@@ -1,0 +1,29 @@
+<!-- Config file for the game -->
+
+<config>
+  <app>
+    <title>Title</title>
+    <organization>UPC</organization>
+  </app>
+	
+  <renderer>
+    <vsync value="false"/>
+  </renderer>
+
+  <window>
+    <resolution width="1024" height="768" scale="1"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="false"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <gui>
+    <atlas file="gui/atlas.png"/>
+  </gui>
+
+  <map>
+    <folder></folder>
+  </map>
+
+</config>
