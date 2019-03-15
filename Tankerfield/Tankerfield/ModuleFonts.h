@@ -29,7 +29,6 @@ public:
 public:
 
 	std::list<_TTF_Font*> fonts;
-	//p2List<_TTF_Font*>	fonts;
 	_TTF_Font*			font_default;
 };
 
