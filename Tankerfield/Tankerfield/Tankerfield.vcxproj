@@ -130,6 +130,7 @@
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModuleFonts.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
   </ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="j1Textures.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Window.h" />
+    <ClInclude Include="ModuleFonts.h" />
     <ClInclude Include="p2Defs.h" />
     <ClInclude Include="p2Log.h" />
     <ClInclude Include="p2Point.h" />
