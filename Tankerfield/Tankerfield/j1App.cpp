@@ -14,6 +14,9 @@
 #include "j1Pathfinding.h"
 #include "j1App.h"
 
+//Brofiler-----------------------------------------------
+#include "Brofiler/Brofiler.h"
+#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
