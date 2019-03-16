@@ -1,10 +1,12 @@
 #ifndef __OBJECT_H__
 #define __OBJECT_H__
 
+#include <list>
+
+#include "PugiXml\src\pugixml.hpp"
 #include "p2Point.h"
 #include "Animation.h"
-#include <list>
-#include "PugiXml\src\pugixml.hpp"
+
 #include "j1PerfTimer.h"
 
 struct SDL_Texture;
@@ -36,7 +38,6 @@ public:
 
 	int type = 0;
 	fPoint position;
-	bool TouchingGround = false;
 	fPoint velocity;
 	fPoint acceleration;
 	//
@@ -45,10 +46,6 @@ public:
 	SDL_Texture* texture;
 	
 	Collider* coll = nullptr;
-	float starttime = 0.0f;
-	float auxGravity = 0.0f;
-	float gravity = 0.0f;
-	bool death = false;
 };
 
 #endif

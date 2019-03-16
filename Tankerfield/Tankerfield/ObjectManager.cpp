@@ -1,3 +1,7 @@
+//#include "Brofiler/Brofiler.h"
+
+#include "p2Log.h"
+
 #include "j1App.h"
 #include "j1Render.h"
 #include "ObjectManager.h"
@@ -5,13 +9,10 @@
 #include "Object.h"
 #include "j1Audio.h"
 #include "j1Window.h"
-//#include "j1Collision.h"
-#include "p2Log.h"
-//#include "j1Map.h"
 #include "j1Scene.h"
+//#include "j1Collision.h"
+//#include "j1Map.h"
 //#include "Player.h"
-
-//#include "Brofiler/Brofiler.h"
 
 ObjectManager::ObjectManager()
 {

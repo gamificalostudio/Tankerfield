@@ -1,9 +1,12 @@
 #ifndef __OBJECTMANAGER_H__
 #define __OBJECTMANAGER_H__
 
-#include "j1Module.h"
-#include "Animation.h"
 #include <list>
+
+#include "Animation.h"
+
+#include "j1Module.h"
+
 
 enum ObjectType
 {
