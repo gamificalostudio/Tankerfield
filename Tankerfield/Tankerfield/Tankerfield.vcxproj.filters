@@ -56,10 +56,10 @@
     <ClCompile Include="j1Pathfinding.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
+    <ClCompile Include="Object.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
+    <ClCompile Include="ObjectManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,10 +111,10 @@
     <ClInclude Include="j1Pathfinding.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
+    <ClInclude Include="Object.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
+    <ClInclude Include="ObjectManager.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>

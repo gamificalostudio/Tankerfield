@@ -1,5 +1,5 @@
-#ifndef __ENTITY_H__
-#define __ENTITY_H__
+#ifndef __OBJECT_H__
+#define __OBJECT_H__
 
 #include "p2Point.h"
 #include "Animation.h"
@@ -10,13 +10,13 @@
 struct SDL_Texture;
 struct Collider;
 
-class Entity 
+class Object 
 {
 public:
 
-	Entity();
-	Entity(int x, int y);
-	virtual ~Entity();
+	Object();
+	Object(int x, int y);
+	virtual ~Object();
 	const Collider* GetCollider() const;
 	
 	virtual bool Start() { return true; };

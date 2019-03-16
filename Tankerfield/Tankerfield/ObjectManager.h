@@ -1,26 +1,26 @@
-#ifndef __ENTITYMANAGER_H__
-#define __ENTITYMANAGER_H__
+#ifndef __OBJECTMANAGER_H__
+#define __OBJECTMANAGER_H__
 
 #include "j1Module.h"
 #include "Animation.h"
 #include <list>
 
-enum EntityType
+enum ObjectType
 {
 	PLAYER,
 
 	NO_TYPE
 };
 
-class Entity;
+class Object;
 class Player;
 
-class EntityManager : public j1Module
+class ObjectManager : public j1Module
 {
 public:
 
-	EntityManager();
-	~EntityManager();
+	ObjectManager();
+	~ObjectManager();
 
 	bool Awake(pugi::xml_node& config);
 
@@ -38,7 +38,7 @@ public:
 
 	bool CleanUp();
 
-	Entity* CreateEntity(EntityType type, int x = 0, int y = 0);
+	Object* CreateObject(ObjectType type, int x = 0, int y = 0);
 	void DeleteEntities();
 
 	Player* GetPlayerData() const;
@@ -46,7 +46,7 @@ public:
 
 private:
 
-	std::list<Entity*> entities;
+	std::list<Object*> objects;
 
 };
 

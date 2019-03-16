@@ -1,7 +1,7 @@
 #include "j1App.h"
-#include "Entity.h"
+#include "Object.h"
 //#include "j1Collision.h"
-#include "EntityManager.h"
+#include "ObjectManager.h"
 #include "j1Render.h"
 #include "j1Scene.h"
 //#include "Brofiler/Brofiler.h"
@@ -9,30 +9,31 @@
 #include <list>
 #include "j1Pathfinding.h"
 //#include "Player.h"
-Entity::Entity()
+
+Object::Object()
 {
 }
 
-Entity::Entity(int x, int y) : position(x, y)
+Object::Object(int x, int y) : position(x, y)
 {
 }
 
-Entity::~Entity()
+Object::~Object()
 {
 
 }
 
-const Collider * Entity::GetCollider() const
+const Collider * Object::GetCollider() const
 {
 	return coll;
 }
 
-bool Entity::Update(float dt)
+bool Object::Update(float dt)
 {
 	return true;
 }
 
-void Entity::Draw(float dt)
+void Object::Draw(float dt)
 {
 	
 
