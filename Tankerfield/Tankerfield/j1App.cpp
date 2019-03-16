@@ -13,6 +13,8 @@
 #include "j1Scene.h"
 #include "j1Pathfinding.h"
 #include "j1App.h"
+#include "j1Fonts.h"
+#include "Module_UI.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -26,6 +28,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	scene = new j1Scene();
 	pathfinding = new j1PathFinding();
+	font = new j1Fonts();
+	ui = new Module_UI();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -34,10 +38,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(pathfinding);
+	AddModule(font);
 
-	// scene last
 	AddModule(scene);
-
+	AddModule(ui);
 	// render last to swap buffer
 	AddModule(render);
 
