@@ -13,6 +13,7 @@
 #include "j1Scene.h"
 #include "j1Pathfinding.h"
 #include "j1App.h"
+#include "EntityManager.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -26,6 +27,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	scene = new j1Scene();
 	pathfinding = new j1PathFinding();
+	entitymanager = new EntityManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -34,6 +36,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(pathfinding);
+	AddModule(entitymanager);
 
 	// scene last
 	AddModule(scene);

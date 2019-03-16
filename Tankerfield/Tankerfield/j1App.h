@@ -16,6 +16,7 @@ class j1Textures;
 class j1Audio;
 class j1Scene;
 class j1PathFinding;
+class EntityManager;
 
 class j1App
 {
@@ -83,6 +84,7 @@ public:
 	j1Audio*			audio = nullptr;
 	j1Scene*			scene = nullptr;
 	j1PathFinding*		pathfinding = nullptr;
+	EntityManager*		entitymanager = nullptr;
 
 private:
 	std::list<j1Module*>	modules;
