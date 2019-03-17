@@ -89,6 +89,7 @@ public:
 	iPoint GetCursorOffset() const;
 
 	void SetCursorOffset(const iPoint offset);
+
 private:
 
 	bool SelectClickedObject();
@@ -114,12 +115,11 @@ private:
 	ClickState click_state = ClickState::None;
 
 public:
-	// Cursor ----------------------------------------------
-	SDL_Rect			cursor_rect;
-	iPoint				cursor_position;
-	iPoint				cursor_offset;
-	bool				show_cursor = true; 
-	Image *				cursor = nullptr;
+	// Mouse ----------------------------------------------
+
+	iPoint				mouse_position;
+
+	iPoint				mouse_offset;
 
 };
 
@@ -131,11 +131,15 @@ public:
 	{}
 
 	virtual bool OnHover(UI_Object* object) { return true; }
+
 	virtual bool RepeatHover(UI_Object* object) { return true; }
+
 	virtual bool OutHover(UI_Object* object) { return true; }
 
 	virtual bool OnClick(UI_Object* object) { return true; }
+
 	virtual bool RepeatClick(UI_Object* object) { return true; }
+
 	virtual bool OutClick(UI_Object* object) { return true; }
 };
 

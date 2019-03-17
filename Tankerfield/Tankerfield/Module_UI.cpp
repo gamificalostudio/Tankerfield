@@ -40,15 +40,14 @@ bool Module_UI::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Module_UI::Start()
 {
-	cursor_rect = { 0, 165, 16, 24 };
-	SDL_ShowCursor(SDL_DISABLE);
+
 	return true;
 }
 
 // Called before quitting
 bool Module_UI::CleanUp()
 {
-	LOG("Freeing all GUI objects");
+	LOG("Freeing all UI objects");
 
 	App->tex->UnLoad(atlas);
 	atlas = nullptr;
@@ -71,13 +70,15 @@ bool Module_UI::CleanUp()
 // Update all guis
 bool Module_UI::PreUpdate()
 {
+	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
+
+	// Debug ===================================================
 	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 		debug = !debug;
 
-	 App->input->GetMousePosition(cursor_position.x, cursor_position.y);
-
 	// Hover States ============================================
-	SDL_Rect rect;
+
+	SDL_Rect object_rect;
 
 	for (list<UI_Object*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
@@ -86,26 +87,33 @@ bool Module_UI::PreUpdate()
 			continue;
 		}
 
-		rect.x = (*item)->position.x - (*item)->section.w * 0.5f;
-		rect.y = (*item)->position.y - (*item)->section.h * 0.5f;
-		rect.w = (*item)->section.w;
-		rect.h = (*item)->section.h;
+		object_rect.x = (*item)->position.x - (*item)->section.w * 0.5f;
+		object_rect.y = (*item)->position.y - (*item)->section.h * 0.5f;
+		object_rect.w = (*item)->section.w;
+		object_rect.h = (*item)->section.h;
 
-		if (cursor_position.x > rect.x && cursor_position.x < rect.x + rect.w && cursor_position.y > rect.y && cursor_position.y < rect.y + rect.h)
+		if (mouse_position.x >= object_rect.x && mouse_position.x <= object_rect.x + object_rect.w && mouse_position.y >= object_rect.y && mouse_position.y <= object_rect.y + object_rect.h)
 		{
 			if ((*item)->hover_state == HoverState::None)
+			{
 				(*item)->hover_state = HoverState::On;
+			}
 			else
+			{
 				(*item)->hover_state = HoverState::Repeat;
+			}
 		}
 		else
 		{
 			if ((*item)->hover_state == HoverState::On || (*item)->hover_state == HoverState::Repeat)
+			{
 				(*item)->hover_state = HoverState::Out;
+			}
 			else
+			{
 				(*item)->hover_state = HoverState::None;
+			}
 		}
-
 		(*item)->PreUpdate();
 	}
 
@@ -141,10 +149,10 @@ bool Module_UI::Update(float dt)
 		switch (click_state)
 		{
 		case ClickState::On:
-			SetCursorOffset(cursor_position - clicked_object->GetPosition());
+			SetCursorOffset(mouse_position - clicked_object->GetPosition());
 			break;
 		case ClickState::Repeat:
-			clicked_object->SetPosition(cursor_position -GetCursorOffset());
+			clicked_object->SetPosition(mouse_position -GetCursorOffset());
 			clicked_object->UpdateRelativePosition();
 			break;
 		case ClickState::Out:
@@ -220,11 +228,6 @@ bool Module_UI::PostUpdate()
 	// Draw all UI objects ====================================
 	DrawUI(screen);
 
-	// Cursor =================================================
-	App->input->GetMousePosition(cursor_position.x, cursor_position.y);
-
-	if(show_cursor)
-		App->render->Blit(atlas, cursor_position.x, cursor_position.y, &cursor_rect, false, 0.0F);
 	return true;
 }
 
@@ -321,7 +324,11 @@ bool Module_UI::DeleteObject(UI_Object * object)
 		LOG("Object not deleted: Pointing to nullptr");
 		return false;
 	}
+
 	list<UI_Object*>::iterator object_to_delete;
+
+
+	// TODO 3: Improve finder
 
 	for (list<UI_Object*>::iterator  item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
@@ -337,16 +344,19 @@ bool Module_UI::DeleteObject(UI_Object * object)
 		return false;
 	}
 
+	// ===========================
+
 	if ((*object_to_delete)->anchor_parent != nullptr)
 	{
 		list<UI_Object*> *sons_list = (*object_to_delete)->anchor_parent->GetAnchorSons();
 		list<UI_Object*>::iterator item = sons_list->begin();
 
-		while ((*item) != nullptr)
+		while ( item != sons_list->end())
 		{
 			if (object == (*item))
 			{
-				list<UI_Object*>::iterator iterator = ++item;
+				list<UI_Object*>::iterator iterator = item;
+				++iterator;
 				sons_list->erase(item);
 				item = iterator;
 			}
@@ -383,12 +393,12 @@ void Module_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_roo
 iPoint Module_UI::GetCursorOffset() const
 {
 
-	return cursor_offset;
+	return mouse_offset;
 }
 
 void Module_UI::SetCursorOffset(const iPoint offset)
 {
-	cursor_offset = offset;
+	mouse_offset = offset;
 
 }
 

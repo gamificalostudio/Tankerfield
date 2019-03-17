@@ -19,7 +19,7 @@
   </window>
 
   <gui>
-    <atlas file="gui/atlas.png"/>
+    <atlas file="ui/atlas.png"/>
   </gui>
 
   <map>
