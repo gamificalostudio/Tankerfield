@@ -27,10 +27,23 @@ enum class ObjectState
 	locked
 };
 
+enum class PivotPos
+{
+	center,
+	center_left,
+	center_right,
+	top_center,
+	top_left,
+	top_right,
+	bottom_center,
+	bottom_left,
+	bottom_right
+};
 
 class UI_Object
 {
 public:
+
 	UI_Object(const iPoint position , Gui_Listener *listener);
 	
 	virtual ~UI_Object();
@@ -43,39 +56,43 @@ public:
 	virtual bool Draw() { return true; };
 
 	// Common methods =================================
-	iPoint GetPosition() const;
 
 	void SetPosition(iPoint position);
 
-	bool UpdateRelativePosition();
+	void SetState(const ObjectState state);
 
-	bool SetAnchor(UI_Object* anchor);
+	bool SetParent(UI_Object* parent);
 
-	list<UI_Object*>* GetAnchorSons(); 
+	iPoint GetPosition() const;
 
-	UI_Object* GetAnchorParent();
+	list<UI_Object*>* GetSons(); 
+
+	UI_Object* GetParent();
 
 	void IsDraggable(const bool is_draggable);
 
-	void SetState(const ObjectState state);
+	bool UpdateRelativePosition();
 
 protected:
+
+	// Vars ==============================================
 
 	iPoint                position = {0, 0};
 	iPoint                relative_position = { 0, 0 };
 	SDL_Rect			  section = {0, 0, 0, 0};
-	SDL_Texture         * texture = nullptr;
 	Gui_Listener        * listener = nullptr;
 
-	// Anchors =========================================
-	UI_Object           * anchor_parent = nullptr;
-	list<UI_Object*>      anchor_sons;
+	// Properties ========================================
 
-	// Properties ======================================
 	ObjectState state = ObjectState::visible;
 	HoverState hover_state = HoverState::None;
 	bool is_draggable = false;
 	bool is_interactive = true;
+
+	// Hierarchy =========================================
+
+	UI_Object           * parent_object = nullptr;
+	list<UI_Object*>      object_sons;
 
 	friend class Module_UI;
 };

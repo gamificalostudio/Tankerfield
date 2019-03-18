@@ -3,16 +3,9 @@
 #include "Module_UI.h"
 #include "j1App.h"
 
-Image::Image(const iPoint position, const Animation animation, SDL_Texture * texture, Gui_Listener* listener): UI_Object(position, listener)
+Image::Image(iPoint position, SDL_Rect draw_rect, Gui_Listener* listener) : UI_Object(position, listener)
 {
-	this->animation = animation;
-	this->texture = texture;
-}
-
-Image::Image(iPoint position, SDL_Rect draw_rect, SDL_Texture * texture, Gui_Listener* listener) : UI_Object(position, listener)
-{
-	this->animation.PushBack({ draw_rect });
-	this->texture = texture;
+	//this->animation.PushBack({ draw_rect });
 }
 
 
@@ -32,10 +25,5 @@ bool Image::Draw()
 	//App->render->Blit( texture ,  position.x - section.w*0.5f , position.y  - section.h *0.5f , &anim_rect, false, 0.0f);
 
 	return true;
-}
-
-void Image::SetAnimationFrame(int frame)
-{
-	/*animation.SetFrame(frame);*/
 }
 

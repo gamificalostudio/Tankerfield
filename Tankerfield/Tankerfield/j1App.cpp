@@ -15,6 +15,7 @@
 #include "j1App.h"
 #include "j1Fonts.h"
 #include "Module_UI.h"
+#include "UI_Test.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -26,7 +27,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	render = new j1Render();
 	tex = new j1Textures();
 	audio = new j1Audio();
-	scene = new j1Scene();
+	ui_test = new UI_Test();
 	pathfinding = new j1PathFinding();
 	font = new j1Fonts();
 	ui = new Module_UI();
@@ -40,7 +41,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(font);
 
-	AddModule(scene);
+	AddModule(ui_test);
 	AddModule(ui);
 	// render last to swap buffer
 	AddModule(render);

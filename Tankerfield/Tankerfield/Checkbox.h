@@ -20,7 +20,7 @@ class Checkbox : public UI_Object, public Gui_Listener
 {
 public:
 
-	Checkbox(const iPoint position, const Checkbox_Definition definition, SDL_Texture * texture, Gui_Listener * listener);
+	Checkbox(const iPoint position, const Checkbox_Definition definition, Gui_Listener * listener);
 
 	virtual ~Checkbox();
 

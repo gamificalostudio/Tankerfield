@@ -20,8 +20,8 @@
 
 Module_UI::Module_UI() : j1Module()
 {
-	name = "Module_UI";
-	screen = new UI_Object({ 0,0 }, nullptr);
+	name.assign("Module UI");
+	main_object = new UI_Object({ 0,0 }, nullptr);
 }
 
 // Destructor
@@ -40,7 +40,7 @@ bool Module_UI::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Module_UI::Start()
 {
-
+	atlas = App->tex->Load("textures/ui/atlas.png");
 	return true;
 }
 
@@ -57,7 +57,7 @@ bool Module_UI::CleanUp()
 
 	while (object != objects_list.end())
 	{
-		(*object)->anchor_sons.clear();
+		(*object)->object_sons.clear();
 		RELEASE((*object));
 		++object;
 	}
@@ -123,18 +123,18 @@ bool Module_UI::PreUpdate()
 	{
 		SelectClickedObject();
 	}
-	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && clicked_object)
+	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
 	{
 		click_state = ClickState::Repeat;
 	}
-	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && clicked_object)
+	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
 	{
 		click_state = ClickState::Out;
 	}
-	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE && clicked_object)
+	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
 	{
 		click_state = ClickState::None;
-		clicked_object = nullptr;
+		selected_object = nullptr;
 	}
 
 
@@ -144,16 +144,16 @@ bool Module_UI::PreUpdate()
 bool Module_UI::Update(float dt)
 {
 	// Draggable ================================================
-	if (clicked_object && clicked_object->is_draggable)
+	if (selected_object && selected_object->is_draggable)
 	{
 		switch (click_state)
 		{
 		case ClickState::On:
-			SetCursorOffset(mouse_position - clicked_object->GetPosition());
+			SetCursorOffset(mouse_position - selected_object->GetPosition());
 			break;
 		case ClickState::Repeat:
-			clicked_object->SetPosition(mouse_position -GetCursorOffset());
-			clicked_object->UpdateRelativePosition();
+			selected_object->SetPosition(mouse_position -GetCursorOffset());
+			selected_object->UpdateRelativePosition();
 			break;
 		case ClickState::Out:
 			SetCursorOffset({ 0,0 });
@@ -162,20 +162,20 @@ bool Module_UI::Update(float dt)
 	}
 	// Click Callbacks =============================================
 
-	if (clicked_object && clicked_object->listener)
+	if (selected_object && selected_object->listener)
 	{
 		switch (click_state)
 		{
 		case ClickState::On:
-			clicked_object->listener->OnClick(clicked_object);
+			selected_object->listener->OnClick(selected_object);
 			break;
 		case ClickState::Repeat:
-			clicked_object->listener->RepeatClick(clicked_object);
+			selected_object->listener->RepeatClick(selected_object);
 			break;
 		case ClickState::Out:
-			if (clicked_object->hover_state != HoverState::None)
+			if (selected_object->hover_state != HoverState::None)
 			{
-				clicked_object->listener->OutClick(clicked_object);
+				selected_object->listener->OutClick(selected_object);
 			}
 			break;
 		}
@@ -187,7 +187,7 @@ bool Module_UI::Update(float dt)
 	{
 		if ((*item)->listener == nullptr)
 		{
-			if ((*item) != screen)
+			if ((*item) != main_object)
 			{
 				LOG("Object callback failed, listener was nullptr");
 			}
@@ -209,7 +209,7 @@ bool Module_UI::Update(float dt)
 		}
 	}
 
-	UpdateGuiPositions(screen, iPoint(0, 0));
+	UpdateGuiPositions(main_object, iPoint(0, 0));
 
 	
 	// Update objects ==============================================
@@ -226,7 +226,7 @@ bool Module_UI::Update(float dt)
 bool Module_UI::PostUpdate()
 {
 	// Draw all UI objects ====================================
-	DrawUI(screen);
+	DrawUI(main_object);
 
 	return true;
 }
@@ -247,7 +247,7 @@ bool Module_UI::PostUpdate()
  UI_Object * Module_UI::CreateObject(iPoint position, Gui_Listener * listener)
  {
 	 UI_Object* object = new UI_Object(position, listener);
-	 object->SetAnchor(screen);
+	 object->SetParent(main_object);
 	 objects_list.push_back(object);
 	 return object;
  }
@@ -255,40 +255,40 @@ bool Module_UI::PostUpdate()
  Label* Module_UI::CreateLabel(iPoint position, String text, _TTF_Font* font, Gui_Listener* listener, SDL_Color color )
 {
 	Label* object = new Label(position, text, font, color, listener);
-	object->SetAnchor(screen);
+	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 
 }
 
-Image* Module_UI::CreateImage(iPoint position, Animation animation, Gui_Listener* listener)
+Image* Module_UI::CreateImage(iPoint position, SDL_Rect draw_rect , Gui_Listener* listener)
 {
-	Image* object = new Image(position, animation, atlas, listener);
-	object->SetAnchor(screen);
+	Image* object = new Image(position, draw_rect, listener);
+	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
 Button* Module_UI::CreateButton(iPoint position, Button_Definition definition, Gui_Listener* listener)
 {
-	Button* object = new Button(position, definition, atlas, listener);
-	object->SetAnchor(screen);
+	Button* object = new Button(position, definition, listener);
+	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
 Slider * Module_UI::CreateSlider(iPoint position, Slider_Definition definition, Gui_Listener * listener)
 {
-	Slider* object = new Slider(position, definition, atlas, listener);
-	object->SetAnchor(screen);
+	Slider* object = new Slider(position, definition, listener);
+	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
 Checkbox * Module_UI::CreateCheckbox(iPoint position, Checkbox_Definition definition, Gui_Listener * listener)
 {
-	Checkbox* object = new Checkbox(position, definition, atlas, listener);
-	object->SetAnchor(screen);
+	Checkbox* object = new Checkbox(position, definition, listener);
+	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
@@ -296,7 +296,7 @@ Checkbox * Module_UI::CreateCheckbox(iPoint position, Checkbox_Definition defini
 TextPanel * Module_UI::CreateTextPanel(const iPoint position, TextPanel_Definition definition, Gui_Listener * listener)
 {
 	TextPanel* object = new TextPanel(position, definition, listener);
-	object->SetAnchor(screen);
+	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
@@ -304,19 +304,19 @@ TextPanel * Module_UI::CreateTextPanel(const iPoint position, TextPanel_Definiti
 
 UI_Object * Module_UI::GetClickedObject()
 {
-	return clicked_object;
+	return selected_object;
 }
 
 UI_Object * Module_UI::GetScreen()
 {
-	return screen;
+	return main_object;
 }
 
 bool Module_UI::DeleteObject(UI_Object * object)
 {
 	if (objects_list.empty())
 	{
-		return true;
+		return false;
 	}
 
 	if (object == nullptr)
@@ -325,48 +325,31 @@ bool Module_UI::DeleteObject(UI_Object * object)
 		return false;
 	}
 
-	list<UI_Object*>::iterator object_to_delete;
+	// Find object to delete =====================================
 
+	list<UI_Object*>::iterator object_to_delete = find(objects_list.begin(), objects_list.end(), object);
 
-	// TODO 3: Improve finder
-
-	for (list<UI_Object*>::iterator  item = objects_list.begin(); item != objects_list.end(); ++item)
-	{
-		if (object == (*item))
-		{
-			object_to_delete = item;
-		}
-	}
-
-	if ( (*object_to_delete) == nullptr)
+	if (object_to_delete == objects_list.end())
 	{
 		LOG("Object not deleted: Not found");
 		return false;
 	}
 
-	// ===========================
+	// Delete object in parent sons list =========================
 
-	if ((*object_to_delete)->anchor_parent != nullptr)
+	if ((*object_to_delete)->parent_object != nullptr)
 	{
-		list<UI_Object*> *sons_list = (*object_to_delete)->anchor_parent->GetAnchorSons();
-		list<UI_Object*>::iterator item = sons_list->begin();
+		list<UI_Object*> *sons_list = (*object_to_delete)->parent_object->GetSons();
+		list<UI_Object*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), object);
 
-		while ( item != sons_list->end())
+		if (son_to_delete == sons_list->end())
 		{
-			if (object == (*item))
-			{
-				list<UI_Object*>::iterator iterator = item;
-				++iterator;
-				sons_list->erase(item);
-				item = iterator;
-			}
-			else
-			{
-				++item;
-			}
+			LOG("Object not deleted: Not found");
+			return false;
 		}
-	}
 
+		sons_list->erase(son_to_delete);
+	}
 	LOG("UI Object deleted");
 	RELEASE((*object_to_delete));
 	objects_list.erase(object_to_delete);
@@ -383,7 +366,7 @@ void Module_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_roo
 
 	branch_root->state = state;
 
-	for (list<UI_Object*>::iterator item = branch_root->anchor_sons.begin(); item != branch_root->anchor_sons.end(); ++item)
+	for (list<UI_Object*>::iterator item = branch_root->object_sons.begin(); item != branch_root->object_sons.end(); ++item)
 	{
 		SetStateToBranch(state, (*item));
 	}
@@ -423,7 +406,7 @@ bool Module_UI::SelectClickedObject()
 		for ( list<UI_Object*>::iterator item = clicked_objects.begin(); item != clicked_objects.end() ; ++item)
 		{
 			int count = 0;
-			for (UI_Object* iterator = (*item); iterator != nullptr ; iterator = iterator->anchor_parent)
+			for (UI_Object* iterator = (*item); iterator != nullptr ; iterator = iterator->parent_object)
 			{
 				++count;
 			}
@@ -434,7 +417,7 @@ bool Module_UI::SelectClickedObject()
 				nearest_object = (*item);
 			}
 		}
-		clicked_object = nearest_object;
+		selected_object = nearest_object;
 		click_state = ClickState::On;
 	}
 
@@ -471,7 +454,7 @@ void Module_UI::DrawUI(UI_Object * object)
 		}
 	}
 
-	for (list<UI_Object*>::iterator item = object->anchor_sons.begin();  item != object->anchor_sons.end(); ++item)
+	for (list<UI_Object*>::iterator item = object->object_sons.begin();  item != object->object_sons.end(); ++item)
 	{
 		DrawUI((*item));
 	}
@@ -487,7 +470,7 @@ void Module_UI::UpdateGuiPositions(UI_Object * object, iPoint cumulated_position
 	cumulated_position += object->relative_position;
 	object->position = cumulated_position;
 
-	for (list<UI_Object*>::iterator item = object->anchor_sons.begin() ; item != object->anchor_sons.end(); ++item)
+	for (list<UI_Object*>::iterator item = object->object_sons.begin() ; item != object->object_sons.end(); ++item)
 	{
 		UpdateGuiPositions((*item), cumulated_position);
 	}

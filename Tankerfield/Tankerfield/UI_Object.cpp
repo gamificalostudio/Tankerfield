@@ -3,11 +3,8 @@
 #include "j1App.h"
 #include "p2Log.h"
 
-UI_Object::UI_Object(const iPoint position, Gui_Listener *listener)
+UI_Object::UI_Object(const iPoint position, Gui_Listener *listener) : position(position), listener(listener)
 {
-	this->position = position;
-	this->listener = listener;
-
 	section.x = section.y = 0;
 	section.w = DEFAULT_MARGIN_SECTION;
 	section.h = DEFAULT_MARGIN_SECTION;
@@ -22,7 +19,7 @@ iPoint UI_Object::GetPosition() const
 	return position;
 }
 
-void UI_Object::SetPosition(const iPoint position) 
+void UI_Object::SetPosition(const iPoint position)
 {
 	this->position = position;
 	UpdateRelativePosition();
@@ -30,59 +27,58 @@ void UI_Object::SetPosition(const iPoint position)
 
 bool UI_Object::UpdateRelativePosition()
 {
-	if (anchor_parent == nullptr)
+	if (parent_object == nullptr)
 	{
 		return false;
 	}
 
-	relative_position = position - anchor_parent->GetPosition();
+	relative_position = position - parent_object->GetPosition();
 	return true;
 }
 
-bool UI_Object::SetAnchor(UI_Object * anchor)
+bool UI_Object::SetParent(UI_Object * parent)
 {
-	if (anchor == nullptr)
+	if (parent == nullptr)
 	{
-		LOG("Failed SetAnchor, anchor was nullptr");
+		LOG("Failed SetParent, parent was nullptr");
 		return false;
 	}
 	// Delete previous parent =====================
-	if (anchor_parent)
+	if (parent_object)
 	{
-		list<UI_Object*> *sons = anchor_parent->GetAnchorSons();
+		list<UI_Object*> *sons = parent_object->GetSons();
 		list<UI_Object*>::iterator find_object = find(sons->begin(), sons->end(), this);
 		
 		if (find_object != sons->end())
 		{
 			sons->erase(find_object);
-			anchor_parent = nullptr;
+			parent_object = nullptr;
 		}
 		else
 		{
-			LOG("Failed SetAnchor, object as son not found");
+			LOG("Failed SetParent, object as son not found");
 			return false;
 		}
 	}
 
 	// Set Parent =================================
-	anchor_parent = anchor;
-
-	relative_position = position - anchor_parent->position;
+	parent_object = parent;
+	relative_position = position - parent_object->position;
 
 	// Add to parent sons =========================
-	anchor_parent->GetAnchorSons()->push_back(this);
+	parent_object->GetSons()->push_back(this);
 
 	return true;
 }
 
-list<UI_Object*>* UI_Object::GetAnchorSons() 
+list<UI_Object*>* UI_Object::GetSons() 
 {
-	return &anchor_sons;
+	return &object_sons;
 }
 
-UI_Object * UI_Object::GetAnchorParent()
+UI_Object * UI_Object::GetParent()
 {
-	return anchor_parent;
+	return parent_object;
 }
 
 void UI_Object::IsDraggable(const bool is_draggable)

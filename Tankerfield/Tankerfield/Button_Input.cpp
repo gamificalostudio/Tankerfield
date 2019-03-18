@@ -8,10 +8,9 @@
 #include "j1App.h"
 
 
-Button::Button(const iPoint position, const Button_Definition definition, SDL_Texture * texture, Gui_Listener* listener) : UI_Object(position, listener)
+Button::Button(const iPoint position, const Button_Definition definition, Gui_Listener* listener) : UI_Object(position, listener)
 {
 	this->definition = definition;
-	this->texture = texture;
 }
 
 
@@ -45,7 +44,7 @@ bool Button::Draw()
 	section.w = current_frame.w;
 	section.h = current_frame.h;
 	
-	App->render->Blit(texture, position.x - section.w*0.5f, position.y - section.h*0.5f, &current_frame, false, 0.0f);
+	App->render->Blit(App->ui->GetAtlas(), position.x - section.w*0.5f, position.y - section.h*0.5f, &current_frame, false, 0.0f);
 
 	return true;
 }
@@ -59,7 +58,7 @@ bool Button::SetLabel(const iPoint position, const String text, _TTF_Font* font,
 	}
 
 	label = App->ui->CreateLabel(position, text, font, this, color);
-	label->SetAnchor(this);
+	label->SetParent(this);
 
 	return true;
 }

@@ -66,7 +66,7 @@ public:
 
 	Label* CreateLabel(iPoint position, String text, _TTF_Font* font, Gui_Listener* listener = nullptr ,SDL_Color color = {255,255,255,255});
 
-	Image* CreateImage(iPoint position, Animation animation, Gui_Listener* listener = nullptr);
+	Image* CreateImage(iPoint position, SDL_Rect draw_rect, Gui_Listener* listener = nullptr);
 
 	Button* CreateButton(iPoint position, Button_Definition definition, Gui_Listener* listener = nullptr);
 
@@ -108,9 +108,9 @@ private:
 	// Objects ---------------------------------------------
 	list<UI_Object*> objects_list;
 
-	UI_Object* screen = nullptr;
+	UI_Object* main_object = nullptr;
 
-	UI_Object* clicked_object = nullptr;
+	UI_Object* selected_object = nullptr;
 
 	ClickState click_state = ClickState::None;
 

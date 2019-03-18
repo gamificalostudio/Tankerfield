@@ -71,9 +71,6 @@
     <ClCompile Include="Label.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Module_UI.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Slider.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
@@ -84,6 +81,12 @@
       <Filter>Modules\UI</Filter>
     </ClCompile>
     <ClCompile Include="j1Fonts.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Test.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_UI.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,9 +150,6 @@
     <ClInclude Include="Label.h">
       <Filter>Modules\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Module_UI.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Slider.h">
       <Filter>Modules\UI</Filter>
     </ClInclude>
@@ -160,6 +160,12 @@
       <Filter>Modules\UI</Filter>
     </ClInclude>
     <ClInclude Include="j1Fonts.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Test.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_UI.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>

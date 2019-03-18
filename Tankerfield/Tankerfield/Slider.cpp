@@ -6,16 +6,15 @@
 #include "j1App.h"
 #include"Button_Input.h"
 
-Slider::Slider(const iPoint position, const Slider_Definition definition, SDL_Texture * texture, Gui_Listener* listener) : UI_Object(position, listener)
+Slider::Slider(const iPoint position, const Slider_Definition definition, Gui_Listener* listener) : UI_Object(position, listener)
 {
 	this->definition = definition;
-	this->texture = texture;
 
 	section.w = definition.rail_draw_rect.w;
 	section.h = definition.rail_draw_rect.h;
 
 	thumb = App->ui->CreateButton(position, definition.thumb_definition, this);
-	thumb->SetAnchor(this);
+	thumb->SetParent(this);
 	thumb->IsDraggable(true);
 
 	point_A = position.x - definition.distance * 0.5f;
@@ -36,7 +35,7 @@ Slider::~Slider()
 
 bool Slider::Draw()
 {
-	App->render->Blit(texture, position.x - definition.rail_draw_rect.w * 0.5f , position.y - definition.rail_draw_rect.h * 0.5f, &definition.rail_draw_rect, false, 0.0f);
+	App->render->Blit(App->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f , position.y - definition.rail_draw_rect.h * 0.5f, &definition.rail_draw_rect, false, 0.0f);
 	return true;
 }
 

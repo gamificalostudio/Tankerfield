@@ -5,10 +5,9 @@
 #include "Button_Input.h"
 #include "j1App.h"
 
-Checkbox::Checkbox(const iPoint position, const Checkbox_Definition definition, SDL_Texture * texture, Gui_Listener* listener) : UI_Object(position, listener)
+Checkbox::Checkbox(const iPoint position, const Checkbox_Definition definition, Gui_Listener* listener) : UI_Object(position, listener)
 {
 	this->definition = definition;
-	this->texture = texture;
 
 	Button_Definition def;
 
@@ -22,7 +21,7 @@ Checkbox::Checkbox(const iPoint position, const Checkbox_Definition definition, 
 	}
 
 	button = App->ui->CreateButton(position, def, this);
-	button->SetAnchor(this);
+	button->SetParent(this);
 }
 
 Checkbox::~Checkbox()

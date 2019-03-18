@@ -8,10 +8,6 @@
 
 Label::Label(const iPoint position, const String text, _TTF_Font* font, SDL_Color color, Gui_Listener* listener): UI_Object(position, listener)
 {
-	//Properties ==================================
-	is_draggable = false;
-	is_interactive = false;
-
 	this->font = font;
 	this->color = color;
 	SetText(text);
@@ -31,6 +27,7 @@ void Label::SetText(String text)
 	if (label_texture != nullptr)
 	{
 		App->tex->UnLoad(label_texture);
+		label_texture = nullptr;
 	}
 
 	App->font->CalcSize( text.c_str() , section.w, section.h, font);

@@ -147,6 +147,7 @@
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Text_Panel.cpp" />
     <ClCompile Include="UI_Object.cpp" />
+    <ClCompile Include="UI_Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Slider.h" />
     <ClInclude Include="Text_Panel.h" />
     <ClInclude Include="UI_Object.h" />
+    <ClInclude Include="UI_Test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

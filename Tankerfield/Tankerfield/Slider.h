@@ -26,7 +26,7 @@ class Slider : public UI_Object, public Gui_Listener
 
 public:
 
-	Slider(iPoint const position, const Slider_Definition definition, SDL_Texture * texture, Gui_Listener * listener);
+	Slider(iPoint const position, const Slider_Definition definition, Gui_Listener * listener);
 
 	virtual ~Slider();
 

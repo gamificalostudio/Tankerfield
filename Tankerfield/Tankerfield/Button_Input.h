@@ -33,7 +33,7 @@ class Button : public UI_Object, public Gui_Listener
 
 public:
 
-	Button(const iPoint position, const Button_Definition definition, SDL_Texture * texture , Gui_Listener * listener);
+	Button(const iPoint position, const Button_Definition definition , Gui_Listener * listener);
 
 	virtual ~Button();
 
