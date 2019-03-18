@@ -1,4 +1,4 @@
-﻿# Tankerfield
+# Tankerfield
 Tankerfield is a cooperative survival tank game made by 8 students in UPC.
 Each one of you will control a tank and defend against enldess rounds of invaders to try to survive as much as you can.
 
@@ -23,8 +23,6 @@ https://github.com/alejandro61299
 https://github.com/VictorSegura99
 
 * **Code:** Gerard Marcos Freixas
-
-s
 
 https://github.com/vsRushy
 
