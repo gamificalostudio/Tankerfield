@@ -1,140 +1,110 @@
 #ifndef __j1MAP_H__
 #define __j1MAP_H__
 
+#include <list>
+
 #include "PugiXml/src/pugixml.hpp"
-#include "p2List.h"
+#include "SDL\include\SDL_pixels.h"
 #include "p2Point.h"
 #include "j1Module.h"
-#include "j1Collision.h"
-#include "j1App.h"
-#include "j1Textures.h"
-#include "Animation.h"
-
-struct Collider;
 
 
-struct Scenes
+#define MAX_OBJECTGROUP_COLLIDERS 100
+
+//struct Collider;
+struct SDL_Texture;
+struct SDL_Rect;
+
+
+struct Levels
 {
-	bool active=false;
-	uint levelnum=0;
-	p2SString level_tmx;
-	p2SString musicPath;
-	
-};
-
-
-struct Object_Layer
-{
-	p2SString			name;
-	p2List<Collider*>		col;
-	~Object_Layer()
-	{
-		for (p2List_item<Collider*>* colItem = col.end; colItem; colItem = colItem->prev )
-		{
-			colItem->data->to_delete = true;
-			RELEASE(colItem->data);
-		}
-
-	}
-
+	std::string name;
 };
 
 struct Properties
 {
-	struct Property
+	bool draw = true;
+	bool navigation = false;
+	int testValue = 0;
+	float parallaxSpeed = 1.0f; // default value
+	// music
+	std::string music_name;
+	std::string fx_name;
+
+	inline bool GetDraw() const
 	{
-		p2SString name;
-		void* value=nullptr;
-	};
-
-	~Properties()
-	{
-		p2List_item<Property*>* item;
-		item = list.start;
-
-		while (item != NULL)
-		{
-			RELEASE(item->data);
-			item = item->next;
-		}
-
-		list.clear();
+		return draw;
 	}
 
-	float GetAsFloat(const char* name, float default_value = 0) const;
-
-	p2List<Property*>	list;
+	// =========
+	// associated GUI xml path
+	std::string gui_xml_path = nullptr;
 };
-struct tile
+
+
+struct MapObjects
 {
+	std::string name;
 	uint id = 0;
-	Animation* anim=nullptr ;
-
-};
-
-
-
-struct MapLayer
-{
-	p2SString name = "";
-	uint width = 0u;
-	uint height = 0u;
-	float parallax_velocity = 0.0f;
-	bool visible = true;
-
-	tile*		arrayOfIds = nullptr;
-	Properties	properties;
-	~MapLayer()
+	//Collider* colliders[MAX_OBJECTGROUP_COLLIDERS] = { nullptr };
+	Properties properties;
+	
+	~MapObjects()
 	{
-		if (arrayOfIds != nullptr)
-		{
-			delete arrayOfIds;
-			arrayOfIds = nullptr;
-		}
-	}
-
-	inline uint Get(int x, int y) const
-	{
-		return arrayOfIds[(y*width) + x].id;
+		//RELEASE_ARRAY(colliders[MAX_OBJECTGROUP_COLLIDERS]);
 	}
 };
-
 
 // ----------------------------------------------------
-struct Patern
+//INFO:
+//- Width & Height are always calculated in pixels
+//- Columns & Rows are always calculated in number of tiles
+struct MapLayer
 {
-	
+	std::string name;
+	uint columns = 0u;
+	uint rows = 0u;
+	uint* tileArray = nullptr;
+	Properties properties;
+	//float parallaxSpeed = 1.0f; // default
 
-	SDL_Rect GetTileRect(int id) const;
+	MapLayer() : tileArray(NULL)
+	{}
 
-	
-	p2SString				name = "";
-	SDL_Texture*			texture = nullptr;
-	uint					tex_width = 0;
-	uint					tex_height = 0;
-
-	uint					firstgid = 0;
-	uint					margin = 0;
-	uint					spacing = 0;
-
-	uint					tile_width = 0;
-	uint					tile_height = 0;
-
-	uint					num_tiles_width  = 0;
-	uint					num_tiles_height = 0;
-	p2List<tile*>			ListStructId;
-
-
-	~Patern()
+	~MapLayer()
 	{
-		if (texture != nullptr)
-		{
-			App->tex->UnLoad(texture);
-		}
+		RELEASE_ARRAY(tileArray);
+	}
+
+	inline uint GetArrayPos(int column, int row) const
+	{
+		return tileArray[(columns*row) + column];
 	}
 };
 
-enum MapTypes
+// ----------------------------------------------------
+struct TileSet
+{
+	SDL_Rect GetTileRect(int id) const;
+
+	std::string			name;
+	int					firstgid;
+	int					margin;
+	int					spacing;
+	int					tile_width;
+	int					tile_height;
+	SDL_Texture*		texture;
+	int					tex_width;
+	int					tex_height;
+	int					columns;
+	int					rows;
+	int					offset_x;
+	int					offset_y;
+	
+
+};
+
+enum class MapTypes
 {
 	MAPTYPE_UNKNOWN = 0,
 	MAPTYPE_ORTHOGONAL,
@@ -144,100 +114,88 @@ enum MapTypes
 // ----------------------------------------------------
 struct MapData
 {
-	float gravity = 300.0f;
-	uint					width;
-	uint					height;
-	uint					tile_width;
-	uint					tile_height;
-
-	MapTypes				type = MAPTYPE_UNKNOWN;
-
-	p2List<Patern*>			list_Patterns;
-	p2List<MapLayer*>		layers;
-	p2List<Object_Layer*>   collition_layers;
-	p2List<Scenes*>			scenes_List;
-	Properties	properties;
+	int					columns;
+	int					rows;
+	int					tile_width;
+	int					tile_height;
+	SDL_Color			background_color;
+	MapTypes			type;
+	std::list<TileSet*>	tilesets;
+	std::list<MapLayer*>	mapLayers;
+	std::list<MapObjects*> mapObjects;
+	std::list<Levels*>		levels;
+	uint				numLevels = 0; // counter for num levels
+	std::string			loadedLevel;
+	
+	Properties properties;
 	
 };
 
 // ----------------------------------------------------
 class j1Map : public j1Module
 {
-private:
-	p2List_item<Scenes*>* atualSceneItem=nullptr;
 public:
-
-	MapData level;
-	
-	
-
-	inline uint Get(int x, int y) const
-	{
-		return  (y * level.width + x);
-	}
 
 	j1Map();
 
 	// Destructor
-	virtual ~j1Map();
+	~j1Map();
 
 	// Called before render is available
-	bool Awake(pugi::xml_node& conf)override;
-	bool Start() override;
-	bool PreUpdate(float dt) override;
-	bool Update(float dt) override;
-	bool PostUpdate() override;
-	
+	bool Awake(pugi::xml_node& conf) override;
+
+	// Called each loop iteration
+	bool PostUpdate()override;
 
 	// Called before quitting
-	bool CleanUp() override;
-
-
+	bool CleanUp()override;
 
 	// Load new map
 	bool Load(const char* path);
+
+	// Reset current map
+	bool Reset();
+
+	//bool Load(pugi::xml_node& node);
+	//bool Save(pugi::xml_node& node) const;
+
+	// Coordinate translation methods
 	iPoint MapToWorld(int x, int y) const;
 	iPoint WorldToMap(int x, int y) const;
-	
-	p2List_item<Scenes*>* activateScene(uint lvlnum)
-	{
-		p2List_item<Scenes*>* item_scene;
-		
-		for(item_scene= level.scenes_List.start; item_scene; item_scene= item_scene->next   )
-			{
-			item_scene->data->active = false;
-		}
-		for (item_scene = level.scenes_List.start; item_scene->data->levelnum!=lvlnum && item_scene !=nullptr ; item_scene = item_scene->next)
-		{	}
-		item_scene->data->active = true;
-		atualSceneItem = item_scene;
-		return item_scene;
-	}
-	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
-
-	bool CreateWalkabilityMap(int & width, int & height, uchar ** buffer) const;
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
+	void DebugMap();
+	int GetTileWidth() const;
 
 private:
 
-	pugi::xml_document	map_file;
-	p2SString			folder;
-	bool				map_loaded;
-
-	uint i = 0;
 	bool LoadMap();
-	bool LoadTilesetDetails(pugi::xml_node& tileset_node, Patern* set);
-	bool LoadPaternImage_tile(pugi::xml_node& tileset_node, Patern* set);
+	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
+	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
-	bool LoadCollision(pugi::xml_node& coll_node, Object_Layer* collision);
-	Patern* GetTilesetFromTileId(int id) const;
-	/*void LoadProperties(pugi::xml_node& node);*/
-	void LoadLayerProperties(pugi::xml_node& node, Properties& properties);
+	bool LoadMapColliders(pugi::xml_node& node);//, MapObjects* obj);
+	bool LoadProperties(pugi::xml_node& node, Properties& properties);
+	
 
-	SDL_Texture* debug_tex;
+	TileSet* GetTilesetFromTileId(int id) const;
 
+	//bool loadFromSaveGame = false;
+
+public:
+
+	MapData data;
+
+	bool				map_loaded;
+	bool showNavLayer = false;
+
+	MapData operator ->()
+	{
+		return data;
+	}
+	
+private:
+
+	pugi::xml_document	map_file;
+	std::string			folder;
 };
-
-
 
 #endif // __j1MAP_H__
