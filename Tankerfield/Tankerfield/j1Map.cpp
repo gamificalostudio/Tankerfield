@@ -94,12 +94,12 @@ void j1Map::Draw()
 
 TileSet* j1Map::GetTilesetFromTileId(int id) const
 {
-	std::list<TileSet*>::reverse_iterator item = data.tilesets.rend();
-	for (item; item != data.tilesets.rbegin() && id < (*item)->firstgid; --item)
+	std::list<TileSet*>::const_reverse_iterator item = data.tilesets.rbegin();
+	for (item; item != data.tilesets.rend() && id < (*item)->firstgid; ++item)
 	{
 
 	}
-	
+
 	return (*item);
 }
 
