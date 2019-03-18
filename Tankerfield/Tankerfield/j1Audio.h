@@ -1,7 +1,8 @@
-#ifndef __j1AUDIO_H__
-#define __j1AUDIO_H__
+#ifndef __J1AUDIO_H__
+#define __J1AUDIO_H__
 
 #include <list>
+
 #include "j1Module.h"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
@@ -38,4 +39,4 @@ private:
 	std::list<Mix_Chunk*>	fx;
 };
 
-#endif // __j1AUDIO_H__
+#endif /* __J1AUDIO_H__ */

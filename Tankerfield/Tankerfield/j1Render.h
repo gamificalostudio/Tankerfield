@@ -1,7 +1,8 @@
-#ifndef __j1RENDER_H__
-#define __j1RENDER_H__
+#ifndef __J1RENDER_H__
+#define __J1RENDER_H__
 
 #include "SDL/include/SDL.h"
+
 #include "p2Point.h"
 #include "j1Module.h"
 
@@ -53,4 +54,4 @@ public:
 	SDL_Color		background;
 };
 
-#endif // __j1RENDER_H__
+#endif /* __J1RENDER_H__ */

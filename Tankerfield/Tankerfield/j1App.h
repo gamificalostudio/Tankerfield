@@ -1,13 +1,14 @@
-#ifndef __j1APP_H__
-#define __j1APP_H__
+#ifndef __J1APP_H__
+#define __J1APP_H__
 
 #include <list>
 #include <string>
+
+#include "PugiXml/src/pugixml.hpp"
+
 #include "j1Module.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
-
-#include "PugiXml/src/pugixml.hpp"
 
 class j1Window;
 class j1Input;
@@ -41,7 +42,7 @@ public:
 	// Add a new module to handle
 	void AddModule(j1Module* module);
 
-	// Exposing some properties for reading
+	/* Exposing some properties for reading */
 	int GetArgc() const;
 	const char* GetArgv(int index) const;
 	const char* GetTitle() const;
@@ -75,7 +76,7 @@ private:
 	bool SavegameNow() const;
 
 public:
-	// Modules
+	/* Modules */
 	j1Window*			win = nullptr;
 	j1Input*			input = nullptr;
 	j1Render*			render = nullptr;
@@ -110,4 +111,4 @@ private:
 
 extern j1App* App;
 
-#endif // __j1APP_H__
+#endif /* __J1APP_H__ */

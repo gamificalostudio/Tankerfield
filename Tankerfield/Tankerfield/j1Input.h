@@ -1,5 +1,5 @@
-#ifndef __j1INPUT_H__
-#define __j1INPUT_H__
+#ifndef __J1INPUT_H__
+#define __J1INPUT_H__
 
 #include "j1Module.h"
 
@@ -78,4 +78,4 @@ private:
 	int			mouse_y;
 };
 
-#endif // __j1INPUT_H__
+#endif /* __J1INPUT_H__ */

@@ -1,7 +1,8 @@
-#ifndef __j1MODULE_H__
-#define __j1MODULE_H__
+#ifndef __J1MODULE_H__
+#define __J1MODULE_H__
 
 #include <string>
+
 #include "PugiXml/src/pugixml.hpp"
 
 class j1App;
@@ -69,7 +70,6 @@ public:
 public:
 	std::string	name;
 	bool		active;
-
 };
 
-#endif // __j1MODULE_H__
+#endif /* __J1MODULE_H__ */

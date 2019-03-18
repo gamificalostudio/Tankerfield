@@ -1,8 +1,9 @@
-#ifndef __j1SCENE_H__
-#define __j1SCENE_H__
+#ifndef __J1SCENE_H__
+#define __J1SCENE_H__
+
+#include "SDL/include/SDL_rect.h"
 
 #include "j1Module.h"
-#include "SDL/include/SDL_rect.h"
 
 struct SDL_Texture;
 
@@ -37,4 +38,4 @@ private:
 
 };
 
-#endif // __j1SCENE_H__
+#endif /* __J1SCENE_H__ */

@@ -1,8 +1,9 @@
-#ifndef __j1TEXTURES_H__
-#define __j1TEXTURES_H__
+#ifndef __J1TEXTURES_H__
+#define __J1TEXTURES_H__
+
+#include <list>
 
 #include "j1Module.h"
-#include <list>
 
 struct SDL_Texture;
 struct SDL_Surface;
@@ -37,4 +38,4 @@ public:
 };
 
 
-#endif // __j1TEXTURES_H__
+#endif /* __J1TEXTURES_H__ */

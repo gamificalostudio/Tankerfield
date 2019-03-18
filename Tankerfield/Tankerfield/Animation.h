@@ -55,4 +55,4 @@ public:
 	}
 };
 
-#endif // __ANIMATION_H__
+#endif /* __ANIMATION_H__ */

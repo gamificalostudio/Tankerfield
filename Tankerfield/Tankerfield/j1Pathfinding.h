@@ -1,11 +1,12 @@
-#ifndef __j1PATHFINDING_H__
-#define __j1PATHFINDING_H__
+#ifndef __J1PATHFINDING_H__
+#define __J1PATHFINDING_H__
 
-#include "j1Module.h"
-#include "p2Point.h"
 #include <vector>
 #include <list>
 #include <algorithm>
+
+#include "j1Module.h"
+#include "p2Point.h"
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
@@ -94,4 +95,4 @@ struct PathList
 	std::list<PathNode> list;
 };
 
-#endif // __j1PATHFINDING_H__
+#endif /* __J1PATHFINDING_H__ */

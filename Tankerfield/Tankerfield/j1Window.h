@@ -1,5 +1,5 @@
-#ifndef __j1WINDOW_H__
-#define __j1WINDOW_H__
+#ifndef __J1WINDOW_H__
+#define __J1WINDOW_H__
 
 #include "j1Module.h"
 
@@ -43,4 +43,4 @@ private:
 	uint		scale;
 };
 
-#endif // __j1WINDOW_H__
+#endif /* __J1WINDOW_H__ */

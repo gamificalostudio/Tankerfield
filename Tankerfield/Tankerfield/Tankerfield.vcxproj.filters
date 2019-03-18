@@ -105,5 +105,8 @@
     <ClInclude Include="j1Pathfinding.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="MemLeaks.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
