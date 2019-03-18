@@ -9,7 +9,6 @@
 Label::Label(const fPoint position, const String text, Label_Definition definition, Gui_Listener* listener): UI_Object(position, definition, listener), font(definition.font), color(definition.color)
 {
 	SetText(text);
-
 }
 
 Label::~Label()

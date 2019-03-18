@@ -33,6 +33,8 @@ private:
 
 	Image       * image_test = nullptr;
 
+	Label       * label_test = nullptr;
+
 };
 
 #endif // __j1SCENE_H__

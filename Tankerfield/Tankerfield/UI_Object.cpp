@@ -3,13 +3,8 @@
 #include "j1App.h"
 #include "p2Log.h"
 
-UI_Object::UI_Object(const fPoint position, UI_Object_Definition definition, Gui_Listener *listener) : position(position), listener(listener)
-{
-	section.x = section.y = 0;
-	section.w = definition.section_mesures.w;
-	section.h = definition.section_mesures.h;
-	draw_offset = definition.draw_offset;
-}
+UI_Object::UI_Object(const fPoint position, UI_Object_Definition definition, Gui_Listener *listener) 
+	: position(position), listener(listener), section(definition.section), pivot(definition.pivot), draw_offset(definition.draw_offset) {}
 
 UI_Object::~UI_Object()
 {
@@ -70,6 +65,16 @@ bool UI_Object::SetParent(UI_Object * parent)
 	parent_object->GetSons()->push_back(this);
 
 	return true;
+}
+
+void UI_Object::SetPivot(const PivotPos new_pivot)
+{
+	pivot = new_pivot;
+	//switch (new_pivot)
+	//{
+	//default:
+	//	break:
+	//}
 }
 
 list<UI_Object*>* UI_Object::GetSons() 

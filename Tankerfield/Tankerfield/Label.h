@@ -7,11 +7,12 @@
 #include "p2Point.h"
 #include "SDL_ttf/include/SDL_ttf.h"
 
-
 class Button;
 
 struct Label_Definition : public UI_Object_Definition
 {
+	Label_Definition(_TTF_Font* font, SDL_Color color = { 255,255,255,255 }): font(font) ,color(color) {}
+
 	_TTF_Font* font = nullptr;
 	SDL_Color  color = { 255,255,255,255 };
 };

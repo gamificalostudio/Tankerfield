@@ -445,7 +445,11 @@ void Module_UI::DrawUI(UI_Object * object)
 		rect.w = object->section.w;
 		rect.h = object->section.h;
 
-		if (object->hover_state != HoverState::None )
+		if (selected_object == object)
+		{
+			App->render->DrawQuad(rect, 255, 233, 15, 100, true, true);
+		}
+		else if (object->hover_state != HoverState::None )
 		{
 			App->render->DrawQuad(rect, 255, 0, 0, 100, true, true);
 		}

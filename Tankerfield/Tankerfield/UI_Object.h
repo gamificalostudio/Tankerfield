@@ -5,7 +5,10 @@
 #include "Animation.h"
 #include "j1Module.h"
 #include <list>
+#include <string>
+
 using namespace std;
+typedef string String;
 
 #define DEFAULT_MARGIN_SECTION 10
 
@@ -42,8 +45,8 @@ enum class PivotPos
 
 struct UI_Object_Definition
 {
-	PivotPos   pivot_pos = PivotPos::center;
-	SDL_Rect   section_mesures = { 0,0,0,0 };
+	PivotPos   pivot = PivotPos::center;
+	SDL_Rect   section = { 0,0,0,0 };
 	fPoint     draw_offset = { 0.f, 0.f };
 
 };
@@ -71,6 +74,8 @@ public:
 
 	bool SetParent(UI_Object* parent);
 
+	void SetPivot(const PivotPos new_pivot);
+
 	fPoint GetPosition() const;
 
 	list<UI_Object*>* GetSons(); 
@@ -84,19 +89,21 @@ public:
 protected:
 
 	// Vars ==============================================
-
+	String                name;
 	fPoint                position = { 0.f, 0.f };
 	fPoint                relative_position = { 0.f, 0.f };
-	fPoint                draw_offset = { 0.f, 0.f };
+	PivotPos              pivot = PivotPos::center;
 	SDL_Rect			  section = {0, 0, 0, 0};
+	fPoint                section_offset = { 0.f, 0.f };
+	fPoint                draw_offset = { 0.f, 0.f };
 	Gui_Listener        * listener = nullptr;
 
 	// Properties ========================================
 
-	ObjectState				state = ObjectState::visible;
-	HoverState				hover_state = HoverState::None;
-	bool					is_draggable = false;
-	bool					is_interactive = true;
+	ObjectState			  state = ObjectState::visible;
+	HoverState			  hover_state = HoverState::None;
+	bool			      is_draggable = false;
+	bool				  is_interactive = true;
 
 	// Hierarchy =========================================
 
