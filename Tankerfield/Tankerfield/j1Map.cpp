@@ -283,30 +283,7 @@ bool j1Map::Load(const char* file_name)
 
 	if(ret == true)
 	{
-		LOG("Successfully parsed map XML file: %s", file_name);
-		LOG("width: %d height: %d", data.columns, data.rows);
-		LOG("tile_width: %d tile_height: %d", data.tile_width, data.tile_height);
-
-		p2List_item<TileSet*>* item = data.tilesets.start;
-		while(item != NULL)
-		{
-			TileSet* s = item->data;
-			LOG("Tileset ----");
-			LOG("name: %s firstgid: %d", s->name.GetString(), s->firstgid);
-			LOG("tile width: %d tile height: %d", s->tile_width, s->tile_height);
-			LOG("spacing: %d margin: %d", s->spacing, s->margin);
-			item = item->next;
-		}
-
-		p2List_item<MapLayer*>* item_layer = data.mapLayers.start;
-		while(item_layer != NULL)
-		{
-			MapLayer* l = item_layer->data;
-			LOG("Layer ----");
-			LOG("name: %s", l->name.GetString());
-			LOG("tile width: %d tile height: %d", l->columns, l->rows);
-			item_layer = item_layer->next;
-		}
+		DebugMap();
 	}
 
 	map_loaded = ret;
@@ -331,16 +308,16 @@ bool j1Map::LoadMap()
 		data.rows = map.attribute("height").as_int();
 		data.tile_width = map.attribute("tilewidth").as_int();
 		data.tile_height = map.attribute("tileheight").as_int();
-		p2SString bg_color(map.attribute("backgroundcolor").as_string());
+		std::string bg_color(map.attribute("backgroundcolor").as_string());
 
 		data.background_color.r = 0;
 		data.background_color.g = 0;
 		data.background_color.b = 0;
 		data.background_color.a = 0;
 
-		if(bg_color.Length() > 0)
+		if(bg_color.size() > 0)
 		{
-			p2SString red, green, blue;
+			std::string red, green, blue;
 			bg_color.SubString(1, 2, red);
 			bg_color.SubString(3, 4, green);
 			bg_color.SubString(5, 6, blue);
@@ -397,7 +374,7 @@ bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
 
-	set->name.create(tileset_node.attribute("name").as_string());
+	set->name = tileset_node.attribute("name").as_string();
 	set->firstgid = tileset_node.attribute("firstgid").as_int();
 	set->tile_width = tileset_node.attribute("tilewidth").as_int();
 	set->tile_height = tileset_node.attribute("tileheight").as_int();
@@ -767,4 +744,27 @@ bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const
 	}
 
 	return ret;
+}
+void j1Map::DebugMap(){
+	LOG("Successfully parsed map XML file: %s", data.loadedLevel);
+	LOG("width: %d height: %d", data.columns, data.rows);
+	LOG("tile_width: %d tile_height: %d", data.tile_width, data.tile_height);
+
+	for (std::list<TileSet*>::iterator item = data.tilesets.begin(); item != data.tilesets.end(); ++item)
+	{
+		TileSet* s = (*item);
+		LOG("Tileset ----");
+		LOG("name: %s firstgid: %d", (*s).name, (*s).firstgid);
+		LOG("tile width: %d tile height: %d", s->tile_width, s->tile_height);
+		LOG("spacing: %d margin: %d", s->spacing, s->margin);
+	};
+	
+	for (std::list<MapLayer*>::iterator item_layer = data.mapLayers.begin(); item_layer != data.mapLayers.end(); ++item_layer)
+	{
+		MapLayer* l = (*item_layer);
+		LOG("Layer ----");
+		LOG("name: %s", l->name);
+		LOG("tile width: %d tile height: %d", l->columns, l->rows);
+	}
+
 }
