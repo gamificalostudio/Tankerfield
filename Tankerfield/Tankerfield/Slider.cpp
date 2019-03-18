@@ -6,7 +6,7 @@
 #include "j1App.h"
 #include"Button_Input.h"
 
-Slider::Slider(const iPoint position, const Slider_Definition definition, Gui_Listener* listener) : UI_Object(position, listener)
+Slider::Slider(const fPoint position, const Slider_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
 {
 	this->definition = definition;
 
@@ -57,7 +57,7 @@ void Slider::SetValue(int value)
 
 	current_value = value;
 	int button_axis_value = point_A + (current_value* definition.distance) / 100;
-	thumb->SetPosition(iPoint(button_axis_value, position.y));
+	thumb->SetPosition(fPoint( (float)button_axis_value, position.y));
 }
 
 bool Slider::Update(float dt)
@@ -65,19 +65,19 @@ bool Slider::Update(float dt)
 	point_A = position.x - definition.distance * 0.5f;
 	point_B = position.x + definition.distance * 0.5f;
 
-	iPoint pos = thumb->GetPosition();
+	fPoint pos = thumb->GetPosition();
 
-	if (pos.x < point_A)
+	if (pos.x <= point_A)
 	{
-		thumb->SetPosition(iPoint(point_A, position.y));
+		thumb->SetPosition(fPoint(point_A, position.y));
 	}
-	else if (pos.x > point_B)
+	else if (pos.x >= point_B)
 	{
-		thumb->SetPosition(iPoint(point_B, position.y));
+		thumb->SetPosition(fPoint(point_B, position.y));
 	}
 	else
 	{
-		thumb->SetPosition(iPoint( thumb->GetPosition().x, position.y));
+		thumb->SetPosition(fPoint( thumb->GetPosition().x, position.y));
 	}
 
 	current_value =   definition.max_value * ( ( (float) (pos.x - point_A) * 1.0f) / (float)definition.distance ) ;

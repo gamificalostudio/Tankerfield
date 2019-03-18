@@ -11,7 +11,7 @@
 using namespace std;
 typedef string String;
 
-struct TextPanel_Definition
+struct TextPanel_Definition: public UI_Object_Definition
 {
 	String  		      text;
 	_TTF_Font*			  font = nullptr;
@@ -24,7 +24,7 @@ class TextPanel : public UI_Object
 {
 public:
 
-	TextPanel(const iPoint position, TextPanel_Definition definition, Gui_Listener* listener);
+	TextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener* listener);
 
 	// Destructor
 	~TextPanel();

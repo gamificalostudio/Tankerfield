@@ -9,7 +9,7 @@
 
 class Gui_Listener;
 
-struct Checkbox_Definition
+struct Checkbox_Definition: public UI_Object_Definition
 {
 	bool                default_value = false;
 	Button_Definition   check_on_button;
@@ -20,7 +20,7 @@ class Checkbox : public UI_Object, public Gui_Listener
 {
 public:
 
-	Checkbox(const iPoint position, const Checkbox_Definition definition, Gui_Listener * listener);
+	Checkbox(const fPoint position, const Checkbox_Definition definition, Gui_Listener * listener);
 
 	virtual ~Checkbox();
 

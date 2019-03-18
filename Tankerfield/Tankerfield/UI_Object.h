@@ -40,11 +40,19 @@ enum class PivotPos
 	bottom_right
 };
 
+struct UI_Object_Definition
+{
+	PivotPos   pivot_pos = PivotPos::center;
+	SDL_Rect   section_mesures = { 0,0,0,0 };
+	fPoint     draw_offset = { 0.f, 0.f };
+
+};
+
 class UI_Object
 {
 public:
 
-	UI_Object(const iPoint position , Gui_Listener *listener);
+	UI_Object(const fPoint position, UI_Object_Definition definition, Gui_Listener *listener);
 	
 	virtual ~UI_Object();
 
@@ -57,13 +65,13 @@ public:
 
 	// Common methods =================================
 
-	void SetPosition(iPoint position);
+	void SetPosition(const fPoint position);
 
 	void SetState(const ObjectState state);
 
 	bool SetParent(UI_Object* parent);
 
-	iPoint GetPosition() const;
+	fPoint GetPosition() const;
 
 	list<UI_Object*>* GetSons(); 
 
@@ -77,17 +85,18 @@ protected:
 
 	// Vars ==============================================
 
-	iPoint                position = {0, 0};
-	iPoint                relative_position = { 0, 0 };
+	fPoint                position = { 0.f, 0.f };
+	fPoint                relative_position = { 0.f, 0.f };
+	fPoint                draw_offset = { 0.f, 0.f };
 	SDL_Rect			  section = {0, 0, 0, 0};
 	Gui_Listener        * listener = nullptr;
 
 	// Properties ========================================
 
-	ObjectState state = ObjectState::visible;
-	HoverState hover_state = HoverState::None;
-	bool is_draggable = false;
-	bool is_interactive = true;
+	ObjectState				state = ObjectState::visible;
+	HoverState				hover_state = HoverState::None;
+	bool					is_draggable = false;
+	bool					is_interactive = true;
 
 	// Hierarchy =========================================
 

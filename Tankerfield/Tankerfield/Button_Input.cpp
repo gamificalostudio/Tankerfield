@@ -8,7 +8,7 @@
 #include "j1App.h"
 
 
-Button::Button(const iPoint position, const Button_Definition definition, Gui_Listener* listener) : UI_Object(position, listener)
+Button::Button(const fPoint position, const Button_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
 {
 	this->definition = definition;
 }
@@ -49,7 +49,7 @@ bool Button::Draw()
 	return true;
 }
 
-bool Button::SetLabel(const iPoint position, const String text, _TTF_Font* font, const SDL_Color color)
+bool Button::SetLabel(const fPoint position, const String text , const Label_Definition definition)
 {
 	if (label != nullptr)
 	{
@@ -57,7 +57,7 @@ bool Button::SetLabel(const iPoint position, const String text, _TTF_Font* font,
 		label = nullptr;
 	}
 
-	label = App->ui->CreateLabel(position, text, font, this, color);
+	label = App->ui->CreateLabel(position, text, definition, this);
 	label->SetParent(this);
 
 	return true;
@@ -92,12 +92,12 @@ bool Button::Update(float dt)
 		switch (state)
 		{
 		case ClickState::On:
-			label->SetPosition(iPoint(label->position.x, label->position.y + LABEL_PRESSED_OFFSET));
+			label->SetPosition({ label->position.x, label->position.y + LABEL_PRESSED_OFFSET });
 			//App->audio->PlayFx(App->ui->fx_button_clicked);
 
 			break;
 		case ClickState::Out:
-			label->SetPosition(iPoint(label->position.x, label->position.y - LABEL_PRESSED_OFFSET));
+			label->SetPosition({ label->position.x, label->position.y - LABEL_PRESSED_OFFSET });
 			break;
 		}
 	}

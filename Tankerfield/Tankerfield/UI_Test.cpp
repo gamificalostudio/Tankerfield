@@ -28,7 +28,7 @@ bool UI_Test::Awake()
 bool UI_Test::Start()
 {
 	Button_Definition buttton_def({0,0,280, 140}, {280, 0 , 280, 140}, {560, 0, 280, 140});
-	button_test = App->ui->CreateButton({ 1920 /2 ,1080 /2 }, buttton_def, this);
+	button_test = App->ui->CreateButton({ 1920 * 0.5f ,1080 * 0.5f }, buttton_def, this);
 	return true;
 }
 

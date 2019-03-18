@@ -6,7 +6,7 @@
 #include "j1Textures.h"
 #include "j1App.h"
 
-TextPanel::TextPanel(const iPoint position, TextPanel_Definition definition, Gui_Listener * listener): UI_Object(position, listener)
+TextPanel::TextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener * listener): UI_Object(position, definition,listener)
 {
 	section.x = section.y = 0;
 	this->definition = definition;

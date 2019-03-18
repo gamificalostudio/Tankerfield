@@ -10,28 +10,33 @@
 
 class Button;
 
+struct Label_Definition : public UI_Object_Definition
+{
+	_TTF_Font* font = nullptr;
+	SDL_Color  color = { 255,255,255,255 };
+};
+
 class Label : public UI_Object
 {
 public:
 
-	Label(const iPoint position, const String text, _TTF_Font* font, const SDL_Color color, Gui_Listener* listener);
+	Label(const fPoint position, const String text, Label_Definition definition, Gui_Listener* listener);
 
-	// Destructor
 	~Label();
 
-	// Set the text
 	void SetText(String text);
 
-	// Draw label
 	bool Draw();
 
 private:
+
 	SDL_Texture*        label_texture = nullptr;
 	_TTF_Font*			font = nullptr;
 	String	    	    text;
 	SDL_Color           color = { 255,255,255,255 };
 
 private:
+
 	friend Button;
 };
 

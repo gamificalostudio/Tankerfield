@@ -3,9 +3,9 @@
 #include "Module_UI.h"
 #include "j1App.h"
 
-Image::Image(iPoint position, SDL_Rect draw_rect, Gui_Listener* listener) : UI_Object(position, listener)
+Image::Image(fPoint position, Image_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener) , draw_rect(definition.draw_rect)
 {
-	//this->animation.PushBack({ draw_rect });
+
 }
 
 

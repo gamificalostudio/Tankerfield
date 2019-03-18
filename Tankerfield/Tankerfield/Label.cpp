@@ -6,10 +6,8 @@
 #include "j1Textures.h"
 #include "j1App.h"
 
-Label::Label(const iPoint position, const String text, _TTF_Font* font, SDL_Color color, Gui_Listener* listener): UI_Object(position, listener)
+Label::Label(const fPoint position, const String text, Label_Definition definition, Gui_Listener* listener): UI_Object(position, definition, listener), font(definition.font), color(definition.color)
 {
-	this->font = font;
-	this->color = color;
 	SetText(text);
 
 }

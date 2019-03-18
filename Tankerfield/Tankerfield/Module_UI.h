@@ -24,7 +24,10 @@ class Label;
 class Checkbox;
 class TextPanel;
 
+struct UI_Object_Definition;
 struct Button_Definition;
+struct Label_Definition;
+struct Image_Definition;
 struct Slider_Definition;
 struct Checkbox_Definition;
 struct TextPanel_Definition;
@@ -62,19 +65,19 @@ public:
 	ClickState GetClickState() const;
 
 	// Creation functions ---------------------------------------------------------
-	UI_Object* CreateObject(iPoint position, Gui_Listener* listener = nullptr);
+	UI_Object* CreateObject(const fPoint position, UI_Object_Definition definition, Gui_Listener* listener = nullptr);
 
-	Label* CreateLabel(iPoint position, String text, _TTF_Font* font, Gui_Listener* listener = nullptr ,SDL_Color color = {255,255,255,255});
+	Label* CreateLabel(const fPoint position, const String text, Label_Definition definition, Gui_Listener* listener = nullptr);
 
-	Image* CreateImage(iPoint position, SDL_Rect draw_rect, Gui_Listener* listener = nullptr);
+	Image* CreateImage(const fPoint position, Image_Definition definition, Gui_Listener* listener = nullptr);
 
-	Button* CreateButton(iPoint position, Button_Definition definition, Gui_Listener* listener = nullptr);
+	Button* CreateButton(const fPoint position, Button_Definition definition, Gui_Listener* listener = nullptr);
 
-	Slider* CreateSlider(iPoint position, Slider_Definition definition, Gui_Listener* listener = nullptr);
+	Slider* CreateSlider(const fPoint position, Slider_Definition definition, Gui_Listener* listener = nullptr);
 
-	Checkbox* CreateCheckbox(iPoint position, Checkbox_Definition definition, Gui_Listener* listener = nullptr);
+	Checkbox* CreateCheckbox(const fPoint position, Checkbox_Definition definition, Gui_Listener* listener = nullptr);
 
-	TextPanel * CreateTextPanel(const iPoint position, TextPanel_Definition definition, Gui_Listener* listener);
+	TextPanel * CreateTextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener* listener);
 
 	// Object functions ----------------------------------------------------------
 	UI_Object*  GetClickedObject();
@@ -86,9 +89,9 @@ public:
 	void SetStateToBranch(const ObjectState state, UI_Object* branch_root);
 
 	// Slider functions ----------------------------------------------------------
-	iPoint GetCursorOffset() const;
+	fPoint GetMouseOffset() const;
 
-	void SetCursorOffset(const iPoint offset);
+	void SetCursorOffset(const fPoint offset);
 
 private:
 
@@ -96,7 +99,7 @@ private:
 
 	void DrawUI(UI_Object* object); // Recursive function to draw gui as a tree
 
-	void UpdateGuiPositions(UI_Object* object, iPoint cumulated_position);
+	void UpdateGuiPositions(UI_Object* object, fPoint cumulated_position);
 
 private:
 
@@ -117,9 +120,9 @@ private:
 public:
 	// Mouse ----------------------------------------------
 
-	iPoint				mouse_position;
+	fPoint				mouse_position;
 
-	iPoint				mouse_offset;
+	fPoint				mouse_offset;
 
 };
 

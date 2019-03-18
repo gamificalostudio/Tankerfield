@@ -3,23 +3,24 @@
 #include "j1App.h"
 #include "p2Log.h"
 
-UI_Object::UI_Object(const iPoint position, Gui_Listener *listener) : position(position), listener(listener)
+UI_Object::UI_Object(const fPoint position, UI_Object_Definition definition, Gui_Listener *listener) : position(position), listener(listener)
 {
 	section.x = section.y = 0;
-	section.w = DEFAULT_MARGIN_SECTION;
-	section.h = DEFAULT_MARGIN_SECTION;
+	section.w = definition.section_mesures.w;
+	section.h = definition.section_mesures.h;
+	draw_offset = definition.draw_offset;
 }
 
 UI_Object::~UI_Object()
 {
 }
 
-iPoint UI_Object::GetPosition() const
+fPoint UI_Object::GetPosition() const
 {
 	return position;
 }
 
-void UI_Object::SetPosition(const iPoint position)
+void UI_Object::SetPosition(const fPoint position)
 {
 	this->position = position;
 	UpdateRelativePosition();

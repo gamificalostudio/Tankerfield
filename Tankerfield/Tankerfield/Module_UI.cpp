@@ -21,7 +21,7 @@
 Module_UI::Module_UI() : j1Module()
 {
 	name.assign("Module UI");
-	main_object = new UI_Object({ 0,0 }, nullptr);
+	main_object = new UI_Object({ 0,0 }, UI_Object_Definition(), nullptr);
 }
 
 // Destructor
@@ -70,8 +70,10 @@ bool Module_UI::CleanUp()
 // Update all guis
 bool Module_UI::PreUpdate()
 {
-	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
-
+	int x_mouse = 0, y_mouse = 0;
+	App->input->GetMousePosition(x_mouse, y_mouse);
+	mouse_position = { (float)x_mouse ,(float)y_mouse };
+	
 	// Debug ===================================================
 	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 		debug = !debug;
@@ -152,7 +154,7 @@ bool Module_UI::Update(float dt)
 			SetCursorOffset(mouse_position - selected_object->GetPosition());
 			break;
 		case ClickState::Repeat:
-			selected_object->SetPosition(mouse_position -GetCursorOffset());
+			selected_object->SetPosition(mouse_position - GetMouseOffset());
 			selected_object->UpdateRelativePosition();
 			break;
 		case ClickState::Out:
@@ -209,7 +211,7 @@ bool Module_UI::Update(float dt)
 		}
 	}
 
-	UpdateGuiPositions(main_object, iPoint(0, 0));
+	UpdateGuiPositions(main_object, fPoint(0, 0));
 
 	
 	// Update objects ==============================================
@@ -244,32 +246,32 @@ bool Module_UI::PostUpdate()
 
 // Creation methods =================================================================
 
- UI_Object * Module_UI::CreateObject(iPoint position, Gui_Listener * listener)
+ UI_Object * Module_UI::CreateObject(const fPoint position, UI_Object_Definition definition, Gui_Listener * listener)
  {
-	 UI_Object* object = new UI_Object(position, listener);
+	 UI_Object* object = new UI_Object(position, definition, listener);
 	 object->SetParent(main_object);
 	 objects_list.push_back(object);
 	 return object;
  }
 
- Label* Module_UI::CreateLabel(iPoint position, String text, _TTF_Font* font, Gui_Listener* listener, SDL_Color color )
+ Label* Module_UI::CreateLabel(const fPoint position, const String text,  Label_Definition definition, Gui_Listener* listener)
 {
-	Label* object = new Label(position, text, font, color, listener);
+	Label* object = new Label(position, text, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 
 }
 
-Image* Module_UI::CreateImage(iPoint position, SDL_Rect draw_rect , Gui_Listener* listener)
+Image* Module_UI::CreateImage(const fPoint position, Image_Definition definition , Gui_Listener* listener)
 {
-	Image* object = new Image(position, draw_rect, listener);
+	Image* object = new Image(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
-Button* Module_UI::CreateButton(iPoint position, Button_Definition definition, Gui_Listener* listener)
+Button* Module_UI::CreateButton(const fPoint position, Button_Definition definition, Gui_Listener* listener)
 {
 	Button* object = new Button(position, definition, listener);
 	object->SetParent(main_object);
@@ -277,7 +279,7 @@ Button* Module_UI::CreateButton(iPoint position, Button_Definition definition, G
 	return object;
 }
 
-Slider * Module_UI::CreateSlider(iPoint position, Slider_Definition definition, Gui_Listener * listener)
+Slider * Module_UI::CreateSlider(const fPoint position, Slider_Definition definition, Gui_Listener * listener)
 {
 	Slider* object = new Slider(position, definition, listener);
 	object->SetParent(main_object);
@@ -285,7 +287,7 @@ Slider * Module_UI::CreateSlider(iPoint position, Slider_Definition definition, 
 	return object;
 }
 
-Checkbox * Module_UI::CreateCheckbox(iPoint position, Checkbox_Definition definition, Gui_Listener * listener)
+Checkbox * Module_UI::CreateCheckbox(const fPoint position, Checkbox_Definition definition, Gui_Listener * listener)
 {
 	Checkbox* object = new Checkbox(position, definition, listener);
 	object->SetParent(main_object);
@@ -293,7 +295,7 @@ Checkbox * Module_UI::CreateCheckbox(iPoint position, Checkbox_Definition defini
 	return object;
 }
 
-TextPanel * Module_UI::CreateTextPanel(const iPoint position, TextPanel_Definition definition, Gui_Listener * listener)
+TextPanel * Module_UI::CreateTextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener * listener)
 {
 	TextPanel* object = new TextPanel(position, definition, listener);
 	object->SetParent(main_object);
@@ -373,13 +375,12 @@ void Module_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_roo
 
 }
 
-iPoint Module_UI::GetCursorOffset() const
+fPoint Module_UI::GetMouseOffset() const
 {
-
 	return mouse_offset;
 }
 
-void Module_UI::SetCursorOffset(const iPoint offset)
+void Module_UI::SetCursorOffset(const fPoint offset)
 {
 	mouse_offset = offset;
 
@@ -446,11 +447,11 @@ void Module_UI::DrawUI(UI_Object * object)
 
 		if (object->hover_state != HoverState::None )
 		{
-			App->render->DrawQuad(rect, 255, 0, 0, 100, true, false);
+			App->render->DrawQuad(rect, 255, 0, 0, 100, true, true);
 		}
 		else
 		{
-			App->render->DrawQuad(rect, 255, 100, 40, 100, true, false);
+			App->render->DrawQuad(rect, 255, 100, 40, 100, true, true);
 		}
 	}
 
@@ -460,7 +461,7 @@ void Module_UI::DrawUI(UI_Object * object)
 	}
 }
 
-void Module_UI::UpdateGuiPositions(UI_Object * object, iPoint cumulated_position)
+void Module_UI::UpdateGuiPositions(UI_Object * object, fPoint cumulated_position)
 {
 	if (object == nullptr)
 	{

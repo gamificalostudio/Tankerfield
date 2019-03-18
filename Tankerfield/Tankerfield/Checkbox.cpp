@@ -5,7 +5,7 @@
 #include "Button_Input.h"
 #include "j1App.h"
 
-Checkbox::Checkbox(const iPoint position, const Checkbox_Definition definition, Gui_Listener* listener) : UI_Object(position, listener)
+Checkbox::Checkbox(const fPoint position, const Checkbox_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
 {
 	this->definition = definition;
 

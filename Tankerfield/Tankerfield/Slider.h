@@ -10,7 +10,7 @@
 struct Slider_Definition;
 class Button;
 
-struct Slider_Definition
+struct Slider_Definition: public UI_Object_Definition
 {
 	int                 distance = 100;
 	int                 fixed_y = 0;
@@ -26,7 +26,7 @@ class Slider : public UI_Object, public Gui_Listener
 
 public:
 
-	Slider(iPoint const position, const Slider_Definition definition, Gui_Listener * listener);
+	Slider(const fPoint position, const Slider_Definition definition, Gui_Listener * listener);
 
 	virtual ~Slider();
 
@@ -43,6 +43,7 @@ private:
 
 private:
 	Button*       thumb = nullptr;
+
 	Slider_Definition   definition;
 	int					point_A = 0;
 	int					point_B = 0;

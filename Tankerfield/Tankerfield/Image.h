@@ -5,11 +5,18 @@
 #include "Animation.h"
 #include "UI_Object.h"
 
+struct Image_Definition : public UI_Object_Definition
+{
+	SDL_Rect draw_rect;
+	bool is_animated = false;
+	Animation image_animation;
+};
+
 class Image: public UI_Object
 {
 
 public:
-	Image(const iPoint position, const SDL_Rect draw_rect, Gui_Listener* listener);
+	Image(const fPoint position, const Image_Definition draw_rect, Gui_Listener* listener);
 
 	virtual ~Image();
 
