@@ -1,10 +1,15 @@
 #include <iostream>
 #include <sstream>
+
+
 #include "SDL/include/SDL_timer.h"
+#include "Brofiler/Brofiler.h"
+#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 
 #include "p2Defs.h"
 #include "p2Log.h"
 
+#include "j1App.h"
 #include "j1Window.h"
 #include "j1Input.h"
 #include "j1Render.h"
@@ -12,11 +17,10 @@
 #include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1Pathfinding.h"
-#include "j1App.h"
+#include "j1Map.h"
 
-//Brofiler-----------------------------------------------
-#include "Brofiler/Brofiler.h"
-#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
+
+
 
 
 // Constructor
@@ -31,7 +35,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	scene = new j1Scene();
 	pathfinding = new j1PathFinding();
-
+	map = new j1Map();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -39,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(pathfinding);
+	AddModule(map);
 
 	// scene last
 	AddModule(scene);

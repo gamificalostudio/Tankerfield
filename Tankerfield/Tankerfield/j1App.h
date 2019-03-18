@@ -3,11 +3,14 @@
 
 #include <list>
 #include <string>
+
+#include "PugiXml/src/pugixml.hpp"
+
 #include "j1Module.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
 
-#include "PugiXml/src/pugixml.hpp"
+
 
 class j1Window;
 class j1Input;
@@ -16,6 +19,7 @@ class j1Textures;
 class j1Audio;
 class j1Scene;
 class j1PathFinding;
+class j1Map;
 
 class j1App
 {
@@ -83,6 +87,7 @@ public:
 	j1Audio*			audio = nullptr;
 	j1Scene*			scene = nullptr;
 	j1PathFinding*		pathfinding = nullptr;
+	j1Map*				map = nullptr;
 
 private:
 	std::list<j1Module*>	modules;
