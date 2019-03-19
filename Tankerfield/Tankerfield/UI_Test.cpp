@@ -90,6 +90,35 @@ void DrawIsometricQuad (float x, float y, float w, float h)
 	App->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, 255, 0, 0, 255, true);
 }
 
+void DrawIsometricBox(float x, float y, float w, float h, float p)
+{
+	fPoint point_1, point_2, point_3, point_4;
+
+	// top_left 
+	point_1 = MapToWorldF(x, y, 100.f, 50.f);
+	// top_right
+	point_2 = MapToWorldF(x + w, y, 100.f, 50.f);
+	// bot_right
+	point_3 = MapToWorldF(x + w, y + h, 100.f, 50.f);
+	// bot_left
+	point_4 = MapToWorldF(x, y + h, 100.f, 50.f);
+
+	App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_2.x, point_2.y, point_3.x, point_3.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_3.x, point_3.y, point_4.x, point_4.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, 255, 0, 0, 255, true);
+
+	App->render->DrawLine(point_1.x, point_1.y - p, point_2.x, point_2.y - p, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_2.x, point_2.y - p, point_3.x, point_3.y - p, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_3.x, point_3.y - p, point_4.x, point_4.y - p, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_4.x, point_4.y - p, point_1.x, point_1.y - p, 255, 0, 0, 255, true);
+
+	App->render->DrawLine(point_1.x, point_1.y, point_1.x, point_1.y - p, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_2.x, point_2.y, point_2.x, point_2.y - p, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_3.x, point_3.y, point_3.x, point_3.y - p, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_4.x, point_4.y, point_4.x, point_4.y - p, 255, 0, 0, 255, true);
+}																		 
+
 bool UI_Test::Update(float dt)
 {
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
@@ -105,19 +134,19 @@ bool UI_Test::Update(float dt)
 		App->render->camera.x -= floor(200.0f * dt);
 	
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		player_pos.y -= 1.f * dt;
+		player_pos.y -= 1.5f * dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		player_pos.y += 1.f * dt;
+		player_pos.y += 1.5f * dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		player_pos.x -= 1.f * dt;
+		player_pos.x -= 1.5f * dt;
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		player_pos.x += 1.f * dt;
+		player_pos.x += 1.5f * dt;
 
 	// Draw Grid ==============================================
-	int rows = 4, columms = 4, tile_width = 100, tile_height = 50;
+	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
 	iPoint point_1, point_2;
 
 
@@ -155,8 +184,9 @@ bool UI_Test::Update(float dt)
 
 	// Draw Player Pos ========================================
 	fPoint player_draw_pos = MapToWorldF(player_pos.x, player_pos.y, tile_width, tile_height);
-	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 10, 0, 255, 0, 255, true);
-	DrawIsometricQuad(player_pos.x - .5f, player_pos.y - .5f, 1, 1);
+	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
+	//DrawIsometricQuad(player_pos.x - .5f, player_pos.y - .5f, 1, 1);
+	DrawIsometricBox(player_pos.x - .5f, player_pos.y - .5f, 1, 1, 100);
 	return true;
 }
 
