@@ -36,6 +36,9 @@ public:
 
 	SDL_Rect* Direction(SDL_Rect* rect, int rect_num, float angle);
 private:
+
+	SDL_Rect * tesla_trooper_rects = nullptr;
+
 	SDL_Texture* texture = nullptr;
 	SDL_Rect player = { 0,0 };
 	std::list<SDL_Rect*>	rects;

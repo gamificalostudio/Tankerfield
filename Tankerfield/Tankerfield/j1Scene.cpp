@@ -29,7 +29,18 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	texture = App->tex->Load("Tesla trooper/shk1.png");
+	texture = App->tex->Load("Tesla trooper/shk-sheet.png");
+
+	tesla_trooper_rects = new SDL_Rect[8];
+	tesla_trooper_rects[0] = {   0, 0, 66, 76 };
+	tesla_trooper_rects[1] = {  66, 0, 66, 76 };
+	tesla_trooper_rects[2] = { 132, 0, 66, 76 };
+	tesla_trooper_rects[3] = { 198, 0, 66, 76 };
+	tesla_trooper_rects[4] = { 264, 0, 66, 76 };
+	tesla_trooper_rects[5] = { 330, 0, 66, 76 };
+	tesla_trooper_rects[6] = { 396, 0, 66, 76 };
+	tesla_trooper_rects[7] = { 462, 0, 66, 76 };
+
 	player = {0,0,76,66};
 	
 	return true;
@@ -65,7 +76,7 @@ bool j1Scene::Update(float dt)
 		App->render->camera.x -= floor(200.0f * dt);
 
 	// Draw ------------------
-	App->render->Blit(texture, 20, 20, &player);
+	App->render->Blit(texture, 20, 20);
 
 	return true;
 }
@@ -91,7 +102,7 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-SDL_Rect* j1Scene::Direction(SDL_Rect* rect, int rect_num, float angle)
+SDL_Rect* j1Scene::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle)
 {
 	float angle_part = 360 / rect_num;
 
