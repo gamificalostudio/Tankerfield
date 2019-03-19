@@ -76,7 +76,7 @@ bool j1Scene::Update(float dt)
 		App->render->camera.x -= floor(200.0f * dt);
 
 	// Draw ------------------
-	App->render->Blit(texture, 20, 20, GetRotatedSprite(tesla_trooper_rects,8,-730));
+	App->render->Blit(texture, 20, 20, GetRotatedSprite(tesla_trooper_rects,8,90));
 
 	return true;
 }
@@ -103,8 +103,10 @@ bool j1Scene::CleanUp()
 }
 
 //The angle should be in degrees and rect_num is the number of rectangles that are inside rect
-SDL_Rect* j1Scene::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle)
+SDL_Rect* j1Scene::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir)
 {
+	angle -= fist_rect_dir;
+
 	if (angle > 360) {
 		angle = fmod(angle, 360);
 	}
