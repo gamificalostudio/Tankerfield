@@ -30,6 +30,8 @@ bool UI_Test::Awake()
 
 bool UI_Test::Start()
 {
+	player_pos = { 2,2 };
+
 	uint win_width = 0u , win_height = 0u;
 	App->win->GetWindowSize(win_width, win_height);
 
@@ -37,8 +39,8 @@ bool UI_Test::Start()
 	Label_Definition label_def(App->font->Load("fonts/pixelart.ttf", 30));
 	button_test = App->ui->CreateButton({ win_width * 0.5f ,win_height * 0.5f }, buttton_def, this);
 	button_test->IsDraggable(true);
-	label_test = App->ui->CreateLabel({ win_width * 0.5f ,win_height * 0.5f },"MORIR", label_def, this);
-	label_test->SetParent(button_test);
+	button_test->SetLabel({ 0,0 }, "i wanna die", label_def);
+
 	return true;
 }
 
@@ -77,15 +79,15 @@ void DrawIsometricQuad (float x, float y, float w, float h)
 	point_1 = MapToWorldF(x, y, 100.f, 50.f);
 	// top_right
 	point_2 = MapToWorldF(x + w, y, 100.f, 50.f);
-	// bot_left
-	point_3 = MapToWorldF(x, y + h, 100.f, 50.f);
 	// bot_right
-	point_4 = MapToWorldF(x + w, y + h, 100.f, 50.f);
-
+	point_3 = MapToWorldF(x + w, y + h, 100.f, 50.f);
+	// bot_left
+	point_4 = MapToWorldF(x, y + h, 100.f, 50.f);
 
 	App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 0, 0, 255, true);
-	App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 0, 0, 255, true);
-
+	App->render->DrawLine(point_2.x, point_2.y, point_3.x, point_3.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_3.x, point_3.y, point_4.x, point_4.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, 255, 0, 0, 255, true);
 }
 
 bool UI_Test::Update(float dt)
@@ -101,6 +103,18 @@ bool UI_Test::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= floor(200.0f * dt);
+	
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		player_pos.y -= 1.f * dt;
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		player_pos.y += 1.f * dt;
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		player_pos.x -= 1.f * dt;
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		player_pos.x += 1.f * dt;
 
 	// Draw Grid ==============================================
 	int rows = 4, columms = 4, tile_width = 100, tile_height = 50;
@@ -134,14 +148,15 @@ bool UI_Test::Update(float dt)
 		{
 			if (coll_tiles[i][j] == 1)
 			{
-				iPoint offset = MapToWorld(i, j, tile_width, tile_height);
-				App->render->DrawCircle(offset.x, offset.y, 4, 255, 255, 255, 255, true);
+				//DrawIsometricQuad(i, j, 1, 1);
 			}
 		}
 	}
 
-
-
+	// Draw Player Pos ========================================
+	fPoint player_draw_pos = MapToWorldF(player_pos.x, player_pos.y, tile_width, tile_height);
+	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 10, 0, 255, 0, 255, true);
+	DrawIsometricQuad(player_pos.x - .5f, player_pos.y - .5f, 1, 1);
 	return true;
 }
 

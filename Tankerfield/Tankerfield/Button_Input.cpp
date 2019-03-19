@@ -57,7 +57,7 @@ bool Button::SetLabel(const fPoint position, const String text , const Label_Def
 		label = nullptr;
 	}
 
-	label = App->ui->CreateLabel(position, text, definition, this);
+	label = App->ui->CreateLabel(position + this->position, text, definition, this);
 	label->SetParent(this);
 
 	return true;

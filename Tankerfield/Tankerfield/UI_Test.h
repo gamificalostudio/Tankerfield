@@ -29,6 +29,8 @@ public:
 
 private:
 
+	fPoint        player_pos;
+
 	Button      * button_test = nullptr;
 
 	Image       * image_test = nullptr;
