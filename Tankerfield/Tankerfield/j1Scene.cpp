@@ -102,7 +102,9 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-//The angle should be in degrees and rect_num is the number of rectangles that are inside rect
+//sprites in SDL_Rect * rect must be ordered in counter clock-wise direction
+//angle should be in degrees
+//int rect_num is the number of rectangles that are inside SDL_Rect * rect array
 SDL_Rect* j1Scene::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir)
 {
 	angle -= fist_rect_dir;
