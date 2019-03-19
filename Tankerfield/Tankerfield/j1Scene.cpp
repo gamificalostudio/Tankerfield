@@ -29,7 +29,8 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-
+	texture = App->tex->Load("Tesla trooper/shk1.png");
+	player = {0,0,76,66};
 	
 	return true;
 }
@@ -64,7 +65,7 @@ bool j1Scene::Update(float dt)
 		App->render->camera.x -= floor(200.0f * dt);
 
 	// Draw ------------------
-
+	App->render->Blit(texture, 20, 20, &player);
 
 	return true;
 }
@@ -88,4 +89,20 @@ bool j1Scene::CleanUp()
 
 
 	return true;
+}
+
+SDL_Rect* j1Scene::Direction(SDL_Rect* rect, int rect_num, float angle)
+{
+	float angle_part = 360 / rect_num;
+
+	float num_pos = angle / angle_part;
+
+	float remainder = fmod(num_pos, 1);
+
+	if (remainder >= 0.5f)
+		num_pos = num_pos - remainder + 1;
+	else
+		num_pos = num_pos - remainder;
+
+	return rect;
 }

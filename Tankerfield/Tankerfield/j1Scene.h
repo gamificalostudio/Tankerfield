@@ -33,8 +33,12 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-private:
 
+	SDL_Rect* Direction(SDL_Rect* rect, int rect_num, float angle);
+private:
+	SDL_Texture* texture = nullptr;
+	SDL_Rect player = { 0,0 };
+	std::list<SDL_Rect*>	rects;
 };
 
 #endif // __j1SCENE_H__
