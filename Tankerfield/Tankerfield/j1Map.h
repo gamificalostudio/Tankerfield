@@ -1,19 +1,9 @@
 #ifndef __j1MAP_H__
 #define __j1MAP_H__
-
 #include <list>
-
-#include "PugiXml/src/pugixml.hpp"
-#include "SDL\include\SDL_pixels.h"
-#include "p2Point.h"
 #include "j1Module.h"
-
-
-#define MAX_OBJECTGROUP_COLLIDERS 100
-
-//struct Collider;
-struct SDL_Texture;
-struct SDL_Rect;
+#include "j1Render.h"
+#include "j1Textures.h"
 
 
 struct Levels
@@ -23,62 +13,85 @@ struct Levels
 
 struct Properties
 {
-	bool draw = true;
-	bool navigation = false;
-	int testValue = 0;
-	float parallaxSpeed = 1.0f; // default value
-	// music
-	std::string music_name;
-	std::string fx_name;
-
-	inline bool GetDraw() const
+	struct Property
 	{
-		return draw;
+		std::string name;
+		void* value;
+	};
+
+	~Properties()
+	{
+		std::list<Property*>::iterator item = list.begin();
+
+		while (item != list.end())
+		{
+			RELEASE(*item);
+			++item;
+		}
+
+		list.clear();
 	}
 
-	// =========
-	// associated GUI xml path
-	std::string gui_xml_path = nullptr;
-};
-
-
-struct MapObjects
-{
-	std::string name;
-	uint id = 0;
-	//Collider* colliders[MAX_OBJECTGROUP_COLLIDERS] = { nullptr };
-	Properties properties;
-	
-	~MapObjects()
+	std::string GetAsString(const char* name, std::string default_value = "") const
 	{
-		//RELEASE_ARRAY(colliders[MAX_OBJECTGROUP_COLLIDERS]);
+		std::string ret = default_value;
+		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+		{
+			if ((*item)->name == name)
+			{
+				return ret = *(std::string*)(*item)->value;
+			}
+		}
+		return ret;
 	}
+	int         GetAsInt(const char* name, int default_value = 0) const
+	{
+		int ret = default_value;
+		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+		{
+			if ((*item)->name == name)
+			{
+				return ret = *(int*)(*item)->value;
+			}
+		}
+		return ret;
+	}
+	float       GetAsFloat(const char* name, float default_value = 0) const
+	{
+		float ret = default_value;
+		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+		{
+			if ((*item)->name == name)
+			{
+				return ret = *(float*)(*item)->value;
+			}
+		}
+		return ret;
+	}
+
+	std::list<Property*>	list;
 };
 
 // ----------------------------------------------------
-//INFO:
-//- Width & Height are always calculated in pixels
-//- Columns & Rows are always calculated in number of tiles
 struct MapLayer
 {
-	std::string name;
-	uint columns = 0u;
-	uint rows = 0u;
-	uint* tileArray = nullptr;
-	Properties properties;
-	//float parallaxSpeed = 1.0f; // default
+	std::string	name;
+	uint			columns;
+	uint			rows;
+	uint*		data;
+	Properties	properties;
 
-	MapLayer() : tileArray(NULL)
+	MapLayer() : data(NULL)
 	{}
 
 	~MapLayer()
 	{
-		RELEASE_ARRAY(tileArray);
+		RELEASE(data);
 	}
 
-	inline uint GetArrayPos(int column, int row) const
+	inline uint Get(int x, int y) const
 	{
-		return tileArray[(columns*row) + column];
+		return data[(y*columns) + x];
 	}
 };
 
@@ -100,102 +113,60 @@ struct TileSet
 	int					rows;
 	int					offset_x;
 	int					offset_y;
-	
-
 };
 
-enum class MapTypes
+enum MapTypes
 {
 	MAPTYPE_UNKNOWN = 0,
 	MAPTYPE_ORTHOGONAL,
 	MAPTYPE_ISOMETRIC,
 	MAPTYPE_STAGGERED
 };
-// ----------------------------------------------------
+
 struct MapData
 {
-	int					columns;
-	int					rows;
-	int					tile_width;
-	int					tile_height;
+	uint					columns;
+	uint					rows;
+	uint					tile_width;
+	uint					tile_height;
 	SDL_Color			background_color;
 	MapTypes			type;
 	std::list<TileSet*>	tilesets;
 	std::list<MapLayer*>	mapLayers;
-	std::list<MapObjects*> mapObjects;
-	std::list<Levels*>		levels;
-	uint				numLevels = 0; // counter for num levels
-	std::string			loadedLevel;
-	
-	Properties properties;
 	
 };
 
-// ----------------------------------------------------
 class j1Map : public j1Module
 {
 public:
-
-	j1Map();
-
-	// Destructor
-	~j1Map();
-
-	// Called before render is available
-	bool Awake(pugi::xml_node& conf) override;
-
-	// Called each loop iteration
-	bool PostUpdate()override;
-
-	// Called before quitting
-	bool CleanUp()override;
-
-	// Load new map
-	bool Load(const char* path);
-
-	// Reset current map
-	bool Reset();
-
-	//bool Load(pugi::xml_node& node);
-	//bool Save(pugi::xml_node& node) const;
-
-	// Coordinate translation methods
-	iPoint MapToWorld(int x, int y) const;
-	iPoint WorldToMap(int x, int y) const;
-	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
-	void DebugMap();
-	int GetTileWidth() const;
-
+	MapData data;
+	bool showNavLayer = false;
+	std::list<Levels*>		levels;
 private:
+	bool				map_loaded;
+	std::string			folder;
+	uint				numLevels = 0; // counter for num levels
+	pugi::xml_document	map_file;
+
 
 	bool LoadMap();
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
-	bool LoadMapColliders(pugi::xml_node& node);//, MapObjects* obj);
-	bool LoadProperties(pugi::xml_node& node, Properties& properties);
-	
+	void DebugMap();
 
-	TileSet* GetTilesetFromTileId(int id) const;
-
-	//bool loadFromSaveGame = false;
 
 public:
+	j1Map();
+	~j1Map();
 
-	MapData data;
+	bool Awake(pugi::xml_node&) override;
+	bool PostUpdate() override;
 
-	bool				map_loaded;
-	bool showNavLayer = false;
+	// Load new map
+	bool Load(const std::string & file_name);
 
-	MapData operator ->()
-	{
-		return data;
-	}
-	
-private:
-
-	pugi::xml_document	map_file;
-	std::string			folder;
+	iPoint MapToWorld(int column, int row) const;
+	TileSet* GetTilesetFromTileId(int id) const;
 };
-
 #endif // __j1MAP_H__
