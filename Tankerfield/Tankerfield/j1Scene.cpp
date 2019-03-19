@@ -109,15 +109,18 @@ SDL_Rect* j1Scene::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, f
 {
 	angle -= fist_rect_dir;
 
-	if (angle > 360) {
+	if (angle > 360) 
+	{
 		angle = fmod(angle, 360);
 	}
-	else if (angle < -360) {
+	else if (angle < -360)
+	{
 		angle = fmod(angle, -360);
 	}
-
 	if (angle < 0)
+	{
 		angle += 360;
+	}
 
 	float angle_part = 360 / rect_num;
 
@@ -126,12 +129,18 @@ SDL_Rect* j1Scene::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, f
 	float remainder = fmod(num_pos, 1);
 
 	if (remainder >= 0.5f)
+	{
 		num_pos = num_pos - remainder + 1;
+	}
 	else
+	{
 		num_pos = num_pos - remainder;
+	}
 
 	if (num_pos == rect_num)
+	{
 		num_pos = 0;
+	}
 
 	return &rect[(int)num_pos];
 }
