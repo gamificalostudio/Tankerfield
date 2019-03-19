@@ -17,6 +17,9 @@ class j1Audio;
 class j1Scene;
 class j1PathFinding;
 class ObjectManager;
+class SceneTest2;
+class SceneManager;
+
 
 class j1App
 {
@@ -85,6 +88,8 @@ public:
 	j1Scene*			scene = nullptr;
 	j1PathFinding*		pathfinding = nullptr;
 	ObjectManager*		objectmanager = nullptr;
+	SceneManager*		scmanager = nullptr;
+	SceneTest2*			test2 = nullptr;
 
 private:
 	std::list<j1Module*>	modules;

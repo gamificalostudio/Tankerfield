@@ -62,6 +62,12 @@
     <ClCompile Include="ObjectManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTest2.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1PerfTimer.h">
@@ -116,6 +122,12 @@
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTest2.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

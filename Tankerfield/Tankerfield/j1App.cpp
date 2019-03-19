@@ -12,7 +12,9 @@
 #include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1Pathfinding.h"
+#include "SceneTest2.h"
 #include "j1App.h"
+#include "SceneManager.h"
 #include "ObjectManager.h"
 
 // Constructor
@@ -28,6 +30,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new j1Scene();
 	pathfinding = new j1PathFinding();
 	objectmanager = new ObjectManager();
+	test2 = new SceneTest2();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -37,6 +40,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(pathfinding);
 	AddModule(objectmanager);
+	AddModule(test2);
 
 	// scene last
 	AddModule(scene);
