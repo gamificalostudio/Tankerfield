@@ -4,7 +4,7 @@
 #include "j1Module.h"
 #include "j1Render.h"
 #include "j1Textures.h"
-
+#include "p2Log.h"
 
 struct Levels
 {
@@ -63,7 +63,8 @@ struct Properties
 		{
 			if ((*item)->name == name)
 			{
-				return ret = *(float*)(*item)->value;
+				ret = *(float*)(*item)->value;
+				return ret;
 			}
 		}
 		return ret;
@@ -75,13 +76,43 @@ struct Properties
 		{
 			if ((*item)->name == name)
 			{
-				return ret = *(bool*)(*item)->value;
+				ret = *(bool*)(*item)->value;
+				return ret;
 			}
 		}
 		return ret;
 	}
 
 	std::list<Property*>	list;
+
+	void LoadProperties(pugi::xml_node propertie_node)
+	{
+		for (pugi::xml_node iter = propertie_node.child("property"); iter; iter = iter.next_sibling("property"))
+		{
+			Property* p = new Property();
+			p->name = iter.attribute("name").as_string();
+			std::string type = iter.attribute("type").as_string();
+			if (type == "int")
+			{
+				p->value = new int(iter.attribute("value").as_int());
+			}
+			else if (type == "float")
+			{
+				p->value = new float(iter.attribute("value").as_float());
+			}
+			else if (type == "bool")
+			{
+				p->value = new bool(iter.attribute("value").as_bool());
+				
+			}
+			else 
+			{
+				p->value = new std::string(iter.attribute("value").as_string());
+			}
+			list.push_back(p);
+			
+		}
+	}
 };
 
 // ----------------------------------------------------
@@ -91,7 +122,7 @@ struct MapLayer
 	int			columns;
 	int			rows;
 	uint*		data;
-	Properties	properties;
+	Properties	layer_properties;
 
 	MapLayer() : data(NULL)
 	{}
@@ -145,7 +176,7 @@ struct MapData
 	MapTypes			type;
 	std::list<TileSet*>	tilesets;
 	std::list<MapLayer*>	mapLayers;
-	
+	Properties				map_properties;
 };
 
 class j1Map : public j1Module
@@ -166,7 +197,7 @@ private:
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	void DebugMap();
-
+	
 
 public:
 	j1Map();
@@ -177,6 +208,8 @@ public:
 
 	// Load new map
 	bool Load(const std::string & file_name);
+
+
 
 	iPoint MapToWorld(int column, int row) const;
 	TileSet* GetTilesetFromTileId(int id) const;

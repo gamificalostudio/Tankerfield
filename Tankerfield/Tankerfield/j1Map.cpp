@@ -52,7 +52,7 @@ bool j1Map::PostUpdate()
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->properties.GetAsBool("NoDraw")) {
+		if ((*layer)->layer_properties.GetAsBool("NoDraw") == true) {
 			continue;
 		}
 
@@ -130,21 +130,6 @@ bool j1Map::Load(const std::string& file_name)
 			data.mapLayers.push_back(lay);
 	}
 
-	// Load objects/scene colliders -----------------------------------------
-	//pugi::xml_node objectGroup;
-	//for (objectGroup = map_file.child("map").child("group"); objectGroup && ret; objectGroup = objectGroup.next_sibling("group"))
-	//{
-	//	std::string tmp = objectGroup.attribute("name").as_string();
-	//	//MapObjects* obj = new MapObjects();
-
-	//	if (tmp == "Colliders")
-	//	{
-	//		//for(pugi::xml_node collidersGroup = objectGroup.child("objectgroup"))
-	//		ret = LoadMapColliders(objectGroup);//, obj);
-	//		LOG("loading Map colliders");
-	//	}
-
-	//}
 
 	if (ret == true)
 	{
@@ -188,7 +173,7 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->name = node.attribute("name").as_string();
 	layer->columns = node.attribute("width").as_int();
 	layer->rows = node.attribute("height").as_int();
-	//LoadProperties(node, layer->properties);
+	layer->layer_properties.LoadProperties(node.child("properties"));
 	pugi::xml_node layer_data = node.child("data");
 
 	if (layer_data == NULL)
@@ -306,21 +291,7 @@ bool j1Map::LoadMap()
 
 		bool ret = false;
 
-		/*pugi::xml_node data = map.child("properties");
-		if (data != NULL)
-		{
-			pugi::xml_node prop;
-			for (prop = data.child("property"); prop; prop = prop.next_sibling("property"))
-			{
-				Properties::Property* p = new Properties::Property();
-				p->name = prop.attribute("name").as_string();
-
-				p->value = new float(prop.attribute("value").as_float());
-
-
-				data.properties.list.add(p);
-			}
-		}*/
+		data.map_properties.LoadProperties(map.child("properties"));
 
 
 		std::string orientation(map.attribute("orientation").as_string());
