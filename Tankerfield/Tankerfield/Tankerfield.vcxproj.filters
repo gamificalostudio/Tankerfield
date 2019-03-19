@@ -56,6 +56,12 @@
     <ClCompile Include="j1Pathfinding.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1PerfTimer.h">
@@ -103,6 +109,12 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Pathfinding.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
