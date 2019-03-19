@@ -76,7 +76,7 @@ bool j1Scene::Update(float dt)
 		App->render->camera.x -= floor(200.0f * dt);
 
 	// Draw ------------------
-	App->render->Blit(texture, 20, 20);
+	App->render->Blit(texture, 20, 20, GetRotatedSprite(tesla_trooper_rects,8,90));
 
 	return true;
 }
@@ -115,5 +115,5 @@ SDL_Rect* j1Scene::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle)
 	else
 		num_pos = num_pos - remainder;
 
-	return rect;
+	return &rect[(int)num_pos];
 }

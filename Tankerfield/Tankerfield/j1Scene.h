@@ -34,7 +34,7 @@ public:
 	bool CleanUp();
 
 
-	SDL_Rect* Direction(SDL_Rect* rect, int rect_num, float angle);
+	SDL_Rect* GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle);
 private:
 
 	SDL_Rect * tesla_trooper_rects = nullptr;
