@@ -33,15 +33,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-
-	SDL_Rect* GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir = 90);
 private:
-
-	SDL_Rect * tesla_trooper_rects = nullptr;
-
-	SDL_Texture* texture = nullptr;
-	SDL_Rect player = { 0,0 };
-	std::list<SDL_Rect*>	rects;
 };
 
 #endif // __j1SCENE_H__
