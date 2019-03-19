@@ -52,7 +52,7 @@ bool j1Map::PostUpdate()
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->name == "navigationLayer" && showNavLayer == false) {
+		if ((*layer)->properties.GetAsBool("NoDraw")) {
 			continue;
 		}
 
@@ -70,7 +70,7 @@ bool j1Map::PostUpdate()
 						iPoint pos = MapToWorld(x, y);
 
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, (*layer)->properties.GetAsFloat("parallax",1.0F));
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
 					}
 				}
@@ -186,8 +186,8 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	bool ret = true;
 
 	layer->name = node.attribute("name").as_string();
-	layer->columns = node.attribute("width").as_uint();
-	layer->rows = node.attribute("height").as_uint();
+	layer->columns = node.attribute("width").as_int();
+	layer->rows = node.attribute("height").as_int();
 	//LoadProperties(node, layer->properties);
 	pugi::xml_node layer_data = node.child("data");
 
@@ -241,7 +241,7 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 			set->tex_height = h;
 		}
 
-		set->columns = tileset_node.attribute("columns").as_uint(0);
+		set->columns = tileset_node.attribute("columns").as_int(0);
 		set->rows = set->tex_height / set->tile_height;
 	}
 
@@ -299,10 +299,10 @@ bool j1Map::LoadMap()
 	}
 	else
 	{
-		data.columns = map.attribute("width").as_uint();
-		data.rows = map.attribute("height").as_uint();
-		data.tile_width = map.attribute("tilewidth").as_uint();
-		data.tile_height = map.attribute("tileheight").as_uint();
+		data.columns = map.attribute("width").as_int();
+		data.rows = map.attribute("height").as_int();
+		data.tile_width = map.attribute("tilewidth").as_int();
+		data.tile_height = map.attribute("tileheight").as_int();
 
 		bool ret = false;
 

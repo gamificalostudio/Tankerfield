@@ -68,6 +68,18 @@ struct Properties
 		}
 		return ret;
 	}
+	bool       GetAsBool(const char* name, bool default_value = false) const
+	{
+		bool ret = default_value;
+		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+		{
+			if ((*item)->name == name)
+			{
+				return ret = *(bool*)(*item)->value;
+			}
+		}
+		return ret;
+	}
 
 	std::list<Property*>	list;
 };
@@ -76,8 +88,8 @@ struct Properties
 struct MapLayer
 {
 	std::string	name;
-	uint			columns;
-	uint			rows;
+	int			columns;
+	int			rows;
 	uint*		data;
 	Properties	properties;
 
@@ -125,10 +137,10 @@ enum MapTypes
 
 struct MapData
 {
-	uint					columns;
-	uint					rows;
-	uint					tile_width;
-	uint					tile_height;
+	int					columns;
+	int					rows;
+	int					tile_width;
+	int					tile_height;
 	SDL_Color			background_color;
 	MapTypes			type;
 	std::list<TileSet*>	tilesets;
