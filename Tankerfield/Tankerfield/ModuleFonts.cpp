@@ -54,9 +54,9 @@ bool ModuleFonts::CleanUp()
 }
 
 // Load new texture from file path
-TTF_Font* const ModuleFonts::Load(const char* path, int size)
+_TTF_Font* const ModuleFonts::Load(const char* path, int size)
 {
-	TTF_Font* font = TTF_OpenFont(path, size);
+	_TTF_Font* font = TTF_OpenFont(path, size);
 
 	if (font == NULL)
 	{
@@ -65,7 +65,7 @@ TTF_Font* const ModuleFonts::Load(const char* path, int size)
 	else
 	{
 		LOG("Successfully loaded font %s size %d", path, size);
-		fonts.assign(font);
+		fonts.push_back(font);
 	}
 
 	return font;
