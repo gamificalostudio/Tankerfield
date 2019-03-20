@@ -1,0 +1,10 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+configuration: Release
+build:
+  verbosity: minimal
+before_package:
+- ps: >-
+    Copy-Item E:\Users\Mi Pc\Documents\GitHub\Tankerfield\Tankerfield\Release\Tankerfield.exe
+
+    E:\Users\Mi Pc\Documents\GitHub\Tankerfield\Tankerfield\Game
