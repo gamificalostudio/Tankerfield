@@ -161,7 +161,7 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 
 	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
 	{
-		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -189,7 +189,7 @@ bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 
 	if (result != 0)
 	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -213,7 +213,7 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 
 	if (result != 0)
 	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -233,17 +233,28 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 
 	float factor = (float)M_PI / 180.0f;
 
-	for (uint i = 0; i < 360; ++i)
+	if (use_camera)
 	{
-		points[i].x = (int)(x + radius * cos(i * factor));
-		points[i].y = (int)(y + radius * sin(i * factor));
+		for (uint i = 0; i < 360; ++i)
+		{
+			points[i].x = (int)(camera.x + x + radius * cos(i * factor));
+			points[i].y = (int)(camera.y + y + radius * sin(i * factor));
+		}
+	}
+	else
+	{
+		for (uint i = 0; i < 360; ++i)
+		{
+			points[i].x = (int)(x + radius * cos(i * factor));
+			points[i].y = (int)(y + radius * sin(i * factor));
+		}
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);
 
 	if (result != 0)
 	{
-		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
 
