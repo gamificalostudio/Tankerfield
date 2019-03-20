@@ -19,6 +19,9 @@
     <Filter Include="Tools\pugixml">
       <UniqueIdentifier>{89a894a7-30a4-4fb1-b357-91a5290dad3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Modules\UI">
+      <UniqueIdentifier>{6bce45f6-0fd4-44bb-8451-e5cd660f1211}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="j1PerfTimer.cpp">
@@ -57,6 +60,42 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Map.cpp">
+       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Button_Input.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Checkbox.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Label.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_Panel.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Object.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Fonts.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Test.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_UI.cpp">
+       <Filter>Modules</Filter>
+ </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -109,6 +148,42 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Map.h">
+      <Filter>Modules</Filter>
+      </ClInclude>
+    <ClInclude Include="Button_Input.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Checkbox.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Image.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Label.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Text_Panel.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Object.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Fonts.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Test.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_UI.h">
+       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectManager.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
