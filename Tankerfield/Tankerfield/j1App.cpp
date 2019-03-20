@@ -16,6 +16,8 @@
 #include "j1Fonts.h"
 #include "Module_UI.h"
 #include "UI_Test.h"
+#include "ObjectManager.h"
+
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -31,6 +33,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	pathfinding = new j1PathFinding();
 	font = new j1Fonts();
 	ui = new Module_UI();
+	objectmanager = new ObjectManager();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -40,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(pathfinding);
 	AddModule(font);
+	AddModule(objectmanager);
 
 	AddModule(ui_test);
 	AddModule(ui);
