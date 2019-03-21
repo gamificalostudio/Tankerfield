@@ -24,7 +24,7 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	position.y = y;
 
 	walking = new Animation[8];
-	walking[0].PushBack({ 528,0,66,76 });
+	walking[0].PushBack({ 528,0,66,76 });//8
 	walking[0].PushBack({ 594,0,66,76 });
 	walking[0].PushBack({ 660,0,66,76 });
 	walking[0].PushBack({ 726,0,66,76 });
@@ -32,7 +32,7 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	walking[0].PushBack({ 858,0,66,76 });
 	walking[0].speed=5.0f;
 
-	walking[1].PushBack({ 924,0,66,76 });
+	walking[1].PushBack({ 924,0,66,76 });//14
 	walking[1].PushBack({ 990,0,66,76 });
 	walking[1].PushBack({ 1056,0,66,76 });
 	walking[1].PushBack({ 1122,0,66,76 });
@@ -40,7 +40,7 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	walking[1].PushBack({ 1254,0,66,76 });
 	walking[1].speed = 5.0f;
 
-	walking[2].PushBack({ 1320,0,66,76 });
+	walking[2].PushBack({ 1320,0,66,76 });//20
 	walking[2].PushBack({ 1386,0,66,76 });
 	walking[2].PushBack({ 1452,0,66,76 });
 	walking[2].PushBack({ 1518,0,66,76 });
@@ -48,7 +48,7 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	walking[2].PushBack({ 1650,0,66,76 });
 	walking[2].speed = 5.0f;
 
-	walking[3].PushBack({ 1716,0,66,76 });
+	walking[3].PushBack({ 1716,0,66,76 });//26
 	walking[3].PushBack({ 1782,0,66,76 });
 	walking[3].PushBack({ 1848,0,66,76 });
 	walking[3].PushBack({ 1914,0,66,76 });
@@ -115,7 +115,7 @@ bool TeslaTrooper::Update(float dt)
 void TeslaTrooper::Draw(float dt, SDL_Texture * texture)
 {
 	Animation* r_walking = GetRotatedAnimation(walking, 8, angle);
-	SDL_Rect walk = r_walking->GetCurrentFrame(dt);
+	SDL_Rect walk = r_walking->GetCurrentFrame(dt,new_current_frame);
 	App->render->Blit(texture, position.x, position.y, &walk);
 }
 
