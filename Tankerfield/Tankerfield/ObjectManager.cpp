@@ -129,14 +129,15 @@ bool ObjectManager::CleanUp()
 Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
 {
 	Object* ret = nullptr;
-	switch (type) {
-	case ObjectType::TESLA_TROOPER:
+	switch (type)
 	{
+	case ObjectType::TESLA_TROOPER:
 		ret = new TeslaTrooper(x, y);
 		ret->type = TESLA_TROOPER;
 		break;
 	}
 	if (ret != nullptr)
+	{
 		objects.push_back(ret);
 	}
 	return ret;
