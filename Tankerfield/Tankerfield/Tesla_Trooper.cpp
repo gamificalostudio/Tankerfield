@@ -23,9 +23,8 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	position.x = x;
 	position.y = y;
 
-	current_animation = &idle;
-
-	idle.PushBack({ 0,0,1343,1600 });
+	walking = new Animation[8];
+	walking[0].PushBack();
 }
 
 TeslaTrooper::~TeslaTrooper()
@@ -44,6 +43,10 @@ bool TeslaTrooper::Update(float dt)
 	return true;
 }
 
+void TeslaTrooper::Draw(float dt, SDL_Texture * texture)
+{
+
+}
 
 
 
