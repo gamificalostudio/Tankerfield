@@ -92,7 +92,7 @@ bool ObjectManager::Update(float dt)
 	return true;
 }
 
-bool ObjectManager::PostUpdate()
+/*bool ObjectManager::PostUpdate()
 {
 	//BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::Green);
 	std::list<Object*>::iterator iterator;
@@ -104,7 +104,7 @@ bool ObjectManager::PostUpdate()
 	}
 
 	return true;
-}
+}*/
 
 // Called before quitting
 bool ObjectManager::CleanUp()
