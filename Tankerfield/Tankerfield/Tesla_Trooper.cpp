@@ -107,9 +107,9 @@ bool TeslaTrooper::Update(float dt)
 
 void TeslaTrooper::Draw(float dt, SDL_Texture * texture)
 {
-	Animation* r_walking=GetRotatedAnimation(walking, 8, 90);
-	(*r_walking)->GetCurrentFrame(dt);
-	App->render->Blit(texture, position.x, position.y, );
+	Animation* r_walking = GetRotatedAnimation(walking, 8, 90);
+
+	App->render->Blit(texture, position.x, position.y, &r_walking->GetCurrentFrame(dt));
 }
 
 
