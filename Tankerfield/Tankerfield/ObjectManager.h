@@ -35,20 +35,21 @@ public:
 	bool Update(float dt);
 
 	bool PostUpdate();
-	void Draw(float dt);
 	bool Load(pugi::xml_node&);
 
 	bool Save(pugi::xml_node&) const;
 
 	bool CleanUp();
 
-	Object* CreateObject(ObjectType type, float x = 0, float y = 0);
-	void DeleteEntities();
+	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
+	void DeleteObjects();
+
+	//Player* GetPlayerData() const;
 
 private:
 
 	std::list<Object*> objects;
-
+	SDL_Texture* texture;
 };
 
 #endif

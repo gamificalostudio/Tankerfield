@@ -36,9 +36,9 @@ bool Object::Update(float dt)
 	return true;
 }
 
-void Object::Draw(float dt)
+void Object::Draw(float dt, SDL_Texture* texture)
 {
-	
+	App->render->Blit(texture, position.x, position.y, &(current_animation->GetCurrentFrame(dt)));
 
 }
 

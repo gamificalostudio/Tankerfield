@@ -51,6 +51,8 @@ bool ObjectManager::Start()
 			(*iterator)->Start();
 	}
 
+	texture = App->tex->Load("Assets/Sprites/tesla.png");
+
 	return ret;
 }
 
@@ -72,18 +74,19 @@ bool ObjectManager::PreUpdate()
 bool ObjectManager::Update(float dt)
 {
 	//BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::Green);
-	std::list<Object*>::iterator iterator;
+	std::list<Object*>::iterator iterator = objects.begin();
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	for (; iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
 			(*iterator)->Update(dt);
 	}
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	std::list<Object*>::iterator iterator2 = objects.begin();
+	for (; iterator2 != objects.end(); iterator2++)
 	{
-		if ((*iterator) != nullptr)
-			(*iterator)->Draw(dt);
+		if ((*iterator2) != nullptr)
+			(*iterator2)->Draw(dt,texture);
 	}
 
 	return true;
@@ -101,10 +104,6 @@ bool ObjectManager::PostUpdate()
 	}
 
 	return true;
-}
-
-void ObjectManager::Draw(float dt)
-{
 }
 
 // Called before quitting
@@ -143,7 +142,8 @@ Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
 	return ret;
 }
 
-void ObjectManager::DeleteEntities()
+
+void ObjectManager::DeleteObjects()
 {
 	std::list<Object*>::iterator iterator;
 
@@ -174,6 +174,7 @@ bool ObjectManager::Save(pugi::xml_node& save) const
 
 	return ret;
 }
+
 /*
 Player* ObjectManager::GetPlayerData() const 
 {
@@ -188,7 +189,7 @@ Player* ObjectManager::GetPlayerData() const
 	}
 
 }
-*/
 
+*/
 
 

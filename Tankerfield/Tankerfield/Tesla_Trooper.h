@@ -19,13 +19,9 @@ public:
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
-	void Draw(float dt);
-
 private:
-	SDL_Texture * tesla;
-
+	
 	Animation idle;
-	Animation* current_animation;
 };
 
 #endif // !__TESLATROOPER_H__

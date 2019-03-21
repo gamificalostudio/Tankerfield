@@ -23,8 +23,6 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	position.x = x;
 	position.y = y;
 
-	tesla = App->tex->Load("Assets/Sprites/tesla.png");
-
 	current_animation = &idle;
 
 	idle.PushBack({ 0,0,1343,1600 });
@@ -46,12 +44,7 @@ bool TeslaTrooper::Update(float dt)
 	return true;
 }
 
-void TeslaTrooper::Draw(float dt)
-{
-	iPoint mouseposition;
-	App->input->GetMousePosition(mouseposition.x, mouseposition.y);
-	App->render->Blit(tesla, mouseposition.x, mouseposition.y,current_animation->GetCurrentFrame);
-}
+
 
 
 

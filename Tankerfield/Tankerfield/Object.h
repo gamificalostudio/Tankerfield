@@ -28,7 +28,7 @@ public:
 	virtual bool CleanUp() { return true; };
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
-	virtual void Draw(float dt);
+	virtual void Draw(float dt,SDL_Texture* texture);
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
@@ -43,7 +43,6 @@ public:
 	//
 
 	Animation* current_animation = nullptr;
-	SDL_Texture* texture;
 	
 	Collider* coll = nullptr;
 };
