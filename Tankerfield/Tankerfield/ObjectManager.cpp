@@ -51,7 +51,7 @@ bool ObjectManager::Start()
 			(*iterator)->Start();
 	}
 
-	texture = App->tex->Load("Assets/Sprites/tesla.png");
+	texture = App->tex->Load("texture/Objects/tesla.png");
 
 	return ret;
 }
