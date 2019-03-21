@@ -23,6 +23,7 @@ public:
 private:
 	
 	Animation* walking = nullptr;
+	float angle = 0.0f;
 };
 
 #endif // !__TESLATROOPER_H__
