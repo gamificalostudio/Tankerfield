@@ -33,6 +33,18 @@ public:
 		}
 		return frames[(int)current_frame];
 	}
+	
+	//This overloaded GetCurrentFrame is used for Animation arrays where the frame number must concide
+	SDL_Rect& GetCurrentFrame(float dt, float & new_current_frame)
+	{
+		new_current_frame += speed*dt;
+		if (new_current_frame >= last_frame)
+		{
+			new_current_frame = (loop) ? 0.0f : last_frame - 1;
+			loops++;
+		}
+		return frames[(int)new_current_frame];
+	}
 
 	bool Finished() const
 	{

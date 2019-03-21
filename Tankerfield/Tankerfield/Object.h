@@ -32,6 +32,9 @@ public:
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
+	SDL_Rect* GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir = 90);
+	//Same as GetRotatedSprite but with animations
+	Animation* GetRotatedAnimation(Animation* animations, int rect_num, float angle, float fist_rect_dir = 90);
 
 
 public:
