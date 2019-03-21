@@ -51,7 +51,7 @@ bool ObjectManager::Start()
 			(*iterator)->Start();
 	}
 
-	texture = App->tex->Load("texture/Objects/tesla.png");
+	texture = App->tex->Load("textures/Objects/tesla.png");
 
 	return ret;
 }
@@ -120,9 +120,7 @@ bool ObjectManager::CleanUp()
 			iterator = objects.erase(iterator);
 		}
 	}
-
 	objects.clear();
-
 	return true;
 }
 
