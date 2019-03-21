@@ -184,6 +184,9 @@
     <ClInclude Include="UI_Object.h" />
     <ClInclude Include="UI_Test.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Game\config.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
