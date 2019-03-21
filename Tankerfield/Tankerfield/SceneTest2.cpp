@@ -32,7 +32,7 @@ bool SceneTest2::Awake()
 // Called before the first frame
 bool SceneTest2::Start()
 {
-
+	LOG("Scene2");
 
 	return true;
 }
@@ -51,7 +51,7 @@ bool SceneTest2::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		App->scmanager->FadeToBlack(App->test2, App->scene, 0.5f);
-		LOG("Scene2 Loaded");
+		LOG("Scene2 off");
 	}
 
 	// Draw ------------------

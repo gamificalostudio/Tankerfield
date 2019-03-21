@@ -30,6 +30,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	scene = new j1Scene();
 	pathfinding = new j1PathFinding();
 	objectmanager = new ObjectManager();
+	scmanager = new SceneManager();
 	test2 = new SceneTest2();
 
 	// Ordered for awake / Start / Update
@@ -40,10 +41,12 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(pathfinding);
 	AddModule(objectmanager);
-	AddModule(test2);
+	AddModule(scmanager);
 
 	// scene last
+	AddModule(test2);
 	AddModule(scene);
+	
 
 	// render last to swap buffer
 	AddModule(render);
