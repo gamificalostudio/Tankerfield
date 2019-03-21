@@ -109,15 +109,15 @@ bool ObjectManager::PostUpdate()
 // Called before quitting
 bool ObjectManager::CleanUp()
 {
-	std::list<Object*>::iterator iterator;
+	std::list<Object*>::iterator iterator = objects.begin();
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	while (iterator != objects.end())
 	{
 		if ((*iterator) != nullptr) {
 			(*iterator)->CleanUp();
-			delete((*iterator));
+			delete (*iterator);
 			(*iterator) = nullptr;
-			objects.erase(iterator);
+			iterator = objects.erase(iterator);
 		}
 	}
 
