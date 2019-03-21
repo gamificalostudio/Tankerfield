@@ -33,7 +33,7 @@ public:
 
 	SDL_Rect* GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir = 90);
 	//Same as GetRotatedSprite but with animations
-	Animation* GetRotatedAnimation(Animation* animations, int rect_num, float angle, float fist_rect_dir = 90);
+	Animation* GetRotatedAnimation(Animation* animations, int num_animations, float angle, float fist_rect_dir = 90);
 
 
 public:

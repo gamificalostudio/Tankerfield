@@ -87,7 +87,7 @@ SDL_Rect* Object::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, fl
 //sprites in SDL_Rect * rect must be ordered in counter clock-wise direction
 //angle should be in degrees
 //int rect_num is the number of rectangles that are inside SDL_Rect * rect array
-Animation* Object::GetRotatedAnimation(Animation* animations, int rect_num, float angle, float fist_rect_dir)
+Animation* Object::GetRotatedAnimation(Animation* animations, int num_animations, float angle, float fist_rect_dir)
 {
 	angle -= fist_rect_dir;
 
@@ -104,7 +104,7 @@ Animation* Object::GetRotatedAnimation(Animation* animations, int rect_num, floa
 		angle += 360;
 	}
 
-	float angle_part = 360 / rect_num;
+	float angle_part = 360 / num_animations;
 
 	float num_pos = angle / angle_part;
 
@@ -119,7 +119,7 @@ Animation* Object::GetRotatedAnimation(Animation* animations, int rect_num, floa
 		num_pos = num_pos - remainder;
 	}
 
-	if (num_pos == rect_num)
+	if (num_pos == num_animations)
 	{
 		num_pos = 0;
 	}
