@@ -42,6 +42,7 @@ public:
 	fPoint position;
 	fPoint velocity;
 	fPoint acceleration;
+	bool to_remove = false;//Set it to true if you want the object to be removed
 	//
 
 	Animation* current_animation = nullptr;

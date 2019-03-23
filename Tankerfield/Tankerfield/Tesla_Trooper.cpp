@@ -119,13 +119,8 @@ bool TeslaTrooper::Update(float dt)
 	if (life <= 0)
 	{
 		death = true;
+		to_remove = true;
 	}
-
-	if (death)
-	{
-		App->objectmanager->DeleteObject(this);
-	}
-
 
 	return true;
 }
