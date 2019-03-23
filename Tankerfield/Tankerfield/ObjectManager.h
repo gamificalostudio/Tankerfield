@@ -46,10 +46,14 @@ public:
 
 	//Player* GetPlayerData() const;
 
+public:
+	SDL_Texture* tesla_trooper_texture;
+
 private:
 
 	std::list<Object*> objects;
 	SDL_Texture* texture;
+	
 };
 
 #endif

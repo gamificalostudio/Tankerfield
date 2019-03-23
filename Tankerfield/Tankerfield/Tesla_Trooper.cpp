@@ -77,16 +77,16 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	walking[6].PushBack({ 990,76,66,76 });
 	walking[6].PushBack({ 1056,76,66,76 });
 	walking[6].PushBack({ 1122,76,66,76 });
-	walking[6].PushBack({ 1188,76,66,76 });
 	walking[6].speed = 5.0f;
-	//50
+	//49
+	walking[7].PushBack({ 1188,76,66,76 });
 	walking[7].PushBack({ 1254,76,66,76 });
 	walking[7].PushBack({ 1320,76,66,76 });
 	walking[7].PushBack({ 1386,76,66,76 });
 	walking[7].PushBack({ 1452,76,66,76 });
 	walking[7].PushBack({ 1518,76,66,76 });
 	walking[7].PushBack({ 1584,76,66,76 });
-	walking[7].speed = 5.0f;
+	walking[7].speed = 7.0f;
 }
 
 TeslaTrooper::~TeslaTrooper()
@@ -116,7 +116,7 @@ void TeslaTrooper::Draw(float dt, SDL_Texture * texture)
 {
 	Animation* r_walking = GetRotatedAnimation(walking, 8, angle);
 	SDL_Rect walk = r_walking->GetCurrentFrame(dt,new_current_frame);
-	App->render->Blit(texture, position.x, position.y, &walk);
+	App->render->Blit(App->objectmanager->tesla_trooper_texture, position.x, position.y, &walk);
 }
 
 
