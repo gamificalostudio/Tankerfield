@@ -7,6 +7,7 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Scene.h"
+#include "j1Map.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -29,7 +30,12 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
+	// Load the first level of the list on first game start -------------------------
+	std::list<Levels*>::iterator levelData = App->map->levels.begin();
+	std::advance(levelData, current_level);
+	App->map->Load((*levelData)->name.c_str());
 
+	
 	
 	return true;
 }
