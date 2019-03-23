@@ -83,37 +83,29 @@ bool ObjectManager::Update(float dt)
 			(*iterator)->Update(dt);
 			if ((*iterator)->to_remove)
 			{
-				//DeleteObject(*iterator);
+				//When we remove an element from the list, the other elements shift 1 space to our position
+				//So we don't need increment the iterator to go to the next one
 				delete((*iterator));
 				(*iterator) = nullptr;
 				iterator = objects.erase(iterator);
 			}
-			else {
+			else
+			{
 				++iterator;
 			}
 		}
-		else {
+		else
+		{
 			++iterator;
 		}
 	}
 
-	//for (; iterator != objects.end(); ++iterator)
-	//{
-	//	if ((*iterator) != nullptr)
-	//	{
-	//		(*iterator)->Update(dt);
-	//		if ((*iterator)->to_remove)
-	//		{
-	//			DeleteObject((*iterator));
-	//			--iterator;
-	//		}
-	//	}
-	//}
-
 	for (iterator=objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
-			(*iterator)->Draw(dt,texture);
+		{
+			(*iterator)->Draw(dt, texture);
+		}
 	}
 
 	return true;
@@ -161,7 +153,8 @@ void ObjectManager::DeleteObjects()
 
 	while (iterator != objects.end())
 	{
-		if ((*iterator) != nullptr) {
+		if ((*iterator) != nullptr)
+		{
 			(*iterator)->CleanUp();
 			delete (*iterator);
 			(*iterator) = nullptr;
@@ -169,25 +162,6 @@ void ObjectManager::DeleteObjects()
 		}
 	}
 	objects.clear();
-}
-
-bool ObjectManager::DeleteObject(Object* object)
-{
-	bool ret = true;
-
-	std::list<Object*>::iterator iterator = objects.begin();
-
-	while (iterator != objects.end())
-	{
-		if ((*iterator) != nullptr)
-		{
-			delete((*iterator));
-			(*iterator) = nullptr;
-			iterator=objects.erase(iterator);
-		}
-	}
-
-	return ret;
 }
 
 bool ObjectManager::Load(pugi::xml_node& load)

@@ -34,6 +34,8 @@ public:
 
 	bool Update(float dt);
 
+	void NewFunction(std::list<Object *>::iterator &iterator);
+
 	bool Load(pugi::xml_node&);
 
 	bool Save(pugi::xml_node&) const;
