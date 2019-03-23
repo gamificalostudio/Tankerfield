@@ -3,11 +3,10 @@
 //#include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
 #include "p2Point.h"
+#include "p2Log.h"
 
 #include "j1App.h"
 #include "Object.h"
-
-#include "j1App.h"
 #include "j1Textures.h"
 #include "ObjectManager.h"
 #include "j1Render.h"
@@ -78,6 +77,7 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	walking[6].PushBack({ 990,76,66,76 });
 	walking[6].PushBack({ 1056,76,66,76 });
 	walking[6].PushBack({ 1122,76,66,76 });
+	walking[6].PushBack({ 924,76,66,76 });
 	walking[6].speed = 5.0f;
 	//49
 	walking[7].PushBack({ 1188,76,66,76 });
@@ -86,8 +86,7 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	walking[7].PushBack({ 1386,76,66,76 });
 	walking[7].PushBack({ 1452,76,66,76 });
 	walking[7].PushBack({ 1518,76,66,76 });
-	walking[7].PushBack({ 1584,76,66,76 });
-	walking[7].speed = 7.0f;
+	walking[7].speed = 5.0f;
 }
 
 TeslaTrooper::~TeslaTrooper()
@@ -110,6 +109,30 @@ bool TeslaTrooper::Update(float dt)
 	{
 		angle -= 45;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	{
+		life -= 100;
+		LOG("life: %i", life);
+	}
+
+	if (life <= 0)
+	{
+		death = true;
+	}
+
+	if (death)
+	{
+		App->objectmanager->DeleteObject(this);
+	}
+
+
+	return true;
+}
+
+bool TeslaTrooper::PostUpdate()
+{
+
 	return true;
 }
 
@@ -119,6 +142,8 @@ void TeslaTrooper::Draw(float dt, SDL_Texture * texture)
 	SDL_Rect walk = r_walking->GetCurrentFrame(dt,new_current_frame);
 	App->render->Blit(App->objectmanager->tesla_trooper_texture, position.x, position.y, &walk);
 }
+
+
 
 
 

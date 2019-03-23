@@ -92,20 +92,6 @@ bool ObjectManager::Update(float dt)
 	return true;
 }
 
-/*bool ObjectManager::PostUpdate()
-{
-	//BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::Green);
-	std::list<Object*>::iterator iterator;
-
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
-	{
-		if ((*iterator) != nullptr)
-			(*iterator)->PostUpdate();
-	}
-
-	return true;
-}*/
-
 // Called before quitting
 bool ObjectManager::CleanUp()
 {
@@ -144,21 +130,38 @@ Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
 
 void ObjectManager::DeleteObjects()
 {
-	std::list<Object*>::iterator iterator;
+	std::list<Object*>::iterator iterator = objects.begin();
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	while (iterator != objects.end())
 	{
 		if ((*iterator) != nullptr) {
 			(*iterator)->CleanUp();
-			delete((*iterator));
+			delete (*iterator);
 			(*iterator) = nullptr;
-			objects.erase(iterator);
+			iterator = objects.erase(iterator);
 		}
 	}
-
 	objects.clear();
 }
 
+bool ObjectManager::DeleteObject(Object* object)
+{
+	bool ret = true;
+
+	std::list<Object*>::iterator iterator = objects.begin();
+
+	while (iterator != objects.end())
+	{
+		if ((*iterator) != nullptr)
+		{
+			delete((*iterator));
+			(*iterator) = nullptr;
+			iterator=objects.erase(iterator);
+		}
+	}
+
+	return ret;
+}
 
 bool ObjectManager::Load(pugi::xml_node& load)
 {

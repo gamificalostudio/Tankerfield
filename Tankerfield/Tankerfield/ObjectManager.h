@@ -34,7 +34,6 @@ public:
 
 	bool Update(float dt);
 
-	//bool PostUpdate();
 	bool Load(pugi::xml_node&);
 
 	bool Save(pugi::xml_node&) const;
@@ -43,6 +42,7 @@ public:
 
 	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
 	void DeleteObjects();
+	bool DeleteObject(Object* object);
 
 	//Player* GetPlayerData() const;
 

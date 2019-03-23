@@ -16,7 +16,7 @@ public:
 	bool PreUpdate(float dt);
 	bool Update(float dt);
 	void Draw(float dt, SDL_Texture * texture) override;
-	bool PostUpdate() { return true; };
+	bool PostUpdate();
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
@@ -25,6 +25,7 @@ private:
 	int damage = 100;
 	float speed = 1.0f;
 
+	bool death = false;
 private:
 	Animation* walking = nullptr;
 	float angle = 0.0f;
