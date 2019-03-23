@@ -22,7 +22,7 @@
 #include "Module_UI.h"
 #include "UI_Test.h"
 #include "ObjectManager.h"
-
+#include "j1Scene.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -37,6 +37,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	ui_test = new UI_Test();
 	pathfinding = new j1PathFinding();
 	map = new j1Map();
+	scene = new j1Scene();
 	font = new j1Fonts();
 	ui = new Module_UI();
 	objectmanager = new ObjectManager();
@@ -49,6 +50,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(pathfinding);
 	AddModule(map);
+	AddModule(scene);
 	AddModule(font);
 	AddModule(objectmanager);
 
