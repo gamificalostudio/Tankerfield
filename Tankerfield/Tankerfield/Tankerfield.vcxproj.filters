@@ -87,12 +87,15 @@
       <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Module_UI.cpp">
-       <Filter>Modules</Filter>
- </ClCompile>
+      <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="ObjectManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_Collision.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -144,7 +147,6 @@
     <ClInclude Include="j1Pathfinding.h">
       <Filter>Modules</Filter>
     </ClInclude>
-
     <ClInclude Include="Button_Input.h">
       <Filter>Modules\UI</Filter>
     </ClInclude>
@@ -173,12 +175,15 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Module_UI.h">
-       <Filter>Modules</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_Collision.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>

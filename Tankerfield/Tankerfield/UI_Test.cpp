@@ -10,7 +10,10 @@
 #include "UI_Test.h"
 #include "UI_Object.h"
 #include "Button_Input.h"
+#include "ObjectManager.h"
+#include "Object.h"
 #include "Label.h"
+#include <typeinfo>
 
 UI_Test::UI_Test() : j1Module()
 {
@@ -46,8 +49,13 @@ bool UI_Test::Start()
 
 bool UI_Test::PreUpdate()
 {
+	Object* a;
+	Object* b;
 
-
+	if (typeid(a) == typeid(b))
+	{
+		LOG("trueeee");
+	}
 	return true;
 }
 
@@ -187,6 +195,7 @@ bool UI_Test::Update(float dt)
 	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
 	//DrawIsometricQuad(player_pos.x - .5f, player_pos.y - .5f, 1, 1);
 	DrawIsometricBox(player_pos.x - .5f, player_pos.y - .5f, 1, 1, 100);
+
 	return true;
 }
 

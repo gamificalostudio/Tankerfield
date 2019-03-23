@@ -4,8 +4,15 @@
 #include "j1Module.h"
 #include "Module_UI.h"
 #include "SDL/include/SDL_rect.h"
+#include "Object.h"
 
 struct SDL_Texture;
+
+
+class Enemy : public Object
+{
+	fPoint blab;
+};
 
 class UI_Test : public j1Module, public Gui_Listener
 {

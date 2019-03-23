@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
     <RootNamespace>Tankerfield</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -141,6 +141,7 @@
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Module_Collision.cpp" />
     <ClCompile Include="Module_UI.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Window.h" />
     <ClInclude Include="Label.h" />
+    <ClInclude Include="Module_Collision.h" />
     <ClInclude Include="Module_UI.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />

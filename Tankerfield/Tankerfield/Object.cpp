@@ -11,7 +11,7 @@
 #include "j1Pathfinding.h"
 //#include "j1Map.h"
 //#include "Player.h"
-//#include "j1Collision.h"
+//#include "ModuleCollision.h"
 
 Object::Object()
 {
