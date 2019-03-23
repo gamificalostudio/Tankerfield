@@ -74,19 +74,18 @@ bool ObjectManager::PreUpdate()
 bool ObjectManager::Update(float dt)
 {
 	//BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::Green);
-	std::list<Object*>::iterator iterator = objects.begin();
+	std::list<Object*>::reverse_iterator iterator = objects.rbegin();
 
-	for (; iterator != objects.end(); iterator++)
+	for (; iterator != objects.rend(); iterator++)
 	{
 		if ((*iterator) != nullptr)
 			(*iterator)->Update(dt);
 	}
 
-	std::list<Object*>::iterator iterator2 = objects.begin();
-	for (; iterator2 != objects.end(); iterator2++)
+	for (iterator=objects.rbegin(); iterator != objects.rend(); iterator++)
 	{
-		if ((*iterator2) != nullptr)
-			(*iterator2)->Draw(dt,texture);
+		if ((*iterator) != nullptr)
+			(*iterator)->Draw(dt,texture);
 	}
 
 	return true;
