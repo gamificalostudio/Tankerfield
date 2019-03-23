@@ -21,10 +21,16 @@ public:
 	bool Awake(pugi::xml_node&) { return true; };
 
 private:
-	
+	int life = 100;
+	int damage = 100;
+	float speed = 1.0f;
+
+private:
 	Animation* walking = nullptr;
 	float angle = 0.0f;
 	float new_current_frame = 0.0f;
+
+
 };
 
 #endif // !__TESLATROOPER_H__

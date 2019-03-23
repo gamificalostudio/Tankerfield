@@ -23,6 +23,7 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	position.x = x;
 	position.y = y;
 
+
 	walking = new Animation[8];
 	walking[0].PushBack({ 528,0,66,76 });//8
 	walking[0].PushBack({ 594,0,66,76 });
