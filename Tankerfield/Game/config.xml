@@ -40,7 +40,7 @@
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
       </spritesheets>
       <animations>
-        <animation name="rotate_base" speed ="1">
+        <rotate_base speed ="1">
           <frame x="0"   y="0"   w="112" h="67"/>
           <frame x="112" y="0"   w="112" h="67"/>
           <frame x="224" y="0"   w="112" h="67"/>
@@ -142,7 +142,7 @@
           <frame x="896" y="670" w="112" h="67"/>
           <frame x="0"   y="737" w="112" h="67"/>
           <frame x="0"   y="0"   w="112" h="67"/>
-        </animation>
+        </rotate_base>
       </animations>
       
     </tank>

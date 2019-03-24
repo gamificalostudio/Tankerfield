@@ -17,7 +17,7 @@ Object::Object()
 {
 }
 
-Object::Object(int x, int y) : position(x, y)
+Object::Object(int x, int y) : pos(x, y)
 {
 }
 
@@ -44,13 +44,18 @@ void Object::Draw(float dt)
 
 bool Object::LoadRects(pugi::xml_node & node, SDL_Rect * rects)
 {
-	for (node = node.child("frame"); node; node = node.next_sibling("frame")) {
-		SDL_Rect frame;
-		frame.x = node.attribute("x").as_int();
-		frame.y = node.attribute("y").as_int();
-		frame.w = node.attribute("w").as_int();
-		frame.h = node.attribute("h").as_int();
-		anim.PushBack(frame);
+	node = node.child("frame");
+	int i = 0;
+
+	while (node)
+	{
+		rects[i].x = node.attribute("x").as_int();
+		rects[i].y = node.attribute("y").as_int();
+		rects[i].w = node.attribute("w").as_int();
+		rects[i].h = node.attribute("h").as_int();
+
+		node = node.next_sibling("frame");
+		++i;
 	}
 	return true;
 }

@@ -26,4 +26,6 @@ private:
 
 	static SDL_Rect * base_rects;
 	static SDL_Rect * turr_rects;
+
+	float speed = 0.f;
 };
