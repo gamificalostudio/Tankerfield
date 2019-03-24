@@ -1,5 +1,7 @@
 #include "Object.h"
 
+struct SDL_Texture;
+
 class Obj_Tank : public Object
 {
 public:
@@ -24,8 +26,8 @@ private:
 	static SDL_Texture * base_shadow_tex;
 	static SDL_Texture * turr_shadow_tex;
 
-	static SDL_Rect * base_rects;
-	static SDL_Rect * turr_rects;
+	//static SDL_Rect * base_rects;
+	//static SDL_Rect * turr_rects;
 
 	float speed = 0.f;
 };
