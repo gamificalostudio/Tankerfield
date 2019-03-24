@@ -23,11 +23,12 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = App->config.child("object").child("tank");
 
-	base_tex = App->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
-	base_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-	turr_tex = App->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
-	turr_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	Obj_Tank::base_tex = App->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
+	Obj_Tank::base_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+	Obj_Tank::turr_tex = App->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	Obj_Tank::turr_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 
+	base_rects = new SDL_Rect[100];
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
 	return true;
@@ -45,8 +46,8 @@ bool Obj_Tank::Update(float dt)
 
 bool Obj_Tank::PostUpdate()
 {
-	
-	App->render->Blit(base_tex, pos.x, pos.y,);
+	//SDL_Rect rect = GetRectFromAngle
+	//App->render->Blit(base_tex, pos.x, pos.y, rects);
 	return true;
 }
 

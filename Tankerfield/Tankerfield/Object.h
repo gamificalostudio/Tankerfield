@@ -32,13 +32,13 @@ public:
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
-	bool LoadRects(pugi::xml_node &node, SDL_Rect * rects);
+	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
 public:
 
 	int type = 0;
-	fPoint position;
+	fPoint pos;
 	fPoint velocity;
 	fPoint acceleration;
 	//

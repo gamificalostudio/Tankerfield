@@ -42,20 +42,23 @@ void Object::Draw(float dt)
 
 }
 
-bool Object::LoadRects(pugi::xml_node & node, SDL_Rect * rects)
+bool Object::LoadRects(pugi::xml_node const & node, SDL_Rect * rects)
 {
-	node = node.child("frame");
+	//Inicialization
 	int i = 0;
+	pugi::xml_node frame_node = node.child("frame");
 
 	while (node)
 	{
-		rects[i].x = node.attribute("x").as_int();
-		rects[i].y = node.attribute("y").as_int();
-		rects[i].w = node.attribute("w").as_int();
-		rects[i].h = node.attribute("h").as_int();
+		//Body
+		rects[i].x = frame_node.attribute("x").as_int();
+		rects[i].y = frame_node.attribute("y").as_int();
+		rects[i].w = frame_node.attribute("w").as_int();
+		rects[i].h = frame_node.attribute("h").as_int();
 
-		node = node.next_sibling("frame");
+		//Increment
 		++i;
+		frame_node = frame_node.next_sibling("frame");
 	}
 	return true;
 }
