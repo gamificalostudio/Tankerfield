@@ -9,20 +9,19 @@
 #include "SDL/include/SDL.h"
 #include <list>
 
+class Object;
+
 class Collider
 {
-	public:
-
-	enum class OFFSET_DIR : uint
+public:
+	enum class ON_TRIGGER_STATE
 	{
-		RIGHT,
-		LEFT,
-		UP,
-		DOWN,
-		UNKNOWN
+		ENTER,
+		STAY,
+		EXIT
 	};
 
-	enum class TYPE : int
+	enum class TAG : int
 	{
 		NONE = -1,
 		WALL,
@@ -32,11 +31,29 @@ class Collider
 		MAX
 	};
 
-	Collider(fPoint pos , float width , float height, TYPE type, j1Module* callback = nullptr) :
+	enum class OVERLAP_DIR : int
+	{
+		NONE = -1,
+		LEFT,
+		RIGHT,
+		UP,
+		DOWN,
+		MAX
+	};
+
+	enum class TYPE
+	{
+		NONE,
+		DYNAMIC,
+		STATIC
+	};
+
+	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,j1Module* callback = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
-		type(type),
+		tag(tag),
+		object(object),
 		callback(callback)
 	{}
 
@@ -45,7 +62,15 @@ class Collider
 		position = { x, y };
 	}
 
+	void SetType(const Collider::TYPE new_type)
+	{
+		type = new_type;
+	}
+
 	bool CheckCollision(Collider*  coll) const;
+
+	
+
 
 private:
 
@@ -55,11 +80,13 @@ private:
 		
 	float height = 0.f;
 
-	TYPE type = TYPE::NONE;
+	TAG tag = TAG::NONE;
+
+	TYPE type = TYPE::STATIC;
 
 	j1Module* callback = nullptr;
 
-	bool is_static = true;
+	Object * object = nullptr;
 
 	friend ModuleCollision;
 
@@ -80,18 +107,18 @@ public:
 
 	bool CleanUp();
 
-	Collider  *AddCollider(fPoint pos, float width , float height, Collider::TYPE type, j1Module* callback = nullptr);
-
-	bool CheckOverlap(std::list<Collider::OFFSET_DIR> &directions, Collider *dynamic_col, Collider::TYPE type, fPoint &position, fPoint &velocity);
+	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, j1Module* callback = nullptr, Object* object = nullptr);
 
 	bool DeleteCollider(Collider* collider);
+
+	void SolveOverlap(Collider* c1 , Collider * c2);
 
 
 private:
 
 	std::list<Collider*> colliders;
 
-	bool matrix[(int)Collider::TYPE::MAX][(int)Collider::TYPE::MAX];
+	bool matrix[(int)Collider::TAG::MAX][(int)Collider::TAG::MAX];
 
 	bool debug = false;
 };

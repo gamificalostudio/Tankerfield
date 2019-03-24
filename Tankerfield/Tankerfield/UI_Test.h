@@ -11,7 +11,12 @@ class Collider;
 
 class Enemy : public Object
 {
-	fPoint blab;
+	
+};
+
+class Player : public Object
+{
+
 };
 
 class UI_Test : public j1Module, public Gui_Listener
@@ -44,9 +49,9 @@ public:
 
 private:
 
-	fPoint        player_pos;
+	Player        player;
 
-	Collider    * player_col = nullptr;
+	Enemy         enemy;
 
 	Collider    * wall = nullptr;
 

@@ -38,31 +38,16 @@ bool UI_Test::Awake()
 
 bool UI_Test::Start()
 {
-	player_pos = { 2,2 };
-	player_col = App->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TYPE::PLAYER, this);
-	wall = App->collision->AddCollider({ 4.f, 4.f }, 1.f, 1.f, Collider::TYPE::WALL, this);
-
-	uint win_width = 0u , win_height = 0u;
-	App->win->GetWindowSize(win_width, win_height);
-
-	Button_Definition buttton_def({0,0,280, 140}, {280, 0 , 280, 140}, {560, 0, 280, 140});
-	Label_Definition label_def(App->font->Load("fonts/pixelart.ttf", 30));
-	button_test = App->ui->CreateButton({ win_width * 0.5f ,win_height * 0.5f }, buttton_def, this);
-	button_test->IsDraggable(true);
-	button_test->SetLabel({ 0,0 }, "i wanna die", label_def);
-
+	player.position = { 2,2 };
+	player.coll = App->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player);
+	player.coll->SetType(Collider::TYPE::DYNAMIC);
+	wall = App->collision->AddCollider({ 4.f, 4.f }, 1.f, 1.f, Collider::TAG::WALL, this);
 	return true;
 }
 
 bool UI_Test::PreUpdate()
 {
-	Object* a;
-	Enemy* b;
 
-	if (typeid(a) == typeid(b))
-	{
-		LOG("trueeee");
-	}
 	return true;
 }
 
@@ -126,6 +111,8 @@ void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
 
 bool UI_Test::Update(float dt)
 {
+	player.velocity = { 0,0 };
+
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += floor(200.0f * dt);
 
@@ -139,16 +126,25 @@ bool UI_Test::Update(float dt)
 		App->render->camera.x -= floor(200.0f * dt);
 	
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		player_pos.y -= 1.5f * dt;
-
+	{
+		player.position.y -= 1.5f * dt;
+		player.velocity.y = -1;
+	}
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		player_pos.y += 1.5f * dt;
-
+	{
+		player.position.y += 1.5f * dt;
+		player.velocity.y = 1.f;
+	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		player_pos.x -= 1.5f * dt;
-
+	{
+		player.position.x -= 1.5f * dt;
+		player.velocity.x = -1;
+	}
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		player_pos.x += 1.5f * dt;
+	{
+		player.position.x += 1.5f * dt;
+		player.velocity.x = 1;
+	}
 
 	// Draw Grid ==============================================
 
@@ -171,10 +167,9 @@ bool UI_Test::Update(float dt)
 	}
 
 	// Draw Player Pos ========================================
-	fPoint player_draw_pos = MapToWorldF(player_pos.x, player_pos.y);
+	fPoint player_draw_pos = MapToWorldF(player.position.x, player.position.y);
 	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
-	player_col->SetPos(player_pos.x, player_pos.y);
-
+	player.coll->SetPos(player.position.x, player.position.y);
 
 	return true;
 }
@@ -200,7 +195,7 @@ bool UI_Test::CleanUp()
 
 void UI_Test::OnCollision(Collider * c1, Collider * c2)
 {
-	if (c1 == player_col && c2 == wall)
+	if (c1 == player.coll && c2 == wall)
 	{
 		LOG("BOIIIIIIIIIIIIIIII");
 	}
