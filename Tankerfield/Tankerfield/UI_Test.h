@@ -49,7 +49,9 @@ public:
 
 private:
 
-	Player        player;
+	Player        player_1;
+
+	Player        player_2;
 
 	Enemy         enemy;
 

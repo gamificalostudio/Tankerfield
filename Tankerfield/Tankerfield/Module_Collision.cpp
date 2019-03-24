@@ -54,40 +54,79 @@ bool ModuleCollision::Update(float dt)
 {
 	// Collision detection and callbacks ============================================== 
 
-	std::list<Collider*>::iterator iterator_1;
-	std::list<Collider*>::iterator iterator_2;
+	std::list<Collider*> static_colliders;
+	std::list<Collider*> dynamic_colliders;
 
 	Collider* c1 = nullptr;
 	Collider* c2 = nullptr;
 
-	for (std::list<Collider*>::iterator item_1 = colliders.begin(); item_1 != colliders.end(); ++item_1)
+	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+	{
+		if ((*item)->type == Collider::TYPE::STATIC)
+		{
+			static_colliders.push_back(*item);
+		}
+	}
+
+	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+	{
+		if ((*item)->type == Collider::TYPE::DYNAMIC)
+		{
+			dynamic_colliders.push_back(*item);
+		}
+	}
+	
+
+	for (std::list<Collider*>::iterator item_1 = static_colliders.begin(); item_1 != static_colliders.end(); ++item_1)
+	{
+		c1 = (*item_1);
+
+		for (std::list<Collider*>::iterator item_2 = dynamic_colliders.begin(); item_2 != dynamic_colliders.end(); ++item_2)
+		{
+			c2 = (*item_2);
+
+			if (c1->CheckCollision(c2) == true)
+			{
+				if (matrix[(int)c1->tag][(int)c2->tag] && c1->callback)
+				{
+					c2->callback->OnCollision(c1, c2);
+					SolveOverlapDS(c2, c1);
+				}
+				if (matrix[(int)c2->tag][(int)c1->tag] && c2->callback)
+				{
+					c2->callback->OnCollision(c2, c1);
+					SolveOverlapDS(c2, c1);
+				}
+			}
+		}
+	}
+
+
+
+	std::list<Collider*>::iterator iterator_1;
+
+	for (std::list<Collider*>::iterator item_1 = dynamic_colliders.begin(); item_1 != dynamic_colliders.end(); ++item_1)
 	{
 		c1 = *item_1;
 		iterator_1 = item_1;
 		++iterator_1;
 
-		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != colliders.end(); ++item_2)
+		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != dynamic_colliders.end(); ++item_2)
 		{
 			c2 = *item_2;
-			iterator_2 = item_2;
-			++iterator_2;
 
 			if (c1->CheckCollision(c2) == true)
 			{
 				if (matrix[(int)c1->tag][(int)c2->tag] && c1->callback)
 				{
 					c1->callback->OnCollision(c1, c2);
-
-					if (c1->type == Collider::TYPE::DYNAMIC)
-					{
-						SolveOverlap(c1, c2);
-					}
+					SolveOverlapDD(c1, c2);
 				}
 				if (matrix[(int)c2->tag][(int)c1->tag] && c2->callback)
 				{
 					c2->callback->OnCollision(c2, c1);
+					SolveOverlapDD(c2, c1);
 				}
-				
 			}
 		}
 	}
@@ -95,7 +134,62 @@ bool ModuleCollision::Update(float dt)
 	return true;
 }
 
+//bool ModuleCollision::Update(float dt)
+//{
+//	// Collision detection and callbacks ============================================== 
+//
+//	std::list<Collider*>::iterator iterator_1;
+//
+//	Collider* c1 = nullptr;
+//	Collider* c2 = nullptr;
+//
+//	for (std::list<Collider*>::iterator item_1 = colliders.begin(); item_1 != colliders.end(); ++item_1)
+//	{
+//		c1 = *item_1;
+//		iterator_1 = item_1;
+//		++iterator_1;
+//
+//		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != colliders.end(); ++item_2)
+//		{
+//			c2 = *item_2;
+//
+//			if (c1->CheckCollision(c2) == true)
+//			{
+//				if (matrix[(int)c1->tag][(int)c2->tag] && c1->callback)
+//				{
+//					c1->callback->OnCollision(c1, c2);
+//
+//					if (c1->type == Collider::TYPE::DYNAMIC && c2->type == Collider::TYPE::DYNAMIC)
+//					{
+//						SolveOverlapDD(c1, c2);
+//					}
+//					else if (c1->type == Collider::TYPE::DYNAMIC && c2->type == Collider::TYPE::STATIC)
+//					{
+//						SolveOverlapDS(c1, c2);
+//					}
+//				}
+//				if (matrix[(int)c2->tag][(int)c1->tag] && c2->callback)
+//				{
+//					c2->callback->OnCollision(c2, c1);
+//
+//					if (c2->type == Collider::TYPE::DYNAMIC && c1->type == Collider::TYPE::DYNAMIC)
+//					{
+//						SolveOverlapDD(c2, c1);
+//					}
+//					else if (c1->type == Collider::TYPE::DYNAMIC && c2->type == Collider::TYPE::STATIC)
+//					{
+//						SolveOverlapDS(c1, c2);
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	return true;
+//}
+
 // Called before render is available
+
 bool ModuleCollision::PostUpdate()
 {
 	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
@@ -173,23 +267,23 @@ bool ModuleCollision::DeleteCollider(Collider * collider)
 
 }
 
-void ModuleCollision::SolveOverlap(Collider * c1, Collider * c2)
+void ModuleCollision::SolveOverlapDS(Collider * c1, Collider * c2)
 {
 	// Check velocity directions ================================================
 
 	bool directions[(int)Collider::OVERLAP_DIR::MAX];
-	directions[(int)Collider::OVERLAP_DIR::LEFT] =		c1->object->velocity.x < 0;
-	directions[(int)Collider::OVERLAP_DIR::RIGHT] =		c1->object->velocity.x > 0;
-	directions[(int)Collider::OVERLAP_DIR::UP] =        c1->object->velocity.y > 0;
-	directions[(int)Collider::OVERLAP_DIR::DOWN] =      c1->object->velocity.y < 0;
+	directions[(int)Collider::OVERLAP_DIR::LEFT] =		c1->object->velocity.x < 0.f;
+	directions[(int)Collider::OVERLAP_DIR::RIGHT] =		c1->object->velocity.x > 0.f;
+	directions[(int)Collider::OVERLAP_DIR::UP] =        c1->object->velocity.y > 0.f;
+	directions[(int)Collider::OVERLAP_DIR::DOWN] =      c1->object->velocity.y < 0.f;
 
 	// Calculate between colliders overlap =======================================
 
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
-	distances[(int)Collider::OVERLAP_DIR::RIGHT] =	abs(c1->position.x + c1->width - c2->position.x);
-	distances[(int)Collider::OVERLAP_DIR::LEFT] =   abs(c2->position.x + c2->width - c1->position.x);
-	distances[(int)Collider::OVERLAP_DIR::UP] =     abs(c1->position.y + c1->height - c2->position.y);    
-	distances[(int)Collider::OVERLAP_DIR::DOWN] =   abs(c2->position.y + c2->height - c1->position.y);
+	distances[(int)Collider::OVERLAP_DIR::RIGHT] =	c1->position.x + c1->width - c2->position.x;
+	distances[(int)Collider::OVERLAP_DIR::LEFT] =   c2->position.x + c2->width - c1->position.x;
+	distances[(int)Collider::OVERLAP_DIR::UP] =     c1->position.y + c1->height - c2->position.y;    
+	distances[(int)Collider::OVERLAP_DIR::DOWN] =   c2->position.y + c2->height - c1->position.y;
 
 	int overlap_dir = -1;
 
@@ -227,55 +321,71 @@ void ModuleCollision::SolveOverlap(Collider * c1, Collider * c2)
 	c1->SetPos(c1->object->position.x, c1->object->position.y);
 }
 
-//Collider::OFFSET_DIR ModuleCollision::SolveOverlap(Collider *dynamic_col, Collider *static_col, fPoint &position , fPoint &velocity)
-//{
-//	SDL_Rect dynamic = dynamic_col->rect;
-//	SDL_Rect rigid = static_col->rect;
-//
-//	bool directions[(uint)Direction::unknown];
-//	directions[(uint)Direction::left] = velocity.x < 0;
-//	directions[(uint)Direction::right] = velocity.x > 0;
-//	directions[(uint)Direction::up] = velocity.y < 0;
-//	directions[(uint)Direction::down] = velocity.y > 0;
-//
-//	uint distances[(uint)Direction::unknown];
-//	distances[(uint)Direction::right] = dynamic.x + dynamic.w - rigid.x;
-//	distances[(uint)Direction::left] = rigid.x + rigid.w - dynamic.x;
-//	distances[(uint)Direction::up] = rigid.y + rigid.h - dynamic.y;
-//	distances[(uint)Direction::down] = dynamic.y + dynamic.h - rigid.y;
-//
-//	int offset_direction = -1;
-//
-//	for (uint i = 0; i < (uint)Direction::unknown; ++i)
-//	{
-//		if (directions[i]) {
-//
-//			if (offset_direction == -1)
-//				offset_direction = i;
-//			else if (distances[i] < distances[(uint)offset_direction])
-//				offset_direction = i;
-//		}
-//	}
-//
-//	if (offset_direction == -1)
-//	{
-//		return Direction::unknown;
-//	}
-//
-//	switch ((Direction)offset_direction)
-//	{
-//	case Direction::right:
-//		position.x = (float)rigid.x - (float)dynamic.w / 2.0f;
-//		break;
-//	case Direction::left:
-//		position.x = (float)rigid.x + (float)rigid.w + (float)dynamic.w / 2.0f;
-//		break;
-//	case Direction::up:
-//		position.y = (float)rigid.y + (float)rigid.h + (float)dynamic.h / 2.0f;
-//		break;
-//	case Direction::down:
-//		position.y = (float)rigid.y - (float)dynamic.h / 2.0f;
-//		break;
-//	}
-//	return (Direction)offset_direction;
-//}
+void ModuleCollision::SolveOverlapDD(Collider * c1, Collider * c2)
+{
+
+	// Collider 1 =====================================================================
+
+	// Check velocity directions ----------------------------------------------
+
+	bool directions_1[(int)Collider::OVERLAP_DIR::MAX];
+	directions_1[(int)Collider::OVERLAP_DIR::LEFT] = c1->object->velocity.x < 0.f;
+	directions_1[(int)Collider::OVERLAP_DIR::RIGHT] = c1->object->velocity.x > 0.f;
+	directions_1[(int)Collider::OVERLAP_DIR::UP] = c1->object->velocity.y > 0.f;
+	directions_1[(int)Collider::OVERLAP_DIR::DOWN] = c1->object->velocity.y < 0.f;
+
+	// Collider 2 =====================================================================
+
+	bool directions_2[(int)Collider::OVERLAP_DIR::MAX];
+	directions_2[(int)Collider::OVERLAP_DIR::LEFT] = c2->object->velocity.x < 0.f;
+	directions_2[(int)Collider::OVERLAP_DIR::RIGHT] = c2->object->velocity.x > 0.f;
+	directions_2[(int)Collider::OVERLAP_DIR::UP] = c2->object->velocity.y > 0.f;
+	directions_2[(int)Collider::OVERLAP_DIR::DOWN] = c2->object->velocity.y < 0.f;
+
+
+	// Calculate between colliders overlap ============================================
+
+	float distances[(int)Collider::OVERLAP_DIR::MAX];
+	distances[(int)Collider::OVERLAP_DIR::RIGHT] = c1->position.x + c1->width - c2->position.x;
+	distances[(int)Collider::OVERLAP_DIR::LEFT] = c2->position.x + c2->width - c1->position.x;
+	distances[(int)Collider::OVERLAP_DIR::UP] = c1->position.y + c1->height - c2->position.y;
+	distances[(int)Collider::OVERLAP_DIR::DOWN] = c2->position.y + c2->height - c1->position.y;
+
+	int overlap_dir = -1;
+
+	for (uint i = 0; i < (int)Collider::OVERLAP_DIR::MAX; ++i)
+	{
+			if (overlap_dir == -1)
+				overlap_dir = i;
+			else if (distances[i] < distances[(int)overlap_dir])
+				overlap_dir = i;
+	}
+
+	switch ((Collider::OVERLAP_DIR)overlap_dir)
+	{
+	case Collider::OVERLAP_DIR::RIGHT:
+		c1->object->position.x -= distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+		c2->object->position.x += distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+
+		break;
+	case Collider::OVERLAP_DIR::LEFT:
+		c1->object->position.x += distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+		c2->object->position.x -= distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+
+		break;
+	case Collider::OVERLAP_DIR::UP:
+		c1->object->position.y -= distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+		c2->object->position.y += distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+
+		break;
+	case Collider::OVERLAP_DIR::DOWN:
+		c1->object->position.y += distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		c2->object->position.y -= distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		break;
+	}
+
+
+	c1->SetPos(c1->object->position.x, c1->object->position.y);
+	c2->SetPos(c2->object->position.x, c2->object->position.y);
+}
+

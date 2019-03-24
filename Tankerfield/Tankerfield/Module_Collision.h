@@ -16,6 +16,7 @@ class Collider
 public:
 	enum class ON_TRIGGER_STATE
 	{
+		NONE,
 		ENTER,
 		STAY,
 		EXIT
@@ -43,9 +44,10 @@ public:
 
 	enum class TYPE
 	{
-		NONE,
+		SAWDW,
 		DYNAMIC,
-		STATIC
+		STATIC,
+		SENSOR
 	};
 
 	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,j1Module* callback = nullptr) :
@@ -69,9 +71,6 @@ public:
 
 	bool CheckCollision(Collider*  coll) const;
 
-	
-
-
 private:
 
 	fPoint position = { 0.f , 0.f };
@@ -83,6 +82,8 @@ private:
 	TAG tag = TAG::NONE;
 
 	TYPE type = TYPE::STATIC;
+
+	ON_TRIGGER_STATE on_trigger_state = ON_TRIGGER_STATE::NONE;
 
 	j1Module* callback = nullptr;
 
@@ -111,7 +112,9 @@ public:
 
 	bool DeleteCollider(Collider* collider);
 
-	void SolveOverlap(Collider* c1 , Collider * c2);
+	void SolveOverlapDS(Collider* c1 , Collider * c2);
+
+	void SolveOverlapDD(Collider * c1, Collider * c2);
 
 
 private:

@@ -38,10 +38,18 @@ bool UI_Test::Awake()
 
 bool UI_Test::Start()
 {
-	player.position = { 2,2 };
-	player.coll = App->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player);
-	player.coll->SetType(Collider::TYPE::DYNAMIC);
+	player_1.position = { 2,2 };
+	player_1.coll = App->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player_1);
+	player_1.coll->SetType(Collider::TYPE::DYNAMIC);
+
+
+	player_2.position = { 6,6 };
+	player_2.coll = App->collision->AddCollider({ 6.f, 6.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player_2);
+	player_2.coll->SetType(Collider::TYPE::DYNAMIC);
+
+
 	wall = App->collision->AddCollider({ 4.f, 4.f }, 1.f, 1.f, Collider::TAG::WALL, this);
+
 	return true;
 }
 
@@ -111,7 +119,8 @@ void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
 
 bool UI_Test::Update(float dt)
 {
-	player.velocity = { 0,0 };
+	player_1.velocity = { 0,0 };
+	player_2.velocity = { 0,0 };
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += floor(200.0f * dt);
@@ -124,52 +133,52 @@ bool UI_Test::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= floor(200.0f * dt);
+
 	
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		player.position.y -= 1.5f * dt;
-		player.velocity.y = -1;
+		player_1.position.y -= 1.5f * dt;
+		player_1.velocity.y = -1;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		player.position.y += 1.5f * dt;
-		player.velocity.y = 1.f;
+		player_1.position.y += 1.5f * dt;
+		player_1.velocity.y = 1.f;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		player.position.x -= 1.5f * dt;
-		player.velocity.x = -1;
+		player_1.position.x -= 1.5f * dt;
+		player_1.velocity.x = -1;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		player.position.x += 1.5f * dt;
-		player.velocity.x = 1;
+		player_1.position.x += 1.5f * dt;
+		player_1.velocity.x = 1;
 	}
 
-	// Draw Grid ==============================================
-
-	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
-	fPoint point_1, point_2;
-
-
-	for (int i = 0; i <= rows; ++i)
+	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_REPEAT)
 	{
-		point_1 = MapToWorldF( 0 , i);
-		point_2 = MapToWorldF(columms, i);
-		App->render->DrawLine(point_1.x , point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		player_2.position.y -= 1.5f * dt;
+		player_2.velocity.y = -1.f;
 	}
-
-	for (int i = 0; i <= columms; ++i)
+	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT)
 	{
-		point_1 = MapToWorldF(i, 0);
-		point_2 = MapToWorldF(i, rows);
-		App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		player_2.position.y += 1.5f * dt;
+		player_2.velocity.y = 1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_REPEAT)
+	{
+		player_2.position.x -= 1.5f * dt;
+		player_2.velocity.x = -1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT)
+	{
+		player_2.position.x += 1.5f * dt;
+		player_2.velocity.x = 1.f;
 	}
 
-	// Draw Player Pos ========================================
-	fPoint player_draw_pos = MapToWorldF(player.position.x, player.position.y);
-	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
-	player.coll->SetPos(player.position.x, player.position.y);
+	player_1.coll->SetPos(player_1.position.x, player_1.position.y);
+	player_2.coll->SetPos(player_2.position.x, player_2.position.y);
 
 	return true;
 }
@@ -180,6 +189,37 @@ bool UI_Test::PostUpdate()
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
+
+
+	// Draw Grid ==============================================
+
+	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
+	fPoint point_1, point_2;
+
+
+	for (int i = 0; i <= rows; ++i)
+	{
+		point_1 = MapToWorldF(0, i);
+		point_2 = MapToWorldF(columms, i);
+		App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+	}
+
+	for (int i = 0; i <= columms; ++i)
+	{
+		point_1 = MapToWorldF(i, 0);
+		point_2 = MapToWorldF(i, rows);
+		App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+	}
+
+	// Draw Player 1 ========================================
+	fPoint player_draw_pos = MapToWorldF(player_1.position.x, player_1.position.y);
+	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
+
+
+	// Draw Player 2 ========================================
+	player_draw_pos = MapToWorldF(player_2.position.x, player_2.position.y);
+	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 0, 255, 255, true);
+
 
 	return ret;
 }
@@ -195,7 +235,7 @@ bool UI_Test::CleanUp()
 
 void UI_Test::OnCollision(Collider * c1, Collider * c2)
 {
-	if (c1 == player.coll && c2 == wall)
+	if (c1 == player_1.coll && c2 == wall)
 	{
 		LOG("BOIIIIIIIIIIIIIIII");
 	}
