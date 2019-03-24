@@ -40,9 +40,9 @@ private:
 	SDL_JoystickID joyId = -1;
 	j1KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
 	SDL_GameController* ctr_pointer = nullptr;
-	
-public:
 	SDL_Haptic* haptic = nullptr;
+public:
+	
 
 
 	j1KeyState Get_Button_State(SDL_GameControllerButton button)
@@ -55,6 +55,25 @@ public:
 	{
 		return SDL_GameControllerGetAxis(ctr_pointer, axis);
 	}
+
+	//strengh -> from 0 to 1
+	//length  -> strength of the rumble to play as a 0-1 float value
+	int PlayRumble(float strengh, Uint32 length)
+	{
+		if (haptic != nullptr)
+			return SDL_HapticRumblePlay(haptic, strengh, length);
+		else
+			return 0;
+	}
+	int StopRumble()
+	{
+		if (haptic != nullptr)
+			return SDL_HapticRumbleStop(haptic);
+		else
+			return 0;
+	}
+
+private:
 	int test_haptic() {
 
 		SDL_HapticEffect effect;

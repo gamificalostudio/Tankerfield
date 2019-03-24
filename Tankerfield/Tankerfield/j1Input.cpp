@@ -52,7 +52,11 @@ bool j1Input::Start()
 		LOG("SDL_INIT_GAMECONTROLLER could not initialize! SDL_Error: %s\n", SDL_GetError());
 		return ret = false;
 	}
-	SDL_Init(SDL_INIT_HAPTIC);
+	if (SDL_Init(SDL_INIT_HAPTIC) < 0)
+	{
+		LOG("SDL_INIT_HAPTIC could not initialize! SDL_Error: %s\n ", SDL_GetError());
+		return ret = false;
+	}
 	return true;
 }
 
@@ -156,9 +160,15 @@ bool j1Input::PreUpdate()
 				{
 					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
 					{
-						SDL_HapticClose((*iter)->haptic);
+						if((*iter)->haptic!=nullptr)
+							SDL_HapticClose((*iter)->haptic);
+
+						if ((*iter)->ctr_pointer != nullptr)
 						SDL_GameControllerClose((*iter)->ctr_pointer);
+
 						delete (*iter);
+						(*iter) = nullptr;
+
 						iter = controllers.erase(iter);
 					}
 					else
