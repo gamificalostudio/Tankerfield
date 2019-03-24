@@ -61,7 +61,9 @@ bool ObjectManager::PreUpdate()
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
+		{
 			(*iterator)->PreUpdate();
+		}
 	}
 
 	return true;
@@ -76,13 +78,17 @@ bool ObjectManager::Update(float dt)
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
+		{
 			(*iterator)->Update(dt);
+		}
 	}
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
+		{
 			(*iterator)->Draw(dt);
+		}
 	}
 
 	return true;
@@ -96,7 +102,9 @@ bool ObjectManager::PostUpdate()
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
+		{
 			(*iterator)->PostUpdate();
+		}
 	}
 
 	return true;
