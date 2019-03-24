@@ -212,6 +212,7 @@ public:
 
 
 	iPoint MapToWorld(int column, int row) const;
+	iPoint WorldToMap(int x, int y) const;
 	TileSet* GetTilesetFromTileId(int id) const;
 };
 #endif // __j1MAP_H__

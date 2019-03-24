@@ -112,7 +112,7 @@ public:
 	bool Start()override;
 
 	// Called each loop iteration
-	bool PreUpdate(float dt)override;
+	bool PreUpdate()override;
 
 	// Called before quitting
 	bool CleanUp()override;

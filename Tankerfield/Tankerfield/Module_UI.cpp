@@ -121,19 +121,19 @@ bool Module_UI::PreUpdate()
 
 	// Click States ============================================
 	
-	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (App->input->GetMouseButtonState(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		SelectClickedObject();
 	}
-	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
+	else if (App->input->GetMouseButtonState(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
 	{
 		click_state = ClickState::Repeat;
 	}
-	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
+	else if (App->input->GetMouseButtonState(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
 	{
 		click_state = ClickState::Out;
 	}
-	else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
+	else if (App->input->GetMouseButtonState(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
 	{
 		click_state = ClickState::None;
 		selected_object = nullptr;
