@@ -19,5 +19,7 @@ private:
 public:
 
 private:
-
+	static SDL_Texture * tank_base;
+	static SDL_Texture * tank_turr;
+	static SDL_Texture * tank_shadow;
 };

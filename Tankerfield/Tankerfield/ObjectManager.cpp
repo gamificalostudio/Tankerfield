@@ -46,8 +46,6 @@ bool ObjectManager::Start()
 {
 	bool ret = true;
 
-	LoadObjectTextures();
-
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
@@ -55,13 +53,6 @@ bool ObjectManager::Start()
 	}
 
 	return ret;
-}
-
-void ObjectManager::LoadObjectTextures()
-{
-	//pugi::xml_node node = App->config.child("spritesheet");
-	//std::string path = node.value().as_string();
-	tank_base = App->tex->Load(App->config.child("object").child("spritesheets").child("tank_base").text().as_string());
 }
 
 bool ObjectManager::PreUpdate()

@@ -1,4 +1,6 @@
 #include "Obj_Tank.h"
+#include "j1App.h"
+#include "j1Textures.h"
 
 Obj_Tank::Obj_Tank()
 {
@@ -15,6 +17,8 @@ bool Obj_Tank::Awake(pugi::xml_node &)
 
 bool Obj_Tank::Start()
 {
+	tank_base = App->tex->Load(App->config.child("object").child("spritesheets").child("tank_base").text().as_string());
+
 	return true;
 }
 
