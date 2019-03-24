@@ -110,7 +110,7 @@ protected:
 	UI_Object           * parent_object = nullptr;
 	list<UI_Object*>      object_sons;
 
-	friend class Module_UI;
+	friend class ModuleUI;
 };
 
 #endif // __Object_H__

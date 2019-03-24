@@ -7,7 +7,7 @@
 #include "Object.h"
 
 struct SDL_Texture;
-
+class Collider;
 
 class Enemy : public Object
 {
@@ -28,6 +28,12 @@ public:
 
 	bool PreUpdate();
 
+	fPoint MapToWorldF(float x, float y);
+
+	void DrawIsometricQuad(float x, float y, float w, float h);
+
+	void DrawIsometricBox(float x, float y, float w, float h, float p);
+
 	bool Update(float dt);
 
 	bool PostUpdate();
@@ -37,6 +43,8 @@ public:
 private:
 
 	fPoint        player_pos;
+
+	Collider    * collider = nullptr;
 
 	Button      * button_test = nullptr;
 

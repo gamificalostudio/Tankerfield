@@ -5,10 +5,19 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 
+
+// TODO REMOVE IR
+
+#include "UI_Test.h"
+
+// =============
+
 using namespace std;
 
 ModuleCollision::ModuleCollision()
 {
+	name.assign("Module_Collision");
+
 	matrix[(int)Collider::TYPE::WALL][(int)Collider::TYPE::WALL] = false;
 	matrix[(int)Collider::TYPE::WALL][(int)Collider::TYPE::PLAYER] = false;
 	matrix[(int)Collider::TYPE::WALL][(int)Collider::TYPE::ENEMY] = false;
@@ -39,19 +48,19 @@ bool ModuleCollision::Update(float dt)
 {
 	// Collision detection and callbacks ============================================== 
 
-	list<Collider*>::iterator iterator_1;
-	list<Collider*>::iterator iterator_2;
+	std::list<Collider*>::iterator iterator_1;
+	std::list<Collider*>::iterator iterator_2;
 
 	Collider* c1 = nullptr;
 	Collider* c2 = nullptr;
 
-	for (list<Collider*>::iterator item_1 = colliders.begin(); item_1 != colliders.end(); ++item_1)
+	for (std::list<Collider*>::iterator item_1 = colliders.begin(); item_1 != colliders.end(); ++item_1)
 	{
 		c1 = *item_1;
 		iterator_1 = item_1;
 		++iterator_1;
 
-		for (list<Collider*>::iterator item_2 = iterator_1; item_2 != colliders.end(); ++item_2)
+		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != colliders.end(); ++item_2)
 		{
 			c2 = *item_2;
 			iterator_2 = item_2;
@@ -81,11 +90,14 @@ bool ModuleCollision::PostUpdate()
 		debug = !debug;
 	}
 		
-	if (debug == false)
+	if (debug == true)
 		return true;
 
 	for (list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
+		SDL_Rect collider_rect = (*item)->rect;
+		App->ui_test->DrawIsometricQuad(collider_rect.x, collider_rect.y, collider_rect.w , collider_rect.h);
+
 		switch ((*item)->type)
 		{
 		case Collider::TYPE::NONE: // white

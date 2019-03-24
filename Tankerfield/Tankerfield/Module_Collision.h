@@ -30,7 +30,6 @@ class Collider
 		ENEMY,
 		GOD,
 		MAX
-
 	};
 
 	Collider(SDL_Rect rectangle, TYPE type, j1Module* callback = nullptr) :
@@ -47,9 +46,12 @@ class Collider
 
 	bool CheckCollision(const SDL_Rect& r) const;
 
+
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	TYPE type = TYPE::NONE;
 	j1Module* callback = nullptr;
+	bool is_static = true;
+
 };
 
 

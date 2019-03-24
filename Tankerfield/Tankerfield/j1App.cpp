@@ -15,6 +15,7 @@
 #include "j1App.h"
 #include "j1Fonts.h"
 #include "Module_UI.h"
+#include "Module_Collision.h"
 #include "UI_Test.h"
 #include "ObjectManager.h"
 
@@ -32,8 +33,9 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	ui_test = new UI_Test();
 	pathfinding = new j1PathFinding();
 	font = new j1Fonts();
-	ui = new Module_UI();
+	ui = new ModuleUI();
 	objectmanager = new ObjectManager();
+	collision = new ModuleCollision();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -44,7 +46,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(font);
 	AddModule(objectmanager);
-
+	AddModule(collision);
 	AddModule(ui_test);
 	AddModule(ui);
 	// render last to swap buffer

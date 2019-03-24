@@ -17,9 +17,9 @@ class j1Audio;
 class UI_Test;
 class j1PathFinding;
 class j1Fonts;
-class Module_UI;
+class ModuleUI;
 class ObjectManager;
-
+class ModuleCollision;
 
 class j1App
 {
@@ -88,7 +88,8 @@ public:
 	UI_Test*			ui_test = nullptr;
 	j1PathFinding*		pathfinding = nullptr;
 	j1Fonts*            font = nullptr;
-	Module_UI*          ui = nullptr;
+	ModuleCollision*    collision = nullptr;
+	ModuleUI*           ui = nullptr;
 	ObjectManager*		objectmanager = nullptr;
 
 
