@@ -31,12 +31,16 @@
   </map>
 
   <object>
-    <spritesheets>
-      <tank_base>textures/objects/tank/base.png</tank_base>
-    </spritesheets>
     <tank>
+      <speed value ="1"/>
+      <spritesheets>
+        <base>textures/objects/tank/base.png</base>
+        <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
+        <turr>textures/objects/tank/turr.png</turr>
+        <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
+      </spritesheets>
       <animations>
-        <animation name="rotate_base">
+        <animation name="rotate_base" speed ="1">
           <frame x="0"   y="0"   w="112" h="67"/>
           <frame x="112" y="0"   w="112" h="67"/>
           <frame x="224" y="0"   w="112" h="67"/>

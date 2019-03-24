@@ -17,8 +17,9 @@ bool Obj_Tank::Awake(pugi::xml_node &)
 
 bool Obj_Tank::Start()
 {
-	tank_base = App->tex->Load(App->config.child("object").child("spritesheets").child("tank_base").text().as_string());
-
+	pugi::xml_node tank_node = App->config.child("object");
+	base_tex = App->tex->Load(App->config.child("object").child("spritesheets").child("tank_base").text().as_string());
+	LoadRects(App->config->child("object"));
 	return true;
 }
 
@@ -34,6 +35,7 @@ bool Obj_Tank::Update(float dt)
 
 bool Obj_Tank::PostUpdate()
 {
+	App->render->Blit();
 	return true;
 }
 

@@ -19,7 +19,11 @@ private:
 public:
 
 private:
-	static SDL_Texture * tank_base;
-	static SDL_Texture * tank_turr;
-	static SDL_Texture * tank_shadow;
+	static SDL_Texture * base_tex;
+	static SDL_Texture * turr_tex;
+	static SDL_Texture * base_shadow_tex;
+	static SDL_Texture * turr_shadow_tex;
+
+	static SDL_Rect * base_rects;
+	static SDL_Rect * turr_rects;
 };
