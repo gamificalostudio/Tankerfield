@@ -112,9 +112,11 @@ public:
 
 	bool DeleteCollider(Collider* collider);
 
-	void SolveOverlapDS(Collider* c1 , Collider * c2);
+	void SolveOverlapDS(Collider* c1 , Collider * c2); // Solve Dynamic vs Static Overlap
 
-	void SolveOverlapDD(Collider * c1, Collider * c2);
+	void SolveOverlapSD(Collider * c1, Collider * c2);
+
+	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
 
 
 private:
