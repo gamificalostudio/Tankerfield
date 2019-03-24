@@ -6,6 +6,8 @@
 #include "Animation.h"
 
 #include "j1Module.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
 
 
 enum ObjectType
@@ -17,6 +19,7 @@ enum ObjectType
 
 class Object;
 class Player;
+struct SDL_Texture;
 
 class ObjectManager : public j1Module
 {
@@ -46,10 +49,15 @@ public:
 
 	Player* GetPlayerData() const;
 
+private:
+	void LoadObjectTextures();
 
 private:
-
 	std::list<Object*> objects;
+
+	//Object textures
+	SDL_Texture * tank_base = nullptr;
+	SDL_Texture * tank_turr = nullptr;
 
 };
 

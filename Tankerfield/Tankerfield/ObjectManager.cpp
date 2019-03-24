@@ -10,6 +10,9 @@
 #include "j1Audio.h"
 #include "j1Window.h"
 #include "j1Scene.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
+#include <string>
 //#include "j1Collision.h"
 //#include "j1Map.h"
 //#include "Player.h"
@@ -41,16 +44,24 @@ bool ObjectManager::Awake(pugi::xml_node& config)
 
 bool ObjectManager::Start()
 {
-	bool ret = true;	
-	std::list<Object*>::iterator iterator;
+	bool ret = true;
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	LoadObjectTextures();
+
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
 			(*iterator)->Start();
 	}
 
 	return ret;
+}
+
+void ObjectManager::LoadObjectTextures()
+{
+	//pugi::xml_node node = App->config.child("spritesheet");
+	//std::string path = node.value().as_string();
+	tank_base = App->tex->Load(App->config.child("object").child("spritesheets").child("tank_base").text().as_string());
 }
 
 bool ObjectManager::PreUpdate()
