@@ -40,11 +40,15 @@ public:
 
 	bool CleanUp();
 
+	void OnCollision(Collider* c1, Collider* c2);
+
 private:
 
 	fPoint        player_pos;
 
-	Collider    * collider = nullptr;
+	Collider    * player_col = nullptr;
+
+	Collider    * wall = nullptr;
 
 	Button      * button_test = nullptr;
 

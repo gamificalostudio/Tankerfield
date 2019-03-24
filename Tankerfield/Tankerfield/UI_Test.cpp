@@ -39,7 +39,8 @@ bool UI_Test::Awake()
 bool UI_Test::Start()
 {
 	player_pos = { 2,2 };
-	collider = App->collision->AddCollider({0,0,1, 1}, Collider::TYPE::PLAYER, this);
+	player_col = App->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TYPE::PLAYER, this);
+	wall = App->collision->AddCollider({ 4.f, 4.f }, 1.f, 1.f, Collider::TYPE::WALL, this);
 
 	uint win_width = 0u , win_height = 0u;
 	App->win->GetWindowSize(win_width, win_height);
@@ -172,7 +173,7 @@ bool UI_Test::Update(float dt)
 	// Draw Player Pos ========================================
 	fPoint player_draw_pos = MapToWorldF(player_pos.x, player_pos.y);
 	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
-	collider->SetPos(player_draw_pos.x, player_draw_pos.y);
+	player_col->SetPos(player_pos.x, player_pos.y);
 
 
 	return true;
@@ -195,4 +196,14 @@ bool UI_Test::CleanUp()
 
 
 	return true;
+}
+
+void UI_Test::OnCollision(Collider * c1, Collider * c2)
+{
+	if (c1 == player_col && c2 == wall)
+	{
+		LOG("BOIIIIIIIIIIIIIIII");
+	}
+
+
 }

@@ -32,25 +32,36 @@ class Collider
 		MAX
 	};
 
-	Collider(SDL_Rect rectangle, TYPE type, j1Module* callback = nullptr) :
-		rect(rectangle),
+	Collider(fPoint pos , float width , float height, TYPE type, j1Module* callback = nullptr) :
+		position(pos),
+		width(width),
+		height(height),
 		type(type),
 		callback(callback)
 	{}
 
-	void SetPos(const int x,const  int y)
+	void SetPos(const float x,const  float y)
 	{
-		rect.x = x;
-		rect.y = y;
+		position = { x, y };
 	}
 
-	bool CheckCollision(const SDL_Rect& r) const;
+	bool CheckCollision(Collider*  coll) const;
 
+private:
 
-	SDL_Rect rect = { 0, 0, 0, 0 };
+	fPoint position = { 0.f , 0.f };
+
+	float width = 0.f;
+		
+	float height = 0.f;
+
 	TYPE type = TYPE::NONE;
+
 	j1Module* callback = nullptr;
+
 	bool is_static = true;
+
+	friend ModuleCollision;
 
 };
 
@@ -69,9 +80,7 @@ public:
 
 	bool CleanUp();
 
-	Collider  *AddCollider(SDL_Rect rect, Collider::TYPE type, j1Module* callback = nullptr);
-
-	//Collider::OFFSET_DIR  SolveOverlap(Collider *dynamic_col, Collider *static_col, fPoint &position, fPoint &velocity);
+	Collider  *AddCollider(fPoint pos, float width , float height, Collider::TYPE type, j1Module* callback = nullptr);
 
 	bool CheckOverlap(std::list<Collider::OFFSET_DIR> &directions, Collider *dynamic_col, Collider::TYPE type, fPoint &position, fPoint &velocity);
 
@@ -79,8 +88,11 @@ public:
 
 
 private:
+
 	std::list<Collider*> colliders;
+
 	bool matrix[(int)Collider::TYPE::MAX][(int)Collider::TYPE::MAX];
+
 	bool debug = false;
 };
 

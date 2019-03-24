@@ -14,6 +14,12 @@
 
 using namespace std;
 
+bool Collider::CheckCollision(Collider*  coll) const
+{
+	return !(coll->position.x >= (position.x + width) || (coll->position.x + coll->width) <= position.x || coll->position.y >= (position.y + height) || (coll->position.y + coll->height) <= position.y);
+}
+
+
 ModuleCollision::ModuleCollision()
 {
 	name.assign("Module_Collision");
@@ -66,7 +72,7 @@ bool ModuleCollision::Update(float dt)
 			iterator_2 = item_2;
 			++iterator_2;
 
-			if (c1->CheckCollision(c2->rect) == true)
+			if (c1->CheckCollision(c2) == true)
 			{
 				if (matrix[(int)c1->type][(int)c2->type] && c1->callback)
 				{
@@ -95,8 +101,7 @@ bool ModuleCollision::PostUpdate()
 
 	for (list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
-		SDL_Rect collider_rect = (*item)->rect;
-		App->ui_test->DrawIsometricQuad(collider_rect.x, collider_rect.y, collider_rect.w , collider_rect.h);
+		App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width , (*item)->height);
 
 		switch ((*item)->type)
 		{
@@ -136,16 +141,11 @@ bool ModuleCollision:: CleanUp()
 	return true;
 }
 
-Collider * ModuleCollision::AddCollider(SDL_Rect rect, Collider::TYPE type, j1Module* callback)
+Collider * ModuleCollision::AddCollider(fPoint pos , float width , float height, Collider::TYPE type, j1Module* callback)
 {
-	Collider* collider = new Collider(rect, type, callback);
+	Collider* collider = new Collider(pos, width, height, type, callback);
 	colliders.push_back(collider);
 	return  collider;
-}
-
-bool Collider::CheckCollision(const SDL_Rect& r) const
-{
-	return !(r.x >= (rect.x + rect.w) || (r.x + r.w) <= rect.x || r.y >= (rect.y + rect.h) || (r.y + r.h) <= rect.y);
 }
 
 bool ModuleCollision::CheckOverlap(list<Collider::OFFSET_DIR> &directions , Collider *dynamic_col, Collider::TYPE type, fPoint &position, fPoint &velocity)
@@ -157,7 +157,7 @@ bool ModuleCollision::CheckOverlap(list<Collider::OFFSET_DIR> &directions , Coll
 			continue;
 		}
 
-		if (dynamic_col->CheckCollision((*item)->rect))
+		if (dynamic_col->CheckCollision(*item))
 		{
 			//directions.push_back(SolveOverlap(dynamic_col, *item, position, velocity));
 		}
