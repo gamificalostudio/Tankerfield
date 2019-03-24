@@ -112,7 +112,7 @@ public:
 	bool Start()override;
 
 	// Called each loop iteration
-	bool PreUpdate(float dt)override;
+	bool PreUpdate()override;
 
 	// Called before quitting
 	bool CleanUp()override;
@@ -126,7 +126,7 @@ public:
 		return keyboard[id];
 	}
 
-	j1KeyState GetMouseButtonState(int id) const
+	j1KeyState GetMouseButton(int id) const
 	{
 		return mouse_buttons[id - 1];
 	}
@@ -137,7 +137,6 @@ public:
 	// Get mouse / axis position
 	void GetMousePosition(int &x, int &y);
 	void GetMouseMotion(int& x, int& y);
-	iPoint GetMousePos_Tiles();
 
 private:
 	void Update_Keyboard_State();

@@ -57,7 +57,7 @@ bool j1Input::Start()
 }
 
 // Called each loop iteration
-bool j1Input::PreUpdate(float dt)
+bool j1Input::PreUpdate()
 {
 	static SDL_Event event;
 	
@@ -195,15 +195,6 @@ void j1Input::GetMouseMotion(int& x, int& y)
 {
 	x = mouse_motion_x;
 	y = mouse_motion_y;
-}
-
-iPoint j1Input::GetMousePos_Tiles()
-{
-	iPoint ret;
-	ret = App->render->ScreenToWorld(mouse_x, mouse_y);
-	ret = App->map->WorldToMap(ret.x, ret.y);
-
-	return ret;
 }
 
 void j1Input::Update_Keyboard_State()
