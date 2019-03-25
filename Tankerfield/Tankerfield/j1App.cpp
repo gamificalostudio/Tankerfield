@@ -1,7 +1,6 @@
 #include <iostream>
 #include <sstream>
 
-
 #include "SDL/include/SDL_timer.h"
 #include "Brofiler/Brofiler.h"
 #pragma comment(lib, "Brofiler/ProfilerCore32.lib")

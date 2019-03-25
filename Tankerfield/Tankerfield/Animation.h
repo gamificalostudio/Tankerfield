@@ -2,15 +2,14 @@
 #define __ANIMATION_H__
 
 #include "SDL/include/SDL_rect.h"
-
-#define MAX_FRAMES 100
+#include "p2Defs.h"
 
 class Animation
 {
 public:
 	bool loop = true;
 	float speed = 1.0f;
-	SDL_Rect frames[MAX_FRAMES];
+	SDL_Rect * frames = nullptr;
 
 public:
 	float current_frame=0;
@@ -18,6 +17,11 @@ public:
 	int loops = 0;
 
 public:
+	Animation(uint frame_num)
+	{
+		frames = new SDL_Rect[frame_num];
+	}
+
 	void PushBack(const SDL_Rect& rect)
 	{
 		frames[last_frame++] = rect;
