@@ -28,6 +28,7 @@ private:
 	static SDL_Texture * turr_shadow_tex;
 
 	static SDL_Rect * base_rects;
+	static int base_rects_num;
 	//static SDL_Rect * turr_rects;
 
 	float speed = 0.f;
