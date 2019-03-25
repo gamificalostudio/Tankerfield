@@ -15,6 +15,7 @@
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
 #include "Obj_Tank.h"
+#include "Obj_Basic_Shoot.h"
 //#include "j1Collision.h"
 //#include "j1Map.h"
 //#include "Player.h"
@@ -148,9 +149,13 @@ Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
 		ret = new TeslaTrooper(x, y);
 		ret->type = TESLA_TROOPER;
 		break;
-  case ObjectType::TANK:
+	case ObjectType::TANK:
 		ret = new Obj_Tank(x, y);
-    ret->type = TANK;
+		ret->type = TANK;
+		break;
+	case ObjectType::BASIC_BULLET:
+		ret = new Obj_Basic_Shoot(x, y);
+		ret->type = BASIC_BULLET;
 		break;
 	}
   

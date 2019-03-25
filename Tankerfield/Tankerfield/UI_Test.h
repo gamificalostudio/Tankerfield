@@ -27,6 +27,8 @@ public:
 
 	bool CleanUp();
 
+	void DrawIsometricQuad(float x, float y, float w, float h);
+
 private:
 
 	fPoint        player_pos;

@@ -11,6 +11,7 @@
 #include "UI_Object.h"
 #include "Button_Input.h"
 #include "Label.h"
+#include "ObjectManager.h"
 
 UI_Test::UI_Test() : j1Module()
 {
@@ -71,7 +72,7 @@ fPoint  MapToWorldF(float x, float y, float tile_width, float tile_height)
 	return ret;
 }
 
-void DrawIsometricQuad (float x, float y, float w, float h)
+void UI_Test::DrawIsometricQuad (float x, float y, float w, float h)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
@@ -144,6 +145,10 @@ bool UI_Test::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		player_pos.x += 1.5f * dt;
+
+	// Create basic bullet
+	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+		App->objectmanager->CreateObject(BASIC_BULLET, player_pos.x, player_pos.y);
 
 	// Draw Grid ==============================================
 	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
