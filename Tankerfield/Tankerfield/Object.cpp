@@ -9,6 +9,7 @@
 #include "j1Render.h"
 #include "j1Scene.h"
 #include "j1Pathfinding.h"
+#include "p2Log.h"
 //#include "j1Map.h"
 //#include "Player.h"
 //#include "j1Collision.h"
@@ -134,13 +135,17 @@ bool Object::LoadRects(pugi::xml_node const & node, SDL_Rect * rects)
 	int i = 0;
 	pugi::xml_node frame_node = node.child("frame");
 
-	while (node)
+	while (frame_node)
 	{
 		//Body
 		rects[i].x = frame_node.attribute("x").as_int();
 		rects[i].y = frame_node.attribute("y").as_int();
 		rects[i].w = frame_node.attribute("w").as_int();
 		rects[i].h = frame_node.attribute("h").as_int();
+
+		if (i == 99){
+			LOG("hello");
+		}
 
 		//Increment
 		++i;

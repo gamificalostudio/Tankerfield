@@ -39,7 +39,7 @@ bool Obj_Tank::Start()
 	Obj_Tank::turr_tex = App->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
 	Obj_Tank::turr_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 
-	//LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
+	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
 	return true;
 }
