@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
     <RootNamespace>Tankerfield</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -149,6 +149,7 @@
     <ClCompile Include="Obj_Tank.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
+    <ClCompile Include="Tesla_Trooper.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Text_Panel.cpp" />
     <ClCompile Include="UI_Object.cpp" />
@@ -182,10 +183,14 @@
     <ClInclude Include="p2Point.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
+    <ClInclude Include="Tesla_Trooper.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="Text_Panel.h" />
     <ClInclude Include="UI_Object.h" />
     <ClInclude Include="UI_Test.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Game\config.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

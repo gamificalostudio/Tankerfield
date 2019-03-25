@@ -12,13 +12,13 @@
 
 enum ObjectType
 {
+  TANK,
 	PLAYER,
-
+	TESLA_TROOPER,
 	NO_TYPE
 };
 
 class Object;
-class Player;
 
 class ObjectManager : public j1Module
 {
@@ -27,27 +27,26 @@ public:
 	ObjectManager();
 	~ObjectManager();
 
-	bool Awake(pugi::xml_node& config);
+	bool Awake(pugi::xml_node& config) override;
 
-	bool Start();
+	bool Start() override;
 
-	bool PreUpdate();
+	bool PreUpdate() override;
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
-	void Draw(float dt);
+	bool PostUpdate() override;
+
 	bool Load(pugi::xml_node&);
 
 	bool Save(pugi::xml_node&) const;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
-	Object* CreateObject(ObjectType type, int x = 0, int y = 0);
-	void DeleteEntities();
-
-	Player* GetPlayerData() const;
-
+	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
+	void DeleteObjects();
+	bool DeleteObject(Object* object);
+  
 private:
 	std::list<Object*> objects;
 };
