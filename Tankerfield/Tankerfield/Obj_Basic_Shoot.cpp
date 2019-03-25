@@ -1,6 +1,7 @@
 #include "Obj_Basic_Shoot.h"
 #include "j1App.h"
 #include "UI_Test.h"
+#include "j1Input.h"
 
 
 
@@ -13,6 +14,20 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 {
 	pos.x = x;
 	pos.y = y;
+
+	speed = 0.25f;
+	iPoint mouse_position = { 0,0 };
+	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
+
+	direction.x = mouse_position.x - pos.x;
+	direction.y = mouse_position.y - pos.y;
+
+	float modulo = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
+
+	direction.x /= modulo;
+	direction.y /= modulo;
+
+	bullet_life_timer.Start();
 }
 
 Obj_Basic_Shoot::~Obj_Basic_Shoot()
@@ -37,7 +52,8 @@ bool Obj_Basic_Shoot::PreUpdate()
 bool Obj_Basic_Shoot::Update(float dt)
 {
 
-
+	pos.x += speed * direction.x;
+	pos.y += speed * direction.y;
 
 	//Draw ========================
 	App->ui_test->DrawIsometricQuad(pos.x, pos.y, 0.75f, 0.5f);
@@ -47,8 +63,10 @@ bool Obj_Basic_Shoot::Update(float dt)
 
 bool Obj_Basic_Shoot::PostUpdate()
 {
-	//uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 135);
-	//App->render->Blit(base_tex, pos.x, pos.y, &base_rects[ind]);
+	if (bullet_life_timer.ReadMs() >= bullet_life_ms)
+	{
+		to_remove = true;
+	}
 	return true;
 }
 

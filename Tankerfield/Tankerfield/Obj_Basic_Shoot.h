@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "j1PerfTimer.h"
+#include "p2Point.h"
 
 struct SDL_Texture;
 
@@ -20,7 +21,10 @@ public:
 
 private:
 
-	j1PerfTimer bullet_life;
+	float speed;
+	fPoint direction;
+	j1PerfTimer bullet_life_timer;
+	float bullet_life_ms = 1000.f;
 	//float angle = 180.f;
 
 };

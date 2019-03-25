@@ -52,7 +52,7 @@ bool UI_Test::PreUpdate()
 	return true;
 }
 
-iPoint  MapToWorld(int x, int y, int tile_width, int tile_height)
+iPoint UI_Test::MapToWorld(int x, int y, int tile_width, int tile_height)
 {
 	iPoint ret;
 
@@ -62,7 +62,7 @@ iPoint  MapToWorld(int x, int y, int tile_width, int tile_height)
 	return ret;
 }
 
-fPoint  MapToWorldF(float x, float y, float tile_width, float tile_height)
+fPoint UI_Test::MapToWorldF(float x, float y, float tile_width, float tile_height)
 {
 	fPoint ret;
 
@@ -91,7 +91,7 @@ void UI_Test::DrawIsometricQuad (float x, float y, float w, float h)
 	App->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, 255, 0, 0, 255, true);
 }
 
-void DrawIsometricBox(float x, float y, float w, float h, float p)
+void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
