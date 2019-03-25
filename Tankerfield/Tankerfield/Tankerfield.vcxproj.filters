@@ -75,6 +75,10 @@
     <ClCompile Include="Tesla_Trooper.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="j1Map.cpp" />
+    <ClCompile Include="Obj_Tank.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h" />
@@ -161,6 +165,10 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Tesla_Trooper.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Map.h" />
+    <ClInclude Include="Obj_Tank.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -42,6 +42,44 @@ bool Object::PostUpdate()
 	return true;
 }
 
+uint Object::GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, float fist_rect_dir)
+{
+	//Account for the spritesheet not starting at the 0 degree rotation
+	angle -= fist_rect_dir;
+	angle = ClampRotation(angle);
+	float num_pos = angle * rect_num / 360;
+	float remainder = fmod(num_pos, 1);
+	num_pos -= remainder;
+	//Select the current or the next frame if the remainder is more than or 0.5
+	if (remainder >= 0.5f)
+	{
+		num_pos = num_pos + 1;
+	}
+	//If it's the last frame, start over again
+	if (num_pos == rect_num)
+	{
+		num_pos = 0;
+	}
+	return (uint)num_pos;
+}
+
+float Object::ClampRotation(float angle)
+{
+	if (angle > 360)
+	{
+		angle = fmod(angle, 360);
+	}
+	else if (angle < -360)
+	{
+		angle = fmod(angle, -360);
+	}
+	if (angle < 0)
+	{
+		angle += 360;
+	}
+	return angle;
+}
+
 //sprites in SDL_Rect * rect must be ordered in counter clock-wise direction
 //angle should be in degrees
 //int rect_num is the number of rectangles that are inside SDL_Rect * rect array

@@ -9,6 +9,12 @@
 
 #include "j1PerfTimer.h"
 
+enum ROTATION_DIR {
+	CLOCKWISE,
+	COUNTER_CLOCKWISE,
+	INVALID
+};
+
 struct SDL_Texture;
 struct Collider;
 
@@ -34,6 +40,10 @@ public:
 	SDL_Rect* GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir = 90);
 	//Same as GetRotatedSprite but with animations
 	Animation* GetRotatedAnimation(Animation* animations, int num_animations, float angle, float fist_rect_dir = 90);
+	//Clamps the rotation from 0 to 360 degrees
+	float ClampRotation(float angle);
+	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = 90);
+
   
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
