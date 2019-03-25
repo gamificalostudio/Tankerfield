@@ -112,7 +112,7 @@ public:
 
 	bool DeleteCollider(Collider* collider);
 
-	void SolveOverlapSD(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
+	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
 
@@ -120,6 +120,7 @@ public:
 private:
 
 	std::list<Collider*> colliders;
+
 
 	bool matrix[(int)Collider::TAG::MAX][(int)Collider::TAG::MAX];
 

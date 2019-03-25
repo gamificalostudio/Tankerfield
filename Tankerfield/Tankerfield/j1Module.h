@@ -67,7 +67,7 @@ public:
 		return true;
 	}
 
-	virtual void OnCollision( Collider* a, Collider* b)
+	virtual void OnTrigger( Collider* a, Collider* b)
 	{
 		return;
 	}

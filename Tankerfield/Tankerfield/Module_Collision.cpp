@@ -45,170 +45,117 @@ ModuleCollision::ModuleCollision()
 	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::GOD] = false;
 }
 
-// Destructor
+ //Destructor
 
 ModuleCollision::~ModuleCollision()
 {}
 
 bool ModuleCollision::Update(float dt)
 {
-	// Collision detection and callbacks ============================================== 
-
 	std::list<Collider*> static_colliders;
 	std::list<Collider*> dynamic_colliders;
-
-	Collider* c1 = nullptr;
-	Collider* c2 = nullptr;
+	std::list<Collider*> sensor_colliders;
 
 	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
 		if ((*item)->type == Collider::TYPE::STATIC)
-		{
 			static_colliders.push_back(*item);
-		}
 	}
-
 	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
 		if ((*item)->type == Collider::TYPE::DYNAMIC)
-		{
 			dynamic_colliders.push_back(*item);
-		}
 	}
-	
-
-	for (std::list<Collider*>::iterator item_1 = static_colliders.begin(); item_1 != static_colliders.end(); ++item_1)
+	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
-		c1 = (*item_1);
-
-		for (std::list<Collider*>::iterator item_2 = dynamic_colliders.begin(); item_2 != dynamic_colliders.end(); ++item_2)
-		{
-			c2 = (*item_2);
-
-			if (c1->CheckCollision(c2) == true)
-			{
-				if (matrix[(int)c1->tag][(int)c2->tag] && c1->callback)
-				{
-					c2->callback->OnCollision(c1, c2);
-					SolveOverlapSD(c2, c1);
-				}
-				if (matrix[(int)c2->tag][(int)c1->tag] && c2->callback)
-				{
-					c2->callback->OnCollision(c2, c1);
-					SolveOverlapSD(c2, c1);
-				}
-			}
-		}
+		if ((*item)->type == Collider::TYPE::SENSOR)
+			sensor_colliders.push_back(*item);
 	}
 
+	 // Collision detection and callbacks ============================================== 
+
+	Collider* collider_1 = nullptr;
+	Collider* collider_2 = nullptr;
 	std::list<Collider*>::iterator iterator_1;
+
+	// Dynamic VS Dynamic 1st Check ========================================
 
 	for (std::list<Collider*>::iterator item_1 = dynamic_colliders.begin(); item_1 != dynamic_colliders.end(); ++item_1)
 	{
-		c1 = *item_1;
+		collider_1 = *item_1;
 		iterator_1 = item_1;
 		++iterator_1;
 
 		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != dynamic_colliders.end(); ++item_2)
 		{
-			c2 = *item_2;
+			collider_2 = *item_2;
 
-			if (c1->CheckCollision(c2) == true)
+			if (collider_1->CheckCollision(collider_2) == true)
 			{
-				if (matrix[(int)c1->tag][(int)c2->tag] && c1->callback)
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->callback)
 				{
-					c1->callback->OnCollision(c1, c2);
-					SolveOverlapDD(c1, c2);
+					collider_1->callback->OnTrigger(collider_1, collider_2);
+
 				}
-				if (matrix[(int)c2->tag][(int)c1->tag] && c2->callback)
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->callback)
 				{
-					c2->callback->OnCollision(c2, c1);
-					SolveOverlapDD(c2, c1);
+					collider_2->callback->OnTrigger(collider_2, collider_1);
 				}
+
+				SolveOverlapDD(collider_1, collider_2);
 			}
 		}
 	}
+
+	// Dynamic VS Dynamic 2nd Check ========================================
+
+	for (std::list<Collider*>::iterator item_1 = dynamic_colliders.begin(); item_1 != dynamic_colliders.end(); ++item_1)
+	{
+		collider_1 = *item_1;
+		iterator_1 = item_1;
+		++iterator_1;
+
+		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != dynamic_colliders.end(); ++item_2)
+		{
+			collider_2 = *item_2;
+
+			if (collider_1->CheckCollision(collider_2) == true)
+			{
+				SolveOverlapDD(collider_1, collider_2);
+			}
+		}
+	}
+
+	// Dynamic VS Static ========================================
 
 	for (std::list<Collider*>::iterator item_1 = static_colliders.begin(); item_1 != static_colliders.end(); ++item_1)
 	{
-		c1 = (*item_1);
+		collider_1 = (*item_1);
 
 		for (std::list<Collider*>::iterator item_2 = dynamic_colliders.begin(); item_2 != dynamic_colliders.end(); ++item_2)
 		{
-			c2 = (*item_2);
+			collider_2 = (*item_2);
 
-			if (c1->CheckCollision(c2) == true)
+			if (collider_1->CheckCollision(collider_2) == true)
 			{
-				if (matrix[(int)c1->tag][(int)c2->tag] && c1->callback)
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->callback)
 				{
-					c2->callback->OnCollision(c1, c2);
-					SolveOverlapSD(c2, c1);
+					collider_1->callback->OnTrigger(collider_1, collider_2);
+
 				}
-				if (matrix[(int)c2->tag][(int)c1->tag] && c2->callback)
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->callback)
 				{
-					c2->callback->OnCollision(c2, c1);
-					SolveOverlapSD(c2, c1);
+					collider_2->callback->OnTrigger(collider_2, collider_1);
 				}
+
+				SolveOverlapDS(collider_2, collider_1);
 			}
 		}
 	}
 
+
 	return true;
 }
-
-//bool ModuleCollision::Update(float dt)
-//{
-//	// Collision detection and callbacks ============================================== 
-//
-//	std::list<Collider*>::iterator iterator_1;
-//
-//	Collider* c1 = nullptr;
-//	Collider* c2 = nullptr;
-//
-//	for (std::list<Collider*>::iterator item_1 = colliders.begin(); item_1 != colliders.end(); ++item_1)
-//	{
-//		c1 = *item_1;
-//		iterator_1 = item_1;
-//		++iterator_1;
-//
-//		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != colliders.end(); ++item_2)
-//		{
-//			c2 = *item_2;
-//
-//			if (c1->CheckCollision(c2) == true)
-//			{
-//				if (matrix[(int)c1->tag][(int)c2->tag] && c1->callback)
-//				{
-//					c1->callback->OnCollision(c1, c2);
-//
-//					if (c1->type == Collider::TYPE::DYNAMIC && c2->type == Collider::TYPE::DYNAMIC)
-//					{
-//						SolveOverlapDD(c1, c2);
-//					}
-//					else if (c1->type == Collider::TYPE::DYNAMIC && c2->type == Collider::TYPE::STATIC)
-//					{
-//						SolveOverlapDS(c1, c2);
-//					}
-//				}
-//				if (matrix[(int)c2->tag][(int)c1->tag] && c2->callback)
-//				{
-//					c2->callback->OnCollision(c2, c1);
-//
-//					if (c2->type == Collider::TYPE::DYNAMIC && c1->type == Collider::TYPE::DYNAMIC)
-//					{
-//						SolveOverlapDD(c2, c1);
-//					}
-//					else if (c1->type == Collider::TYPE::DYNAMIC && c2->type == Collider::TYPE::STATIC)
-//					{
-//						SolveOverlapDS(c1, c2);
-//					}
-//				}
-//			}
-//		}
-//	}
-//
-//	return true;
-//}
 
 // Called before render is available
 
@@ -229,10 +176,10 @@ bool ModuleCollision::PostUpdate()
 		case Collider::TAG::NONE: // white
 			break;
 		case Collider::TAG::WALL: // blue
-			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height);
+			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {255, 0, 0 , 255});
 			break;
 		case Collider::TAG::PLAYER: // green
-			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height);
+			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
 			break;
 		case Collider::TAG::GOD: // orange
 			break;
@@ -290,48 +237,47 @@ bool ModuleCollision::DeleteCollider(Collider * collider)
 
 }
 
-void ModuleCollision::SolveOverlapSD(Collider * c1, Collider * c2)
+void ModuleCollision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
 	// Calculate between colliders overlap ============================================
-
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
-	distances[(int)Collider::OVERLAP_DIR::RIGHT] = c1->position.x + c1->width - c2->position.x;
-	distances[(int)Collider::OVERLAP_DIR::LEFT] = c2->position.x + c2->width - c1->position.x;
-	distances[(int)Collider::OVERLAP_DIR::UP] = c1->position.y + c1->height - c2->position.y;
-	distances[(int)Collider::OVERLAP_DIR::DOWN] = c2->position.y + c2->height - c1->position.y;
+	distances[(int)Collider::OVERLAP_DIR::RIGHT] = dynamic_col->position.x + dynamic_col->width - static_col->position.x;
+	distances[(int)Collider::OVERLAP_DIR::LEFT] = static_col->position.x + static_col->width - dynamic_col->position.x;
+	distances[(int)Collider::OVERLAP_DIR::UP] = dynamic_col->position.y + dynamic_col->height - static_col->position.y;
+	distances[(int)Collider::OVERLAP_DIR::DOWN] = static_col->position.y + static_col->height - dynamic_col->position.y;
 
 	int overlap_dir = -1;
 
 	for (uint i = 0; i < (int)Collider::OVERLAP_DIR::MAX; ++i)
 	{
-		if (overlap_dir == -1)
-			overlap_dir = i;
-		else if (distances[i] < distances[(int)overlap_dir])
-			overlap_dir = i;
+			if (overlap_dir == -1)
+				overlap_dir = i;
+			else if (distances[i] < distances[(int)overlap_dir])
+				overlap_dir = i;
 	}
 
 
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
 	case Collider::OVERLAP_DIR::RIGHT:
-		c1->object->position.x = c2->position.x - c1->width;
+		dynamic_col->object->position.x = static_col->position.x - dynamic_col->width;
 		LOG("RIGHT");
 		break;
 	case Collider::OVERLAP_DIR::LEFT:
-		c1->object->position.x = c2->position.x + c2->width;
+		dynamic_col->object->position.x = static_col->position.x + static_col->width;
 		LOG("LEFT");
 		break;
 	case Collider::OVERLAP_DIR::UP:
-		c1->object->position.y = c2->position.y - c1->height;
+		dynamic_col->object->position.y = static_col->position.y - dynamic_col->height;
 		LOG("UP");
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
-		c1->object->position.y = c2->position.y + c2->height;
+		dynamic_col->object->position.y = static_col->position.y + static_col->height;
 		LOG("DOWN");
 		break;
 	}
 
-	c1->SetPos(c1->object->position.x, c1->object->position.y);
+	dynamic_col->SetPos(dynamic_col->object->position.x, dynamic_col->object->position.y);
 }
 
 

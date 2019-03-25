@@ -9,11 +9,6 @@
 struct SDL_Texture;
 class Collider;
 
-class Enemy : public Object
-{
-	
-};
-
 class Player : public Object
 {
 
@@ -35,7 +30,7 @@ public:
 
 	fPoint MapToWorldF(float x, float y);
 
-	void DrawIsometricQuad(float x, float y, float w, float h);
+	void DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color = {255, 0, 0, 255});
 
 	void DrawIsometricBox(float x, float y, float w, float h, float p);
 
@@ -45,7 +40,7 @@ public:
 
 	bool CleanUp();
 
-	void OnCollision(Collider* c1, Collider* c2);
+	void OnTrigger(Collider* c1, Collider* c2);
 
 private:
 
@@ -57,16 +52,7 @@ private:
 
 	Player        player_4;
 
-	Enemy         enemy;
-
 	Collider    * wall = nullptr;
-
-	Button      * button_test = nullptr;
-
-	Image       * image_test = nullptr;
-
-	Label       * label_test = nullptr;
-
 };
 
 #endif // __j1SCENE_H__

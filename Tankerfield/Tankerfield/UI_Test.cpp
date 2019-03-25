@@ -56,7 +56,7 @@ bool UI_Test::Start()
 
 
 
-	wall = App->collision->AddCollider({ 4.f, 4.f }, 1.f, 1.f, Collider::TAG::WALL, this);
+	wall = App->collision->AddCollider({ 4.f, 4.f }, 1.f, 3.f, Collider::TAG::WALL, this);
 
 	return true;
 }
@@ -77,7 +77,7 @@ fPoint  UI_Test::MapToWorldF(float x, float y)
 	return ret;
 }
 
-void UI_Test::DrawIsometricQuad (float x, float y, float w, float h)
+void UI_Test::DrawIsometricQuad (float x, float y, float w, float h, SDL_Color color)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
@@ -90,10 +90,10 @@ void UI_Test::DrawIsometricQuad (float x, float y, float w, float h)
 	// bot_left
 	point_4 = MapToWorldF(x, y + h);
 
-	App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 0, 0, 255, true);
-	App->render->DrawLine(point_2.x, point_2.y, point_3.x, point_3.y, 255, 0, 0, 255, true);
-	App->render->DrawLine(point_3.x, point_3.y, point_4.x, point_4.y, 255, 0, 0, 255, true);
-	App->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, 255, 0, 0, 255, true);
+	App->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
+	App->render->DrawLine(point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);
+	App->render->DrawLine(point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, true);
+	App->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, true);
 }
 
 void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
@@ -139,7 +139,7 @@ bool UI_Test::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= floor(200.0f * dt);
 
-	float speed_xy = 4.f;
+	float speed_xy = 20.f;
 	
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
@@ -253,7 +253,7 @@ bool UI_Test::CleanUp()
 	return true;
 }
 
-void UI_Test::OnCollision(Collider * c1, Collider * c2)
+void UI_Test::OnTrigger(Collider * c1, Collider * c2)
 {
 	if (c1 == player_1.coll && c2 == wall)
 	{
