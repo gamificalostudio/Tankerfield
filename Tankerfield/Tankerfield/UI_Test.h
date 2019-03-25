@@ -34,6 +34,7 @@ public:
 	iPoint MapToWorld(int x, int y, int tile_width, int tile_height);
 
 	fPoint MapToWorldF(float x, float y, float tile_width, float tile_height);
+	fPoint WorldToMapF(fPoint world_pos, float tile_width, float tile_height);
 
 private:
 
