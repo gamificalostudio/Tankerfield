@@ -9,6 +9,7 @@ SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
+SDL_Rect * Obj_Tank::base_rects = new SDL_Rect[100];
 
 Obj_Tank::Obj_Tank() : Object()
 {
@@ -38,7 +39,6 @@ bool Obj_Tank::Start()
 	Obj_Tank::turr_tex = App->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
 	Obj_Tank::turr_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 
-	//base_rects = new SDL_Rect[100];
 	//LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
 	return true;
