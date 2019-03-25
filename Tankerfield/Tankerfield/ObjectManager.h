@@ -12,7 +12,9 @@
 
 enum ObjectType
 {
-	TANK,
+  TANK,
+	PLAYER,
+	TESLA_TROOPER,
 	NO_TYPE
 };
 
@@ -33,17 +35,18 @@ public:
 
 	bool Update(float dt);
 
-	bool PostUpdate();
-	void Draw(float dt);
+	void NewFunction(std::list<Object *>::iterator &iterator);
+
 	bool Load(pugi::xml_node&);
 
 	bool Save(pugi::xml_node&) const;
 
 	bool CleanUp();
 
-	Object* CreateObject(ObjectType type, int x = 0, int y = 0);
-	void DeleteEntities();
-
+	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
+	void DeleteObjects();
+	bool DeleteObject(Object* object);
+  
 private:
 	std::list<Object*> objects;
 };

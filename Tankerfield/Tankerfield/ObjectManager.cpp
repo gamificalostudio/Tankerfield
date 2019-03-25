@@ -10,6 +10,7 @@
 #include "j1Audio.h"
 #include "j1Window.h"
 #include "j1Scene.h"
+#include "Tesla_Trooper.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
@@ -55,6 +56,8 @@ bool ObjectManager::Start()
 		}
 	}
 
+	tesla_trooper_texture = App->tex->Load("textures/Objects/shk-sheet.png");
+
 	return ret;
 }
 
@@ -70,7 +73,6 @@ bool ObjectManager::PreUpdate()
 			(*iterator)->PreUpdate();
 		}
 	}
-
 	return true;
 }
 
@@ -78,24 +80,31 @@ bool ObjectManager::PreUpdate()
 bool ObjectManager::Update(float dt)
 {
 	//BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::Green);
-	std::list<Object*>::iterator iterator;
+	std::list<Object*>::iterator iterator = objects.begin();
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	while (iterator != objects.end())
 	{
 		if ((*iterator) != nullptr)
 		{
 			(*iterator)->Update(dt);
+			if ((*iterator)->to_remove)
+			{
+				//When we remove an element from the list, the other elements shift 1 space to our position
+				//So we don't need increment the iterator to go to the next one
+				delete((*iterator));
+				(*iterator) = nullptr;
+				iterator = objects.erase(iterator);
+			}
+			else
+			{
+				++iterator;
+			}
 		}
-	}
-
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
-	{
-		if ((*iterator) != nullptr)
+		else
 		{
-			(*iterator)->Draw(dt);
+			++iterator;
 		}
 	}
-
 	return true;
 }
 
@@ -115,66 +124,64 @@ bool ObjectManager::PostUpdate()
 	return true;
 }
 
-void ObjectManager::Draw(float dt)
-{
-}
-
 // Called before quitting
 bool ObjectManager::CleanUp()
 {
-	std::list<Object*>::iterator iterator;
+	std::list<Object*>::iterator iterator = objects.begin();
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	while (iterator != objects.end())
 	{
 		if ((*iterator) != nullptr) {
 			(*iterator)->CleanUp();
-			delete((*iterator));
+			delete (*iterator);
 			(*iterator) = nullptr;
-			objects.erase(iterator);
+			iterator = objects.erase(iterator);
 		}
 	}
-
 	objects.clear();
-
 	return true;
 }
 
-Object* ObjectManager::CreateObject(ObjectType type, int x, int y)
+Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
 {
 	Object* ret = nullptr;
-
 	switch (type)
 	{
-	case ObjectType::TANK:
+	case ObjectType::TESLA_TROOPER:
+		ret = new TeslaTrooper(x, y);
+		ret->type = TESLA_TROOPER;
+		break;
+  case ObjectType::TANK:
 		ret = new Obj_Tank(x, y);
+    ret->type = TANK;
 		break;
 	}
-
+  
 	if (ret != nullptr)
 	{
 		objects.push_back(ret);
 	}
-
+  
 	return ret;
 }
 
-void ObjectManager::DeleteEntities()
-{
-	std::list<Object*>::iterator iterator;
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+void ObjectManager::DeleteObjects()
+{
+	std::list<Object*>::iterator iterator = objects.begin();
+
+	while (iterator != objects.end())
 	{
-		if ((*iterator) != nullptr) {
+		if ((*iterator) != nullptr)
+		{
 			(*iterator)->CleanUp();
-			delete((*iterator));
+			delete (*iterator);
 			(*iterator) = nullptr;
-			objects.erase(iterator);
+			iterator = objects.erase(iterator);
 		}
 	}
-
 	objects.clear();
 }
-
 
 bool ObjectManager::Load(pugi::xml_node& load)
 {

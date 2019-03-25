@@ -65,7 +65,8 @@ bool j1Scene::Update(float dt)
 		App->render->camera.x -= floor(200.0f * dt);
 
 	// Draw ------------------
-
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		App->objectmanager->CreateObject(TESLA_TROOPER, 200, 200);
 
 	return true;
 }

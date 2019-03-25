@@ -41,7 +41,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	font = new j1Fonts();
 	ui = new Module_UI();
 	objectmanager = new ObjectManager();
-
+	scene = new j1Scene();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -52,13 +52,13 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(scene);
 	AddModule(font);
-	AddModule(objectmanager);
-
+	AddModule(scene);
 	AddModule(ui_test);
 	AddModule(ui);
+	AddModule(objectmanager);
 	// render last to swap buffer
 	AddModule(render);
-
+	
 	PERF_PEEK(ptimer);
 }
 

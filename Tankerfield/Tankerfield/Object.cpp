@@ -36,10 +36,96 @@ bool Object::Update(float dt)
 	return true;
 }
 
-void Object::Draw(float dt)
+void Object::Draw(float dt, SDL_Texture* texture)
 {
-	
+	App->render->Blit(texture, position.x, position.y, &(current_animation->GetCurrentFrame(dt)));
+}
 
+//sprites in SDL_Rect * rect must be ordered in counter clock-wise direction
+//angle should be in degrees
+//int rect_num is the number of rectangles that are inside SDL_Rect * rect array
+SDL_Rect* Object::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir)
+{
+	angle -= fist_rect_dir;
+
+	if (angle > 360)
+	{
+		angle = fmod(angle, 360);
+	}
+	else if (angle < -360)
+	{
+		angle = fmod(angle, -360);
+	}
+	if (angle < 0)
+	{
+		angle += 360;
+	}
+
+	float angle_part = 360 / rect_num;
+
+	float num_pos = angle / angle_part;
+
+	float remainder = fmod(num_pos, 1);
+
+	if (remainder >= 0.5f)
+	{
+		num_pos = num_pos - remainder + 1;
+	}
+	else
+	{
+		num_pos = num_pos - remainder;
+	}
+
+	if (num_pos == rect_num)
+	{
+		num_pos = 0;
+	}
+
+	return &rect[(int)num_pos];
+}
+
+
+//sprites in SDL_Rect * rect must be ordered in counter clock-wise direction
+//angle should be in degrees
+//int rect_num is the number of rectangles that are inside SDL_Rect * rect array
+Animation* Object::GetRotatedAnimation(Animation* animations, int num_animations, float angle, float fist_rect_dir)
+{
+	angle -= fist_rect_dir;
+
+	if (angle > 360)
+	{
+		angle = fmod(angle, 360);
+	}
+	else if (angle < -360)
+	{
+		angle = fmod(angle, -360);
+	}
+	if (angle < 0)
+	{
+		angle += 360;
+	}
+
+	float angle_part = 360 / num_animations;
+
+	float num_pos = angle / angle_part;
+
+	float remainder = fmod(num_pos, 1);
+
+	if (remainder >= 0.5f)
+	{
+		num_pos = num_pos - remainder + 1;
+	}
+	else
+	{
+		num_pos = num_pos - remainder;
+	}
+
+	if (num_pos == num_animations)
+	{
+		num_pos = 0;
+	}
+
+	return &animations[(int)num_pos];
 }
 
 bool Object::LoadRects(pugi::xml_node const & node, SDL_Rect * rects)
@@ -76,7 +162,3 @@ bool Object::LoadAnimation(pugi::xml_node & node, Animation & anim)
 	}
 	return true;
 }
-
-
-
-

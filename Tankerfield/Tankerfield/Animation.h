@@ -13,7 +13,7 @@ public:
 	SDL_Rect frames[MAX_FRAMES];
 
 public:
-	float current_frame;
+	float current_frame=0;
 	int last_frame = 0;
 	int loops = 0;
 
@@ -23,15 +23,27 @@ public:
 		frames[last_frame++] = rect;
 	}
 
-	SDL_Rect& GetCurrentFrame()
+	SDL_Rect& GetCurrentFrame(float dt)
 	{
-		current_frame += speed;
+		current_frame += speed*dt;
 		if (current_frame >= last_frame)
 		{
 			current_frame = (loop) ? 0.0f : last_frame - 1;
 			loops++;
 		}
 		return frames[(int)current_frame];
+	}
+	
+	//This overloaded GetCurrentFrame is used for Animation arrays where the frame number must concide
+	SDL_Rect& GetCurrentFrame(float dt, float & new_current_frame)
+	{
+		new_current_frame += speed*dt;
+		if (new_current_frame >= last_frame)
+		{
+			new_current_frame = (loop) ? 0.0f : last_frame - 1;
+			loops++;
+		}
+		return frames[(int)new_current_frame];
 	}
 
 	bool Finished() const

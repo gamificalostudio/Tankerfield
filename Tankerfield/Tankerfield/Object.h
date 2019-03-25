@@ -24,14 +24,17 @@ public:
 	virtual bool Start() { return true; };
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt);
-	virtual bool PostUpdate() { return true; };
+	virtual void Draw(float dt, SDL_Texture* texture);
 	virtual bool CleanUp() { return true; };
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
-	virtual void Draw(float dt);
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
-
+  
+	SDL_Rect* GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir = 90);
+	//Same as GetRotatedSprite but with animations
+	Animation* GetRotatedAnimation(Animation* animations, int num_animations, float angle, float fist_rect_dir = 90);
+  
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
@@ -41,10 +44,10 @@ public:
 	fPoint pos;
 	fPoint velocity;
 	fPoint acceleration;
+	bool to_remove = false;//Set it to true if you want the object to be removed
 	//
 
 	Animation* current_animation = nullptr;
-	SDL_Texture* texture;
 	
 	Collider* coll = nullptr;
 };
