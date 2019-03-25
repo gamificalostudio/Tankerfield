@@ -28,10 +28,12 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 	mouse_position.x += -App->render->camera.x;
 	mouse_position.y += -App->render->camera.y;
 
-	fPoint pos_map = App->ui_test->MapToWorldF(pos.x, pos.y, 100, 50);
+	fPoint Fmouse_position = App->ui_test->WorldToMapF(mouse_position, 100, 50);
 
-	direction.x = mouse_position.x - pos_map.x;
-	direction.y = mouse_position.y - pos_map.y;
+	//fPoint pos_map = App->ui_test->MapToWorldF(pos.x, pos.y, 100, 50);
+
+	direction.x = Fmouse_position.x - pos.x;
+	direction.y = Fmouse_position.y - pos.y;
 
 	float modul = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
 
