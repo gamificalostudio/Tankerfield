@@ -43,6 +43,10 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	if (App->input->controllers.size())
+	{
+		control1 = &(*App->input->controllers.begin());
+	}
 
 
 	return true;
@@ -69,8 +73,28 @@ bool j1Scene::Update(float dt)
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= floor(200.0f * dt);
 
-	// Draw ------------------
+	if (control1 && (*control1))
+	{
+		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTX) < -10000)
+			cube.x -= 1;
+		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTX) > 10000)
+			cube.x += 1;
 
+		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTY) < -10000)
+			cube.y -= 1;
+		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTY) > 10000)
+			cube.y += 1;
+
+		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 1000)
+		{
+			//SDL_HapticRumblePlay((*control1)->haptic, 1, 500);
+			(*control1)->PlayRumble(0.5, 500);
+
+			LOG("%s",SDL_GetError());
+		}
+	}
+	// Draw ------------------
+	
 
 	return true;
 }
@@ -82,7 +106,7 @@ bool j1Scene::PostUpdate()
 
 	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-
+	App->render->DrawQuad(cube, 255, 0, 0, 255);
 	return ret;
 }
 

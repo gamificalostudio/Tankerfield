@@ -43,7 +43,7 @@ private:
 	SDL_Haptic* haptic = nullptr;
 public:
 	
-
+	
 
 	j1KeyState Get_Button_State(SDL_GameControllerButton button)
 	{
