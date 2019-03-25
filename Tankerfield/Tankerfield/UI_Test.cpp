@@ -127,9 +127,6 @@ void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
 
 bool UI_Test::Update(float dt)
 {
-	player_1.velocity = { 0,0 };
-	player_2.velocity = { 0,0 };
-
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += floor(200.0f * dt);
 
@@ -142,74 +139,60 @@ bool UI_Test::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= floor(200.0f * dt);
 
-
+	float speed_xy = 4.f;
 	
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		player_1.position.y -= 1.5f * dt;
-		player_1.velocity.y = -1;
+		player_1.position.y -= speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		player_1.position.y += 1.5f * dt;
-		player_1.velocity.y = 1.f;
+		player_1.position.y += speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		player_1.position.x -= 1.5f * dt;
-		player_1.velocity.x = -1;
+		player_1.position.x -= speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		player_1.position.x += 1.5f * dt;
-		player_1.velocity.x = 1;
+		player_1.position.x += speed_xy * dt;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_REPEAT)
 	{
-		player_2.position.y -= 1.5f * dt;
-		player_2.velocity.y = -1.f;
+		player_2.position.y -= speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_J) == KEY_REPEAT)
 	{
-		player_2.position.y += 1.5f * dt;
-		player_2.velocity.y = 1.f;
+		player_2.position.y += speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_H) == KEY_REPEAT)
 	{
-		player_2.position.x -= 1.5f * dt;
-		player_2.velocity.x = -1.f;
+		player_2.position.x -= speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_K) == KEY_REPEAT)
 	{
-		player_2.position.x += 1.5f * dt;
-		player_2.velocity.x = 1.f;
+		player_2.position.x += speed_xy * dt;
 	}
 
 
 
 	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_REPEAT)
 	{
-		player_3.position.y -= 1.5f * dt;
-		player_3.velocity.y = -1.f;
+		player_3.position.y -= speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_REPEAT)
 	{
-		player_3.position.y += 1.5f * dt;
-		player_3.velocity.y = 1.f;
+		player_3.position.y += speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_REPEAT)
 	{
-		player_3.position.x -= 1.5f * dt;
-		player_3.velocity.x = -1.f;
+		player_3.position.x -= speed_xy * dt;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_KP_6) == KEY_REPEAT)
 	{
-		player_3.position.x += 1.5f * dt;
-		player_3.velocity.x = 1.f;
+		player_3.position.x += speed_xy * dt;
 	}
-
-
 
 	player_1.coll->SetPos(player_1.position.x, player_1.position.y);
 	player_2.coll->SetPos(player_2.position.x, player_2.position.y);
@@ -250,11 +233,13 @@ bool UI_Test::PostUpdate()
 	fPoint player_draw_pos = MapToWorldF(player_1.position.x, player_1.position.y);
 	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
 
-
 	// Draw Player 2 ========================================
 	player_draw_pos = MapToWorldF(player_2.position.x, player_2.position.y);
 	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 0, 255, 255, true);
 
+	// Draw Player 3 ========================================
+	player_draw_pos = MapToWorldF(player_3.position.x, player_3.position.y);
+	App->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 255, 0, 255, 255, true);
 
 	return ret;
 }

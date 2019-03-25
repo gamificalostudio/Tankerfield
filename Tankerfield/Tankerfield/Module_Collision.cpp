@@ -223,15 +223,16 @@ bool ModuleCollision::PostUpdate()
 
 	for (list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
-		App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width , (*item)->height);
 
 		switch ((*item)->tag)
 		{
 		case Collider::TAG::NONE: // white
 			break;
 		case Collider::TAG::WALL: // blue
+			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height);
 			break;
 		case Collider::TAG::PLAYER: // green
+			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height);
 			break;
 		case Collider::TAG::GOD: // orange
 			break;
