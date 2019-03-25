@@ -1,10 +1,15 @@
 #include <iostream>
 #include <sstream>
+
+
 #include "SDL/include/SDL_timer.h"
+#include "Brofiler/Brofiler.h"
+#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 
 #include "p2Defs.h"
 #include "p2Log.h"
 
+#include "j1App.h"
 #include "j1Window.h"
 #include "j1Input.h"
 #include "j1Render.h"
@@ -12,12 +17,12 @@
 #include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1Pathfinding.h"
-#include "j1App.h"
+#include "j1Map.h"
 #include "j1Fonts.h"
 #include "Module_UI.h"
 #include "UI_Test.h"
 #include "ObjectManager.h"
-
+#include "j1Scene.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -31,6 +36,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new j1Audio();
 	ui_test = new UI_Test();
 	pathfinding = new j1PathFinding();
+	map = new j1Map();
+	scene = new j1Scene();
 	font = new j1Fonts();
 	ui = new Module_UI();
 	objectmanager = new ObjectManager();
@@ -42,6 +49,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(pathfinding);
+	AddModule(map);
+	AddModule(scene);
 	AddModule(font);
 	AddModule(scene);
 	AddModule(ui_test);
@@ -78,10 +87,6 @@ void j1App::AddModule(j1Module* module)
 bool j1App::Awake()
 {
 	PERF_START(ptimer);
-
-	pugi::xml_document	config_file;
-	pugi::xml_node		config;
-	pugi::xml_node		app_config;
 
 	bool ret = false;
 

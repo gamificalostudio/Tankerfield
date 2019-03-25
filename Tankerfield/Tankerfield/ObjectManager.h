@@ -6,18 +6,19 @@
 #include "Animation.h"
 
 #include "j1Module.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
 
 
 enum ObjectType
 {
+  TANK,
 	PLAYER,
 	TESLA_TROOPER,
-
 	NO_TYPE
 };
 
 class Object;
-class Player;
 
 class ObjectManager : public j1Module
 {
@@ -45,17 +46,9 @@ public:
 	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
 	void DeleteObjects();
 	bool DeleteObject(Object* object);
-
-	//Player* GetPlayerData() const;
-
-public:
-	SDL_Texture* tesla_trooper_texture;
-
+  
 private:
-
 	std::list<Object*> objects;
-	SDL_Texture* texture;
-	
 };
 
 #endif

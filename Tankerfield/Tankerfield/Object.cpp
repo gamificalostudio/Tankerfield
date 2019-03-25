@@ -17,7 +17,7 @@ Object::Object()
 {
 }
 
-Object::Object(int x, int y) : position(x, y)
+Object::Object(int x, int y) : pos(x, y)
 {
 }
 
@@ -84,6 +84,7 @@ SDL_Rect* Object::GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, fl
 	return &rect[(int)num_pos];
 }
 
+
 //sprites in SDL_Rect * rect must be ordered in counter clock-wise direction
 //angle should be in degrees
 //int rect_num is the number of rectangles that are inside SDL_Rect * rect array
@@ -125,4 +126,39 @@ Animation* Object::GetRotatedAnimation(Animation* animations, int num_animations
 	}
 
 	return &animations[(int)num_pos];
+}
+
+bool Object::LoadRects(pugi::xml_node const & node, SDL_Rect * rects)
+{
+	//Inicialization
+	int i = 0;
+	pugi::xml_node frame_node = node.child("frame");
+
+	while (node)
+	{
+		//Body
+		rects[i].x = frame_node.attribute("x").as_int();
+		rects[i].y = frame_node.attribute("y").as_int();
+		rects[i].w = frame_node.attribute("w").as_int();
+		rects[i].h = frame_node.attribute("h").as_int();
+
+		//Increment
+		++i;
+		frame_node = frame_node.next_sibling("frame");
+	}
+	return true;
+}
+
+bool Object::LoadAnimation(pugi::xml_node & node, Animation & anim)
+{
+	anim.speed = node.attribute("speed").as_float();
+	for (node = node.child("frame"); node; node = node.next_sibling("sprite")) {
+		SDL_Rect frame;
+		frame.x = node.attribute("x").as_int();
+		frame.y = node.attribute("y").as_int();
+		frame.w = node.attribute("w").as_int();
+		frame.h = node.attribute("h").as_int();
+		anim.PushBack(frame);
+	}
+	return true;
 }

@@ -23,10 +23,14 @@
   </gui>
 
   <map>
-    <folder></folder>
+   <folder>maps/</folder>
+      <levels>
+        <level name="iso.tmx"/>
+      </levels>
+  
   </map>
 
-  <objects>
+  <object>
     <sprites>
       <tesla_trooper>
         <frames>
@@ -6354,6 +6358,120 @@
         </frames>
       </tesla_trooper>
     </sprites>
-  </objects>
+    <tank>
+      <speed value ="1"/>
+      <spritesheets>
+        <base>textures/objects/tank/base.png</base>
+        <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
+        <turr>textures/objects/tank/turr.png</turr>
+        <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
+      </spritesheets>
+      <animations>
+        <rotate_base speed ="1">
+          <frame x="0"   y="0"   w="112" h="67"/>
+          <frame x="112" y="0"   w="112" h="67"/>
+          <frame x="224" y="0"   w="112" h="67"/>
+          <frame x="336" y="0"   w="112" h="67"/>
+          <frame x="448" y="0"   w="112" h="67"/>
+          <frame x="560" y="0"   w="112" h="67"/>
+          <frame x="672" y="0"   w="112" h="67"/>
+          <frame x="784" y="0"   w="112" h="67"/>
+          <frame x="896" y="0"   w="112" h="67"/>
+          <frame x="0"   y="67"  w="112" h="67"/>
+          <frame x="112" y="67"  w="112" h="67"/>
+          <frame x="224" y="67"  w="112" h="67"/>
+          <frame x="336" y="67"  w="112" h="67"/>
+          <frame x="448" y="67"  w="112" h="67"/>
+          <frame x="560" y="67"  w="112" h="67"/>
+          <frame x="672" y="67"  w="112" h="67"/>
+          <frame x="784" y="67"  w="112" h="67"/>
+          <frame x="896" y="67"  w="112" h="67"/>
+          <frame x="0"   y="134" w="112" h="67"/>
+          <frame x="112" y="134" w="112" h="67"/>
+          <frame x="224" y="134" w="112" h="67"/>
+          <frame x="336" y="134" w="112" h="67"/>
+          <frame x="448" y="134" w="112" h="67"/>
+          <frame x="560" y="134" w="112" h="67"/>
+          <frame x="672" y="134" w="112" h="67"/>
+          <frame x="784" y="134" w="112" h="67"/>
+          <frame x="896" y="134" w="112" h="67"/>
+          <frame x="0"   y="201" w="112" h="67"/>
+          <frame x="112" y="201" w="112" h="67"/>
+          <frame x="224" y="201" w="112" h="67"/>
+          <frame x="336" y="201" w="112" h="67"/>
+          <frame x="448" y="201" w="112" h="67"/>
+          <frame x="560" y="201" w="112" h="67"/>
+          <frame x="672" y="201" w="112" h="67"/>
+          <frame x="784" y="201" w="112" h="67"/>
+          <frame x="896" y="201" w="112" h="67"/>
+          <frame x="0"   y="268" w="112" h="67"/>
+          <frame x="112" y="268" w="112" h="67"/>
+          <frame x="224" y="268" w="112" h="67"/>
+          <frame x="336" y="268" w="112" h="67"/>
+          <frame x="448" y="268" w="112" h="67"/>
+          <frame x="560" y="268" w="112" h="67"/>
+          <frame x="672" y="268" w="112" h="67"/>
+          <frame x="784" y="268" w="112" h="67"/>
+          <frame x="896" y="268" w="112" h="67"/>
+          <frame x="0"   y="335" w="112" h="67"/>
+          <frame x="112" y="335" w="112" h="67"/>
+          <frame x="224" y="335" w="112" h="67"/>
+          <frame x="336" y="335" w="112" h="67"/>
+          <frame x="448" y="335" w="112" h="67"/>
+          <frame x="560" y="335" w="112" h="67"/>
+          <frame x="672" y="335" w="112" h="67"/>
+          <frame x="784" y="335" w="112" h="67"/>
+          <frame x="896" y="335" w="112" h="67"/>
+          <frame x="0"   y="402" w="112" h="67"/>
+          <frame x="112" y="402" w="112" h="67"/>
+          <frame x="224" y="402" w="112" h="67"/>
+          <frame x="336" y="402" w="112" h="67"/>
+          <frame x="448" y="402" w="112" h="67"/>
+          <frame x="560" y="402" w="112" h="67"/>
+          <frame x="672" y="402" w="112" h="67"/>
+          <frame x="784" y="402" w="112" h="67"/>
+          <frame x="896" y="402" w="112" h="67"/>
+          <frame x="0"   y="469" w="112" h="67"/>
+          <frame x="112" y="469" w="112" h="67"/>
+          <frame x="224" y="469" w="112" h="67"/>
+          <frame x="336" y="469" w="112" h="67"/>
+          <frame x="448" y="469" w="112" h="67"/>
+          <frame x="560" y="469" w="112" h="67"/>
+          <frame x="672" y="469" w="112" h="67"/>
+          <frame x="784" y="469" w="112" h="67"/>
+          <frame x="896" y="469" w="112" h="67"/>
+          <frame x="0"   y="536" w="112" h="67"/>
+          <frame x="112" y="536" w="112" h="67"/>
+          <frame x="224" y="536" w="112" h="67"/>
+          <frame x="336" y="536" w="112" h="67"/>
+          <frame x="448" y="536" w="112" h="67"/>
+          <frame x="560" y="536" w="112" h="67"/>
+          <frame x="672" y="536" w="112" h="67"/>
+          <frame x="784" y="536" w="112" h="67"/>
+          <frame x="896" y="536" w="112" h="67"/>
+          <frame x="0"   y="603" w="112" h="67"/>
+          <frame x="112" y="603" w="112" h="67"/>
+          <frame x="224" y="603" w="112" h="67"/>
+          <frame x="336" y="603" w="112" h="67"/>
+          <frame x="448" y="603" w="112" h="67"/>
+          <frame x="560" y="603" w="112" h="67"/>
+          <frame x="672" y="603" w="112" h="67"/>
+          <frame x="784" y="603" w="112" h="67"/>
+          <frame x="896" y="603" w="112" h="67"/>
+          <frame x="0"   y="670" w="112" h="67"/>
+          <frame x="112" y="670" w="112" h="67"/>
+          <frame x="224" y="670" w="112" h="67"/>
+          <frame x="336" y="670" w="112" h="67"/>
+          <frame x="448" y="670" w="112" h="67"/>
+          <frame x="560" y="670" w="112" h="67"/>
+          <frame x="672" y="670" w="112" h="67"/>
+          <frame x="784" y="670" w="112" h="67"/>
+          <frame x="896" y="670" w="112" h="67"/>
+          <frame x="0"   y="737" w="112" h="67"/>
+          <frame x="0"   y="0"   w="112" h="67"/>
+        </rotate_base>
+      </animations>
+    </tank>
+  </object>
 
 </config>

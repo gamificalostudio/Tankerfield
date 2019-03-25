@@ -30,16 +30,18 @@ public:
 
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
-
+  
 	SDL_Rect* GetRotatedSprite(SDL_Rect* rect, int rect_num, float angle, float fist_rect_dir = 90);
 	//Same as GetRotatedSprite but with animations
 	Animation* GetRotatedAnimation(Animation* animations, int num_animations, float angle, float fist_rect_dir = 90);
-
+  
+	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
+	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
 public:
 
 	int type = 0;
-	fPoint position;
+	fPoint pos;
 	fPoint velocity;
 	fPoint acceleration;
 	bool to_remove = false;//Set it to true if you want the object to be removed

@@ -11,6 +11,10 @@
 #include "j1Window.h"
 #include "j1Scene.h"
 #include "Tesla_Trooper.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
+#include <string>
+#include "Obj_Tank.h"
 //#include "j1Collision.h"
 //#include "j1Map.h"
 //#include "Player.h"
@@ -42,13 +46,14 @@ bool ObjectManager::Awake(pugi::xml_node& config)
 
 bool ObjectManager::Start()
 {
-	bool ret = true;	
-	std::list<Object*>::iterator iterator;
+	bool ret = true;
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
+		{
 			(*iterator)->Start();
+		}
 	}
 
 	tesla_trooper_texture = App->tex->Load("textures/Objects/shk-sheet.png");
@@ -64,9 +69,10 @@ bool ObjectManager::PreUpdate()
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
+		{
 			(*iterator)->PreUpdate();
+		}
 	}
-
 	return true;
 }
 
@@ -99,12 +105,19 @@ bool ObjectManager::Update(float dt)
 			++iterator;
 		}
 	}
+	return true;
+}
 
-	for (iterator=objects.begin(); iterator != objects.end(); iterator++)
+bool ObjectManager::PostUpdate()
+{
+	//BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::Green);
+	std::list<Object*>::iterator iterator;
+
+	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
 		{
-			(*iterator)->Draw(dt, texture);
+			(*iterator)->PostUpdate();
 		}
 	}
 
@@ -138,11 +151,17 @@ Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
 		ret = new TeslaTrooper(x, y);
 		ret->type = TESLA_TROOPER;
 		break;
+  case ObjectType::TANK:
+		ret = new Obj_Tank(x, y);
+    ret->type = TANK;
+		break;
 	}
+  
 	if (ret != nullptr)
 	{
 		objects.push_back(ret);
 	}
+  
 	return ret;
 }
 
@@ -177,22 +196,3 @@ bool ObjectManager::Save(pugi::xml_node& save) const
 
 	return ret;
 }
-
-/*
-Player* ObjectManager::GetPlayerData() const 
-{
-	std::list<Object*>::const_iterator iterator;
-
-	for (iterator = objects.cbegin(); iterator != objects.cend(); iterator++)
-	{
-		if ((*iterator) != nullptr) {
-			if ((*iterator)->type == PLAYER)
-				return (Player*)(*iterator);
-		}
-	}
-
-}
-
-*/
-
-
