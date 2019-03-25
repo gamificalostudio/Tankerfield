@@ -143,6 +143,10 @@ bool j1Input::PreUpdate()
 							{
 								LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
 							}
+							else
+							{
+								SDL_HapticRumbleInit(controller->haptic);
+							}
 							controllers.push_back(controller);
 						}
 					}
@@ -159,6 +163,7 @@ bool j1Input::PreUpdate()
 						SDL_HapticClose((*iter)->haptic);
 						SDL_GameControllerClose((*iter)->ctr_pointer);
 						delete (*iter);
+						(*iter) = nullptr;
 						iter = controllers.erase(iter);
 					}
 					else

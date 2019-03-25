@@ -40,10 +40,11 @@ private:
 	SDL_JoystickID joyId = -1;
 	j1KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
 	SDL_GameController* ctr_pointer = nullptr;
-	
-public:
 	SDL_Haptic* haptic = nullptr;
-
+	bool attached = false;
+public:
+	
+	
 
 	j1KeyState Get_Button_State(SDL_GameControllerButton button)
 	{
@@ -152,12 +153,23 @@ private:
 	int			mouse_x;
 	int			mouse_y;
 
-private:
-	
-
 
 public:
 	std::vector<Controller*> controllers;
+
+	Controller** GetAbleController()
+	{
+		Controller** ret = nullptr;
+		for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+		{
+			if(!(*iter)->attached)
+				{
+				(*iter)->attached = true;
+				return &(*iter);
+			}
+		}
+			return ret;
+	}
 };
 
 #endif // __j1INPUT_H__
