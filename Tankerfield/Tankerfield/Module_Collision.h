@@ -44,7 +44,7 @@ public:
 
 	enum class TYPE
 	{
-		SAWDW,
+		NONE,
 		DYNAMIC,
 		STATIC,
 		SENSOR
@@ -112,9 +112,7 @@ public:
 
 	bool DeleteCollider(Collider* collider);
 
-	void SolveOverlapDS(Collider* c1 , Collider * c2); // Solve Dynamic vs Static Overlap
-
-	void SolveOverlapSD(Collider * c1, Collider * c2);
+	void SolveOverlapSD(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
 

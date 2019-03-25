@@ -53,6 +53,10 @@ private:
 
 	Player        player_2;
 
+	Player        player_3;
+
+	Player        player_4;
+
 	Enemy         enemy;
 
 	Collider    * wall = nullptr;

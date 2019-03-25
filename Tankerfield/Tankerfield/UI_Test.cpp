@@ -42,10 +42,18 @@ bool UI_Test::Start()
 	player_1.coll = App->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player_1);
 	player_1.coll->SetType(Collider::TYPE::DYNAMIC);
 
-
 	player_2.position = { 6,6 };
-	player_2.coll = App->collision->AddCollider({ 6.f, 6.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player_2);
+	player_2.coll = App->collision->AddCollider({ 4.f, 5.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player_2);
 	player_2.coll->SetType(Collider::TYPE::DYNAMIC);
+
+	player_3.position = { 6,6 };
+	player_3.coll = App->collision->AddCollider({ 3.f, 6.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player_3);
+	player_3.coll->SetType(Collider::TYPE::DYNAMIC);
+
+	player_4.position = { 6,6 };
+	player_4.coll = App->collision->AddCollider({ 6.f, 6.f }, 1.f, 1.f, Collider::TAG::PLAYER, this, &player_4);
+	player_4.coll->SetType(Collider::TYPE::DYNAMIC);
+
 
 
 	wall = App->collision->AddCollider({ 4.f, 4.f }, 1.f, 1.f, Collider::TAG::WALL, this);
@@ -134,6 +142,7 @@ bool UI_Test::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= floor(200.0f * dt);
 
+
 	
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
@@ -177,8 +186,34 @@ bool UI_Test::Update(float dt)
 		player_2.velocity.x = 1.f;
 	}
 
+
+
+	if (App->input->GetKey(SDL_SCANCODE_KP_8) == KEY_REPEAT)
+	{
+		player_3.position.y -= 1.5f * dt;
+		player_3.velocity.y = -1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_KP_5) == KEY_REPEAT)
+	{
+		player_3.position.y += 1.5f * dt;
+		player_3.velocity.y = 1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_KP_4) == KEY_REPEAT)
+	{
+		player_3.position.x -= 1.5f * dt;
+		player_3.velocity.x = -1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_KP_6) == KEY_REPEAT)
+	{
+		player_3.position.x += 1.5f * dt;
+		player_3.velocity.x = 1.f;
+	}
+
+
+
 	player_1.coll->SetPos(player_1.position.x, player_1.position.y);
 	player_2.coll->SetPos(player_2.position.x, player_2.position.y);
+	player_3.coll->SetPos(player_3.position.x, player_3.position.y);
 
 	return true;
 }
