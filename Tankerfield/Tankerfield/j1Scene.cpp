@@ -75,17 +75,17 @@ bool j1Scene::Update(float dt)
 
 	if (control1 && (*control1))
 	{
-		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTX) < -10000)
+		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTX) < -10000)
 			cube.x -= 1;
-		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTX) > 10000)
+		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTX) > 10000)
 			cube.x += 1;
 
-		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTY) < -10000)
+		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTY) < -10000)
 			cube.y -= 1;
-		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_LEFTY) > 10000)
+		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTY) > 10000)
 			cube.y += 1;
 
-		if ((*control1)->Get_Axis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 1000)
+		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 1000)
 		{
 			//SDL_HapticRumblePlay((*control1)->haptic, 1, 500);
 			(*control1)->PlayRumble(0.5, 500);

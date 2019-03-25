@@ -65,8 +65,8 @@ bool j1Input::PreUpdate()
 {
 	static SDL_Event event;
 	
-	Update_Keyboard_State();
-	Update_Mouse_State();
+	UpdateKeyboardState();
+	UpdateMouseState();
 
 	while(SDL_PollEvent(&event) != 0)
 	{
@@ -220,7 +220,7 @@ iPoint j1Input::GetMousePos_Tiles()
 	return ret;
 }
 
-void j1Input::Update_Keyboard_State()
+void j1Input::UpdateKeyboardState()
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -243,7 +243,7 @@ void j1Input::Update_Keyboard_State()
 	}
 }
 
-void j1Input::Update_Mouse_State()
+void j1Input::UpdateMouseState()
 {
 	for (int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
 	{
@@ -255,7 +255,7 @@ void j1Input::Update_Mouse_State()
 	}
 }
 
-void j1Input::Update_Controllers()
+void j1Input::UpdateControllers()
 {
 	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
 	{

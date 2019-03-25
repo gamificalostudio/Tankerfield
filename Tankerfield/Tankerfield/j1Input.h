@@ -42,16 +42,14 @@ private:
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
 public:
-	
-	
 
-	j1KeyState Get_Button_State(SDL_GameControllerButton button)
+	j1KeyState GetButtonState(SDL_GameControllerButton button)
 	{
 		return key_state[button];
 	}
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 Get_Axis(SDL_GameControllerAxis axis)
+	Sint16 GetAxis(SDL_GameControllerAxis axis)
 	{
 		return SDL_GameControllerGetAxis(ctr_pointer, axis);
 	}
@@ -71,45 +69,6 @@ public:
 			return SDL_HapticRumbleStop(haptic);
 		else
 			return 0;
-	}
-
-private:
-	int test_haptic() {
-
-		SDL_HapticEffect effect;
-		int effect_id;
-
-		// See if it can do sine waves
-		if ((SDL_HapticQuery(haptic) /*& SDL_HAPTIC_SINE*/) == 0) {
-			SDL_HapticClose(haptic); // No sine effect
-			return -1;
-		}
-
-		// Create the effect
-		SDL_memset(&effect, 0, sizeof(SDL_HapticEffect)); // 0 is safe default
-		effect.type = SDL_HAPTIC_SINE;
-		effect.periodic.direction.type = SDL_HAPTIC_POLAR; // Polar coordinates
-		effect.periodic.direction.dir[0] = 18000; // Force comes from south
-		effect.periodic.period = 1000; // 1000 ms
-		effect.periodic.magnitude = 20000; // 20000/32767 strength
-		effect.periodic.length = 5000; // 5 seconds long
-		effect.periodic.attack_length = 1000; // Takes 1 second to get max strength
-		effect.periodic.fade_length = 1000; // Takes 1 second to fade away
-
-		// Upload the effect
-		effect_id = SDL_HapticNewEffect(haptic, &effect);
-
-		// Test the effect
-		SDL_HapticRunEffect(haptic, effect_id, 1);
-		SDL_Delay(5000); // Wait for the effect to finish
-
-		// We destroy the effect, although closing the device also does this
-		SDL_HapticDestroyEffect(haptic, effect_id);
-
-		// Close the device
-		SDL_HapticClose(haptic);
-
-		return 0; // Success
 	}
 	friend class j1Input;
 };
@@ -159,9 +118,9 @@ public:
 	iPoint GetMousePos_Tiles();
 
 private:
-	void Update_Keyboard_State();
-	void Update_Mouse_State();
-	void Update_Controllers();
+	void UpdateKeyboardState();
+	void UpdateMouseState();
+	void UpdateControllers();
 
 private:
 	bool		windowEvents[WE_COUNT];
@@ -171,10 +130,6 @@ private:
 	int			mouse_motion_y;
 	int			mouse_x;
 	int			mouse_y;
-
-private:
-	
-
 
 public:
 	std::vector<Controller*> controllers;
