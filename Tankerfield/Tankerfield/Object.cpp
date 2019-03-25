@@ -47,20 +47,20 @@ uint Object::GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, f
 	//Account for the spritesheet not starting at the 0 degree rotation
 	angle -= fist_rect_dir;
 	angle = ClampRotation(angle);
-	float num_pos = angle * rect_num / 360;
-	float remainder = fmod(num_pos, 1);
-	num_pos -= remainder;
+	float ind = (angle * rect_num) / 360;
+	float remainder = fmod(ind, 1);
+	ind -= remainder;
 	//Select the current or the next frame if the remainder is more than or 0.5
 	if (remainder >= 0.5f)
 	{
-		num_pos = num_pos + 1;
+		ind = ind + 1;
 	}
 	//If it's the last frame, start over again
-	if (num_pos == rect_num)
+	if (ind == rect_num)
 	{
-		num_pos = 0;
+		ind = 0;
 	}
-	return (uint)num_pos;
+	return (uint)ind;
 }
 
 float Object::ClampRotation(float angle)
