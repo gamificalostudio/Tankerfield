@@ -57,8 +57,8 @@ bool Obj_Tank::Update(float dt)
 
 bool Obj_Tank::PostUpdate()
 {
-	SDL_Rect * rect = GetRotatedSprite(base_rects, 100, 0);
-	App->render->Blit(base_tex, pos.x, pos.y, rect);
+	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 135);
+	App->render->Blit(base_tex, pos.x, pos.y, &base_rects[ind]);
 	return true;
 }
 

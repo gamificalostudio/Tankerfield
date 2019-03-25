@@ -32,4 +32,5 @@ private:
 	//static SDL_Rect * turr_rects;
 
 	float speed = 0.f;
+	float angle = 0.f;
 };
