@@ -32,7 +32,16 @@ enum j1KeyState
 	KEY_REPEAT,
 	KEY_UP
 };
+
+enum class Joystick
+{
+	LEFT,
+	RIGHT,
+	INVALID
+};
+
 class j1Input;
+
 struct Controller
 {
 private:
@@ -50,12 +59,25 @@ public:
 	{
 		return key_state[button];
 	}
+
+	iPoint GetJoystick(Joystick joystick)
+	{
+		switch (joystick)
+		{
+		case Joystick::LEFT:
+			return iPoint (GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
+		case Joystick::RIGHT:
+			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
+		}
+	}
+
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 Get_Axis(SDL_GameControllerAxis axis)
+	Sint16 GetAxis(SDL_GameControllerAxis axis)
 	{
 		return SDL_GameControllerGetAxis(ctr_pointer, axis);
 	}
+
 	int test_haptic() {
 
 		SDL_HapticEffect effect;

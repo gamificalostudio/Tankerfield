@@ -4,6 +4,8 @@
 #include "j1Render.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
+#include "j1Input.h"
+#include "p2Log.h"
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
@@ -42,11 +44,16 @@ bool Obj_Tank::Start()
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
+
 	return true;
 }
 
 bool Obj_Tank::PreUpdate()
 {
+	if (controller == nullptr)
+	{
+		controller = App->input->GetAbleController();
+	}
 	return true;
 }
 
@@ -57,6 +64,20 @@ bool Obj_Tank::Update(float dt)
 
 bool Obj_Tank::PostUpdate()
 {
+	//SDL_CONTROLLER_AXIS_INVALID = -1,
+	//	,
+	//	,
+	//	SDL_CONTROLLER_AXIS_RIGHTX,
+	//	SDL_CONTROLLER_AXIS_RIGHTY,
+	//	SDL_CONTROLLER_AXIS_TRIGGERLEFT,
+	//	SDL_CONTROLLER_AXIS_TRIGGERRIGHT,
+	//	SDL_CONTROLLER_AXIS_MAX
+
+	if (controller != nullptr)
+	{
+		iPoint joystick_left = (*controller)->GetJoystick(Joystick::LEFT);
+		LOG("X: %i, Y: %i", joystick_left.x, joystick_left.y);
+	}
 	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 135);
 	App->render->Blit(base_tex, pos.x, pos.y, &base_rects[ind]);
 	return true;
