@@ -15,6 +15,11 @@ Obj_Tank::Obj_Tank() : Object()
 
 }
 
+Obj_Tank::Obj_Tank(int x, int y) : Object(x, y)
+{
+
+}
+
 Obj_Tank::~Obj_Tank()
 {
 }

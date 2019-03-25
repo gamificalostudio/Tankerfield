@@ -12,13 +12,11 @@
 
 enum ObjectType
 {
-	PLAYER,
-
+	TANK,
 	NO_TYPE
 };
 
 class Object;
-class Player;
 
 class ObjectManager : public j1Module
 {
@@ -45,8 +43,6 @@ public:
 
 	Object* CreateObject(ObjectType type, int x = 0, int y = 0);
 	void DeleteEntities();
-
-	Player* GetPlayerData() const;
 
 private:
 	std::list<Object*> objects;

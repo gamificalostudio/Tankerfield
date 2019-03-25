@@ -13,6 +13,7 @@
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
+#include "Obj_Tank.h"
 //#include "j1Collision.h"
 //#include "j1Map.h"
 //#include "Player.h"
@@ -49,7 +50,9 @@ bool ObjectManager::Start()
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
+		{
 			(*iterator)->Start();
+		}
 	}
 
 	return ret;
@@ -139,18 +142,20 @@ bool ObjectManager::CleanUp()
 Object* ObjectManager::CreateObject(ObjectType type, int x, int y)
 {
 	Object* ret = nullptr;
-	while (ret == nullptr) {
-		switch (type) {
-			/*case EntityType::PLAYER: {ret = new Player();
-				ret->type = PLAYER;
-				break; }
 
-			}*/
-			if (ret != nullptr)
-				objects.push_back(ret);
-		}
-		return ret;
+	switch (type)
+	{
+	case ObjectType::TANK:
+		ret = new Obj_Tank(x, y);
+		break;
 	}
+
+	if (ret != nullptr)
+	{
+		objects.push_back(ret);
+	}
+
+	return ret;
 }
 
 void ObjectManager::DeleteEntities()
@@ -184,21 +189,3 @@ bool ObjectManager::Save(pugi::xml_node& save) const
 
 	return ret;
 }
-
-Player* ObjectManager::GetPlayerData() const 
-{
-	std::list<Object*>::const_iterator iterator;
-
-	for (iterator = objects.cbegin(); iterator != objects.cend(); iterator++)
-	{
-		if ((*iterator) != nullptr) {
-			if ((*iterator)->type == PLAYER)
-				return (Player*)(*iterator);
-		}
-	}
-
-}
-
-
-
-

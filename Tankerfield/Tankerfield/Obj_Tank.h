@@ -6,6 +6,7 @@ class Obj_Tank : public Object
 {
 public:
 	Obj_Tank();
+	Obj_Tank(int x, int y);
 	~Obj_Tank();
 
 public:
