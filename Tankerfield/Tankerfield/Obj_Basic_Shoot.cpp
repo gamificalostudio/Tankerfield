@@ -2,6 +2,7 @@
 #include "j1App.h"
 #include "UI_Test.h"
 #include "j1Input.h"
+#include "j1Render.h"
 
 
 
@@ -12,8 +13,6 @@ Obj_Basic_Shoot::Obj_Basic_Shoot() : Object()
 
 Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 {
-	pos.x = x;//
-	pos.y = y;//
 
 	//Load XML var ============
 	pugi::xml_node basic_bullet_node = App->config.child("object").child("basic_bullet");
@@ -26,8 +25,13 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 	iPoint mouse_position = { 0,0 };
 	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
 
-	direction.x = mouse_position.x - pos.x;
-	direction.y = mouse_position.y - pos.y;
+	mouse_position.x += -App->render->camera.x;
+	mouse_position.y += -App->render->camera.y;
+
+	fPoint pos_map = App->ui_test->MapToWorldF(pos.x, pos.y, 100, 50);
+
+	direction.x = mouse_position.x - pos_map.x;
+	direction.y = mouse_position.y - pos_map.y;
 
 	float modul = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
 
@@ -60,6 +64,8 @@ bool Obj_Basic_Shoot::PreUpdate()
 bool Obj_Basic_Shoot::Update(float dt)
 {
 	//Calculate new pos of the bullet =====
+	//iPoint directionMap = WorldToMap(direction.x, direction.y);
+
 	pos.x += speed * direction.x;
 	pos.y += speed * direction.y;
 
@@ -81,4 +87,15 @@ bool Obj_Basic_Shoot::PostUpdate()
 bool Obj_Basic_Shoot::CleanUp()
 {
 	return true;
+}
+
+iPoint Obj_Basic_Shoot::WorldToMap(int x, int y)
+{
+
+	iPoint ret(0, 0);
+
+	ret.x = x / 100;
+	ret.y = y / 50;
+
+	return ret;
 }

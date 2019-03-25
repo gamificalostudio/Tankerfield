@@ -18,6 +18,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
+	iPoint WorldToMap(int x, int y);
 
 private:
 
@@ -25,6 +26,5 @@ private:
 	fPoint direction;
 	j1PerfTimer bullet_life_timer;
 	float bullet_life_ms;
-	//float angle = 180.f;
 
 };
