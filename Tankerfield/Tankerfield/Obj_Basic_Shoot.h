@@ -24,7 +24,7 @@ private:
 	float speed;
 	fPoint direction;
 	j1PerfTimer bullet_life_timer;
-	float bullet_life_ms = 1000.f;
+	float bullet_life_ms;
 	//float angle = 180.f;
 
 };

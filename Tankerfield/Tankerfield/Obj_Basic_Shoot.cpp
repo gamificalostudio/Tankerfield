@@ -12,21 +12,29 @@ Obj_Basic_Shoot::Obj_Basic_Shoot() : Object()
 
 Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 {
-	pos.x = x;
-	pos.y = y;
+	pos.x = x;//
+	pos.y = y;//
 
-	speed = 0.25f;
+	//Load XML var ============
+	pugi::xml_node basic_bullet_node = App->config.child("object").child("basic_bullet");
+
+	speed = basic_bullet_node.child("speed").attribute("value").as_float();
+	bullet_life_ms = basic_bullet_node.child("life").attribute("value").as_float();
+	
+
+	//Direction of the bullet ===========
 	iPoint mouse_position = { 0,0 };
 	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
 
 	direction.x = mouse_position.x - pos.x;
 	direction.y = mouse_position.y - pos.y;
 
-	float modulo = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
+	float modul = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
 
-	direction.x /= modulo;
-	direction.y /= modulo;
+	direction.x /= modul;
+	direction.y /= modul;
 
+	//Start life timer ====
 	bullet_life_timer.Start();
 }
 
@@ -51,7 +59,7 @@ bool Obj_Basic_Shoot::PreUpdate()
 
 bool Obj_Basic_Shoot::Update(float dt)
 {
-
+	//Calculate new pos of the bullet =====
 	pos.x += speed * direction.x;
 	pos.y += speed * direction.y;
 
