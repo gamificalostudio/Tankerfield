@@ -64,15 +64,6 @@ bool Obj_Tank::Update(float dt)
 
 bool Obj_Tank::PostUpdate()
 {
-	//SDL_CONTROLLER_AXIS_INVALID = -1,
-	//	,
-	//	,
-	//	SDL_CONTROLLER_AXIS_RIGHTX,
-	//	SDL_CONTROLLER_AXIS_RIGHTY,
-	//	SDL_CONTROLLER_AXIS_TRIGGERLEFT,
-	//	SDL_CONTROLLER_AXIS_TRIGGERRIGHT,
-	//	SDL_CONTROLLER_AXIS_MAX
-
 	if (controller != nullptr)
 	{
 		iPoint joystick_left = (*controller)->GetJoystick(Joystick::LEFT);
