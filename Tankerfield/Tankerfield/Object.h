@@ -24,7 +24,7 @@ public:
 	virtual bool Start() { return true; };
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt);
-	virtual void Draw(float dt, SDL_Texture* texture);
+	virtual bool PostUpdate();
 	virtual bool CleanUp() { return true; };
 	virtual bool Awake(pugi::xml_node&) { return true; };
 

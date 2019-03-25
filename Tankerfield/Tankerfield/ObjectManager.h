@@ -27,21 +27,21 @@ public:
 	ObjectManager();
 	~ObjectManager();
 
-	bool Awake(pugi::xml_node& config);
+	bool Awake(pugi::xml_node& config) override;
 
-	bool Start();
+	bool Start() override;
 
-	bool PreUpdate();
+	bool PreUpdate() override;
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	void NewFunction(std::list<Object *>::iterator &iterator);
+	bool PostUpdate() override;
 
 	bool Load(pugi::xml_node&);
 
 	bool Save(pugi::xml_node&) const;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
 	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
 	void DeleteObjects();

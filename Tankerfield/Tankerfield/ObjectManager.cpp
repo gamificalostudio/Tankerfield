@@ -55,9 +55,6 @@ bool ObjectManager::Start()
 			(*iterator)->Start();
 		}
 	}
-
-	tesla_trooper_texture = App->tex->Load("textures/Objects/shk-sheet.png");
-
 	return ret;
 }
 

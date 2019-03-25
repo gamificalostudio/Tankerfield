@@ -36,9 +36,9 @@ bool Object::Update(float dt)
 	return true;
 }
 
-void Object::Draw(float dt, SDL_Texture* texture)
+bool Object::PostUpdate()
 {
-	App->render->Blit(texture, position.x, position.y, &(current_animation->GetCurrentFrame(dt)));
+	return true;
 }
 
 //sprites in SDL_Rect * rect must be ordered in counter clock-wise direction

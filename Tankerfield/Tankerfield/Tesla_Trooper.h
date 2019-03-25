@@ -13,10 +13,9 @@ public:
 	~TeslaTrooper();
 
 public:
-	bool PreUpdate(float dt);
-	bool Update(float dt);
-	void Draw(float dt, SDL_Texture * texture) override;
-	bool PostUpdate();
+	bool PreUpdate() override;
+	bool Update(float dt) override;
+	bool PostUpdate() override;
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
