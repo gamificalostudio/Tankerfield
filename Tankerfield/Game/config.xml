@@ -6473,7 +6473,7 @@
       </animations>
     </tank>
     <basic_bullet>
-      <speed value ="1"/>
+      <speed value ="13"/>
       <life value ="1000"/>
     </basic_bullet>
   </object>

@@ -63,7 +63,7 @@ public:
 	{
 		x /= v;
 		y /= v;
-		return this;
+		return (*this);
 	}
 	const p2Point& operator -=(const p2Point &v)
 	{

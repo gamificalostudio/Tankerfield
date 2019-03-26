@@ -25,20 +25,18 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 	iPoint mouse_position = { 0,0 };
 	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
 
+	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
 	mouse_position.x += -App->render->camera.x;
 	mouse_position.y += -App->render->camera.y;
 
-	fPoint Fmouse_position = App->ui_test->WorldToMapF(mouse_position, 100, 50);
+	//Transform to map to work all variables in map(blit do MapToWorld automatically)
+	fPoint map_mouse_position = App->ui_test->WorldToMapF(mouse_position, 100, 50);
 
-	//fPoint pos_map = App->ui_test->MapToWorldF(pos.x, pos.y, 100, 50);
+	direction = map_mouse_position - pos;
 
-	direction.x = Fmouse_position.x - pos.x;
-	direction.y = Fmouse_position.y - pos.y;
-
-	float modul = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
-
-	direction.x /= modul;
-	direction.y /= modul;
+	//Normilize vector
+	float norm = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
+	direction /= norm;
 
 	//Start life timer ====
 	bullet_life_timer.Start();
@@ -66,10 +64,9 @@ bool Obj_Basic_Shoot::PreUpdate()
 bool Obj_Basic_Shoot::Update(float dt)
 {
 	//Calculate new pos of the bullet =====
-	//iPoint directionMap = WorldToMap(direction.x, direction.y);
 
-	pos.x += speed * direction.x;
-	pos.y += speed * direction.y;
+	pos.x += speed * direction.x * dt;
+	pos.y += speed * direction.y * dt;
 
 	//Draw ========================
 	App->ui_test->DrawIsometricQuad(pos.x, pos.y, 0.75f, 0.5f);
@@ -91,13 +88,3 @@ bool Obj_Basic_Shoot::CleanUp()
 	return true;
 }
 
-iPoint Obj_Basic_Shoot::WorldToMap(int x, int y)
-{
-
-	iPoint ret(0, 0);
-
-	ret.x = x / 100;
-	ret.y = y / 50;
-
-	return ret;
-}

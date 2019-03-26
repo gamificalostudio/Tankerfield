@@ -18,7 +18,6 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
-	iPoint WorldToMap(int x, int y);
 
 private:
 
