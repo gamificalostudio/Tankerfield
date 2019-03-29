@@ -148,6 +148,16 @@ public:
 		}
 	}
 
+	explicit operator p2Point<int>() const
+	{
+		return p2Point<int>((int)x, (int)y);
+	}
+
+	explicit operator p2Point<float> () const
+	{
+		return p2Point<float>((float)x, (float)y);
+	}
+
 	// Distances ---------------------------------------------
 	TYPE DistanceTo(const p2Point& v) const
 	{

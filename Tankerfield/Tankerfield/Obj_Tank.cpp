@@ -62,10 +62,29 @@ bool Obj_Tank::Update(float dt)
 {
 	if (controller != nullptr)
 	{
+		//iPoint joystick = (*controller)->GetJoystick(Joystick::LEFT);
+		//float joystick_rotation = atan2f(joystick.y, joystick.x);
+
+
 		iPoint joystick = (*controller)->GetJoystick(Joystick::LEFT);
-		fPoint fjoy(joystick.x, joystick.y);
-		fjoy.Normalize();
-		pos += fjoy * speed * dt;
+		fPoint joystick_log((float)joystick.x, (float)joystick.y);
+		joystick_log.Normalize();
+		LOG("joystick log x: %f, y:%f", joystick_log.x, joystick_log.y);
+		//2. Rotate it (45 degrees clockwise) -> we don't want it to move in the "isometric space"
+		float angle_cos = cosf(90) * 180 / M_PI;//TODO: Create a macro (value doesn't change, so it's useless to recalculate it every frame)
+		float angle_sin = sinf(90) * 180 / M_PI;
+		fPoint iso_dir;
+		iso_dir.x = joystick.x * angle_cos - joystick.y * angle_sin;
+		iso_dir.y = joystick.x * angle_sin + joystick.y * angle_cos;
+		iso_dir.Normalize();
+		LOG("rotated dir  x: %f, y:%f", iso_dir.x, iso_dir.y);
+
+		//3. Normalize it
+		//iso_dir.Normalize();
+		//4. Apply it to the position
+		//pos += iso_dir * speed * dt;
+		//LOG("X: %f, Y: %f", iso_dir.x, iso_dir.y);
+
 		//if(!fjoy.IsZero())
 		//{
 		//	angle = (atan2(fjoy.y, fjoy.x) * 180 / M_PI);
