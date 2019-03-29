@@ -1,9 +1,11 @@
-#include "Obj_Tank.h"
-#include "j1App.h"
-#include "j1Textures.h"
-#include "j1Render.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
+
+#include "j1App.h"
+#include "Obj_Tank.h"
+#include "j1Textures.h"
+#include "j1Render.h"
+
 #include "j1Input.h"
 #include "p2Log.h"
 #include "UI_Test.h"
