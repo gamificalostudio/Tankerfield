@@ -39,16 +39,13 @@ public:
 	}
 
 	// Math ------------------------------------------------
-	p2Point operator -(const p2Point &v) const
-	{
-		p2Point r;
+	const p2Point& operator = (const p2Point &v) {
+		x = v.x;
+		y = v.y;
 
-		r.x = x - v.x;
-		r.y = y - v.y;
-
-		return(r);
+		return(*this);
 	}
-
+	
 	p2Point operator +(const p2Point &v) const
 	{
 		p2Point r;
@@ -59,12 +56,24 @@ public:
 		return(r);
 	}
 
-	p2Point operator /=(const TYPE& v)
+	const p2Point& operator +=(const p2Point &v)
 	{
-		x /= v;
-		y /= v;
-		return this;
+		x += v.x;
+		y += v.y;
+
+		return(*this);
 	}
+
+	p2Point operator -(const p2Point &v) const
+	{
+		p2Point r;
+
+		r.x = x - v.x;
+		r.y = y - v.y;
+
+		return(r);
+	}
+
 	const p2Point& operator -=(const p2Point &v)
 	{
 		x -= v.x;
@@ -73,12 +82,31 @@ public:
 		return(*this);
 	}
 
-	const p2Point& operator +=(const p2Point &v)
-	{
-		x += v.x;
-		y += v.y;
+	p2Point operator* (const TYPE & num) const {
+		p2Point r;
+		r.x = x * num;
+		r.y = y * num;
+		return r;
+	}
 
-		return(*this);
+	const p2Point operator*= (const TYPE & num) {
+		x *= num;
+		y *= num;
+		return (*this);
+	}
+
+	p2Point operator/ (const TYPE & num) const {
+		p2Point r;
+		r.x = x / num;
+		r.y = y / num;
+		return r;
+	}
+
+	p2Point operator /=(const TYPE& v)
+	{
+		x /= v;
+		y /= v;
+		return this;
 	}
 
 	bool operator ==(const p2Point& v) const
@@ -109,6 +137,15 @@ public:
 		y = -y;
 
 		return(*this);
+	}
+
+	void Normalize() {
+		double module = sqrt(x * x + y * y);
+		if (module != 0.)
+		{
+			x /= module;
+			y /= module;
+		}
 	}
 
 	// Distances ---------------------------------------------
