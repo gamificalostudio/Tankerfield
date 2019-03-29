@@ -11,7 +11,7 @@ SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
-int Obj_Tank::base_rects_num = 100;
+int Obj_Tank::base_rects_num = 128;
 SDL_Rect * Obj_Tank::base_rects = new SDL_Rect[base_rects_num];
 
 Obj_Tank::Obj_Tank() : Object()
