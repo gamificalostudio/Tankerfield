@@ -48,4 +48,6 @@ private:
 
 };
 
+fPoint  MapToWorldF(float x, float y, float tile_width, float tile_height);
+
 #endif // __j1SCENE_H__

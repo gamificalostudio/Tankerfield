@@ -32,7 +32,16 @@ enum j1KeyState
 	KEY_REPEAT,
 	KEY_UP
 };
+
+enum class Joystick
+{
+	LEFT,
+	RIGHT,
+	INVALID
+};
+
 class j1Input;
+
 struct Controller
 {
 private:
@@ -40,21 +49,43 @@ private:
 	SDL_JoystickID joyId = -1;
 	j1KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
 	SDL_GameController* ctr_pointer = nullptr;
-	
-public:
 	SDL_Haptic* haptic = nullptr;
-
+	bool attached = false;
+public:
+	
+	
 
 	j1KeyState Get_Button_State(SDL_GameControllerButton button)
 	{
 		return key_state[button];
 	}
+
+	iPoint GetJoystick(Joystick joystick)
+	{
+		switch (joystick)
+		{
+		case Joystick::LEFT:
+			return iPoint (GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
+		case Joystick::RIGHT:
+			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
+		}
+	}
+
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 Get_Axis(SDL_GameControllerAxis axis)
+	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = 1000)
 	{
-		return SDL_GameControllerGetAxis(ctr_pointer, axis);
+		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+		if (abs(value) > dead_zone)
+		{
+			return value;
+		}
+		else
+		{
+			return 0;
+		}
 	}
+
 	int test_haptic() {
 
 		SDL_HapticEffect effect;
@@ -152,12 +183,11 @@ private:
 	int			mouse_x;
 	int			mouse_y;
 
-private:
-	
-
 
 public:
 	std::vector<Controller*> controllers;
+
+	Controller** GetAbleController();
 };
 
 #endif // __j1INPUT_H__

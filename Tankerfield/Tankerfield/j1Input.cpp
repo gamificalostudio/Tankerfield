@@ -69,39 +69,43 @@ bool j1Input::PreUpdate()
 		switch(event.type)
 		{
 			case SDL_QUIT:
+			{
 				windowEvents[WE_QUIT] = true;
-			break;
-
+				break;
+			}
 			case SDL_WINDOWEVENT:
-				switch(event.window.event)
+			{
+				switch (event.window.event)
 				{
 					//case SDL_WINDOWEVENT_LEAVE:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_MINIMIZED:
-					case SDL_WINDOWEVENT_FOCUS_LOST:
+				case SDL_WINDOWEVENT_HIDDEN:
+				case SDL_WINDOWEVENT_MINIMIZED:
+				case SDL_WINDOWEVENT_FOCUS_LOST:
 					windowEvents[WE_HIDE] = true;
 					break;
 
 					//case SDL_WINDOWEVENT_ENTER:
-					case SDL_WINDOWEVENT_SHOWN:
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-					case SDL_WINDOWEVENT_MAXIMIZED:
-					case SDL_WINDOWEVENT_RESTORED:
+				case SDL_WINDOWEVENT_SHOWN:
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+				case SDL_WINDOWEVENT_MAXIMIZED:
+				case SDL_WINDOWEVENT_RESTORED:
 					windowEvents[WE_SHOW] = true;
 					break;
 				}
-			break;
-
+				break;
+			}
 			case SDL_MOUSEBUTTONDOWN:
+			{
 				mouse_buttons[event.button.button - 1] = KEY_DOWN;
 				//LOG("Mouse button %d down", event.button.button-1);
-			break;
-
+				break;
+			}
 			case SDL_MOUSEBUTTONUP:
+			{
 				mouse_buttons[event.button.button - 1] = KEY_UP;
 				//LOG("Mouse button %d up", event.button.button-1);
-			break;
-
+				break;
+			}
 			case SDL_MOUSEMOTION:
 			{
 				int scale = App->win->GetScale();
@@ -110,9 +114,8 @@ bool j1Input::PreUpdate()
 				mouse_x = event.motion.x / scale;
 				mouse_y = event.motion.y / scale;
 				//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
+				break;
 			}
-			break;
-
 			case SDL_CONTROLLERDEVICEADDED:
 			{
 				if (controllers.size() < MAX_CONTROLLERS)
@@ -127,7 +130,6 @@ bool j1Input::PreUpdate()
 							{
 								is_joystick = true;
 							}
-
 						}
 						if (!is_joystick)
 						{
@@ -138,20 +140,22 @@ bool j1Input::PreUpdate()
 							controller->index_number = i;
 							controller->haptic = SDL_HapticOpen(i);
 							LOG("Joys stick is aptic: %i", SDL_JoystickIsHaptic(j));
-							
 							if (controller->haptic == NULL)
 							{
 								LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
+							}
+							else
+							{
+								SDL_HapticRumbleInit(controller->haptic);
 							}
 							controllers.push_back(controller);
 						}
 					}
 				}
-			}
-				
 				break;
-
+			}
 			case SDL_CONTROLLERDEVICEREMOVED:
+			{
 				for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end();)
 				{
 					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
@@ -159,12 +163,16 @@ bool j1Input::PreUpdate()
 						SDL_HapticClose((*iter)->haptic);
 						SDL_GameControllerClose((*iter)->ctr_pointer);
 						delete (*iter);
+						(*iter) = nullptr;
 						iter = controllers.erase(iter);
 					}
 					else
+					{
 						++iter;
+					}
 				}
 				break;
+			}
 		}
 	}
 
@@ -257,4 +265,18 @@ void j1Input::Update_Controllers()
 		}
 		
 	}
+}
+
+Controller** j1Input::GetAbleController()
+{
+	Controller** ret = nullptr;
+	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+	{
+		if (!(*iter)->attached)
+		{
+			(*iter)->attached = true;
+			return &(*iter);
+		}
+	}
+	return ret;
 }

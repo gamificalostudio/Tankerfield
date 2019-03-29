@@ -46,7 +46,6 @@ public:
 
 	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
 	void DeleteObjects();
-	bool DeleteObject(Object* object);
   
 private:
 	std::list<Object*> objects;

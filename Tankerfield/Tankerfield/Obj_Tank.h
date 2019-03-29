@@ -1,5 +1,6 @@
 #include "Object.h"
 
+struct Controller;
 struct SDL_Texture;
 
 class Obj_Tank : public Object
@@ -31,6 +32,7 @@ private:
 	static int base_rects_num;
 	//static SDL_Rect * turr_rects;
 
-	float speed = 0.f;
-	float angle = 180.f;
+	float speed = 5.f;
+	float angle = 0.f;
+	Controller ** controller = nullptr;
 };
