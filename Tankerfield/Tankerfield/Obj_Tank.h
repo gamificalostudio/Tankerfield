@@ -32,7 +32,7 @@ private:
 	static int base_rects_num;
 	//static SDL_Rect * turr_rects;
 
-	float speed = 100.f;
+	float speed = 5.f;
 	float angle = 0.f;
 	Controller ** controller = nullptr;
 };
