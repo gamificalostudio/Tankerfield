@@ -36,11 +36,11 @@ bool UI_Test::Start()
 	uint win_width = 0u , win_height = 0u;
 	App->win->GetWindowSize(win_width, win_height);
 
-	Button_Definition buttton_def({0,0,280, 140}, {280, 0 , 280, 140}, {560, 0, 280, 140});
-	Label_Definition label_def(App->font->Load("fonts/pixelart.ttf", 30));
-	button_test = App->ui->CreateButton({ win_width * 0.5f ,win_height * 0.5f }, buttton_def, this);
-	button_test->IsDraggable(true);
-	button_test->SetLabel({ 0,0 }, "i wanna die", label_def);
+	//Button_Definition buttton_def({0,0,280, 140}, {280, 0 , 280, 140}, {560, 0, 280, 140});
+	//Label_Definition label_def(App->font->Load("fonts/pixelart.ttf", 30));
+	//button_test = App->ui->CreateButton({ win_width * 0.5f ,win_height * 0.5f }, buttton_def, this);
+	//button_test->IsDraggable(true);
+	//button_test->SetLabel({ 0,0 }, "i wanna die", label_def);
 
 	return true;
 }
