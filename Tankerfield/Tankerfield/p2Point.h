@@ -148,7 +148,7 @@ public:
 		}
 	}
 
-	explicit operator p2Point<int>() const
+	explicit operator p2Point<int> () const
 	{
 		return p2Point<int>((int)x, (int)y);
 	}
