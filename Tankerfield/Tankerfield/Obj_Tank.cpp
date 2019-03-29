@@ -67,6 +67,11 @@ bool Obj_Tank::Update(float dt)
 		fPoint fjoy(joystick.x, joystick.y);
 		fjoy.Normalize();
 		pos += fjoy * speed * dt;
+		if(!fjoy.IsZero())
+		{
+			angle = (atan2(fjoy.y, fjoy.x) * 180 / M_PI) - 45;
+		}
+		LOG("%f", angle);
 		//2. Rotate it (45 degrees clockwise) -> we don't want it to move in the "isometric space"
 		//float angle_cos = cosf(45);//TODO: Create a macro (value doesn't change, so it's useless to recalculate it every frame)
 		//float angle_sin = sinf(45);
