@@ -265,3 +265,17 @@ void j1Input::Update_Controllers()
 		
 	}
 }
+
+Controller** j1Input::GetAbleController()
+{
+	Controller** ret = nullptr;
+	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+	{
+		if (!(*iter)->attached)
+		{
+			(*iter)->attached = true;
+			return &(*iter);
+		}
+	}
+	return ret;
+}

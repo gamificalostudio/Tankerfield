@@ -179,19 +179,7 @@ private:
 public:
 	std::vector<Controller*> controllers;
 
-	Controller** GetAbleController()
-	{
-		Controller** ret = nullptr;
-		for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
-		{
-			if(!(*iter)->attached)
-				{
-				(*iter)->attached = true;
-				return &(*iter);
-			}
-		}
-			return ret;
-	}
+	Controller** GetAbleController();
 };
 
 #endif // __j1INPUT_H__

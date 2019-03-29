@@ -59,16 +59,31 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
+	if (controller != nullptr)
+	{
+		//1. Get controller vector
+		iPoint joystick = (*controller)->GetJoystick(Joystick::LEFT);
+		//2. Rotate it (45 degrees clockwise) -> we don't want it to move in the "isometric space"
+		float angle_cos = cosf(45);//TODO: Create a macro (value doesn't change, so it's useless to recalculate it every frame)
+		float angle_sin = sinf(45);
+		iPoint iso_dir;
+		iso_dir.x = joystick.x * angle_cos - joystick.y * angle_sin;
+		iso_dir.y = joystick.x * angle_sin + joystick.y * angle_cos;
+		//3. Normalize it
+		LOG("X: %i, Y: %i", joystick.x, joystick.y);
+	}
+
+	//4. Apply it to the position
+
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	//{
+	//	position
+	//}
 	return true;
 }
 
 bool Obj_Tank::PostUpdate()
 {
-	if (controller != nullptr)
-	{
-		iPoint joystick_left = (*controller)->GetJoystick(Joystick::LEFT);
-		LOG("X: %i, Y: %i", joystick_left.x, joystick_left.y);
-	}
 	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 135);
 	App->render->Blit(base_tex, pos.x, pos.y, &base_rects[ind]);
 	return true;

@@ -59,18 +59,39 @@ public:
 		return(r);
 	}
 
+	const p2Point& operator= (const p2Point &v) {
+		x = v.x;
+		y = v.y;
+
+		return(*this);
+	}
+
 	p2Point operator /=(const TYPE& v)
 	{
 		x /= v;
 		y /= v;
 		return this;
 	}
+
 	const p2Point& operator -=(const p2Point &v)
 	{
 		x -= v.x;
 		y -= v.y;
 
 		return(*this);
+	}
+
+	p2Point operator* (const TYPE & num) const {
+		p2Point r;
+		r.x = x * num;
+		r.y = y * num;
+		return r;
+	}
+
+	const p2Point operator*= (const TYPE & num) {
+		x *= num;
+		y *= num;
+		return (*this);
 	}
 
 	const p2Point& operator +=(const p2Point &v)
@@ -109,6 +130,12 @@ public:
 		y = -y;
 
 		return(*this);
+	}
+
+	void Normalize() {
+		double module = sqrt(x * x + y * y);
+		x /= module;
+		y /= module;
 	}
 
 	// Distances ---------------------------------------------
