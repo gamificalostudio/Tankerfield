@@ -141,8 +141,11 @@ public:
 
 	void Normalize() {
 		double module = sqrt(x * x + y * y);
-		x /= module;
-		y /= module;
+		if (module != 0.)
+		{
+			x /= module;
+			y /= module;
+		}
 	}
 
 	// Distances ---------------------------------------------

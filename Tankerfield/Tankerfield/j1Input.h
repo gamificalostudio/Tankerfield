@@ -73,9 +73,17 @@ public:
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis)
+	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = 1000)
 	{
-		return SDL_GameControllerGetAxis(ctr_pointer, axis);
+		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+		if (abs(value) > dead_zone)
+		{
+			return value;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	int test_haptic() {
