@@ -26,8 +26,8 @@ Obj_BasicShoot::Obj_BasicShoot(int x, int y) : Object(x, y)
 	app->input->GetMousePosition(mouse_position.x, mouse_position.y);
 
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_position.x += -app->render->camera.x;
-	mouse_position.y += -app->render->camera.y;
+	mouse_position.x += app->render->camera.x;
+	mouse_position.y += app->render->camera.y;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
 	fPoint map_mouse_position = app->ui_test->WorldToMapF(mouse_position, 100, 50);

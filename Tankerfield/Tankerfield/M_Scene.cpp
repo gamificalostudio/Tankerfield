@@ -57,17 +57,22 @@ bool M_Scene::PreUpdate()
 // Called each loop iteration
 bool M_Scene::Update(float dt)
 {
-	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += floor(200.0f * dt);
-
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
 		app->render->camera.y -= floor(200.0f * dt);
-
+	}
+	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		app->render->camera.y += floor(200.0f * dt);
+	}
 	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += floor(200.0f * dt);
-
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
 		app->render->camera.x -= floor(200.0f * dt);
+	}
+	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	{
+		app->render->camera.x += floor(200.0f * dt);
+	}
 
 	return true;
 }

@@ -122,18 +122,6 @@ void M_UITest::DrawIsometricBox(float x, float y, float w, float h, float p)
 
 bool M_UITest::Update(float dt)
 {
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y += floor(200.0f * dt);
-
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y -= floor(200.0f * dt);
-
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x += floor(200.0f * dt);
-
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= floor(200.0f * dt);
-
 	// Create basic bullet
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 		app->objectmanager->CreateObject(BASIC_BULLET, player_pos.x, player_pos.y);
