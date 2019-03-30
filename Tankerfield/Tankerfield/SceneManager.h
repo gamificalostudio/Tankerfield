@@ -4,7 +4,7 @@
 #include "j1Module.h"
 #include "SDL\include\SDL_rect.h"
 
-class SceneManager : public j1Module
+class SceneManager : public Module
 {
 public:
 	SceneManager();
@@ -12,7 +12,7 @@ public:
 
 	bool Start();
 	bool Update(float dt);
-	bool FadeToBlack(j1Module* module_off, j1Module* module_on,float time = 2.0f);
+	bool FadeToBlack(Module* module_off, Module* module_on,float time = 2.0f);
 
 private:
 
@@ -26,8 +26,8 @@ private:
 	Uint32 start_time = 0;
 	Uint32 total_time = 0;
 	SDL_Rect screen;
-	j1Module* ModuleOff = nullptr;
-	j1Module* ModuleOn = nullptr;
+	Module* ModuleOff = nullptr;
+	Module* ModuleOn = nullptr;
 };
 
 #endif //__SCENEMANAGER_H__

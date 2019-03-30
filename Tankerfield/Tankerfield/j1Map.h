@@ -179,7 +179,7 @@ struct MapData
 	Properties				map_properties;
 };
 
-class j1Map : public j1Module
+class j1Map : public Module
 {
 public:
 	MapData data;

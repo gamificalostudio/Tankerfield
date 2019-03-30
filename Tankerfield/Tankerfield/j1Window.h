@@ -6,7 +6,7 @@
 struct SDL_Window;
 struct SDL_Surface;
 
-class j1Window : public j1Module
+class j1Window : public Module
 {
 public:
 

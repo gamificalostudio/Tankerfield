@@ -16,7 +16,7 @@ class j1Window;
 class j1Input;
 class j1Render;
 class j1Textures;
-class j1Audio;
+class M_Audio;
 class UI_Test;
 class j1PathFinding;
 class j1Map;
@@ -48,7 +48,7 @@ public:
 	bool CleanUp();
 
 	// Add a new module to handle
-	void AddModule(j1Module* module);
+	void AddModule(Module* module);
 
 	// Exposing some properties for reading
 	int GetArgc() const;
@@ -89,7 +89,7 @@ public:
 	j1Input*			input = nullptr;
 	j1Render*			render = nullptr;
 	j1Textures*			tex = nullptr;
-	j1Audio*			audio = nullptr;
+	M_Audio*			audio = nullptr;
 	UI_Test*			ui_test = nullptr;
 	j1PathFinding*		pathfinding = nullptr;
 	j1Map*				map = nullptr;
@@ -103,7 +103,7 @@ public:
 	pugi::xml_node		config;
 
 private:
-	std::list<j1Module*>	modules;
+	std::list<Module*>	modules;
 	int					argc;
 	char**				args;
 

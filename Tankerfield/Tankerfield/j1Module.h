@@ -6,17 +6,17 @@
 
 class j1App;
 
-class j1Module
+class Module
 {
 
 private:
 	bool enabled = true;
 
 public:
-	j1Module() : active(false)
+	Module() : active(false)
 	{}
 
-	virtual ~j1Module()
+	virtual ~Module()
 	{}
 
 	void Init()

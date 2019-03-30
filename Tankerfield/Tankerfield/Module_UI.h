@@ -40,7 +40,7 @@ enum class ClickState
 	None
 };
 
-class Module_UI : public j1Module
+class Module_UI : public Module
 {
 public:
 

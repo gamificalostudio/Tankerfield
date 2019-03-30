@@ -10,7 +10,7 @@
 
 #define MAX_KEYS 300
 
-j1Input::j1Input() : j1Module()
+j1Input::j1Input() : Module()
 {
 	name = "input";
 

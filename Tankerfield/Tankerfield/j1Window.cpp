@@ -6,7 +6,7 @@
 #include "SDL/include/SDL.h"
 
 
-j1Window::j1Window() : j1Module()
+j1Window::j1Window() : Module()
 {
 	window = NULL;
 	screen_surface = NULL;

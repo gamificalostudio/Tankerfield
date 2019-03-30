@@ -13,7 +13,7 @@
 #include "Label.h"
 #include "ObjectManager.h"
 
-UI_Test::UI_Test() : j1Module()
+UI_Test::UI_Test() : Module()
 {
 	name.assign("UI Test");
 }

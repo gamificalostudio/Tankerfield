@@ -11,7 +11,7 @@
 #include "j1Map.h"
 #include "ObjectManager.h"
 
-j1Scene::j1Scene() : j1Module()
+j1Scene::j1Scene() : Module()
 {
 	name.assign("scene");
 }

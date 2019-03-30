@@ -11,7 +11,7 @@
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
 
-SceneManager::SceneManager():j1Module()
+SceneManager::SceneManager():Module()
 {
 
 	screen = { 0, 0, 1024,640 }; //revisar hardcode TODO
@@ -68,7 +68,7 @@ bool SceneManager::Update(float dt)
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool SceneManager::FadeToBlack(j1Module* module_off, j1Module* module_on, float time)
+bool SceneManager::FadeToBlack(Module* module_off, Module* module_on, float time)
 {
 	bool ret = false;
 

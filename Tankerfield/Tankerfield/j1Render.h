@@ -5,7 +5,7 @@
 #include "p2Point.h"
 #include "j1Module.h"
 
-class j1Render : public j1Module
+class j1Render : public Module
 {
 public:
 

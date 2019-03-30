@@ -34,7 +34,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	win = new j1Window();
 	render = new j1Render();
 	tex = new j1Textures();
-	audio = new j1Audio();
+	audio = new M_Audio();
 	ui_test = new UI_Test();
 	pathfinding = new j1PathFinding();
 	map = new j1Map();
@@ -69,7 +69,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 j1App::~j1App()
 {
 	// release modules
-	std::list<j1Module*>::reverse_iterator item = modules.rbegin();
+	std::list<Module*>::reverse_iterator item = modules.rbegin();
 
 	while (item != modules.rend())
 	{
@@ -80,7 +80,7 @@ j1App::~j1App()
 	modules.clear();
 }
 
-void j1App::AddModule(j1Module* module)
+void j1App::AddModule(Module* module)
 {
 	module->Init();
 	modules.push_back(module);
@@ -113,7 +113,7 @@ bool j1App::Awake()
 
 	if (ret == true)
 	{
-		std::list<j1Module*>::const_iterator item;
+		std::list<Module*>::const_iterator item;
 		item = modules.begin();
 
 		while (item != modules.end() && ret == true)
@@ -146,7 +146,7 @@ bool j1App::Start()
 		capped_ms = 1000 / cap;
 	}
 
-	std::list<j1Module*>::const_iterator item;
+	std::list<Module*>::const_iterator item;
 	item = modules.begin();
 
 	while (item != modules.end())
@@ -245,9 +245,9 @@ void j1App::FinishUpdate()
 bool j1App::PreUpdate()
 {
 	bool ret = true;
-	std::list<j1Module*>::const_iterator item;
+	std::list<Module*>::const_iterator item;
 	item = modules.begin();
-	j1Module* pModule = NULL;
+	Module* pModule = NULL;
 
 	for (item = modules.begin(); item != modules.end() && ret == true; item++)
 	{
@@ -267,9 +267,9 @@ bool j1App::PreUpdate()
 bool j1App::DoUpdate()
 {
 	bool ret = true;
-	std::list <j1Module*>::const_iterator item;
+	std::list <Module*>::const_iterator item;
 	item = modules.begin();
-	j1Module* pModule = NULL;
+	Module* pModule = NULL;
 
 	for (item = modules.begin(); item != modules.end() && ret == true; item++)
 	{
@@ -289,8 +289,8 @@ bool j1App::DoUpdate()
 bool j1App::PostUpdate()
 {
 	bool ret = true;
-	std::list<j1Module*>::const_iterator item;
-	j1Module* pModule = NULL;
+	std::list<Module*>::const_iterator item;
+	Module* pModule = NULL;
 
 	for (item = modules.begin(); item != modules.end() && ret == true; item++)
 	{
@@ -311,7 +311,7 @@ bool j1App::CleanUp()
 {
 	PERF_START(ptimer);
 	bool ret = true;
-	std::list<j1Module*>::reverse_iterator item;
+	std::list<Module*>::reverse_iterator item;
 	item = modules.rbegin();
 
 	while (item != modules.rend() && ret == true)
@@ -389,7 +389,7 @@ bool j1App::LoadGameNow()
 
 		root = data.child("game_state");
 
-		std::list<j1Module*>::const_iterator item = modules.begin();
+		std::list<Module*>::const_iterator item = modules.begin();
 		ret = true;
 
 		while (item != modules.end() && ret == true)
@@ -424,7 +424,7 @@ bool j1App::SavegameNow() const
 
 	root = data.append_child("game_state");
 
-	std::list<j1Module*>::const_iterator item = modules.begin();
+	std::list<Module*>::const_iterator item = modules.begin();
 
 	while (item != modules.end() && ret == true)
 	{

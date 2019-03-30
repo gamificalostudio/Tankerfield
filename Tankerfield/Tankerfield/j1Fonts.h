@@ -12,7 +12,7 @@ using namespace std;
 struct SDL_Texture;
 struct _TTF_Font;
 
-class j1Fonts : public j1Module
+class j1Fonts : public Module
 {
 public:
 

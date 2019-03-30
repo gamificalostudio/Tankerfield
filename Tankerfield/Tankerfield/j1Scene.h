@@ -7,7 +7,7 @@
 struct SDL_Texture;
 struct Controller;
 
-class j1Scene : public j1Module
+class j1Scene : public Module
 {
 private:
 	Controller** control1 = nullptr;

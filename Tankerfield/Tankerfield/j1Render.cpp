@@ -4,7 +4,7 @@
 #include "j1Window.h"
 #include "j1Render.h"
 
-j1Render::j1Render() : j1Module()
+j1Render::j1Render() : Module()
 {
 	name.assign("renderer");
 	background.r = 0;

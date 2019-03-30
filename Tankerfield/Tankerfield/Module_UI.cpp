@@ -18,7 +18,7 @@
 #include "Checkbox.h"
 #include "Text_Panel.h"
 
-Module_UI::Module_UI() : j1Module()
+Module_UI::Module_UI() : Module()
 {
 	name.assign("Module UI");
 	main_object = new UI_Object({ 0,0 }, UI_Object_Definition(), nullptr);

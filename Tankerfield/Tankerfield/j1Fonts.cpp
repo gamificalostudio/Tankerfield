@@ -10,7 +10,7 @@
 
 
 
-j1Fonts::j1Fonts() : j1Module()
+j1Fonts::j1Fonts() : Module()
 {
 	name = "fonts";
 }

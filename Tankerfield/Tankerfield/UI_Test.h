@@ -7,7 +7,7 @@
 
 struct SDL_Texture;
 
-class UI_Test : public j1Module, public Gui_Listener
+class UI_Test : public Module, public Gui_Listener
 {
 public:
 

@@ -21,7 +21,7 @@ enum ObjectType
 
 class Object;
 
-class ObjectManager : public j1Module
+class ObjectManager : public Module
 {
 public:
 

@@ -9,14 +9,14 @@
 struct _Mix_Music;
 struct Mix_Chunk;
 
-class j1Audio : public j1Module
+class M_Audio : public Module
 {
 public:
 	// Constructor
-	j1Audio();
+	M_Audio();
 
 	// Destructor
-	virtual ~j1Audio();
+	virtual ~M_Audio();
 
 	// Called before quitting
 	bool CleanUp();

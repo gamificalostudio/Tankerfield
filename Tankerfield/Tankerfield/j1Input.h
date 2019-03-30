@@ -111,7 +111,7 @@ public:
 	friend class j1Input;
 };
 
-class j1Input : public j1Module
+class j1Input : public Module
 {
 
 public:
