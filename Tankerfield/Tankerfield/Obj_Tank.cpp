@@ -76,7 +76,7 @@ bool Obj_Tank::Update(float dt)
 
 		if(!joystick.IsZero())
 		{
-			angle = atan2(joystick.y, joystick.x) * RADTODEG;
+			angle = atan2(joystick.y, -joystick.x) * RADTODEG;
 		}
 	}
 	return true;
