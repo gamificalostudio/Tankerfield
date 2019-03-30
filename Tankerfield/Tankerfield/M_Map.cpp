@@ -91,14 +91,14 @@ bool M_Map::Update(float dt)
 	{
 		point_1 = MapToWorld(i, 0) ;
 		point_2 = MapToWorld(i, rows);
-		app->render->DrawLine(point_1.x + (int)(tile_width*0.5), point_1.y, point_2.x + (int)(tile_width*0.5), point_2.y, 255, 255, 255, 255, true);
+		app->render->DrawLine(point_1.x /*+ (int)(tile_width*0.5)*/, point_1.y, point_2.x /*+ (int)(tile_width*0.5)*/, point_2.y, 255, 255, 255, 255, true);
 	}
 
 	for (int i = 0; i <= rows; ++i)
 	{
 		point_1 = MapToWorld(0, i);
 		point_2 = MapToWorld(columms, i);
-		app->render->DrawLine(point_1.x + (int)(tile_width*0.5), point_1.y, point_2.x + (int)(tile_width*0.5), point_2.y, 255, 255, 255, 255, true);
+		app->render->DrawLine(point_1.x /*+ (int)(tile_width*0.5)*/, point_1.y, point_2.x /*+ (int)(tile_width*0.5)*/, point_2.y, 255, 255, 255, 255, true);
 	}
 
 	
@@ -403,6 +403,32 @@ iPoint M_Map::WorldToMap(int x, int y) const
 		float half_height = data.tile_height * 0.5f;
 		ret.x = int((x / half_width + y / half_height) / 2) - 1;
 		ret.y = int((y / half_height - (x / half_width)) / 2);
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
+	}
+	return ret;
+}
+
+fPoint M_Map::WorldToMapF(int x, int y)
+{
+	fPoint ret(0, 0);
+
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		ret.x = x / data.tile_width;
+		ret.y = y / data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+
+		float half_width = data.tile_width * 0.5f;
+		float half_height = data.tile_height * 0.5f;
+		ret.x = ((x / half_width) + y / half_height) * 0.5f;
+		ret.y = ((y / half_height) - x / half_width) * 0.5f;
+		return ret;
 	}
 	else
 	{

@@ -3,6 +3,7 @@
 #include "M_UITest.h"
 #include "M_Input.h"
 #include "M_Render.h"
+#include "M_Map.h"
 
 
 
@@ -30,7 +31,7 @@ Obj_BasicShoot::Obj_BasicShoot(int x, int y) : Object(x, y)
 	mouse_position.y += app->render->camera.y;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_position = app->ui_test->WorldToMapF(mouse_position, 100, 50);
+	fPoint map_mouse_position = app->map->WorldToMapF(mouse_position.x, mouse_position.y);
 
 	direction = map_mouse_position - pos;
 

@@ -210,7 +210,10 @@ public:
 
 
 	iPoint MapToWorld(int column, int row) const;
+
 	iPoint WorldToMap(int x, int y) const;
+	fPoint WorldToMapF(int x, int y);
+
 	TileSet* GetTilesetFromTileId(int id) const;
 };
 #endif // __j1MAP_H__
