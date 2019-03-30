@@ -148,6 +148,25 @@ public:
 		}
 	}
 
+	//Rotate a vector in radians
+	p2Point Rotate(float angle) {
+		p2Point aux = (*this);
+		float angle_cos = cosf(angle);
+		float angle_sin = sinf(angle);
+		x = aux.x * angle_cos - aux.y * angle_sin;
+		y = aux.x * angle_sin + aux.y * angle_cos;
+	}
+
+	//Rotate a vector in degrees
+	p2Point RotateDegree(float angle) {
+		angle *= RADTODEG;
+		p2Point aux = (*this);
+		float angle_cos = cosf(angle);
+		float angle_sin = sinf(angle);
+		x = aux.x * angle_cos - aux.y * angle_sin;
+		y = aux.x * angle_sin + aux.y * angle_cos;
+	}
+
 	explicit operator p2Point<int> () const
 	{
 		return p2Point<int>((int)x, (int)y);
