@@ -9,6 +9,8 @@
 #include "M_Input.h"
 #include "Log.h"
 #include "M_UITest.h"
+#include "M_ObjManager.h"
+#include "PerfTimer.h"
 
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
@@ -45,6 +47,7 @@ bool Obj_Tank::Start()
 	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
 	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	Obj_Tank::time_between_bullets = tank_node.child("time_between_bullets").attribute("value").as_float();
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
@@ -67,6 +70,12 @@ bool Obj_Tank::Update(float dt)
 {
 	Movement(dt);
 
+	if (IsShooting())
+	{
+		Shoot();
+	}
+	
+	app->ui_test->DrawIsometricQuad(pos.x, pos.y, 1, 1);
 	return true;
 }
 
@@ -130,4 +139,33 @@ bool Obj_Tank::PostUpdate()
 bool Obj_Tank::CleanUp()
 {
 	return true;
+}
+
+bool Obj_Tank::IsShooting()
+{
+	return app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT;
+}
+
+void Obj_Tank::Shoot()
+{
+	// Create basic bullet
+	if (!IsHold())
+	{
+		app->objectmanager->CreateObject(BASIC_BULLET, pos.x, pos.y);
+		time_between_bullets_timer.Start();
+	}
+	else
+	{
+
+		if (time_between_bullets_timer.ReadMs() >= time_between_bullets)
+		{
+			app->objectmanager->CreateObject(BASIC_BULLET, pos.x, pos.y);
+			time_between_bullets_timer.Start();
+		}
+	}
+}
+
+bool Obj_Tank::IsHold()
+{
+	return app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT;
 }

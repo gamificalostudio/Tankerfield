@@ -6360,6 +6360,7 @@
     </sprites>
     <tank>
       <speed value ="1"/>
+      <time_between_bullets value ="100"/>
       <spritesheets>
         <base>textures/objects/tank/base.png</base>
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>

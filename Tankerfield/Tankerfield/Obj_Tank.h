@@ -25,6 +25,9 @@ private:
 	void Movement(float dt);
 	void GetKeyboardInput(fPoint & input);
 	void GetControllerInput(fPoint & input);
+	bool IsShooting();
+	void Shoot();
+	bool IsHold();
 
 public:
 
@@ -44,6 +47,9 @@ private:
 
 	float cos_45 = 0.f;
 	float sin_45 = 0.f;
+
+	PerfTimer time_between_bullets_timer;
+	float time_between_bullets = 0.f;
 };
 
 #endif

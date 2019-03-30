@@ -149,7 +149,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
 	case ObjectType::TANK:
 		ret = new Obj_Tank(x, y);
 		ret->type = TANK;
-		player = ret;
 		break;
 	case ObjectType::BASIC_BULLET:
 		ret = new Obj_BasicShoot(x, y);

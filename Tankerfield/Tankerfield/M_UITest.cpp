@@ -166,11 +166,7 @@ bool M_UITest::Update(float dt)
 	//DrawIsometricQuad(player_pos.x - .5f, player_pos.y - .5f, 1, 1);
 	DrawIsometricBox(player_pos.x - .5f, player_pos.y - .5f, 1, 1, 100);
 
-	// Create basic bullet
-	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
-		app->objectmanager->CreateObject(BASIC_BULLET, app->objectmanager->player->pos.x, app->objectmanager->player->pos.y);
 
-	DrawIsometricQuad(app->objectmanager->player->pos.x, app->objectmanager->player->pos.y, 1, 1);
 	return true;
 }
 

@@ -14,22 +14,7 @@ Obj_Weapon::Obj_Weapon() : Object()
 Obj_Weapon::Obj_Weapon(int x, int y) : Object(x, y)
 {
 
-	//Direction of the bullet ===========
-	iPoint mouse_position = { 0,0 };
-	app->input->GetMousePosition(mouse_position.x, mouse_position.y);
-
-	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_position.x += -app->render->camera.x;
-	mouse_position.y += -app->render->camera.y;
-
-	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_position = app->ui_test->WorldToMapF(mouse_position, 100, 50);
-
-	direction = map_mouse_position - pos;
-
-	//Normilize vector
-	float norm = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
-	direction /= norm;
+	CalculateDirection();
 
 	//Start life timer ====
 	bullet_life_timer.Start();
@@ -72,4 +57,31 @@ bool Obj_Weapon::PostUpdate()
 bool Obj_Weapon::CleanUp()
 {
 	return true;
+}
+
+void Obj_Weapon::CalculateDirection()
+{
+	//Direction of the bullet ===========
+	iPoint mouse_position = { 0,0 };
+	app->input->GetMousePosition(mouse_position.x, mouse_position.y);
+
+	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
+	mouse_position.x += app->render->camera.x;
+	mouse_position.y += app->render->camera.y;
+
+	//Transform to map to work all variables in map(blit do MapToWorld automatically)
+	fPoint map_mouse_position = app->ui_test->WorldToMapF(mouse_position, 100, 50);
+
+	direction = map_mouse_position - pos;
+
+	NormilizeVector(direction);
+
+
+}
+
+void Obj_Weapon::NormilizeVector(fPoint& vector)
+{
+	//Normilize vector
+	float norm = sqrtf((vector.x*vector.x) + (vector.y*vector.y));
+	vector /= norm;
 }

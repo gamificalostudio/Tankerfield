@@ -50,8 +50,6 @@ public:
 private:
 	std::list<Object*> objects;
 
-public:
-	Object* player = nullptr;
 };
 
 #endif

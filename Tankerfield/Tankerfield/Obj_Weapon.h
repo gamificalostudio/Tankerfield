@@ -19,6 +19,9 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 
+	void CalculateDirection();
+	void NormilizeVector(fPoint& vector);
+
 protected:
 
 	float speed;
