@@ -3,8 +3,19 @@
 #include "M_UITest.h"
 #include "M_Input.h"
 #include "M_Render.h"
+#include "M_ObjManager.h"
+#include "Obj_Bullet.h"
+#include "App.h"
 
-Weapon::Weapon(int damage, float speed, float life, ObjectType type)
+Weapon::Weapon()
+{
+}
+
+Weapon::Weapon(int damage, float speed, float life, ObjectType type):
+	damage(damage),
+	speed(speed),
+	bullet_life_ms(life),
+	bullet_type(type)
 {
 }
 
@@ -14,6 +25,9 @@ Weapon::~Weapon()
 
 void Weapon::Shoot()
 {
+	//Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type);
+	//bullet->direction = CalculateDirection();
+	//bullet->life = bullet_life_ms;
 	//Calculate direction
 	//Bullet * obj = CreateObject(obj_type)
 	//bullet->damage = ...;

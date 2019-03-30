@@ -126,7 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Obj_Bullet.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
@@ -163,7 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Obj_Bullet.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Checkbox.h" />

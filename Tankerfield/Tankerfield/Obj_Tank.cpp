@@ -56,9 +56,9 @@ bool Obj_Tank::Start()
 	sin_45 = sinf(-45 * DEGTORAD);
 
 
-	//weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
+	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	//weapons[WEAPON_TYPE::SNIPER] = new Weapon();
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10, 10, BASIC_BULLET);
 
 	return true;
 }
@@ -157,7 +157,7 @@ void Obj_Tank::Shoot()
 	// Create basic bullet
 	if (!IsHold())
 	{
-		//weapons[weapon_type]->Shoot();
+		weapons[weapon_type]->Shoot();
 		//weapon->Shoot();
 		//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
 		time_between_bullets_timer.Start();
@@ -167,7 +167,7 @@ void Obj_Tank::Shoot()
 
 		if (time_between_bullets_timer.ReadMs() >= time_between_bullets)
 		{
-			//weapons[weapon_type]->Shoot();
+			weapons[weapon_type]->Shoot();
 			//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
 			time_between_bullets_timer.Start();
 		}

@@ -1,4 +1,4 @@
-#include "Bullet.h"
+#include "Obj_Bullet.h"
 
 Obj_Bullet::Obj_Bullet()
 {

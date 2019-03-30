@@ -6,6 +6,9 @@
 class Weapon_Flamethrower : public Weapon
 {
 public:
+	Weapon_Flamethrower();
+
+public:
 	void Shoot() override;
 };
 

@@ -94,7 +94,7 @@
       <Filter>Modules\Weapons</Filter>
     </ClCompile>
     <ClCompile Include="Weapon_Flamethrower .cpp" />
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Modules\Objects\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
@@ -205,7 +205,7 @@
     <ClInclude Include="Weapon_Flamethrower .h">
       <Filter>Modules\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="Obj_Bullet.h">
       <Filter>Modules\Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>

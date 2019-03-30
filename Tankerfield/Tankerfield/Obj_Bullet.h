@@ -19,7 +19,7 @@ public:
 		//Sound
 	//}
 
-protected:
+public:
 	float speed = 0.f;
 	fPoint direction = { 0.f, 0.f };
 	int damage = 0;

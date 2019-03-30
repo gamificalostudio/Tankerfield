@@ -9,6 +9,7 @@ struct Controller;
 struct SDL_Texture;
 
 enum class WEAPON_TYPE {
+	BASIC,
 	FLAMETHROWER,
 	MAX
 };

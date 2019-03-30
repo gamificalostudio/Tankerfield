@@ -3,7 +3,7 @@
 
 #include "PerfTimer.h"
 #include "Point.h"
-#include "Bullet.h"
+#include "Obj_Bullet.h"
 
 struct SDL_Texture;
 
