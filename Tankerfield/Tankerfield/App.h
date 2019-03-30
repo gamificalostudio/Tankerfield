@@ -115,11 +115,11 @@ private:
 	std::string			load_game;
 	mutable std::string	save_game;
 
-	j1PerfTimer			ptimer;
+	PerfTimer			ptimer;
 	uint64				frame_count = 0;
-	j1Timer				startup_time;
-	j1Timer				frame_time;
-	j1Timer				last_sec_frame_time;
+	Timer				startup_time;
+	Timer				frame_time;
+	Timer				last_sec_frame_time;
 	uint32				last_sec_frame_count = 0;
 	uint32				prev_last_sec_frame_count = 0;
 	float				dt = 0.0f;

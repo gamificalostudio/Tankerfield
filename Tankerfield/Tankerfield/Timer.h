@@ -3,12 +3,12 @@
 
 #include "Defs.h"
 
-class j1Timer
+class Timer
 {
 public:
 
 	// Constructor
-	j1Timer();
+	Timer();
 
 	void Start();
 	uint32 Read() const;

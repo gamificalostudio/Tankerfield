@@ -23,7 +23,7 @@ private:
 
 	float speed;
 	fPoint direction;
-	j1PerfTimer bullet_life_timer;
+	PerfTimer bullet_life_timer;
 	float bullet_life_ms;
 
 };

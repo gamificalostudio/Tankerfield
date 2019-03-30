@@ -3,12 +3,12 @@
 
 #include "Defs.h"
 
-class j1PerfTimer
+class PerfTimer
 {
 public:
 
 	// Constructor
-	j1PerfTimer();
+	PerfTimer();
 
 	void Start();
 	double ReadMs() const;
