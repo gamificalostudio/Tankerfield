@@ -179,7 +179,7 @@ struct MapData
 	Properties				map_properties;
 };
 
-class j1Map : public Module
+class M_Map : public Module
 {
 public:
 	MapData data;
@@ -200,8 +200,8 @@ private:
 	
 
 public:
-	j1Map();
-	~j1Map();
+	M_Map();
+	~M_Map();
 
 	bool Awake(pugi::xml_node&) override;
 	bool Update(float dt) override;

@@ -4,15 +4,15 @@
 #include "M_Map.h"
 #include "p2Log.h"
 
-j1Map::j1Map()
+M_Map::M_Map()
 {
 	name = "map";
 }
 
-j1Map::~j1Map()
+M_Map::~M_Map()
 {
 }
-bool j1Map::Awake(pugi::xml_node& config)
+bool M_Map::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Map Parser");
 	bool ret = true;
@@ -41,7 +41,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 	return true;
 }
 
-bool j1Map::Update(float dt)
+bool M_Map::Update(float dt)
 {
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
@@ -70,7 +70,7 @@ bool j1Map::Update(float dt)
 						iPoint pos = MapToWorld(x, y);
 
 
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+						app->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
 					}
 				}
@@ -80,7 +80,7 @@ bool j1Map::Update(float dt)
 	return ret;
 }
 
-bool j1Map::Load(const std::string& file_name)
+bool M_Map::Load(const std::string& file_name)
 {
 	bool ret = true;
 	std::string tmp = folder + file_name;
@@ -141,7 +141,7 @@ bool j1Map::Load(const std::string& file_name)
 	return ret;
 }
 
-void j1Map::DebugMap() 
+void M_Map::DebugMap() 
 {
 	//LOG("Successfully parsed map XML file: %s", data.loadedLevel);
 	LOG("width: %d height: %d", data.columns, data.rows);
@@ -166,7 +166,7 @@ void j1Map::DebugMap()
 
 }
 
-bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
+bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 {
 	bool ret = true;
 
@@ -197,7 +197,7 @@ bool j1Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	return ret;
 }
 
-bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
+bool M_Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
 	pugi::xml_node image = tileset_node.child("image");
@@ -209,7 +209,7 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	}
 	else
 	{
-		set->texture = App->tex->Load(PATH(folder.c_str(), image.attribute("source").as_string()));
+		set->texture = app->tex->Load(PATH(folder.c_str(), image.attribute("source").as_string()));
 		int w, h;
 		SDL_QueryTexture(set->texture, NULL, NULL, &w, &h);
 		set->tex_width = image.attribute("width").as_int();
@@ -245,7 +245,7 @@ bool j1Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
-bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
+bool M_Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
 
@@ -272,7 +272,7 @@ bool j1Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 }
 
 // Load map general properties
-bool j1Map::LoadMap()
+bool M_Map::LoadMap()
 {
 	bool ret = true;
 	pugi::xml_node map = map_file.child("map");
@@ -328,7 +328,7 @@ SDL_Rect TileSet::GetTileRect(int id) const
 	return rect;
 }
 
-TileSet* j1Map::GetTilesetFromTileId(int id) const
+TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
 	std::list<TileSet*>::const_reverse_iterator item = data.tilesets.rbegin();
 	for (item; item != data.tilesets.rend() && id < (*item)->firstgid; ++item)
@@ -338,7 +338,7 @@ TileSet* j1Map::GetTilesetFromTileId(int id) const
 	return (*item);
 }
 
-iPoint j1Map::MapToWorld(int column, int row) const
+iPoint M_Map::MapToWorld(int column, int row) const
 {
 	iPoint retVec(0, 0);
 	switch (data.type) {
@@ -358,7 +358,7 @@ iPoint j1Map::MapToWorld(int column, int row) const
 	return retVec;
 }
 
-iPoint j1Map::WorldToMap(int x, int y) const
+iPoint M_Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
 

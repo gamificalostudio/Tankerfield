@@ -13,27 +13,27 @@
 
 
 class j1Window;
-class j1Input;
-class j1Render;
+class M_Input;
+class M_Render;
 class j1Textures;
 class M_Audio;
 class UI_Test;
-class j1PathFinding;
-class j1Map;
-class j1Fonts;
+class M_Pathfinding;
+class M_Map;
+class M_Fonts;
 class Module_UI;
 class ObjectManager;
 class SceneManager;
 class M_Scene;
 
-class j1App
+class App
 {
 public:
 	// Constructor
-	j1App(int argc, char* args[]);
+	App(int argc, char* args[]);
 
 	// Destructor
-	virtual ~j1App();
+	virtual ~App();
 
 	// Called before render is available
 	bool Awake();
@@ -86,14 +86,14 @@ private:
 public:
 	// Modules
 	j1Window*			win = nullptr;
-	j1Input*			input = nullptr;
-	j1Render*			render = nullptr;
+	M_Input*			input = nullptr;
+	M_Render*			render = nullptr;
 	j1Textures*			tex = nullptr;
 	M_Audio*			audio = nullptr;
 	UI_Test*			ui_test = nullptr;
-	j1PathFinding*		pathfinding = nullptr;
-	j1Map*				map = nullptr;
-	j1Fonts*            font = nullptr;
+	M_Pathfinding*		pathfinding = nullptr;
+	M_Map*				map = nullptr;
+	M_Fonts*            font = nullptr;
 	Module_UI*          ui = nullptr;
 	ObjectManager*		objectmanager = nullptr;
 	SceneManager*		scmanager = nullptr;
@@ -130,6 +130,6 @@ private:
 	pugi::xml_node		app_config;
 };
 
-extern j1App* App;
+extern App* app;
 
 #endif

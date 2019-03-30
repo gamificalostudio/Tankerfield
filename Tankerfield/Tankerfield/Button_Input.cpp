@@ -18,17 +18,17 @@ Button::~Button()
 {
 	if (label != nullptr)
 	{
-		App->ui->DeleteObject(label);
+		app->ui->DeleteObject(label);
 		label = nullptr;
 	}
 }
 
 bool Button::Draw()
 {
-	ClickState state = App->ui->GetClickState();
+	ClickState state = app->ui->GetClickState();
 	SDL_Rect current_frame;
 
-	if (App->ui->GetClickedObject() == this && state != ClickState::None &&  state != ClickState::Out)
+	if (app->ui->GetClickedObject() == this && state != ClickState::None &&  state != ClickState::Out)
 	{
 		current_frame = definition.pushed_rect;
 	}
@@ -44,7 +44,7 @@ bool Button::Draw()
 	section.w = current_frame.w;
 	section.h = current_frame.h;
 	
-	App->render->Blit(App->ui->GetAtlas(), position.x - section.w*0.5f, position.y - section.h*0.5f, &current_frame, false, 0.0f);
+	app->render->Blit(app->ui->GetAtlas(), position.x - section.w*0.5f, position.y - section.h*0.5f, &current_frame, false, 0.0f);
 
 	return true;
 }
@@ -53,11 +53,11 @@ bool Button::SetLabel(const fPoint position, const String text , const Label_Def
 {
 	if (label != nullptr)
 	{
-		App->ui->DeleteObject(label);
+		app->ui->DeleteObject(label);
 		label = nullptr;
 	}
 
-	label = App->ui->CreateLabel(position + this->position, text, definition, this);
+	label = app->ui->CreateLabel(position + this->position, text, definition, this);
 	label->SetParent(this);
 
 	return true;
@@ -70,7 +70,7 @@ void Button::SetDefinition(Button_Definition definition)
 
 bool Button::PreUpdate()
 {
-	if (hover_state == HoverState::On && App->ui->GetClickedObject() != this)
+	if (hover_state == HoverState::On && app->ui->GetClickedObject() != this)
 	{
 		// TODO 1: Add SFX  
 	}
@@ -85,9 +85,9 @@ bool Button::Update(float dt)
 		return true;
 	}
 
-	if (this == App->ui->GetClickedObject())
+	if (this == app->ui->GetClickedObject())
 	{
-		ClickState state = App->ui->GetClickState();
+		ClickState state = app->ui->GetClickState();
 		
 		switch (state)
 		{

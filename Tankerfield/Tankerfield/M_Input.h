@@ -40,7 +40,7 @@ enum class Joystick
 	INVALID
 };
 
-class j1Input;
+class M_Input;
 
 struct Controller
 {
@@ -108,18 +108,18 @@ public:
 			return 0;
 	}
   
-	friend class j1Input;
+	friend class M_Input;
 };
 
-class j1Input : public Module
+class M_Input : public Module
 {
 
 public:
 
-	j1Input();
+	M_Input();
 
 	// Destructor
-	virtual ~j1Input();
+	virtual ~M_Input();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&) override;

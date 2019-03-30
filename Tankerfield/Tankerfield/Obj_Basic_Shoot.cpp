@@ -15,7 +15,7 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 {
 
 	//Load XML var ============
-	pugi::xml_node basic_bullet_node = App->config.child("object").child("basic_bullet");
+	pugi::xml_node basic_bullet_node = app->config.child("object").child("basic_bullet");
 
 	speed = basic_bullet_node.child("speed").attribute("value").as_float();
 	bullet_life_ms = basic_bullet_node.child("life").attribute("value").as_float();
@@ -23,14 +23,14 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 
 	//Direction of the bullet ===========
 	iPoint mouse_position = { 0,0 };
-	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
+	app->input->GetMousePosition(mouse_position.x, mouse_position.y);
 
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_position.x += -App->render->camera.x;
-	mouse_position.y += -App->render->camera.y;
+	mouse_position.x += -app->render->camera.x;
+	mouse_position.y += -app->render->camera.y;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_position = App->ui_test->WorldToMapF(mouse_position, 100, 50);
+	fPoint map_mouse_position = app->ui_test->WorldToMapF(mouse_position, 100, 50);
 
 	direction = map_mouse_position - pos;
 
@@ -69,7 +69,7 @@ bool Obj_Basic_Shoot::Update(float dt)
 	pos.y += speed * direction.y * dt;
 
 	//Draw ========================
-	App->ui_test->DrawIsometricQuad(pos.x, pos.y, 0.75f, 0.5f);
+	app->ui_test->DrawIsometricQuad(pos.x, pos.y, 0.75f, 0.5f);
 	
 	return true;
 }

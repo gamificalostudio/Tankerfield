@@ -20,7 +20,7 @@ Checkbox::Checkbox(const fPoint position, const Checkbox_Definition definition, 
 		def = definition.check_off_button;
 	}
 
-	button = App->ui->CreateButton(position, def, this);
+	button = app->ui->CreateButton(position, def, this);
 	button->SetParent(this);
 }
 
@@ -28,7 +28,7 @@ Checkbox::~Checkbox()
 {
 	if (button != nullptr)
 	{
-		App->ui->DeleteObject(button);
+		app->ui->DeleteObject(button);
 		button = nullptr;
 	}
 }

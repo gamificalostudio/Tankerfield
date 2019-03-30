@@ -13,7 +13,7 @@ Slider::Slider(const fPoint position, const Slider_Definition definition, Gui_Li
 	section.w = definition.rail_draw_rect.w;
 	section.h = definition.rail_draw_rect.h;
 
-	thumb = App->ui->CreateButton(position, definition.thumb_definition, this);
+	thumb = app->ui->CreateButton(position, definition.thumb_definition, this);
 	thumb->SetParent(this);
 	thumb->IsDraggable(true);
 
@@ -28,14 +28,14 @@ Slider::~Slider()
 {
 	if (thumb != nullptr)
 	{
-		App->ui->DeleteObject(thumb);
+		app->ui->DeleteObject(thumb);
 		thumb = nullptr;
 	}
 }
 
 bool Slider::Draw()
 {
-	App->render->Blit(App->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f , position.y - definition.rail_draw_rect.h * 0.5f, &definition.rail_draw_rect, false, 0.0f);
+	app->render->Blit(app->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f , position.y - definition.rail_draw_rect.h * 0.5f, &definition.rail_draw_rect, false, 0.0f);
 	return true;
 }
 

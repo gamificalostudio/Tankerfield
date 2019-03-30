@@ -4,7 +4,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 
-j1Render::j1Render() : Module()
+M_Render::M_Render() : Module()
 {
 	name.assign("renderer");
 	background.r = 0;
@@ -14,11 +14,11 @@ j1Render::j1Render() : Module()
 }
 
 // Destructor
-j1Render::~j1Render()
+M_Render::~M_Render()
 {}
 
 // Called before render is available
-bool j1Render::Awake(pugi::xml_node& config)
+bool M_Render::Awake(pugi::xml_node& config)
 {
 	LOG("Create SDL rendering context");
 	bool ret = true;
@@ -31,7 +31,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 		LOG("Using vsync");
 	}
 
-	renderer = SDL_CreateRenderer(App->win->window, -1, flags);
+	renderer = SDL_CreateRenderer(app->win->window, -1, flags);
 
 	if (renderer == NULL)
 	{
@@ -40,8 +40,8 @@ bool j1Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
-		camera.w = App->win->screen_surface->w;
-		camera.h = App->win->screen_surface->h;
+		camera.w = app->win->screen_surface->w;
+		camera.h = app->win->screen_surface->h;
 		camera.x = 0;
 		camera.y = 0;
 	}
@@ -50,7 +50,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool j1Render::Start()
+bool M_Render::Start()
 {
 	LOG("render start");
 	// back background
@@ -59,13 +59,13 @@ bool j1Render::Start()
 }
 
 // Called each loop iteration
-bool j1Render::PreUpdate()
+bool M_Render::PreUpdate()
 {
 	SDL_RenderClear(renderer);
 	return true;
 }
 
-bool j1Render::PostUpdate()
+bool M_Render::PostUpdate()
 {
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
@@ -73,7 +73,7 @@ bool j1Render::PostUpdate()
 }
 
 // Called before quitting
-bool j1Render::CleanUp()
+bool M_Render::CleanUp()
 {
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
@@ -81,7 +81,7 @@ bool j1Render::CleanUp()
 }
 
 // Load Game State
-bool j1Render::Load(pugi::xml_node& data)
+bool M_Render::Load(pugi::xml_node& data)
 {
 	camera.x = data.child("camera").attribute("x").as_int();
 	camera.y = data.child("camera").attribute("y").as_int();
@@ -90,7 +90,7 @@ bool j1Render::Load(pugi::xml_node& data)
 }
 
 // Save Game State
-bool j1Render::Save(pugi::xml_node& data) const
+bool M_Render::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node cam = data.append_child("camera");
 
@@ -100,25 +100,25 @@ bool j1Render::Save(pugi::xml_node& data) const
 	return true;
 }
 
-void j1Render::SetBackgroundColor(SDL_Color color)
+void M_Render::SetBackgroundColor(SDL_Color color)
 {
 	background = color;
 }
 
-void j1Render::SetViewPort(const SDL_Rect& rect)
+void M_Render::SetViewPort(const SDL_Rect& rect)
 {
 	SDL_RenderSetViewport(renderer, &rect);
 }
 
-void j1Render::ResetViewPort()
+void M_Render::ResetViewPort()
 {
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
-iPoint j1Render::ScreenToWorld(int x, int y) const
+iPoint M_Render::ScreenToWorld(int x, int y) const
 {
 	iPoint ret;
-	int scale = App->win->GetScale();
+	int scale = app->win->GetScale();
 
 	ret.x = (x - camera.x / scale);
 	ret.y = (y - camera.y / scale);
@@ -127,10 +127,10 @@ iPoint j1Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 {
 	bool ret = true;
-	uint scale = App->win->GetScale();
+	uint scale = app->win->GetScale();
 
 	SDL_Rect rect;
 	rect.x = (int)(camera.x * speed) + x * scale;
@@ -168,10 +168,10 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	return ret;
 }
 
-bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
+bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
-	uint scale = App->win->GetScale();
+	uint scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -196,10 +196,10 @@ bool j1Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	return ret;
 }
 
-bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool M_Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	uint scale = App->win->GetScale();
+	uint scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -220,10 +220,10 @@ bool j1Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	return ret;
 }
 
-bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	uint scale = App->win->GetScale();
+	uint scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);

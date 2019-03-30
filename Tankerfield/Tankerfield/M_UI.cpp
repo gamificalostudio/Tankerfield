@@ -40,7 +40,7 @@ bool Module_UI::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Module_UI::Start()
 {
-	atlas = App->tex->Load("textures/ui/atlas.png");
+	atlas = app->tex->Load("textures/ui/atlas.png");
 	return true;
 }
 
@@ -49,7 +49,7 @@ bool Module_UI::CleanUp()
 {
 	LOG("Freeing all UI objects");
 
-	App->tex->UnLoad(atlas);
+	app->tex->UnLoad(atlas);
 	atlas = nullptr;
 
 	list<UI_Object*>::iterator object;
@@ -71,11 +71,11 @@ bool Module_UI::CleanUp()
 bool Module_UI::PreUpdate()
 {
 	int x_mouse = 0, y_mouse = 0;
-	App->input->GetMousePosition(x_mouse, y_mouse);
+	app->input->GetMousePosition(x_mouse, y_mouse);
 	mouse_position = { (float)x_mouse ,(float)y_mouse };
 	
 	// Debug ===================================================
-	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 		debug = !debug;
 
 	// Hover States ============================================
@@ -120,19 +120,19 @@ bool Module_UI::PreUpdate()
 	}
 
 	// Click States ============================================
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		SelectClickedObject();
 	}
-	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
 	{
 		click_state = ClickState::Repeat;
 	}
-	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
 	{
 		click_state = ClickState::Out;
 	}
-	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
 
 	{
 		click_state = ClickState::None;
@@ -447,15 +447,15 @@ void Module_UI::DrawUI(UI_Object * object)
 
 		if (selected_object == object)
 		{
-			App->render->DrawQuad(rect, 255, 233, 15, 100, true, true);
+			app->render->DrawQuad(rect, 255, 233, 15, 100, true, true);
 		}
 		else if (object->hover_state != HoverState::None )
 		{
-			App->render->DrawQuad(rect, 255, 0, 0, 100, true, true);
+			app->render->DrawQuad(rect, 255, 0, 0, 100, true, true);
 		}
 		else
 		{
-			App->render->DrawQuad(rect, 255, 100, 40, 100, true, true);
+			app->render->DrawQuad(rect, 255, 100, 40, 100, true, true);
 		}
 	}
 

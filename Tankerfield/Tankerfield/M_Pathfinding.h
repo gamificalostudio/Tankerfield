@@ -10,14 +10,14 @@
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
-class j1PathFinding : public Module
+class M_Pathfinding : public Module
 {
 public:
 
-	j1PathFinding();
+	M_Pathfinding();
 
 	// Destructor
-	~j1PathFinding();
+	~M_Pathfinding();
 
 	// Called before quitting
 	bool CleanUp();

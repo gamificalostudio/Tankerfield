@@ -12,14 +12,14 @@ using namespace std;
 struct SDL_Texture;
 struct _TTF_Font;
 
-class j1Fonts : public Module
+class M_Fonts : public Module
 {
 public:
 
-	j1Fonts();
+	M_Fonts();
 
 	// Destructor
-	virtual ~j1Fonts();
+	virtual ~M_Fonts();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);

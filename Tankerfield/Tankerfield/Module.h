@@ -4,7 +4,7 @@
 #include <string>
 #include "PugiXml/src/pugixml.hpp"
 
-class j1App;
+class App;
 
 class Module
 {

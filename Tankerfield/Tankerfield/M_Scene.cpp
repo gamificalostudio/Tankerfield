@@ -33,11 +33,11 @@ bool M_Scene::Awake()
 bool M_Scene::Start()
 {
 	// Load the first level of the list on first game start -------------------------
-	std::list<Levels*>::iterator levelData = App->map->levels.begin();
+	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
-	App->map->Load((*levelData)->name.c_str());
+	app->map->Load((*levelData)->name.c_str());
 
-	App->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
+	app->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
 	
 	return true;
 }
@@ -45,9 +45,9 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
-	if (App->input->controllers.size())
+	if (app->input->controllers.size())
 	{
-		control1 = &(*App->input->controllers.begin());
+		control1 = &(*app->input->controllers.begin());
 	}
 
 
@@ -57,17 +57,17 @@ bool M_Scene::PreUpdate()
 // Called each loop iteration
 bool M_Scene::Update(float dt)
 {
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += floor(200.0f * dt);
+	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		app->render->camera.y += floor(200.0f * dt);
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= floor(200.0f * dt);
+	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		app->render->camera.y -= floor(200.0f * dt);
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += floor(200.0f * dt);
+	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		app->render->camera.x += floor(200.0f * dt);
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= floor(200.0f * dt);
+	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		app->render->camera.x -= floor(200.0f * dt);
 
 	return true;
 }
@@ -77,7 +77,7 @@ bool M_Scene::PostUpdate()
 {
 	bool ret = true;
 
-	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	
 	return ret;

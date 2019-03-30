@@ -96,16 +96,16 @@ bool TeslaTrooper::PreUpdate()
 
 bool TeslaTrooper::Update(float dt)
 {
-	if(App->input->GetKey(SDL_SCANCODE_W)==KEY_DOWN)
+	if(app->input->GetKey(SDL_SCANCODE_W)==KEY_DOWN)
 	{
 		angle += 45;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 	{
 		angle -= 45;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
 	{
 		life -= 100;
 		LOG("life: %i", life);

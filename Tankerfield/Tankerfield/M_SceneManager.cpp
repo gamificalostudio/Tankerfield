@@ -24,7 +24,7 @@ SceneManager::~SceneManager()
 bool SceneManager::Start()
 {
 	LOG("Preparing Fade Screen");
-	SDL_SetRenderDrawBlendMode(App->render->renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
 	return true;
 }
 
@@ -61,8 +61,8 @@ bool SceneManager::Update(float dt)
 	}
 
 	// Finally render the black square with alpha on the screen
-	SDL_SetRenderDrawColor(App->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0f));
-	SDL_RenderFillRect(App->render->renderer, &screen);
+	SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(normalized * 255.0f));
+	SDL_RenderFillRect(app->render->renderer, &screen);
 	
 	return true;
 }

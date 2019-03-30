@@ -1,7 +1,7 @@
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 
-#include "App.h"
+#include "app.h"
 #include "Obj_Tank.h"
 #include "M_Textures.h"
 #include "M_Render.h"
@@ -39,12 +39,12 @@ bool Obj_Tank::Awake(pugi::xml_node &)
 
 bool Obj_Tank::Start()
 {
-	pugi::xml_node tank_node = App->config.child("object").child("tank");
+	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	Obj_Tank::base_tex = App->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
-	Obj_Tank::base_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-	Obj_Tank::turr_tex = App->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
-	Obj_Tank::turr_shadow_tex = App->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
+	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
@@ -58,7 +58,7 @@ bool Obj_Tank::PreUpdate()
 {
 	if (controller == nullptr)
 	{
-		controller = App->input->GetAbleController();
+		controller = app->input->GetAbleController();
 	}
 	return true;
 }
@@ -92,19 +92,19 @@ void Obj_Tank::Movement(float dt)
 
 void Obj_Tank::GetKeyboardInput(fPoint & input)
 {
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		input.y -= 1.f;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		input.x -= 1.f;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
 		input.y += 1.f;
 	}
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		input.x += 1.f;
 	}
@@ -123,7 +123,7 @@ bool Obj_Tank::PostUpdate()
 	int tile_width = 100, tile_height = 50;
 	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	fPoint iso_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
-	App->render->Blit(base_tex, iso_pos.x, iso_pos.y, &base_rects[ind]);
+	app->render->Blit(base_tex, iso_pos.x, iso_pos.y, &base_rects[ind]);
 	return true;
 }
 

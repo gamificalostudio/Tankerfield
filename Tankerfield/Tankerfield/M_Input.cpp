@@ -10,7 +10,7 @@
 
 #define MAX_KEYS 300
 
-j1Input::j1Input() : Module()
+M_Input::M_Input() : Module()
 {
 	name = "input";
 
@@ -20,13 +20,13 @@ j1Input::j1Input() : Module()
 }
 
 // Destructor
-j1Input::~j1Input()
+M_Input::~M_Input()
 {
 	
 }
 
 // Called before render is available
-bool j1Input::Awake(pugi::xml_node& config)
+bool M_Input::Awake(pugi::xml_node& config)
 {
 	LOG("Init SDL input event system");
 	bool ret = true;
@@ -42,7 +42,7 @@ bool j1Input::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool j1Input::Start()
+bool M_Input::Start()
 {
 	bool ret = true;
 	SDL_StopTextInput();
@@ -61,7 +61,7 @@ bool j1Input::Start()
 }
 
 // Called each loop iteration
-bool j1Input::PreUpdate()
+bool M_Input::PreUpdate()
 {
 	static SDL_Event event;
 	
@@ -112,7 +112,7 @@ bool j1Input::PreUpdate()
 			}
 			case SDL_MOUSEMOTION:
 			{
-				int scale = App->win->GetScale();
+				int scale = app->win->GetScale();
 				mouse_motion_x = event.motion.xrel / scale;
 				mouse_motion_y = event.motion.yrel / scale;
 				mouse_x = event.motion.x / scale;
@@ -188,7 +188,7 @@ bool j1Input::PreUpdate()
 }
 
 // Called before quitting
-bool j1Input::CleanUp()
+bool M_Input::CleanUp()
 {
 	LOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
@@ -197,34 +197,34 @@ bool j1Input::CleanUp()
 }
 
 // ---------
-bool j1Input::GetWindowEvent(j1EventWindow ev)
+bool M_Input::GetWindowEvent(j1EventWindow ev)
 {
 	return windowEvents[ev];
 }
 
-void j1Input::GetMousePosition(int& x, int& y)
+void M_Input::GetMousePosition(int& x, int& y)
 {
 	x = mouse_x;
 	y = mouse_y;
 }
 
-void j1Input::GetMouseMotion(int& x, int& y)
+void M_Input::GetMouseMotion(int& x, int& y)
 {
 	x = mouse_motion_x;
 	y = mouse_motion_y;
 }
 
 
-iPoint j1Input::GetMousePos_Tiles()
+iPoint M_Input::GetMousePos_Tiles()
 {
 	iPoint ret;
-	ret = App->render->ScreenToWorld(mouse_x, mouse_y);
-	ret = App->map->WorldToMap(ret.x, ret.y);
+	ret = app->render->ScreenToWorld(mouse_x, mouse_y);
+	ret = app->map->WorldToMap(ret.x, ret.y);
 
 	return ret;
 }
 
-void j1Input::UpdateKeyboardState()
+void M_Input::UpdateKeyboardState()
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -247,7 +247,7 @@ void j1Input::UpdateKeyboardState()
 	}
 }
 
-void j1Input::UpdateMouseState()
+void M_Input::UpdateMouseState()
 {
 	for (int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
 	{
@@ -259,7 +259,7 @@ void j1Input::UpdateMouseState()
 	}
 }
 
-void j1Input::UpdateControllers()
+void M_Input::UpdateControllers()
 {
 	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
 	{
@@ -285,7 +285,7 @@ void j1Input::UpdateControllers()
 	}
 }
 
-Controller** j1Input::GetAbleController()
+Controller** M_Input::GetAbleController()
 {
 	Controller** ret = nullptr;
 	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)

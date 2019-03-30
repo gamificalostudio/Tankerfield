@@ -17,7 +17,7 @@ TextPanel::~TextPanel()
 {
 	if (text_texture != nullptr)
 	{
-		App->tex->UnLoad(text_texture);
+		app->tex->UnLoad(text_texture);
 	}
 }
 

@@ -5,14 +5,14 @@
 #include "p2Point.h"
 #include "Module.h"
 
-class j1Render : public Module
+class M_Render : public Module
 {
 public:
 
-	j1Render();
+	M_Render();
 
 	// Destructor
-	virtual ~j1Render();
+	virtual ~M_Render();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);

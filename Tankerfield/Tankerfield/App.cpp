@@ -26,20 +26,20 @@
 #include "M_Scene.h"
 
 // Constructor
-j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
+App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	PERF_START(ptimer);
 
-	input = new j1Input();
+	input = new M_Input();
 	win = new j1Window();
-	render = new j1Render();
+	render = new M_Render();
 	tex = new j1Textures();
 	audio = new M_Audio();
 	ui_test = new UI_Test();
-	pathfinding = new j1PathFinding();
-	map = new j1Map();
+	pathfinding = new M_Pathfinding();
+	map = new M_Map();
 	scene = new M_Scene();
-	font = new j1Fonts();
+	font = new M_Fonts();
 	ui = new Module_UI();
 	objectmanager = new ObjectManager();
 	scmanager = new SceneManager();
@@ -66,7 +66,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 }
 
 // Destructor
-j1App::~j1App()
+App::~App()
 {
 	// release modules
 	std::list<Module*>::reverse_iterator item = modules.rbegin();
@@ -80,14 +80,14 @@ j1App::~j1App()
 	modules.clear();
 }
 
-void j1App::AddModule(Module* module)
+void App::AddModule(Module* module)
 {
 	module->Init();
 	modules.push_back(module);
 }
 
 // Called before render is available
-bool j1App::Awake()
+bool App::Awake()
 {
 	PERF_START(ptimer);
 
@@ -130,7 +130,7 @@ bool j1App::Awake()
 }
 
 // Called before the first frame
-bool j1App::Start()
+bool App::Start()
 {
 	PERF_START(ptimer);
 
@@ -163,7 +163,7 @@ bool j1App::Start()
 }
 
 // Called each loop iteration
-bool j1App::Update()
+bool App::Update()
 {
 	bool ret = true;
 	PrepareUpdate();
@@ -185,7 +185,7 @@ bool j1App::Update()
 }
 
 // ---------------------------------------------
-pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
+pugi::xml_node App::LoadConfig(pugi::xml_document& config_file) const
 {
 	pugi::xml_node ret;
 
@@ -200,7 +200,7 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 }
 
 // ---------------------------------------------
-void j1App::PrepareUpdate()
+void App::PrepareUpdate()
 {
 	frame_count++;
 	last_sec_frame_count++;
@@ -210,7 +210,7 @@ void j1App::PrepareUpdate()
 }
 
 // ---------------------------------------------
-void j1App::FinishUpdate()
+void App::FinishUpdate()
 {
 	if (want_to_save == true)
 		SavegameNow();
@@ -233,7 +233,7 @@ void j1App::FinishUpdate()
 
 	static char title[256];
 	sprintf_s(title, 256, "Tankerfield | Av.FPS: %.2f", avg_fps);
-	App->win->SetTitle(title);
+	app->win->SetTitle(title);
 
 	if (capped_ms > 0 && last_frame_ms < capped_ms)
 	{
@@ -242,7 +242,7 @@ void j1App::FinishUpdate()
 }
 
 // Call modules before each loop iteration
-bool j1App::PreUpdate()
+bool App::PreUpdate()
 {
 	bool ret = true;
 	std::list<Module*>::const_iterator item;
@@ -264,7 +264,7 @@ bool j1App::PreUpdate()
 }
 
 // Call modules on each loop iteration
-bool j1App::DoUpdate()
+bool App::DoUpdate()
 {
 	bool ret = true;
 	std::list <Module*>::const_iterator item;
@@ -286,7 +286,7 @@ bool j1App::DoUpdate()
 }
 
 // Call modules after each loop iteration
-bool j1App::PostUpdate()
+bool App::PostUpdate()
 {
 	bool ret = true;
 	std::list<Module*>::const_iterator item;
@@ -307,7 +307,7 @@ bool j1App::PostUpdate()
 }
 
 // Called before quitting
-bool j1App::CleanUp()
+bool App::CleanUp()
 {
 	PERF_START(ptimer);
 	bool ret = true;
@@ -325,13 +325,13 @@ bool j1App::CleanUp()
 }
 
 // ---------------------------------------
-int j1App::GetArgc() const
+int App::GetArgc() const
 {
 	return argc;
 }
 
 // ---------------------------------------
-const char* j1App::GetArgv(int index) const
+const char* App::GetArgv(int index) const
 {
 	if (index < argc)
 		return args[index];
@@ -340,32 +340,32 @@ const char* j1App::GetArgv(int index) const
 }
 
 // ---------------------------------------
-const char* j1App::GetTitle() const
+const char* App::GetTitle() const
 {
 	return title.data();
 }
 
 // ---------------------------------------
-float j1App::GetDT() const
+float App::GetDT() const
 {
 	return dt;
 }
 
 // ---------------------------------------
-const char* j1App::GetOrganization() const
+const char* App::GetOrganization() const
 {
 	return organization.data();
 }
 
 
 // Load / Save
-void j1App::LoadGame(const char* file)
+void App::LoadGame(const char* file)
 {
 	want_to_load = true;
 }
 
 // ---------------------------------------
-void j1App::SaveGame(const char* file) const
+void App::SaveGame(const char* file) const
 {
 
 	want_to_save = true;
@@ -374,7 +374,7 @@ void j1App::SaveGame(const char* file) const
 
 // ---------------------------------------
 
-bool j1App::LoadGameNow()
+bool App::LoadGameNow()
 {
 	bool ret = false;
 
@@ -412,7 +412,7 @@ bool j1App::LoadGameNow()
 	return ret;
 }
 
-bool j1App::SavegameNow() const
+bool App::SavegameNow() const
 {
 	bool ret = true;
 

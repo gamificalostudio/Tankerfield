@@ -10,17 +10,17 @@
 
 
 
-j1Fonts::j1Fonts() : Module()
+M_Fonts::M_Fonts() : Module()
 {
 	name = "fonts";
 }
 
 // Destructor
-j1Fonts::~j1Fonts()
+M_Fonts::~M_Fonts()
 {}
 
 // Called before render is available
-bool j1Fonts::Awake(pugi::xml_node& conf)
+bool M_Fonts::Awake(pugi::xml_node& conf)
 {
 	LOG("Init True Type Font library");
 	bool ret = true;
@@ -41,7 +41,7 @@ bool j1Fonts::Awake(pugi::xml_node& conf)
 }
 
 // Called before quitting
-bool j1Fonts::CleanUp()
+bool M_Fonts::CleanUp()
 {
 	LOG("Freeing True Type fonts and library");
 
@@ -58,7 +58,7 @@ bool j1Fonts::CleanUp()
 }
 
 // Load new texture from file path
-TTF_Font* const j1Fonts::Load(const char* path, int size)
+TTF_Font* const M_Fonts::Load(const char* path, int size)
 {
 	TTF_Font* font = TTF_OpenFont(path, size);
 
@@ -75,7 +75,7 @@ TTF_Font* const j1Fonts::Load(const char* path, int size)
 	return font;
 }
 
-bool j1Fonts::Unload(_TTF_Font * font)
+bool M_Fonts::Unload(_TTF_Font * font)
 {
 	list<_TTF_Font*>::iterator item;
 
@@ -94,7 +94,7 @@ bool j1Fonts::Unload(_TTF_Font * font)
 }
 
 // Print text using font
-SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
+SDL_Texture* M_Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
 {
 	if (font == nullptr)
 	{
@@ -110,7 +110,7 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
 	}
 	else
 	{
-		ret = App->tex->LoadSurface(surface);
+		ret = app->tex->LoadSurface(surface);
 		SDL_FreeSurface(surface);
 	}
 
@@ -118,7 +118,7 @@ SDL_Texture* j1Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
 }
 
 // calculate size of a text
-bool j1Fonts::CalcSize(const char* text, int& width, int& height, _TTF_Font* font) const
+bool M_Fonts::CalcSize(const char* text, int& width, int& height, _TTF_Font* font) const
 {
 	bool ret = false;
 
