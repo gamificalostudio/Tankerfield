@@ -3,13 +3,16 @@
 #include "j1App.h"
 #include "j1Input.h"
 #include "j1Window.h"
+#include "j1Render.h"
+#include "j1Map.h"
 #include "SDL/include/SDL.h"
+
 
 #define MAX_KEYS 300
 
 j1Input::j1Input() : j1Module()
 {
-	name.assign("input");
+	name = "input";
 
 	keyboard = new j1KeyState[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(j1KeyState) * MAX_KEYS);
@@ -19,7 +22,7 @@ j1Input::j1Input() : j1Module()
 // Destructor
 j1Input::~j1Input()
 {
-	delete[] keyboard;
+	
 }
 
 // Called before render is available
@@ -41,7 +44,19 @@ bool j1Input::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Input::Start()
 {
+	bool ret = true;
 	SDL_StopTextInput();
+
+	if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0)
+	{
+		LOG("SDL_INIT_GAMECONTROLLER could not initialize! SDL_Error: %s\n", SDL_GetError());
+		return ret = false;
+	}
+	if (SDL_Init(SDL_INIT_HAPTIC) < 0)
+	{
+		LOG("SDL_INIT_HAPTIC could not initialize! SDL_Error: %s\n ", SDL_GetError());
+		return ret = false;
+	}
 	return true;
 }
 
@@ -50,81 +65,122 @@ bool j1Input::PreUpdate()
 {
 	static SDL_Event event;
 	
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
-
-	for(int i = 0; i < MAX_KEYS; ++i)
-	{
-		if(keys[i] == 1)
-		{
-			if(keyboard[i] == KEY_IDLE)
-				keyboard[i] = KEY_DOWN;
-			else
-				keyboard[i] = KEY_REPEAT;
-		}
-		else
-		{
-			if(keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
-				keyboard[i] = KEY_UP;
-			else
-				keyboard[i] = KEY_IDLE;
-		}
-	}
-
-	for(int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
-	{
-		if(mouse_buttons[i] == KEY_DOWN)
-			mouse_buttons[i] = KEY_REPEAT;
-
-		if(mouse_buttons[i] == KEY_UP)
-			mouse_buttons[i] = KEY_IDLE;
-	}
+	UpdateKeyboardState();
+	UpdateMouseState();
 
 	while(SDL_PollEvent(&event) != 0)
 	{
 		switch(event.type)
 		{
 			case SDL_QUIT:
+			{
 				windowEvents[WE_QUIT] = true;
-			break;
-
+				break;
+			}
 			case SDL_WINDOWEVENT:
-				switch(event.window.event)
+			{
+				switch (event.window.event)
 				{
 					//case SDL_WINDOWEVENT_LEAVE:
-					case SDL_WINDOWEVENT_HIDDEN:
-					case SDL_WINDOWEVENT_MINIMIZED:
-					case SDL_WINDOWEVENT_FOCUS_LOST:
+				case SDL_WINDOWEVENT_HIDDEN:
+				case SDL_WINDOWEVENT_MINIMIZED:
+				case SDL_WINDOWEVENT_FOCUS_LOST:
 					windowEvents[WE_HIDE] = true;
 					break;
 
 					//case SDL_WINDOWEVENT_ENTER:
-					case SDL_WINDOWEVENT_SHOWN:
-					case SDL_WINDOWEVENT_FOCUS_GAINED:
-					case SDL_WINDOWEVENT_MAXIMIZED:
-					case SDL_WINDOWEVENT_RESTORED:
+				case SDL_WINDOWEVENT_SHOWN:
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+				case SDL_WINDOWEVENT_MAXIMIZED:
+				case SDL_WINDOWEVENT_RESTORED:
 					windowEvents[WE_SHOW] = true;
 					break;
 				}
-			break;
-
+				break;
+			}
 			case SDL_MOUSEBUTTONDOWN:
+			{
 				mouse_buttons[event.button.button - 1] = KEY_DOWN;
 				//LOG("Mouse button %d down", event.button.button-1);
-			break;
-
+				break;
+			}
 			case SDL_MOUSEBUTTONUP:
+			{
 				mouse_buttons[event.button.button - 1] = KEY_UP;
 				//LOG("Mouse button %d up", event.button.button-1);
-			break;
-
+				break;
+			}
 			case SDL_MOUSEMOTION:
+			{
 				int scale = App->win->GetScale();
 				mouse_motion_x = event.motion.xrel / scale;
 				mouse_motion_y = event.motion.yrel / scale;
 				mouse_x = event.motion.x / scale;
 				mouse_y = event.motion.y / scale;
 				//LOG("Mouse motion x %d y %d", mouse_motion_x, mouse_motion_y);
-			break;
+				break;
+			}
+			case SDL_CONTROLLERDEVICEADDED:
+			{
+				if (controllers.size() < MAX_CONTROLLERS)
+				{
+					int num_joystincks = SDL_NumJoysticks();
+					for (int i = 0; i < num_joystincks; ++i)
+					{
+						bool is_joystick = false;
+						for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+						{
+							if ((*iter)->index_number == i)
+							{
+								is_joystick = true;
+							}
+						}
+						if (!is_joystick)
+						{
+							Controller* controller = new Controller();
+							controller->ctr_pointer = SDL_GameControllerOpen(i);
+							SDL_Joystick* j = SDL_GameControllerGetJoystick(controller->ctr_pointer);
+							controller->joyId = SDL_JoystickInstanceID(j);
+							controller->index_number = i;
+							controller->haptic = SDL_HapticOpen(i);
+							LOG("Joys stick is aptic: %i", SDL_JoystickIsHaptic(j));
+							if (controller->haptic == NULL)
+							{
+								LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
+							}
+							else
+							{
+								SDL_HapticRumbleInit(controller->haptic);
+							}
+							controllers.push_back(controller);
+						}
+					}
+				}
+				break;
+			}
+			case SDL_CONTROLLERDEVICEREMOVED:
+			{
+				for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end();)
+				{
+					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
+					{
+						if((*iter)->haptic!=nullptr)
+							SDL_HapticClose((*iter)->haptic);
+
+						if ((*iter)->ctr_pointer != nullptr)
+						SDL_GameControllerClose((*iter)->ctr_pointer);
+
+						delete (*iter);
+						(*iter) = nullptr;
+						iter = controllers.erase(iter);
+					}
+					else
+					{
+						++iter;
+					}
+				}
+				break;
+			}
 		}
 	}
 
@@ -136,6 +192,7 @@ bool j1Input::CleanUp()
 {
 	LOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
+	//RELEASE_ARRAY(keyboard);
 	return true;
 }
 
@@ -156,3 +213,89 @@ void j1Input::GetMouseMotion(int& x, int& y)
 	x = mouse_motion_x;
 	y = mouse_motion_y;
 }
+
+
+iPoint j1Input::GetMousePos_Tiles()
+{
+	iPoint ret;
+	ret = App->render->ScreenToWorld(mouse_x, mouse_y);
+	ret = App->map->WorldToMap(ret.x, ret.y);
+
+	return ret;
+}
+
+void j1Input::UpdateKeyboardState()
+{
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
+
+	for (int i = 0; i < MAX_KEYS; ++i)
+	{
+		if (keys[i] == 1)
+		{
+			if (keyboard[i] == KEY_IDLE)
+				keyboard[i] = KEY_DOWN;
+			else
+				keyboard[i] = KEY_REPEAT;
+		}
+		else
+		{
+			if (keyboard[i] == KEY_REPEAT || keyboard[i] == KEY_DOWN)
+				keyboard[i] = KEY_UP;
+			else
+				keyboard[i] = KEY_IDLE;
+		}
+	}
+}
+
+void j1Input::UpdateMouseState()
+{
+	for (int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
+	{
+		if (mouse_buttons[i] == KEY_DOWN)
+			mouse_buttons[i] = KEY_REPEAT;
+
+		if (mouse_buttons[i] == KEY_UP)
+			mouse_buttons[i] = KEY_IDLE;
+	}
+}
+
+void j1Input::UpdateControllers()
+{
+	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+	{
+		for (int button = SDL_CONTROLLER_BUTTON_A; button < SDL_CONTROLLER_BUTTON_MAX; ++button)
+		{
+			if (SDL_GameControllerGetButton((*iter)->ctr_pointer, (SDL_GameControllerButton)button))
+			{
+				
+				if ((*iter)->key_state[button] == KEY_IDLE)
+					(*iter)->key_state[button] = KEY_DOWN;
+				else
+					(*iter)->key_state[button] = KEY_REPEAT;
+			}
+			else
+			{
+				if ((*iter)->key_state[button] == KEY_REPEAT || (*iter)->key_state[button] == KEY_DOWN)
+					(*iter)->key_state[button] = KEY_UP;
+				else
+					(*iter)->key_state[button] = KEY_IDLE;
+			}
+		}
+		
+	}
+}
+
+Controller** j1Input::GetAbleController()
+{
+	Controller** ret = nullptr;
+	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+	{
+		if (!(*iter)->attached)
+		{
+			(*iter)->attached = true;
+			return &(*iter);
+		}
+	}
+	return ret;
+}
+

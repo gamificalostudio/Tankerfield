@@ -7,8 +7,9 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Scene.h"
-#include "SceneTest2.h"
 #include "SceneManager.h"
+#include "j1Map.h"
+#include "ObjectManager.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -31,7 +32,12 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	LOG("Scene1");
+	// Load the first level of the list on first game start -------------------------
+	std::list<Levels*>::iterator levelData = App->map->levels.begin();
+	std::advance(levelData, current_level);
+	App->map->Load((*levelData)->name.c_str());
+
+	App->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
 	
 	return true;
 }
@@ -39,6 +45,10 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	if (App->input->controllers.size())
+	{
+		control1 = &(*App->input->controllers.begin());
+	}
 
 
 	return true;
@@ -47,12 +57,17 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
- 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
-		App->scmanager->FadeToBlack(App->scene, App->test2, 0.5f);
-		LOG("Scene1 off");
-	}
-	// Draw ------------------
+	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		App->render->camera.y += floor(200.0f * dt);
 
+	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		App->render->camera.y -= floor(200.0f * dt);
+
+	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		App->render->camera.x += floor(200.0f * dt);
+
+	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		App->render->camera.x -= floor(200.0f * dt);
 
 	return true;
 }
@@ -64,7 +79,7 @@ bool j1Scene::PostUpdate()
 
 	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-
+	
 	return ret;
 }
 

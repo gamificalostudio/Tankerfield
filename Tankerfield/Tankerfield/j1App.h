@@ -3,23 +3,28 @@
 
 #include <list>
 #include <string>
+
+#include "PugiXml/src/pugixml.hpp"
+
 #include "j1Module.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
 
-#include "PugiXml/src/pugixml.hpp"
+
 
 class j1Window;
 class j1Input;
 class j1Render;
 class j1Textures;
 class j1Audio;
-class j1Scene;
+class UI_Test;
 class j1PathFinding;
+class j1Map;
+class j1Fonts;
+class Module_UI;
 class ObjectManager;
-class SceneTest2;
 class SceneManager;
-
+class j1Scene;
 
 class j1App
 {
@@ -85,11 +90,17 @@ public:
 	j1Render*			render = nullptr;
 	j1Textures*			tex = nullptr;
 	j1Audio*			audio = nullptr;
-	j1Scene*			scene = nullptr;
+	UI_Test*			ui_test = nullptr;
 	j1PathFinding*		pathfinding = nullptr;
+	j1Map*				map = nullptr;
+	j1Fonts*            font = nullptr;
+	Module_UI*          ui = nullptr;
 	ObjectManager*		objectmanager = nullptr;
 	SceneManager*		scmanager = nullptr;
-	SceneTest2*			test2 = nullptr;
+	j1Scene*			scene = nullptr;
+  
+	//XML document
+	pugi::xml_node		config;
 
 private:
 	std::list<j1Module*>	modules;
@@ -113,8 +124,12 @@ private:
 	uint32				prev_last_sec_frame_count = 0;
 	float				dt = 0.0f;
 	int					capped_ms = -1;
+
+	//XML document
+	pugi::xml_document	config_file;
+	pugi::xml_node		app_config;
 };
 
 extern j1App* App;
 
-#endif // __j1APP_H__
+#endif
