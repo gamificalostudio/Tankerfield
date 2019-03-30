@@ -52,7 +52,11 @@ bool j1Input::Start()
 		LOG("SDL_INIT_GAMECONTROLLER could not initialize! SDL_Error: %s\n", SDL_GetError());
 		return ret = false;
 	}
-	SDL_Init(SDL_INIT_HAPTIC);
+	if (SDL_Init(SDL_INIT_HAPTIC) < 0)
+	{
+		LOG("SDL_INIT_HAPTIC could not initialize! SDL_Error: %s\n ", SDL_GetError());
+		return ret = false;
+	}
 	return true;
 }
 
@@ -61,8 +65,8 @@ bool j1Input::PreUpdate()
 {
 	static SDL_Event event;
 	
-	Update_Keyboard_State();
-	Update_Mouse_State();
+	UpdateKeyboardState();
+	UpdateMouseState();
 
 	while(SDL_PollEvent(&event) != 0)
 	{
@@ -160,8 +164,12 @@ bool j1Input::PreUpdate()
 				{
 					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
 					{
-						SDL_HapticClose((*iter)->haptic);
+						if((*iter)->haptic!=nullptr)
+							SDL_HapticClose((*iter)->haptic);
+
+						if ((*iter)->ctr_pointer != nullptr)
 						SDL_GameControllerClose((*iter)->ctr_pointer);
+
 						delete (*iter);
 						(*iter) = nullptr;
 						iter = controllers.erase(iter);
@@ -206,7 +214,17 @@ void j1Input::GetMouseMotion(int& x, int& y)
 	y = mouse_motion_y;
 }
 
-void j1Input::Update_Keyboard_State()
+
+iPoint j1Input::GetMousePos_Tiles()
+{
+	iPoint ret;
+	ret = App->render->ScreenToWorld(mouse_x, mouse_y);
+	ret = App->map->WorldToMap(ret.x, ret.y);
+
+	return ret;
+}
+
+void j1Input::UpdateKeyboardState()
 {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 
@@ -229,7 +247,7 @@ void j1Input::Update_Keyboard_State()
 	}
 }
 
-void j1Input::Update_Mouse_State()
+void j1Input::UpdateMouseState()
 {
 	for (int i = 0; i < NUM_MOUSE_BUTTONS; ++i)
 	{
@@ -241,7 +259,7 @@ void j1Input::Update_Mouse_State()
 	}
 }
 
-void j1Input::Update_Controllers()
+void j1Input::UpdateControllers()
 {
 	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
 	{
@@ -280,3 +298,4 @@ Controller** j1Input::GetAbleController()
 	}
 	return ret;
 }
+

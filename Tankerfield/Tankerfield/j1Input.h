@@ -50,16 +50,18 @@ private:
 	j1KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
-	bool attached = false;
-public:
-	
-	
 
-	j1KeyState Get_Button_State(SDL_GameControllerButton button)
+public:
+
+	j1KeyState GetButtonState(SDL_GameControllerButton button)
 	{
 		return key_state[button];
 	}
 
+	bool attached = false;
+
+public:
+	
 	iPoint GetJoystick(Joystick joystick)
 	{
 		switch (joystick)
@@ -73,6 +75,7 @@ public:
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
+
 	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = 1000)
 	{
 		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
@@ -86,43 +89,25 @@ public:
 		}
 	}
 
-	int test_haptic() {
 
-		SDL_HapticEffect effect;
-		int effect_id;
-
-		// See if it can do sine waves
-		if ((SDL_HapticQuery(haptic) /*& SDL_HAPTIC_SINE*/) == 0) {
-			SDL_HapticClose(haptic); // No sine effect
-			return -1;
-		}
-
-		// Create the effect
-		SDL_memset(&effect, 0, sizeof(SDL_HapticEffect)); // 0 is safe default
-		effect.type = SDL_HAPTIC_SINE;
-		effect.periodic.direction.type = SDL_HAPTIC_POLAR; // Polar coordinates
-		effect.periodic.direction.dir[0] = 18000; // Force comes from south
-		effect.periodic.period = 1000; // 1000 ms
-		effect.periodic.magnitude = 20000; // 20000/32767 strength
-		effect.periodic.length = 5000; // 5 seconds long
-		effect.periodic.attack_length = 1000; // Takes 1 second to get max strength
-		effect.periodic.fade_length = 1000; // Takes 1 second to fade away
-
-		// Upload the effect
-		effect_id = SDL_HapticNewEffect(haptic, &effect);
-
-		// Test the effect
-		SDL_HapticRunEffect(haptic, effect_id, 1);
-		SDL_Delay(5000); // Wait for the effect to finish
-
-		// We destroy the effect, although closing the device also does this
-		SDL_HapticDestroyEffect(haptic, effect_id);
-
-		// Close the device
-		SDL_HapticClose(haptic);
-
-		return 0; // Success
+	//strengh -> from 0 to 1
+	//length  -> strength of the rumble to play as a 0-1 float value
+	int PlayRumble(float strengh, Uint32 length)
+	{
+		if (haptic != nullptr)
+			return SDL_HapticRumblePlay(haptic, strengh, length);
+		else
+			return 0;
 	}
+  
+	int StopRumble()
+	{
+		if (haptic != nullptr)
+			return SDL_HapticRumbleStop(haptic);
+		else
+			return 0;
+	}
+  
 	friend class j1Input;
 };
 
@@ -170,9 +155,10 @@ public:
 	void GetMouseMotion(int& x, int& y);
 
 private:
-	void Update_Keyboard_State();
-	void Update_Mouse_State();
-	void Update_Controllers();
+	iPoint GetMousePos_Tiles();
+	void UpdateKeyboardState();
+	void UpdateMouseState();
+	void UpdateControllers();
 
 private:
 	bool		windowEvents[WE_COUNT];
@@ -183,10 +169,8 @@ private:
 	int			mouse_x;
 	int			mouse_y;
 
-
 public:
 	std::vector<Controller*> controllers;
-
 	Controller** GetAbleController();
 };
 

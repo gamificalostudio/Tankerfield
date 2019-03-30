@@ -5,9 +5,13 @@
 #include "SDL/include/SDL_rect.h"
 
 struct SDL_Texture;
+struct Controller;
 
 class j1Scene : public j1Module
 {
+private:
+	Controller** control1 = nullptr;
+	
 public:
 	int current_level = 0;
 public:

@@ -120,7 +120,6 @@ bool Module_UI::PreUpdate()
 	}
 
 	// Click States ============================================
-	
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		SelectClickedObject();
@@ -134,6 +133,7 @@ bool Module_UI::PreUpdate()
 		click_state = ClickState::Out;
 	}
 	else if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
+
 	{
 		click_state = ClickState::None;
 		selected_object = nullptr;
