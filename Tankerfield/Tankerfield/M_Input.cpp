@@ -14,9 +14,9 @@ M_Input::M_Input() : Module()
 {
 	name = "input";
 
-	keyboard = new j1KeyState[MAX_KEYS];
-	memset(keyboard, KEY_IDLE, sizeof(j1KeyState) * MAX_KEYS);
-	memset(mouse_buttons, KEY_IDLE, sizeof(j1KeyState) * NUM_MOUSE_BUTTONS);
+	keyboard = new KeyState[MAX_KEYS];
+	memset(keyboard, KEY_IDLE, sizeof(KeyState) * MAX_KEYS);
+	memset(mouse_buttons, KEY_IDLE, sizeof(KeyState) * NUM_MOUSE_BUTTONS);
 }
 
 // Destructor
@@ -197,7 +197,7 @@ bool M_Input::CleanUp()
 }
 
 // ---------
-bool M_Input::GetWindowEvent(j1EventWindow ev)
+bool M_Input::GetWindowEvent(EventWindow ev)
 {
 	return windowEvents[ev];
 }

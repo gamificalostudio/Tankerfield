@@ -17,7 +17,7 @@
 
 struct SDL_Rect;
 
-enum j1EventWindow
+enum EventWindow
 {
 	WE_QUIT = 0,
 	WE_HIDE = 1,
@@ -25,7 +25,7 @@ enum j1EventWindow
 	WE_COUNT
 };
 
-enum j1KeyState
+enum KeyState
 {
 	KEY_IDLE = 0,
 	KEY_DOWN,
@@ -47,13 +47,13 @@ struct Controller
 private:
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
-	j1KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
+	KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
 
 public:
 
-	j1KeyState GetButtonState(SDL_GameControllerButton button)
+	KeyState GetButtonState(SDL_GameControllerButton button)
 	{
 		return key_state[button];
 	}
@@ -134,15 +134,15 @@ public:
 	bool CleanUp()override;
 
 	// Gather relevant win events
-	bool GetWindowEvent(j1EventWindow ev);
+	bool GetWindowEvent(EventWindow ev);
 
 	// Check key states (includes mouse and joy buttons)
-	j1KeyState GetKey(int id) const
+	KeyState GetKey(int id) const
 	{
 		return keyboard[id];
 	}
 
-	j1KeyState GetMouseButton(int id) const
+	KeyState GetMouseButton(int id) const
 	{
 		return mouse_buttons[id - 1];
 	}
@@ -162,8 +162,8 @@ private:
 
 private:
 	bool		windowEvents[WE_COUNT];
-	j1KeyState*	keyboard;
-	j1KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
+	KeyState*	keyboard;
+	KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
 	int			mouse_motion_x;
 	int			mouse_motion_y;
 	int			mouse_x;
