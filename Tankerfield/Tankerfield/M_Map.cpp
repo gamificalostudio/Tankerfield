@@ -66,13 +66,15 @@ bool M_Map::Update(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToWorld(x, y);
-					if (app->render->IsOnCamera(pos.x,pos.y,data.tile_width,data.tile_height))
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
+					
+					if (app->render->IsOnCamera(pos.x - data.tile_width*0.5,pos.y - data.tile_height*0.5,data.tile_width,data.tile_height))
 					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						
 						if (tileset != nullptr)
 						{
 							SDL_Rect r = tileset->GetTileRect(tile_id);
-							app->render->Blit(tileset->texture, pos.x, pos.y, &r);
+							app->render->Blit(tileset->texture, pos.x - data.tile_width * 0.5, pos.y - data.tile_height * 0.5, &r);
 
 						}
 					}
@@ -83,26 +85,23 @@ bool M_Map::Update(float dt)
 	}
 
 	//// Draw Grid ==============================================
-	int rows = data.rows, columms = data.columns, tile_width = data.tile_width, tile_height = data.tile_height;
-	iPoint point_1, point_2;
-
-	
-	for (int i = 0; i <= columms; ++i)
 	{
-		point_1 = MapToWorld(i, 0) ;
-		point_2 = MapToWorld(i, rows);
-		app->render->DrawLine(point_1.x /*+ (int)(tile_width*0.5)*/, point_1.y, point_2.x /*+ (int)(tile_width*0.5)*/, point_2.y, 255, 255, 255, 255, true);
-	}
+		iPoint point_1, point_2;
+		for (int i = 0; i <= data.columns; ++i)
+		{
+			point_1 = MapToWorld(i, 0);
+			point_2 = MapToWorld(i, data.rows);
+			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		}
 
-	for (int i = 0; i <= rows; ++i)
-	{
-		point_1 = MapToWorld(0, i);
-		point_2 = MapToWorld(columms, i);
-		app->render->DrawLine(point_1.x /*+ (int)(tile_width*0.5)*/, point_1.y, point_2.x /*+ (int)(tile_width*0.5)*/, point_2.y, 255, 255, 255, 255, true);
+		for (int i = 0; i <= data.rows; ++i)
+		{
+			point_1 = MapToWorld(0, i);
+			point_2 = MapToWorld(data.columns, i);
+			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		}
 	}
-
 	
-
 	return ret;
 }
 
