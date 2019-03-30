@@ -1,8 +1,5 @@
 #include "Bullet_Basic.h"
 #include "App.h"
-#include "M_UITest.h"
-#include "M_Input.h"
-#include "M_Render.h"
 
 
 
@@ -12,13 +9,11 @@ Bullet_Basic::Bullet_Basic()
 
 }
 
-Bullet_Basic::Bullet_Basic(int x, int y)
+Bullet_Basic::Bullet_Basic(int x, int y) : Obj_Bullet()
 {
 	//Load XML var ============
-	pugi::xml_node basic_bullet_node = app->config.child("object").child("basic_bullet");
-
-	speed = basic_bullet_node.child("speed").attribute("value").as_float();
-	bullet_life_ms = basic_bullet_node.child("life").attribute("value").as_float();
+	pos.x = x;
+	pos.y = y;
 }
 
 Bullet_Basic::~Bullet_Basic()
@@ -49,7 +44,8 @@ bool Bullet_Basic::Update(float dt)
 
 bool Bullet_Basic::PostUpdate()
 {
-	app->ui_test->DrawIsometricQuad(pos.x, pos.y, 0.75f, 0.5f);
+	Obj_Bullet::PostUpdate();
+
 	return true;
 }
 

@@ -5,23 +5,29 @@
 #include "PerfTimer.h"
 #include "M_ObjManager.h"
 
+class Obj_Bullet;
+
 class Weapon
 {
 public:
 	Weapon();
-	Weapon(int damage, float speed, float life, ObjectType type);
+	Weapon(int damage, float speed, float life, float time_between_bullet, ObjectType type);
 	~Weapon();
 
 public:
-	virtual void Shoot();
+	virtual void Shoot(float x, float y);
+
+private:
+	Obj_Bullet * bullet = nullptr;
 
 protected:
-	void CalculateDirection();
+	fPoint CalculateDirection();
 
 public:
 	int damage = 0;
 	float speed = 0.f;
 	float bullet_life_ms = 0.f;
+	float time_between_bullets = 0.f;
 	ObjectType bullet_type;
 };
 

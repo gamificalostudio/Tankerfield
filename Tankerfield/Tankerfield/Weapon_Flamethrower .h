@@ -9,7 +9,7 @@ public:
 	Weapon_Flamethrower();
 
 public:
-	void Shoot() override;
+	void Shoot();
 };
 
 #endif

@@ -39,7 +39,7 @@ private:
 	bool IsHold();
 
 public:
-	WEAPON_TYPE weapon_type;
+	WEAPON_TYPE weapon_type = WEAPON_TYPE::BASIC;
 
 private:
 	static SDL_Texture * base_tex;
