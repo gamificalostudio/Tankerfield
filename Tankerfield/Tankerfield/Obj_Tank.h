@@ -1,3 +1,6 @@
+#ifndef __OBJ_TANK_H__
+#define __OBJ_TANK_H__
+
 #include "Object.h"
 
 struct Controller;
@@ -42,3 +45,5 @@ private:
 	float cos_45 = 0.f;
 	float sin_45 = 0.f;
 };
+
+#endif

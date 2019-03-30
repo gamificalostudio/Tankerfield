@@ -1,5 +1,5 @@
-#ifndef __TESLATROOPER_H__
-#define __TESLATROOPER_H__
+#ifndef __OBJ_TESLATROOPER_H__
+#define __OBJ_TESLATROOPER_H__
 
 #include "Point.h"
 #include "Animation.h"

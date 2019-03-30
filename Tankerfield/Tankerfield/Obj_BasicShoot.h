@@ -1,3 +1,6 @@
+#ifndef __OBJ_BASIC_SHOOT_H__
+#define __OBJ_BASIC_SHOOT_H__
+
 #include "Object.h"
 #include "PerfTimer.h"
 #include "Point.h"
@@ -27,3 +30,5 @@ private:
 	float bullet_life_ms;
 
 };
+
+#endif
