@@ -74,9 +74,9 @@ bool Obj_Tank::Update(float dt)
 		iso_dir.Normalize();
 		pos += iso_dir * speed * dt;
 
-		if(!iso_dir.IsZero())
+		if(!joystick.IsZero())
 		{
-			angle = atan2(iso_dir.y, iso_dir.x) * RADTODEG;
+			angle = atan2(joystick.y, joystick.x) * RADTODEG;
 		}
 	}
 	return true;
