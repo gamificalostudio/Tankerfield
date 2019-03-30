@@ -56,7 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(font);
 	AddModule(ui_test);
 	AddModule(ui);
-	AddModule(objectmanager);
+	
 	// render last to swap buffer
 	AddModule(render);
 	
