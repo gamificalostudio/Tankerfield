@@ -87,6 +87,9 @@
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Weapon.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -188,6 +191,9 @@
     </ClInclude>
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Weapon.h">
+      <Filter>Modules\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
