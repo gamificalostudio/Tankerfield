@@ -8,13 +8,13 @@
 #include "App.h"
 
 
-Button::Button(const fPoint position, const Button_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
+UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener) : UI_Element(position, definition, listener)
 {
 	this->definition = definition;
 }
 
 
-Button::~Button()
+UI_Button::~UI_Button()
 {
 	if (label != nullptr)
 	{
@@ -23,7 +23,7 @@ Button::~Button()
 	}
 }
 
-bool Button::Draw()
+bool UI_Button::Draw()
 {
 	ClickState state = app->ui->GetClickState();
 	SDL_Rect current_frame;
@@ -49,7 +49,7 @@ bool Button::Draw()
 	return true;
 }
 
-bool Button::SetLabel(const fPoint position, const String text , const Label_Definition definition)
+bool UI_Button::SetLabel(const fPoint position, const String text , const UI_LabelDef definition)
 {
 	if (label != nullptr)
 	{
@@ -63,12 +63,12 @@ bool Button::SetLabel(const fPoint position, const String text , const Label_Def
 	return true;
 }
 
-void Button::SetDefinition(Button_Definition definition)
+void UI_Button::SetDefinition(UI_ButtonDef definition)
 {
 	this->definition = definition;
 }
 
-bool Button::PreUpdate()
+bool UI_Button::PreUpdate()
 {
 	if (hover_state == HoverState::On && app->ui->GetClickedObject() != this)
 	{
@@ -78,7 +78,7 @@ bool Button::PreUpdate()
 	return true;
 }
 
-bool Button::Update(float dt)
+bool UI_Button::Update(float dt)
 {
 	if (label == nullptr)
 	{

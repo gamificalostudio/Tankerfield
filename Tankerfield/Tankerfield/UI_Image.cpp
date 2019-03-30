@@ -3,18 +3,18 @@
 #include "M_UI.h"
 #include "App.h"
 
-Image::Image(fPoint position, Image_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener) , draw_rect(definition.draw_rect)
+UI_Image::UI_Image(fPoint position, UI_ImageDef definition, UI_Listener* listener) : UI_Element(position, definition, listener) , draw_rect(definition.draw_rect)
 {
 
 }
 
 
-Image::~Image()
+UI_Image::~UI_Image()
 {
 
 }
 
-bool Image::Draw()
+bool UI_Image::Draw()
 {
 	// TODO 2: Add animation.h methods
 

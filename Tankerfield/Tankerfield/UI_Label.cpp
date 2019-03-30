@@ -6,12 +6,12 @@
 #include "M_Textures.h"
 #include "App.h"
 
-Label::Label(const fPoint position, const String text, Label_Definition definition, Gui_Listener* listener): UI_Object(position, definition, listener), font(definition.font), color(definition.color)
+UI_Label::UI_Label(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener): UI_Element(position, definition, listener), font(definition.font), color(definition.color)
 {
 	SetText(text);
 }
 
-Label::~Label()
+UI_Label::~UI_Label()
 {
 	if (label_texture != nullptr)
 	{
@@ -19,7 +19,7 @@ Label::~Label()
 	}
 }
 
-void Label::SetText(String text)
+void UI_Label::SetText(String text)
 {
 	if (label_texture != nullptr)
 	{
@@ -32,7 +32,7 @@ void Label::SetText(String text)
 	label_texture = app->font->Print( text.c_str(), color, font);
 }
 
-bool Label::Draw()
+bool UI_Label::Draw()
 {
 	app->render->Blit(label_texture, position.x- section.w * 0.5f, position.y - section.h * 0.5f , &section, false, 0.0f);
 

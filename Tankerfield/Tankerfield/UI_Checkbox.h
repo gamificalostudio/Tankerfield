@@ -7,22 +7,22 @@
 #include "Animation.h"
 #include "UI_Button.h"
 
-class Gui_Listener;
+class UI_Listener;
 
-struct Checkbox_Definition: public UI_Object_Definition
+struct UI_CheckboxDef: public UI_ElementDefinition
 {
 	bool                default_value = false;
-	Button_Definition   check_on_button;
-	Button_Definition   check_off_button;
+	UI_ButtonDef   check_on_button;
+	UI_ButtonDef   check_off_button;
 };
 
-class Checkbox : public UI_Object, public Gui_Listener
+class UI_Checkbox : public UI_Element, public UI_Listener
 {
 public:
 
-	Checkbox(const fPoint position, const Checkbox_Definition definition, Gui_Listener * listener);
+	UI_Checkbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener * listener);
 
-	virtual ~Checkbox();
+	virtual ~UI_Checkbox();
 
 	void SetValue(const bool value);
 
@@ -30,16 +30,16 @@ public:
 
 private:
 
-	bool OutClick(UI_Object* object);
+	bool OutClick(UI_Element* object);
 
 private:
 
-	Checkbox_Definition     definition;
+	UI_CheckboxDef     definition;
 	bool                    value = false;
 
 	// Components =================================
 
-	Button* button = nullptr;   
+	UI_Button* button = nullptr;   
 
 private:
 	friend M_UI;

@@ -6,7 +6,7 @@
 #include "App.h"
 #include "UI_Button.h"
 
-Slider::Slider(const fPoint position, const Slider_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
+UI_Slider::UI_Slider(const fPoint position, const UI_SliderDef definition, UI_Listener* listener) : UI_Element(position, definition, listener)
 {
 	this->definition = definition;
 
@@ -24,7 +24,7 @@ Slider::Slider(const fPoint position, const Slider_Definition definition, Gui_Li
 }
 
 
-Slider::~Slider()
+UI_Slider::~UI_Slider()
 {
 	if (thumb != nullptr)
 	{
@@ -33,18 +33,18 @@ Slider::~Slider()
 	}
 }
 
-bool Slider::Draw()
+bool UI_Slider::Draw()
 {
 	app->render->Blit(app->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f , position.y - definition.rail_draw_rect.h * 0.5f, &definition.rail_draw_rect, false, 0.0f);
 	return true;
 }
 
-int Slider::GetValue()
+int UI_Slider::GetValue()
 {
 	return current_value;
 }
 
-void Slider::SetValue(int value)
+void UI_Slider::SetValue(int value)
 {
 	if (value > definition.max_value)
 	{
@@ -60,7 +60,7 @@ void Slider::SetValue(int value)
 	thumb->SetPosition(fPoint( (float)button_axis_value, position.y));
 }
 
-bool Slider::Update(float dt)
+bool UI_Slider::Update(float dt)
 {
 	point_A = position.x - definition.distance * 0.5f;
 	point_B = position.x + definition.distance * 0.5f;
@@ -85,7 +85,7 @@ bool Slider::Update(float dt)
 	return true;
 }
 
-bool Slider::RepeatClick(UI_Object * object)
+bool UI_Slider::RepeatClick(UI_Element * object)
 {
 	if (object == thumb)
 	{

@@ -7,7 +7,7 @@
 
 struct SDL_Texture;
 
-class M_UITest : public Module, public Gui_Listener
+class M_UITest : public Module, public UI_Listener
 {
 public:
 
@@ -40,11 +40,11 @@ private:
 
 	fPoint        player_pos;
 
-	Button      * button_test = nullptr;
+	UI_Button      * button_test = nullptr;
 
-	Image       * image_test = nullptr;
+	UI_Image       * image_test = nullptr;
 
-	Label       * label_test = nullptr;
+	UI_Label       * label_test = nullptr;
 
 };
 

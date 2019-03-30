@@ -3,25 +3,25 @@
 #include "App.h"
 #include "p2Log.h"
 
-UI_Object::UI_Object(const fPoint position, UI_Object_Definition definition, Gui_Listener *listener) 
+UI_Element::UI_Element(const fPoint position, UI_ElementDefinition definition, UI_Listener *listener) 
 	: position(position), listener(listener), section(definition.section), pivot(definition.pivot), draw_offset(definition.draw_offset) {}
 
-UI_Object::~UI_Object()
+UI_Element::~UI_Element()
 {
 }
 
-fPoint UI_Object::GetPosition() const
+fPoint UI_Element::GetPosition() const
 {
 	return position;
 }
 
-void UI_Object::SetPosition(const fPoint position)
+void UI_Element::SetPosition(const fPoint position)
 {
 	this->position = position;
 	UpdateRelativePosition();
 }
 
-bool UI_Object::UpdateRelativePosition()
+bool UI_Element::UpdateRelativePosition()
 {
 	if (parent_object == nullptr)
 	{
@@ -32,7 +32,7 @@ bool UI_Object::UpdateRelativePosition()
 	return true;
 }
 
-bool UI_Object::SetParent(UI_Object * parent)
+bool UI_Element::SetParent(UI_Element * parent)
 {
 	if (parent == nullptr)
 	{
@@ -42,8 +42,8 @@ bool UI_Object::SetParent(UI_Object * parent)
 	// Delete previous parent =====================
 	if (parent_object)
 	{
-		list<UI_Object*> *sons = parent_object->GetSons();
-		list<UI_Object*>::iterator find_object = find(sons->begin(), sons->end(), this);
+		list<UI_Element*> *sons = parent_object->GetSons();
+		list<UI_Element*>::iterator find_object = find(sons->begin(), sons->end(), this);
 		
 		if (find_object != sons->end())
 		{
@@ -67,7 +67,7 @@ bool UI_Object::SetParent(UI_Object * parent)
 	return true;
 }
 
-void UI_Object::SetPivot(const PivotPos new_pivot)
+void UI_Element::SetPivot(const PivotPos new_pivot)
 {
 	pivot = new_pivot;
 	//switch (new_pivot)
@@ -77,22 +77,22 @@ void UI_Object::SetPivot(const PivotPos new_pivot)
 	//}
 }
 
-list<UI_Object*>* UI_Object::GetSons() 
+list<UI_Element*>* UI_Element::GetSons() 
 {
 	return &object_sons;
 }
 
-UI_Object * UI_Object::GetParent()
+UI_Element * UI_Element::GetParent()
 {
 	return parent_object;
 }
 
-void UI_Object::IsDraggable(const bool is_draggable)
+void UI_Element::IsDraggable(const bool is_draggable)
 {
 	this->is_draggable = is_draggable;
 }
 
-void UI_Object::SetState(const ObjectState state)
+void UI_Element::SetState(const ObjectState state)
 {
 	this->state = state;
 }

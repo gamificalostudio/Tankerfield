@@ -13,7 +13,7 @@ typedef string String;
 #define DEFAULT_MARGIN_SECTION 10
 
 struct SDL_Texture;
-class Gui_Listener;
+class UI_Listener;
 
 enum class HoverState
 {
@@ -43,7 +43,7 @@ enum class PivotPos
 	bottom_right
 };
 
-struct UI_Object_Definition
+struct UI_ElementDefinition
 {
 	PivotPos   pivot = PivotPos::center;
 	SDL_Rect   section = { 0,0,0,0 };
@@ -51,13 +51,13 @@ struct UI_Object_Definition
 
 };
 
-class UI_Object
+class UI_Element
 {
 public:
 
-	UI_Object(const fPoint position, UI_Object_Definition definition, Gui_Listener *listener);
+	UI_Element(const fPoint position, UI_ElementDefinition definition, UI_Listener *listener);
 	
-	virtual ~UI_Object();
+	virtual ~UI_Element();
 
 	// Virtual methods ================================
 	virtual bool PreUpdate() { return true; }
@@ -72,15 +72,15 @@ public:
 
 	void SetState(const ObjectState state);
 
-	bool SetParent(UI_Object* parent);
+	bool SetParent(UI_Element* parent);
 
 	void SetPivot(const PivotPos new_pivot);
 
 	fPoint GetPosition() const;
 
-	list<UI_Object*>* GetSons(); 
+	list<UI_Element*>* GetSons(); 
 
-	UI_Object* GetParent();
+	UI_Element* GetParent();
 
 	void IsDraggable(const bool is_draggable);
 
@@ -96,7 +96,7 @@ protected:
 	SDL_Rect			  section = {0, 0, 0, 0};
 	fPoint                section_offset = { 0.f, 0.f };
 	fPoint                draw_offset = { 0.f, 0.f };
-	Gui_Listener        * listener = nullptr;
+	UI_Listener        * listener = nullptr;
 
 	// Properties ========================================
 
@@ -107,8 +107,8 @@ protected:
 
 	// Hierarchy =========================================
 
-	UI_Object           * parent_object = nullptr;
-	list<UI_Object*>      object_sons;
+	UI_Element           * parent_object = nullptr;
+	list<UI_Element*>      object_sons;
 
 	friend class M_UI;
 };

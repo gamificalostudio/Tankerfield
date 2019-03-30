@@ -13,24 +13,24 @@
 using namespace std;
 typedef string String;
 
-class UI_Object;
+class UI_Element;
 enum class ObjectState;
 
-class Gui_Listener;
-class Image;
-class Button;
-class Slider;
-class Label;
-class Checkbox;
-class TextPanel;
+class UI_Listener;
+class UI_Image;
+class UI_Button;
+class UI_Slider;
+class UI_Label;
+class UI_Checkbox;
+class UI_TextPanel;
 
-struct UI_Object_Definition;
-struct Button_Definition;
-struct Label_Definition;
-struct Image_Definition;
-struct Slider_Definition;
-struct Checkbox_Definition;
-struct TextPanel_Definition;
+struct UI_ElementDefinition;
+struct UI_ButtonDef;
+struct UI_LabelDef;
+struct UI_ImageDef;
+struct UI_SliderDef;
+struct UI_CheckboxDef;
+struct UI_TextPanelDef;
 
 enum class ClickState
 {
@@ -65,28 +65,28 @@ public:
 	ClickState GetClickState() const;
 
 	// Creation functions ---------------------------------------------------------
-	UI_Object* CreateObject(const fPoint position, UI_Object_Definition definition, Gui_Listener* listener = nullptr);
+	UI_Element* CreateObject(const fPoint position, UI_ElementDefinition definition, UI_Listener* listener = nullptr);
 
-	Label* CreateLabel(const fPoint position, const String text, Label_Definition definition, Gui_Listener* listener = nullptr);
+	UI_Label* CreateLabel(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener = nullptr);
 
-	Image* CreateImage(const fPoint position, Image_Definition definition, Gui_Listener* listener = nullptr);
+	UI_Image* CreateImage(const fPoint position, UI_ImageDef definition, UI_Listener* listener = nullptr);
 
-	Button* CreateButton(const fPoint position, Button_Definition definition, Gui_Listener* listener = nullptr);
+	UI_Button* CreateButton(const fPoint position, UI_ButtonDef definition, UI_Listener* listener = nullptr);
 
-	Slider* CreateSlider(const fPoint position, Slider_Definition definition, Gui_Listener* listener = nullptr);
+	UI_Slider* CreateSlider(const fPoint position, UI_SliderDef definition, UI_Listener* listener = nullptr);
 
-	Checkbox* CreateCheckbox(const fPoint position, Checkbox_Definition definition, Gui_Listener* listener = nullptr);
+	UI_Checkbox* CreateCheckbox(const fPoint position, UI_CheckboxDef definition, UI_Listener* listener = nullptr);
 
-	TextPanel * CreateTextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener* listener);
+	UI_TextPanel * CreateTextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener* listener);
 
 	// Object functions ----------------------------------------------------------
-	UI_Object*  GetClickedObject();
+	UI_Element*  GetClickedObject();
 
-	UI_Object* GetScreen();
+	UI_Element* GetScreen();
 
-	bool DeleteObject(UI_Object* object);
+	bool DeleteObject(UI_Element* object);
 
-	void SetStateToBranch(const ObjectState state, UI_Object* branch_root);
+	void SetStateToBranch(const ObjectState state, UI_Element* branch_root);
 
 	// Slider functions ----------------------------------------------------------
 	fPoint GetMouseOffset() const;
@@ -97,9 +97,9 @@ private:
 
 	bool SelectClickedObject();
 
-	void DrawUI(UI_Object* object); // Recursive function to draw gui as a tree
+	void DrawUI(UI_Element* object); // Recursive function to draw gui as a tree
 
-	void UpdateGuiPositions(UI_Object* object, fPoint cumulated_position);
+	void UpdateGuiPositions(UI_Element* object, fPoint cumulated_position);
 
 private:
 
@@ -109,11 +109,11 @@ private:
 	SDL_Texture* atlas;
 
 	// Objects ---------------------------------------------
-	list<UI_Object*> objects_list;
+	list<UI_Element*> objects_list;
 
-	UI_Object* main_object = nullptr;
+	UI_Element* main_object = nullptr;
 
-	UI_Object* selected_object = nullptr;
+	UI_Element* selected_object = nullptr;
 
 	ClickState click_state = ClickState::None;
 
@@ -127,23 +127,23 @@ public:
 };
 
 
-class Gui_Listener
+class UI_Listener
 {
 public:
-	Gui_Listener()
+	UI_Listener()
 	{}
 
-	virtual bool OnHover(UI_Object* object) { return true; }
+	virtual bool OnHover(UI_Element* object) { return true; }
 
-	virtual bool RepeatHover(UI_Object* object) { return true; }
+	virtual bool RepeatHover(UI_Element* object) { return true; }
 
-	virtual bool OutHover(UI_Object* object) { return true; }
+	virtual bool OutHover(UI_Element* object) { return true; }
 
-	virtual bool OnClick(UI_Object* object) { return true; }
+	virtual bool OnClick(UI_Element* object) { return true; }
 
-	virtual bool RepeatClick(UI_Object* object) { return true; }
+	virtual bool RepeatClick(UI_Element* object) { return true; }
 
-	virtual bool OutClick(UI_Object* object) { return true; }
+	virtual bool OutClick(UI_Element* object) { return true; }
 };
 
 

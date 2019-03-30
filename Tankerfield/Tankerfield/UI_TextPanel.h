@@ -11,7 +11,7 @@
 using namespace std;
 typedef string String;
 
-struct TextPanel_Definition: public UI_Object_Definition
+struct UI_TextPanelDef: public UI_ElementDefinition
 {
 	String  		      text;
 	_TTF_Font*			  font = nullptr;
@@ -20,14 +20,14 @@ struct TextPanel_Definition: public UI_Object_Definition
 	SDL_Color             color = { 255,255,255,255 };
 };
 
-class TextPanel : public UI_Object
+class UI_TextPanel : public UI_Element
 {
 public:
 
-	TextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener* listener);
+	UI_TextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener* listener);
 
 	// Destructor
-	~TextPanel();
+	~UI_TextPanel();
 
 	// Set the text
 	void SetText(String text);
@@ -38,7 +38,7 @@ public:
 private:
 
 	SDL_Texture*           text_texture = nullptr;
-	TextPanel_Definition   definition;
+	UI_TextPanelDef   definition;
 	vector<SDL_Rect>       rects;
 	uint                   lines = 0;
 	int                    font_height = 0;

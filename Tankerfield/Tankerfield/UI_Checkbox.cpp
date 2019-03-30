@@ -5,11 +5,11 @@
 #include "UI_Button.h"
 #include "App.h"
 
-Checkbox::Checkbox(const fPoint position, const Checkbox_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
+UI_Checkbox::UI_Checkbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener* listener) : UI_Element(position, definition, listener)
 {
 	this->definition = definition;
 
-	Button_Definition def;
+	UI_ButtonDef def;
 
 	if (definition.default_value)
 	{
@@ -24,7 +24,7 @@ Checkbox::Checkbox(const fPoint position, const Checkbox_Definition definition, 
 	button->SetParent(this);
 }
 
-Checkbox::~Checkbox()
+UI_Checkbox::~UI_Checkbox()
 {
 	if (button != nullptr)
 	{
@@ -33,7 +33,7 @@ Checkbox::~Checkbox()
 	}
 }
 
-void Checkbox::SetValue(const bool value)
+void UI_Checkbox::SetValue(const bool value)
 {
 	this->value = value;
 
@@ -48,12 +48,12 @@ void Checkbox::SetValue(const bool value)
 
 }
 
-bool Checkbox::GetValue()
+bool UI_Checkbox::GetValue()
 {
 	return value;
 }
 
-bool Checkbox::OutClick(UI_Object * object)
+bool UI_Checkbox::OutClick(UI_Element * object)
 {
 	if (object == button)
 	{

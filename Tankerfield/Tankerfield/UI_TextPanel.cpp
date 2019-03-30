@@ -6,14 +6,14 @@
 #include "M_Textures.h"
 #include "App.h"
 
-TextPanel::TextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener * listener): UI_Object(position, definition,listener)
+UI_TextPanel::UI_TextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener * listener): UI_Element(position, definition,listener)
 {
 	section.x = section.y = 0;
 	this->definition = definition;
 	SetText(definition.text);
 }
 
-TextPanel::~TextPanel()
+UI_TextPanel::~UI_TextPanel()
 {
 	if (text_texture != nullptr)
 	{
@@ -21,12 +21,12 @@ TextPanel::~TextPanel()
 	}
 }
 
-void TextPanel::SetText(String text)
+void UI_TextPanel::SetText(String text)
 {
 	
 }
 
-bool TextPanel::Draw()
+bool UI_TextPanel::Draw()
 {
 
 	return true;

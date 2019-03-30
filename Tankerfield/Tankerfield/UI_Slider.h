@@ -7,28 +7,27 @@
 #include "M_UI.h"
 #include "UI_Button.h"
 
-struct Slider_Definition;
-class Button;
+class UI_Button;
 
-struct Slider_Definition: public UI_Object_Definition
+struct UI_SliderDef: public UI_ElementDefinition
 {
 	int                 distance = 100;
 	int                 fixed_y = 0;
 	SDL_Rect            rail_draw_rect = {0,0,0,0};
 	int                 default_value = 0;
-	Button_Definition   thumb_definition;
+	UI_ButtonDef   thumb_definition;
 	int                 max_value = 100;
 };
 
 
-class Slider : public UI_Object, public Gui_Listener
+class UI_Slider : public UI_Element, public UI_Listener
 {
 
 public:
 
-	Slider(const fPoint position, const Slider_Definition definition, Gui_Listener * listener);
+	UI_Slider(const fPoint position, const UI_SliderDef definition, UI_Listener * listener);
 
-	virtual ~Slider();
+	virtual ~UI_Slider();
 
 	bool Draw();
 
@@ -39,12 +38,12 @@ public:
 private:
 	bool Update(float dt);
 
-	bool RepeatClick(UI_Object* object);
+	bool RepeatClick(UI_Element* object);
 
 private:
-	Button*       thumb = nullptr;
+	UI_Button*       thumb = nullptr;
 
-	Slider_Definition   definition;
+	UI_SliderDef   definition;
 	int					point_A = 0;
 	int					point_B = 0;
 	int                 value = 0;
@@ -53,7 +52,7 @@ private:
 
 private:
 	friend M_UI;
-	friend Gui_Listener;
+	friend UI_Listener;
 };
 
 #endif // _SLIDER_H__

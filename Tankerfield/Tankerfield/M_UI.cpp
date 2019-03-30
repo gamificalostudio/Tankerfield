@@ -21,7 +21,7 @@
 M_UI::M_UI() : Module()
 {
 	name.assign("Module UI");
-	main_object = new UI_Object({ 0,0 }, UI_Object_Definition(), nullptr);
+	main_object = new UI_Element({ 0,0 }, UI_ElementDefinition(), nullptr);
 }
 
 // Destructor
@@ -52,7 +52,7 @@ bool M_UI::CleanUp()
 	app->tex->UnLoad(atlas);
 	atlas = nullptr;
 
-	list<UI_Object*>::iterator object;
+	list<UI_Element*>::iterator object;
 	object = objects_list.begin();
 
 	while (object != objects_list.end())
@@ -82,7 +82,7 @@ bool M_UI::PreUpdate()
 
 	SDL_Rect object_rect;
 
-	for (list<UI_Object*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
 		if ((*item)->state != ObjectState::visible)
 		{
@@ -185,7 +185,7 @@ bool M_UI::Update(float dt)
 
 	// Hover Callbacks =============================================
 
-	for (list<UI_Object*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
 		if ((*item)->listener == nullptr)
 		{
@@ -216,7 +216,7 @@ bool M_UI::Update(float dt)
 	
 	// Update objects ==============================================
 
-	for (list<UI_Object*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
 		(*item)->Update(dt);
 	}
@@ -246,75 +246,75 @@ bool M_UI::PostUpdate()
 
 // Creation methods =================================================================
 
- UI_Object * M_UI::CreateObject(const fPoint position, UI_Object_Definition definition, Gui_Listener * listener)
+ UI_Element * M_UI::CreateObject(const fPoint position, UI_ElementDefinition definition, UI_Listener * listener)
  {
-	 UI_Object* object = new UI_Object(position, definition, listener);
+	 UI_Element* object = new UI_Element(position, definition, listener);
 	 object->SetParent(main_object);
 	 objects_list.push_back(object);
 	 return object;
  }
 
- Label* M_UI::CreateLabel(const fPoint position, const String text,  Label_Definition definition, Gui_Listener* listener)
+ UI_Label* M_UI::CreateLabel(const fPoint position, const String text,  UI_LabelDef definition, UI_Listener* listener)
 {
-	Label* object = new Label(position, text, definition, listener);
+	UI_Label* object = new UI_Label(position, text, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 
 }
 
-Image* M_UI::CreateImage(const fPoint position, Image_Definition definition , Gui_Listener* listener)
+UI_Image* M_UI::CreateImage(const fPoint position, UI_ImageDef definition , UI_Listener* listener)
 {
-	Image* object = new Image(position, definition, listener);
+	UI_Image* object = new UI_Image(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
-Button* M_UI::CreateButton(const fPoint position, Button_Definition definition, Gui_Listener* listener)
+UI_Button* M_UI::CreateButton(const fPoint position, UI_ButtonDef definition, UI_Listener* listener)
 {
-	Button* object = new Button(position, definition, listener);
+	UI_Button* object = new UI_Button(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
-Slider * M_UI::CreateSlider(const fPoint position, Slider_Definition definition, Gui_Listener * listener)
+UI_Slider * M_UI::CreateSlider(const fPoint position, UI_SliderDef definition, UI_Listener * listener)
 {
-	Slider* object = new Slider(position, definition, listener);
+	UI_Slider* object = new UI_Slider(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
-Checkbox * M_UI::CreateCheckbox(const fPoint position, Checkbox_Definition definition, Gui_Listener * listener)
+UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, UI_CheckboxDef definition, UI_Listener * listener)
 {
-	Checkbox* object = new Checkbox(position, definition, listener);
+	UI_Checkbox* object = new UI_Checkbox(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 
-TextPanel * M_UI::CreateTextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener * listener)
+UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener * listener)
 {
-	TextPanel* object = new TextPanel(position, definition, listener);
+	UI_TextPanel* object = new UI_TextPanel(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 // ====================================================================================
 
-UI_Object * M_UI::GetClickedObject()
+UI_Element * M_UI::GetClickedObject()
 {
 	return selected_object;
 }
 
-UI_Object * M_UI::GetScreen()
+UI_Element * M_UI::GetScreen()
 {
 	return main_object;
 }
 
-bool M_UI::DeleteObject(UI_Object * object)
+bool M_UI::DeleteObject(UI_Element * object)
 {
 	if (objects_list.empty())
 	{
@@ -329,7 +329,7 @@ bool M_UI::DeleteObject(UI_Object * object)
 
 	// Find object to delete =====================================
 
-	list<UI_Object*>::iterator object_to_delete = find(objects_list.begin(), objects_list.end(), object);
+	list<UI_Element*>::iterator object_to_delete = find(objects_list.begin(), objects_list.end(), object);
 
 	if (object_to_delete == objects_list.end())
 	{
@@ -341,8 +341,8 @@ bool M_UI::DeleteObject(UI_Object * object)
 
 	if ((*object_to_delete)->parent_object != nullptr)
 	{
-		list<UI_Object*> *sons_list = (*object_to_delete)->parent_object->GetSons();
-		list<UI_Object*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), object);
+		list<UI_Element*> *sons_list = (*object_to_delete)->parent_object->GetSons();
+		list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), object);
 
 		if (son_to_delete == sons_list->end())
 		{
@@ -359,7 +359,7 @@ bool M_UI::DeleteObject(UI_Object * object)
 	return true;
 }
 
-void M_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_root)
+void M_UI::SetStateToBranch(const ObjectState state, UI_Element * branch_root)
 {
 	if (branch_root == nullptr)
 	{
@@ -368,7 +368,7 @@ void M_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_root)
 
 	branch_root->state = state;
 
-	for (list<UI_Object*>::iterator item = branch_root->object_sons.begin(); item != branch_root->object_sons.end(); ++item)
+	for (list<UI_Element*>::iterator item = branch_root->object_sons.begin(); item != branch_root->object_sons.end(); ++item)
 	{
 		SetStateToBranch(state, (*item));
 	}
@@ -388,9 +388,9 @@ void M_UI::SetCursorOffset(const fPoint offset)
 
 bool M_UI::SelectClickedObject()
 {
-	list<UI_Object*> clicked_objects;
+	list<UI_Element*> clicked_objects;
 
-	for (list<UI_Object*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
 		if ((*item)->hover_state != HoverState::None  && (*item)->state == ObjectState::visible && (*item)->is_interactive == true)
 		{
@@ -401,13 +401,13 @@ bool M_UI::SelectClickedObject()
 	// Select nearest object -------------------------------
 	if ( ! clicked_objects.empty())
 	{
-		UI_Object* nearest_object = nullptr;
+		UI_Element* nearest_object = nullptr;
 		int nearest_object_position = -1;
 
-		for ( list<UI_Object*>::iterator item = clicked_objects.begin(); item != clicked_objects.end() ; ++item)
+		for ( list<UI_Element*>::iterator item = clicked_objects.begin(); item != clicked_objects.end() ; ++item)
 		{
 			int count = 0;
-			for (UI_Object* iterator = (*item); iterator != nullptr ; iterator = iterator->parent_object)
+			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->parent_object)
 			{
 				++count;
 			}
@@ -425,7 +425,7 @@ bool M_UI::SelectClickedObject()
 	return true;
 }
 
-void M_UI::DrawUI(UI_Object * object)
+void M_UI::DrawUI(UI_Element * object)
 {
 	if (object == nullptr)
 	{
@@ -459,13 +459,13 @@ void M_UI::DrawUI(UI_Object * object)
 		}
 	}
 
-	for (list<UI_Object*>::iterator item = object->object_sons.begin();  item != object->object_sons.end(); ++item)
+	for (list<UI_Element*>::iterator item = object->object_sons.begin();  item != object->object_sons.end(); ++item)
 	{
 		DrawUI((*item));
 	}
 }
 
-void M_UI::UpdateGuiPositions(UI_Object * object, fPoint cumulated_position)
+void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 {
 	if (object == nullptr)
 	{
@@ -475,7 +475,7 @@ void M_UI::UpdateGuiPositions(UI_Object * object, fPoint cumulated_position)
 	cumulated_position += object->relative_position;
 	object->position = cumulated_position;
 
-	for (list<UI_Object*>::iterator item = object->object_sons.begin() ; item != object->object_sons.end(); ++item)
+	for (list<UI_Element*>::iterator item = object->object_sons.begin() ; item != object->object_sons.end(); ++item)
 	{
 		UpdateGuiPositions((*item), cumulated_position);
 	}

@@ -7,23 +7,23 @@
 #include "p2Point.h"
 #include "SDL_ttf/include/SDL_ttf.h"
 
-class Button;
+class UI_Button;
 
-struct Label_Definition : public UI_Object_Definition
+struct UI_LabelDef : public UI_ElementDefinition
 {
-	Label_Definition(_TTF_Font* font, SDL_Color color = { 255,255,255,255 }): font(font) ,color(color) {}
+	UI_LabelDef(_TTF_Font* font, SDL_Color color = { 255,255,255,255 }): font(font) ,color(color) {}
 
 	_TTF_Font* font = nullptr;
 	SDL_Color  color = { 255,255,255,255 };
 };
 
-class Label : public UI_Object
+class UI_Label : public UI_Element
 {
 public:
 
-	Label(const fPoint position, const String text, Label_Definition definition, Gui_Listener* listener);
+	UI_Label(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener);
 
-	~Label();
+	~UI_Label();
 
 	void SetText(String text);
 
@@ -38,7 +38,7 @@ private:
 
 private:
 
-	friend Button;
+	friend UI_Button;
 };
 
 #endif // __LABEL_H__

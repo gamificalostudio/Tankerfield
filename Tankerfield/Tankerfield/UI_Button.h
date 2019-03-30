@@ -9,34 +9,34 @@
 
 #define LABEL_PRESSED_OFFSET 4
 
-class Label;
-struct Button_Definition;
+class UI_Label;
+struct UI_ButtonDef;
 
-struct Button_Definition: public UI_Object_Definition
+struct UI_ButtonDef: public UI_ElementDefinition
 {
 public:
-	Button_Definition() {}
-	Button_Definition(SDL_Rect idle_rect, SDL_Rect hover_rect, SDL_Rect pushed_rect) : idle_rect(idle_rect), hover_rect(hover_rect), pushed_rect(pushed_rect) {}
+	UI_ButtonDef() {}
+	UI_ButtonDef(SDL_Rect idle_rect, SDL_Rect hover_rect, SDL_Rect pushed_rect) : idle_rect(idle_rect), hover_rect(hover_rect), pushed_rect(pushed_rect) {}
 
 	SDL_Rect idle_rect = {0,0,0,0};
 	SDL_Rect pushed_rect = { 0,0,0,0 };
 	SDL_Rect hover_rect = { 0,0,0,0 };
 };
 
-class Button : public UI_Object, public Gui_Listener
+class UI_Button : public UI_Element, public UI_Listener
 {
 
 public:
 
-	Button(const fPoint position, const Button_Definition definition , Gui_Listener * listener);
+	UI_Button(const fPoint position, const UI_ButtonDef definition , UI_Listener * listener);
 
-	virtual ~Button();
+	virtual ~UI_Button();
 
 	bool Draw();
 
-	bool SetLabel(const fPoint position, const String text, const Label_Definition definition);
+	bool SetLabel(const fPoint position, const String text, const UI_LabelDef definition);
 
-	void SetDefinition(Button_Definition definition);
+	void SetDefinition(UI_ButtonDef definition);
 
 private:
 
@@ -46,11 +46,11 @@ private:
 
 private:
 
-	Button_Definition	definition;
+	UI_ButtonDef	definition;
 
 public:
 	// Components =================================
-	Label*			label = nullptr;
+	UI_Label*			label = nullptr;
 
 private:
 	friend M_UI;
