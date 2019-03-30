@@ -164,14 +164,11 @@ void Obj_Tank::InputShotMouse(fPoint & input)
 	input.Normalize();
 }
 
-void Obj_Tank::InputShotController(fPoint & dir)
+void Obj_Tank::InputShotController(fPoint & input)
 {
 	if (controller != nullptr)
 	{
-		fPoint input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
-		dir.x = input.x * cos_45 - input.y * sin_45;
-		dir.y = input.x * sin_45 + input.y * cos_45;
-		dir.Normalize();
+		input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
 	}
 }
 
@@ -181,15 +178,19 @@ void Obj_Tank::Shoot()
 	fPoint input(0.f, 0.f);
 	//If the direction of the controller is null, we get the keyboard direction
 	//InputShotMouse(input);
+	fPoint dir;
+	dir.x = input.x * cos_45 - input.y * sin_45;
+	dir.y = input.x * sin_45 + input.y * cos_45;
+	dir.Normalize();
 	InputShotController(input);
 	if (!input.IsZero())
 	{
-		turr_angle = (atan2(input.y, -input.x) * RADTODEG);
+		turr_angle = (atan2(-input.y, input.x) * RADTODEG);
 	}
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(pos.x, pos.y, input);
+		weapons[weapon_type]->Shoot(pos.x, pos.y, dir);
 		time_between_bullets_timer.Start();
 	}
 }
