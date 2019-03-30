@@ -19,6 +19,9 @@ public:
 	bool CleanUp();
 
 private:
+	void Movement(float dt);
+	void GetKeyboardInput(fPoint & input);
+	void GetControllerInput(fPoint & input);
 
 public:
 
@@ -35,4 +38,7 @@ private:
 	float speed = 5.f;
 	float angle = 0.f;
 	Controller ** controller = nullptr;
+
+	float cos_45 = 0.f;
+	float sin_45 = 0.f;
 };

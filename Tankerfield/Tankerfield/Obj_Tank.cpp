@@ -48,6 +48,8 @@ bool Obj_Tank::Start()
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
+	cos_45 = cosf(-45 * DEGTORAD);
+	sin_45 = sinf(-45 * DEGTORAD);
 
 	return true;
 }
@@ -63,24 +65,63 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
+	Movement(dt);
+
+	return true;
+}
+
+void Obj_Tank::Movement(float dt)
+{
+	fPoint input(0.f, 0.f);
+	GetKeyboardInput(input);
+	GetControllerInput(input);
+
+	fPoint dir(0.f, 0.f);
+	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
+	dir.x = input.x * cos_45 - input.y * sin_45;
+	dir.y = input.x * sin_45 + input.y * cos_45;
+	dir.Normalize();
+
+	if (!dir.IsZero())
+	{
+		angle = (atan2(input.y, -input.x) * RADTODEG);
+	}
+
+	pos += dir * speed * dt;
+}
+
+void Obj_Tank::GetKeyboardInput(fPoint & input)
+{
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		input.y -= 1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		input.x -= 1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		input.y += 1.f;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		input.x += 1.f;
+	}
+}
+
+void Obj_Tank::GetControllerInput(fPoint & input)
+{
 	if (controller != nullptr)
 	{
-		iPoint joystick = (*controller)->GetJoystick(Joystick::LEFT);
-		fPoint fjoy(joystick.x, joystick.y);
-		fjoy.Normalize();
-		pos += fjoy * speed * dt;
-		//if(!fjoy.IsZero())
-		//{
-		//	angle = (atan2(fjoy.y, fjoy.x) * 180 / M_PI);
-		//}
+		input += (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
 	}
-	return true;
 }
 
 bool Obj_Tank::PostUpdate()
 {
 	int tile_width = 100, tile_height = 50;
-	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 135);
+	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	fPoint iso_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
 	App->render->Blit(base_tex, iso_pos.x, iso_pos.y, &base_rects[ind]);
 	return true;
