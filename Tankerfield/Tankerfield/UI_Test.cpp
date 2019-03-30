@@ -62,15 +62,7 @@ iPoint UI_Test::MapToWorld(int x, int y, int tile_width, int tile_height)
 	return ret;
 }
 
-fPoint UI_Test::MapToWorldF(float x, float y, float tile_width, float tile_height)
-{
-	fPoint ret;
 
-	ret.x = (x - y) * (tile_width * 0.5f);
-	ret.y = (x + y) * (tile_height * 0.5f);
-
-	return ret;
-}
 
 fPoint UI_Test::WorldToMapF(iPoint world_pos, float tile_width, float tile_height)
 {
@@ -220,4 +212,14 @@ bool UI_Test::CleanUp()
 
 
 	return true;
+}
+
+fPoint MapToWorldF(float x, float y, float tile_width, float tile_height)
+{
+	fPoint ret;
+
+	ret.x = (x - y) * (tile_width * 0.5f);
+	ret.y = (x + y) * (tile_height * 0.5f);
+
+	return ret;
 }

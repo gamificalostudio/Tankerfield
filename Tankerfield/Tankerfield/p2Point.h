@@ -102,11 +102,11 @@ public:
 		return r;
 	}
 
-	p2Point operator /=(const TYPE& v)
+	const p2Point operator /=(const TYPE& v)
 	{
 		x /= v;
 		y /= v;
-		return this;
+		return (*this);
 	}
 
 	bool operator ==(const p2Point& v) const

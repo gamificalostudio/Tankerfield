@@ -10,6 +10,7 @@
 #include "p2Log.h"
 #include "UI_Test.h"
 
+
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;

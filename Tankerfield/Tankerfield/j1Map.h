@@ -204,7 +204,7 @@ public:
 	~j1Map();
 
 	bool Awake(pugi::xml_node&) override;
-	bool PostUpdate() override;
+	bool Update(float dt) override;
 
 	// Load new map
 	bool Load(const std::string & file_name);
