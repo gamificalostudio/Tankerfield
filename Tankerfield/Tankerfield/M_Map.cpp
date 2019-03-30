@@ -3,6 +3,7 @@
 #include "App.h"
 #include "M_Map.h"
 #include "Log.h"
+#include "M_Window.h"
 
 M_Map::M_Map()
 {
@@ -49,6 +50,9 @@ bool M_Map::Update(float dt)
 	if (map_loaded == false)
 		return ret;
 
+	uint win_w = 0, win_h = 0;
+	app->win->GetWindowSize(win_w, win_h);
+
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
@@ -63,16 +67,21 @@ bool M_Map::Update(float dt)
 				int tile_id = (*layer)->Get(x, y);
 				if (tile_id > 0)
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
-					if (tileset != nullptr)
+					iPoint pos = MapToWorld(x, y);
+					if (app->render->IsOnCamera(pos.x,pos.y,data.tile_width,data.tile_height))
 					{
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						if (tileset != nullptr)
+						{
+							SDL_Rect r = tileset->GetTileRect(tile_id);
 
 
-						app->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
+							app->render->Blit(tileset->texture, pos.x, pos.y, &r);
+
+						}
 					}
+					
 				}
 			}
 		}
