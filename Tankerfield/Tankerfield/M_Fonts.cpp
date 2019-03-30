@@ -1,8 +1,8 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
-#include "j1Textures.h"
-#include "j1Fonts.h"
+#include "App.h"
+#include "M_Textures.h"
+#include "M_Fonts.h"
 
 #include "SDL\include\SDL.h"
 #include "SDL_TTF\include\SDL_ttf.h"

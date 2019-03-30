@@ -1,7 +1,7 @@
 #ifndef __TEXT_PANEL_H__
 #define __TEXT_PANEL_H__
 
-#include "j1Module.h"
+#include "Module.h"
 #include "UI_Object.h"
 #include "p2Point.h"
 #include "SDL_ttf/include/SDL_ttf.h"

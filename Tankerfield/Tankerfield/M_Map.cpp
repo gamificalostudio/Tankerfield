@@ -1,7 +1,7 @@
 #include "Brofiler\Brofiler.h"
 
-#include "j1App.h"
-#include "j1Map.h"
+#include "App.h"
+#include "M_Map.h"
 #include "p2Log.h"
 
 j1Map::j1Map()

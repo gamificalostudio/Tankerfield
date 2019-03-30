@@ -2,7 +2,7 @@
 #define __j1AUDIO_H__
 
 #include <list>
-#include "j1Module.h"
+#include "Module.h"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
 

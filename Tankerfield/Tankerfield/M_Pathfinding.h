@@ -1,7 +1,7 @@
 #ifndef __j1PATHFINDING_H__
 #define __j1PATHFINDING_H__
 
-#include "j1Module.h"
+#include "Module.h"
 #include "p2Point.h"
 #include <vector>
 #include <list>

@@ -1,7 +1,7 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
-#include "j1Pathfinding.h"
+#include "App.h"
+#include "M_Pathfinding.h"
 
 j1PathFinding::j1PathFinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {

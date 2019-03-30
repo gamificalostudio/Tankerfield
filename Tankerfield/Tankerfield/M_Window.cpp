@@ -1,7 +1,7 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
-#include "j1Window.h"
+#include "App.h"
+#include "M_Window.h"
 
 #include "SDL/include/SDL.h"
 

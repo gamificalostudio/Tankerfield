@@ -1,13 +1,13 @@
 #ifndef __j1SCENE_H__
 #define __j1SCENE_H__
 
-#include "j1Module.h"
+#include "Module.h"
 #include "SDL/include/SDL_rect.h"
 
 struct SDL_Texture;
 struct Controller;
 
-class j1Scene : public Module
+class M_Scene : public Module
 {
 private:
 	Controller** control1 = nullptr;
@@ -16,10 +16,10 @@ public:
 	int current_level = 0;
 public:
 
-	j1Scene();
+	M_Scene();
 
 	// Destructor
-	virtual ~j1Scene();
+	virtual ~M_Scene();
 
 	// Called before render is available
 	bool Awake();

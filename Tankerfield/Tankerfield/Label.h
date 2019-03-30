@@ -1,8 +1,8 @@
 #ifndef __LABEL_H__
 #define __LABEL_H__
 
-#include "j1Module.h"
-#include "Module_UI.h"
+#include "Module.h"
+#include "M_UI.h"
 #include "UI_Object.h"
 #include "p2Point.h"
 #include "SDL_ttf/include/SDL_ttf.h"

@@ -2,23 +2,20 @@
 
 #include "p2Log.h"
 
-#include "j1App.h"
-#include "j1Render.h"
-#include "ObjectManager.h"
-#include "j1Textures.h"
+#include "App.h"
+#include "M_Render.h"
+#include "M_ObjManager.h"
+#include "M_Textures.h"
 #include "Object.h"
 #include "M_Audio.h"
-#include "j1Window.h"
-#include "j1Scene.h"
+#include "M_Window.h"
+#include "M_Scene.h"
 #include "Tesla_Trooper.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
 #include "Obj_Tank.h"
 #include "Obj_Basic_Shoot.h"
-//#include "j1Collision.h"
-//#include "j1Map.h"
-//#include "Player.h"
 
 ObjectManager::ObjectManager()
 {

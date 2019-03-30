@@ -1,7 +1,7 @@
 #ifndef _BUTTON_INPUT_H__
 #define _BUTTON_INPUT_H__
 
-#include "Module_UI.h"
+#include "M_UI.h"
 #include "UI_Object.h"
 #include "p2Point.h"
 #include "Animation.h"

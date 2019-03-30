@@ -1,7 +1,7 @@
 #include "Image.h"
-#include "j1Render.h"
-#include "Module_UI.h"
-#include "j1App.h"
+#include "M_Render.h"
+#include "M_UI.h"
+#include "App.h"
 
 Image::Image(fPoint position, Image_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener) , draw_rect(definition.draw_rect)
 {

@@ -1,7 +1,7 @@
 #ifndef __j1FONTS_H__
 #define __j1FONTS_H__
 
-#include "j1Module.h"
+#include "Module.h"
 #include "SDL\include\SDL_pixels.h"
 #include <list>
 using namespace std;

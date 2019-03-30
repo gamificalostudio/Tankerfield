@@ -1,6 +1,6 @@
-#include "Module_UI.h"
+#include "M_UI.h"
 #include "UI_Object.h"
-#include "j1App.h"
+#include "App.h"
 #include "p2Log.h"
 
 UI_Object::UI_Object(const fPoint position, UI_Object_Definition definition, Gui_Listener *listener) 

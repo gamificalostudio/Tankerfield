@@ -1,10 +1,10 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "Text_Panel.h"
-#include "j1Render.h"
-#include "j1Fonts.h"
-#include "j1Textures.h"
-#include "j1App.h"
+#include "M_Render.h"
+#include "M_Fonts.h"
+#include "M_Textures.h"
+#include "App.h"
 
 TextPanel::TextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener * listener): UI_Object(position, definition,listener)
 {

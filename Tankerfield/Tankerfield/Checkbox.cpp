@@ -1,9 +1,9 @@
 #include "Checkbox.h"
-#include "j1Render.h"
-#include  "p2Log.h"
-#include "j1Input.h"
+#include "M_Render.h"
+#include "p2Log.h"
+#include "M_Input.h"
 #include "Button_Input.h"
-#include "j1App.h"
+#include "App.h"
 
 Checkbox::Checkbox(const fPoint position, const Checkbox_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
 {

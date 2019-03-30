@@ -1,8 +1,8 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
-#include "j1Window.h"
-#include "j1Render.h"
+#include "App.h"
+#include "M_Window.h"
+#include "M_Render.h"
 
 j1Render::j1Render() : Module()
 {

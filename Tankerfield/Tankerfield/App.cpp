@@ -8,22 +8,22 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 
-#include "j1App.h"
-#include "j1Window.h"
-#include "j1Input.h"
-#include "j1Render.h"
-#include "j1Textures.h"
+#include "App.h"
+#include "M_Window.h"
+#include "M_Input.h"
+#include "M_Render.h"
+#include "M_Textures.h"
 #include "M_Audio.h"
-#include "j1Scene.h"
-#include "j1Pathfinding.h"
-#include "j1App.h"
-#include "SceneManager.h"
-#include "j1Map.h"
-#include "j1Fonts.h"
-#include "Module_UI.h"
-#include "UI_Test.h"
-#include "ObjectManager.h"
-#include "j1Scene.h"
+#include "M_Scene.h"
+#include "M_Pathfinding.h"
+#include "App.h"
+#include "M_SceneManager.h"
+#include "M_Map.h"
+#include "M_Fonts.h"
+#include "M_UI.h"
+#include "M_UITest.h"
+#include "M_ObjManager.h"
+#include "M_Scene.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -38,7 +38,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	ui_test = new UI_Test();
 	pathfinding = new j1PathFinding();
 	map = new j1Map();
-	scene = new j1Scene();
+	scene = new M_Scene();
 	font = new j1Fonts();
 	ui = new Module_UI();
 	objectmanager = new ObjectManager();

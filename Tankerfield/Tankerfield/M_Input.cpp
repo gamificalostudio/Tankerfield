@@ -1,10 +1,10 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
-#include "j1Input.h"
-#include "j1Window.h"
-#include "j1Render.h"
-#include "j1Map.h"
+#include "App.h"
+#include "M_Input.h"
+#include "M_Window.h"
+#include "M_Render.h"
+#include "M_Map.h"
 #include "SDL/include/SDL.h"
 
 

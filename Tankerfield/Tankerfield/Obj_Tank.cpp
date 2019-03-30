@@ -1,14 +1,14 @@
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 
-#include "j1App.h"
+#include "App.h"
 #include "Obj_Tank.h"
-#include "j1Textures.h"
-#include "j1Render.h"
+#include "M_Textures.h"
+#include "M_Render.h"
 
-#include "j1Input.h"
+#include "M_Input.h"
 #include "p2Log.h"
-#include "UI_Test.h"
+#include "M_UITest.h"
 
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;

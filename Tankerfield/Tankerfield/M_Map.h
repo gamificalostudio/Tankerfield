@@ -1,9 +1,9 @@
 #ifndef __j1MAP_H__
 #define __j1MAP_H__
 #include <list>
-#include "j1Module.h"
-#include "j1Render.h"
-#include "j1Textures.h"
+#include "Module.h"
+#include "M_Render.h"
+#include "M_Textures.h"
 #include "p2Log.h"
 
 struct Levels

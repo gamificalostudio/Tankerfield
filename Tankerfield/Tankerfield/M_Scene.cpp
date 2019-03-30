@@ -1,27 +1,27 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "j1App.h"
-#include "j1Input.h"
-#include "j1Textures.h"
+#include "App.h"
+#include "M_Input.h"
+#include "M_Textures.h"
 #include "M_Audio.h"
-#include "j1Render.h"
-#include "j1Window.h"
-#include "j1Scene.h"
-#include "SceneManager.h"
-#include "j1Map.h"
-#include "ObjectManager.h"
+#include "M_Render.h"
+#include "M_Window.h"
+#include "M_Scene.h"
+#include "M_SceneManager.h"
+#include "M_Map.h"
+#include "M_ObjManager.h"
 
-j1Scene::j1Scene() : Module()
+M_Scene::M_Scene() : Module()
 {
 	name.assign("scene");
 }
 
 // Destructor
-j1Scene::~j1Scene()
+M_Scene::~M_Scene()
 {}
 
 // Called before render is available
-bool j1Scene::Awake()
+bool M_Scene::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -30,7 +30,7 @@ bool j1Scene::Awake()
 }
 
 // Called before the first frame
-bool j1Scene::Start()
+bool M_Scene::Start()
 {
 	// Load the first level of the list on first game start -------------------------
 	std::list<Levels*>::iterator levelData = App->map->levels.begin();
@@ -43,7 +43,7 @@ bool j1Scene::Start()
 }
 
 // Called each loop iteration
-bool j1Scene::PreUpdate()
+bool M_Scene::PreUpdate()
 {
 	if (App->input->controllers.size())
 	{
@@ -55,7 +55,7 @@ bool j1Scene::PreUpdate()
 }
 
 // Called each loop iteration
-bool j1Scene::Update(float dt)
+bool M_Scene::Update(float dt)
 {
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += floor(200.0f * dt);
@@ -73,7 +73,7 @@ bool j1Scene::Update(float dt)
 }
 
 // Called each loop iteration
-bool j1Scene::PostUpdate()
+bool M_Scene::PostUpdate()
 {
 	bool ret = true;
 
@@ -84,7 +84,7 @@ bool j1Scene::PostUpdate()
 }
 
 // Called before quitting
-bool j1Scene::CleanUp()
+bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
 

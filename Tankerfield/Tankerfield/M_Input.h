@@ -6,7 +6,7 @@
 #include "SDL\include\SDL_gamecontroller.h"
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL.h"
-#include "j1Module.h"
+#include "Module.h"
 #include "p2Point.h"
 
 

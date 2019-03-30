@@ -1,8 +1,8 @@
 #ifndef __UI_TEST_H__
 #define __UI_TEST_H__
 
-#include "j1Module.h"
-#include "Module_UI.h"
+#include "Module.h"
+#include "M_UI.h"
 #include "SDL/include/SDL_rect.h"
 
 struct SDL_Texture;

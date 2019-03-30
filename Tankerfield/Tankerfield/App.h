@@ -6,7 +6,7 @@
 
 #include "PugiXml/src/pugixml.hpp"
 
-#include "j1Module.h"
+#include "Module.h"
 #include "j1PerfTimer.h"
 #include "j1Timer.h"
 
@@ -24,7 +24,7 @@ class j1Fonts;
 class Module_UI;
 class ObjectManager;
 class SceneManager;
-class j1Scene;
+class M_Scene;
 
 class j1App
 {
@@ -97,7 +97,7 @@ public:
 	Module_UI*          ui = nullptr;
 	ObjectManager*		objectmanager = nullptr;
 	SceneManager*		scmanager = nullptr;
-	j1Scene*			scene = nullptr;
+	M_Scene*			scene = nullptr;
   
 	//XML document
 	pugi::xml_node		config;

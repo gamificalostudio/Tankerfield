@@ -1,7 +1,7 @@
 #ifndef __SCENEMANAGER_H__
 #define __SCENEMANAGER_H__
 
-#include "j1Module.h"
+#include "Module.h"
 #include "SDL\include\SDL_rect.h"
 
 class SceneManager : public Module

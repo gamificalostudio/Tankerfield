@@ -1,7 +1,7 @@
 #ifndef __MODULE_UI_H__
 #define __MODULE_UI_H__
 
-#include "j1Module.h"
+#include "Module.h"
 #include "SDL_ttf/include/SDL_ttf.h"
 #include "Animation.h"
 #include "p2Point.h"

@@ -1,7 +1,7 @@
 #ifndef __j1WINDOW_H__
 #define __j1WINDOW_H__
 
-#include "j1Module.h"
+#include "Module.h"
 
 struct SDL_Window;
 struct SDL_Surface;
