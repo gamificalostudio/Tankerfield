@@ -54,9 +54,6 @@
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_BasicShoot.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Button.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
@@ -87,8 +84,18 @@
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Weapon.cpp">
-      <Filter>Modules\Objects</Filter>
+    <ClCompile Include="Bullet_Basic.cpp">
+      <Filter>Modules\Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Modules\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower.cpp">
+      <Filter>Modules\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower .cpp" />
+    <ClCompile Include="Obj_Bullet.cpp">
+      <Filter>Modules\Objects\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,9 +160,6 @@
     <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_BasicShoot.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Button.h">
       <Filter>Modules\UI</Filter>
     </ClInclude>
@@ -192,8 +196,17 @@
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Weapon.h">
-      <Filter>Modules\Objects</Filter>
+    <ClInclude Include="Bullet_Basic.h">
+      <Filter>Modules\Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Modules\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Flamethrower .h">
+      <Filter>Modules\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Bullet.h">
+      <Filter>Modules\Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +233,12 @@
     </Filter>
     <Filter Include="Modules\Objects">
       <UniqueIdentifier>{4792041f-ce51-4387-beaa-caae693b8a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Objects\Bullets">
+      <UniqueIdentifier>{c037be62-82b2-43d0-a9bf-a27eea4f35a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Weapons">
+      <UniqueIdentifier>{2cf19cc7-2f3a-496e-9bc8-d26eafa39e20}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -11,6 +11,7 @@
 #include "M_UITest.h"
 #include "M_ObjManager.h"
 #include "PerfTimer.h"
+#include "Weapon_Flamethrower .h"
 
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
@@ -53,6 +54,11 @@ bool Obj_Tank::Start()
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
+
+
+	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
+	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10, 10, BASIC_BULLET);
 
 	return true;
 }
@@ -151,7 +157,9 @@ void Obj_Tank::Shoot()
 	// Create basic bullet
 	if (!IsHold())
 	{
-		app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
+		weapons[weapon_type]->Shoot();
+		//weapon->Shoot();
+		//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
 		time_between_bullets_timer.Start();
 	}
 	else
@@ -159,7 +167,8 @@ void Obj_Tank::Shoot()
 
 		if (time_between_bullets_timer.ReadMs() >= time_between_bullets)
 		{
-			app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
+			weapons[weapon_type]->Shoot();
+			//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
 			time_between_bullets_timer.Start();
 		}
 	}

@@ -1,18 +1,18 @@
-#ifndef __OBJ_BASIC_SHOOT_H__
-#define __OBJ_BASIC_SHOOT_H__
+#ifndef __BULLET_BASIC_H__
+#define __BULLET_BASIC_H__
 
-#include "Obj_Weapon.h"
 #include "PerfTimer.h"
 #include "Point.h"
+#include "Obj_Bullet.h"
 
 struct SDL_Texture;
 
-class Obj_BasicShoot : public Obj_Weapon
+class Bullet_Basic : public Obj_Bullet
 {
 public:
-	Obj_BasicShoot();
-	Obj_BasicShoot(int x, int y);
-	~Obj_BasicShoot();
+	Bullet_Basic();
+	Bullet_Basic(int x, int y);
+	~Bullet_Basic();
 
 public:
 	bool Awake(pugi::xml_node & tank_node);
@@ -21,7 +21,6 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
-
 };
 
 #endif
