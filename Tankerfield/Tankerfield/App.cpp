@@ -41,7 +41,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	ui = new M_UI();
 	objectmanager = new M_ObjManager();
 	scmanager = new M_SceneManager();
-  
+
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -49,17 +49,17 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(pathfinding);
+	AddModule(objectmanager);
 	AddModule(scmanager);
 	AddModule(map);
 	AddModule(scene);
-	AddModule(objectmanager);
 	AddModule(font);
 	AddModule(ui_test);
 	AddModule(ui);
 
 	// render last to swap buffer
 	AddModule(render);
-	
+
 	PERF_PEEK(ptimer);
 }
 
@@ -133,10 +133,10 @@ bool App::Start()
 	PERF_START(ptimer);
 
 	bool ret = true;
-	
+
 	title.assign("Tankerfield");
 	organization.assign("Gamificalo Studio");
-	
+
 	int cap = 60;
 
 	if (cap > 0)
@@ -152,7 +152,7 @@ bool App::Start()
 		ret = (*item)->Start();
 		item++;
 	}
-	
+
 	startup_time.Start();
 
 	PERF_PEEK(ptimer);
@@ -444,4 +444,4 @@ bool App::SavegameNow() const
 	data.reset();
 	want_to_save = false;
 	return ret;
-}
+} v
