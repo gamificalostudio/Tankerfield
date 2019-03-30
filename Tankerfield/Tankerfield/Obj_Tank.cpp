@@ -47,8 +47,8 @@ bool Obj_Tank::Start()
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
-	cos_45 = cosf(45 * DEGTORAD);
-	sin_45 = sinf(45 * DEGTORAD);
+	cos_45 = cosf(-45 * DEGTORAD);
+	sin_45 = sinf(-45 * DEGTORAD);
 
 	return true;
 }
