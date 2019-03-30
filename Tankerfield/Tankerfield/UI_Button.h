@@ -2,7 +2,7 @@
 #define _BUTTON_INPUT_H__
 
 #include "M_UI.h"
-#include "UI_Object.h"
+#include "UI_Element.h"
 #include "p2Point.h"
 #include "Animation.h"
 

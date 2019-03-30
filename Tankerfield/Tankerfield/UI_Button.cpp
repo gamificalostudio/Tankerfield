@@ -1,9 +1,9 @@
-#include "Button_Input.h"
+#include "UI_Button.h"
 #include "M_UI.h"
 #include "M_Render.h"
-#include  "p2Log.h"
+#include "p2Log.h"
 #include "M_Input.h"
-#include "Label.h"
+#include "UI_Label.h"
 #include "M_Audio.h"
 #include "App.h"
 

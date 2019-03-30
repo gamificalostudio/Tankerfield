@@ -2,7 +2,7 @@
 #define __TEXT_PANEL_H__
 
 #include "Module.h"
-#include "UI_Object.h"
+#include "UI_Element.h"
 #include "p2Point.h"
 #include "SDL_ttf/include/SDL_ttf.h"
 #include <vector>

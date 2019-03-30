@@ -2,24 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Button_Input.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Checkbox.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Object.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Text_Panel.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Slider.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Tools\Timers</Filter>
     </ClCompile>
@@ -31,9 +13,6 @@
     </ClCompile>
     <ClCompile Include="p2Log.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Label.cpp">
-      <Filter>Modules\UI</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Tank.cpp">
       <Filter>Modules\Objects</Filter>
@@ -87,28 +66,31 @@
     <ClCompile Include="Obj_BasicShoot.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Button.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Checkbox.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Label.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Slider.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_TextPanel.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Element.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
       <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Button_Input.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Checkbox.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Image.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Object.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Text_Panel.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Slider.h">
-      <Filter>Modules\UI</Filter>
     </ClInclude>
     <ClInclude Include="j1PerfTimer.h">
       <Filter>Tools\Timers</Filter>
@@ -133,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="Obj_Tank.h">
       <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Label.h">
-      <Filter>Modules\UI</Filter>
     </ClInclude>
     <ClInclude Include="M_Audio.h">
       <Filter>Modules</Filter>
@@ -188,6 +167,27 @@
     </ClInclude>
     <ClInclude Include="Obj_BasicShoot.h">
       <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Button.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Checkbox.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Label.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Slider.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_TextPanel.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Element.h">
+      <Filter>Modules\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

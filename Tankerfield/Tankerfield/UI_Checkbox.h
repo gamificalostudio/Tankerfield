@@ -2,10 +2,10 @@
 #define _CHECKBOX_H__
 
 #include "M_UI.h"
-#include "UI_Object.h"
+#include "UI_Element.h"
 #include "p2Point.h"
 #include "Animation.h"
-#include "Button_Input.h"
+#include "UI_Button.h"
 
 class Gui_Listener;
 

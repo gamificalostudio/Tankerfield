@@ -8,9 +8,9 @@
 #include "M_Render.h"
 #include "M_Fonts.h"
 #include "M_UITest.h"
-#include "UI_Object.h"
-#include "Button_Input.h"
-#include "Label.h"
+#include "UI_Element.h"
+#include "UI_Button.h"
+#include "UI_Label.h"
 #include "M_ObjManager.h"
 
 M_UITest::M_UITest() : Module()

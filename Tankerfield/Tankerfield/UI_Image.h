@@ -3,7 +3,7 @@
 
 #include "p2Point.h"
 #include "Animation.h"
-#include "UI_Object.h"
+#include "UI_Element.h"
 
 struct Image_Definition : public UI_Object_Definition
 {

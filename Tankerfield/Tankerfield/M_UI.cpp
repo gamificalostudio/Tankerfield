@@ -10,13 +10,13 @@
 #include "M_Scene.h"
 
 // UI includes --------------------------
-#include "UI_Object.h"
-#include "Image.h"
-#include "Label.h"
-#include "Button_Input.h"
-#include "Slider.h"
-#include "Checkbox.h"
-#include "Text_Panel.h"
+#include "UI_Element.h"
+#include "UI_Image.h"
+#include "UI_Label.h"
+#include "UI_Button.h"
+#include "UI_Slider.h"
+#include "UI_Checkbox.h"
+#include "UI_TextPanel.h"
 
 M_UI::M_UI() : Module()
 {

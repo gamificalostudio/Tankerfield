@@ -1,10 +1,10 @@
-#include "Slider.h"
+#include "UI_Slider.h"
 #include "M_Render.h"
 #include "p2Log.h"
 #include "M_Input.h"
 #include "M_UI.h"
 #include "App.h"
-#include"Button_Input.h"
+#include "UI_Button.h"
 
 Slider::Slider(const fPoint position, const Slider_Definition definition, Gui_Listener* listener) : UI_Object(position, definition, listener)
 {

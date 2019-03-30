@@ -1,6 +1,6 @@
 #include "p2Defs.h"
 #include "p2Log.h"
-#include "Text_Panel.h"
+#include "UI_TextPanel.h"
 #include "M_Render.h"
 #include "M_Fonts.h"
 #include "M_Textures.h"

@@ -3,7 +3,7 @@
 
 #include "Module.h"
 #include "M_UI.h"
-#include "UI_Object.h"
+#include "UI_Element.h"
 #include "p2Point.h"
 #include "SDL_ttf/include/SDL_ttf.h"
 

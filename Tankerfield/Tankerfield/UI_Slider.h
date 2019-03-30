@@ -3,9 +3,9 @@
 
 #include "p2Point.h"
 #include "Animation.h"
-#include "UI_Object.h"
+#include "UI_Element.h"
 #include "M_UI.h"
-#include "Button_Input.h"
+#include "UI_Button.h"
 
 struct Slider_Definition;
 class Button;

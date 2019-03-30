@@ -126,9 +126,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Button_Input.cpp" />
-    <ClCompile Include="Checkbox.cpp" />
-    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="UI_Button.cpp" />
+    <ClCompile Include="UI_Checkbox.cpp" />
+    <ClCompile Include="UI_Image.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="M_Audio.cpp" />
     <ClCompile Include="M_Fonts.cpp" />
@@ -141,7 +141,7 @@
     <ClCompile Include="M_Textures.cpp" />
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="M_Window.cpp" />
-    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="UI_Label.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="M_UI.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -152,16 +152,16 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="M_SceneManager.cpp" />
     <ClCompile Include="Obj_TeslaTrooper.cpp" />
-    <ClCompile Include="Slider.cpp" />
-    <ClCompile Include="Text_Panel.cpp" />
-    <ClCompile Include="UI_Object.cpp" />
+    <ClCompile Include="UI_Slider.cpp" />
+    <ClCompile Include="UI_TextPanel.cpp" />
+    <ClCompile Include="UI_Element.cpp" />
     <ClCompile Include="M_UITest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Button_Input.h" />
-    <ClInclude Include="Checkbox.h" />
-    <ClInclude Include="Image.h" />
+    <ClInclude Include="UI_Button.h" />
+    <ClInclude Include="UI_Checkbox.h" />
+    <ClInclude Include="UI_Image.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="M_Audio.h" />
     <ClInclude Include="M_Fonts.h" />
@@ -175,7 +175,7 @@
     <ClInclude Include="M_Textures.h" />
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="M_Window.h" />
-    <ClInclude Include="Label.h" />
+    <ClInclude Include="UI_Label.h" />
     <ClInclude Include="M_UI.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="M_ObjManager.h" />
@@ -188,9 +188,9 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="M_SceneManager.h" />
     <ClInclude Include="Obj_TeslaTrooper.h" />
-    <ClInclude Include="Slider.h" />
-    <ClInclude Include="Text_Panel.h" />
-    <ClInclude Include="UI_Object.h" />
+    <ClInclude Include="UI_Slider.h" />
+    <ClInclude Include="UI_TextPanel.h" />
+    <ClInclude Include="UI_Element.h" />
     <ClInclude Include="M_UITest.h" />
   </ItemGroup>
   <ItemGroup>
