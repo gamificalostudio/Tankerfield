@@ -66,7 +66,7 @@ bool Obj_Tank::Update(float dt)
 {
 	fPoint input(0.f ,0.f);
 	GetKeyboardInput(input);
-	//GetControllerInput(input);
+	GetControllerInput(input);
 
 	fPoint dir(0.f, 0.f);
 	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
@@ -108,7 +108,7 @@ void Obj_Tank::GetControllerInput(fPoint & input)
 {
 	if (controller != nullptr)
 	{
-		input = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
+		input += (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
 	}
 }
 
