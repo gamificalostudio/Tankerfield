@@ -182,7 +182,10 @@ void Obj_Tank::Shoot()
 	//If the direction of the controller is null, we get the keyboard direction
 	//InputShotMouse(input);
 	InputShotController(input);
-	//TODO: Rotate turret sprite
+	if (!input.IsZero())
+	{
+		turr_angle = (atan2(input.y, -input.x) * RADTODEG);
+	}
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
