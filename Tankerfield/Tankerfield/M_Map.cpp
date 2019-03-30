@@ -59,7 +59,7 @@ bool M_Map::Update(float dt)
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->layer_properties.GetAsBool("NoDraw") == true) {
+		if ((*layer)->visible == false) {
 			continue;
 		}
 
@@ -206,6 +206,9 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->columns = node.attribute("width").as_int();
 	layer->rows = node.attribute("height").as_int();
 	layer->layer_properties.LoadProperties(node.child("properties"));
+	int visible = node.attribute("visible").as_int(1);
+	layer->visible = (visible == 0) ? false : true;
+	
 	pugi::xml_node layer_data = node.child("data");
 
 	if (layer_data == NULL)

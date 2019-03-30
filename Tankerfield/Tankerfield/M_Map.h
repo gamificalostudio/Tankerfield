@@ -123,7 +123,7 @@ struct MapLayer
 	int			rows;
 	uint*		data;
 	Properties	layer_properties;
-
+	bool visible = true;
 	MapLayer() : data(NULL)
 	{}
 

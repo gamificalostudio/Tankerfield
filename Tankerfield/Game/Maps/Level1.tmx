@@ -7941,7 +7941,7 @@
    <tile gid="1"/>
   </data>
  </layer>
- <layer id="2" name="Colliders" width="103" height="77">
+ <layer id="2" name="Colliders" width="103" height="77" visible="0">
   <data>
    <tile/>
    <tile/>
