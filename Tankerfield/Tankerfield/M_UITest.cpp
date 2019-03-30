@@ -126,24 +126,7 @@ bool M_UITest::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 		app->objectmanager->CreateObject(BASIC_BULLET, player_pos.x, player_pos.y);
 
-	// Draw Grid ==============================================
-	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
-	iPoint point_1, point_2;
-
-
-	for (int i = 0; i <= rows; ++i)
-	{
-		point_1 = MapToWorld( 0 , i, tile_width, tile_height);
-		point_2 = MapToWorld(columms, i, tile_width, tile_height);
-		app->render->DrawLine(point_1.x , point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-	}
-
-	for (int i = 0; i <= columms; ++i)
-	{
-		point_1 = MapToWorld(i, 0, tile_width, tile_height);
-		point_2 = MapToWorld(i, rows, tile_width, tile_height);
-		app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-	}
+	
 
 	// Draw colliders =========================================
 	uchar coll_tiles[4][4]
@@ -162,7 +145,7 @@ bool M_UITest::Update(float dt)
 			}
 		}
 	}
-
+	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
 	// Draw Player Pos ========================================
 	fPoint player_draw_pos = MapToWorldF(player_pos.x, player_pos.y, tile_width, tile_height);
 	app->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);

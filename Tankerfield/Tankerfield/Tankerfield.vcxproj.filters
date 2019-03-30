@@ -101,50 +101,8 @@
     <ClInclude Include="Obj_Tank.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="M_Audio.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Fonts.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Input.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Pathfinding.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Render.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Scene.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Textures.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Window.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_UI.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="M_ObjManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_SceneManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_UITest.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Map.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Module.h">
-      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="App.h" />
     <ClInclude Include="Obj_TeslaTrooper.h">
@@ -189,6 +147,48 @@
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="M_Audio.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Fonts.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Input.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Map.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_ObjManager.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Pathfinding.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Render.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Scene.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_SceneManager.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Textures.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_UI.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_UITest.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Window.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml" />
@@ -214,6 +214,9 @@
     </Filter>
     <Filter Include="Modules\Objects">
       <UniqueIdentifier>{4792041f-ce51-4387-beaa-caae693b8a61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Headers">
+      <UniqueIdentifier>{6a6ea59c-4085-48f4-bc04-3ec1d3aa16ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
