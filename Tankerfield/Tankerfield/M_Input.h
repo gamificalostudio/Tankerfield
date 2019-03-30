@@ -67,7 +67,7 @@ public:
 		switch (joystick)
 		{
 		case Joystick::LEFT:
-			return iPoint (GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
+			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
 		case Joystick::RIGHT:
 			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
 		}
@@ -75,7 +75,6 @@ public:
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-
 	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = 1000)
 	{
 		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
@@ -89,24 +88,10 @@ public:
 		}
 	}
 
-
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
-	int PlayRumble(float strengh, Uint32 length)
-	{
-		if (haptic != nullptr)
-			return SDL_HapticRumblePlay(haptic, strengh, length);
-		else
-			return 0;
-	}
-  
-	int StopRumble()
-	{
-		if (haptic != nullptr)
-			return SDL_HapticRumbleStop(haptic);
-		else
-			return 0;
-	}
+	int PlayRumble(float strengh, Uint32 length);
+	int StopRumble();
   
 	friend class M_Input;
 };
@@ -148,10 +133,15 @@ public:
 	}
 
 	// Check if a certain window event happened
-	bool GetWindowEvent(int code);
+	//bool GetWindowEvent(int code);
 
 	// Get mouse / axis position
-	void GetMousePosition(int &x, int &y);
+	void GetMousePosition(int &x, int &y)
+	{
+		x = mouse_x;
+		y = mouse_y;
+	}
+
 	void GetMouseMotion(int& x, int& y);
 
 private:

@@ -202,11 +202,7 @@ bool M_Input::GetWindowEvent(EventWindow ev)
 	return windowEvents[ev];
 }
 
-void M_Input::GetMousePosition(int& x, int& y)
-{
-	x = mouse_x;
-	y = mouse_y;
-}
+// Check key states (includes mouse and joy buttons)
 
 void M_Input::GetMouseMotion(int& x, int& y)
 {
@@ -299,3 +295,28 @@ Controller** M_Input::GetAbleController()
 	return ret;
 }
 
+//This funtion returns axis and triggers state value
+// The state is a value ranging from -32768 to 32767.
+
+//strengh -> from 0 to 1
+//length  -> strength of the rumble to play as a 0-1 float value
+
+int Controller::PlayRumble(float strengh, Uint32 length)
+{
+	if (haptic != nullptr)
+	{
+		return SDL_HapticRumblePlay(haptic, strengh, length);
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int Controller::StopRumble()
+{
+	if (haptic != nullptr)
+		return SDL_HapticRumbleStop(haptic);
+	else
+		return 0;
+}
