@@ -68,7 +68,7 @@ bool M_Map::Update(float dt)
 					iPoint pos = MapToWorld(x, y);
 					TileSet* tileset = GetTilesetFromTileId(tile_id);
 					
-					if (app->render->IsOnCamera(pos.x - data.tile_width*0.5,pos.y - data.tile_height*0.5,data.tile_width,data.tile_height))
+					if (app->render->IsOnCamera(pos.x - data.tile_width*0.5,pos.y - data.tile_height*0.5,tileset->tile_width, tileset->tile_height))
 					{
 						
 						if (tileset != nullptr)
