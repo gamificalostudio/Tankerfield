@@ -30,9 +30,6 @@
     <ClCompile Include="j1Textures.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="j1Scene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Module_UI.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -50,9 +47,6 @@
     </ClCompile>
     <ClCompile Include="Slider.cpp">
       <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Test.cpp">
-      <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="j1PerfTimer.cpp">
       <Filter>Tools\Timers</Filter>
@@ -81,6 +75,15 @@
     </ClCompile>
     <ClCompile Include="Obj_Basic_Shoot.cpp">
       <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Scene.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Test.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +119,6 @@
     <ClInclude Include="j1Textures.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="j1Scene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Module_UI.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -136,9 +136,6 @@
     </ClInclude>
     <ClInclude Include="Slider.h">
       <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Test.h">
-      <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="j1PerfTimer.h">
       <Filter>Tools\Timers</Filter>
@@ -161,9 +158,6 @@
     <ClInclude Include="p2Defs.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Label.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="j1Window.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -177,6 +171,18 @@
     <ClInclude Include="Obj_Basic_Shoot.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Label.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Scene.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Test.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml" />
@@ -184,9 +190,6 @@
   <ItemGroup>
     <Filter Include="Tools">
       <UniqueIdentifier>{d4c7e7c3-72bf-4107-8d08-0ae327873629}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{14d84f58-ff24-4e18-89e5-89dd65297374}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{97fa8477-870f-46d8-af8d-88f34e52dcbd}</UniqueIdentifier>

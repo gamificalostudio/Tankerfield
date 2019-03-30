@@ -150,6 +150,7 @@
     <ClCompile Include="Obj_Tank.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Tesla_Trooper.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Text_Panel.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="p2Point.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Tesla_Trooper.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="Text_Panel.h" />
