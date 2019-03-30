@@ -30,6 +30,7 @@ private:
 	bool IsHold();
 
 public:
+	ObjectType weapon_type = ObjectType::BASIC_BULLET;
 
 private:
 	static SDL_Texture * base_tex;
