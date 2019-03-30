@@ -1,9 +1,9 @@
-#ifndef __OBJ_BASIC_SHOOT_H__
-#define __OBJ_BASIC_SHOOT_H__
+#ifndef __BULLET_BASIC_H__
+#define __BULLET_BASIC_H__
 
 #include "PerfTimer.h"
 #include "Point.h"
-#include "Obj_Bullet.h"
+#include "Bullet.h"
 
 struct SDL_Texture;
 

@@ -3,9 +3,16 @@
 
 #include "Object.h"
 #include "Weapon.h"
+#include <map>
 
 struct Controller;
 struct SDL_Texture;
+
+enum class WEAPON_TYPE {
+	FLAMETHROWER,
+	MAX
+};
+
 
 class Obj_Tank : public Object
 {
@@ -31,7 +38,7 @@ private:
 	bool IsHold();
 
 public:
-	Weapon * weapon = nullptr;
+	WEAPON_TYPE weapon_type;
 
 private:
 	static SDL_Texture * base_tex;
@@ -52,6 +59,8 @@ private:
 
 	PerfTimer time_between_bullets_timer;
 	float time_between_bullets = 0.f;
+
+	std::map<WEAPON_TYPE, Weapon*> weapons;
 };
 
 #endif

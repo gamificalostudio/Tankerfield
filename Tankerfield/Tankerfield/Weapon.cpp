@@ -4,9 +4,8 @@
 #include "M_Input.h"
 #include "M_Render.h"
 
-Weapon::Weapon()
+Weapon::Weapon(int damage, float speed, float life, ObjectType type)
 {
-
 }
 
 Weapon::~Weapon()
@@ -15,13 +14,10 @@ Weapon::~Weapon()
 
 void Weapon::Shoot()
 {
-	//FLAMETHROWER
-	//Activate a collider and do damage
-		//- Add a drawing on the area
-		//Flamethrower sound
-
-	//SNIPER
-	//CreateObject(BULLET_SNIPER, x, y...);
+	//Calculate direction
+	//Bullet * obj = CreateObject(obj_type)
+	//bullet->damage = ...;
+	//bullet->direction = ...;
 }
 
 void Weapon::CalculateDirection()
