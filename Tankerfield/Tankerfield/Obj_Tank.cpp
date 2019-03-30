@@ -162,9 +162,11 @@ void Obj_Tank::InputShotController(fPoint & dir)
 	if (controller != nullptr)
 	{
 		fPoint input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
-		dir.x = input.x * cos_45 - input.y * sin_45;
-		dir.y = input.x * sin_45 + input.y * cos_45;
-		dir.Normalize();
+		LOG("input x: %f, y: %f", input.x, input.y);
+		dir = input;
+		//dir.x = input.x * cos_45 - input.y * sin_45;
+		//dir.y = input.x * sin_45 + input.y * cos_45;
+		//dir.Normalize();
 	}
 }
 
@@ -201,7 +203,7 @@ void Obj_Tank::Shoot()
 }
 
 bool Obj_Tank::IsShooting() {
-	LOG("%f", (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
+	//LOG("%f", (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
 	return ((app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN
 		|| app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT)
 		|| (controller != nullptr
