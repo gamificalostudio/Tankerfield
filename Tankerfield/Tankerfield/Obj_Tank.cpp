@@ -161,11 +161,10 @@ void Obj_Tank::InputShotController(fPoint & dir)
 	if (controller != nullptr)
 	{
 		fPoint input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
-		//LOG("input x: %f, y: %f", input.x, input.y);
-		dir = input;
-		//dir.x = input.x * cos_45 - input.y * sin_45;
-		//dir.y = input.x * sin_45 + input.y * cos_45;
-		//dir.Normalize();
+		//LOG("A input x: %f, y: %f", input.x, input.y);
+		dir.x = input.x * cos_45 - input.y * sin_45;
+		dir.y = input.x * sin_45 + input.y * cos_45;
+		dir.Normalize();
 	}
 }
 
@@ -176,6 +175,7 @@ void Obj_Tank::Shoot()
 	//If the direction of the controller is null, we get the keyboard direction
 	//InputShotMouse(input);
 	InputShotController(input);
+	//LOG("B input x: %f, y: %f", input.x, input.y);
 
 	//TODO: Rotate turret sprite
 
