@@ -2,14 +2,14 @@
 
 //#include "Brofiler/Brofiler.h"
 
-#include "j1App.h"
+#include "App.h"
 #include "Object.h"
 
-#include "ObjectManager.h"
-#include "j1Render.h"
-#include "j1Scene.h"
-#include "j1Pathfinding.h"
-#include "p2Log.h"
+#include "M_ObjManager.h"
+#include "M_Render.h"
+#include "M_Scene.h"
+#include "M_Pathfinding.h"
+#include "Log.h"
 //#include "j1Map.h"
 //#include "Player.h"
 //#include "j1Collision.h"

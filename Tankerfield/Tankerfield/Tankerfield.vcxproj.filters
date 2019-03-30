@@ -1,150 +1,96 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="j1App.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Button_Input.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Checkbox.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Audio.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Fonts.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Input.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Pathfinding.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Render.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Textures.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Scene.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Module_UI.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Object.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Text_Panel.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Slider.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Test.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="j1PerfTimer.cpp">
-      <Filter>Tools\Timers</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Timer.cpp">
-      <Filter>Tools\pugixml</Filter>
-    </ClCompile>
     <ClCompile Include="PugiXml\src\pugixml.cpp">
       <Filter>Tools\pugixml</Filter>
     </ClCompile>
-    <ClCompile Include="p2Log.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Label.cpp">
-      <Filter>Modules\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Window.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Tesla_Trooper.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="Obj_Tank.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Basic_Shoot.cpp">
+    <ClCompile Include="M_Audio.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Fonts.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Input.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Pathfinding.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Render.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Scene.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Textures.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Window.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_UI.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="M_ObjManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_SceneManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_UITest.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Map.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Obj_TeslaTrooper.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_BasicShoot.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Button.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Checkbox.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Label.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Slider.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_TextPanel.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Element.cpp">
+      <Filter>Modules\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
+      <Filter>Tools\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Tools\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="j1App.h" />
-    <ClInclude Include="j1Module.h" />
     <ClInclude Include="Animation.h">
       <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Button_Input.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Checkbox.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Image.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Audio.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Fonts.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Input.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Pathfinding.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Render.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Textures.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Scene.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Module_UI.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Object.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Text_Panel.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Slider.h">
-      <Filter>Modules\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Test.h">
-      <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="j1PerfTimer.h">
-      <Filter>Tools\Timers</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Timer.h">
-      <Filter>Tools\Timers</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugixml.hpp">
       <Filter>Tools\pugixml</Filter>
@@ -152,30 +98,96 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp">
       <Filter>Tools\pugixml</Filter>
     </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Log.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Defs.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Label.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Window.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Tesla_Trooper.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Map.h" />
     <ClInclude Include="Obj_Tank.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Basic_Shoot.h">
+    <ClInclude Include="M_Audio.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Fonts.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Input.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Pathfinding.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Render.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Scene.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Textures.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Window.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_UI.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="M_ObjManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_SceneManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_UITest.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Map.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h" />
+    <ClInclude Include="Obj_TeslaTrooper.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_BasicShoot.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Button.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Checkbox.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Label.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Slider.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_TextPanel.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Element.h">
+      <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>Tools\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Tools\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +196,6 @@
   <ItemGroup>
     <Filter Include="Tools">
       <UniqueIdentifier>{d4c7e7c3-72bf-4107-8d08-0ae327873629}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{14d84f58-ff24-4e18-89e5-89dd65297374}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{97fa8477-870f-46d8-af8d-88f34e52dcbd}</UniqueIdentifier>
