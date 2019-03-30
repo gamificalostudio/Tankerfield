@@ -135,11 +135,21 @@ bool Obj_Tank::PostUpdate()
 
 	//Base
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	app->render->Blit(base_tex, iso_pos.x, iso_pos.y, &base_rects[ind_base]);
+	SDL_Rect * base_rect = &base_rects[ind_base];
+	app->render->Blit(
+		base_tex,
+		iso_pos.x - base_rect->w * 0.5f,
+		iso_pos.y - base_rect->h * 0.5f,
+		base_rect);
 
 	//Turret
 	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	app->render->Blit(turr_tex, iso_pos.x, iso_pos.y, &turr_rects[ind_turr]);
+	SDL_Rect * turr_rect = &turr_rects[ind_turr];
+	app->render->Blit(
+		turr_tex,
+		iso_pos.x - turr_rect->w * 0.5f,
+		iso_pos.y - turr_rect->h * 0.5f,
+		turr_rect);
 	return true;
 }
 
