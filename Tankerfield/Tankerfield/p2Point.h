@@ -149,7 +149,7 @@ public:
 	}
 
 	//Rotate a vector in radians
-	p2Point Rotate(float angle) {
+	void Rotate(float angle) {
 		p2Point aux = (*this);
 		float angle_cos = cosf(angle);
 		float angle_sin = sinf(angle);
@@ -158,8 +158,8 @@ public:
 	}
 
 	//Rotate a vector in degrees
-	p2Point RotateDegree(float angle) {
-		angle *= RADTODEG;
+	void RotateDegree(float angle) {
+		angle *= DEGTORAD;
 		p2Point aux = (*this);
 		float angle_cos = cosf(angle);
 		float angle_sin = sinf(angle);

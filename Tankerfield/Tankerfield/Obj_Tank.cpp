@@ -66,13 +66,11 @@ bool Obj_Tank::Update(float dt)
 {
 	if (controller != nullptr)
 	{
-		fPoint joystick = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
+		fPoint dir = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
 		//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
-		fPoint iso_dir
-			(joystick.x * cos_45 - joystick.y * sin_45,
-			 joystick.x * sin_45 + joystick.y * cos_45);
-		iso_dir.Normalize();
-		pos += iso_dir * speed * dt;
+		dir.RotateDegree(-45);
+		dir.Normalize();
+		pos += dir * speed * dt;
 
 		//if(!fjoy.IsZero())
 		//{
