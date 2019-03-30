@@ -38,6 +38,7 @@ bool M_Scene::Start()
 	app->map->Load((*levelData)->name.c_str());
 
 	app->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
+	app->audio->PlayMusic("audio/Music/indeep.ogg",0.0f);
 	
 	return true;
 }
