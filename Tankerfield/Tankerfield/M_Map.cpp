@@ -66,15 +66,22 @@ bool M_Map::Update(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToWorld(x, y);
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
 					
-					if (app->render->IsOnCamera(pos.x - data.tile_width*0.5,pos.y - data.tile_height*0.5,tileset->tile_width, tileset->tile_height))
+					
+					if (app->render->IsOnCamera(pos.x - data.tile_width*0.5,pos.y, data.tile_width, data.tile_height))		
 					{
-						
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
 						if (tileset != nullptr)
 						{
 							SDL_Rect r = tileset->GetTileRect(tile_id);
+							
 							app->render->Blit(tileset->texture, pos.x - data.tile_width * 0.5, pos.y - data.tile_height * 0.5, &r);
+							if (pos.IsZero())
+							{
+								app->render->DrawQuad({ (int)(pos.x - data.tile_width * 0.5), (int)(pos.y - data.tile_height * 0.5), r.w,r.h }, 255, 0, 0, 100);
+								app->render->DrawQuad({ (int)(pos.x - data.tile_width*0.5), (int)(pos.y), data.tile_width,data.tile_height }, 0, 0, 255, 100);
+							}
+							
 
 						}
 					}
