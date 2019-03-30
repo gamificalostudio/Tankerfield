@@ -4,12 +4,12 @@
 
 struct SDL_Texture;
 
-class Obj_Basic_Shoot : public Object
+class Obj_BasicShoot : public Object
 {
 public:
-	Obj_Basic_Shoot();
-	Obj_Basic_Shoot(int x, int y);
-	~Obj_Basic_Shoot();
+	Obj_BasicShoot();
+	Obj_BasicShoot(int x, int y);
+	~Obj_BasicShoot();
 
 public:
 	bool Awake(pugi::xml_node & tank_node);

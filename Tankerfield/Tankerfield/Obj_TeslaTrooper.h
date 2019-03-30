@@ -6,11 +6,11 @@
 #include "Object.h"
 
 
-class TeslaTrooper : public Object 
+class Obj_TeslaTrooper : public Object 
 {
 public:
-	TeslaTrooper(float x, float y);
-	~TeslaTrooper();
+	Obj_TeslaTrooper(float x, float y);
+	~Obj_TeslaTrooper();
 
 public:
 	bool PreUpdate() override;

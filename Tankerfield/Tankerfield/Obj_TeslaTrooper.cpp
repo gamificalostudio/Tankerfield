@@ -17,7 +17,7 @@
 //#include "j1Map.h"
 //#include "j1Collision.h"
 
-TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
+Obj_TeslaTrooper::Obj_TeslaTrooper(float x, float y) : Object (x,y)
 {
 	//walking = new Animation[8];
 	//walking[0].PushBack({ 528,0,66,76 });//8
@@ -85,16 +85,16 @@ TeslaTrooper::TeslaTrooper(float x, float y) : Object (x,y)
 	//walking[7].speed = 5.0f;
 }
 
-TeslaTrooper::~TeslaTrooper()
+Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
 }
 
-bool TeslaTrooper::PreUpdate()
+bool Obj_TeslaTrooper::PreUpdate()
 {
 	return true;
 }
 
-bool TeslaTrooper::Update(float dt)
+bool Obj_TeslaTrooper::Update(float dt)
 {
 	if(app->input->GetKey(SDL_SCANCODE_W)==KEY_DOWN)
 	{
@@ -120,7 +120,7 @@ bool TeslaTrooper::Update(float dt)
 	return true;
 }
 
-bool TeslaTrooper::PostUpdate()
+bool Obj_TeslaTrooper::PostUpdate()
 {
 	//Animation* r_walking = GetRotatedAnimation(walking, 8, angle);
 	//SDL_Rect walk = r_walking->GetCurrentFrame(dt, new_current_frame);

@@ -6,12 +6,12 @@
 
 
 
-Obj_Basic_Shoot::Obj_Basic_Shoot() : Object()
+Obj_BasicShoot::Obj_BasicShoot() : Object()
 {
 
 }
 
-Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
+Obj_BasicShoot::Obj_BasicShoot(int x, int y) : Object(x, y)
 {
 
 	//Load XML var ============
@@ -42,26 +42,26 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 	bullet_life_timer.Start();
 }
 
-Obj_Basic_Shoot::~Obj_Basic_Shoot()
+Obj_BasicShoot::~Obj_BasicShoot()
 {
 }
 
-bool Obj_Basic_Shoot::Awake(pugi::xml_node &)
-{
-	return true;
-}
-
-bool Obj_Basic_Shoot::Start()
+bool Obj_BasicShoot::Awake(pugi::xml_node &)
 {
 	return true;
 }
 
-bool Obj_Basic_Shoot::PreUpdate()
+bool Obj_BasicShoot::Start()
 {
 	return true;
 }
 
-bool Obj_Basic_Shoot::Update(float dt)
+bool Obj_BasicShoot::PreUpdate()
+{
+	return true;
+}
+
+bool Obj_BasicShoot::Update(float dt)
 {
 	//Calculate new pos of the bullet =====
 
@@ -74,7 +74,7 @@ bool Obj_Basic_Shoot::Update(float dt)
 	return true;
 }
 
-bool Obj_Basic_Shoot::PostUpdate()
+bool Obj_BasicShoot::PostUpdate()
 {
 	if (bullet_life_timer.ReadMs() >= bullet_life_ms)
 	{
@@ -83,7 +83,7 @@ bool Obj_Basic_Shoot::PostUpdate()
 	return true;
 }
 
-bool Obj_Basic_Shoot::CleanUp()
+bool Obj_BasicShoot::CleanUp()
 {
 	return true;
 }

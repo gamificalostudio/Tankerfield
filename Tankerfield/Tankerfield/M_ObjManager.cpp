@@ -143,7 +143,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
 	switch (type)
 	{
 	case ObjectType::TESLA_TROOPER:
-		ret = new TeslaTrooper(x, y);
+		ret = new Obj_TeslaTrooper(x, y);
 		ret->type = TESLA_TROOPER;
 		break;
 	case ObjectType::TANK:
@@ -151,7 +151,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
 		ret->type = TANK;
 		break;
 	case ObjectType::BASIC_BULLET:
-		ret = new Obj_Basic_Shoot(x, y);
+		ret = new Obj_BasicShoot(x, y);
 		ret->type = BASIC_BULLET;
 		break;
 	}
