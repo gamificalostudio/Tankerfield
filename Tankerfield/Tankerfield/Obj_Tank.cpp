@@ -18,8 +18,9 @@ SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
-int Obj_Tank::base_rects_num = 128;
-SDL_Rect * Obj_Tank::base_rects = new SDL_Rect[base_rects_num];
+int Obj_Tank::rects_num = 128;
+SDL_Rect * Obj_Tank::base_rects = new SDL_Rect[rects_num];
+SDL_Rect * Obj_Tank::turr_rects = new SDL_Rect[rects_num];
 
 Obj_Tank::Obj_Tank() : Object()
 {
@@ -50,6 +51,7 @@ bool Obj_Tank::Start()
 	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
+	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -92,7 +94,7 @@ void Obj_Tank::Movement(float dt)
 
 	if (!dir.IsZero())
 	{
-		angle = (atan2(input.y, -input.x) * RADTODEG);
+		base_angle = (atan2(input.y, -input.x) * RADTODEG);
 	}
 
 	pos += dir * speed * dt;
@@ -129,9 +131,15 @@ void Obj_Tank::InputMovementController(fPoint & input)
 bool Obj_Tank::PostUpdate()
 {
 	int tile_width = 100, tile_height = 50;
-	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	fPoint iso_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
-	app->render->Blit(base_tex, iso_pos.x, iso_pos.y, &base_rects[ind]);
+
+	//Base
+	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
+	app->render->Blit(base_tex, iso_pos.x, iso_pos.y, &base_rects[ind_base]);
+
+	//Turret
+	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
+	app->render->Blit(turr_tex, iso_pos.x, iso_pos.y, &turr_rects[ind_turr]);
 	return true;
 }
 
@@ -161,7 +169,6 @@ void Obj_Tank::InputShotController(fPoint & dir)
 	if (controller != nullptr)
 	{
 		fPoint input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
-		//LOG("A input x: %f, y: %f", input.x, input.y);
 		dir.x = input.x * cos_45 - input.y * sin_45;
 		dir.y = input.x * sin_45 + input.y * cos_45;
 		dir.Normalize();
@@ -175,8 +182,6 @@ void Obj_Tank::Shoot()
 	//If the direction of the controller is null, we get the keyboard direction
 	//InputShotMouse(input);
 	InputShotController(input);
-	//LOG("B input x: %f, y: %f", input.x, input.y);
-
 	//TODO: Rotate turret sprite
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
