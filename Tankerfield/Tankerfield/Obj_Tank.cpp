@@ -47,6 +47,8 @@ bool Obj_Tank::Start()
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
+	cos_45 = cosf(45 * DEGTORAD);
+	sin_45 = sinf(45 * DEGTORAD);
 
 	return true;
 }
@@ -64,26 +66,13 @@ bool Obj_Tank::Update(float dt)
 {
 	if (controller != nullptr)
 	{
-		//iPoint joystick = (*controller)->GetJoystick(Joystick::LEFT);
-		//float joystick_rotation = atan2f(joystick.y, joystick.x);
-
-
 		fPoint joystick = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
-		joystick.Normalize();
-		//2. Rotate it (45 degrees clockwise) -> we don't want it to move in the "isometric space"
-		float angle_cos = cosf(45 * M_PI / 180);//TODO: Create a macro (value doesn't change, so it's useless to recalculate it every frame)
-		float angle_sin = sinf(45 * M_PI / 180);
-		fPoint iso_dir;
-		iso_dir.x = joystick.x * angle_cos - joystick.y * angle_sin;
-		iso_dir.y = joystick.x * angle_sin + joystick.y * angle_cos;
-		LOG("base    input  x: %f, y: %f", joystick.x, joystick.y);
-		LOG("rotated input  x: %f, y: %f", iso_dir.x, iso_dir.y);
-
-		//3. Normalize it
-		//iso_dir.Normalize();
-		//4. Apply it to the position
-		//pos += iso_dir * speed * dt;
-		//LOG("X: %f, Y: %f", iso_dir.x, iso_dir.y);
+		//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
+		fPoint iso_dir
+			(joystick.x * cos_45 - joystick.y * sin_45,
+			 joystick.x * sin_45 + joystick.y * cos_45);
+		iso_dir.Normalize();
+		pos += iso_dir * speed * dt;
 
 		//if(!fjoy.IsZero())
 		//{

@@ -35,4 +35,7 @@ private:
 	float speed = 5.f;
 	float angle = 0.f;
 	Controller ** controller = nullptr;
+
+	float cos_45 = 0.f;
+	float sin_45 = 0.f;
 };
