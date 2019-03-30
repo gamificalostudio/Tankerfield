@@ -32,9 +32,9 @@ bool j1Scene::Awake()
 bool j1Scene::Start()
 {
 	// Load the first level of the list on first game start -------------------------
-	//std::list<Levels*>::iterator levelData = App->map->levels.begin();
-	//std::advance(levelData, current_level);
-	//App->map->Load((*levelData)->name.c_str());
+	std::list<Levels*>::iterator levelData = App->map->levels.begin();
+	std::advance(levelData, current_level);
+	App->map->Load((*levelData)->name.c_str());
 
 	App->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
 	
@@ -67,6 +67,8 @@ bool j1Scene::Update(float dt)
 	// Draw ------------------
 	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	//	App->objectmanager->CreateObject(TESLA_TROOPER, 200, 200);
+
+
 
 	return true;
 }

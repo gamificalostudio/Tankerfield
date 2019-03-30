@@ -15,6 +15,7 @@ enum ObjectType
   TANK,
 	PLAYER,
 	TESLA_TROOPER,
+	BASIC_BULLET,
 	NO_TYPE
 };
 

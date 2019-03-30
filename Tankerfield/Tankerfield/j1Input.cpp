@@ -22,7 +22,7 @@ j1Input::j1Input() : j1Module()
 // Destructor
 j1Input::~j1Input()
 {
-	delete[] keyboard;
+	
 }
 
 // Called before render is available
@@ -184,6 +184,7 @@ bool j1Input::CleanUp()
 {
 	LOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
+	//RELEASE_ARRAY(keyboard);
 	return true;
 }
 
