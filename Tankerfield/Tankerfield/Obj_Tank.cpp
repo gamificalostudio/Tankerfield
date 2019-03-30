@@ -79,6 +79,31 @@ bool Obj_Tank::Update(float dt)
 			angle = (atan2(joystick.y, -joystick.x) * RADTODEG) + 180;
 		}
 	}
+
+	fPoint input (0,0);
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		input.x += sin_45;
+		input.y += sin_45;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		input.x += sin_45;
+		input.y -= sin_45;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		input.x -= sin_45;
+		input.y -= sin_45;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		input.x -= sin_45;
+		input.y += sin_45;
+	}
+	input.Normalize();
+	pos += input * speed * dt;
+
 	return true;
 }
 
