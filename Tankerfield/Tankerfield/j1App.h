@@ -23,6 +23,7 @@ class j1Map;
 class j1Fonts;
 class Module_UI;
 class ObjectManager;
+class SceneManager;
 class j1Scene;
 
 class j1App
@@ -95,8 +96,9 @@ public:
 	j1Fonts*            font = nullptr;
 	Module_UI*          ui = nullptr;
 	ObjectManager*		objectmanager = nullptr;
+	SceneManager*		scmanager = nullptr;
 	j1Scene*			scene = nullptr;
-
+  
 	//XML document
 	pugi::xml_node		config;
 

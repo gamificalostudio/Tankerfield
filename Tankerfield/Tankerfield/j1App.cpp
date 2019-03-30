@@ -16,6 +16,8 @@
 #include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1Pathfinding.h"
+#include "j1App.h"
+#include "SceneManager.h"
 #include "j1Map.h"
 #include "j1Fonts.h"
 #include "Module_UI.h"
@@ -40,6 +42,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	font = new j1Fonts();
 	ui = new Module_UI();
 	objectmanager = new ObjectManager();
+	scmanager = new SceneManager();
+  
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -47,6 +51,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(pathfinding);
+	AddModule(objectmanager);
+	AddModule(scmanager);
 	AddModule(map);
 	AddModule(scene);
 	AddModule(font);
