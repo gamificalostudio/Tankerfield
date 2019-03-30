@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="M_Collision.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
     <ClCompile Include="UI_Image.cpp" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="M_Collision.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Checkbox.h" />
     <ClInclude Include="UI_Image.h" />

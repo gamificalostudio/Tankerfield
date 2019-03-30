@@ -3,13 +3,12 @@
 
 #define MAX_COLLIDERS 50
 
-#include "j1Module.h"
-#include "p2Defs.h"
+#include "Module.h"
 #include "PugiXml/src/pugixml.hpp"
-#include "SDL/include/SDL.h"
 #include <list>
 
 class Object;
+class ModuleCollision;
 
 class Collider
 {
@@ -50,7 +49,7 @@ public:
 		SENSOR
 	};
 
-	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,j1Module* callback = nullptr) :
+	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,Module* callback = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
@@ -85,16 +84,14 @@ private:
 
 	ON_TRIGGER_STATE on_trigger_state = ON_TRIGGER_STATE::NONE;
 
-	j1Module* callback = nullptr;
+	Module* callback = nullptr;
 
 	Object * object = nullptr;
 
 	friend ModuleCollision;
-
 };
 
-
-class ModuleCollision : public j1Module
+class ModuleCollision : public Module
 {
 public:
 
@@ -108,7 +105,7 @@ public:
 
 	bool CleanUp();
 
-	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, j1Module* callback = nullptr, Object* object = nullptr);
+	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, Module* callback = nullptr, Object* object = nullptr);
 
 	bool DeleteCollider(Collider* collider);
 

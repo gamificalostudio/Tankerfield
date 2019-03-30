@@ -1,18 +1,10 @@
-#include "j1App.h"
-#include "j1Input.h"
-#include "j1Render.h"
-#include "Module_Collision.h"
-#include "p2Defs.h"
-#include "p2Log.h"
-
-
-// TODO REMOVE IR
-
-#include "UI_Test.h"
-
-// =============
-
-using namespace std;
+#include "App.h"
+#include "M_Input.h"
+#include "M_Render.h"
+#include "M_Collision.h"
+#include "Object.h"
+#include "Defs.h"
+#include "Log.h"
 
 bool Collider::CheckCollision(Collider*  coll) const
 {
@@ -161,14 +153,14 @@ bool ModuleCollision::Update(float dt)
 
 bool ModuleCollision::PostUpdate()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
 		debug = !debug;
 	}
 		
 	if (debug == true)
 		return true;
 
-	for (list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
 
 		switch ((*item)->tag)
@@ -176,10 +168,10 @@ bool ModuleCollision::PostUpdate()
 		case Collider::TAG::NONE: // white
 			break;
 		case Collider::TAG::WALL: // blue
-			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {255, 0, 0 , 255});
+			//app->map->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {255, 0, 0 , 255});
 			break;
 		case Collider::TAG::PLAYER: // green
-			App->ui_test->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
+			//app->map->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
 			break;
 		case Collider::TAG::GOD: // orange
 			break;
@@ -211,7 +203,7 @@ bool ModuleCollision:: CleanUp()
 	return true;
 }
 
-Collider * ModuleCollision::AddCollider(fPoint pos , float width , float height, Collider::TAG type, j1Module* callback, Object* object)
+Collider * ModuleCollision::AddCollider(fPoint pos , float width , float height, Collider::TAG type, Module* callback, Object* object)
 {
 	Collider* collider = new Collider(pos, width, height, type, object, callback);
 	colliders.push_back(collider);
@@ -222,7 +214,7 @@ Collider * ModuleCollision::AddCollider(fPoint pos , float width , float height,
 
 bool ModuleCollision::DeleteCollider(Collider * collider)
 {
-	list<Collider*>::iterator collider_to_delete;
+	std::list<Collider*>::iterator collider_to_delete;
 
 	collider_to_delete = std::find(colliders.begin(), colliders.end(), collider);
 
@@ -260,24 +252,24 @@ void ModuleCollision::SolveOverlapDS(Collider * dynamic_col, Collider * static_c
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
 	case Collider::OVERLAP_DIR::RIGHT:
-		dynamic_col->object->position.x = static_col->position.x - dynamic_col->width;
+		dynamic_col->object->pos.x = static_col->position.x - dynamic_col->width;
 		LOG("RIGHT");
 		break;
 	case Collider::OVERLAP_DIR::LEFT:
-		dynamic_col->object->position.x = static_col->position.x + static_col->width;
+		dynamic_col->object->pos.x = static_col->position.x + static_col->width;
 		LOG("LEFT");
 		break;
 	case Collider::OVERLAP_DIR::UP:
-		dynamic_col->object->position.y = static_col->position.y - dynamic_col->height;
+		dynamic_col->object->pos.y = static_col->position.y - dynamic_col->height;
 		LOG("UP");
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
-		dynamic_col->object->position.y = static_col->position.y + static_col->height;
+		dynamic_col->object->pos.y = static_col->position.y + static_col->height;
 		LOG("DOWN");
 		break;
 	}
 
-	dynamic_col->SetPos(dynamic_col->object->position.x, dynamic_col->object->position.y);
+	dynamic_col->SetPos(dynamic_col->object->pos.x, dynamic_col->object->pos.y);
 }
 
 
@@ -304,28 +296,28 @@ void ModuleCollision::SolveOverlapDD(Collider * c1, Collider * c2)
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
 	case Collider::OVERLAP_DIR::RIGHT:
-		c1->object->position.x -= distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
-		c2->object->position.x += distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+		c1->object->pos.x -= distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+		c2->object->pos.x += distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
 
 		break;
 	case Collider::OVERLAP_DIR::LEFT:
-		c1->object->position.x += distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
-		c2->object->position.x -= distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+		c1->object->pos.x += distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+		c2->object->pos.x -= distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
 
 		break;
 	case Collider::OVERLAP_DIR::UP:
-		c1->object->position.y -= distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
-		c2->object->position.y += distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+		c1->object->pos.y -= distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+		c2->object->pos.y += distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
 
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
-		c1->object->position.y += distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
-		c2->object->position.y -= distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		c1->object->pos.y += distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		c2->object->pos.y -= distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
 		break;
 	}
 
 
-	c1->SetPos(c1->object->position.x, c1->object->position.y);
-	c2->SetPos(c2->object->position.x, c2->object->position.y);
+	c1->SetPos(c1->object->pos.x, c1->object->pos.y);
+	c2->SetPos(c2->object->pos.x, c2->object->pos.y);
 }
 
