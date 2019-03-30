@@ -11,7 +11,7 @@
 #include "M_UITest.h"
 #include "M_ObjManager.h"
 #include "PerfTimer.h"
-#include "Weapon_Flamethrower .h"
+#include "Weapon_Flamethrower.h"
 
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
