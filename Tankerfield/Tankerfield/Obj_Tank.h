@@ -19,7 +19,7 @@ public:
 	bool CleanUp();
 
 private:
-
+	void Movement(float dt);
 	void GetKeyboardInput(fPoint & input);
 	void GetControllerInput(fPoint & input);
 

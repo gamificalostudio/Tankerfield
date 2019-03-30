@@ -64,7 +64,14 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
-	fPoint input(0.f ,0.f);
+	Movement(dt);
+
+	return true;
+}
+
+void Obj_Tank::Movement(float dt)
+{
+	fPoint input(0.f, 0.f);
 	GetKeyboardInput(input);
 	GetControllerInput(input);
 
@@ -80,8 +87,6 @@ bool Obj_Tank::Update(float dt)
 	}
 
 	pos += dir * speed * dt;
-
-	return true;
 }
 
 void Obj_Tank::GetKeyboardInput(fPoint & input)
