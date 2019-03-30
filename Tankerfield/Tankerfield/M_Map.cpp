@@ -50,11 +50,6 @@ bool M_Map::Update(float dt)
 	if (map_loaded == false)
 		return ret;
 
-	uint win_w = 0, win_h = 0;
-	app->win->GetWindowSize(win_w, win_h);
-
-
-	
 
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
@@ -77,9 +72,6 @@ bool M_Map::Update(float dt)
 						if (tileset != nullptr)
 						{
 							SDL_Rect r = tileset->GetTileRect(tile_id);
-
-
-
 							app->render->Blit(tileset->texture, pos.x, pos.y, &r);
 
 						}
@@ -91,23 +83,25 @@ bool M_Map::Update(float dt)
 	}
 
 	//// Draw Grid ==============================================
-	int rows = 100, columms = 100, tile_width = data.tile_width, tile_height = data.tile_height;
+	int rows = data.rows, columms = data.columns, tile_width = data.tile_width, tile_height = data.tile_height;
 	iPoint point_1, point_2;
 
+	
+	for (int i = 0; i <= columms; ++i)
+	{
+		point_1 = MapToWorld(i, 0) ;
+		point_2 = MapToWorld(i, rows);
+		app->render->DrawLine(point_1.x + (int)(tile_width*0.5), point_1.y, point_2.x + (int)(tile_width*0.5), point_2.y, 255, 255, 255, 255, true);
+	}
 
 	for (int i = 0; i <= rows; ++i)
 	{
 		point_1 = MapToWorld(0, i);
 		point_2 = MapToWorld(columms, i);
-		app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		app->render->DrawLine(point_1.x + (int)(tile_width*0.5), point_1.y, point_2.x + (int)(tile_width*0.5), point_2.y, 255, 255, 255, 255, true);
 	}
 
-	for (int i = 0; i <= columms; ++i)
-	{
-		point_1 = MapToWorld(i, 0);
-		point_2 = MapToWorld(i, rows);
-		app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-	}
+	
 
 	return ret;
 }

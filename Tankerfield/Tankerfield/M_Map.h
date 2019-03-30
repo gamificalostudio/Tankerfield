@@ -168,10 +168,8 @@ enum MapTypes
 
 struct MapData
 {
-	int					columns;
-	int					rows;
-	int					tile_width;
-	int					tile_height;
+	int					columns, rows;
+	int					tile_width,	tile_height;
 	SDL_Color			background_color;
 	MapTypes			type;
 	std::list<TileSet*>	tilesets;

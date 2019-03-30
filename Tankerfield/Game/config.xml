@@ -25,7 +25,7 @@
   <map>
    <folder>Maps/</folder>
       <levels>
-        <level name="Level1.tmx"/>
+        <level name="iso.tmx"/>
       </levels>
   
   </map>
