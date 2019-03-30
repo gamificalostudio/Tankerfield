@@ -48,7 +48,6 @@ bool Obj_Tank::Start()
 	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
 	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-	Obj_Tank::time_between_bullets = tank_node.child("time_between_bullets").attribute("value").as_float();
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 
@@ -162,7 +161,7 @@ void Obj_Tank::InputShotController(fPoint & dir)
 	if (controller != nullptr)
 	{
 		fPoint input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
-		LOG("input x: %f, y: %f", input.x, input.y);
+		//LOG("input x: %f, y: %f", input.x, input.y);
 		dir = input;
 		//dir.x = input.x * cos_45 - input.y * sin_45;
 		//dir.y = input.x * sin_45 + input.y * cos_45;
@@ -180,37 +179,16 @@ void Obj_Tank::Shoot()
 
 	//TODO: Rotate turret sprite
 
-	if (IsShooting())
+	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		if (!IsHold())
-		{
-			weapons[weapon_type]->Shoot(pos.x, pos.y, input);
-			time_between_bullets = weapons[weapon_type]->time_between_bullets;
-			//weapon->Shoot();
-			//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
-			time_between_bullets_timer.Start();
-		}
-		else
-		{
-			if (time_between_bullets_timer.ReadMs() >= time_between_bullets)
-			{
-				weapons[weapon_type]->Shoot(pos.x, pos.y, input);
-				//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
-				time_between_bullets_timer.Start();
-			}
-		}
+		weapons[weapon_type]->Shoot(pos.x, pos.y, input);
+		time_between_bullets_timer.Start();
 	}
 }
 
 bool Obj_Tank::IsShooting() {
-	//LOG("%f", (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
 	return ((app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN
 		|| app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT)
 		|| (controller != nullptr
 			&& (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 0));
-}
-
-bool Obj_Tank::IsHold()
-{
-	return app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT;
 }

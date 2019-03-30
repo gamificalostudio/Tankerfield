@@ -6,6 +6,7 @@
 #include "M_ObjManager.h"
 #include "Obj_Bullet.h"
 #include "App.h"
+#include "Log.h"
 
 Weapon::Weapon()
 {
@@ -26,6 +27,7 @@ Weapon::~Weapon()
 
 void Weapon::Shoot(float x, float y, fPoint & dir)
 {
+	LOG("dir x: %f, y: %f", dir.x, dir.y);
 	bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type, x, y);
 	bullet->direction = dir;
 	bullet->bullet_life_ms = bullet_life_ms;

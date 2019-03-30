@@ -39,7 +39,6 @@ private:
 	void InputShotMouse(fPoint & input);
 	void InputShotController(fPoint & input);
 	bool IsShooting();
-	bool IsHold();
 
 public:
 	WEAPON_TYPE weapon_type = WEAPON_TYPE::BASIC;
@@ -62,7 +61,6 @@ private:
 	float sin_45 = 0.f;
 
 	PerfTimer time_between_bullets_timer;
-	float time_between_bullets = 0.f;
 
 	std::map<WEAPON_TYPE, Weapon*> weapons;
 };
