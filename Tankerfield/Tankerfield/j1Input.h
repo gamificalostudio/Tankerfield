@@ -54,17 +54,14 @@ private:
 public:
 
 	j1KeyState GetButtonState(SDL_GameControllerButton button)
-
-	bool attached = false;
-public:
-	
-	
-
-
 	{
 		return key_state[button];
 	}
 
+	bool attached = false;
+
+public:
+	
 	iPoint GetJoystick(Joystick joystick)
 	{
 		switch (joystick)
@@ -158,6 +155,7 @@ public:
 	void GetMouseMotion(int& x, int& y);
 
 private:
+	iPoint GetMousePos_Tiles();
 	void UpdateKeyboardState();
 	void UpdateMouseState();
 	void UpdateControllers();

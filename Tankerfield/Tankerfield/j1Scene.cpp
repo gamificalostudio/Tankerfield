@@ -70,19 +70,9 @@ bool j1Scene::Update(float dt)
 
 	if (control1 && (*control1))
 	{
-		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTX) < -10000)
-			cube.x -= 1;
-		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTX) > 10000)
-			cube.x += 1;
-
-		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTY) < -10000)
-			cube.y -= 1;
-		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_LEFTY) > 10000)
-			cube.y += 1;
 
 		if ((*control1)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 1000)
 		{
-			//SDL_HapticRumblePlay((*control1)->haptic, 1, 500);
 			(*control1)->PlayRumble(0.5, 500);
 
 			LOG("%s",SDL_GetError());
@@ -106,7 +96,7 @@ bool j1Scene::PostUpdate()
 
 	if(App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-	App->render->DrawQuad(cube, 255, 0, 0, 255);
+	
 	return ret;
 }
 

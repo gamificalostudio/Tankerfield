@@ -298,3 +298,4 @@ Controller** j1Input::GetAbleController()
 	}
 	return ret;
 }
+

@@ -11,7 +11,7 @@ class j1Scene : public j1Module
 {
 private:
 	Controller** control1 = nullptr;
-	SDL_Rect	cube = {100,100,10,10};
+	
 public:
 	int current_level = 0;
 public:
