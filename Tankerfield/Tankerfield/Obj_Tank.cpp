@@ -75,20 +75,15 @@ bool Obj_Tank::PreUpdate()
 bool Obj_Tank::Update(float dt)
 {
 	Movement(dt);
-
-	if (IsShooting())
-	{
-		Shoot();
-	}
-
+	Shoot();
 	return true;
 }
 
 void Obj_Tank::Movement(float dt)
 {
 	fPoint input(0.f, 0.f);
-	GetKeyboardInput(input);
-	GetControllerInput(input);
+	InputMovementKeyboard(input);
+	InputMovementController(input);
 
 	fPoint dir(0.f, 0.f);
 	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
@@ -104,7 +99,7 @@ void Obj_Tank::Movement(float dt)
 	pos += dir * speed * dt;
 }
 
-void Obj_Tank::GetKeyboardInput(fPoint & input)
+void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
 	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
@@ -124,7 +119,7 @@ void Obj_Tank::GetKeyboardInput(fPoint & input)
 	}
 }
 
-void Obj_Tank::GetControllerInput(fPoint & input)
+void Obj_Tank::InputMovementController(fPoint & input)
 {
 	if (controller != nullptr)
 	{
@@ -146,32 +141,71 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-bool Obj_Tank::IsShooting()
+void Obj_Tank::InputShotMouse(fPoint & input)
 {
-	return app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT;
+	iPoint mouse_pos = { 0,0 };
+	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+
+	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
+	mouse_pos.x += app->render->camera.x;
+	mouse_pos.y += app->render->camera.y;
+
+	//Transform to map to work all variables in map(blit do MapToWorld automatically)
+	fPoint map_mouse_pos = app->ui_test->WorldToMapF(mouse_pos, 100, 50);
+
+	input = map_mouse_pos - pos;
+	input.Normalize();
+}
+
+void Obj_Tank::InputShotController(fPoint & dir)
+{
+	if (controller != nullptr)
+	{
+		fPoint input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
+		dir.x = input.x * cos_45 - input.y * sin_45;
+		dir.y = input.x * sin_45 + input.y * cos_45;
+		dir.Normalize();
+	}
 }
 
 void Obj_Tank::Shoot()
 {
-	// Create basic bullet
-	if (!IsHold())
-	{
-		weapons[weapon_type]->Shoot(pos.x, pos.y);
-		time_between_bullets = weapons[weapon_type]->time_between_bullets;
-		//weapon->Shoot();
-		//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
-		time_between_bullets_timer.Start();
-	}
-	else
-	{
+	//1. Get the direction
+	fPoint input(0.f, 0.f);
+	//If the direction of the controller is null, we get the keyboard direction
+	//InputShotMouse(input);
+	InputShotController(input);
 
-		if (time_between_bullets_timer.ReadMs() >= time_between_bullets)
+	//TODO: Rotate turret sprite
+
+	if (IsShooting())
+	{
+		if (!IsHold())
 		{
-			weapons[weapon_type]->Shoot(pos.x, pos.y);
+			weapons[weapon_type]->Shoot(pos.x, pos.y, input);
+			time_between_bullets = weapons[weapon_type]->time_between_bullets;
+			//weapon->Shoot();
 			//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
 			time_between_bullets_timer.Start();
 		}
+		else
+		{
+			if (time_between_bullets_timer.ReadMs() >= time_between_bullets)
+			{
+				weapons[weapon_type]->Shoot(pos.x, pos.y, input);
+				//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
+				time_between_bullets_timer.Start();
+			}
+		}
 	}
+}
+
+bool Obj_Tank::IsShooting() {
+	LOG("%f", (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT));
+	return ((app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN
+		|| app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT)
+		|| (controller != nullptr
+			&& (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 0));
 }
 
 bool Obj_Tank::IsHold()

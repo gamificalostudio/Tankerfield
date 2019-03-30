@@ -32,10 +32,13 @@ public:
 
 private:
 	void Movement(float dt);
-	void GetKeyboardInput(fPoint & input);
-	void GetControllerInput(fPoint & input);
-	bool IsShooting();
+	void InputMovementKeyboard(fPoint & input);
+	void InputMovementController(fPoint & input);
+
 	void Shoot();
+	void InputShotMouse(fPoint & input);
+	void InputShotController(fPoint & input);
+	bool IsShooting();
 	bool IsHold();
 
 public:
