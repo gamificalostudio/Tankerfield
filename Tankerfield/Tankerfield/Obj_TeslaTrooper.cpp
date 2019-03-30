@@ -2,8 +2,8 @@
 
 //#include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
-#include "p2Point.h"
-#include "p2Log.h"
+#include "Point.h"
+#include "Log.h"
 
 #include "App.h"
 #include "Object.h"

@@ -7,7 +7,7 @@
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL.h"
 #include "Module.h"
-#include "p2Point.h"
+#include "Point.h"
 
 
 //#define NUM_KEYS 352

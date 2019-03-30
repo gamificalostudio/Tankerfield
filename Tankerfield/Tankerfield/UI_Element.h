@@ -1,7 +1,7 @@
 #ifndef __UI_Object_H__
 #define __UI_Object_H__
 
-#include "p2Point.h"
+#include "Point.h"
 #include "Animation.h"
 #include "Module.h"
 #include <list>

@@ -1,6 +1,6 @@
 #include "Object.h"
-#include "j1PerfTimer.h"
-#include "p2Point.h"
+#include "PerfTimer.h"
+#include "Point.h"
 
 struct SDL_Texture;
 

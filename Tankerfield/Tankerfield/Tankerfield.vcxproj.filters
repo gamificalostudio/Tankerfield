@@ -2,17 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="j1PerfTimer.cpp">
-      <Filter>Tools\Timers</Filter>
-    </ClCompile>
-    <ClCompile Include="j1Timer.cpp">
-      <Filter>Tools\pugixml</Filter>
-    </ClCompile>
     <ClCompile Include="PugiXml\src\pugixml.cpp">
       <Filter>Tools\pugixml</Filter>
-    </ClCompile>
-    <ClCompile Include="p2Log.cpp">
-      <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Tank.cpp">
       <Filter>Modules\Objects</Filter>
@@ -87,31 +78,25 @@
     <ClCompile Include="UI_Element.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
+    <ClCompile Include="PerfTimer.cpp">
+      <Filter>Tools\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Tools\Timers</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
       <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="j1PerfTimer.h">
-      <Filter>Tools\Timers</Filter>
-    </ClInclude>
-    <ClInclude Include="j1Timer.h">
-      <Filter>Tools\Timers</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugixml.hpp">
       <Filter>Tools\pugixml</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugiconfig.hpp">
       <Filter>Tools\pugixml</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Log.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Defs.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Tank.h">
       <Filter>Modules\Objects</Filter>
@@ -188,6 +173,21 @@
     </ClInclude>
     <ClInclude Include="UI_Element.h">
       <Filter>Modules\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PerfTimer.h">
+      <Filter>Tools\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Tools\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

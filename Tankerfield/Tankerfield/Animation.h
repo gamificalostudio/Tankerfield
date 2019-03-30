@@ -2,7 +2,7 @@
 #define __ANIMATION_H__
 
 #include "SDL/include/SDL_rect.h"
-#include "p2Defs.h"
+#include "Defs.h"
 
 class Animation
 {

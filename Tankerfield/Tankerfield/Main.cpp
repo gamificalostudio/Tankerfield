@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
-#include "p2Defs.h"
-#include "p2Log.h"
+#include "Defs.h"
+#include "Log.h"
 #include "App.h"
 
 #include "SDL/include/SDL.h"

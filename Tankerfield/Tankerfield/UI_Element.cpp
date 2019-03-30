@@ -1,7 +1,7 @@
 #include "M_UI.h"
 #include "UI_Element.h"
 #include "App.h"
-#include "p2Log.h"
+#include "Log.h"
 
 UI_Element::UI_Element(const fPoint position, UI_ElementDefinition definition, UI_Listener *listener) 
 	: position(position), listener(listener), section(definition.section), pivot(definition.pivot), draw_offset(definition.draw_offset) {}

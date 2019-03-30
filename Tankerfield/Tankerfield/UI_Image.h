@@ -1,7 +1,7 @@
 #ifndef _IMAGE_H__
 #define _IMAGE_H__
 
-#include "p2Point.h"
+#include "Point.h"
 #include "Animation.h"
 #include "UI_Element.h"
 

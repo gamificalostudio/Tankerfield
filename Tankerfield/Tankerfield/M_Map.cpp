@@ -2,7 +2,7 @@
 
 #include "App.h"
 #include "M_Map.h"
-#include "p2Log.h"
+#include "Log.h"
 
 M_Map::M_Map()
 {

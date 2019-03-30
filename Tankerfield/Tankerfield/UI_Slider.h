@@ -1,7 +1,7 @@
 #ifndef _SLIDER_H__
 #define _SLIDER_H__
 
-#include "p2Point.h"
+#include "Point.h"
 #include "Animation.h"
 #include "UI_Element.h"
 #include "M_UI.h"

@@ -7,8 +7,8 @@
 #include "PugiXml/src/pugixml.hpp"
 
 #include "Module.h"
-#include "j1PerfTimer.h"
-#include "j1Timer.h"
+#include "PerfTimer.h"
+#include "Timer.h"
 
 
 

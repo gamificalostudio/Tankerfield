@@ -9,7 +9,7 @@
 #include "M_Render.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
-#include "p2Log.h"
+#include "Log.h"
 //#include "j1Map.h"
 //#include "Player.h"
 //#include "j1Collision.h"

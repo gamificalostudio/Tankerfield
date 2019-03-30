@@ -3,7 +3,7 @@
 // Fast timer with milisecons precision
 // ----------------------------------------------------
 
-#include "j1Timer.h"
+#include "Timer.h"
 #include "SDL/include/SDL_timer.h"
 
 // ---------------------------------------------

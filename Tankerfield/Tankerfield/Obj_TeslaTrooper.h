@@ -1,7 +1,7 @@
 #ifndef __TESLATROOPER_H__
 #define __TESLATROOPER_H__
 
-#include "p2Point.h"
+#include "Point.h"
 #include "Animation.h"
 #include "Object.h"
 

@@ -1,5 +1,5 @@
-#include "p2Defs.h"
-#include "p2Log.h"
+#include "Defs.h"
+#include "Log.h"
 #include "App.h"
 #include "M_Input.h"
 #include "M_Window.h"

@@ -4,10 +4,10 @@
 #include <list>
 
 #include "PugiXml\src\pugixml.hpp"
-#include "p2Point.h"
+#include "Point.h"
 #include "Animation.h"
 
-#include "j1PerfTimer.h"
+#include "PerfTimer.h"
 
 enum ROTATION_DIR {
 	CLOCKWISE,
