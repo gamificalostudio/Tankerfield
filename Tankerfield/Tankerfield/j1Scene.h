@@ -9,6 +9,8 @@ struct SDL_Texture;
 class j1Scene : public j1Module
 {
 public:
+	int current_level = 0;
+public:
 
 	j1Scene();
 

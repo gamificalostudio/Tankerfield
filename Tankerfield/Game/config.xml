@@ -23,7 +23,11 @@
   </gui>
 
   <map>
-    <folder></folder>
+   <folder>maps/</folder>
+      <levels>
+        <level name="iso.tmx"/>
+      </levels>
+  
   </map>
 
 </config>

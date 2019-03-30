@@ -59,6 +59,9 @@
     <ClCompile Include="j1Pathfinding.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="j1Map.cpp">
+       <Filter>Modules</Filter>
+    </ClCompile>
     <ClCompile Include="Button_Input.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
@@ -144,7 +147,9 @@
     <ClInclude Include="j1Pathfinding.h">
       <Filter>Modules</Filter>
     </ClInclude>
-
+    <ClInclude Include="j1Map.h">
+      <Filter>Modules</Filter>
+      </ClInclude>
     <ClInclude Include="Button_Input.h">
       <Filter>Modules\UI</Filter>
     </ClInclude>
