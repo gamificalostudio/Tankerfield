@@ -82,6 +82,9 @@
     <ClCompile Include="Obj_Basic_Shoot.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Weapon.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1App.h" />
@@ -175,6 +178,9 @@
       <Filter>Modules\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Basic_Shoot.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Weapon.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,12 +6,12 @@
 
 
 
-Obj_Basic_Shoot::Obj_Basic_Shoot() : Object()
+Obj_Basic_Shoot::Obj_Basic_Shoot() : Obj_Weapon()
 {
 
 }
 
-Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
+Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Obj_Weapon(x, y)
 {
 
 	//Load XML var ============
@@ -19,24 +19,6 @@ Obj_Basic_Shoot::Obj_Basic_Shoot(int x, int y) : Object(x, y)
 
 	speed = basic_bullet_node.child("speed").attribute("value").as_float();
 	bullet_life_ms = basic_bullet_node.child("life").attribute("value").as_float();
-	
-
-	//Direction of the bullet ===========
-	iPoint mouse_position = { 0,0 };
-	App->input->GetMousePosition(mouse_position.x, mouse_position.y);
-
-	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_position.x += -App->render->camera.x;
-	mouse_position.y += -App->render->camera.y;
-
-	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_position = App->ui_test->WorldToMapF(mouse_position, 100, 50);
-
-	direction = map_mouse_position - pos;
-
-	//Normilize vector
-	float norm = sqrtf((direction.x*direction.x) + (direction.y*direction.y));
-	direction /= norm;
 
 	//Start life timer ====
 	bullet_life_timer.Start();
@@ -76,10 +58,7 @@ bool Obj_Basic_Shoot::Update(float dt)
 
 bool Obj_Basic_Shoot::PostUpdate()
 {
-	if (bullet_life_timer.ReadMs() >= bullet_life_ms)
-	{
-		to_remove = true;
-	}
+	Obj_Weapon::PostUpdate();
 	return true;
 }
 

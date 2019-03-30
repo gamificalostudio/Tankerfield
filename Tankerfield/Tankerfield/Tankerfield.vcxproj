@@ -148,6 +148,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Obj_Basic_Shoot.cpp" />
     <ClCompile Include="Obj_Tank.cpp" />
+    <ClCompile Include="Obj_Weapon.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Tesla_Trooper.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Obj_Basic_Shoot.h" />
     <ClInclude Include="Obj_Tank.h" />
+    <ClInclude Include="Obj_Weapon.h" />
     <ClInclude Include="p2Defs.h" />
     <ClInclude Include="p2Log.h" />
     <ClInclude Include="p2Point.h" />

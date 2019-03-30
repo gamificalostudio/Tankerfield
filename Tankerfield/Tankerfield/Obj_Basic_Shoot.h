@@ -1,10 +1,8 @@
-#include "Object.h"
+#include "Obj_Weapon.h"
 #include "j1PerfTimer.h"
 #include "p2Point.h"
 
-struct SDL_Texture;
-
-class Obj_Basic_Shoot : public Object
+class Obj_Basic_Shoot : public Obj_Weapon
 {
 public:
 	Obj_Basic_Shoot();
@@ -21,9 +19,6 @@ public:
 
 private:
 
-	float speed;
-	fPoint direction;
-	j1PerfTimer bullet_life_timer;
-	float bullet_life_ms;
+	
 
 };
