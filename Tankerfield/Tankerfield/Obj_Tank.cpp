@@ -72,10 +72,10 @@ bool Obj_Tank::Update(float dt)
 		dir.Normalize();
 		pos += dir * speed * dt;
 
-		//if(!fjoy.IsZero())
-		//{
-		//	angle = (atan2(fjoy.y, fjoy.x) * 180 / M_PI);
-		//}
+		if(!dir.IsZero())
+		{
+			angle = atan2(dir.y, dir.x) * RADTODEG;
+		}
 	}
 	return true;
 }
