@@ -2,8 +2,8 @@
 // Point class    -----------
 // ----------------------------------------------------
 
-#ifndef __P2POINT_H__
-#define __P2POINT_H__
+#ifndef __POINT_H__
+#define __POINT_H__
 
 #include "Defs.h"
 #include <math.h>

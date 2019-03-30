@@ -1,5 +1,5 @@
-#ifndef __P2DEFS_H__
-#define __P2DEFS_H__
+#ifndef __DEFS_H__
+#define __DEFS_H__
 
 #include <stdio.h>
 

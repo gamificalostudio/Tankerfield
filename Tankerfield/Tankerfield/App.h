@@ -1,5 +1,5 @@
-#ifndef __j1APP_H__
-#define __j1APP_H__
+#ifndef __APP_H__
+#define __APP_H__
 
 #include <list>
 #include <string>

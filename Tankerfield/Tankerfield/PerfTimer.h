@@ -1,5 +1,5 @@
-#ifndef __j1PERFTIMER_H__
-#define __j1PERFTIMER_H__
+#ifndef __PERFTIMER_H__
+#define __PERFTIMER_H__
 
 #include "Defs.h"
 
