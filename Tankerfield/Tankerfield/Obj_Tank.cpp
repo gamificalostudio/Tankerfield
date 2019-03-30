@@ -64,47 +64,52 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
-	if (controller != nullptr)
-	{
-		fPoint joystick = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
-		//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
-		fPoint iso_dir
-			(joystick.x * cos_45 - joystick.y * sin_45,
-			 joystick.x * sin_45 + joystick.y * cos_45);
-		iso_dir.Normalize();
-		pos += iso_dir * speed * dt;
+	fPoint input(0.f ,0.f);
+	GetKeyboardInput(input);
+	//GetControllerInput(input);
 
-		if(!joystick.IsZero())
-		{
-			angle = (atan2(joystick.y, -joystick.x) * RADTODEG) + 180;
-		}
+	fPoint dir(0.f, 0.f);
+	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
+	dir.x = input.x * cos_45 - input.y * sin_45;
+	dir.y = input.x * sin_45 + input.y * cos_45;
+	dir.Normalize();
+
+	if (!dir.IsZero())
+	{
+		angle = (atan2(input.y, -input.x) * RADTODEG) + 180;
 	}
 
-	fPoint input (0,0);
+	pos += dir * speed * dt;
+
+	return true;
+}
+
+void Obj_Tank::GetKeyboardInput(fPoint & input)
+{
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		input.x += sin_45;
-		input.y += sin_45;
+		input.y -= 1.f;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		input.x += sin_45;
-		input.y -= sin_45;
+		input.x -= 1.f;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		input.x -= sin_45;
-		input.y -= sin_45;
+		input.y += 1.f;
 	}
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		input.x -= sin_45;
-		input.y += sin_45;
+		input.x += 1.f;
 	}
-	input.Normalize();
-	pos += input * speed * dt;
+}
 
-	return true;
+void Obj_Tank::GetControllerInput(fPoint & input)
+{
+	if (controller != nullptr)
+	{
+		input = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
+	}
 }
 
 bool Obj_Tank::PostUpdate()

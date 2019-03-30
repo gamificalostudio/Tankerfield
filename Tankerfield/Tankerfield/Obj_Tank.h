@@ -20,6 +20,9 @@ public:
 
 private:
 
+	void GetKeyboardInput(fPoint & input);
+	void GetControllerInput(fPoint & input);
+
 public:
 
 private:
