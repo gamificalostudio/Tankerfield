@@ -53,7 +53,7 @@ public:
 	Label*			label = nullptr;
 
 private:
-	friend Module_UI;
+	friend M_UI;
 };
 
 #endif // _BUTTON_INPUT_H__

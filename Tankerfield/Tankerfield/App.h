@@ -12,18 +12,18 @@
 
 
 
-class j1Window;
+class M_Window;
 class M_Input;
 class M_Render;
-class j1Textures;
+class M_Textures;
 class M_Audio;
-class UI_Test;
+class M_UITest;
 class M_Pathfinding;
 class M_Map;
 class M_Fonts;
-class Module_UI;
-class ObjectManager;
-class SceneManager;
+class M_UI;
+class M_ObjManager;
+class M_SceneManager;
 class M_Scene;
 
 class App
@@ -85,18 +85,18 @@ private:
 
 public:
 	// Modules
-	j1Window*			win = nullptr;
+	M_Window*			win = nullptr;
 	M_Input*			input = nullptr;
 	M_Render*			render = nullptr;
-	j1Textures*			tex = nullptr;
+	M_Textures*			tex = nullptr;
 	M_Audio*			audio = nullptr;
-	UI_Test*			ui_test = nullptr;
+	M_UITest*			ui_test = nullptr;
 	M_Pathfinding*		pathfinding = nullptr;
 	M_Map*				map = nullptr;
 	M_Fonts*            font = nullptr;
-	Module_UI*          ui = nullptr;
-	ObjectManager*		objectmanager = nullptr;
-	SceneManager*		scmanager = nullptr;
+	M_UI*          ui = nullptr;
+	M_ObjManager*		objectmanager = nullptr;
+	M_SceneManager*		scmanager = nullptr;
 	M_Scene*			scene = nullptr;
   
 	//XML document

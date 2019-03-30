@@ -21,12 +21,12 @@ enum ObjectType
 
 class Object;
 
-class ObjectManager : public Module
+class M_ObjManager : public Module
 {
 public:
 
-	ObjectManager();
-	~ObjectManager();
+	M_ObjManager();
+	~M_ObjManager();
 
 	bool Awake(pugi::xml_node& config) override;
 

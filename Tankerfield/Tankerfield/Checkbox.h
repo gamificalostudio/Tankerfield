@@ -42,7 +42,7 @@ private:
 	Button* button = nullptr;   
 
 private:
-	friend Module_UI;
+	friend M_UI;
 };
 
 #endif // _CHECKBOX_H__

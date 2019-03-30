@@ -17,18 +17,18 @@
 #include "Obj_Tank.h"
 #include "Obj_Basic_Shoot.h"
 
-ObjectManager::ObjectManager()
+M_ObjManager::M_ObjManager()
 {
 	name.assign("object_manager");
 }
 
 // Destructor
-ObjectManager::~ObjectManager()
+M_ObjManager::~M_ObjManager()
 {
 
 }
 
-bool ObjectManager::Awake(pugi::xml_node& config)
+bool M_ObjManager::Awake(pugi::xml_node& config)
 {
 	bool ret = true;
 	std::list<Object*>::iterator iterator;
@@ -42,7 +42,7 @@ bool ObjectManager::Awake(pugi::xml_node& config)
 	return ret;
 }
 
-bool ObjectManager::Start()
+bool M_ObjManager::Start()
 {
 	bool ret = true;
 
@@ -56,7 +56,7 @@ bool ObjectManager::Start()
 	return ret;
 }
 
-bool ObjectManager::PreUpdate()
+bool M_ObjManager::PreUpdate()
 {
 	//BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Green);
 	std::list<Object*>::iterator iterator;
@@ -72,7 +72,7 @@ bool ObjectManager::PreUpdate()
 }
 
 // Called before render is available
-bool ObjectManager::Update(float dt)
+bool M_ObjManager::Update(float dt)
 {
 	//BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::Green);
 	std::list<Object*>::iterator iterator = objects.begin();
@@ -103,7 +103,7 @@ bool ObjectManager::Update(float dt)
 	return true;
 }
 
-bool ObjectManager::PostUpdate()
+bool M_ObjManager::PostUpdate()
 {
 	//BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::Green);
 	std::list<Object*>::iterator iterator;
@@ -120,7 +120,7 @@ bool ObjectManager::PostUpdate()
 }
 
 // Called before quitting
-bool ObjectManager::CleanUp()
+bool M_ObjManager::CleanUp()
 {
 	std::list<Object*>::iterator iterator = objects.begin();
 
@@ -137,7 +137,7 @@ bool ObjectManager::CleanUp()
 	return true;
 }
 
-Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
+Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
 {
 	Object* ret = nullptr;
 	switch (type)
@@ -165,7 +165,7 @@ Object* ObjectManager::CreateObject(ObjectType type, float x, float y)
 }
 
 
-void ObjectManager::DeleteObjects()
+void M_ObjManager::DeleteObjects()
 {
 	std::list<Object*>::iterator iterator = objects.begin();
 
@@ -182,14 +182,14 @@ void ObjectManager::DeleteObjects()
 	objects.clear();
 }
 
-bool ObjectManager::Load(pugi::xml_node& load)
+bool M_ObjManager::Load(pugi::xml_node& load)
 {
 	bool ret = true;
 
 	return ret;
 }
 
-bool ObjectManager::Save(pugi::xml_node& save) const
+bool M_ObjManager::Save(pugi::xml_node& save) const
 {
 	bool ret = true;
 

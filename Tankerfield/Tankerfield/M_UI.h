@@ -40,13 +40,13 @@ enum class ClickState
 	None
 };
 
-class Module_UI : public Module
+class M_UI : public Module
 {
 public:
 
-	Module_UI();
+	M_UI();
 
-	virtual ~Module_UI();
+	virtual ~M_UI();
 
 	bool Awake(pugi::xml_node& node);
 

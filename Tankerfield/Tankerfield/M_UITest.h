@@ -7,13 +7,13 @@
 
 struct SDL_Texture;
 
-class UI_Test : public Module, public Gui_Listener
+class M_UITest : public Module, public Gui_Listener
 {
 public:
 
-	UI_Test();
+	M_UITest();
 
-	virtual ~UI_Test();
+	virtual ~M_UITest();
 
 	bool Awake();
 

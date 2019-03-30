@@ -16,14 +16,12 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
-#include "App.h"
 #include "M_SceneManager.h"
 #include "M_Map.h"
 #include "M_Fonts.h"
 #include "M_UI.h"
 #include "M_UITest.h"
 #include "M_ObjManager.h"
-#include "M_Scene.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -31,18 +29,18 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	PERF_START(ptimer);
 
 	input = new M_Input();
-	win = new j1Window();
+	win = new M_Window();
 	render = new M_Render();
-	tex = new j1Textures();
+	tex = new M_Textures();
 	audio = new M_Audio();
-	ui_test = new UI_Test();
+	ui_test = new M_UITest();
 	pathfinding = new M_Pathfinding();
 	map = new M_Map();
 	scene = new M_Scene();
 	font = new M_Fonts();
-	ui = new Module_UI();
-	objectmanager = new ObjectManager();
-	scmanager = new SceneManager();
+	ui = new M_UI();
+	objectmanager = new M_ObjManager();
+	scmanager = new M_SceneManager();
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp

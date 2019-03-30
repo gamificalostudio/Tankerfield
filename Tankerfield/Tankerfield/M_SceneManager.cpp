@@ -11,17 +11,17 @@
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
 
-SceneManager::SceneManager():Module()
+M_SceneManager::M_SceneManager():Module()
 {
 
 	screen = { 0, 0, 1024,640 }; //revisar hardcode TODO
 }
 
-SceneManager::~SceneManager()
+M_SceneManager::~M_SceneManager()
 {}
 
 // Load assets
-bool SceneManager::Start()
+bool M_SceneManager::Start()
 {
 	LOG("Preparing Fade Screen");
 	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
@@ -29,7 +29,7 @@ bool SceneManager::Start()
 }
 
 // Update: draw background
-bool SceneManager::Update(float dt)
+bool M_SceneManager::Update(float dt)
 {
 	
 
@@ -68,7 +68,7 @@ bool SceneManager::Update(float dt)
 }
 
 // Fade to black. At mid point deactivate one module, then activate the other
-bool SceneManager::FadeToBlack(Module* module_off, Module* module_on, float time)
+bool M_SceneManager::FadeToBlack(Module* module_off, Module* module_on, float time)
 {
 	bool ret = false;
 

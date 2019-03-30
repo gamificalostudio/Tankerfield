@@ -13,15 +13,15 @@
 #include "Label.h"
 #include "M_ObjManager.h"
 
-UI_Test::UI_Test() : Module()
+M_UITest::M_UITest() : Module()
 {
 	name.assign("UI Test");
 }
 
-UI_Test::~UI_Test()
+M_UITest::~M_UITest()
 {}
 
-bool UI_Test::Awake()
+bool M_UITest::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -29,7 +29,7 @@ bool UI_Test::Awake()
 	return ret;
 }
 
-bool UI_Test::Start()
+bool M_UITest::Start()
 {
 	player_pos = { 2,2 };
 
@@ -45,14 +45,14 @@ bool UI_Test::Start()
 	return true;
 }
 
-bool UI_Test::PreUpdate()
+bool M_UITest::PreUpdate()
 {
 
 
 	return true;
 }
 
-iPoint UI_Test::MapToWorld(int x, int y, int tile_width, int tile_height)
+iPoint M_UITest::MapToWorld(int x, int y, int tile_width, int tile_height)
 {
 	iPoint ret;
 
@@ -64,7 +64,7 @@ iPoint UI_Test::MapToWorld(int x, int y, int tile_width, int tile_height)
 
 
 
-fPoint UI_Test::WorldToMapF(iPoint world_pos, float tile_width, float tile_height)
+fPoint M_UITest::WorldToMapF(iPoint world_pos, float tile_width, float tile_height)
 {
 	fPoint map_pos;
 	map_pos.x = ((world_pos.x / (tile_width * 0.5f)) + world_pos.y / (tile_height * 0.5f)) * 0.5f;
@@ -72,7 +72,7 @@ fPoint UI_Test::WorldToMapF(iPoint world_pos, float tile_width, float tile_heigh
 	return map_pos;
 }
 
-void UI_Test::DrawIsometricQuad (float x, float y, float w, float h)
+void M_UITest::DrawIsometricQuad (float x, float y, float w, float h)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
@@ -91,7 +91,7 @@ void UI_Test::DrawIsometricQuad (float x, float y, float w, float h)
 	app->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, 255, 0, 0, 255, true);
 }
 
-void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
+void M_UITest::DrawIsometricBox(float x, float y, float w, float h, float p)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
@@ -120,7 +120,7 @@ void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
 	app->render->DrawLine(point_4.x, point_4.y, point_4.x, point_4.y - p, 255, 0, 0, 255, true);
 }																		 
 
-bool UI_Test::Update(float dt)
+bool M_UITest::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += floor(200.0f * dt);
@@ -183,7 +183,7 @@ bool UI_Test::Update(float dt)
 	return true;
 }
 
-bool UI_Test::PostUpdate()
+bool M_UITest::PostUpdate()
 {
 	bool ret = true;
 
@@ -193,7 +193,7 @@ bool UI_Test::PostUpdate()
 	return ret;
 }
 
-bool UI_Test::CleanUp()
+bool M_UITest::CleanUp()
 {
 	LOG("Freeing ui_test");
 

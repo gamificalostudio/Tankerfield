@@ -52,7 +52,7 @@ private:
 	int                 points_distance = 0;
 
 private:
-	friend Module_UI;
+	friend M_UI;
 	friend Gui_Listener;
 };
 

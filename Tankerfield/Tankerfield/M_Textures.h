@@ -7,14 +7,14 @@
 struct SDL_Texture;
 struct SDL_Surface;
 
-class j1Textures : public Module
+class M_Textures : public Module
 {
 public:
 
-	j1Textures();
+	M_Textures();
 
 	// Destructor
-	virtual ~j1Textures();
+	virtual ~M_Textures();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);

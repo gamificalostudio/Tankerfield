@@ -18,18 +18,18 @@
 #include "Checkbox.h"
 #include "Text_Panel.h"
 
-Module_UI::Module_UI() : Module()
+M_UI::M_UI() : Module()
 {
 	name.assign("Module UI");
 	main_object = new UI_Object({ 0,0 }, UI_Object_Definition(), nullptr);
 }
 
 // Destructor
-Module_UI::~Module_UI()
+M_UI::~M_UI()
 {}
 
 // Called before render is available
-bool Module_UI::Awake(pugi::xml_node& config)
+bool M_UI::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Module UI");
 	bool ret = true;
@@ -38,14 +38,14 @@ bool Module_UI::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool Module_UI::Start()
+bool M_UI::Start()
 {
 	atlas = app->tex->Load("textures/ui/atlas.png");
 	return true;
 }
 
 // Called before quitting
-bool Module_UI::CleanUp()
+bool M_UI::CleanUp()
 {
 	LOG("Freeing all UI objects");
 
@@ -68,7 +68,7 @@ bool Module_UI::CleanUp()
 
 
 // Update all guis
-bool Module_UI::PreUpdate()
+bool M_UI::PreUpdate()
 {
 	int x_mouse = 0, y_mouse = 0;
 	app->input->GetMousePosition(x_mouse, y_mouse);
@@ -143,7 +143,7 @@ bool Module_UI::PreUpdate()
 	return true;
 }
 
-bool Module_UI::Update(float dt)
+bool M_UI::Update(float dt)
 {
 	// Draggable ================================================
 	if (selected_object && selected_object->is_draggable)
@@ -225,7 +225,7 @@ bool Module_UI::Update(float dt)
 }
 
 // Called after all Updates
-bool Module_UI::PostUpdate()
+bool M_UI::PostUpdate()
 {
 	// Draw all UI objects ====================================
 	DrawUI(main_object);
@@ -234,19 +234,19 @@ bool Module_UI::PostUpdate()
 }
 
 // const getter for atlas
- SDL_Texture* Module_UI::GetAtlas() const 
+ SDL_Texture* M_UI::GetAtlas() const 
 {
 	return atlas;
 }
 
- ClickState Module_UI::GetClickState() const
+ ClickState M_UI::GetClickState() const
  {
 	 return click_state;
  }
 
 // Creation methods =================================================================
 
- UI_Object * Module_UI::CreateObject(const fPoint position, UI_Object_Definition definition, Gui_Listener * listener)
+ UI_Object * M_UI::CreateObject(const fPoint position, UI_Object_Definition definition, Gui_Listener * listener)
  {
 	 UI_Object* object = new UI_Object(position, definition, listener);
 	 object->SetParent(main_object);
@@ -254,7 +254,7 @@ bool Module_UI::PostUpdate()
 	 return object;
  }
 
- Label* Module_UI::CreateLabel(const fPoint position, const String text,  Label_Definition definition, Gui_Listener* listener)
+ Label* M_UI::CreateLabel(const fPoint position, const String text,  Label_Definition definition, Gui_Listener* listener)
 {
 	Label* object = new Label(position, text, definition, listener);
 	object->SetParent(main_object);
@@ -263,7 +263,7 @@ bool Module_UI::PostUpdate()
 
 }
 
-Image* Module_UI::CreateImage(const fPoint position, Image_Definition definition , Gui_Listener* listener)
+Image* M_UI::CreateImage(const fPoint position, Image_Definition definition , Gui_Listener* listener)
 {
 	Image* object = new Image(position, definition, listener);
 	object->SetParent(main_object);
@@ -271,7 +271,7 @@ Image* Module_UI::CreateImage(const fPoint position, Image_Definition definition
 	return object;
 }
 
-Button* Module_UI::CreateButton(const fPoint position, Button_Definition definition, Gui_Listener* listener)
+Button* M_UI::CreateButton(const fPoint position, Button_Definition definition, Gui_Listener* listener)
 {
 	Button* object = new Button(position, definition, listener);
 	object->SetParent(main_object);
@@ -279,7 +279,7 @@ Button* Module_UI::CreateButton(const fPoint position, Button_Definition definit
 	return object;
 }
 
-Slider * Module_UI::CreateSlider(const fPoint position, Slider_Definition definition, Gui_Listener * listener)
+Slider * M_UI::CreateSlider(const fPoint position, Slider_Definition definition, Gui_Listener * listener)
 {
 	Slider* object = new Slider(position, definition, listener);
 	object->SetParent(main_object);
@@ -287,7 +287,7 @@ Slider * Module_UI::CreateSlider(const fPoint position, Slider_Definition defini
 	return object;
 }
 
-Checkbox * Module_UI::CreateCheckbox(const fPoint position, Checkbox_Definition definition, Gui_Listener * listener)
+Checkbox * M_UI::CreateCheckbox(const fPoint position, Checkbox_Definition definition, Gui_Listener * listener)
 {
 	Checkbox* object = new Checkbox(position, definition, listener);
 	object->SetParent(main_object);
@@ -295,7 +295,7 @@ Checkbox * Module_UI::CreateCheckbox(const fPoint position, Checkbox_Definition 
 	return object;
 }
 
-TextPanel * Module_UI::CreateTextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener * listener)
+TextPanel * M_UI::CreateTextPanel(const fPoint position, TextPanel_Definition definition, Gui_Listener * listener)
 {
 	TextPanel* object = new TextPanel(position, definition, listener);
 	object->SetParent(main_object);
@@ -304,17 +304,17 @@ TextPanel * Module_UI::CreateTextPanel(const fPoint position, TextPanel_Definiti
 }
 // ====================================================================================
 
-UI_Object * Module_UI::GetClickedObject()
+UI_Object * M_UI::GetClickedObject()
 {
 	return selected_object;
 }
 
-UI_Object * Module_UI::GetScreen()
+UI_Object * M_UI::GetScreen()
 {
 	return main_object;
 }
 
-bool Module_UI::DeleteObject(UI_Object * object)
+bool M_UI::DeleteObject(UI_Object * object)
 {
 	if (objects_list.empty())
 	{
@@ -359,7 +359,7 @@ bool Module_UI::DeleteObject(UI_Object * object)
 	return true;
 }
 
-void Module_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_root)
+void M_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_root)
 {
 	if (branch_root == nullptr)
 	{
@@ -375,18 +375,18 @@ void Module_UI::SetStateToBranch(const ObjectState state, UI_Object * branch_roo
 
 }
 
-fPoint Module_UI::GetMouseOffset() const
+fPoint M_UI::GetMouseOffset() const
 {
 	return mouse_offset;
 }
 
-void Module_UI::SetCursorOffset(const fPoint offset)
+void M_UI::SetCursorOffset(const fPoint offset)
 {
 	mouse_offset = offset;
 
 }
 
-bool Module_UI::SelectClickedObject()
+bool M_UI::SelectClickedObject()
 {
 	list<UI_Object*> clicked_objects;
 
@@ -425,7 +425,7 @@ bool Module_UI::SelectClickedObject()
 	return true;
 }
 
-void Module_UI::DrawUI(UI_Object * object)
+void M_UI::DrawUI(UI_Object * object)
 {
 	if (object == nullptr)
 	{
@@ -465,7 +465,7 @@ void Module_UI::DrawUI(UI_Object * object)
 	}
 }
 
-void Module_UI::UpdateGuiPositions(UI_Object * object, fPoint cumulated_position)
+void M_UI::UpdateGuiPositions(UI_Object * object, fPoint cumulated_position)
 {
 	if (object == nullptr)
 	{

@@ -4,11 +4,11 @@
 #include "Module.h"
 #include "SDL\include\SDL_rect.h"
 
-class SceneManager : public Module
+class M_SceneManager : public Module
 {
 public:
-	SceneManager();
-	~SceneManager();
+	M_SceneManager();
+	~M_SceneManager();
 
 	bool Start();
 	bool Update(float dt);

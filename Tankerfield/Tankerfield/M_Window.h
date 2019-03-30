@@ -6,14 +6,14 @@
 struct SDL_Window;
 struct SDL_Surface;
 
-class j1Window : public Module
+class M_Window : public Module
 {
 public:
 
-	j1Window();
+	M_Window();
 
 	// Destructor
-	virtual ~j1Window();
+	virtual ~M_Window();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
