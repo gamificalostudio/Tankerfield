@@ -76,7 +76,7 @@ bool Obj_Tank::Update(float dt)
 
 	if (!dir.IsZero())
 	{
-		angle = (atan2(input.y, -input.x) * RADTODEG) + 180;
+		angle = (atan2(input.y, -input.x) * RADTODEG);
 	}
 
 	pos += dir * speed * dt;
@@ -115,7 +115,7 @@ void Obj_Tank::GetControllerInput(fPoint & input)
 bool Obj_Tank::PostUpdate()
 {
 	int tile_width = 100, tile_height = 50;
-	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 135);
+	uint ind = GetRotatedIndex(base_rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	fPoint iso_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
 	App->render->Blit(base_tex, iso_pos.x, iso_pos.y, &base_rects[ind]);
 	return true;
