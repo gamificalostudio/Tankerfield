@@ -130,7 +130,7 @@
     <ClCompile Include="Checkbox.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="j1App.cpp" />
-    <ClCompile Include="j1Audio.cpp" />
+    <ClCompile Include="M_Audio.cpp" />
     <ClCompile Include="j1Fonts.cpp" />
     <ClCompile Include="j1Input.cpp" />
     <ClCompile Include="j1Map.cpp" />
@@ -163,7 +163,7 @@
     <ClInclude Include="Checkbox.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="j1App.h" />
-    <ClInclude Include="j1Audio.h" />
+    <ClInclude Include="M_Audio.h" />
     <ClInclude Include="j1Fonts.h" />
     <ClInclude Include="j1Input.h" />
     <ClInclude Include="j1Map.h" />
