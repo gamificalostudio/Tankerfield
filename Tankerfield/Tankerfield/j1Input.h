@@ -32,7 +32,16 @@ enum j1KeyState
 	KEY_REPEAT,
 	KEY_UP
 };
+
+enum class Joystick
+{
+	LEFT,
+	RIGHT,
+	INVALID
+};
+
 class j1Input;
+
 struct Controller
 {
 private:
@@ -41,18 +50,48 @@ private:
 	j1KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
+
 public:
 
 	j1KeyState GetButtonState(SDL_GameControllerButton button)
+
+	bool attached = false;
+public:
+	
+	
+
+
 	{
 		return key_state[button];
 	}
+
+	iPoint GetJoystick(Joystick joystick)
+	{
+		switch (joystick)
+		{
+		case Joystick::LEFT:
+			return iPoint (GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
+		case Joystick::RIGHT:
+			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTX));
+		}
+	}
+
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis)
+
+	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = 1000)
 	{
-		return SDL_GameControllerGetAxis(ctr_pointer, axis);
+		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+		if (abs(value) > dead_zone)
+		{
+			return value;
+		}
+		else
+		{
+			return 0;
+		}
 	}
+
 
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
@@ -63,6 +102,7 @@ public:
 		else
 			return 0;
 	}
+  
 	int StopRumble()
 	{
 		if (haptic != nullptr)
@@ -70,6 +110,7 @@ public:
 		else
 			return 0;
 	}
+  
 	friend class j1Input;
 };
 
@@ -104,7 +145,7 @@ public:
 		return keyboard[id];
 	}
 
-	j1KeyState GetMouseButtonState(int id) const
+	j1KeyState GetMouseButton(int id) const
 	{
 		return mouse_buttons[id - 1];
 	}
@@ -115,7 +156,6 @@ public:
 	// Get mouse / axis position
 	void GetMousePosition(int &x, int &y);
 	void GetMouseMotion(int& x, int& y);
-	iPoint GetMousePos_Tiles();
 
 private:
 	void UpdateKeyboardState();
@@ -133,6 +173,7 @@ private:
 
 public:
 	std::vector<Controller*> controllers;
+	Controller** GetAbleController();
 };
 
 #endif // __j1INPUT_H__

@@ -8,6 +8,7 @@
 #include "j1Window.h"
 #include "j1Scene.h"
 #include "j1Map.h"
+#include "ObjectManager.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -35,7 +36,7 @@ bool j1Scene::Start()
 	std::advance(levelData, current_level);
 	App->map->Load((*levelData)->name.c_str());
 
-	
+	App->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
 	
 	return true;
 }
@@ -55,12 +56,6 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	if(App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		App->LoadGame("save_game.xml");
-
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-		App->SaveGame("save_game.xml");
-
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += floor(200.0f * dt);
 
@@ -94,7 +89,12 @@ bool j1Scene::Update(float dt)
 		}
 	}
 	// Draw ------------------
+
 	
+
+	//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	//	App->objectmanager->CreateObject(TESLA_TROOPER, 200, 200);
+
 
 	return true;
 }

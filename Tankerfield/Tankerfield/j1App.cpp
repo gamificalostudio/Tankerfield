@@ -1,7 +1,6 @@
 #include <iostream>
 #include <sstream>
 
-
 #include "SDL/include/SDL_timer.h"
 #include "Brofiler/Brofiler.h"
 #pragma comment(lib, "Brofiler/ProfilerCore32.lib")
@@ -41,7 +40,6 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	font = new j1Fonts();
 	ui = new Module_UI();
 	objectmanager = new ObjectManager();
-
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
@@ -52,13 +50,12 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(scene);
 	AddModule(font);
-	AddModule(objectmanager);
-
 	AddModule(ui_test);
 	AddModule(ui);
+	AddModule(objectmanager);
 	// render last to swap buffer
 	AddModule(render);
-
+	
 	PERF_PEEK(ptimer);
 }
 
@@ -87,10 +84,6 @@ void j1App::AddModule(j1Module* module)
 bool j1App::Awake()
 {
 	PERF_START(ptimer);
-
-	pugi::xml_document	config_file;
-	pugi::xml_node		config;
-	pugi::xml_node		app_config;
 
 	bool ret = false;
 

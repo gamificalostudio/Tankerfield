@@ -41,7 +41,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 	return true;
 }
 
-bool j1Map::PostUpdate()
+bool j1Map::Update(float dt)
 {
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;

@@ -11,6 +11,7 @@
 #include "UI_Object.h"
 #include "Button_Input.h"
 #include "Label.h"
+#include "ObjectManager.h"
 
 UI_Test::UI_Test() : j1Module()
 {
@@ -35,11 +36,11 @@ bool UI_Test::Start()
 	uint win_width = 0u , win_height = 0u;
 	App->win->GetWindowSize(win_width, win_height);
 
-	Button_Definition buttton_def({0,0,280, 140}, {280, 0 , 280, 140}, {560, 0, 280, 140});
-	Label_Definition label_def(App->font->Load("fonts/pixelart.ttf", 30));
-	button_test = App->ui->CreateButton({ win_width * 0.5f ,win_height * 0.5f }, buttton_def, this);
-	button_test->IsDraggable(true);
-	button_test->SetLabel({ 0,0 }, "i wanna die", label_def);
+	//Button_Definition buttton_def({0,0,280, 140}, {280, 0 , 280, 140}, {560, 0, 280, 140});
+	//Label_Definition label_def(App->font->Load("fonts/pixelart.ttf", 30));
+	//button_test = App->ui->CreateButton({ win_width * 0.5f ,win_height * 0.5f }, buttton_def, this);
+	//button_test->IsDraggable(true);
+	//button_test->SetLabel({ 0,0 }, "i wanna die", label_def);
 
 	return true;
 }
@@ -51,7 +52,7 @@ bool UI_Test::PreUpdate()
 	return true;
 }
 
-iPoint  MapToWorld(int x, int y, int tile_width, int tile_height)
+iPoint UI_Test::MapToWorld(int x, int y, int tile_width, int tile_height)
 {
 	iPoint ret;
 
@@ -61,17 +62,17 @@ iPoint  MapToWorld(int x, int y, int tile_width, int tile_height)
 	return ret;
 }
 
-fPoint  MapToWorldF(float x, float y, float tile_width, float tile_height)
+
+
+fPoint UI_Test::WorldToMapF(iPoint world_pos, float tile_width, float tile_height)
 {
-	fPoint ret;
-
-	ret.x = (x - y) * (tile_width * 0.5f);
-	ret.y = (x + y) * (tile_height * 0.5f);
-
-	return ret;
+	fPoint map_pos;
+	map_pos.x = ((world_pos.x / (tile_width * 0.5f)) + world_pos.y / (tile_height * 0.5f)) * 0.5f;
+	map_pos.y = ((world_pos.y / (tile_height * 0.5f)) - world_pos.x / (tile_width * 0.5f)) * 0.5f;
+	return map_pos;
 }
 
-void DrawIsometricQuad (float x, float y, float w, float h)
+void UI_Test::DrawIsometricQuad (float x, float y, float w, float h)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
@@ -90,7 +91,7 @@ void DrawIsometricQuad (float x, float y, float w, float h)
 	App->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, 255, 0, 0, 255, true);
 }
 
-void DrawIsometricBox(float x, float y, float w, float h, float p)
+void UI_Test::DrawIsometricBox(float x, float y, float w, float h, float p)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
@@ -144,6 +145,10 @@ bool UI_Test::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		player_pos.x += 1.5f * dt;
+
+	// Create basic bullet
+	if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+		App->objectmanager->CreateObject(BASIC_BULLET, player_pos.x, player_pos.y);
 
 	// Draw Grid ==============================================
 	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
@@ -207,4 +212,14 @@ bool UI_Test::CleanUp()
 
 
 	return true;
+}
+
+fPoint MapToWorldF(float x, float y, float tile_width, float tile_height)
+{
+	fPoint ret;
+
+	ret.x = (x - y) * (tile_width * 0.5f);
+	ret.y = (x + y) * (tile_height * 0.5f);
+
+	return ret;
 }
