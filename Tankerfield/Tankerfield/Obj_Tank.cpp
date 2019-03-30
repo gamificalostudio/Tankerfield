@@ -151,7 +151,8 @@ void Obj_Tank::Shoot()
 	// Create basic bullet
 	if (!IsHold())
 	{
-		app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
+		weapon->Shoot();
+		//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
 		time_between_bullets_timer.Start();
 	}
 	else
@@ -159,7 +160,8 @@ void Obj_Tank::Shoot()
 
 		if (time_between_bullets_timer.ReadMs() >= time_between_bullets)
 		{
-			app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
+			weapon->Shoot();
+			//app->objectmanager->CreateObject(weapon_type, pos.x, pos.y);
 			time_between_bullets_timer.Start();
 		}
 	}

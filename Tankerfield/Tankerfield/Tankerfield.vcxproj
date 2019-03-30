@@ -126,7 +126,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Obj_Weapon.cpp" />
+    <ClCompile Include="Obj_Bullet.cpp" />
+    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
     <ClCompile Include="UI_Image.cpp" />
@@ -147,7 +148,7 @@
     <ClCompile Include="M_UI.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="M_ObjManager.cpp" />
-    <ClCompile Include="Obj_BasicShoot.cpp" />
+    <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Obj_Tank.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
@@ -157,10 +158,12 @@
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
     <ClCompile Include="M_UITest.cpp" />
+    <ClCompile Include="Weapon_Flamethrower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Obj_Weapon.h" />
+    <ClInclude Include="Obj_Bullet.h" />
+    <ClInclude Include="Weapon.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Checkbox.h" />
     <ClInclude Include="UI_Image.h" />
@@ -181,7 +184,7 @@
     <ClInclude Include="M_UI.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="M_ObjManager.h" />
-    <ClInclude Include="Obj_BasicShoot.h" />
+    <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Obj_Tank.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="Log.h" />
@@ -194,6 +197,7 @@
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />
     <ClInclude Include="M_UITest.h" />
+    <ClInclude Include="Weapon_Flamethrower .h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml">

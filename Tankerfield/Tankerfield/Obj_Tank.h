@@ -2,6 +2,7 @@
 #define __OBJ_TANK_H__
 
 #include "Object.h"
+#include "Weapon.h"
 
 struct Controller;
 struct SDL_Texture;
@@ -30,7 +31,7 @@ private:
 	bool IsHold();
 
 public:
-	ObjectType weapon_type = ObjectType::BASIC_BULLET;
+	Weapon * weapon = nullptr;
 
 private:
 	static SDL_Texture * base_tex;
