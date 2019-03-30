@@ -12,7 +12,7 @@
 #include "M_Render.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
-#include "Tesla_Trooper.h"
+#include "Obj_TeslaTrooper.h"
 #include "M_Input.h"
 //#include "j1Map.h"
 //#include "j1Collision.h"

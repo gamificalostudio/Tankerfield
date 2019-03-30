@@ -10,12 +10,12 @@
 #include "M_Audio.h"
 #include "M_Window.h"
 #include "M_Scene.h"
-#include "Tesla_Trooper.h"
+#include "Obj_TeslaTrooper.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
 #include "Obj_Tank.h"
-#include "Obj_Basic_Shoot.h"
+#include "Obj_BasicShoot.h"
 
 M_ObjManager::M_ObjManager()
 {

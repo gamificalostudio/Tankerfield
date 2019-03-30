@@ -146,12 +146,12 @@
     <ClCompile Include="M_UI.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="M_ObjManager.cpp" />
-    <ClCompile Include="Obj_Basic_Shoot.cpp" />
+    <ClCompile Include="Obj_BasicShoot.cpp" />
     <ClCompile Include="Obj_Tank.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="M_SceneManager.cpp" />
-    <ClCompile Include="Tesla_Trooper.cpp" />
+    <ClCompile Include="Obj_TeslaTrooper.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Text_Panel.cpp" />
     <ClCompile Include="UI_Object.cpp" />
@@ -179,7 +179,7 @@
     <ClInclude Include="M_UI.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="M_ObjManager.h" />
-    <ClInclude Include="Obj_Basic_Shoot.h" />
+    <ClInclude Include="Obj_BasicShoot.h" />
     <ClInclude Include="Obj_Tank.h" />
     <ClInclude Include="p2Defs.h" />
     <ClInclude Include="p2Log.h" />
@@ -187,7 +187,7 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="M_SceneManager.h" />
-    <ClInclude Include="Tesla_Trooper.h" />
+    <ClInclude Include="Obj_TeslaTrooper.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="Text_Panel.h" />
     <ClInclude Include="UI_Object.h" />

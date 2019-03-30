@@ -35,13 +35,7 @@
     <ClCompile Include="Label.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Tesla_Trooper.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_Tank.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Basic_Shoot.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
     <ClCompile Include="M_Audio.cpp">
@@ -87,6 +81,12 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="Obj_TeslaTrooper.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_BasicShoot.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -131,13 +131,7 @@
     <ClInclude Include="p2Defs.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Tesla_Trooper.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_Tank.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Basic_Shoot.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Label.h">
@@ -189,6 +183,12 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="App.h" />
+    <ClInclude Include="Obj_TeslaTrooper.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_BasicShoot.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml" />
