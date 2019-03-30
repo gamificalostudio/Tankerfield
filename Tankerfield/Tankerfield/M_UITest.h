@@ -1,5 +1,5 @@
-#ifndef __UI_TEST_H__
-#define __UI_TEST_H__
+#ifndef __M_UI_TEST_H__
+#define __M_UI_TEST_H__
 
 #include "Module.h"
 #include "M_UI.h"

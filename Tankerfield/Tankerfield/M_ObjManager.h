@@ -1,5 +1,5 @@
-#ifndef __OBJECTMANAGER_H__
-#define __OBJECTMANAGER_H__
+#ifndef __M_OBJMANAGER_H__
+#define __M_OBJMANAGER_H__
 
 #include <list>
 

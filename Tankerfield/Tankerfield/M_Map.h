@@ -1,5 +1,5 @@
-#ifndef __j1MAP_H__
-#define __j1MAP_H__
+#ifndef __M_MAP_H__
+#define __M_MAP_H__
 #include <list>
 #include "Module.h"
 #include "M_Render.h"

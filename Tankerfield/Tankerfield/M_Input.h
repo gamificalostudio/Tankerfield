@@ -1,5 +1,5 @@
-#ifndef __j1INPUT_H__
-#define __j1INPUT_H__
+#ifndef __M_INPUT_H__
+#define __M_INPUT_H__
 
 #include <vector>
 

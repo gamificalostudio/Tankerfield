@@ -1,5 +1,5 @@
-#ifndef __j1TEXTURES_H__
-#define __j1TEXTURES_H__
+#ifndef __M_TEXTURES_H__
+#define __M_TEXTURES_H__
 
 #include "Module.h"
 #include <list>

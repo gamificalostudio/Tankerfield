@@ -1,5 +1,5 @@
-#ifndef __UI_Object_H__
-#define __UI_Object_H__
+#ifndef __UI_ELEMENT_H__
+#define __UI_ELEMENT_H__
 
 #include "Point.h"
 #include "Animation.h"

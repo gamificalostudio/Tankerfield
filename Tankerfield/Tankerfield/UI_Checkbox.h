@@ -1,5 +1,5 @@
-#ifndef _CHECKBOX_H__
-#define _CHECKBOX_H__
+#ifndef __UI_CHECKBOX_H__
+#define __UI_CHECKBOX_H__
 
 #include "M_UI.h"
 #include "UI_Element.h"

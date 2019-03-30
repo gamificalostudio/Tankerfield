@@ -1,5 +1,5 @@
-#ifndef __j1WINDOW_H__
-#define __j1WINDOW_H__
+#ifndef __M_WINDOW_H__
+#define __M_WINDOW_H__
 
 #include "Module.h"
 

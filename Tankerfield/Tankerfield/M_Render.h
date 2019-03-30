@@ -1,5 +1,5 @@
-#ifndef __j1RENDER_H__
-#define __j1RENDER_H__
+#ifndef __M_RENDER_H__
+#define __M_RENDER_H__
 
 #include "SDL/include/SDL.h"
 #include "Point.h"

@@ -1,5 +1,5 @@
-#ifndef _SLIDER_H__
-#define _SLIDER_H__
+#ifndef __UI_SLIDER_H__
+#define __UI_SLIDER_H__
 
 #include "Point.h"
 #include "Animation.h"

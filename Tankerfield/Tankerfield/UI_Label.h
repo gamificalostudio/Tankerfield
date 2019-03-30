@@ -1,5 +1,5 @@
-#ifndef __LABEL_H__
-#define __LABEL_H__
+#ifndef __UI_LABEL_H__
+#define __UI_LABEL_H__
 
 #include "Module.h"
 #include "M_UI.h"

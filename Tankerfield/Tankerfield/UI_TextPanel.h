@@ -1,5 +1,5 @@
-#ifndef __TEXT_PANEL_H__
-#define __TEXT_PANEL_H__
+#ifndef __UI_TEXT_PANEL_H__
+#define __UI_TEXT_PANEL_H__
 
 #include "Module.h"
 #include "UI_Element.h"

@@ -1,5 +1,5 @@
-#ifndef __j1PATHFINDING_H__
-#define __j1PATHFINDING_H__
+#ifndef __M_PATHFINDING_H__
+#define __M_PATHFINDING_H__
 
 #include "Module.h"
 #include "Point.h"

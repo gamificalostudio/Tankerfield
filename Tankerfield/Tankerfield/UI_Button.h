@@ -1,5 +1,5 @@
-#ifndef _BUTTON_INPUT_H__
-#define _BUTTON_INPUT_H__
+#ifndef __UI_BUTTON_H__
+#define __UI_BUTTON_H__
 
 #include "M_UI.h"
 #include "UI_Element.h"

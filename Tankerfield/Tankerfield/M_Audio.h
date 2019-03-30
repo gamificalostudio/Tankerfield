@@ -1,5 +1,5 @@
-#ifndef __j1AUDIO_H__
-#define __j1AUDIO_H__
+#ifndef __M_AUDIO_H__
+#define __M_AUDIO_H__
 
 #include <list>
 #include "Module.h"

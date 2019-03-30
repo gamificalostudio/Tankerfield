@@ -1,5 +1,5 @@
-#ifndef __SCENEMANAGER_H__
-#define __SCENEMANAGER_H__
+#ifndef __M_SCENEMANAGER_H__
+#define __M_SCENEMANAGER_H__
 
 #include "Module.h"
 #include "SDL\include\SDL_rect.h"

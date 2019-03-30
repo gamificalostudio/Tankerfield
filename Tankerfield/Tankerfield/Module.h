@@ -1,5 +1,5 @@
-#ifndef __j1MODULE_H__
-#define __j1MODULE_H__
+#ifndef __MODULE_H__
+#define __MODULE_H__
 
 #include <string>
 #include "PugiXml/src/pugixml.hpp"

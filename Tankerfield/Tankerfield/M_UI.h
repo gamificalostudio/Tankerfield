@@ -1,5 +1,5 @@
-#ifndef __MODULE_UI_H__
-#define __MODULE_UI_H__
+#ifndef __M_UI_H__
+#define __M_UI_H__
 
 #include "Module.h"
 #include "SDL_ttf/include/SDL_ttf.h"
