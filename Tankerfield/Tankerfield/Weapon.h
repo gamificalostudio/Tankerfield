@@ -15,7 +15,7 @@ public:
 	~Weapon();
 
 public:
-	virtual void Shoot(float x, float y, fPoint & direction);
+	virtual void Shoot(fPoint & pos, fPoint & direction);
 
 private:
 	Obj_Bullet * bullet = nullptr;

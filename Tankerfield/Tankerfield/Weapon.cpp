@@ -25,9 +25,9 @@ Weapon::~Weapon()
 {
 }
 
-void Weapon::Shoot(float x, float y, fPoint & dir)
+void Weapon::Shoot(fPoint & pos, fPoint & dir)
 {
-	bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type, x, y);
+	bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type, pos);
 	bullet->direction = dir;
 	bullet->bullet_life_ms = bullet_life_ms;
 	bullet->damage = damage;
