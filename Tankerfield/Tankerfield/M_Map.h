@@ -170,8 +170,10 @@ struct MapData
 {
 	int					columns, rows;
 	int					tile_width,	tile_height;
-	SDL_Color			background_color;
+	int					offset_x, offset_y;
 	MapTypes			type;
+
+	SDL_Color			background_color;
 	std::list<TileSet*>	tilesets;
 	std::list<MapLayer*>	mapLayers;
 	Properties				map_properties;

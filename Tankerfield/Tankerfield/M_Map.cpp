@@ -66,23 +66,13 @@ bool M_Map::Update(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToWorld(x, y);
-					
-					
 					if (app->render->IsOnCamera(pos.x - data.tile_width*0.5,pos.y, data.tile_width, data.tile_height))		
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 						if (tileset != nullptr)
 						{
 							SDL_Rect r = tileset->GetTileRect(tile_id);
-							
-							app->render->Blit(tileset->texture, pos.x - data.tile_width * 0.5, pos.y - data.tile_height * 0.5, &r);
-							if (pos.IsZero())
-							{
-								app->render->DrawQuad({ (int)(pos.x - data.tile_width * 0.5), (int)(pos.y - data.tile_height * 0.5), r.w,r.h }, 255, 0, 0, 100);
-								app->render->DrawQuad({ (int)(pos.x - data.tile_width*0.5), (int)(pos.y), data.tile_width,data.tile_height }, 0, 0, 255, 100);
-							}
-							
-
+							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
 						}
 					}
 					
@@ -327,7 +317,8 @@ bool M_Map::LoadMap()
 		bool ret = false;
 
 		data.map_properties.LoadProperties(map.child("properties"));
-
+		data.offset_x = data.map_properties.GetAsInt("offset_x");
+		data.offset_y = data.map_properties.GetAsInt("offset_y");
 
 		std::string orientation(map.attribute("orientation").as_string());
 		if (orientation == "orthogonal")
