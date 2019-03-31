@@ -157,7 +157,6 @@
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
-    <ClCompile Include="M_UITest.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Weapon_Flamethrower .cpp" />
     <ClCompile Include="Weapon_Flamethrower.cpp" />
@@ -198,7 +197,6 @@
     <ClInclude Include="UI_Slider.h" />
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />
-    <ClInclude Include="M_UITest.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="Weapon_Flamethrower.h" />
   </ItemGroup>

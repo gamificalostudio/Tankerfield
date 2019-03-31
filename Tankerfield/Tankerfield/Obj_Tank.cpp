@@ -80,6 +80,9 @@ bool Obj_Tank::Update(float dt)
 {
 	Movement(dt);
 	Shoot();
+
+	coll->SetPos(pos.x, pos.y);
+
 	return true;
 }
 
@@ -152,8 +155,6 @@ bool Obj_Tank::PostUpdate()
 		iso_pos.x - turr_rect->w * 0.5f,
 		iso_pos.y - turr_rect->h * 0.5f,
 		turr_rect);
-
-	coll->SetPos(pos.x, pos.y);
 
 	return true;
 }
