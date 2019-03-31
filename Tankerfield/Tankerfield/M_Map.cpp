@@ -179,24 +179,24 @@ bool M_Map::Load(const std::string& file_name)
 void M_Map::DebugMap() 
 {
 	//LOG("Successfully parsed map XML file: %s", data.loadedLevel);
-	LOG("width: %d height: %d", data.columns, data.rows);
-	LOG("tile_width: %d tile_height: %d", data.tile_width, data.tile_height);
+	LOG("width: %i height: %i", data.columns, data.rows);
+	LOG("tile_width: %i tile_height: %i", data.tile_width, data.tile_height);
 
 	for (std::list<TileSet*>::iterator item = data.tilesets.begin(); item != data.tilesets.end(); ++item)
 	{
 		TileSet* s = (*item);
 		LOG("Tileset ----");
-		LOG("name: %s firstgid: %d", (*s).name, (*s).firstgid);
-		LOG("tile width: %d tile height: %d", s->tile_width, s->tile_height);
-		LOG("spacing: %d margin: %d", s->spacing, s->margin);
+		LOG("name: %s firstgid: %i", (*s).name.data(), (*s).firstgid);
+		LOG("tile width: %i tile height: %i", s->tile_width, s->tile_height);
+		LOG("spacing: %i margin: %i", s->spacing, s->margin);
 	};
 
 	for (std::list<MapLayer*>::iterator item_layer = data.mapLayers.begin(); item_layer != data.mapLayers.end(); ++item_layer)
 	{
 		MapLayer* l = (*item_layer);
 		LOG("Layer ----");
-		LOG("name: %s", l->name);
-		LOG("tile width: %d tile height: %d", l->columns, l->rows);
+		LOG("name: %s", l->name.data());
+		LOG("tile width: %i tile height: %i", l->columns, l->rows);
 	}
 
 }
