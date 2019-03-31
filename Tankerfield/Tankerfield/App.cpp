@@ -47,13 +47,13 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
+	AddModule(font);
 	AddModule(audio);
-	AddModule(pathfinding);
 	AddModule(scmanager);
+	AddModule(pathfinding);
 	AddModule(map);
 	AddModule(scene);
 	AddModule(objectmanager);
-	AddModule(font);
 	AddModule(ui_test);
 	AddModule(ui);
 	// render last to swap buffer

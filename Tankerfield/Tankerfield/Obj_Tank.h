@@ -55,8 +55,7 @@ private:
 	static SDL_Rect * turr_rects;
 	static int rects_num;
 
-	float speed = 5.f;
-
+	float speed = 2.5f;
 	Controller ** controller = nullptr;
 
 	float cos_45 = 0.f;
