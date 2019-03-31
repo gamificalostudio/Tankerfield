@@ -136,6 +136,12 @@ struct MapLayer
 	{
 		return data[(y*columns) + x];
 	}
+
+	inline fPoint GetTilePos(int id) const
+	{
+		return fPoint(((id % columns)), ((id / columns)));
+	}
+
 };
 
 // ----------------------------------------------------
@@ -156,6 +162,8 @@ struct TileSet
 	int					rows;
 	int					offset_x;
 	int					offset_y;
+
+
 };
 
 enum MapTypes
@@ -182,44 +190,47 @@ struct MapData
 class M_Map : public Module
 {
 public:
-	MapData data;
-	bool showNavLayer = false;
-	std::list<Levels*>		levels;
-private:
-	bool				map_loaded;
-	std::string			folder;
-	uint				numLevels = 0; // counter for num levels
-	pugi::xml_document	map_file;
+	M_Map();
 
+	~M_Map();
+
+	bool Awake(pugi::xml_node&);
+
+	bool Update(float dt);
+
+	bool PostUpdate();
+
+	bool Load(const std::string & file_name);
+
+	iPoint MapToWorld(int column, int row) const;
+
+	fPoint MapToWorldF(float x, float y);
+
+	iPoint WorldToMap(int x, int y) const;
+
+	fPoint WorldToMapF(float x, float y);
+
+	TileSet* GetTilesetFromTileId(int id) const;
+
+
+
+public:
+
+	MapData					data;
+	std::list<Levels*>		levels;
+
+private:
+
+	bool					map_loaded;
+	bool					show_grid = true;
+	std::string				folder;
+	uint					numLevels = 0; // counter for num levels
+	pugi::xml_document		map_file;
 
 	bool LoadMap();
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	void DebugMap();
-	
-
-public:
-	M_Map();
-	~M_Map();
-
-	bool Awake(pugi::xml_node&) override;
-	bool Update(float dt) override;
-
-	// Load new map
-	bool Load(const std::string & file_name);
-
-
-
-	iPoint MapToWorld(int column, int row) const;
-	fPoint MapToWorldF(float x, float y);
-
-	iPoint WorldToMap(int x, int y) const;
-	fPoint WorldToMapF(float x, float y);
-
-	
-
-
-	TileSet* GetTilesetFromTileId(int id) const;
 };
 #endif // __j1MAP_H__

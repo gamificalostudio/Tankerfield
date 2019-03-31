@@ -118,7 +118,6 @@ private:
 
 	std::list<Collider*> colliders;
 
-
 	bool matrix[(int)Collider::TAG::MAX][(int)Collider::TAG::MAX];
 
 	bool debug = false;
