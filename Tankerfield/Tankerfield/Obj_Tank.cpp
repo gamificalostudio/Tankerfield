@@ -251,6 +251,7 @@ void Obj_Tank::SelectInputMethod()
 		|| app->input->GetMouseButton(kb_shoot) != KEY_IDLE))
 	{
 		last_input = INPUT_METHOD::KEYBOARD_MOUSE;
+		SDL_ShowCursor(SDL_ENABLE);
 	}
 	if (last_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
@@ -259,5 +260,6 @@ void Obj_Tank::SelectInputMethod()
 		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		last_input = INPUT_METHOD::CONTROLLER;
+		SDL_ShowCursor(SDL_DISABLE);
 	}
 }
