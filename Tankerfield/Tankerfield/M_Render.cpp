@@ -49,9 +49,9 @@ bool M_Render::Awake(pugi::xml_node& config)
 
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
-		camera.x = 0;
-		camera.y = 0;
-
+		camera.x = -app->win->screen_surface->w/2;
+		camera.y = -app->win->screen_surface->h / 2;
+		//app->render->camera.y = app->scene->tank_1->pos.y;
 		
 	}
 
