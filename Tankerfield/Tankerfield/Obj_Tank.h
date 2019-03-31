@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Weapon.h"
 #include <map>
+#include "M_Input.h"
 
 struct Controller;
 struct SDL_Texture;
@@ -58,11 +59,12 @@ private:
 
 	float base_angle = 0.f;
 	float turr_angle = 0.f;
+	fPoint shot_dir = { 0.f, 0.f };
 	static SDL_Rect * base_rects;
 	static SDL_Rect * turr_rects;
 	static int rects_num;
 
-	float speed = 2.5f;
+	float speed = 0.f;
 	Controller ** controller = nullptr;
 
 	float cos_45 = 0.f;

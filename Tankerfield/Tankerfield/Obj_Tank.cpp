@@ -53,6 +53,8 @@ bool Obj_Tank::Start()
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
+	speed = 2.5f;//TODO: Load from xml
+	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
@@ -62,14 +64,14 @@ bool Obj_Tank::Start()
 	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 50, 300, 100, BASIC_BULLET);
 
 	//TODO: Load them from the XML
-	int kb_shoot							= SDL_BUTTON_LEFT;
-	SDL_Scancode kb_up						= SDL_SCANCODE_W;
-	SDL_Scancode kb_left					= SDL_SCANCODE_A;
-	SDL_Scancode kb_down					= SDL_SCANCODE_S;
-	SDL_Scancode kb_right					= SDL_SCANCODE_D;
-	Joystick gamepad_move					= Joystick::LEFT;
-	Joystick gamepad_aim					= Joystick::RIGHT;
-	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	kb_shoot		= SDL_BUTTON_LEFT;
+	kb_up			= SDL_SCANCODE_W;
+	kb_left			= SDL_SCANCODE_A;
+	kb_down			= SDL_SCANCODE_S;
+	kb_right		= SDL_SCANCODE_D;
+	gamepad_move	= Joystick::LEFT;
+	gamepad_aim		= Joystick::RIGHT;
+	gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 
 	return true;
 }
@@ -80,6 +82,7 @@ bool Obj_Tank::PreUpdate()
 	{
 		controller = app->input->GetAbleController();
 	}
+	SelectInputMethod();
 	return true;
 }
 
@@ -92,22 +95,27 @@ bool Obj_Tank::Update(float dt)
 
 void Obj_Tank::Movement(float dt)
 {
-	fPoint input(0.f, 0.f);
-	InputMovementKeyboard(input);
-	InputMovementController(input);
-
-	fPoint dir(0.f, 0.f);
-	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
-	dir.x = input.x * cos_45 - input.y * sin_45;
-	dir.y = input.x * sin_45 + input.y * cos_45;
-	dir.Normalize();
-
-	if (!dir.IsZero())
+	fPoint input_dir(0.f, 0.f);
+	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		base_angle = (atan2(input.y, -input.x) * RADTODEG);
+		InputMovementKeyboard(input_dir);
+	}
+	else if (last_input == INPUT_METHOD::CONTROLLER)
+	{
+		InputMovementController(input_dir);
+	}
+	fPoint iso_dir(0.f, 0.f);
+	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
+	iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
+	iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
+	iso_dir.Normalize();
+
+	if (!iso_dir.IsZero())
+	{
+		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
 	}
 
-	pos += dir * speed * dt;
+	pos += iso_dir * speed * dt;
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -227,17 +235,18 @@ bool Obj_Tank::IsShooting() {
 void Obj_Tank::SelectInputMethod()
 {
 	if (app->input->GetKey(kb_up) != KEY_IDLE
-		|| app->input->GetKey(kb_up) != KEY_IDLE
-		|| app->input->GetKey(kb_up) != KEY_IDLE
-		|| app->input->GetKey(kb_up) != KEY_IDLE
+		|| app->input->GetKey(kb_left) != KEY_IDLE
+		|| app->input->GetKey(kb_down) != KEY_IDLE
+		|| app->input->GetKey(kb_right) != KEY_IDLE
 		|| app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
 	{
 		last_input = INPUT_METHOD::KEYBOARD_MOUSE;
 	}
-	if (!(*controller)->GetJoystick(gamepad_move).IsZero()
+	if (controller != nullptr
+		&& (!(*controller)->GetJoystick(gamepad_move).IsZero()
 		|| !(*controller)->GetJoystick(gamepad_move).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot) > 0)
+		|| (*controller)->GetAxis(gamepad_shoot) > 0))
 	{
-		last_input = INPUT_METHOD::KEYBOARD_MOUSE;
+		last_input = INPUT_METHOD::CONTROLLER;
 	}
 }
