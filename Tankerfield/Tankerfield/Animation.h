@@ -2,36 +2,52 @@
 #define __ANIMATION_H__
 
 #include "SDL/include/SDL_rect.h"
-
-#define MAX_FRAMES 100
+#include "Defs.h"
 
 class Animation
 {
 public:
 	bool loop = true;
 	float speed = 1.0f;
-	SDL_Rect frames[MAX_FRAMES];
+	SDL_Rect * frames = nullptr;
 
 public:
-	float current_frame;
+	float current_frame=0;
 	int last_frame = 0;
 	int loops = 0;
 
 public:
+	Animation(uint frame_num)
+	{
+		frames = new SDL_Rect[frame_num];
+	}
+
 	void PushBack(const SDL_Rect& rect)
 	{
 		frames[last_frame++] = rect;
 	}
 
-	SDL_Rect& GetCurrentFrame()
+	SDL_Rect& GetCurrentFrame(float dt)
 	{
-		current_frame += speed;
+		current_frame += speed*dt;
 		if (current_frame >= last_frame)
 		{
 			current_frame = (loop) ? 0.0f : last_frame - 1;
 			loops++;
 		}
 		return frames[(int)current_frame];
+	}
+	
+	//This overloaded GetCurrentFrame is used for Animation arrays where the frame number must concide
+	SDL_Rect& GetCurrentFrame(float dt, float & new_current_frame)
+	{
+		new_current_frame += speed*dt;
+		if (new_current_frame >= last_frame)
+		{
+			new_current_frame = (loop) ? 0.0f : last_frame - 1;
+			loops++;
+		}
+		return frames[(int)new_current_frame];
 	}
 
 	bool Finished() const
