@@ -63,7 +63,7 @@ bool Obj_Tank::Start()
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
 	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 50, 300, 100, BASIC_BULLET);
 
-	coll = app->collision->AddCollider(pos, 1.f, 1.f, Collider::TAG::PLAYER, nullptr, this);
+	coll = app->collision->AddCollider(pos, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
 	coll->SetType(Collider::TYPE::DYNAMIC);
 
 	//TODO: Load them from the XML
