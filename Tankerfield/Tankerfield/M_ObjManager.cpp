@@ -1,4 +1,4 @@
-//#include "Brofiler/Brofiler.h"
+#include "Brofiler/Brofiler.h"
 
 #include "Log.h"
 
@@ -16,6 +16,7 @@
 #include <string>
 #include "Obj_Tank.h"
 #include "Bullet_Basic.h"
+#include "Brofiler/Brofiler.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -74,7 +75,7 @@ bool M_ObjManager::PreUpdate()
 // Called before render is available
 bool M_ObjManager::Update(float dt)
 {
-	//BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::Green);
+	BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator = objects.begin();
 
 	while (iterator != objects.end())
@@ -106,7 +107,7 @@ bool M_ObjManager::Update(float dt)
 
 bool M_ObjManager::PostUpdate()
 {
-	//BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::Green);
+	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)

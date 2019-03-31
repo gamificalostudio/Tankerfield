@@ -18,6 +18,8 @@
 #include "UI_Checkbox.h"
 #include "UI_TextPanel.h"
 
+#include "Brofiler/Brofiler.h"
+
 M_UI::M_UI() : Module()
 {
 	name.assign("Module UI");
@@ -70,6 +72,7 @@ bool M_UI::CleanUp()
 // Update all guis
 bool M_UI::PreUpdate()
 {
+	BROFILER_CATEGORY("M_UIPreupdate", Profiler::Color::Brown)
 	int x_mouse = 0, y_mouse = 0;
 	app->input->GetMousePosition(x_mouse, y_mouse);
 	mouse_position = { (float)x_mouse ,(float)y_mouse };
@@ -145,6 +148,7 @@ bool M_UI::PreUpdate()
 
 bool M_UI::Update(float dt)
 {
+	BROFILER_CATEGORY("M_UIUpdate", Profiler::Color::Brown)
 	// Draggable ================================================
 	if (selected_object && selected_object->is_draggable)
 	{

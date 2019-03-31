@@ -8,6 +8,7 @@
 #include "M_Collision.h"
 #include "M_Input.h"
 
+
 M_Map::M_Map()
 {
 	name = "map";
