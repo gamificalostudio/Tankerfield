@@ -42,8 +42,8 @@ private:
 	void InputMovementController(fPoint & input);
 
 	void Shoot();
-	void InputShotMouse(fPoint & input);
-	void InputShotController(fPoint & input);
+	void InputShotMouse(fPoint & input_dir, fPoint & iso_dir);
+	void InputShotController(fPoint & input, fPoint & iso_dir);
 	bool IsShooting();
 
 	void SelectInputMethod();
@@ -74,7 +74,7 @@ private:
 
 	std::map<WEAPON_TYPE, Weapon*> weapons;
 
-	INPUT_METHOD last_input					= INPUT_METHOD::KEYBOARD_MOUSE;
+	INPUT_METHOD last_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
 	//- Keyboard inputs
 	int kb_shoot							= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;

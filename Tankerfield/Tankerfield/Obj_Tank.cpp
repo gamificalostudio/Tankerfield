@@ -104,8 +104,8 @@ void Obj_Tank::Movement(float dt)
 	{
 		InputMovementController(input_dir);
 	}
-	fPoint iso_dir(0.f, 0.f);
 	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
+	fPoint iso_dir(0.f, 0.f);
 	iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
 	iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 	iso_dir.Normalize();
@@ -140,10 +140,7 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input)
 
 void Obj_Tank::InputMovementController(fPoint & input)
 {
-	if (controller != nullptr)
-	{
-		input += (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
-	}
+	input = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
 }
 
 bool Obj_Tank::PostUpdate()
@@ -176,9 +173,9 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-void Obj_Tank::InputShotMouse(fPoint & input)
+void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 {
-	iPoint mouse_pos = { 0,0 };
+	iPoint mouse_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
@@ -188,37 +185,44 @@ void Obj_Tank::InputShotMouse(fPoint & input)
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
 	fPoint map_mouse_pos = app->ui_test->WorldToMapF(mouse_pos, 100, 50);
 
-	input = map_mouse_pos - pos;
-	input.Normalize();
+	input_dir = map_mouse_pos - pos;
+	input_dir.Normalize();
 }
 
-void Obj_Tank::InputShotController(fPoint & input)
+void Obj_Tank::InputShotController(fPoint & input_dir, fPoint & iso_dir)
 {
 	if (controller != nullptr)
 	{
-		input = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
+		input_dir = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
+		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
+		iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
+		iso_dir.Normalize();
 	}
 }
 
 void Obj_Tank::Shoot()
 {
 	//1. Get the direction
-	fPoint input(0.f, 0.f);
-	//If the direction of the controller is null, we get the keyboard direction
-	//InputShotMouse(input);
-	InputShotController(input);
-	fPoint dir;
-	dir.x = input.x * cos_45 - input.y * sin_45;
-	dir.y = input.x * sin_45 + input.y * cos_45;
-	dir.Normalize();
-	if (!input.IsZero())
+	fPoint input_dir(0.f, 0.f);
+	fPoint iso_dir;
+	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		turr_angle = (atan2(-input.y, input.x) * RADTODEG);
+		InputShotMouse(input_dir, iso_dir);
+	}
+	else if (last_input == INPUT_METHOD::CONTROLLER)
+	{
+		InputShotController(input_dir, iso_dir);
+	}
+
+	if (!input_dir.IsZero())
+	{
+		turr_angle = (atan2(-input_dir.y, input_dir.x) * RADTODEG);
+		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(pos.x, pos.y, dir);
+		weapons[weapon_type]->Shoot(pos.x, pos.y, shot_dir);
 		time_between_bullets_timer.Start();
 	}
 }
