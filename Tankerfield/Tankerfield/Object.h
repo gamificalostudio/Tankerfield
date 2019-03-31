@@ -16,7 +16,7 @@ enum ROTATION_DIR {
 };
 
 struct SDL_Texture;
-struct Collider;
+class Collider;
 
 class Object 
 {

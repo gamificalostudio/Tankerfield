@@ -17,7 +17,7 @@ public:
 	virtual ~M_Textures();
 
 	// Called before render is available
-	bool Awake(pugi::xml_node&);
+	bool Awake(pugi::xml_node&) override;
 
 	// Called before the first frame
 	bool Start();

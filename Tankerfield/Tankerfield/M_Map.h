@@ -123,7 +123,7 @@ struct MapLayer
 	int			rows;
 	uint*		data;
 	Properties	layer_properties;
-
+	bool visible = true;
 	MapLayer() : data(NULL)
 	{}
 
@@ -168,12 +168,12 @@ enum MapTypes
 
 struct MapData
 {
-	int					columns;
-	int					rows;
-	int					tile_width;
-	int					tile_height;
-	SDL_Color			background_color;
+	int					columns, rows;
+	int					tile_width,	tile_height;
+	int					offset_x, offset_y;
 	MapTypes			type;
+
+	SDL_Color			background_color;
 	std::list<TileSet*>	tilesets;
 	std::list<MapLayer*>	mapLayers;
 	Properties				map_properties;
@@ -212,7 +212,14 @@ public:
 
 
 	iPoint MapToWorld(int column, int row) const;
+	fPoint MapToWorldF(float x, float y);
+
 	iPoint WorldToMap(int x, int y) const;
+	fPoint WorldToMapF(float x, float y);
+
+	
+
+
 	TileSet* GetTilesetFromTileId(int id) const;
 };
 #endif // __j1MAP_H__

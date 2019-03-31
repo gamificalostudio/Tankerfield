@@ -31,10 +31,7 @@ public:
 
 	void DrawIsometricBox(float x, float y, float w, float h, float p);
 
-	iPoint MapToWorld(int x, int y, int tile_width, int tile_height);
-
-
-	fPoint WorldToMapF(iPoint world_pos, float tile_width, float tile_height);
+	
 
 private:
 

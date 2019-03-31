@@ -49,6 +49,7 @@ public:
 	void DeleteObjects();
   
 private:
+
 	std::list<Object*> objects;
 
 };

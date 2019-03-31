@@ -3,6 +3,7 @@
 #include "App.h"
 #include "M_Map.h"
 #include "Log.h"
+#include "M_Window.h"
 
 M_Map::M_Map()
 {
@@ -49,10 +50,11 @@ bool M_Map::Update(float dt)
 	if (map_loaded == false)
 		return ret;
 
+
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->layer_properties.GetAsBool("NoDraw") == true) {
+		if ((*layer)->visible == false) {
 			continue;
 		}
 
@@ -63,20 +65,40 @@ bool M_Map::Update(float dt)
 				int tile_id = (*layer)->Get(x, y);
 				if (tile_id > 0)
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
-					if (tileset != nullptr)
+					iPoint pos = MapToWorld(x, y);
+					if (app->render->IsOnCamera(pos.x + data.offset_x,pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
-
-
-						app->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						if (tileset != nullptr)
+						{
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+						}
 					}
+					
 				}
 			}
 		}
 	}
+
+	//// Draw Grid ==============================================
+	{
+		iPoint point_1, point_2;
+		for (int i = 0; i <= data.columns; ++i)
+		{
+			point_1 = MapToWorld(i, 0);
+			point_2 = MapToWorld(i, data.rows);
+			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		}
+
+		for (int i = 0; i <= data.rows; ++i)
+		{
+			point_1 = MapToWorld(0, i);
+			point_2 = MapToWorld(data.columns, i);
+			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		}
+	}
+	
 	return ret;
 }
 
@@ -174,6 +196,9 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->columns = node.attribute("width").as_int();
 	layer->rows = node.attribute("height").as_int();
 	layer->layer_properties.LoadProperties(node.child("properties"));
+	int visible = node.attribute("visible").as_int(1);
+	layer->visible = (visible == 0) ? false : true;
+	
 	pugi::xml_node layer_data = node.child("data");
 
 	if (layer_data == NULL)
@@ -292,7 +317,8 @@ bool M_Map::LoadMap()
 		bool ret = false;
 
 		data.map_properties.LoadProperties(map.child("properties"));
-
+		data.offset_x = data.map_properties.GetAsInt("offset_x");
+		data.offset_y = data.map_properties.GetAsInt("offset_y");
 
 		std::string orientation(map.attribute("orientation").as_string());
 		if (orientation == "orthogonal")
@@ -358,6 +384,27 @@ iPoint M_Map::MapToWorld(int column, int row) const
 	return retVec;
 }
 
+fPoint M_Map::MapToWorldF(float x, float y)
+{
+	fPoint retVec(0.0F, 0.0F);
+	switch (data.type) {
+	case MapTypes::MAPTYPE_ORTHOGONAL:
+		retVec.x = x * data.tile_width;
+		retVec.y = y * data.tile_height;
+		break;
+	case MapTypes::MAPTYPE_ISOMETRIC:
+		retVec.x = (x - y) * (data.tile_width * 0.5f);
+		retVec.y = (x + y) * (data.tile_height * 0.5f);
+		break;
+	default:
+		LOG("ERROR: Map type not identified.");
+		break;
+	}
+
+	return retVec;
+}
+
+
 iPoint M_Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
@@ -382,3 +429,35 @@ iPoint M_Map::WorldToMap(int x, int y) const
 	}
 	return ret;
 }
+
+fPoint M_Map::WorldToMapF(float x, float y)
+{
+	fPoint ret(0, 0);
+
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		ret.x = x / data.tile_width;
+		ret.y = y / data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+
+		float half_width = data.tile_width * 0.5f;
+		float half_height = data.tile_height * 0.5f;
+		ret.x = ((x / half_width) + y / half_height) * 0.5f;
+		ret.y = ((y / half_height) - x / half_width) * 0.5f;
+		return ret;
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
+	}
+	return ret;
+}
+
+
+
+
+
+

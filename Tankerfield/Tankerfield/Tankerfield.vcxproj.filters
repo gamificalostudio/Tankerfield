@@ -54,6 +54,9 @@
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_BasicShoot.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
     <ClCompile Include="UI_Button.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
@@ -84,19 +87,6 @@
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet_Basic.cpp">
-      <Filter>Modules\Objects\Bullets</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Modules\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Flamethrower.cpp">
-      <Filter>Modules\Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Flamethrower .cpp" />
-    <ClCompile Include="Obj_Bullet.cpp">
-      <Filter>Modules\Objects\Bullets</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -111,53 +101,14 @@
     <ClInclude Include="Obj_Tank.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="M_Audio.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Fonts.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Input.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Pathfinding.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Render.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Scene.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Textures.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Window.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_UI.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="M_ObjManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_SceneManager.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_UITest.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Map.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Module.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="App.h" />
     <ClInclude Include="Obj_TeslaTrooper.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_BasicShoot.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
     <ClInclude Include="UI_Button.h">
@@ -196,17 +147,47 @@
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet_Basic.h">
-      <Filter>Modules\Objects\Bullets</Filter>
+    <ClInclude Include="M_Audio.h">
+      <Filter>Modules\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Modules\Weapons</Filter>
+    <ClInclude Include="M_Fonts.h">
+      <Filter>Modules\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Bullet.h">
-      <Filter>Modules\Objects\Bullets</Filter>
+    <ClInclude Include="M_Input.h">
+      <Filter>Modules\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon_Flamethrower.h">
-      <Filter>Modules\Weapons</Filter>
+    <ClInclude Include="M_Map.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_ObjManager.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Pathfinding.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Render.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Scene.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_SceneManager.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Textures.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_UI.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_UITest.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Window.h">
+      <Filter>Modules\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Modules\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,11 +215,8 @@
     <Filter Include="Modules\Objects">
       <UniqueIdentifier>{4792041f-ce51-4387-beaa-caae693b8a61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Modules\Objects\Bullets">
-      <UniqueIdentifier>{c037be62-82b2-43d0-a9bf-a27eea4f35a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Modules\Weapons">
-      <UniqueIdentifier>{2cf19cc7-2f3a-496e-9bc8-d26eafa39e20}</UniqueIdentifier>
+    <Filter Include="Modules\Headers">
+      <UniqueIdentifier>{6a6ea59c-4085-48f4-bc04-3ec1d3aa16ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

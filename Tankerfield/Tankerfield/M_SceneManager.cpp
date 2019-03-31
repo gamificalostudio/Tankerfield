@@ -13,7 +13,6 @@
 
 M_SceneManager::M_SceneManager():Module()
 {
-
 	screen = { 0, 0, 1024,640 }; //revisar hardcode TODO
 }
 
@@ -32,6 +31,10 @@ bool M_SceneManager::Start()
 bool M_SceneManager::Update(float dt)
 {
 	
+	if (current_step == fade_step::none)
+	{
+		return true;
+	}
 
 	Uint32 now = SDL_GetTicks() - start_time;
 	float normalized = MIN(1.0f, (float)now / (float)total_time);
