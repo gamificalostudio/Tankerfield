@@ -12,6 +12,7 @@
 #include "UI_Button.h"
 #include "UI_Label.h"
 #include "M_ObjManager.h"
+#include "Object.h"
 
 M_UITest::M_UITest() : Module()
 {
@@ -122,10 +123,6 @@ void M_UITest::DrawIsometricBox(float x, float y, float w, float h, float p)
 
 bool M_UITest::Update(float dt)
 {
-	// Create basic bullet
-	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
-		app->objectmanager->CreateObject(BASIC_BULLET, player_pos.x, player_pos.y);
-
 	// Draw Grid ==============================================
 	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
 	iPoint point_1, point_2;
@@ -168,6 +165,8 @@ bool M_UITest::Update(float dt)
 	app->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
 	//DrawIsometricQuad(player_pos.x - .5f, player_pos.y - .5f, 1, 1);
 	DrawIsometricBox(player_pos.x - .5f, player_pos.y - .5f, 1, 1, 100);
+
+
 	return true;
 }
 

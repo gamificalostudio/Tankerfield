@@ -12,7 +12,7 @@
 
 enum ObjectType
 {
-  TANK,
+	TANK,
 	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
@@ -49,6 +49,7 @@ public:
   
 private:
 	std::list<Object*> objects;
+
 };
 
 #endif
