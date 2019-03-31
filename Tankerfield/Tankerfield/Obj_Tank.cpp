@@ -106,7 +106,7 @@ void Obj_Tank::Movement(float dt)
 	fPoint input_dir(0.f, 0.f);
 	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputMovementKeyboard(input_dir);
+		InputMovementKeyboard(input_dir,dt);
 	}
 	else if (last_input == INPUT_METHOD::CONTROLLER)
 	{
@@ -126,22 +126,26 @@ void Obj_Tank::Movement(float dt)
 	pos += iso_dir * speed * dt;
 }
 
-void Obj_Tank::InputMovementKeyboard(fPoint & input)
+void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
+		app->render->camera.y -= floor(100.0f * dt);
 		input.y -= 1.f;
 	}
 	if (app->input->GetKey(kb_left) == KEY_DOWN || app->input->GetKey(kb_left) == KEY_REPEAT)
 	{
+		app->render->camera.x -= floor(100.0f * dt);
 		input.x -= 1.f;
 	}
 	if (app->input->GetKey(kb_down) == KEY_DOWN || app->input->GetKey(kb_down) == KEY_REPEAT)
 	{
+		app->render->camera.y += floor(100.0f * dt);
 		input.y += 1.f;
 	}
 	if (app->input->GetKey(kb_right) == KEY_DOWN || app->input->GetKey(kb_right) == KEY_REPEAT)
 	{
+		app->render->camera.x += floor(100.0f * dt);
 		input.x += 1.f;
 	}
 }

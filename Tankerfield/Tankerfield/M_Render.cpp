@@ -4,6 +4,9 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "Obj_Tank.h"
+#include "M_ObjManager.h"
+#include "M_Scene.h"
 
 M_Render::M_Render() : Module()
 {
@@ -41,10 +44,15 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
+		//int tankPosX = app->scene->tank_1->pos.x;
+		//int tankPosY = app->scene->tank_1->pos.y;
+
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
 		camera.x = 0;
 		camera.y = 0;
+
+		
 	}
 
 	return ret;
