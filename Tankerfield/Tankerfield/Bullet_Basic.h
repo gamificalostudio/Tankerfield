@@ -15,12 +15,7 @@ public:
 	~Bullet_Basic();
 
 public:
-	bool Awake(pugi::xml_node & tank_node);
-	bool Start();
-	bool PreUpdate();
-	bool Update(float dt);
-	bool PostUpdate();
-	bool CleanUp();
+	//Add functions that are overriden
 };
 
 #endif

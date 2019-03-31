@@ -13,7 +13,10 @@ Obj_Bullet::~Obj_Bullet()
 
 bool Obj_Bullet::Update(float dt)
 {
-	return false;
+	pos.x += speed * direction.x * dt;
+	pos.y += speed * direction.y * dt;
+
+	return true;
 }
 
 bool Obj_Bullet::PostUpdate()
@@ -23,6 +26,14 @@ bool Obj_Bullet::PostUpdate()
 		to_remove = true;
 	}
 
-	app->ui_test->DrawIsometricQuad(pos.x, pos.y, 0.75f, 0.5f);
-	return false;
+	float width = 0.5f;
+	float height = 0.5f;
+
+	app->ui_test->DrawIsometricQuad(
+		pos.x - width * 0.5f,
+		pos.y - height * 0.5f,
+		width,
+		height);
+
+	return true;
 }

@@ -202,11 +202,11 @@
     <ClInclude Include="Weapon.h">
       <Filter>Modules\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon_Flamethrower .h">
-      <Filter>Modules\Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_Bullet.h">
       <Filter>Modules\Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Flamethrower.h">
+      <Filter>Modules\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
