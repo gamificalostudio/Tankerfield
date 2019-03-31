@@ -38,7 +38,7 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
-	app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f,0.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f,0.f));
 	
 	return true;
 }
