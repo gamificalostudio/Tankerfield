@@ -206,8 +206,8 @@ void Obj_Tank::Shoot()
 }
 
 bool Obj_Tank::IsShooting() {
-	return ((app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN
-		|| app->input->GetKey(SDL_SCANCODE_B) == KEY_REPEAT)
+	return ((app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
+		|| app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		|| (controller != nullptr
 			&& (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 0));
 }
