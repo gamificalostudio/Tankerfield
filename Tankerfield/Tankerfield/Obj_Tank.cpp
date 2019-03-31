@@ -146,15 +146,15 @@ void Obj_Tank::InputMovementController(fPoint & input)
 bool Obj_Tank::PostUpdate()
 {
 	int tile_width = 100, tile_height = 50;
-	fPoint iso_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
+	fPoint screen_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
 
 	//Base
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	SDL_Rect * base_rect = &base_rects[ind_base];
 	app->render->Blit(
 		base_tex,
-		iso_pos.x - base_rect->w * 0.5f,
-		iso_pos.y - base_rect->h * 0.5f,
+		screen_pos.x - base_rect->w * 0.5f,
+		screen_pos.y - base_rect->h * 0.5f,
 		base_rect);
 
 	//Turret
@@ -162,8 +162,8 @@ bool Obj_Tank::PostUpdate()
 	SDL_Rect * turr_rect = &turr_rects[ind_turr];
 	app->render->Blit(
 		turr_tex,
-		iso_pos.x - turr_rect->w * 0.5f,
-		iso_pos.y - turr_rect->h * 0.5f,
+		screen_pos.x - turr_rect->w * 0.5f,
+		screen_pos.y - turr_rect->h * 0.5f,
 		turr_rect);
 	return true;
 }
@@ -182,11 +182,15 @@ void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 	mouse_pos.x += app->render->camera.x;
 	mouse_pos.y += app->render->camera.y;
 
+	int tile_width = 100, tile_height = 50;
+	fPoint screen_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
+	input_dir = (fPoint)mouse_pos - screen_pos;
+
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
 	fPoint map_mouse_pos = app->ui_test->WorldToMapF(mouse_pos, 100, 50);
 
-	input_dir = map_mouse_pos - pos;
-	input_dir.Normalize();
+	iso_dir = map_mouse_pos - pos;
+	iso_dir.Normalize();
 }
 
 void Obj_Tank::InputShotController(fPoint & input_dir, fPoint & iso_dir)
@@ -216,7 +220,7 @@ void Obj_Tank::Shoot()
 
 	if (!input_dir.IsZero())
 	{
-		turr_angle = (atan2(-input_dir.y, input_dir.x) * RADTODEG) - 45;
+		turr_angle = (atan2(-input_dir.y, input_dir.x) * RADTODEG);
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
