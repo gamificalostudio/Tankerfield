@@ -8,7 +8,7 @@
 #include "Module.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
-
+#include "Point.h"
 
 enum ObjectType
 {
@@ -44,7 +44,8 @@ public:
 
 	bool CleanUp() override;
 
-	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
+	Object* CreateObject(ObjectType type, fPoint pos);
+
 	void DeleteObjects();
   
 private:

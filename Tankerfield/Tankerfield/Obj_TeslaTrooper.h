@@ -9,7 +9,7 @@
 class Obj_TeslaTrooper : public Object 
 {
 public:
-	Obj_TeslaTrooper(float x, float y);
+	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
 
 public:

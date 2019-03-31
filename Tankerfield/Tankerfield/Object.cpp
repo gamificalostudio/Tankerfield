@@ -18,7 +18,7 @@ Object::Object()
 {
 }
 
-Object::Object(int x, int y) : pos(x, y)
+Object::Object(fPoint pos) : pos(pos)
 {
 }
 

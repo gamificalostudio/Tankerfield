@@ -8,7 +8,7 @@ class PerfTimer;
 class Obj_Bullet : public Object
 {
 public:
-	Obj_Bullet();
+	Obj_Bullet(fPoint pos);
 	~Obj_Bullet();
 
 	//No need to rewrite them if they do the same

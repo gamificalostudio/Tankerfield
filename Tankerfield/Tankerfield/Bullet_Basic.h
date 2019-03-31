@@ -11,7 +11,7 @@ class Bullet_Basic : public Obj_Bullet
 {
 public:
 	Bullet_Basic();
-	Bullet_Basic(float x, float y);
+	Bullet_Basic(fPoint pos);
 	~Bullet_Basic();
 
 public:

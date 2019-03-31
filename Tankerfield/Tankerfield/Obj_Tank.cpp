@@ -27,7 +27,7 @@ Obj_Tank::Obj_Tank() : Object()
 
 }
 
-Obj_Tank::Obj_Tank(int x, int y) : Object(x, y)
+Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 {
 
 }
@@ -236,7 +236,7 @@ void Obj_Tank::Shoot()
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(pos.x, pos.y, shot_dir);
+		weapons[weapon_type]->Shoot(pos, shot_dir);
 		time_between_bullets_timer.Start();
 	}
 }

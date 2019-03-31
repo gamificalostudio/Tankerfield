@@ -23,7 +23,7 @@ class Object
 public:
 
 	Object();
-	Object(int x, int y);
+	Object(fPoint pos);
 	virtual ~Object();
 	const Collider* GetCollider() const;
 	
