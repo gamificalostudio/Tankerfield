@@ -3,6 +3,7 @@
 #include "App.h"
 #include "M_Window.h"
 #include "M_Render.h"
+#include "M_Map.h"
 
 M_Render::M_Render() : Module()
 {
@@ -194,6 +195,27 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	}
 
 	return ret;
+}
+
+bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color)
+{
+	fPoint point_1, point_2, point_3, point_4;
+
+	// top_left 
+	point_1 = app->map->MapToWorldF(x, y);
+	// top_right
+	point_2 = app->map->MapToWorldF(x + w, y);
+	// bot_right
+	point_3 = app->map->MapToWorldF(x + w, y + h);
+	// bot_left
+	point_4 = app->map->MapToWorldF(x, y + h);
+
+	app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
+	app->render->DrawLine(point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);
+	app->render->DrawLine(point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, true);
+	app->render->DrawLine(point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, true);
+
+	return true;
 }
 
 bool M_Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const

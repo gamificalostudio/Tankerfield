@@ -15,7 +15,7 @@
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
 #include "Obj_Tank.h"
-#include "Obj_BasicShoot.h"
+#include "Bullet_Basic.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -151,7 +151,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
 		ret->type = TANK;
 		break;
 	case ObjectType::BASIC_BULLET:
-		ret = new Obj_BasicShoot(x, y);
+		ret = new Bullet_Basic(x, y);
 		ret->type = BASIC_BULLET;
 		break;
 	}

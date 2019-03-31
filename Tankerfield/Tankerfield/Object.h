@@ -16,7 +16,7 @@ enum ROTATION_DIR {
 };
 
 struct SDL_Texture;
-struct Collider;
+class Collider;
 
 class Object 
 {
@@ -53,7 +53,6 @@ public:
 	fPoint acceleration;
 	bool to_remove = false;//Set it to true if you want the object to be removed
 	//
-
 	Animation* current_animation = nullptr;
 	
 	Collider* coll = nullptr;

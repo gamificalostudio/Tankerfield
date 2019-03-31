@@ -20,8 +20,8 @@
 #include "M_Map.h"
 #include "M_Fonts.h"
 #include "M_UI.h"
-#include "M_UITest.h"
 #include "M_ObjManager.h"
+#include "M_Collision.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -33,7 +33,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new M_Render();
 	tex = new M_Textures();
 	audio = new M_Audio();
-	ui_test = new M_UITest();
 	pathfinding = new M_Pathfinding();
 	map = new M_Map();
 	scene = new M_Scene();
@@ -41,23 +40,22 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	ui = new M_UI();
 	objectmanager = new M_ObjManager();
 	scmanager = new M_SceneManager();
+	collision = new M_Collision();
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
+	AddModule(font);
 	AddModule(audio);
 	AddModule(pathfinding);
-	AddModule(scmanager);
 	AddModule(map);
+	AddModule(scmanager);
 	AddModule(scene);
 	AddModule(objectmanager);
-	AddModule(font);
-	AddModule(ui_test);
+	AddModule(collision);
 	AddModule(ui);
-
-	
 	// render last to swap buffer
 	AddModule(render);
 	

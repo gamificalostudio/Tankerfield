@@ -212,9 +212,13 @@ public:
 
 
 	iPoint MapToWorld(int column, int row) const;
+	fPoint MapToWorldF(float x, float y);
 
 	iPoint WorldToMap(int x, int y) const;
-	fPoint WorldToMapF(int x, int y);
+	fPoint WorldToMapF(float x, float y);
+
+	
+
 
 	TileSet* GetTilesetFromTileId(int id) const;
 };

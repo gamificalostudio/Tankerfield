@@ -17,7 +17,6 @@ class M_Input;
 class M_Render;
 class M_Textures;
 class M_Audio;
-class M_UITest;
 class M_Pathfinding;
 class M_Map;
 class M_Fonts;
@@ -25,6 +24,7 @@ class M_UI;
 class M_ObjManager;
 class M_SceneManager;
 class M_Scene;
+class M_Collision;
 
 class App
 {
@@ -90,14 +90,14 @@ public:
 	M_Render*			render = nullptr;
 	M_Textures*			tex = nullptr;
 	M_Audio*			audio = nullptr;
-	M_UITest*			ui_test = nullptr;
 	M_Pathfinding*		pathfinding = nullptr;
 	M_Map*				map = nullptr;
 	M_Fonts*            font = nullptr;
-	M_UI*          ui = nullptr;
+	M_UI*               ui = nullptr;
 	M_ObjManager*		objectmanager = nullptr;
 	M_SceneManager*		scmanager = nullptr;
 	M_Scene*			scene = nullptr;
+	M_Collision*        collision = nullptr;
   
 	//XML document
 	pugi::xml_node		config;

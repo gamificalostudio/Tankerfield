@@ -384,6 +384,27 @@ iPoint M_Map::MapToWorld(int column, int row) const
 	return retVec;
 }
 
+fPoint M_Map::MapToWorldF(float x, float y)
+{
+	fPoint retVec(0.0F, 0.0F);
+	switch (data.type) {
+	case MapTypes::MAPTYPE_ORTHOGONAL:
+		retVec.x = x * data.tile_width;
+		retVec.y = y * data.tile_height;
+		break;
+	case MapTypes::MAPTYPE_ISOMETRIC:
+		retVec.x = (x - y) * (data.tile_width * 0.5f);
+		retVec.y = (x + y) * (data.tile_height * 0.5f);
+		break;
+	default:
+		LOG("ERROR: Map type not identified.");
+		break;
+	}
+
+	return retVec;
+}
+
+
 iPoint M_Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
@@ -409,7 +430,7 @@ iPoint M_Map::WorldToMap(int x, int y) const
 	return ret;
 }
 
-fPoint M_Map::WorldToMapF(int x, int y)
+fPoint M_Map::WorldToMapF(float x, float y)
 {
 	fPoint ret(0, 0);
 
@@ -434,3 +455,9 @@ fPoint M_Map::WorldToMapF(int x, int y)
 	}
 	return ret;
 }
+
+
+
+
+
+
