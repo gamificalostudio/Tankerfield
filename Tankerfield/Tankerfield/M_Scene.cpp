@@ -10,7 +10,9 @@
 #include "M_SceneManager.h"
 #include "M_Map.h"
 #include "M_ObjManager.h"
+#include "M_Collision.h"
 #include "Point.h"
+
 
 M_Scene::M_Scene() : Module()
 {
@@ -22,7 +24,7 @@ M_Scene::~M_Scene()
 {}
 
 // Called before render is available
-bool M_Scene::Awake()
+bool M_Scene::Awake(pugi::xml_node&)
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -37,9 +39,10 @@ bool M_Scene::Start()
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
-
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f,0.f));
+	app->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::WALL, this);
 	
+
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
 	return true;
 }
 
@@ -50,8 +53,6 @@ bool M_Scene::PreUpdate()
 	{
 		control1 = &(*app->input->controllers.begin());
 	}
-
-
 	return true;
 }
 

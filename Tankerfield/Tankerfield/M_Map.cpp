@@ -1,9 +1,12 @@
 #include "Brofiler\Brofiler.h"
 
+#include "Log.h"
+
 #include "App.h"
 #include "M_Map.h"
-#include "Log.h"
 #include "M_Window.h"
+#include "M_Collision.h"
+#include "M_Input.h"
 
 M_Map::M_Map()
 {
@@ -44,6 +47,15 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
+	
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
+		show_grid = !show_grid;
+
+	return true;
+}
+
+bool M_Map::PostUpdate()
+{
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
 
@@ -66,7 +78,7 @@ bool M_Map::Update(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToWorld(x, y);
-					if (app->render->IsOnCamera(pos.x + data.offset_x,pos.y + data.offset_y, data.tile_width, data.tile_height))
+					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 						if (tileset != nullptr)
@@ -75,13 +87,14 @@ bool M_Map::Update(float dt)
 							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
 						}
 					}
-					
+
 				}
 			}
 		}
 	}
 
 	//// Draw Grid ==============================================
+	if(show_grid)
 	{
 		iPoint point_1, point_2;
 		for (int i = 0; i <= data.columns; ++i)
@@ -98,7 +111,7 @@ bool M_Map::Update(float dt)
 			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -209,13 +222,22 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
+		
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
 		int i = 0;
 		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
-			layer->data[i++] = tile.attribute("gid").as_int(0);
+			layer->data[i] = tile.attribute("gid").as_int(0);
+
+			if (layer->name == "Colliders" && layer->data[i] != 0u)
+				{
+					fPoint pos = layer->GetTilePos(i);
+					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+				}
+
+			++i;
 		}
 	}
 
