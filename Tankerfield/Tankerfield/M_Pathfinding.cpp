@@ -1,3 +1,4 @@
+#include "Brofiler\Brofiler.h"
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -172,6 +173,8 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
+	
+	BROFILER_CATEGORY("CRATE PATH", Profiler::Color::Red);
 	last_path.clear();
 
 	int ret = -1;

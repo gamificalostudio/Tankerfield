@@ -12,7 +12,6 @@
 #include "UI_Button.h"
 #include "UI_Label.h"
 #include "M_ObjManager.h"
-#include "Object.h"
 
 M_UITest::M_UITest() : Module()
 {
@@ -53,25 +52,6 @@ bool M_UITest::PreUpdate()
 	return true;
 }
 
-iPoint M_UITest::MapToWorld(int x, int y, int tile_width, int tile_height)
-{
-	iPoint ret;
-
-	ret.x = (x - y) * (tile_width * 0.5f);
-	ret.y = (x + y) * (tile_height * 0.5f);
-
-	return ret;
-}
-
-
-
-fPoint M_UITest::WorldToMapF(iPoint world_pos, float tile_width, float tile_height)
-{
-	fPoint map_pos;
-	map_pos.x = ((world_pos.x / (tile_width * 0.5f)) + world_pos.y / (tile_height * 0.5f)) * 0.5f;
-	map_pos.y = ((world_pos.y / (tile_height * 0.5f)) - world_pos.x / (tile_width * 0.5f)) * 0.5f;
-	return map_pos;
-}
 
 void M_UITest::DrawIsometricQuad (float x, float y, float w, float h)
 {
@@ -123,24 +103,11 @@ void M_UITest::DrawIsometricBox(float x, float y, float w, float h, float p)
 
 bool M_UITest::Update(float dt)
 {
-	// Draw Grid ==============================================
-	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
-	iPoint point_1, point_2;
+	// Create basic bullet
+	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+		app->objectmanager->CreateObject(BASIC_BULLET, player_pos.x, player_pos.y);
 
-
-	for (int i = 0; i <= rows; ++i)
-	{
-		point_1 = MapToWorld( 0 , i, tile_width, tile_height);
-		point_2 = MapToWorld(columms, i, tile_width, tile_height);
-		app->render->DrawLine(point_1.x , point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-	}
-
-	for (int i = 0; i <= columms; ++i)
-	{
-		point_1 = MapToWorld(i, 0, tile_width, tile_height);
-		point_2 = MapToWorld(i, rows, tile_width, tile_height);
-		app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-	}
+	
 
 	// Draw colliders =========================================
 	uchar coll_tiles[4][4]
@@ -159,14 +126,12 @@ bool M_UITest::Update(float dt)
 			}
 		}
 	}
-
+	int rows = 100, columms = 100, tile_width = 100, tile_height = 50;
 	// Draw Player Pos ========================================
 	fPoint player_draw_pos = MapToWorldF(player_pos.x, player_pos.y, tile_width, tile_height);
 	app->render->DrawCircle(player_draw_pos.x, player_draw_pos.y, 3, 0, 255, 0, 255, true);
 	//DrawIsometricQuad(player_pos.x - .5f, player_pos.y - .5f, 1, 1);
 	DrawIsometricBox(player_pos.x - .5f, player_pos.y - .5f, 1, 1, 100);
-
-
 	return true;
 }
 

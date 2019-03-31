@@ -168,7 +168,7 @@ void Obj_Tank::InputShotMouse(fPoint & input)
 	mouse_pos.y += app->render->camera.y;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_pos = app->map->WorldToMapF(mouse_pos, 100, 50);
+	fPoint map_mouse_pos = app->map->WorldToMapF(mouse_pos.x,mouse_pos.y);
 
 	input = map_mouse_pos - pos;
 	input.Normalize();
