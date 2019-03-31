@@ -61,6 +61,16 @@ bool Obj_Tank::Start()
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
 	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 50, 300, 100, BASIC_BULLET);
 
+	//TODO: Load them from the XML
+	int kb_shoot							= SDL_BUTTON_LEFT;
+	SDL_Scancode kb_up						= SDL_SCANCODE_W;
+	SDL_Scancode kb_left					= SDL_SCANCODE_A;
+	SDL_Scancode kb_down					= SDL_SCANCODE_S;
+	SDL_Scancode kb_right					= SDL_SCANCODE_D;
+	Joystick gamepad_move					= Joystick::LEFT;
+	Joystick gamepad_aim					= Joystick::RIGHT;
+	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+
 	return true;
 }
 
@@ -210,4 +220,24 @@ bool Obj_Tank::IsShooting() {
 		|| app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 		|| (controller != nullptr
 			&& (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 0));
+}
+
+//Select the input method depending on the last input pressed
+//Prioritize controller if both inputs are being pressed at the same time
+void Obj_Tank::SelectInputMethod()
+{
+	if (app->input->GetKey(kb_up) != KEY_IDLE
+		|| app->input->GetKey(kb_up) != KEY_IDLE
+		|| app->input->GetKey(kb_up) != KEY_IDLE
+		|| app->input->GetKey(kb_up) != KEY_IDLE
+		|| app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
+	{
+		last_input = INPUT_METHOD::KEYBOARD_MOUSE;
+	}
+	if (!(*controller)->GetJoystick(gamepad_move).IsZero()
+		|| !(*controller)->GetJoystick(gamepad_move).IsZero()
+		|| (*controller)->GetAxis(gamepad_shoot) > 0)
+	{
+		last_input = INPUT_METHOD::KEYBOARD_MOUSE;
+	}
 }

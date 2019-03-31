@@ -14,6 +14,11 @@ enum class WEAPON_TYPE {
 	MAX
 };
 
+enum class INPUT_METHOD {
+	KEYBOARD_MOUSE,
+	CONTROLLER
+};
+
 
 class Obj_Tank : public Object
 {
@@ -40,6 +45,8 @@ private:
 	void InputShotController(fPoint & input);
 	bool IsShooting();
 
+	void SelectInputMethod();
+
 public:
 	WEAPON_TYPE weapon_type = WEAPON_TYPE::BASIC;
 
@@ -64,6 +71,18 @@ private:
 	PerfTimer time_between_bullets_timer;
 
 	std::map<WEAPON_TYPE, Weapon*> weapons;
+
+	INPUT_METHOD last_input					= INPUT_METHOD::KEYBOARD_MOUSE;
+	//- Keyboard inputs
+	int kb_shoot							= 0;
+	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_right					= SDL_SCANCODE_UNKNOWN;
+	//- Controller inputs
+	Joystick gamepad_move					= Joystick::INVALID;
+	Joystick gamepad_aim					= Joystick::INVALID;
+	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_INVALID;
 };
 
 #endif
