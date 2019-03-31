@@ -9,7 +9,7 @@ Bullet_Basic::Bullet_Basic()
 
 }
 
-Bullet_Basic::Bullet_Basic(int x, int y) : Obj_Bullet()
+Bullet_Basic::Bullet_Basic(float x, float y) : Obj_Bullet()
 {
 	//Load XML var ============
 	pos.x = x;

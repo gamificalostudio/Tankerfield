@@ -70,6 +70,8 @@ private:
 	float cos_45 = 0.f;
 	float sin_45 = 0.f;
 
+	iPoint draw_offset = { 0, 0 };//Pixels to the center of the player. Used to center the player sprite.
+
 	PerfTimer time_between_bullets_timer;
 
 	std::map<WEAPON_TYPE, Weapon*> weapons;
