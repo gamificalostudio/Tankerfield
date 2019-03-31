@@ -48,9 +48,9 @@ public:
 public:
 
 	int type = 0;
-	fPoint pos;
-	fPoint velocity;
-	fPoint acceleration;
+	fPoint pos			= { 0.f, 0.f };
+	fPoint velocity		= { 0.f, 0.f };
+	fPoint acceleration = { 0.f, 0.f };
 	bool to_remove = false;//Set it to true if you want the object to be removed
 	//
 	Animation* current_animation = nullptr;

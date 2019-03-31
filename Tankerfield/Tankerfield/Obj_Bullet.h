@@ -26,7 +26,6 @@ public:
 	fPoint direction = { 0.f, 0.f };
 	int damage = 0;
 	float bullet_life_ms = 0.f;
-	fPoint pos = { 0,0 };
 	PerfTimer bullet_life_ms_timer;
 	float time_between_bullets = 0.f;
 	//SFX impact_sound
