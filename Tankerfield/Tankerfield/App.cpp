@@ -444,4 +444,4 @@ bool App::SavegameNow() const
 	data.reset();
 	want_to_save = false;
 	return ret;
-} v
+} 
