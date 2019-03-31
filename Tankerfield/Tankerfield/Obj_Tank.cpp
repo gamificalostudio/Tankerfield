@@ -243,18 +243,20 @@ bool Obj_Tank::IsShooting() {
 //Prioritize controller if both inputs are being pressed at the same time
 void Obj_Tank::SelectInputMethod()
 {
-	if (app->input->GetKey(kb_up) != KEY_IDLE
+	if (last_input != INPUT_METHOD::KEYBOARD_MOUSE
+		&& (app->input->GetKey(kb_up) != KEY_IDLE
 		|| app->input->GetKey(kb_left) != KEY_IDLE
 		|| app->input->GetKey(kb_down) != KEY_IDLE
 		|| app->input->GetKey(kb_right) != KEY_IDLE
-		|| app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
+		|| app->input->GetMouseButton(kb_shoot) != KEY_IDLE))
 	{
 		last_input = INPUT_METHOD::KEYBOARD_MOUSE;
 	}
-	if (controller != nullptr
+	if (last_input != INPUT_METHOD::CONTROLLER
+		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_move).IsZero()
 		|| !(*controller)->GetJoystick(gamepad_move).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot) > 0))
+		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		last_input = INPUT_METHOD::CONTROLLER;
 	}
