@@ -5,6 +5,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "Brofiler/Brofiler.h"
 #include "SDL/include/SDL.h"
 
 
@@ -63,6 +64,7 @@ bool M_Input::Start()
 // Called each loop iteration
 bool M_Input::PreUpdate()
 {
+	BROFILER_CATEGORY("M_InputPreUpdate", Profiler::Color::Green)
 	static SDL_Event event;
 	
 	UpdateKeyboardState();
