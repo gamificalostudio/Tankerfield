@@ -54,9 +54,6 @@
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_BasicShoot.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Button.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
@@ -89,6 +86,21 @@
     </ClCompile>
     <ClCompile Include="M_Collision.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet_Basic.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Bullet.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower .cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower.cpp">
+      <Filter>Modules\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,9 +165,6 @@
     <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_BasicShoot.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Button.h">
       <Filter>Modules\UI</Filter>
     </ClInclude>
@@ -194,6 +203,18 @@
     </ClInclude>
     <ClInclude Include="M_Collision.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Basic.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Bullet.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Flamethrower.h">
+      <Filter>Modules\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

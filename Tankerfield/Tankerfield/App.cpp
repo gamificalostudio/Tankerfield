@@ -55,10 +55,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 	AddModule(objectmanager);
 	AddModule(collision);
-
-	//AddModule(ui_test);
 	AddModule(ui);
-	
 	// render last to swap buffer
 	AddModule(render);
 	

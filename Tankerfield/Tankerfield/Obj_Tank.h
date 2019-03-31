@@ -2,9 +2,18 @@
 #define __OBJ_TANK_H__
 
 #include "Object.h"
+#include "Weapon.h"
+#include <map>
 
 struct Controller;
 struct SDL_Texture;
+
+enum class WEAPON_TYPE {
+	BASIC,
+	FLAMETHROWER,
+	MAX
+};
+
 
 class Obj_Tank : public Object
 {
@@ -23,10 +32,16 @@ public:
 
 private:
 	void Movement(float dt);
-	void GetKeyboardInput(fPoint & input);
-	void GetControllerInput(fPoint & input);
+	void InputMovementKeyboard(fPoint & input);
+	void InputMovementController(fPoint & input);
+
+	void Shoot();
+	void InputShotMouse(fPoint & input);
+	void InputShotController(fPoint & input);
+	bool IsShooting();
 
 public:
+	WEAPON_TYPE weapon_type = WEAPON_TYPE::BASIC;
 
 private:
 	static SDL_Texture * base_tex;
@@ -34,16 +49,21 @@ private:
 	static SDL_Texture * base_shadow_tex;
 	static SDL_Texture * turr_shadow_tex;
 
+	float base_angle = 0.f;
+	float turr_angle = 0.f;
 	static SDL_Rect * base_rects;
-	static int base_rects_num;
-	//static SDL_Rect * turr_rects;
+	static SDL_Rect * turr_rects;
+	static int rects_num;
 
-	float speed = 5.f;
-	float angle = 0.f;
+	float speed = 2.5f;
 	Controller ** controller = nullptr;
 
 	float cos_45 = 0.f;
 	float sin_45 = 0.f;
+
+	PerfTimer time_between_bullets_timer;
+
+	std::map<WEAPON_TYPE, Weapon*> weapons;
 };
 
 #endif

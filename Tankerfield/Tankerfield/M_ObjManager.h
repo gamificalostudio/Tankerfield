@@ -12,7 +12,7 @@
 
 enum ObjectType
 {
-  TANK,
+	TANK,
 	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
@@ -45,10 +45,13 @@ public:
 	bool CleanUp() override;
 
 	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
+
 	void DeleteObjects();
   
 private:
+
 	std::list<Object*> objects;
+
 };
 
 #endif
