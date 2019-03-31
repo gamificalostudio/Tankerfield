@@ -1,5 +1,5 @@
 #include "Obj_Bullet.h"
-#include "M_UITest.h"
+#include "M_Render.h"
 #include "App.h"
 
 Obj_Bullet::Obj_Bullet()
@@ -29,7 +29,7 @@ bool Obj_Bullet::PostUpdate()
 	float width = 0.5f;
 	float height = 0.5f;
 
-	app->ui_test->DrawIsometricQuad(
+	app->render->DrawIsometricQuad(
 		pos.x - width * 0.5f,
 		pos.y - height * 0.5f,
 		width,

@@ -8,7 +8,7 @@
 
 #include "M_Input.h"
 #include "Log.h"
-#include "M_UITest.h"
+#include "M_Map.h"
 #include "M_ObjManager.h"
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
@@ -131,7 +131,7 @@ void Obj_Tank::InputMovementController(fPoint & input)
 bool Obj_Tank::PostUpdate()
 {
 	int tile_width = 100, tile_height = 50;
-	fPoint iso_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
+	fPoint iso_pos = app->map->MapToWorldF(pos.x, pos.y);
 
 	//Base
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
@@ -168,7 +168,7 @@ void Obj_Tank::InputShotMouse(fPoint & input)
 	mouse_pos.y += app->render->camera.y;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_pos = app->ui_test->WorldToMapF(mouse_pos, 100, 50);
+	fPoint map_mouse_pos = app->map->WorldToMapF(mouse_pos, 100, 50);
 
 	input = map_mouse_pos - pos;
 	input.Normalize();

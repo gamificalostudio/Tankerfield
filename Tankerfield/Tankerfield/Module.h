@@ -5,6 +5,7 @@
 #include "PugiXml/src/pugixml.hpp"
 
 class App;
+class Collider;
 
 class Module
 {
@@ -70,6 +71,8 @@ public:
 		return true;
 	}
 
+	virtual void OnTrigger( Collider* c1, Collider* c2) {}
+
 // Enable and disable
 
 	bool IsEnabled() const { return enabled; }
@@ -93,7 +96,9 @@ public:
 	}
 
 public:
+
 	std::string	name;
+
 	bool		active;
 
 };
