@@ -44,9 +44,6 @@
     <ClCompile Include="M_SceneManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="M_UITest.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="M_Map.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -205,9 +202,6 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_UI.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_UITest.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Window.h">

@@ -10,6 +10,9 @@
 #include "M_SceneManager.h"
 #include "M_Map.h"
 #include "M_ObjManager.h"
+#include "M_Collision.h"
+#include "Point.h"
+
 
 M_Scene::M_Scene() : Module()
 {
@@ -36,11 +39,12 @@ bool M_Scene::Start()
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
+	app->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::WALL, this);
+	app->objectmanager->CreateObject(ObjectType::TANK, { 0.f, 0.f });
 
-	app->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
-	
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f,0.f));
 	return true;
-}
+
 
 // Called each loop iteration
 bool M_Scene::PreUpdate()

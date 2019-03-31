@@ -17,7 +17,7 @@
 //#include "j1Map.h"
 //#include "j1Collision.h"
 
-Obj_TeslaTrooper::Obj_TeslaTrooper(float x, float y) : Object (x,y)
+Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	//walking = new Animation[8];
 	//walking[0].PushBack({ 528,0,66,76 });//8

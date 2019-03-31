@@ -105,7 +105,7 @@ bool M_UITest::Update(float dt)
 {
 	// Create basic bullet
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
-		app->objectmanager->CreateObject(BASIC_BULLET, player_pos.x, player_pos.y);
+		app->objectmanager->CreateObject(BASIC_BULLET, player_pos);
 
 	
 
