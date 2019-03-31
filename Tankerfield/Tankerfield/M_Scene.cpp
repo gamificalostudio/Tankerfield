@@ -10,6 +10,7 @@
 #include "M_SceneManager.h"
 #include "M_Map.h"
 #include "M_ObjManager.h"
+#include "Point.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -37,7 +38,7 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
-	app->objectmanager->CreateObject(ObjectType::TANK, 0, 0);
+	app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f,0.f));
 	
 	return true;
 }

@@ -10,8 +10,7 @@ struct SDL_Texture;
 class Bullet_Basic : public Obj_Bullet
 {
 public:
-	Bullet_Basic();
-	Bullet_Basic(int x, int y);
+	Bullet_Basic(fPoint pos);
 	~Bullet_Basic();
 
 public:

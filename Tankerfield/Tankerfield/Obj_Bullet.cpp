@@ -2,7 +2,7 @@
 #include "M_Render.h"
 #include "App.h"
 
-Obj_Bullet::Obj_Bullet()
+Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
 	bullet_life_ms_timer.Start();
 }

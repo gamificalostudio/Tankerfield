@@ -137,21 +137,21 @@ bool M_ObjManager::CleanUp()
 	return true;
 }
 
-Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
+Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 {
 	Object* ret = nullptr;
 	switch (type)
 	{
 	case ObjectType::TESLA_TROOPER:
-		ret = new Obj_TeslaTrooper(x, y);
+		ret = new Obj_TeslaTrooper(pos);
 		ret->type = TESLA_TROOPER;
 		break;
 	case ObjectType::TANK:
-		ret = new Obj_Tank(x, y);
+		ret = new Obj_Tank(pos);
 		ret->type = TANK;
 		break;
 	case ObjectType::BASIC_BULLET:
-		ret = new Bullet_Basic(x, y);
+		ret = new Bullet_Basic(pos);
 		ret->type = BASIC_BULLET;
 		break;
 	}
