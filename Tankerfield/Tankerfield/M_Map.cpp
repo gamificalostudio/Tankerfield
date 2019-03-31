@@ -94,7 +94,8 @@ bool M_Map::PostUpdate()
 	}
 
 	//// Draw Grid ==============================================
-	if(show_grid){
+	if(show_grid)
+	{
 		iPoint point_1, point_2;
 		for (int i = 0; i <= data.columns; ++i)
 		{
@@ -228,11 +229,15 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		int i = 0;
 		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
-			layer->data[i++] = tile.attribute("gid").as_int(0);
-			if (layer->name == "colliders")
-			{
-				//app->collision->AddCollider()
-			}
+			layer->data[i] = tile.attribute("gid").as_int(0);
+
+			if (layer->name == "Colliders" && layer->data[i] != 0u)
+				{
+					fPoint pos = layer->GetTilePos(i);
+					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+				}
+
+			++i;
 		}
 	}
 

@@ -136,6 +136,12 @@ struct MapLayer
 	{
 		return data[(y*columns) + x];
 	}
+
+	inline fPoint GetTilePos(int id) const
+	{
+		return fPoint(((id % columns)), ((id / columns)));
+	}
+
 };
 
 // ----------------------------------------------------
@@ -156,6 +162,8 @@ struct TileSet
 	int					rows;
 	int					offset_x;
 	int					offset_y;
+
+
 };
 
 enum MapTypes
@@ -203,6 +211,8 @@ public:
 	fPoint WorldToMapF(float x, float y);
 
 	TileSet* GetTilesetFromTileId(int id) const;
+
+
 
 public:
 
