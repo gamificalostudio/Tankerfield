@@ -12,7 +12,7 @@ bool Collider::CheckCollision(Collider*  coll) const
 }
 
 
-ModuleCollision::ModuleCollision()
+M_Collision::M_Collision()
 {
 	name.assign("Module_Collision");
 
@@ -39,10 +39,10 @@ ModuleCollision::ModuleCollision()
 
  //Destructor
 
-ModuleCollision::~ModuleCollision()
+M_Collision::~M_Collision()
 {}
 
-bool ModuleCollision::Update(float dt)
+bool M_Collision::Update(float dt)
 {
 	std::list<Collider*> static_colliders;
 	std::list<Collider*> dynamic_colliders;
@@ -70,7 +70,7 @@ bool ModuleCollision::Update(float dt)
 	Collider* collider_2 = nullptr;
 	std::list<Collider*>::iterator iterator_1;
 
-	// Dynamic VS Dynamic 1st Check ========================================
+	// Dynamic VS Dynamic ========================================
 
 	for (std::list<Collider*>::iterator item_1 = dynamic_colliders.begin(); item_1 != dynamic_colliders.end(); ++item_1)
 	{
@@ -94,25 +94,6 @@ bool ModuleCollision::Update(float dt)
 					collider_2->callback->OnTrigger(collider_2, collider_1);
 				}
 
-				SolveOverlapDD(collider_1, collider_2);
-			}
-		}
-	}
-
-	// Dynamic VS Dynamic 2nd Check ========================================
-
-	for (std::list<Collider*>::iterator item_1 = dynamic_colliders.begin(); item_1 != dynamic_colliders.end(); ++item_1)
-	{
-		collider_1 = *item_1;
-		iterator_1 = item_1;
-		++iterator_1;
-
-		for (std::list<Collider*>::iterator item_2 = iterator_1; item_2 != dynamic_colliders.end(); ++item_2)
-		{
-			collider_2 = *item_2;
-
-			if (collider_1->CheckCollision(collider_2) == true)
-			{
 				SolveOverlapDD(collider_1, collider_2);
 			}
 		}
@@ -151,7 +132,7 @@ bool ModuleCollision::Update(float dt)
 
 // Called before render is available
 
-bool ModuleCollision::PostUpdate()
+bool M_Collision::PostUpdate()
 {
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
 		debug = !debug;
@@ -168,10 +149,10 @@ bool ModuleCollision::PostUpdate()
 		case Collider::TAG::NONE: // white
 			break;
 		case Collider::TAG::WALL: // blue
-			//app->map->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {255, 0, 0 , 255});
+			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {255, 0, 0 , 255});
 			break;
 		case Collider::TAG::PLAYER: // green
-			//app->map->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
+			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
 			break;
 		case Collider::TAG::GOD: // orange
 			break;
@@ -184,7 +165,7 @@ bool ModuleCollision::PostUpdate()
 }
 
 // Called before quitting
-bool ModuleCollision:: CleanUp()
+bool M_Collision:: CleanUp()
 {
 	LOG("Freeing all colliders");
 
@@ -203,7 +184,7 @@ bool ModuleCollision:: CleanUp()
 	return true;
 }
 
-Collider * ModuleCollision::AddCollider(fPoint pos , float width , float height, Collider::TAG type, Module* callback, Object* object)
+Collider * M_Collision::AddCollider(fPoint pos , float width , float height, Collider::TAG type, Module* callback, Object* object)
 {
 	Collider* collider = new Collider(pos, width, height, type, object, callback);
 	colliders.push_back(collider);
@@ -212,7 +193,7 @@ Collider * ModuleCollision::AddCollider(fPoint pos , float width , float height,
 
 
 
-bool ModuleCollision::DeleteCollider(Collider * collider)
+bool M_Collision::DeleteCollider(Collider * collider)
 {
 	std::list<Collider*>::iterator collider_to_delete;
 
@@ -229,7 +210,7 @@ bool ModuleCollision::DeleteCollider(Collider * collider)
 
 }
 
-void ModuleCollision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
+void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
 	// Calculate between colliders overlap ============================================
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
@@ -273,7 +254,7 @@ void ModuleCollision::SolveOverlapDS(Collider * dynamic_col, Collider * static_c
 }
 
 
-void ModuleCollision::SolveOverlapDD(Collider * c1, Collider * c2)
+void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 {
 	// Calculate between colliders overlap ============================================
 

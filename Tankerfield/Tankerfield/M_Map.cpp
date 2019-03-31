@@ -382,3 +382,22 @@ iPoint M_Map::WorldToMap(int x, int y) const
 	}
 	return ret;
 }
+
+fPoint M_Map::MapToWorldF(float x, float y)
+{
+	fPoint ret;
+
+	ret.x = (x - y) * (data.tile_width * 0.5f);
+	ret.y = (x + y) * (data.tile_height * 0.5f);
+
+	return ret;
+}
+
+fPoint M_Map::WorldToMapF(iPoint world_pos, float tile_width, float tile_height)
+{
+	fPoint map_pos;
+	map_pos.x = ((world_pos.x / (tile_width * 0.5f)) + world_pos.y / (tile_height * 0.5f)) * 0.5f;
+	map_pos.y = ((world_pos.y / (tile_height * 0.5f)) - world_pos.x / (tile_width * 0.5f)) * 0.5f;
+	return map_pos;
+}
+

@@ -8,7 +8,7 @@
 #include <list>
 
 class Object;
-class ModuleCollision;
+class M_Collision;
 
 class Collider
 {
@@ -88,16 +88,16 @@ private:
 
 	Object * object = nullptr;
 
-	friend ModuleCollision;
+	friend M_Collision;
 };
 
-class ModuleCollision : public Module
+class M_Collision : public Module
 {
 public:
 
-	ModuleCollision();
+	M_Collision();
 
-	virtual ~ModuleCollision();
+	virtual ~M_Collision();
 
 	bool Update(float dt);
 
