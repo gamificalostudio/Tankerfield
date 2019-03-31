@@ -13,7 +13,6 @@
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
 
-
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;

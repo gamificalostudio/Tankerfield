@@ -2,6 +2,10 @@
 #include "M_Render.h"
 #include "App.h"
 
+SDL_Texture * Obj_Bullet::tex = nullptr;
+int Obj_Bullet::rects_num = 128;
+SDL_Rect * Obj_Bullet::rects = new SDL_Rect[rects_num];
+
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
 	bullet_life_ms_timer.Start();
@@ -9,6 +13,14 @@ Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 
 Obj_Bullet::~Obj_Bullet()
 {
+}
+
+bool Obj_Bullet::Start()
+{
+	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
+	LoadRects(bullet_node.child("animations").child("rotate"), rects);
+
+	return true;
 }
 
 bool Obj_Bullet::Update(float dt)
@@ -34,6 +46,10 @@ bool Obj_Bullet::PostUpdate()
 		pos.y - height * 0.5f,
 		width,
 		height);
+
+
+
+	app->render->Blit(tex, );
 
 	return true;
 }

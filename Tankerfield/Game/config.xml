@@ -6633,6 +6633,92 @@
     <basic_bullet>
       <speed value ="13"/>
       <life value ="1000"/>
+      <tex path="textures/objects/bullet.png"/>
+      <animations>
+        <rotate>
+          <sprite n="bullet0020.png" x="0" y="0" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0021.png" x="66" y="0" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0022.png" x="132" y="0" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0023.png" x="198" y="0" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0024.png" x="264" y="0" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0025.png" x="330" y="0" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0026.png" x="396" y="0" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0027.png" x="0" y="40" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0028.png" x="66" y="40" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0029.png" x="132" y="40" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0030.png" x="198" y="40" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0031.png" x="264" y="40" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0032.png" x="330" y="40" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0033.png" x="396" y="40" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0034.png" x="0" y="80" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0035.png" x="66" y="80" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0036.png" x="132" y="80" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0037.png" x="198" y="80" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0038.png" x="264" y="80" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0039.png" x="330" y="80" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0040.png" x="396" y="80" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0041.png" x="0" y="120" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0042.png" x="66" y="120" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0043.png" x="132" y="120" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0044.png" x="198" y="120" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0045.png" x="264" y="120" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0046.png" x="330" y="120" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0047.png" x="396" y="120" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0048.png" x="0" y="160" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0049.png" x="66" y="160" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0050.png" x="132" y="160" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0051.png" x="198" y="160" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0052.png" x="264" y="160" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0053.png" x="330" y="160" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0054.png" x="396" y="160" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0055.png" x="0" y="200" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0056.png" x="66" y="200" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0057.png" x="132" y="200" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0058.png" x="198" y="200" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0059.png" x="264" y="200" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0060.png" x="330" y="200" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0061.png" x="396" y="200" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0062.png" x="0" y="240" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0063.png" x="66" y="240" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0064.png" x="132" y="240" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0065.png" x="198" y="240" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0066.png" x="264" y="240" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0067.png" x="330" y="240" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0068.png" x="396" y="240" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0069.png" x="0" y="280" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0070.png" x="66" y="280" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0071.png" x="132" y="280" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0072.png" x="198" y="280" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0073.png" x="264" y="280" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0074.png" x="330" y="280" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0075.png" x="396" y="280" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0076.png" x="0" y="320" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0077.png" x="66" y="320" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0078.png" x="132" y="320" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0079.png" x="198" y="320" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0080.png" x="264" y="320" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0081.png" x="330" y="320" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0082.png" x="396" y="320" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0083.png" x="0" y="360" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0084.png" x="66" y="360" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0085.png" x="132" y="360" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0086.png" x="198" y="360" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0087.png" x="264" y="360" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0088.png" x="330" y="360" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0089.png" x="396" y="360" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0090.png" x="0" y="400" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0091.png" x="66" y="400" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0092.png" x="132" y="400" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0093.png" x="198" y="400" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0094.png" x="264" y="400" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0095.png" x="330" y="400" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0096.png" x="396" y="400" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0097.png" x="0" y="440" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0098.png" x="66" y="440" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0099.png" x="132" y="440" w="66" h="40" pX="0.5" pY="0.5"/>
+          <sprite n="bullet0100.png" x="198" y="440" w="66" h="40" pX="0.5" pY="0.5"/>
+        </rotate>
+      </animations>
     </basic_bullet>
   </object>
 
