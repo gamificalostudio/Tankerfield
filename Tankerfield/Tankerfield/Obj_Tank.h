@@ -44,6 +44,7 @@ public:
 	WEAPON_TYPE weapon_type = WEAPON_TYPE::BASIC;
 
 private:
+
 	static SDL_Texture * base_tex;
 	static SDL_Texture * turr_tex;
 	static SDL_Texture * base_shadow_tex;

@@ -5,7 +5,7 @@
 #include "Obj_Tank.h"
 #include "M_Textures.h"
 #include "M_Render.h"
-
+#include "M_Collision.h"
 #include "M_Input.h"
 #include "Log.h"
 #include "M_Map.h"
@@ -60,6 +60,9 @@ bool Obj_Tank::Start()
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
 	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 50, 300, 100, BASIC_BULLET);
+
+	coll = app->collision->AddCollider(pos, 1.f, 1.f, Collider::TAG::PLAYER, nullptr, this);
+	coll->SetType(Collider::TYPE::DYNAMIC);
 
 	return true;
 }
@@ -130,10 +133,9 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::PostUpdate()
 {
-	int tile_width = 100, tile_height = 50;
 	fPoint iso_pos = app->map->MapToWorldF(pos.x, pos.y);
 
-	//Base
+	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	SDL_Rect * base_rect = &base_rects[ind_base];
 	app->render->Blit(
@@ -142,7 +144,7 @@ bool Obj_Tank::PostUpdate()
 		iso_pos.y - base_rect->h * 0.5f,
 		base_rect);
 
-	//Turret
+	// Turret =======================================
 	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	SDL_Rect * turr_rect = &turr_rects[ind_turr];
 	app->render->Blit(
@@ -150,6 +152,9 @@ bool Obj_Tank::PostUpdate()
 		iso_pos.x - turr_rect->w * 0.5f,
 		iso_pos.y - turr_rect->h * 0.5f,
 		turr_rect);
+
+	coll->SetPos(pos.x, pos.y);
+
 	return true;
 }
 

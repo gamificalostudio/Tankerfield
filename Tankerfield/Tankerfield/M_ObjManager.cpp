@@ -82,6 +82,7 @@ bool M_ObjManager::Update(float dt)
 		if ((*iterator) != nullptr)
 		{
 			(*iterator)->Update(dt);
+
 			if ((*iterator)->to_remove)
 			{
 				//When we remove an element from the list, the other elements shift 1 space to our position

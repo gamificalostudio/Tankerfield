@@ -44,6 +44,11 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
+	return true;
+}
+
+bool M_Map::PostUpdate()
+{
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
 
@@ -66,7 +71,7 @@ bool M_Map::Update(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToWorld(x, y);
-					if (app->render->IsOnCamera(pos.x + data.offset_x,pos.y + data.offset_y, data.tile_width, data.tile_height))
+					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 						if (tileset != nullptr)
@@ -75,7 +80,7 @@ bool M_Map::Update(float dt)
 							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
 						}
 					}
-					
+
 				}
 			}
 		}
@@ -98,7 +103,7 @@ bool M_Map::Update(float dt)
 			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
 		}
 	}
-	
+
 	return ret;
 }
 
