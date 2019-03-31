@@ -15,13 +15,10 @@ public:
 	~Weapon();
 
 public:
-	virtual void Shoot(float x, float y);
+	virtual void Shoot(float x, float y, fPoint & direction);
 
 private:
 	Obj_Bullet * bullet = nullptr;
-
-protected:
-	fPoint CalculateDirection();
 
 public:
 	int damage = 0;
