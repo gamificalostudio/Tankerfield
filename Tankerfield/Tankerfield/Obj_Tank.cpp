@@ -150,7 +150,7 @@ bool Obj_Tank::PostUpdate()
 {
 	int tile_width = 100, tile_height = 50;
   
-	fPoint screen_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
+	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
 
 	//Base
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
@@ -173,7 +173,7 @@ bool Obj_Tank::PostUpdate()
 	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 	debug_mouse_pos.x += app->render->camera.x;
 	debug_mouse_pos.y += app->render->camera.y;
-	fPoint debug_screen_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
+	fPoint debug_screen_pos = app->map->MapToWorldF(pos.x, pos.y);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
 	return true;
@@ -194,7 +194,7 @@ void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 	mouse_pos.y += app->render->camera.y;
 
 	int tile_width = 100, tile_height = 50;
-	fPoint screen_pos = MapToWorldF(pos.x, pos.y, tile_width, tile_height);
+	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
 	input_dir = (fPoint)mouse_pos - screen_pos;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
