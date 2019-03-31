@@ -120,19 +120,19 @@ void Obj_Tank::Movement(float dt)
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
-	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
 		input.y -= 1.f;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (app->input->GetKey(kb_left) == KEY_DOWN || app->input->GetKey(kb_left) == KEY_REPEAT)
 	{
 		input.x -= 1.f;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	if (app->input->GetKey(kb_down) == KEY_DOWN || app->input->GetKey(kb_down) == KEY_REPEAT)
 	{
 		input.y += 1.f;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (app->input->GetKey(kb_right) == KEY_DOWN || app->input->GetKey(kb_right) == KEY_REPEAT)
 	{
 		input.x += 1.f;
 	}
@@ -140,7 +140,7 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input)
 
 void Obj_Tank::InputMovementController(fPoint & input)
 {
-	input = (fPoint)(*controller)->GetJoystick(Joystick::LEFT);
+	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
 bool Obj_Tank::PostUpdate()
@@ -198,7 +198,7 @@ void Obj_Tank::InputShotController(fPoint & input_dir, fPoint & iso_dir)
 {
 	if (controller != nullptr)
 	{
-		input_dir = (fPoint)(*controller)->GetJoystick(Joystick::RIGHT);
+		input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim);
 		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
 		iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 		iso_dir.Normalize();
@@ -233,10 +233,10 @@ void Obj_Tank::Shoot()
 }
 
 bool Obj_Tank::IsShooting() {
-	return ((app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
-		|| app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	return ((app->input->GetMouseButton(kb_shoot) == KEY_DOWN
+		|| app->input->GetMouseButton(kb_shoot) == KEY_REPEAT)
 		|| (controller != nullptr
-			&& (*controller)->GetAxis(SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 0));
+			&& (*controller)->GetAxis(gamepad_shoot) > 0));
 }
 
 //Select the input method depending on the last input pressed
