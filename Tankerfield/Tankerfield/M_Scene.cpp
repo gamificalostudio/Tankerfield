@@ -42,8 +42,9 @@ bool M_Scene::Start()
 	app->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::WALL, this);
 	app->objectmanager->CreateObject(ObjectType::TANK, { 0.f, 0.f });
 
-    return true;
-}
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f,0.f));
+	return true;
+
 
 // Called each loop iteration
 bool M_Scene::PreUpdate()
