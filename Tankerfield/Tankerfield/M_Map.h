@@ -212,6 +212,7 @@ public:
 private:
 
 	bool					map_loaded;
+	bool					show_grid = true;
 	std::string				folder;
 	uint					numLevels = 0; // counter for num levels
 	pugi::xml_document		map_file;
