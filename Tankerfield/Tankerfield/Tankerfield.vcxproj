@@ -159,7 +159,6 @@
     <ClCompile Include="UI_Element.cpp" />
     <ClCompile Include="M_UITest.cpp" />
     <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="Weapon_Flamethrower .cpp" />
     <ClCompile Include="Weapon_Flamethrower.cpp" />
   </ItemGroup>
   <ItemGroup>

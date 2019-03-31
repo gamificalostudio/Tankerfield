@@ -54,9 +54,6 @@
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Modules\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_BasicShoot.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Button.cpp">
       <Filter>Modules\UI</Filter>
     </ClCompile>
@@ -87,6 +84,21 @@
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="M_Collision.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Bullet.cpp">
+      <Filter>Modules\Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet_Basic.cpp">
+      <Filter>Modules\Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -106,9 +118,6 @@
     </ClInclude>
     <ClInclude Include="App.h" />
     <ClInclude Include="Obj_TeslaTrooper.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_BasicShoot.h">
       <Filter>Modules\Objects</Filter>
     </ClInclude>
     <ClInclude Include="UI_Button.h">
@@ -148,46 +157,61 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="M_Audio.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Fonts.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Input.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Map.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_ObjManager.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Pathfinding.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Render.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Scene.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_SceneManager.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Textures.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_UI.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_UITest.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Window.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Module.h">
-      <Filter>Modules\Headers</Filter>
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Collision.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Bullet.h">
+      <Filter>Modules\Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Flamethrower.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Basic.h">
+      <Filter>Modules\Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -215,8 +239,11 @@
     <Filter Include="Modules\Objects">
       <UniqueIdentifier>{4792041f-ce51-4387-beaa-caae693b8a61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Modules\Headers">
-      <UniqueIdentifier>{6a6ea59c-4085-48f4-bc04-3ec1d3aa16ba}</UniqueIdentifier>
+    <Filter Include="Modules\Objects\Bullets">
+      <UniqueIdentifier>{50deb3bb-f9e9-4e16-8e78-25f23fb24e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{1fe55f70-340e-4b97-b811-5da11e060649}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
