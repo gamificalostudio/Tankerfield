@@ -204,13 +204,13 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 	fPoint point_1, point_2, point_3, point_4;
 
 	// top_left 
-	point_1 = app->map->MapToScreenF(x, y);
+	point_1 = app->map->MapToScreenF({x, y});
 	// top_right
-	point_2 = app->map->MapToScreenF(x + w, y);
+	point_2 = app->map->MapToScreenF({x + w, y});
 	// bot_right
-	point_3 = app->map->MapToScreenF(x + w, y + h);
+	point_3 = app->map->MapToScreenF({x + w, y + h});
 	// bot_left
-	point_4 = app->map->MapToScreenF(x, y + h);
+	point_4 = app->map->MapToScreenF({x, y + h});
 
 	app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
 	app->render->DrawLine(point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);

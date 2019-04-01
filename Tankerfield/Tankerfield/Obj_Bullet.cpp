@@ -52,7 +52,7 @@ bool Obj_Bullet::PostUpdate()
 		width,
 		height);
 
-	fPoint screen_pos = app->map->MapToScreenF(pos_map.x, pos_map.y);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	SDL_Rect * rect = &rects[ind];
 	app->render->Blit(tex, screen_pos.x - rect->w * 0.5f, screen_pos.y - rect->h * 0.5f, rect);

@@ -204,7 +204,7 @@ public:
 
 	iPoint MapToScreenI(int column, int row) const;
 
-	fPoint MapToScreenF(float x, float y);
+	fPoint MapToScreenF(const fPoint & map_pos);
 
 	iPoint ScreenToMapI(int x, int y) const;
 

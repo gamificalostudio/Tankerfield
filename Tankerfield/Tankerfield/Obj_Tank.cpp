@@ -154,7 +154,7 @@ void Obj_Tank::InputMovementController(fPoint & input)
 bool Obj_Tank::PostUpdate()
 {
 
-	fPoint screen_pos = app->map->MapToScreenF(pos_map.x, pos_map.y);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
 
 	// Base =========================================
@@ -178,7 +178,7 @@ bool Obj_Tank::PostUpdate()
 	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 	debug_mouse_pos.x += app->render->camera.x;
 	debug_mouse_pos.y += app->render->camera.y;
-	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map.x, pos_map.y);
+	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
 
@@ -200,7 +200,7 @@ void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 	mouse_pos.y += app->render->camera.y;
 
 	int tile_width = 100, tile_height = 50;
-	fPoint screen_pos = app->map->MapToScreenF(pos_map.x, pos_map.y);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	input_dir = (fPoint)mouse_pos - screen_pos;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)

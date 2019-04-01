@@ -389,42 +389,42 @@ TileSet* M_Map::GetTilesetFromTileId(int id) const
 
 iPoint M_Map::MapToScreenI(int column, int row) const
 {
-	iPoint retVec(0, 0);
+	iPoint screen_pos(0, 0);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:
-		retVec.x = column * data.tile_width;
-		retVec.y = row * data.tile_height;
+		screen_pos.x = column * data.tile_width;
+		screen_pos.y = row * data.tile_height;
 		break;
 	case MapTypes::MAPTYPE_ISOMETRIC:
-		retVec.x = (column - row) * data.tile_width * 0.5f;
-		retVec.y = (column + row) * data.tile_height * 0.5f;
+		screen_pos.x = (column - row) * data.tile_width * 0.5f;
+		screen_pos.y = (column + row) * data.tile_height * 0.5f;
 		break;
 	default:
 		LOG("ERROR: Map type not identified.");
 		break;
 	}
 
-	return retVec;
+	return screen_pos;
 }
 
-fPoint M_Map::MapToScreenF(float x, float y)
+fPoint M_Map::MapToScreenF(const fPoint & map_pos)
 {
-	fPoint retVec(0.0F, 0.0F);
+	fPoint screen_pos(0.0F, 0.0F);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:
-		retVec.x = x * data.tile_width;
-		retVec.y = y * data.tile_height;
+		screen_pos.x = map_pos.x * data.tile_width;
+		screen_pos.y = map_pos.y * data.tile_height;
 		break;
 	case MapTypes::MAPTYPE_ISOMETRIC:
-		retVec.x = (x - y) * (data.tile_width * 0.5f);
-		retVec.y = (x + y) * (data.tile_height * 0.5f);
+		screen_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f);
+		screen_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f);
 		break;
 	default:
 		LOG("ERROR: Map type not identified.");
 		break;
 	}
 
-	return retVec;
+	return screen_pos;
 }
 
 
