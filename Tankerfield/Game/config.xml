@@ -6631,7 +6631,7 @@
       </animations>
     </tank>
     <basic_bullet>
-      <speed value ="13"/>
+      <speed value ="0.5"/>
       <life value ="1000"/>
       <tex path="textures/objects/bullet.png"/>
       <animations>
