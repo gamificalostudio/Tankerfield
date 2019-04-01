@@ -129,15 +129,15 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
-bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 {
 	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
 	bool ret = true;
 	uint scale = app->win->GetScale();
 
 	SDL_Rect rect;
-	rect.x = (int)(-camera.x * speed) + x * scale;
-	rect.y = (int)(-camera.y * speed) + y * scale;
+	rect.x = (int)(-camera.x * speed) + screen_x * scale;
+	rect.y = (int)(-camera.y * speed) + screen_y * scale;
 
 	if (section != NULL)
 	{
