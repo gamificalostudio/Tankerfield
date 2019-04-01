@@ -1,9 +1,10 @@
 #include "Obj_Bullet.h"
 #include "M_Render.h"
 #include "App.h"
+#include "M_Map.h"
 
 SDL_Texture * Obj_Bullet::tex = nullptr;
-int Obj_Bullet::rects_num = 128;
+int Obj_Bullet::rects_num = 64;
 SDL_Rect * Obj_Bullet::rects = new SDL_Rect[rects_num];
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
@@ -47,9 +48,9 @@ bool Obj_Bullet::PostUpdate()
 		width,
 		height);
 
-
-
-	app->render->Blit(tex, );
+	//fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	//uint ind = GetRotatedIndex(rects_num, );
+	//app->render->Blit(tex, screen_pos.x, screen_pos.y, &rects[]);
 
 	return true;
 }

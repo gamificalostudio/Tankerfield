@@ -35,6 +35,7 @@ public:
 	static SDL_Texture * tex;
 	static int rects_num;
 	static SDL_Rect * rects;
+	float angle = 0.f;
 };
 
 #endif
