@@ -30,8 +30,8 @@ bool Obj_Bullet::Start()
 
 bool Obj_Bullet::Update(float dt)
 {
-	//pos.x += speed * direction.x * dt;
-	//pos.y += speed * direction.y * dt;
+	pos.x += speed * direction.x * dt;
+	pos.y += speed * direction.y * dt;
 
 	return true;
 }
@@ -43,18 +43,22 @@ bool Obj_Bullet::PostUpdate()
 		to_remove = true;
 	}
 
-	float width = 0.5f;
-	float height = 0.5f;
-
-	app->render->DrawIsometricQuad(
-		pos.x - width * 0.5f,
-		pos.y - height * 0.5f,
-		width,
-		height);
+	//Collider reference
+	//float width = 0.5f;
+	//float height = 0.5f;
+	//app->render->DrawIsometricQuad(
+	//	pos.x - width * 0.5f,
+	//	pos.y - height * 0.5f,
+	//	width,
+	//	height);
 
 	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	app->render->Blit(tex, screen_pos.x, screen_pos.y, &rects[ind]);
+	app->render->Blit(
+		tex,
+		screen_pos.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
+		screen_pos.y - 14,
+		&rects[ind]);
 
 	return true;
 }
