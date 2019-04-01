@@ -38,13 +38,9 @@ bool M_Pathfinding::PostUpdate()
 		app->input->GetMousePosition(mousePos.x, mousePos.y);
 		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
 		p = app->map->WorldToMap(p.x , p.y );
-		p = app->map->MapToWorld(p.x, p.y);
-
-		app->render->Blit(path_tex, p.x  , p.y + 16 );
+		
 		if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
 		{
-			
-
 			if (origin_selected == true)
 			{
 
@@ -65,6 +61,34 @@ bool M_Pathfinding::PostUpdate()
 
 			}
 		}
+
+		if (createdDebugPath)
+		{
+			uint debugPathSize = debugPath.size();
+			if (debugPathSize == 0)
+			{
+
+				const std::vector<iPoint>* path = app->pathfinding->GetLastPath();
+				uint sizeArray = path->size();
+				for (uint i = 0; i < sizeArray; ++i)
+				{
+					debugPath.push_back(path->at(i));
+				}
+			}
+			else
+			{
+				for (uint i = 0; i < debugPathSize; ++i)
+				{
+					iPoint pos = app->map->MapToWorld(debugPath.at(i).x, debugPath.at(i).y);
+					app->render->Blit(path_tex, pos.x, pos.y);
+				}
+			}
+
+		}
+
+		p = app->map->MapToWorld(p.x, p.y);
+
+		app->render->Blit(path_tex, p.x, p.y + 16);
 	}
 	
 
