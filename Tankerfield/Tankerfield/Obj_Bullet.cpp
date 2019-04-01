@@ -5,7 +5,7 @@
 
 SDL_Texture * Obj_Bullet::tex = nullptr;
 int Obj_Bullet::rects_num = 64;
-SDL_Rect * Obj_Bullet::rects = new SDL_Rect[rects_num];
+SDL_Rect * Obj_Bullet::rects = nullptr;
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
@@ -19,7 +19,11 @@ Obj_Bullet::~Obj_Bullet()
 bool Obj_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
-	LoadRects(bullet_node.child("animations").child("rotate"), rects);//TODO: Optimize. Rects are loaded every time a bullet is created
+	if (rects == nullptr)
+	{
+		rects = new SDL_Rect[rects_num];
+		LoadRects(bullet_node.child("animations").child("rotate"), rects);
+	}
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
