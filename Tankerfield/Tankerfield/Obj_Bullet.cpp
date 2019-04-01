@@ -19,8 +19,14 @@ Obj_Bullet::~Obj_Bullet()
 bool Obj_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
-	LoadRects(bullet_node.child("animations").child("rotate"), rects);
-	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	if (rects == nullptr)
+	{
+		LoadRects(bullet_node.child("animations").child("rotate"), rects);
+	}
+	if (tex == nullptr)
+	{
+		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	}
 
 	return true;
 }
