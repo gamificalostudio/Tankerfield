@@ -4,6 +4,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "Brofiler/Brofiler.h"
 
 M_Render::M_Render() : Module()
 {
@@ -130,6 +131,7 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 // Blit to screen
 bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 {
+	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
 	bool ret = true;
 	uint scale = app->win->GetScale();
 

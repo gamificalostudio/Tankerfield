@@ -1,9 +1,13 @@
 #include "Brofiler\Brofiler.h"
 
+#include "Log.h"
+
 #include "App.h"
 #include "M_Map.h"
-#include "Log.h"
 #include "M_Window.h"
+#include "M_Collision.h"
+#include "M_Input.h"
+
 
 M_Map::M_Map()
 {
@@ -44,6 +48,15 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
+	
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
+		show_grid = !show_grid;
+
+	return true;
+}
+
+bool M_Map::PostUpdate()
+{
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
 
@@ -66,7 +79,7 @@ bool M_Map::Update(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToWorld(x, y);
-					if (app->render->IsOnCamera(pos.x + data.offset_x,pos.y + data.offset_y, data.tile_width, data.tile_height))
+					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 						if (tileset != nullptr)
@@ -75,13 +88,14 @@ bool M_Map::Update(float dt)
 							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
 						}
 					}
-					
+
 				}
 			}
 		}
 	}
 
 	//// Draw Grid ==============================================
+	if(show_grid)
 	{
 		iPoint point_1, point_2;
 		for (int i = 0; i <= data.columns; ++i)
@@ -98,7 +112,7 @@ bool M_Map::Update(float dt)
 			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -166,24 +180,24 @@ bool M_Map::Load(const std::string& file_name)
 void M_Map::DebugMap() 
 {
 	//LOG("Successfully parsed map XML file: %s", data.loadedLevel);
-	LOG("width: %d height: %d", data.columns, data.rows);
-	LOG("tile_width: %d tile_height: %d", data.tile_width, data.tile_height);
+	LOG("width: %i height: %i", data.columns, data.rows);
+	LOG("tile_width: %i tile_height: %i", data.tile_width, data.tile_height);
 
 	for (std::list<TileSet*>::iterator item = data.tilesets.begin(); item != data.tilesets.end(); ++item)
 	{
 		TileSet* s = (*item);
 		LOG("Tileset ----");
-		LOG("name: %s firstgid: %d", (*s).name, (*s).firstgid);
-		LOG("tile width: %d tile height: %d", s->tile_width, s->tile_height);
-		LOG("spacing: %d margin: %d", s->spacing, s->margin);
+		LOG("name: %s firstgid: %i", (*s).name.data(), (*s).firstgid);
+		LOG("tile width: %i tile height: %i", s->tile_width, s->tile_height);
+		LOG("spacing: %i margin: %i", s->spacing, s->margin);
 	};
 
 	for (std::list<MapLayer*>::iterator item_layer = data.mapLayers.begin(); item_layer != data.mapLayers.end(); ++item_layer)
 	{
 		MapLayer* l = (*item_layer);
 		LOG("Layer ----");
-		LOG("name: %s", l->name);
-		LOG("tile width: %d tile height: %d", l->columns, l->rows);
+		LOG("name: %s", l->name.data());
+		LOG("tile width: %i tile height: %i", l->columns, l->rows);
 	}
 
 }
@@ -209,13 +223,22 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
+		
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
 		int i = 0;
 		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
-			layer->data[i++] = tile.attribute("gid").as_int(0);
+			layer->data[i] = tile.attribute("gid").as_int(0);
+
+			if (layer->name == "Colliders" && layer->data[i] != 0u)
+				{
+					fPoint pos = layer->GetTilePos(i);
+					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+				}
+
+			++i;
 		}
 	}
 
@@ -419,8 +442,8 @@ iPoint M_Map::WorldToMap(int x, int y) const
 
 		float half_width = data.tile_width * 0.5f;
 		float half_height = data.tile_height * 0.5f;
-		ret.x = int((x / half_width + y / half_height) / 2) - 1;
-		ret.y = int((y / half_height - (x / half_width)) / 2);
+		ret.x = int((x / half_width + y / half_height) * 0.5f) - 1;
+		ret.y = int((y / half_height - (x / half_width)) * 0.5f);
 	}
 	else
 	{

@@ -5,7 +5,7 @@
 #include "Obj_Tank.h"
 #include "M_Textures.h"
 #include "M_Render.h"
-
+#include "M_Collision.h"
 #include "M_Input.h"
 #include "Log.h"
 #include "M_Map.h"
@@ -62,6 +62,9 @@ bool Obj_Tank::Start()
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
 	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, BASIC_BULLET);
 
+	coll = app->collision->AddCollider(pos, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
+	coll->SetType(Collider::TYPE::DYNAMIC);
+
 	//TODO: Load them from the XML
 	kb_shoot		= SDL_BUTTON_LEFT;
 	kb_up			= SDL_SCANCODE_W;
@@ -92,6 +95,8 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
+	coll->SetPos(pos.x, pos.y);
+
 	return true;
 }
 
@@ -147,11 +152,11 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::PostUpdate()
 {
-	int tile_width = 100, tile_height = 50;
-  
+
 	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
 
-	//Base
+
+	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		base_tex,
@@ -159,7 +164,7 @@ bool Obj_Tank::PostUpdate()
 		screen_pos.y - draw_offset.y,
 		&base_rects[ind_base]);
 
-	//Turret
+	// Turret =======================================
 	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		turr_tex,
@@ -174,6 +179,7 @@ bool Obj_Tank::PostUpdate()
 	debug_mouse_pos.y += app->render->camera.y;
 	fPoint debug_screen_pos = app->map->MapToWorldF(pos.x, pos.y);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
+
 
 	return true;
 }

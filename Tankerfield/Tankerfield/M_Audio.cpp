@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "App.h"
 #include "M_Audio.h"
+#include "Brofiler/Brofiler.h"
 
 #include "SDL/include/SDL.h"
 #include "SDL_mixer/include/SDL_mixer.h"
@@ -82,6 +83,7 @@ bool M_Audio::CleanUp()
 // Play a music file
 bool M_Audio::PlayMusic(const char* path, float fade_time)
 {
+	BROFILER_CATEGORY("M_AudioPlayMusic", Profiler::Color::Red)
 	bool ret = true;
 
 	if (!active)

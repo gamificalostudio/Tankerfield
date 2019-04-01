@@ -44,9 +44,6 @@
     <ClCompile Include="M_SceneManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="M_UITest.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="M_Map.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -84,20 +81,23 @@
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="M_Collision.cpp">
-      <Filter>Modules</Filter>
+    <ClCompile Include="Bullet_Basic.cpp">
+      <Filter>Modules\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
-      <Filter>Weapons</Filter>
+      <Filter>Modules\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Weapon_Flamethrower.cpp">
-      <Filter>Weapons</Filter>
+      <Filter>Modules\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet_Basic.cpp">
-      <Filter>Objects\Bullets</Filter>
+    <ClCompile Include="Weapon_Flamethrower .cpp">
+      <Filter>Modules\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Collision.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +156,22 @@
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet_Basic.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Bullet.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Flamethrower.h">
+      <Filter>Modules\Objects</Filter>
+    </ClInclude>
     <ClInclude Include="M_Audio.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Collision.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Fonts.h">
@@ -189,29 +204,11 @@
     <ClInclude Include="M_UI.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="M_UITest.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
     <ClInclude Include="M_Window.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Module.h">
       <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_Collision.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Bullet.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon_Flamethrower.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet_Basic.h">
-      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -238,12 +235,6 @@
     </Filter>
     <Filter Include="Objects">
       <UniqueIdentifier>{4792041f-ce51-4387-beaa-caae693b8a61}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Objects\Bullets">
-      <UniqueIdentifier>{50deb3bb-f9e9-4e16-8e78-25f23fb24e3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{444322c1-6d72-42bc-bc5f-8008ccc54cc3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
