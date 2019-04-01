@@ -78,7 +78,7 @@ bool M_Map::PostUpdate()
 				int tile_id = (*layer)->Get(x, y);
 				if (tile_id > 0)
 				{
-					iPoint pos = MapToWorld(x, y);
+					iPoint pos = MapToScreenI(x, y);
 					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
@@ -100,15 +100,15 @@ bool M_Map::PostUpdate()
 		iPoint point_1, point_2;
 		for (int i = 0; i <= data.columns; ++i)
 		{
-			point_1 = MapToWorld(i, 0);
-			point_2 = MapToWorld(i, data.rows);
+			point_1 = MapToScreenI(i, 0);
+			point_2 = MapToScreenI(i, data.rows);
 			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
 		}
 
 		for (int i = 0; i <= data.rows; ++i)
 		{
-			point_1 = MapToWorld(0, i);
-			point_2 = MapToWorld(data.columns, i);
+			point_1 = MapToScreenI(0, i);
+			point_2 = MapToScreenI(data.columns, i);
 			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
 		}
 	}
@@ -387,7 +387,7 @@ TileSet* M_Map::GetTilesetFromTileId(int id) const
 	return (*item);
 }
 
-iPoint M_Map::MapToWorld(int column, int row) const
+iPoint M_Map::MapToScreenI(int column, int row) const
 {
 	iPoint retVec(0, 0);
 	switch (data.type) {
@@ -407,7 +407,7 @@ iPoint M_Map::MapToWorld(int column, int row) const
 	return retVec;
 }
 
-fPoint M_Map::MapToWorldF(float x, float y)
+fPoint M_Map::MapToScreenF(float x, float y)
 {
 	fPoint retVec(0.0F, 0.0F);
 	switch (data.type) {
@@ -428,7 +428,7 @@ fPoint M_Map::MapToWorldF(float x, float y)
 }
 
 
-iPoint M_Map::WorldToMap(int x, int y) const
+iPoint M_Map::ScreenToMapI(int x, int y) const
 {
 	iPoint ret(0, 0);
 
@@ -453,7 +453,7 @@ iPoint M_Map::WorldToMap(int x, int y) const
 	return ret;
 }
 
-fPoint M_Map::WorldToMapF(float x, float y)
+fPoint M_Map::ScreenToMapF(float x, float y)
 {
 	fPoint ret(0, 0);
 

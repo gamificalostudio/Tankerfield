@@ -30,8 +30,8 @@ bool Obj_Bullet::Start()
 
 bool Obj_Bullet::Update(float dt)
 {
-	pos.x += speed * direction.x * dt;
-	pos.y += speed * direction.y * dt;
+	pos_map.x += speed * direction.x * dt;
+	pos_map.y += speed * direction.y * dt;
 
 	return true;
 }
@@ -47,12 +47,12 @@ bool Obj_Bullet::PostUpdate()
 	float height = 0.5f;
 
 	app->render->DrawIsometricQuad(
-		pos.x - width * 0.5f,
-		pos.y - height * 0.5f,
+		pos_map.x - width * 0.5f,
+		pos_map.y - height * 0.5f,
 		width,
 		height);
 
-	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map.x, pos_map.y);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	SDL_Rect * rect = &rects[ind];
 	app->render->Blit(tex, screen_pos.x - rect->w * 0.5f, screen_pos.y - rect->h * 0.5f, rect);
