@@ -122,8 +122,8 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 	iPoint ret;
 	int scale = app->win->GetScale();
 
-	ret.x = (x - camera.x / scale);
-	ret.y = (y - camera.y / scale);
+	ret.x = (x + camera.x / scale);
+	ret.y = (y + camera.y / scale);
 
 	return ret;
 }

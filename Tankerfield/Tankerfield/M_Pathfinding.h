@@ -10,17 +10,24 @@
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
+struct SDL_Texture;
+
 class M_Pathfinding : public Module
 {
 public:
-
+	
 	M_Pathfinding();
 
 	// Destructor
 	~M_Pathfinding();
 
+	bool Start() override;
+
+	//Here were going to DebugPathfinding
+	bool PostUpdate() override;
+
 	// Called before quitting
-	bool CleanUp();
+	bool CleanUp() override;
 
 	// Sets up the walkability map
 	void SetMap(uint width, uint height, uchar* data);
@@ -49,6 +56,14 @@ private:
 	uchar* map;
 	// we store the created path here
 	std::vector<iPoint> last_path;
+
+
+	std::vector<iPoint> debugPath;
+	bool test_path = true;
+	SDL_Texture* path_tex = nullptr;
+
+
+
 };
 
 // forward declaration

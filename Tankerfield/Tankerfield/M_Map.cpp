@@ -48,17 +48,12 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
-	
+	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	bool ret = true;
+
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
 		show_grid = !show_grid;
 
-	return true;
-}
-
-bool M_Map::PostUpdate()
-{
-	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
-	bool ret = true;
 
 	if (map_loaded == false)
 		return ret;
@@ -235,6 +230,7 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			if (layer->name == "Colliders" && layer->data[i] != 0u)
 				{
 					fPoint pos = layer->GetTilePos(i);
+
 					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
 				}
 

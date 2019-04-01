@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="isometric" renderorder="left-down" width="40" height="40" tilewidth="60" tileheight="30" infinite="0" nextlayerid="8" nextobjectid="1">
+<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="left-down" width="40" height="40" tilewidth="60" tileheight="30" infinite="0" nextobjectid="1">
  <properties>
   <property name="offset_x" type="int" value="-30"/>
   <property name="offset_y" type="int" value="0"/>
@@ -10,7 +10,7 @@
  <tileset firstgid="185" name="Meta" tilewidth="60" tileheight="30" tilecount="1" columns="1">
   <image source="Meta.png" width="60" height="30"/>
  </tileset>
- <layer id="6" name="Capa de Patrones 1" width="40" height="40">
+ <layer name="Capa de Patrones 1" width="40" height="40">
   <data>
    <tile gid="10"/>
    <tile gid="10"/>
@@ -1614,7 +1614,7 @@
    <tile gid="1"/>
   </data>
  </layer>
- <layer id="7" name="Colliders" width="40" height="40">
+ <layer name="Colliders" width="40" height="40" visible="0">
   <data>
    <tile/>
    <tile/>

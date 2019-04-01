@@ -3,7 +3,10 @@
 #include "Log.h"
 #include "App.h"
 #include "M_Pathfinding.h"
-
+#include "M_input.h"
+#include "M_render.h"
+#include "M_Textures.h"
+#include "M_map.h"
 
 M_Pathfinding::M_Pathfinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
@@ -14,6 +17,58 @@ M_Pathfinding::M_Pathfinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LEN
 M_Pathfinding::~M_Pathfinding()
 {
 	RELEASE_ARRAY(map);
+}
+
+bool M_Pathfinding::Start()
+{
+	path_tex = app->tex->Load("maps/path.png");
+
+	return true;
+}
+
+bool M_Pathfinding::PostUpdate()
+{
+	if (test_path)
+	{
+		static iPoint origin;
+		static bool origin_selected = false;
+		static bool createdDebugPath = false;
+
+		iPoint mousePos;
+		app->input->GetMousePosition(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		p = app->map->WorldToMap(p.x , p.y );
+		p = app->map->MapToWorld(p.x, p.y);
+
+		app->render->Blit(path_tex, p.x  , p.y + 16 );
+		if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+		{
+			
+
+			if (origin_selected == true)
+			{
+
+				origin_selected = false;
+
+				if (CreatePath(origin, p) != -1)
+				{
+					createdDebugPath = true;
+				}
+
+			}
+			else
+			{
+				origin = p;
+				origin_selected = true;
+				createdDebugPath = false;
+				debugPath.clear();
+
+			}
+		}
+	}
+	
+
+	return true;
 }
 
 // Called before quitting

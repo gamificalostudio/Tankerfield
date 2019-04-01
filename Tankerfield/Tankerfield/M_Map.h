@@ -194,11 +194,9 @@ public:
 
 	~M_Map();
 
-	bool Awake(pugi::xml_node&);
+	bool Awake(pugi::xml_node&) override;
 
-	bool Update(float dt);
-
-	bool PostUpdate();
+	bool Update(float dt) override;
 
 	bool Load(const std::string & file_name);
 
@@ -222,7 +220,7 @@ public:
 private:
 
 	bool					map_loaded;
-	bool					show_grid = true;
+	bool					show_grid = false;
 	std::string				folder;
 	uint					numLevels = 0; // counter for num levels
 	pugi::xml_document		map_file;
