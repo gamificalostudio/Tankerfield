@@ -65,6 +65,9 @@ bool Obj_Tank::Start()
 	coll = app->collision->AddCollider(pos, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
 	coll->SetType(Collider::TYPE::DYNAMIC);
 
+	cannon_height = 11.f;
+	cannon_length = 1.f;
+
 	//TODO: Load them from the XML
 	kb_shoot		= SDL_BUTTON_LEFT;
 	kb_up			= SDL_SCANCODE_W;
@@ -76,7 +79,7 @@ bool Obj_Tank::Start()
 	gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 
 	draw_offset.x = 46;
-	draw_offset.y = 36;
+	draw_offset.y = 46;
 
 	return true;
 }
@@ -123,8 +126,9 @@ void Obj_Tank::Movement(float dt)
 	pos += iso_dir * speed * dt;
 
 	//Set collider position
-	//fPoint col_offset = app->map->WorldToMapF();
-	coll->SetPos(pos);
+	float width, height;
+	coll->GetSize(width, height);
+	coll->SetPos({ pos.x - width * 0.5f, pos.y - height * 0.5f });
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -179,8 +183,9 @@ bool Obj_Tank::PostUpdate()
 	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 	debug_mouse_pos.x += app->render->camera.x;
 	debug_mouse_pos.y += app->render->camera.y;
-	fPoint debug_screen_pos = app->map->MapToWorldF(pos.x, pos.y);
-	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
+	fPoint shot_pos(pos - app->map->WorldToMapF(0.f, cannon_height));
+	fPoint debug_screen_pos = app->map->MapToWorldF(shot_pos.x, shot_pos.y);
+	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 0, 255, 0);
 
 
 	return true;
@@ -191,7 +196,7 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
+void Obj_Tank::InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir)
 {
 	iPoint mouse_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
@@ -201,17 +206,17 @@ void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 	mouse_pos.y += app->render->camera.y;
 
 	int tile_width = 100, tile_height = 50;
-	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	fPoint screen_pos = app->map->MapToWorldF(shot_pos.x, shot_pos.y);
 	input_dir = (fPoint)mouse_pos - screen_pos;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
 	fPoint map_mouse_pos = app->map->WorldToMapF(mouse_pos.x,mouse_pos.y);
 
-	iso_dir = map_mouse_pos - pos;
+	iso_dir = map_mouse_pos - shot_pos;
 	iso_dir.Normalize();
 }
 
-void Obj_Tank::InputShotController(fPoint & input_dir, fPoint & iso_dir)
+void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir)
 {
 	if (controller != nullptr)
 	{
@@ -224,16 +229,19 @@ void Obj_Tank::InputShotController(fPoint & input_dir, fPoint & iso_dir)
 
 void Obj_Tank::Shoot()
 {
-	//1. Get the direction
+	//fPoint Obj_Tank::pos is on the center of the base
+	//fPoint shot_pos is on the cetner of the turret (considers the cannon_height)
+	fPoint shot_pos(pos - app->map->WorldToMapF(0, cannon_height));
+
 	fPoint input_dir(0.f, 0.f);
 	fPoint iso_dir;
 	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputShotMouse(input_dir, iso_dir);
+		InputShotMouse(shot_pos, input_dir, iso_dir);
 	}
 	else if (last_input == INPUT_METHOD::CONTROLLER)
 	{
-		InputShotController(input_dir, iso_dir);
+		InputShotController(shot_pos, input_dir, iso_dir);
 	}
 
 	if (!input_dir.IsZero())
@@ -244,7 +252,7 @@ void Obj_Tank::Shoot()
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(pos, shot_dir, turr_angle);
+		weapons[weapon_type]->Shoot(shot_pos, shot_dir, turr_angle);
 		time_between_bullets_timer.Start();
 	}
 }

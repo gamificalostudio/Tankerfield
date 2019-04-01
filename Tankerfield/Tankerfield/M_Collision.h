@@ -68,6 +68,11 @@ public:
 		type = new_type;
 	}
 
+	void GetSize(float & w, float & h) {
+		w = width;
+		h = height;
+	}
+
 	bool CheckCollision(Collider*  coll) const;
 
 private:
