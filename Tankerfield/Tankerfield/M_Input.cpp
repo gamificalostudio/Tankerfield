@@ -217,7 +217,7 @@ iPoint M_Input::GetMousePos_Tiles()
 {
 	iPoint ret;
 	ret = app->render->ScreenToWorld(mouse_x, mouse_y);
-	ret = app->map->WorldToMap(ret.x, ret.y);
+	ret = app->map->ScreenToMapI(ret.x, ret.y);
 
 	return ret;
 }

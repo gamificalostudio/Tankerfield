@@ -79,18 +79,6 @@
     <ClCompile Include="Log.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet_Basic.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Bullet.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Flamethrower.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="M_Collision.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -99,6 +87,18 @@
     </ClCompile>
     <ClCompile Include="App.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet_Basic.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Bullet.cpp">
+      <Filter>Objects\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,18 +156,6 @@
     <ClInclude Include="Point.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet_Basic.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Bullet.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon_Flamethrower.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="M_Audio.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -213,6 +201,18 @@
     <ClInclude Include="App.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Weapon_Flamethrower.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Basic.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Bullet.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -238,6 +238,12 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{e04ab093-71bc-428e-bbd0-6a9ad67abeb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{82e0d428-2283-4035-94a8-f385e7ef9a4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Bullets">
+      <UniqueIdentifier>{7fdb053f-2696-4225-9b31-203b4b8cbd8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

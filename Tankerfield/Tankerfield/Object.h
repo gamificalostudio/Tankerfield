@@ -48,7 +48,7 @@ public:
 public:
 
 	int type = 0;
-	fPoint pos			= { 0.f, 0.f };
+	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
 	bool to_remove = false;//Set it to true if you want the object to be removed
