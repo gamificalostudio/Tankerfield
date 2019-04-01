@@ -58,9 +58,9 @@ public:
 		callback(callback)
 	{}
 
-	void SetPos(const float x,const  float y)
+	void SetPos(const fPoint pos)
 	{
-		position = { x, y };
+		position = pos;
 	}
 
 	void SetType(const Collider::TYPE new_type)

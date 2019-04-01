@@ -124,7 +124,7 @@ void Obj_Tank::Movement(float dt)
 
 	//Set collider position
 	//fPoint col_offset = app->map->WorldToMapF();
-	coll->SetPos(pos.x, pos.y);
+	coll->SetPos(pos);
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)

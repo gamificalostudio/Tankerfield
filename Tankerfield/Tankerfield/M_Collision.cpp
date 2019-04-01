@@ -253,7 +253,7 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 		break;
 	}
 
-	dynamic_col->SetPos(dynamic_col->object->pos.x, dynamic_col->object->pos.y);
+	dynamic_col->SetPos(dynamic_col->object->pos);
 }
 
 
@@ -301,7 +301,7 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 	}
 
 
-	c1->SetPos(c1->object->pos.x, c1->object->pos.y);
-	c2->SetPos(c2->object->pos.x, c2->object->pos.y);
+	c1->SetPos(c1->object->pos);
+	c2->SetPos(c2->object->pos);
 }
 
