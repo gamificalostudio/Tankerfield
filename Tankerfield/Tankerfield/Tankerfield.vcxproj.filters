@@ -6,7 +6,7 @@
       <Filter>Tools\pugixml</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Tank.cpp">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="M_Audio.cpp">
       <Filter>Modules</Filter>
@@ -36,7 +36,7 @@
       <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="M_ObjManager.cpp">
       <Filter>Modules</Filter>
@@ -49,28 +49,28 @@
     </ClCompile>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Obj_TeslaTrooper.cpp">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="UI_Button.cpp">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_Checkbox.cpp">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_Image.cpp">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_Label.cpp">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_Slider.cpp">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_TextPanel.cpp">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_Element.cpp">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="PerfTimer.cpp">
       <Filter>Tools\Timers</Filter>
@@ -85,7 +85,7 @@
       <Filter>Modules\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Bullet.cpp">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
       <Filter>Modules\Objects</Filter>
@@ -111,35 +111,35 @@
       <Filter>Tools\pugixml</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Tank.h">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="App.h" />
     <ClInclude Include="Obj_TeslaTrooper.h">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="UI_Button.h">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="UI_Checkbox.h">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="UI_Image.h">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="UI_Label.h">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="UI_Slider.h">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="UI_TextPanel.h">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="UI_Element.h">
-      <Filter>Modules\UI</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="PerfTimer.h">
       <Filter>Tools\Timers</Filter>
@@ -230,10 +230,10 @@
     <Filter Include="Modules">
       <UniqueIdentifier>{c2bdac2d-285b-47c9-b0c3-1e66b630c4f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Modules\UI">
-      <UniqueIdentifier>{444322c1-6d72-42bc-bc5f-8008ccc54cc3}</UniqueIdentifier>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{1fe55f70-340e-4b97-b811-5da11e060649}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Modules\Objects">
+    <Filter Include="Objects">
       <UniqueIdentifier>{4792041f-ce51-4387-beaa-caae693b8a61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

@@ -13,6 +13,7 @@ class M_Scene : public Module
 private:
 	Controller** control1 = nullptr;
 	Obj_Tank * tank_1 = nullptr;
+	Obj_Tank * tank_2 = nullptr;
 
 public:
 	int current_level = 0;
