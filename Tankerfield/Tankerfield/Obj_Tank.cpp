@@ -123,7 +123,8 @@ void Obj_Tank::Movement(float dt)
 		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
 	}
 
-	pos += iso_dir * speed * dt;
+	velocity = iso_dir * speed * dt;                                                               
+	pos += velocity;
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
