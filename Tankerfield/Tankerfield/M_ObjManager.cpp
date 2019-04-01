@@ -45,14 +45,7 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); iterator++)
-	{
-		if ((*iterator) != nullptr)
-		{
-			(*iterator)->Start();
-		}
-	}
+	//Object start is executed when the object is created
 	return ret;
 }
 
@@ -158,6 +151,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
   
 	if (ret != nullptr)
 	{
+		ret->Start();
 		objects.push_back(ret);
 	}
   
