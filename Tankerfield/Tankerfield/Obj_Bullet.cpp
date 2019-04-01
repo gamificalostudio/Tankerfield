@@ -30,8 +30,8 @@ bool Obj_Bullet::Start()
 
 bool Obj_Bullet::Update(float dt)
 {
-	pos.x += speed * direction.x * dt;
-	pos.y += speed * direction.y * dt;
+	//pos.x += speed * direction.x * dt;
+	//pos.y += speed * direction.y * dt;
 
 	return true;
 }

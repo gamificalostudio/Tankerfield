@@ -252,7 +252,7 @@ void Obj_Tank::Shoot()
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(shot_pos, shot_dir, turr_angle);
+		weapons[weapon_type]->Shoot(shot_pos + shot_dir * cannon_length, shot_dir, turr_angle);
 		time_between_bullets_timer.Start();
 	}
 }

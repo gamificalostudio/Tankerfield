@@ -25,7 +25,7 @@ Weapon::~Weapon()
 {
 }
 
-void Weapon::Shoot(fPoint & pos, fPoint & dir, float angle)
+void Weapon::Shoot(const fPoint & pos, fPoint & dir, float angle)
 {
 	bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type, pos);
 	bullet->direction = dir;
