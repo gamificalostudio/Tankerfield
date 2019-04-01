@@ -13,7 +13,6 @@
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
 
-
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
@@ -61,7 +60,7 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 50, 300, 100, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, BASIC_BULLET);
 
 	coll = app->collision->AddCollider(pos, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
 	coll->SetType(Collider::TYPE::DYNAMIC);
@@ -244,7 +243,7 @@ void Obj_Tank::Shoot()
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(pos, shot_dir);
+		weapons[weapon_type]->Shoot(pos, shot_dir, turr_angle);
 		time_between_bullets_timer.Start();
 	}
 }
