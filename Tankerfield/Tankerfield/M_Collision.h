@@ -10,9 +10,20 @@
 class Object;
 class M_Collision;
 
+
+
 class Collider
 {
 public:
+	
+	enum class TYPE
+	{
+		NONE,
+		DYNAMIC,
+		STATIC,
+		SENSOR
+	};
+
 	enum class ON_TRIGGER_STATE
 	{
 		NONE,
@@ -39,14 +50,6 @@ public:
 		UP,
 		DOWN,
 		MAX
-	};
-
-	enum class TYPE
-	{
-		NONE,
-		DYNAMIC,
-		STATIC,
-		SENSOR
 	};
 
 	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,Module* callback = nullptr) :
@@ -87,6 +90,8 @@ private:
 	Module* callback = nullptr;
 
 	Object * object = nullptr;
+
+	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
 	friend M_Collision;
 };

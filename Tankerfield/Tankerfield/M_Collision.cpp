@@ -217,17 +217,24 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
 	// Calculate between colliders overlap ============================================
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
-	distances[(int)Collider::OVERLAP_DIR::RIGHT] = dynamic_col->position.x + dynamic_col->width - static_col->position.x;
-	distances[(int)Collider::OVERLAP_DIR::LEFT] = static_col->position.x + static_col->width - dynamic_col->position.x;
-	distances[(int)Collider::OVERLAP_DIR::UP] = dynamic_col->position.y + dynamic_col->height - static_col->position.y;
-	distances[(int)Collider::OVERLAP_DIR::DOWN] = static_col->position.y + static_col->height - dynamic_col->position.y;
+	distances[(int)Collider::OVERLAP_DIR::LEFT]		= dynamic_col->position.x + dynamic_col->width - static_col->position.x;
+	distances[(int)Collider::OVERLAP_DIR::RIGHT]	= static_col->position.x + static_col->width - dynamic_col->position.x;
+	distances[(int)Collider::OVERLAP_DIR::UP]		= dynamic_col->position.y + dynamic_col->height - static_col->position.y;
+	distances[(int)Collider::OVERLAP_DIR::DOWN]		= static_col->position.y + static_col->height - dynamic_col->position.y;
 
 	int overlap_dir = -1;
 
-	for (uint i = 0; i < (int)Collider::OVERLAP_DIR::MAX; ++i)
+	for (int i = 0; i < (int)Collider::OVERLAP_DIR::MAX; ++i)
 	{
 			if (overlap_dir == -1)
 				overlap_dir = i;
+			else if (distances[i] == distances[(int)overlap_dir])
+			{
+				if ((Collider::OVERLAP_DIR)i == dynamic_col->last_overlap)
+				{
+					overlap_dir = i;
+				}
+			}
 			else if (distances[i] < distances[(int)overlap_dir])
 				overlap_dir = i;
 	}
@@ -235,31 +242,28 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
-	case Collider::OVERLAP_DIR::RIGHT:
-		dynamic_col->object->pos.x = static_col->position.x - dynamic_col->width;
-		LOG("RIGHT");
-		break;
 	case Collider::OVERLAP_DIR::LEFT:
+		dynamic_col->object->pos.x = static_col->position.x - dynamic_col->width;
+		break;
+	case Collider::OVERLAP_DIR::RIGHT:
 		dynamic_col->object->pos.x = static_col->position.x + static_col->width;
-		LOG("LEFT");
 		break;
 	case Collider::OVERLAP_DIR::UP:
 		dynamic_col->object->pos.y = static_col->position.y - dynamic_col->height;
-		LOG("UP");
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
 		dynamic_col->object->pos.y = static_col->position.y + static_col->height;
-		LOG("DOWN");
 		break;
 	}
 
+	dynamic_col->last_overlap = (Collider::OVERLAP_DIR)overlap_dir;
 	dynamic_col->SetPos(dynamic_col->object->pos.x, dynamic_col->object->pos.y);
 }
 
 
 void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 {
-	// Calculate between colliders overlap ============================================
+	// Calculate between colliders overlap (c1 reference collider) ========================
 
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
 	distances[(int)Collider::OVERLAP_DIR::RIGHT] = c1->position.x + c1->width - c2->position.x;
