@@ -46,7 +46,7 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	return ret;
+	return true;
 }
 
 bool M_ObjManager::PreUpdate()
