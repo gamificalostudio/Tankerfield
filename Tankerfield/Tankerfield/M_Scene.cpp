@@ -39,7 +39,7 @@ bool M_Scene::Start()
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
-	app->collision->AddCollider({ 2.f, 2.f }, 1.f, 1.f, Collider::TAG::WALL, this);
+	
 	
 
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
@@ -53,6 +53,17 @@ bool M_Scene::PreUpdate()
 	{
 		control1 = &(*app->input->controllers.begin());
 	}
+
+	if(app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+	{
+		++current_level;
+
+		if (current_level == app->map->GetMaxLevels())
+			current_level = 0;
+
+		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
+	}
+
 	return true;
 }
 
@@ -95,7 +106,7 @@ bool M_Scene::PostUpdate()
 bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
-
+	app->objectmanager->DeleteObjects();
 
 
 	return true;

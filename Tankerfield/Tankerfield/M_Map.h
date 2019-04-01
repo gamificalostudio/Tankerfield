@@ -210,7 +210,7 @@ public:
 
 	TileSet* GetTilesetFromTileId(int id) const;
 
-
+	uint GetMaxLevels() const;
 
 public:
 
@@ -218,11 +218,10 @@ public:
 	std::list<Levels*>		levels;
 
 private:
-
-	bool					map_loaded;
-	bool					show_grid = false;
+	bool					map_loaded = false;
+	bool					show_grid  = false;
 	std::string				folder;
-	uint					numLevels = 0; // counter for num levels
+	uint					num_levels  = 0u; // counter for num levels
 	pugi::xml_document		map_file;
 
 	bool LoadMap();
