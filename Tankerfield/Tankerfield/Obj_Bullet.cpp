@@ -54,8 +54,7 @@ bool Obj_Bullet::PostUpdate()
 
 	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	SDL_Rect * rect = &rects[ind];
-	app->render->Blit(tex, screen_pos.x - rect->w * 0.5f, screen_pos.y - rect->h * 0.5f, rect);
+	app->render->Blit(tex, screen_pos.x, screen_pos.y, &rects[ind]);
 
 	return true;
 }

@@ -95,8 +95,6 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
-	coll->SetPos(pos.x, pos.y);
-
 	return true;
 }
 
@@ -123,6 +121,10 @@ void Obj_Tank::Movement(float dt)
 	}
 
 	pos += iso_dir * speed * dt;
+
+	//Set collider position
+	//fPoint col_offset = app->map->WorldToMapF();
+	coll->SetPos(pos.x, pos.y);
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
