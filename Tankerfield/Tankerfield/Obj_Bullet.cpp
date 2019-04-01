@@ -1,6 +1,11 @@
 #include "Obj_Bullet.h"
 #include "M_Render.h"
 #include "App.h"
+#include "M_Map.h"
+
+SDL_Texture * Obj_Bullet::tex = nullptr;
+int Obj_Bullet::rects_num = 64;
+SDL_Rect * Obj_Bullet::rects = new SDL_Rect[rects_num];
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
@@ -9,6 +14,18 @@ Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 
 Obj_Bullet::~Obj_Bullet()
 {
+}
+
+bool Obj_Bullet::Start()
+{
+	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
+	LoadRects(bullet_node.child("animations").child("rotate"), rects);//TODO: Optimize. Rects are loaded every time a bullet is created
+	if (tex == nullptr)
+	{
+		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	}
+
+	return true;
 }
 
 bool Obj_Bullet::Update(float dt)
@@ -34,6 +51,11 @@ bool Obj_Bullet::PostUpdate()
 		pos.y - height * 0.5f,
 		width,
 		height);
+
+	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
+	SDL_Rect * rect = &rects[ind];
+	app->render->Blit(tex, screen_pos.x - rect->w * 0.5f, screen_pos.y - rect->h * 0.5f, rect);
 
 	return true;
 }

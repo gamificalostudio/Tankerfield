@@ -41,19 +41,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_0.png>
           <shk_1.png>
             <frame>
@@ -62,19 +49,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_1.png>
           <shk_2.png>
             <frame>
@@ -83,19 +57,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_2.png>
           <shk_3.png>
             <frame>
@@ -5900,19 +5861,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_279.png>
           <shk_280.png>
             <frame>
@@ -5921,19 +5869,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_280.png>
           <shk_281.png>
             <frame>
@@ -5942,19 +5877,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_281.png>
           <shk_282.png>
             <frame>
@@ -5963,19 +5885,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_282.png>
           <shk_283.png>
             <frame>
@@ -5984,19 +5893,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_283.png>
           <shk_284.png>
             <frame>
@@ -6005,19 +5901,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_284.png>
           <shk_285.png>
             <frame>
@@ -6026,19 +5909,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_285.png>
           <shk_286.png>
             <frame>
@@ -6047,19 +5917,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_286.png>
           <shk_287.png>
             <frame>
@@ -6068,19 +5925,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_287.png>
           <shk_288.png>
             <frame>
@@ -6089,19 +5933,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_288.png>
           <shk_289.png>
             <frame>
@@ -6110,19 +5941,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_289.png>
           <shk_290.png>
             <frame>
@@ -6131,19 +5949,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_290.png>
           <shk_291.png>
             <frame>
@@ -6152,19 +5957,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_291.png>
           <shk_292.png>
             <frame>
@@ -6173,19 +5965,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_292.png>
           <shk_293.png>
             <frame>
@@ -6194,19 +5973,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_293.png>
           <shk_294.png>
             <frame>
@@ -6215,19 +5981,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_294.png>
           <shk_295.png>
             <frame>
@@ -6236,19 +5989,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_295.png>
           <shk_296.png>
             <frame>
@@ -6257,19 +5997,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_296.png>
           <shk_297.png>
             <frame>
@@ -6278,19 +6005,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_297.png>
           <shk_298.png>
             <frame>
@@ -6299,19 +6013,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_298.png>
           <shk_299.png>
             <frame>
@@ -6320,19 +6021,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_299.png>
           <shk_300.png>
             <frame>
@@ -6341,19 +6029,6 @@
               <w>66</w>
               <h>76</h>
             </frame>
-            <rotated>false</rotated>
-            <trimmed>false</trimmed>
-            <spriteSourceSize>
-              <x>0</x>
-              <y>0</y>
-              <w>66</w>
-              <h>76</h>
-            </spriteSourceSize>
-            <sourceSize>
-              <w>66</w>
-              <h>76</h>
-            </sourceSize>
-            <duration>100</duration>
           </shk_300.png>
         </frames>
       </tesla_trooper>
@@ -6631,8 +6306,77 @@
       </animations>
     </tank>
     <basic_bullet>
-      <speed value ="13"/>
+      <speed value ="0.5"/>
       <life value ="1000"/>
+      <tex path="textures/objects/bullet.png"/>
+      <animations>
+        <rotate>
+          <frame x="0"   y="0"   w="67" h="42"/>
+          <frame x="67"  y="0"   w="67" h="42"/>
+          <frame x="134" y="0"   w="67" h="42"/>
+          <frame x="201" y="0"   w="67" h="42"/>
+          <frame x="268" y="0"   w="67" h="42"/>
+          <frame x="335" y="0"   w="67" h="42"/>
+          <frame x="402" y="0"   w="67" h="42"/>
+          <frame x="0"   y="42"  w="67" h="42"/>
+          <frame x="67"  y="42"  w="67" h="42"/>
+          <frame x="134" y="42"  w="67" h="42"/>
+          <frame x="201" y="42"  w="67" h="42"/>
+          <frame x="268" y="42"  w="67" h="42"/>
+          <frame x="335" y="42"  w="67" h="42"/>
+          <frame x="402" y="42"  w="67" h="42"/>
+          <frame x="0"   y="84"  w="67" h="42"/>
+          <frame x="67"  y="84"  w="67" h="42"/>
+          <frame x="134" y="84"  w="67" h="42"/>
+          <frame x="201" y="84"  w="67" h="42"/>
+          <frame x="268" y="84"  w="67" h="42"/>
+          <frame x="335" y="84"  w="67" h="42"/>
+          <frame x="402" y="84"  w="67" h="42"/>
+          <frame x="0"   y="126" w="67" h="42"/>
+          <frame x="67"  y="126" w="67" h="42"/>
+          <frame x="134" y="126" w="67" h="42"/>
+          <frame x="201" y="126" w="67" h="42"/>
+          <frame x="268" y="126" w="67" h="42"/>
+          <frame x="335" y="126" w="67" h="42"/>
+          <frame x="402" y="126" w="67" h="42"/>
+          <frame x="0"   y="168" w="67" h="42"/>
+          <frame x="67"  y="168" w="67" h="42"/>
+          <frame x="134" y="168" w="67" h="42"/>
+          <frame x="201" y="168" w="67" h="42"/>
+          <frame x="268" y="168" w="67" h="42"/>
+          <frame x="335" y="168" w="67" h="42"/>
+          <frame x="402" y="168" w="67" h="42"/>
+          <frame x="0"   y="210" w="67" h="42"/>
+          <frame x="67"  y="210" w="67" h="42"/>
+          <frame x="134" y="210" w="67" h="42"/>
+          <frame x="201" y="210" w="67" h="42"/>
+          <frame x="268" y="210" w="67" h="42"/>
+          <frame x="335" y="210" w="67" h="42"/>
+          <frame x="402" y="210" w="67" h="42"/>
+          <frame x="0"   y="252" w="67" h="42"/>
+          <frame x="67"  y="252" w="67" h="42"/>
+          <frame x="134" y="252" w="67" h="42"/>
+          <frame x="201" y="252" w="67" h="42"/>
+          <frame x="268" y="252" w="67" h="42"/>
+          <frame x="335" y="252" w="67" h="42"/>
+          <frame x="402" y="252" w="67" h="42"/>
+          <frame x="0"   y="294" w="67" h="42"/>
+          <frame x="67"  y="294" w="67" h="42"/>
+          <frame x="134" y="294" w="67" h="42"/>
+          <frame x="201" y="294" w="67" h="42"/>
+          <frame x="268" y="294" w="67" h="42"/>
+          <frame x="335" y="294" w="67" h="42"/>
+          <frame x="402" y="294" w="67" h="42"/>
+          <frame x="0"   y="336" w="67" h="42"/>
+          <frame x="67"  y="336" w="67" h="42"/>
+          <frame x="134" y="336" w="67" h="42"/>
+          <frame x="201" y="336" w="67" h="42"/>
+          <frame x="268" y="336" w="67" h="42"/>
+          <frame x="335" y="336" w="67" h="42"/>
+          <frame x="402" y="336" w="67" h="42"/>
+          <frame x="0"   y="378" w="67" h="42"/>
+        </rotate>
+      </animations>
     </basic_bullet>
   </object>
 

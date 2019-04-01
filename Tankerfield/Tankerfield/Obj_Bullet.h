@@ -4,6 +4,7 @@
 #include "Object.h"
 
 class PerfTimer;
+struct SDL_Texture;
 
 class Obj_Bullet : public Object
 {
@@ -13,6 +14,7 @@ public:
 
 	//No need to rewrite them if they do the same
 
+	bool Start();
 	bool Update(float dt);
 	virtual bool PostUpdate();
 	//OnCollision{
@@ -30,6 +32,10 @@ public:
 	float time_between_bullets = 0.f;
 	//SFX impact_sound
 	//Particle impact_particle
+	static SDL_Texture * tex;
+	static int rects_num;
+	static SDL_Rect * rects;
+	float angle = 0.f;
 };
 
 #endif
