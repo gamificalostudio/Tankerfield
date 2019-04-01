@@ -20,6 +20,7 @@ bool Obj_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
 	LoadRects(bullet_node.child("animations").child("rotate"), rects);
+	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 
 	return true;
 }
@@ -48,9 +49,9 @@ bool Obj_Bullet::PostUpdate()
 		width,
 		height);
 
-	//fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
-	//uint ind = GetRotatedIndex(rects_num, );
-	//app->render->Blit(tex, screen_pos.x, screen_pos.y, &rects[]);
+	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 135);
+	app->render->Blit(tex, screen_pos.x, screen_pos.y, &rects[ind]);
 
 	return true;
 }
