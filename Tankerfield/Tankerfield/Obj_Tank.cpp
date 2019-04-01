@@ -29,11 +29,7 @@ Obj_Tank::Obj_Tank() : Object()
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 {
-	if (coll != nullptr)
-	{
-		app->collision->DeleteCollider(coll);
-		coll = nullptr;
-	}
+
 }
 
 Obj_Tank::~Obj_Tank()
@@ -100,8 +96,7 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
-	if(coll!=nullptr)
-		coll->SetPos(pos.x, pos.y);
+	coll->SetPos(pos.x, pos.y);
 
 	return true;
 }
@@ -192,11 +187,6 @@ bool Obj_Tank::PostUpdate()
 
 bool Obj_Tank::CleanUp()
 {
-	if (coll != nullptr)
-	{
-		app->collision->DeleteCollider(coll);
-		coll = nullptr;
-	}
 	return true;
 }
 

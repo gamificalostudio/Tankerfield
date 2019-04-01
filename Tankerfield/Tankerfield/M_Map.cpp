@@ -39,7 +39,7 @@ bool M_Map::Awake(pugi::xml_node& config)
 		{
 			Levels* newLevel = new Levels();
 			newLevel->name = level.attribute("name").as_string();
-			num_levels++;
+			numLevels++;
 			levels.push_back(newLevel);
 		}
 	}
@@ -381,11 +381,6 @@ TileSet* M_Map::GetTilesetFromTileId(int id) const
 	}
 
 	return (*item);
-}
-
-uint M_Map::GetMaxLevels() const
-{
-	return num_levels;
 }
 
 iPoint M_Map::MapToWorld(int column, int row) const
