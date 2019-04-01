@@ -6,6 +6,7 @@
 #include "Module.h"
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
+#include <assert.h>
 
 class Object;
 class M_Collision;
@@ -63,6 +64,7 @@ public:
 
 	void SetPos(const float x,const  float y)
 	{
+		assert(type != TYPE::STATIC);
 		position = { x, y };
 	}
 
