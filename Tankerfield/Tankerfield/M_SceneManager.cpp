@@ -8,6 +8,7 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "M_SceneManager.h"
+#include "Brofiler/Brofiler.h"
 #include "SDL/include/SDL_render.h"
 #include "SDL/include/SDL_timer.h"
 
@@ -30,7 +31,7 @@ bool M_SceneManager::Start()
 // Update: draw background
 bool M_SceneManager::Update(float dt)
 {
-	
+	BROFILER_CATEGORY("M_SceneManagerUpdate", Profiler::Color::Purple)
 	if (current_step == fade_step::none)
 	{
 		return true;
@@ -73,6 +74,7 @@ bool M_SceneManager::Update(float dt)
 // Fade to black. At mid point deactivate one module, then activate the other
 bool M_SceneManager::FadeToBlack(Module* module_off, Module* module_on, float time)
 {
+	BROFILER_CATEGORY("M_SceneManagerFadeToBlack", Profiler::Color::Purple)
 	bool ret = false;
 
 	ModuleOff = module_off;

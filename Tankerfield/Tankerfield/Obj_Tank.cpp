@@ -13,7 +13,6 @@
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
 
-
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
@@ -61,9 +60,9 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 50, 300, 100, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, BASIC_BULLET);
 
-	coll = app->collision->AddCollider(pos, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
+	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
 	coll->SetType(Collider::TYPE::DYNAMIC);
 
 	//TODO: Load them from the XML
@@ -96,7 +95,7 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
-	coll->SetPos(pos.x, pos.y);
+	coll->SetPos(pos_map.x, pos_map.y);
 
 	return true;
 }
@@ -123,7 +122,8 @@ void Obj_Tank::Movement(float dt)
 		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
 	}
 
-	pos += iso_dir * speed * dt;
+	velocity = iso_dir * speed * dt;                                                               
+	pos_map += velocity;
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
@@ -155,10 +155,10 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
-bool Obj_Tank::PostUpdate()
+bool Obj_Tank::PostUpdate(float dt)
 {
 
-	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
 
 	// Base =========================================
@@ -182,7 +182,7 @@ bool Obj_Tank::PostUpdate()
 	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 	debug_mouse_pos.x += app->render->camera.x;
 	debug_mouse_pos.y += app->render->camera.y;
-	fPoint debug_screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
 
@@ -204,13 +204,13 @@ void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 	mouse_pos.y += app->render->camera.y;
 
 	int tile_width = 100, tile_height = 50;
-	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	input_dir = (fPoint)mouse_pos - screen_pos;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_pos = app->map->WorldToMapF(mouse_pos.x,mouse_pos.y);
+	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x,mouse_pos.y);
 
-	iso_dir = map_mouse_pos - pos;
+	iso_dir = map_mouse_pos - pos_map;
 	iso_dir.Normalize();
 }
 
@@ -247,7 +247,7 @@ void Obj_Tank::Shoot()
 
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(pos, shot_dir);
+		weapons[weapon_type]->Shoot(pos_map, shot_dir, turr_angle);
 		time_between_bullets_timer.Start();
 	}
 }

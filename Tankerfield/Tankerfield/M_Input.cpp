@@ -5,6 +5,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "Brofiler/Brofiler.h"
 #include "SDL/include/SDL.h"
 
 
@@ -63,6 +64,7 @@ bool M_Input::Start()
 // Called each loop iteration
 bool M_Input::PreUpdate()
 {
+	BROFILER_CATEGORY("M_InputPreUpdate", Profiler::Color::Green)
 	static SDL_Event event;
 	
 	UpdateKeyboardState();
@@ -215,7 +217,7 @@ iPoint M_Input::GetMousePos_Tiles()
 {
 	iPoint ret;
 	ret = app->render->ScreenToWorld(mouse_x, mouse_y);
-	ret = app->map->WorldToMap(ret.x, ret.y);
+	ret = app->map->ScreenToMapI(ret.x, ret.y);
 
 	return ret;
 }
