@@ -42,45 +42,6 @@ bool Object::PostUpdate(float dt)
 	return true;
 }
 
-//angle should be in degrees
-uint Object::GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, float fist_rect_dir)
-{
-	//Account for the spritesheet not starting at the 0 degree rotation
-	angle -= fist_rect_dir;
-	angle = ClampRotation(angle);
-	float ind = (angle * rect_num) / 360;
-	float remainder = fmod(ind, 1);
-	ind -= remainder;
-	//Select the current or the next frame if the remainder is more than or 0.5
-	if (remainder >= 0.5f)
-	{
-		ind = ind + 1;
-	}
-	//If it's the last frame, start over again
-	if (ind == rect_num)
-	{
-		ind = 0;
-	}
-	return (uint)ind;
-}
-
-float Object::ClampRotation(float angle)
-{
-	if (angle > 360)
-	{
-		angle = fmod(angle, 360);
-	}
-	else if (angle < -360)
-	{
-		angle = fmod(angle, -360);
-	}
-	if (angle < 0)
-	{
-		angle += 360;
-	}
-	return angle;
-}
-
 bool Object::LoadRects(pugi::xml_node const & node, SDL_Rect * rects)
 {
 	//Inicialization
