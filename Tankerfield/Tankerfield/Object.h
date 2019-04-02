@@ -30,7 +30,7 @@ public:
 	virtual bool Start() { return true; };
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt);
-	virtual bool PostUpdate();
+	virtual bool PostUpdate(float dt);
 	virtual bool CleanUp() { return true; };
 	virtual bool Awake(pugi::xml_node&) { return true; };
 

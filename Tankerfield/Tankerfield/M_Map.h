@@ -194,11 +194,11 @@ public:
 
 	~M_Map();
 
-	bool Awake(pugi::xml_node&);
+	bool Awake(pugi::xml_node&) override;
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
+	bool PostUpdate(float dt) override;
 
 	bool Load(const std::string & file_name);
 

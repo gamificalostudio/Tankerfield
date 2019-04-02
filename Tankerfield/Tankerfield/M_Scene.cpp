@@ -83,7 +83,7 @@ bool M_Scene::Update(float dt)
 }
 
 // Called each loop iteration
-bool M_Scene::PostUpdate()
+bool M_Scene::PostUpdate(float dt)
 {
 	bool ret = true;
 

@@ -133,7 +133,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 	return true;
 }
 
-bool Obj_TeslaTrooper::PostUpdate()
+bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 	return true;
 }

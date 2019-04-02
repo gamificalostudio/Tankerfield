@@ -55,7 +55,7 @@ bool M_Map::Update(float dt)
 	return true;
 }
 
-bool M_Map::PostUpdate()
+bool M_Map::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;

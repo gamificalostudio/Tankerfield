@@ -153,7 +153,7 @@ bool M_Collision::Update(float dt)
 
 // Called before render is available
 
-bool M_Collision::PostUpdate()
+bool M_Collision::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("M_CollisionPostUpdate", Profiler::Color::Orange)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {

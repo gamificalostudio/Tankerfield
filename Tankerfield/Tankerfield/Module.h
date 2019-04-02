@@ -50,7 +50,7 @@ public:
 	}
 
 	// Called each loop iteration
-	virtual bool PostUpdate()
+	virtual bool PostUpdate(float dt)
 	{
 		return true;
 	}

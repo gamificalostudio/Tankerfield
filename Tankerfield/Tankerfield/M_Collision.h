@@ -106,11 +106,11 @@ public:
 
 	virtual ~M_Collision();
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
+	bool PostUpdate(float dt) override;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
 	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, Module* callback = nullptr, Object* object = nullptr);
 

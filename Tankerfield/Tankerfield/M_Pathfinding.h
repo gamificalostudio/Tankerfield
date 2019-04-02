@@ -20,7 +20,7 @@ public:
 	~M_Pathfinding();
 
 	// Called before quitting
-	bool CleanUp();
+	bool CleanUp() override;
 
 	// Sets up the walkability map
 	void SetMap(uint width, uint height, uchar* data);
