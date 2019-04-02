@@ -12,16 +12,15 @@ class M_Scene : public Module
 {
 private:
 	Controller** control1 = nullptr;
-<<<<<<< HEAD
 
-=======
-	Obj_Tank * tank_1 = nullptr;
-	Obj_Tank * tank_2 = nullptr;
->>>>>>> development
+
+	
+
 
 public:
 	int current_level = 0;
 	Obj_Tank * tank_1 = nullptr;
+	Obj_Tank * tank_2 = nullptr;
 public:
 
 	M_Scene();

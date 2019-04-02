@@ -4,13 +4,12 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
-<<<<<<< HEAD
 #include "Obj_Tank.h"
 #include "M_ObjManager.h"
 #include "M_Scene.h"
-=======
+
 #include "Brofiler/Brofiler.h"
->>>>>>> development
+
 
 M_Render::M_Render() : Module()
 {
