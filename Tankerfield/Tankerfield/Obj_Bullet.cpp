@@ -2,6 +2,7 @@
 #include "M_Render.h"
 #include "App.h"
 #include "M_Map.h"
+#include "M_Collision.h"
 
 SDL_Texture * Obj_Bullet::tex = nullptr;
 int Obj_Bullet::rects_num = 64;
@@ -14,16 +15,20 @@ Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 
 Obj_Bullet::~Obj_Bullet()
 {
+	coll->Destroy();
 }
 
 bool Obj_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
 	LoadRects(bullet_node.child("animations").child("rotate"), rects);//TODO: Optimize. Rects are loaded every time a bullet is created
+
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	}
+
+	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET, this);
 
 	return true;
 }
@@ -32,6 +37,9 @@ bool Obj_Bullet::Update(float dt)
 {
 	pos_map.x += speed * direction.x * dt;
 	pos_map.y += speed * direction.y * dt;
+
+	coll->SetPos(pos_map.x, pos_map.y);
+	coll->SetType(Collider::TYPE::DYNAMIC);
 
 	return true;
 }
@@ -43,14 +51,14 @@ bool Obj_Bullet::PostUpdate()
 		to_remove = true;
 	}
 
-	float width = 0.5f;
-	float height = 0.5f;
+	//float width = 0.5f;
+	//float height = 0.5f;
 
-	app->render->DrawIsometricQuad(
-		pos_map.x - width * 0.5f,
-		pos_map.y - height * 0.5f,
-		width,
-		height);
+	//app->render->DrawIsometricQuad(
+	//	pos_map.x - width * 0.5f,
+	//	pos_map.y - height * 0.5f,
+	//	width,
+	//	height);
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);

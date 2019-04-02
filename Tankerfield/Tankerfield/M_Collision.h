@@ -37,6 +37,7 @@ public:
 	{
 		NONE = -1,
 		WALL,
+		BULLET,
 		PLAYER,
 		ENEMY,
 		GOD,
@@ -53,18 +54,16 @@ public:
 		MAX
 	};
 
-	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,Module* callback = nullptr) :
+	Collider(const fPoint pos,const  float width,const  float height, const TAG tag, Object* object = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
 		tag(tag),
-		object(object),
-		callback(callback)
+		object(object)
 	{}
 
 	void SetPos(const float x,const  float y)
 	{
-		assert(type != TYPE::STATIC);
 		position = { x, y };
 	}
 
@@ -73,7 +72,12 @@ public:
 		type = new_type;
 	}
 
-	bool CheckCollision(Collider*  coll) const;
+	void Destroy()
+	{
+		to_destroy = true;
+	}
+
+	bool CheckCollision(Collider* coll) const;
 
 private:
 
@@ -83,17 +87,17 @@ private:
 		
 	float height = 0.f;
 
+	Object * object = nullptr;
+
 	TAG tag = TAG::NONE;
 
 	TYPE type = TYPE::STATIC;
 
 	ON_TRIGGER_STATE on_trigger_state = ON_TRIGGER_STATE::NONE;
 
-	Module* callback = nullptr;
-
-	Object * object = nullptr;
-
 	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
+
+	bool to_destroy = false;
 
 	friend M_Collision;
 };
@@ -112,9 +116,7 @@ public:
 
 	bool CleanUp();
 
-	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, Module* callback = nullptr, Object* object = nullptr);
-
-	bool DeleteCollider(Collider* collider);
+	Collider* AddCollider(fPoint pos, float width , float height, Collider::TAG type, Object* object = nullptr);
 
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
