@@ -23,6 +23,7 @@ SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
+	//Inicialize animations
 	walking = new Animation[8] { {8}, {8}, {8}, {8}, {8}, {8}, {8}, {8} };
 	walking[0].PushBack({ 528,0,66,76 });//8
 	walking[0].PushBack({ 594,0,66,76 });
