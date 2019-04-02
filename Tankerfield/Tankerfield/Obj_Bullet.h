@@ -16,7 +16,7 @@ public:
 
 	bool Start();
 	bool Update(float dt);
-	virtual bool PostUpdate();
+	virtual bool PostUpdate(float dt) override;
 	//OnCollision{
 	//Do damage to entity
 		//Show explosion particle

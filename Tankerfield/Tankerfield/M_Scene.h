@@ -37,7 +37,7 @@ public:
 	bool Update(float dt) override;
 
 	// Called before all Updates
-	bool PostUpdate() override;
+	bool PostUpdate(float dt) override;
 
 	// Called before quitting
 	bool CleanUp() override;

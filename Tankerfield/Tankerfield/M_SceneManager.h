@@ -10,8 +10,8 @@ public:
 	M_SceneManager();
 	~M_SceneManager();
 
-	bool Start();
-	bool Update(float dt);
+	bool Start() override;
+	bool Update(float dt) override;
 	bool FadeToBlack(Module* module_off, Module* module_on,float time = 2.0f);
 
 private:

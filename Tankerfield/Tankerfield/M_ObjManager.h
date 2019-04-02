@@ -36,7 +36,7 @@ public:
 
 	bool Update(float dt) override;
 
-	bool PostUpdate() override;
+	bool PostUpdate(float dt) override;
 
 	bool Load(pugi::xml_node&);
 
