@@ -115,17 +115,17 @@ bool Obj_TeslaTrooper::Update(float dt)
 		angle -= 45;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
-	{
-		life -= 100;
-		LOG("life: %i", life);
-	}
+	//if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+	//{
+	//	life -= 100;
+	//	LOG("life: %i", life);
+	//}
 
-	if (life <= 0)
-	{
-		death = true;
-		to_remove = true;
-	}
+	//if (life <= 0)
+	//{
+	//	death = true;
+	//	to_remove = true;
+	//}
 
 	return true;
 }
