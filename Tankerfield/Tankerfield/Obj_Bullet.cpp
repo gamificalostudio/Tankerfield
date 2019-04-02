@@ -36,7 +36,7 @@ bool Obj_Bullet::Update(float dt)
 	return true;
 }
 
-bool Obj_Bullet::PostUpdate()
+bool Obj_Bullet::PostUpdate(float dt)
 {
 	if (bullet_life_ms_timer.ReadMs() >= bullet_life_ms)
 	{

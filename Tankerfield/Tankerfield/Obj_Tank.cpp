@@ -151,7 +151,7 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
-bool Obj_Tank::PostUpdate()
+bool Obj_Tank::PostUpdate(float dt)
 {
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);

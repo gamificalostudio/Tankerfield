@@ -29,12 +29,12 @@ public:
 	~Obj_Tank();
 
 public:
-	bool Awake(pugi::xml_node & tank_node);
-	bool Start();
-	bool PreUpdate();
-	bool Update(float dt);
-	bool PostUpdate();
-	bool CleanUp();
+	bool Awake(pugi::xml_node & tank_node) override;
+	bool Start() override;
+	bool PreUpdate() override;
+	bool Update(float dt) override;
+	bool PostUpdate(float dt) override;
+	bool CleanUp() override;
 
 private:
 	void Movement(float dt);
