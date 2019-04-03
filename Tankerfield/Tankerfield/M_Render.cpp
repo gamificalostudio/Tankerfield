@@ -42,8 +42,8 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
-		camera.w = app->win->screen_surface->w;
-		camera.h = app->win->screen_surface->h;
+		camera.w = app->win->screen_surface->w/2;
+		camera.h = app->win->screen_surface->h/2;
 		camera.x = 0;
 		camera.y = 0;
 	}
@@ -153,19 +153,33 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 	rect.w *= scale;
 	rect.h *= scale;
 
-	SDL_Point* p = NULL;
-	SDL_Point pivot;
+	//Don't blit if the sprite is out of the screen
+	uint width, height = 0;
+	app->win->GetWindowSize(width, height);
+	SDL_Rect cam;
+	cam.x = 0;
+	cam.y = 0;
+	cam.w = width * 0.5f;
+	cam.h = height * 0.5f;
+	if (SDL_HasIntersection(&rect, &cam))
+	{
+		SDL_Point* p = NULL;
+		SDL_Point pivot;
 
-	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
-	{
-		pivot.x = pivot_x;
-		pivot.y = pivot_y;
-		p = &pivot;
+		if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+		{
+			pivot.x = pivot_x;
+			pivot.y = pivot_y;
+			p = &pivot;
+		}
+
+		if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
+		{
+			LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+			ret = false;
+		}
 	}
-	
-	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
-	{
-		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+	else {
 		ret = false;
 	}
 
@@ -284,14 +298,4 @@ bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	}
 
 	return ret;
-}
-
-bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int & h) const
-{
-	int scale = app->win->GetScale();
-
-	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
-	SDL_Rect cam = { camera.x,camera.y,camera.w,camera.h };
-
-	return SDL_HasIntersection(&r, &cam);
 }
