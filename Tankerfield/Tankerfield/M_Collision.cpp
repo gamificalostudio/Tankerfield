@@ -84,13 +84,13 @@ bool M_Collision::Update(float dt)
 
 		switch ((*iterator_1)->type)
 		{
-		case Collider::TYPE::STATIC:
+		case Collider::BODY_TYPE::STATIC:
 			static_colliders.push_back(*iterator_1);
 			break;
-		case Collider::TYPE::DYNAMIC:
+		case Collider::BODY_TYPE::DYNAMIC:
 			dynamic_colliders.push_back(*iterator_1);
 			break;
-		case Collider::TYPE::SENSOR:
+		case Collider::BODY_TYPE::SENSOR:
 			sensor_colliders.push_back(*iterator_1);
 			break;
 		}
@@ -115,7 +115,7 @@ bool M_Collision::Update(float dt)
 		{
 			collider_2 = *itr_2;
 
-			if (collider_1->CheckCollision(collider_2) == true)
+			if (collider_1->CheckCollision(collider_2))
 			{
 				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
 				{
@@ -147,7 +147,7 @@ bool M_Collision::Update(float dt)
 		{
 			collider_2 = (*itr_2);
 
-			if (collider_1->CheckCollision(collider_2) == true)
+			if (collider_1->CheckCollision(collider_2))
 			{
 				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
 				{
@@ -171,27 +171,42 @@ bool M_Collision::Update(float dt)
 
 	// Dynamic VS Sensors ========================================
 
-	//for (std::list<Collider*>::iterator itr_1 = sensor_colliders.begin(); itr_1 != sensor_colliders.end(); ++itr_1)
-	//{
-	//	collider_1 = (*itr_1);
+	for (std::list<Collider*>::iterator itr_1 = sensor_colliders.begin(); itr_1 != sensor_colliders.end(); ++itr_1)
+	{
+		collider_1 = (*itr_1);
 
-	//	for (std::list<Collider*>::iterator itr_2 = dynamic_colliders.begin(); itr_2 != dynamic_colliders.end(); ++itr_2)
-	//	{
-	//		collider_2 = (*itr_2);
+		for (std::list<Collider*>::iterator itr_2 = dynamic_colliders.begin(); itr_2 != dynamic_colliders.end(); ++itr_2)
+		{
+			collider_2 = (*itr_2);
 
-	//		if (collider_1->CheckCollision(collider_2) == true)
-	//		{
-	//			if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
-	//			{
-	//				collider_1->object->OnTrigger(collider_1);
-	//			}
-	//			if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->object)
-	//			{
-	//				collider_2->object->OnTrigger(collider_2);
-	//			}
-	//		}
-	//	}
-	//}
+			if (collider_1->CheckCollision(collider_2))
+			{
+				DoOnTrigger(collider_1, collider_2);
+				DoOnTrigger(collider_2, collider_1);
+			}
+			else
+			{
+
+
+				//for (std::vector<Collider::Collision_Info>::iterator iter = collider_1->collisions_info.begin(); iter != collider_1->collisions_info.end(); ++iter)
+				//{
+				//	if ((*iter).collider == collider_2)
+				//	{
+				//		collider_1->object->OnTrigger(collider_2);
+				//	}
+				//}
+
+				//for (std::vector<Collider::Collision_Info>::iterator iter = collider_2->collisions_info.begin(); iter != collider_2->collisions_info.end(); ++iter)
+				//{
+				//	if ((*iter).collider == collider_2)
+				//	{
+				//		collider_2->object->OnTrigger(collider_1);
+				//	}
+				//}
+			}
+		}
+	}
+
 
 	return true;
 }
@@ -352,5 +367,26 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 
 	c1->SetPos(c1->object->pos_map.x, c1->object->pos_map.y);
 	c2->SetPos(c2->object->pos_map.x, c2->object->pos_map.y);
+}
+
+void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
+{
+
+	bool find = false;
+
+	for (std::vector<Collider::Collision_Info>::iterator iter = c1->collisions_info.begin(); iter != c1->collisions_info.end(); ++iter)
+	{
+		if ((*iter).collider == c2)
+		{
+			c1->object->OnTrigger(c2);
+			find = true;
+		}
+	}
+		
+	if (find == false)
+	{
+		c1->object->OnTriggerEnter(c2);
+	}
+
 }
 

@@ -39,7 +39,7 @@ bool Obj_Bullet::Update(float dt)
 	pos_map.y += speed * direction.y * dt;
 
 	coll->SetPos(pos_map.x, pos_map.y);
-	coll->SetType(Collider::TYPE::DYNAMIC);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 
 	return true;
 }

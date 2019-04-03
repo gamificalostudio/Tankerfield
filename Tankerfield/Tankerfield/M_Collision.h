@@ -6,23 +6,26 @@
 #include "Module.h"
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
+#include <vector>
 #include <assert.h>
 
 class Object;
 class M_Collision;
 
 
-
 class Collider
 {
 public:
 	
-	enum class TYPE
+	enum class TAG : int
 	{
-		NONE,
-		DYNAMIC,
-		STATIC,
-		SENSOR
+		NONE = -1,
+		WALL,
+		BULLET,
+		PLAYER,
+		ENEMY,
+		GOD,
+		MAX
 	};
 
 	enum class ON_TRIGGER_STATE
@@ -33,15 +36,19 @@ public:
 		EXIT
 	};
 
-	enum class TAG : int
+	struct Collision_Info
 	{
-		NONE = -1,
-		WALL,
-		BULLET,
-		PLAYER,
-		ENEMY,
-		GOD,
-		MAX
+		Collider*			collider;
+		ON_TRIGGER_STATE	on_trigger_state;
+		bool                check = false;
+	};
+
+	enum class BODY_TYPE
+	{
+		NONE,
+		DYNAMIC,
+		STATIC,
+		SENSOR
 	};
 
 	enum class OVERLAP_DIR : int
@@ -54,7 +61,7 @@ public:
 		MAX
 	};
 
-	Collider(const fPoint pos,const  float width,const  float height, const TAG tag, Object* object = nullptr) :
+	Collider(const fPoint pos,const  float width, const  float height, const TAG tag, Object* object = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
@@ -67,7 +74,7 @@ public:
 		position = { x, y };
 	}
 
-	void SetType(const Collider::TYPE new_type)
+	void AddRigidBody(const Collider::BODY_TYPE new_type)
 	{
 		type = new_type;
 	}
@@ -91,13 +98,15 @@ private:
 
 	TAG tag = TAG::NONE;
 
-	TYPE type = TYPE::STATIC;
-
-	ON_TRIGGER_STATE on_trigger_state = ON_TRIGGER_STATE::NONE;
-
-	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
+	std::vector<Collision_Info> collisions_info;
 
 	bool to_destroy = false;
+
+	// Body vars ===================================================
+
+	BODY_TYPE type = BODY_TYPE::STATIC;
+
+	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
 	friend M_Collision;
 };
@@ -122,6 +131,7 @@ public:
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
 
+	void DoOnTrigger(Collider* c1, Collider *c2);
 
 private:
 

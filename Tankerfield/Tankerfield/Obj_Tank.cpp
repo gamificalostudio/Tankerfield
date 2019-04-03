@@ -63,7 +63,7 @@ bool Obj_Tank::Start()
 	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 500.f, BASIC_BULLET);
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
-	coll->SetType(Collider::TYPE::DYNAMIC);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 
 	//TODO: Load them from the XML
 	kb_shoot		= SDL_BUTTON_LEFT;
