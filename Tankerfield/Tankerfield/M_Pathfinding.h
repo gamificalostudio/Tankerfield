@@ -12,12 +12,13 @@
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
-class SDL_Texture;
+struct SDL_Texture;
+
 
 class M_Pathfinding : public Module
 {
 public:
-
+	
 	M_Pathfinding();
 
 	// Destructor
@@ -25,6 +26,7 @@ public:
 
 	bool Start() override;
 
+	//Here were going to DebugPathfinding
 	bool PostUpdate(float dt) override;
 
 	// Called before quitting
@@ -57,6 +59,14 @@ private:
 	uchar* map;
 	// we store the created path here
 	std::vector<iPoint> last_path;
+
+
+	std::vector<iPoint> debugPath;
+	bool test_path = true;
+	SDL_Texture* path_tex = nullptr;
+
+
+
 };
 
 // forward declaration

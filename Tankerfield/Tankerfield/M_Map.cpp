@@ -66,6 +66,7 @@ bool M_Map::PostUpdate(float dt)
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
 
+
 	if (map_loaded == false)
 		return ret;
 
@@ -120,6 +121,12 @@ bool M_Map::PostUpdate(float dt)
 	}
 
 	return ret;
+}
+
+bool M_Map::CleanUp()
+{
+	Unload();
+	return true;
 }
 
 bool M_Map::Load(const std::string& file_name)
@@ -192,6 +199,46 @@ bool M_Map::Load(const std::string& file_name)
 	return ret;
 }
 
+bool M_Map::Unload()
+{
+	if (!map_loaded)
+		return false;
+
+	for (std::list<TileSet*>::iterator iter = data.tilesets.begin(); iter != data.tilesets.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.tilesets.clear();
+
+	for (std::list<MapLayer*>::iterator iter = data.mapLayers.begin(); iter != data.mapLayers.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.mapLayers.clear();
+
+	for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			app->collision->DeleteCollider((*iter));
+
+		}
+	}
+	data.colliders_list.clear();
+
+	data.map_properties.UnloadProperties();
+
+	return true;
+}
+
 void M_Map::DebugMap() 
 {
 	//LOG("Successfully parsed map XML file: %s", data.loadedLevel);
@@ -250,8 +297,10 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			if (layer->name == "Colliders" && layer->data[i] != 0u)
 				{
 					fPoint pos = layer->GetTilePos(i);
-					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
-				}
+
+					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+					data.colliders_list.push_back(aux);
+			}
 
 			++i;
 		}
@@ -402,6 +451,11 @@ TileSet* M_Map::GetTilesetFromTileId(int id) const
 	return (*item);
 }
 
+uint M_Map::GetMaxLevels()
+{
+	return numLevels;
+}
+
 bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 {
 	bool ret = false;
@@ -541,8 +595,15 @@ fPoint M_Map::ScreenToMapF(float x, float y)
 	return ret;
 }
 
+void Properties::UnloadProperties()
+{
+	std::list<Property*>::iterator item = list.begin();
 
+	while (item != list.end())
+	{
+		RELEASE(*item);
+		++item;
+	}
 
-
-
-
+	list.clear();
+}
