@@ -30,8 +30,7 @@ private:
 	Animation* walking = nullptr;
 	float angle = 0.0f;
 	float new_current_frame = 0.0f;
-	static SDL_Texture * tex;
-
+	static SDL_Texture* tex;
 };
 
 #endif // !__TESLATROOPER_H__

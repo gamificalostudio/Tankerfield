@@ -9,6 +9,7 @@
 #include "M_Scene.h"
 #include "M_SceneManager.h"
 #include "M_Map.h"
+#include "M_Pathfinding.h"
 #include "M_ObjManager.h"
 #include "M_Collision.h"
 #include "Point.h"
@@ -35,6 +36,8 @@ bool M_Scene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool M_Scene::Start()
 {
+	path_tex = app->tex->Load("maps/path.png");
+
 	// Load the first level of the list on first game start -------------------------
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
@@ -98,6 +101,8 @@ bool M_Scene::PostUpdate(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	
+	DebugPathfinding();
+
 	return ret;
 }
 
@@ -106,7 +111,72 @@ bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-
+	if (path_tex != nullptr)
+		app->tex->UnLoad(path_tex);
 
 	return true;
+}
+
+void M_Scene::DebugPathfinding()
+{
+	if (test_path)
+	{
+		static iPoint origin;
+		static bool origin_selected = false;
+		static bool createdDebugPath = false;
+
+		iPoint mousePos;
+		app->input->GetMousePosition(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		p = app->map->ScreenToMapI(p.x, p.y);
+
+		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
+		{
+			if (origin_selected == true)
+			{
+				origin_selected = false;
+
+				if (app->pathfinding->CreatePath(origin, p) != -1)
+				{
+					createdDebugPath = true;
+				}
+
+			}
+			else
+			{
+				origin = p;
+				origin_selected = true;
+				createdDebugPath = false;
+				debugPath.clear();
+			}
+		}
+
+		if (createdDebugPath)
+		{
+			uint debugPathSize = debugPath.size();
+			if (debugPathSize == 0)
+			{
+
+				const std::vector<iPoint>* path = app->pathfinding->GetLastPath();
+				uint sizeArray = path->size();
+				for (uint i = 0; i < sizeArray; ++i)
+				{
+					debugPath.push_back(path->at(i));
+				}
+			}
+			else
+			{
+				for (uint i = 0; i < debugPathSize; ++i)
+				{
+					iPoint pos = app->map->MapToScreenI(debugPath.at(i).x, debugPath.at(i).y);
+					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y);
+				}
+			}
+
+		}
+
+		p = app->map->MapToScreenI(p.x, p.y);
+
+		app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y);
+	}
 }
