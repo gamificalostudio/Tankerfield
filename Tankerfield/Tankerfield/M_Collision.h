@@ -6,6 +6,7 @@
 #include "Module.h"
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
+#include <assert.h>
 
 class Object;
 class M_Collision;
@@ -63,6 +64,7 @@ public:
 
 	void SetPos(const float x,const  float y)
 	{
+		assert(type != TYPE::STATIC);
 		position = { x, y };
 	}
 
@@ -104,11 +106,11 @@ public:
 
 	virtual ~M_Collision();
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
+	bool PostUpdate(float dt) override;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
 	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, Module* callback = nullptr, Object* object = nullptr);
 

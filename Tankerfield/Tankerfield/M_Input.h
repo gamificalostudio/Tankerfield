@@ -13,6 +13,7 @@
 //#define NUM_KEYS 352
 #define NUM_MOUSE_BUTTONS 5
 #define MAX_CONTROLLERS 4
+#define DEAD_ZONE 2500
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
@@ -75,7 +76,7 @@ public:
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = 1000)
+	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEAD_ZONE)
 	{
 		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
 		if (abs(value) > dead_zone)

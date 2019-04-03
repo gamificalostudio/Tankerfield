@@ -97,7 +97,7 @@ bool M_ObjManager::Update(float dt)
 	return true;
 }
 
-bool M_ObjManager::PostUpdate()
+bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
@@ -106,7 +106,7 @@ bool M_ObjManager::PostUpdate()
 	{
 		if ((*iterator) != nullptr)
 		{
-			(*iterator)->PostUpdate();
+			(*iterator)->PostUpdate(dt);
 		}
 	}
 

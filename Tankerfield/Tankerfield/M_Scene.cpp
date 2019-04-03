@@ -40,9 +40,10 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(20.f, 20.f));
 
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-	
+	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
+
 
 	return true;
 }
@@ -91,7 +92,7 @@ bool M_Scene::Update(float dt)
 }
 
 // Called each loop iteration
-bool M_Scene::PostUpdate()
+bool M_Scene::PostUpdate(float dt)
 {
 	bool ret = true;
 

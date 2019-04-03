@@ -24,7 +24,7 @@ public:
 	bool Start() override;
 
 	//Here were going to DebugPathfinding
-	bool PostUpdate() override;
+	bool PostUpdate(float dt) override;
 
 	// Called before quitting
 	bool CleanUp() override;

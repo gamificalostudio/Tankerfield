@@ -48,17 +48,17 @@ public:
 
 	virtual ~M_UI();
 
-	bool Awake(pugi::xml_node& node);
+	bool Awake(pugi::xml_node& node) override;
 
-	bool Start();
+	bool Start() override;
 
-	bool PreUpdate();
+	bool PreUpdate() override;
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
+	bool PostUpdate(float dt) override;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
 	SDL_Texture* GetAtlas() const;
 

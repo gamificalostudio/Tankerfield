@@ -208,6 +208,8 @@ public:
 	bool Awake(pugi::xml_node&) override;
 
 	bool Update(float dt) override;
+
+	bool PostUpdate(float dt) override;
 	
 	bool CleanUp() override;
 
@@ -215,13 +217,13 @@ public:
 
 	bool Unload();
 
-	iPoint MapToWorld(int column, int row) const;
+	iPoint MapToScreenI(int column, int row) const;
 
-	fPoint MapToWorldF(float x, float y);
+	fPoint MapToScreenF(const fPoint & map_pos);
 
-	iPoint WorldToMap(int x, int y) const;
+	iPoint ScreenToMapI(int x, int y) const;
 
-	fPoint WorldToMapF(float x, float y);
+	fPoint ScreenToMapF(float x, float y);
 
 	TileSet* GetTilesetFromTileId(int id) const;
 

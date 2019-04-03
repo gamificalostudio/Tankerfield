@@ -54,6 +54,14 @@ bool M_Map::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
 		show_grid = !show_grid;
 
+	return true;
+}
+
+bool M_Map::PostUpdate(float dt)
+{
+	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	bool ret = true;
+
 
 	if (map_loaded == false)
 		return ret;
@@ -73,7 +81,7 @@ bool M_Map::Update(float dt)
 				int tile_id = (*layer)->Get(x, y);
 				if (tile_id > 0)
 				{
-					iPoint pos = MapToWorld(x, y);
+					iPoint pos = MapToScreenI(x, y);
 					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
@@ -95,15 +103,15 @@ bool M_Map::Update(float dt)
 		iPoint point_1, point_2;
 		for (int i = 0; i <= data.columns; ++i)
 		{
-			point_1 = MapToWorld(i, 0);
-			point_2 = MapToWorld(i, data.rows);
+			point_1 = MapToScreenI(i, 0);
+			point_2 = MapToScreenI(i, data.rows);
 			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
 		}
 
 		for (int i = 0; i <= data.rows; ++i)
 		{
-			point_1 = MapToWorld(0, i);
-			point_2 = MapToWorld(data.columns, i);
+			point_1 = MapToScreenI(0, i);
+			point_2 = MapToScreenI(data.columns, i);
 			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
 		}
 	}
@@ -435,48 +443,48 @@ uint M_Map::GetMaxLevels()
 	return numLevels;
 }
 
-iPoint M_Map::MapToWorld(int column, int row) const
+iPoint M_Map::MapToScreenI(int column, int row) const
 {
-	iPoint retVec(0, 0);
+	iPoint screen_pos(0, 0);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:
-		retVec.x = column * data.tile_width;
-		retVec.y = row * data.tile_height;
+		screen_pos.x = column * data.tile_width;
+		screen_pos.y = row * data.tile_height;
 		break;
 	case MapTypes::MAPTYPE_ISOMETRIC:
-		retVec.x = (column - row) * data.tile_width * 0.5f;
-		retVec.y = (column + row) * data.tile_height * 0.5f;
+		screen_pos.x = (column - row) * data.tile_width * 0.5f;
+		screen_pos.y = (column + row) * data.tile_height * 0.5f;
 		break;
 	default:
 		LOG("ERROR: Map type not identified.");
 		break;
 	}
 
-	return retVec;
+	return screen_pos;
 }
 
-fPoint M_Map::MapToWorldF(float x, float y)
+fPoint M_Map::MapToScreenF(const fPoint & map_pos)
 {
-	fPoint retVec(0.0F, 0.0F);
+	fPoint screen_pos(0.0F, 0.0F);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:
-		retVec.x = x * data.tile_width;
-		retVec.y = y * data.tile_height;
+		screen_pos.x = map_pos.x * data.tile_width;
+		screen_pos.y = map_pos.y * data.tile_height;
 		break;
 	case MapTypes::MAPTYPE_ISOMETRIC:
-		retVec.x = (x - y) * (data.tile_width * 0.5f);
-		retVec.y = (x + y) * (data.tile_height * 0.5f);
+		screen_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f);
+		screen_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f);
 		break;
 	default:
 		LOG("ERROR: Map type not identified.");
 		break;
 	}
 
-	return retVec;
+	return screen_pos;
 }
 
 
-iPoint M_Map::WorldToMap(int x, int y) const
+iPoint M_Map::ScreenToMapI(int x, int y) const
 {
 	iPoint ret(0, 0);
 
@@ -501,7 +509,7 @@ iPoint M_Map::WorldToMap(int x, int y) const
 	return ret;
 }
 
-fPoint M_Map::WorldToMapF(float x, float y)
+fPoint M_Map::ScreenToMapF(float x, float y)
 {
 	fPoint ret(0, 0);
 

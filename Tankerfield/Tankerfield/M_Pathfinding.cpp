@@ -26,7 +26,7 @@ bool M_Pathfinding::Start()
 	return true;
 }
 
-bool M_Pathfinding::PostUpdate()
+bool M_Pathfinding::PostUpdate(float dt)
 {
 	if (test_path)
 	{
@@ -37,7 +37,7 @@ bool M_Pathfinding::PostUpdate()
 		iPoint mousePos;
 		app->input->GetMousePosition(mousePos.x, mousePos.y);
 		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
-		p = app->map->WorldToMap(p.x , p.y );
+		p = app->map->MapToScreenI(p.x , p.y );
 		
 		if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
 		{
@@ -79,14 +79,14 @@ bool M_Pathfinding::PostUpdate()
 			{
 				for (uint i = 0; i < debugPathSize; ++i)
 				{
-					iPoint pos = app->map->MapToWorld(debugPath.at(i).x, debugPath.at(i).y);
+					iPoint pos = app->map->MapToScreenI(debugPath.at(i).x, debugPath.at(i).y);
 					app->render->Blit(path_tex, pos.x, pos.y);
 				}
 			}
 
 		}
 
-		p = app->map->MapToWorld(p.x, p.y);
+		p = app->map->MapToScreenI(p.x, p.y);
 
 		app->render->Blit(path_tex, p.x, p.y + 16);
 	}
