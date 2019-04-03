@@ -65,6 +65,8 @@ public:
 	
 	iPoint GetJoystick(Joystick joystick)
 	{
+		if (this == nullptr)
+			return iPoint(0, 0);
 		switch (joystick)
 		{
 		case Joystick::LEFT:
@@ -76,18 +78,8 @@ public:
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEAD_ZONE)
-	{
-		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
-		if (abs(value) > dead_zone)
-		{
-			return value;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEAD_ZONE);
+	
 
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
