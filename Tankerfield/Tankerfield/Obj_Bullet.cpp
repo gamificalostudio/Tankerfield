@@ -35,9 +35,8 @@ bool Obj_Bullet::Start()
 
 bool Obj_Bullet::Update(float dt)
 {
-	pos_map.x += speed * direction.x * dt;
-	pos_map.y += speed * direction.y * dt;
-
+	pos_map += direction * speed * dt;
+	
 	coll->SetPos(pos_map.x, pos_map.y);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 
@@ -51,19 +50,15 @@ bool Obj_Bullet::PostUpdate()
 		to_remove = true;
 	}
 
-	//float width = 0.5f;
-	//float height = 0.5f;
-
-	//app->render->DrawIsometricQuad(
-	//	pos_map.x - width * 0.5f,
-	//	pos_map.y - height * 0.5f,
-	//	width,
-	//	height);
-
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	SDL_Rect * rect = &rects[ind];
 	app->render->Blit(tex, screen_pos.x - rect->w * 0.5f, screen_pos.y - rect->h * 0.5f, rect);
 
 	return true;
+}
+
+void Obj_Bullet::OnTrigger(Collider * collider_1)
+{
+	to_remove = true;
 }
