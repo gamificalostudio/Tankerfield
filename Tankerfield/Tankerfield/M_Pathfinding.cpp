@@ -22,7 +22,6 @@ M_Pathfinding::~M_Pathfinding()
 bool M_Pathfinding::Start()
 {
 	path_tex = app->tex->Load("maps/path.png");
-
 	return true;
 }
 
@@ -90,6 +89,7 @@ bool M_Pathfinding::PostUpdate(float dt)
 
 		app->render->Blit(path_tex, p.x, p.y + 16);
 	}
+
 	
 
 	return true;
@@ -253,7 +253,6 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
-	
 	BROFILER_CATEGORY("CRATE PATH", Profiler::Color::LightBlue);
 	last_path.clear();
 

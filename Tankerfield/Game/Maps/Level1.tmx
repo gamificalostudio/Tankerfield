@@ -1614,7 +1614,10 @@
    <tile gid="1"/>
   </data>
  </layer>
- <layer name="Colliders" width="40" height="40" visible="0">
+ <layer name="Colliders" width="40" height="40">
+  <properties>
+   <property name="Navigation" type="float" value="1"/>
+  </properties>
   <data>
    <tile/>
    <tile/>

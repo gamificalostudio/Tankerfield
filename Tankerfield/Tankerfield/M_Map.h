@@ -228,6 +228,8 @@ public:
 	TileSet* GetTilesetFromTileId(int id) const;
 
 	uint GetMaxLevels();
+  
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
 public:
 

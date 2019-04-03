@@ -132,7 +132,6 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
-
 	uint ind = GetRotatedIndex(8, angle);
 	app->render->Blit(tex, pos_map.x, pos_map.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
 

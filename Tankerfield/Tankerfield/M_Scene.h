@@ -1,6 +1,8 @@
 #ifndef __M_SCENE_H__
 #define __M_SCENE_H__
 
+#include <vector>
+
 #include "Module.h"
 #include "SDL/include/SDL_rect.h"
 
@@ -46,8 +48,17 @@ public:
 	// Called before quitting
 	bool CleanUp() override;
 
-private:
+	// ---------
 
+	void DebugPathfinding();
+
+private:
+	/* Debug pathfinding */
+	std::vector<iPoint> debugPath;
+	bool test_path = true;
+	SDL_Texture* path_tex = nullptr;
+
+	iPoint path_tex_offset = { -2, -7 };
 };
 
 #endif // __j1SCENE_H__

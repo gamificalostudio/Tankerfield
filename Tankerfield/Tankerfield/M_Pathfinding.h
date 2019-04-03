@@ -1,16 +1,19 @@
 #ifndef __M_PATHFINDING_H__
 #define __M_PATHFINDING_H__
 
-#include "Module.h"
-#include "Point.h"
 #include <vector>
 #include <list>
 #include <algorithm>
+
+#include "Module.h"
+#include "Point.h"
+#include "M_Textures.h"
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
 struct SDL_Texture;
+
 
 class M_Pathfinding : public Module
 {
