@@ -41,6 +41,7 @@ public:
 	float ClampRotation(float angle);
 	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = 90);
 
+	void SetPivot(const float &x, const float &y);
   
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
@@ -51,6 +52,7 @@ public:
 	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
+	fPoint pivot		= { 0.f, 0.f };
 	bool to_remove = false;//Set it to true if you want the object to be removed
 	//
 	Animation* current_animation = nullptr;

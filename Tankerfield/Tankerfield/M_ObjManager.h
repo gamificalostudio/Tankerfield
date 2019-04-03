@@ -16,6 +16,7 @@ enum ObjectType
 	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
+	STATIC,
 	NO_TYPE
 };
 

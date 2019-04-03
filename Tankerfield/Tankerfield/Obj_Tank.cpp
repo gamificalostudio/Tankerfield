@@ -57,6 +57,7 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
+	SetPivot(30.f, 15.f);
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
@@ -180,7 +181,9 @@ bool Obj_Tank::PostUpdate(float dt)
 	debug_mouse_pos.y += app->render->camera.y;
 	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
-
+	SDL_Rect debug_pivot = { screen_pos.x-3, screen_pos.y-3, 6, 6 };
+	debug_pivot.y += 12;
+	app->render->DrawQuad(debug_pivot, 0, 255, 150);
 
 	return true;
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="left-down" width="40" height="40" tilewidth="60" tileheight="30" infinite="0" nextobjectid="9">
+<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="left-down" width="40" height="40" tilewidth="60" tileheight="30" infinite="0" nextobjectid="12">
  <properties>
   <property name="offset_x" type="int" value="-30"/>
   <property name="offset_y" type="int" value="0"/>
@@ -4829,4 +4829,9 @@
    <tile/>
   </data>
  </layer>
+ <objectgroup name="StaticObjects">
+  <object id="9" name="garage" x="91.5" y="210.5" width="120" height="120"/>
+  <object id="10" x="-9" y="13"/>
+  <object id="11" name="garage" x="330.5" y="119.5" width="120" height="120"/>
+ </objectgroup>
 </map>

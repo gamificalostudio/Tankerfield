@@ -81,6 +81,11 @@ float Object::ClampRotation(float angle)
 	return angle;
 }
 
+void Object::SetPivot(const float & x, const float & y)
+{
+	pivot.create(x, y);
+}
+
 bool Object::LoadRects(pugi::xml_node const & node, SDL_Rect * rects)
 {
 	//Inicialization

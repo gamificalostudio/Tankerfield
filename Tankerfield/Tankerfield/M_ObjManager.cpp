@@ -15,6 +15,7 @@
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
 #include "Obj_Tank.h"
+#include "Obj_Static.h"
 #include "Bullet_Basic.h"
 #include "Brofiler/Brofiler.h"
 
@@ -146,6 +147,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::BASIC_BULLET:
 		ret = new Bullet_Basic(pos);
 		ret->type = BASIC_BULLET;
+		break;
+	case ObjectType::STATIC:
+		ret = new Obj_Static(pos);
+		ret->type = STATIC;
 		break;
 	}
   
