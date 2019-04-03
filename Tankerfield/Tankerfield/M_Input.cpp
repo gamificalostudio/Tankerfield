@@ -166,11 +166,19 @@ bool M_Input::PreUpdate()
 				{
 					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
 					{
-						if((*iter)->haptic!=nullptr)
+						if ((*iter)->haptic != nullptr)
+						{
 							SDL_HapticClose((*iter)->haptic);
+							(*iter)->haptic = nullptr;
+						}
+							
 
 						if ((*iter)->ctr_pointer != nullptr)
-						SDL_GameControllerClose((*iter)->ctr_pointer);
+						{
+							SDL_GameControllerClose((*iter)->ctr_pointer);
+							(*iter)->ctr_pointer = nullptr;
+						}
+						
 
 						delete (*iter);
 						(*iter) = nullptr;
@@ -297,28 +305,41 @@ Controller** M_Input::GetAbleController()
 	return ret;
 }
 
+Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
+{
+
+		if (this == nullptr || ctr_pointer == nullptr)
+			return 0;
+
+		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+		if (abs(value) > dead_zone)
+		{
+			return value;
+		}
+		else
+		{
+			return 0;
+		}
+	
+}
+
 //This funtion returns axis and triggers state value
 // The state is a value ranging from -32768 to 32767.
-
 //strengh -> from 0 to 1
 //length  -> strength of the rumble to play as a 0-1 float value
-
 int Controller::PlayRumble(float strengh, Uint32 length)
 {
-	if (haptic != nullptr)
-	{
-		return SDL_HapticRumblePlay(haptic, strengh, length);
-	}
-	else
-	{
+	if (this == nullptr || haptic == nullptr)
 		return 0;
-	}
+
+	return SDL_HapticRumblePlay(haptic, strengh, length);
+	
 }
 
 int Controller::StopRumble()
 {
-	if (haptic != nullptr)
-		return SDL_HapticRumbleStop(haptic);
-	else
+	if (this == nullptr || haptic == nullptr)
 		return 0;
+
+	return SDL_HapticRumbleStop(haptic);
 }
