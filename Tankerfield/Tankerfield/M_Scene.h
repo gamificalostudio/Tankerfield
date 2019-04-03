@@ -58,7 +58,7 @@ private:
 	bool test_path = true;
 	SDL_Texture* path_tex = nullptr;
 
-	iPoint path_tex_offset = { -2, -7 };
+	iPoint path_tex_offset = { 0, 16 };
 };
 
 #endif // __j1SCENE_H__
