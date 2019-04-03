@@ -96,7 +96,7 @@ bool M_Scene::PostUpdate()
 bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
-
+	app->map->Unload();
 
 
 	return true;

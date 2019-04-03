@@ -197,8 +197,12 @@ public:
 	bool Awake(pugi::xml_node&) override;
 
 	bool Update(float dt) override;
+	
+	bool CleanUp() override;
 
 	bool Load(const std::string & file_name);
+
+	bool Unload();
 
 	iPoint MapToWorld(int column, int row) const;
 

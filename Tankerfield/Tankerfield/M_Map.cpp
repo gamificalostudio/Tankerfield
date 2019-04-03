@@ -111,6 +111,12 @@ bool M_Map::Update(float dt)
 	return ret;
 }
 
+bool M_Map::CleanUp()
+{
+	Unload();
+	return true;
+}
+
 bool M_Map::Load(const std::string& file_name)
 {
 	bool ret = true;
@@ -170,6 +176,34 @@ bool M_Map::Load(const std::string& file_name)
 	map_loaded = ret;
 
 	return ret;
+}
+
+bool M_Map::Unload()
+{
+	if (map_loaded)
+		return false;
+
+	for (std::list<TileSet*>::iterator iter = data.tilesets.begin(); iter != data.tilesets.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.tilesets.clear();
+
+	for (std::list<MapLayer*>::iterator iter = data.mapLayers.begin(); iter != data.mapLayers.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.mapLayers.clear();
+
+	return true;
 }
 
 void M_Map::DebugMap() 
