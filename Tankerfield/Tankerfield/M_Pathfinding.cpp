@@ -3,7 +3,10 @@
 #include "Log.h"
 #include "App.h"
 #include "M_Pathfinding.h"
-
+#include "M_input.h"
+#include "M_render.h"
+#include "M_Textures.h"
+#include "M_map.h"
 
 M_Pathfinding::M_Pathfinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
@@ -16,10 +19,88 @@ M_Pathfinding::~M_Pathfinding()
 	RELEASE_ARRAY(map);
 }
 
+bool M_Pathfinding::Start()
+{
+	path_tex = app->tex->Load("maps/path.png");
+
+	return true;
+}
+
+bool M_Pathfinding::PostUpdate(float dt)
+{
+	if (test_path)
+	{
+		static iPoint origin;
+		static bool origin_selected = false;
+		static bool createdDebugPath = false;
+
+		iPoint mousePos;
+		app->input->GetMousePosition(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		p = app->map->ScreenToMapI(p.x, p.y);
+
+		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
+		{
+			if (origin_selected == true)
+			{
+
+				origin_selected = false;
+
+				if (CreatePath(origin, p) != -1)
+				{
+					createdDebugPath = true;
+				}
+
+			}
+			else
+			{
+				origin = p;
+				origin_selected = true;
+				createdDebugPath = false;
+				debugPath.clear();
+
+			}
+		}
+
+		if (createdDebugPath)
+		{
+			uint debugPathSize = debugPath.size();
+			if (debugPathSize == 0)
+			{
+
+				const std::vector<iPoint>* path = app->pathfinding->GetLastPath();
+				uint sizeArray = path->size();
+				for (uint i = 0; i < sizeArray; ++i)
+				{
+					debugPath.push_back(path->at(i));
+				}
+			}
+			else
+			{
+				for (uint i = 0; i < debugPathSize; ++i)
+				{
+					iPoint pos = app->map->MapToScreenI(debugPath.at(i).x, debugPath.at(i).y);
+					app->render->Blit(path_tex, pos.x, pos.y + path_tex_offset.y);
+				}
+			}
+
+		}
+
+		p = app->map->MapToScreenI(p.x, p.y);
+
+		app->render->Blit(path_tex, p.x, p.y + path_tex_offset.y);
+	}
+
+	return true;
+}
+
 // Called before quitting
 bool M_Pathfinding::CleanUp()
 {
 	LOG("Freeing pathfinding library");
+
+	if (path_tex != nullptr)
+		app->tex->UnLoad(path_tex);
 
 	last_path.clear();
 

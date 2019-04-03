@@ -1,14 +1,18 @@
 #ifndef __M_PATHFINDING_H__
 #define __M_PATHFINDING_H__
 
-#include "Module.h"
-#include "Point.h"
 #include <vector>
 #include <list>
 #include <algorithm>
 
+#include "Module.h"
+#include "Point.h"
+#include "M_Textures.h"
+
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
+
+class SDL_Texture;
 
 class M_Pathfinding : public Module
 {
@@ -18,6 +22,10 @@ public:
 
 	// Destructor
 	~M_Pathfinding();
+
+	bool Start() override;
+
+	bool PostUpdate(float dt) override;
 
 	// Called before quitting
 	bool CleanUp() override;
@@ -49,6 +57,13 @@ private:
 	uchar* map;
 	// we store the created path here
 	std::vector<iPoint> last_path;
+
+	/* Debug */
+	std::vector<iPoint> debugPath;
+	bool test_path = true;
+	SDL_Texture* path_tex = nullptr;
+
+	iPoint path_tex_offset = { 0,16 };
 };
 
 // forward declaration
