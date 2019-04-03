@@ -165,6 +165,14 @@ public:
 		float angle_sin = sinf(angle);
 		x = aux.x * angle_cos - aux.y * angle_sin;
 		y = aux.x * angle_sin + aux.y * angle_cos;
+
+	}
+	
+	//Linear interpolation
+
+	float lerp(float posx, float posy, float t){
+
+		return (1 - t)*posx + t * posy;
 	}
 
 	explicit operator Point<int> () const

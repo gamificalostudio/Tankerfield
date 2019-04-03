@@ -7,6 +7,7 @@
 #include "Obj_Tank.h"
 #include "M_ObjManager.h"
 #include "M_Scene.h"
+#include "Point.h"
 
 #include "Brofiler/Brofiler.h"
 
@@ -82,15 +83,14 @@ bool M_Render::PostUpdate(float dt)
 	// Camera fix TODO: Move it to camera class
 
 	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
-	if (camera.x - screen_pos.x <= 7 || camera.y - screen_pos.y <= 7) {
-		camera.x = screen_pos.x*1.5f - app->win->screen_surface->w * 0.5f;
-		camera.y = screen_pos.y*1.5f - app->win->screen_surface->h * 0.5f;
-	}
-	else {
-		camera.x = screen_pos.x - app->win->screen_surface->w;
-		camera.y = screen_pos.y - app->win->screen_surface->h;
-	}
 	
+		/*camera.x = screen_pos.x*1.5f - app->win->screen_surface->w * 0.5f;
+		camera.y = screen_pos.y*1.5f - app->win->screen_surface->h * 0.5f;*/
+	
+		camera.x = screen_pos.x - app->win->screen_surface->w*0.5;
+		camera.y = screen_pos.y - app->win->screen_surface->h*0.5;
+	
+		
 
 
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
