@@ -174,7 +174,6 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
-	
 	BROFILER_CATEGORY("CRATE PATH", Profiler::Color::LightBlue);
 	last_path.clear();
 

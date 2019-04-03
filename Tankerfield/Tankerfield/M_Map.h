@@ -212,7 +212,7 @@ public:
 
 	TileSet* GetTilesetFromTileId(int id) const;
 
-
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
 public:
 
