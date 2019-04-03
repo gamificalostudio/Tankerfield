@@ -124,7 +124,9 @@ public:
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
 
-	void DoOnTrigger(Collider* c1, Collider *c2);
+	inline void DoOnTrigger(Collider* c1, Collider *c2);
+
+	inline void DoOnTriggerExit(Collider* c1, Collider *c2);
 
 private:
 

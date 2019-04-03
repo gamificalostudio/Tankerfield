@@ -147,6 +147,9 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Bullet_Basic(pos);
 		ret->type = BASIC_BULLET;
 		break;
+	case ObjectType::SENSOR:
+		ret = new Sensor(pos);
+		ret->type = SENSOR;
 	}
   
 	if (ret != nullptr)

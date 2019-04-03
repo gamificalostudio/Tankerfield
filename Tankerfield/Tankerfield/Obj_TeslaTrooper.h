@@ -34,13 +34,23 @@ private:
 };
 
 // TODO REMOVE IT 
+#include "M_Collision.h"
+
 class Sensor : public Object
 {
-	Sensor();
+public:
+
+	Sensor(fPoint pos): Object(pos) { }
+
+	~Sensor()
+	{
+		coll->Destroy();
+	}
 
 	bool Start()
 	{
-
+		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::NONE, this);
+		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 		return true;
 	}
 

@@ -6,6 +6,7 @@
 #include "Defs.h"
 #include "Log.h"
 #include "Brofiler/Brofiler.h"
+#include <math.h>
 
 bool Collider::CheckCollision(Collider*  coll) const
 {
@@ -131,7 +132,7 @@ bool M_Collision::Update(float dt)
 				{
 					SolveOverlapDD(collider_1, collider_2);
 				}
-				
+
 				do_overlap = false;
 			}
 		}
@@ -182,29 +183,10 @@ bool M_Collision::Update(float dt)
 			if (collider_1->CheckCollision(collider_2))
 			{
 				DoOnTrigger(collider_1, collider_2);
-				DoOnTrigger(collider_2, collider_1);
 			}
 			else
 			{
-				for (std::list<Collider*>::iterator iter = collider_1->collisions_list.begin(); iter != collider_1->collisions_list.end(); ++iter)
-				{
-					if ((*iter) == collider_2)
-					{
-						collider_1->object->OnTriggerExit(collider_2);
-						collider_1->collisions_list.erase(iter);
-						break;
-					}
-				}
-
-				for (std::list<Collider*>::iterator iter = collider_2->collisions_list.begin(); iter != collider_2->collisions_list.end(); ++iter)
-				{
-					if ((*iter) == collider_1)
-					{
-						collider_2->object->OnTriggerExit(collider_1);
-						collider_2->collisions_list.erase(iter);
-						break;
-					}
-				}
+				DoOnTriggerExit(collider_1, collider_2);
 			}
 		}
 	}
@@ -230,7 +212,7 @@ bool M_Collision::PostUpdate()
 
 		switch ((*item)->body_type)
 		{
-		case Collider::BODY_TYPE::NONE:
+		case Collider::BODY_TYPE::SENSOR:
 			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {   0, 255, 0 , 255 });
 			break;
 		case Collider::BODY_TYPE::DYNAMIC:
@@ -274,6 +256,13 @@ Collider * M_Collision::AddCollider(fPoint pos , float width , float height, Col
 
 void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
+	// Calculate directions ===========================================================
+	bool directions[(int)Collider::OVERLAP_DIR::MAX];
+	directions[(int)Collider::OVERLAP_DIR::LEFT] =  dynamic_col->object->velocity.x > 0;
+	directions[(int)Collider::OVERLAP_DIR::RIGHT] = dynamic_col->object->velocity.x < 0;
+	directions[(int)Collider::OVERLAP_DIR::UP] =    dynamic_col->object->velocity.y > 0;
+	directions[(int)Collider::OVERLAP_DIR::DOWN] =  dynamic_col->object->velocity.y < 0;
+
 	// Calculate between colliders overlap ============================================
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
 	distances[(int)Collider::OVERLAP_DIR::LEFT]		= dynamic_col->position.x + dynamic_col->width - static_col->position.x;
@@ -285,19 +274,22 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 
 	for (int i = 0; i < (int)Collider::OVERLAP_DIR::MAX; ++i)
 	{
-			if (overlap_dir == -1)
-				overlap_dir = i;
-			else if (distances[i] == distances[(int)overlap_dir])
+		if (overlap_dir == -1)
+		{
+			overlap_dir = i;
+		}
+		else if (distances[i] == distances[(int)overlap_dir])
+		{
+			if ((Collider::OVERLAP_DIR)i == dynamic_col->last_overlap)
 			{
-				if ((Collider::OVERLAP_DIR)i == dynamic_col->last_overlap)
-				{
-					overlap_dir = i;
-				}
-			}
-			else if (distances[i] < distances[(int)overlap_dir])
 				overlap_dir = i;
+			}
+		}
+		else if (distances[i] < distances[(int)overlap_dir])
+		{
+			overlap_dir = i;
+		}
 	}
-
 
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
@@ -367,8 +359,10 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 	c2->SetPos(c2->object->pos_map.x, c2->object->pos_map.y);
 }
 
-void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
+inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 {
+	// Find on Collider 1 =========================================
+
 	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
 	{
 		c1->object->OnTrigger(c2);
@@ -377,6 +371,40 @@ void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	{
 		c1->collisions_list.push_back(c2);
 		c1->object->OnTriggerEnter(c2);
+	}
+
+	// Find on Collider 2 =========================================
+
+	if (std::find(c2->collisions_list.begin(), c2->collisions_list.end(), c1) != c2->collisions_list.end())
+	{
+		c2->object->OnTrigger(c1);
+	}
+	else
+	{
+		c2->collisions_list.push_back(c1);
+		c2->object->OnTriggerEnter(c1);
+	}
+
+
+
+}
+
+inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
+{
+	std::list<Collider*>::iterator iter = std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2);
+
+	if (iter != c1->collisions_list.end())
+	{
+		c1->object->OnTriggerExit(c2);
+		c1->collisions_list.erase(iter);
+	}
+
+	iter = std::find(c2->collisions_list.begin(), c2->collisions_list.end(), c1);
+
+	if (iter != c2->collisions_list.end())
+	{
+		c2->object->OnTriggerExit(c1);
+		c2->collisions_list.erase(iter);
 	}
 }
 
