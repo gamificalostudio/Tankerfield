@@ -52,8 +52,8 @@ bool M_Render::Awake(pugi::xml_node& config)
 
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
-		camera.x = -app->win->screen_surface->w/2;
-		camera.y = -app->win->screen_surface->h / 2;
+		camera.x = -app->win->screen_surface->w * .5f;
+		camera.y = -app->win->screen_surface->h * .5f;
 		//app->render->camera.y = app->scene->tank_1->pos.y;
 		
 	}
@@ -79,8 +79,23 @@ bool M_Render::PreUpdate()
 
 bool M_Render::PostUpdate(float dt)
 {
+	// Camera fix TODO: Move it to camera class
+
+	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
+	if (camera.x - screen_pos.x <= 7 || camera.y - screen_pos.y <= 7) {
+		camera.x = screen_pos.x*1.5f - app->win->screen_surface->w * 0.5f;
+		camera.y = screen_pos.y*1.5f - app->win->screen_surface->h * 0.5f;
+	}
+	else {
+		camera.x = screen_pos.x - app->win->screen_surface->w;
+		camera.y = screen_pos.y - app->win->screen_surface->h;
+	}
+	
+
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
 	return true;
 }
 

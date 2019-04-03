@@ -187,10 +187,6 @@ bool Obj_Tank::PostUpdate(float dt)
 	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
-
-	app->render->camera.x = screen_pos.x-app->win->screen_surface->w / 2;
-	app->render->camera.y = screen_pos.y-app->win->screen_surface->h / 2;
-
 	return true;
 }
 
