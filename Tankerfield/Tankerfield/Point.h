@@ -172,7 +172,7 @@ public:
 
 	float lerp(float posx, float posy, float t){
 
-		return (1 - t)*posx + t * posy;
+		return (1.f - t)*posx + t * posy;
 	}
 
 	explicit operator Point<int> () const
