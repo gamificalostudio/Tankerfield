@@ -4,7 +4,13 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "Obj_Tank.h"
+#include "M_ObjManager.h"
+#include "M_Scene.h"
+#include "Point.h"
+
 #include "Brofiler/Brofiler.h"
+
 
 M_Render::M_Render() : Module()
 {
@@ -42,10 +48,14 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
+
+
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
-		camera.x = 0;
-		camera.y = 0;
+		camera.x = -app->win->screen_surface->w * .5f;
+		camera.y = -app->win->screen_surface->h * .5f;
+		
+		
 	}
 
 	return ret;
@@ -69,8 +79,22 @@ bool M_Render::PreUpdate()
 
 bool M_Render::PostUpdate(float dt)
 {
+	// Camera fix TODO: Move it to camera class
+
+	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
+	fPoint target_pos;
+	
+	target_pos.x = camera.x;
+	target_pos.y = camera.y;
+
+	iPoint a;
+	camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.6f);
+	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.6f);
+
+		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
 	return true;
 }
 

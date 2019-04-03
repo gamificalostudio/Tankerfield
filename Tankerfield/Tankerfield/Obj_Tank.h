@@ -38,7 +38,7 @@ public:
 
 private:
 	void Movement(float dt);
-	void InputMovementKeyboard(fPoint & input);
+	void InputMovementKeyboard(fPoint & input,float dt);
 	void InputMovementController(fPoint & input);
 
 	void Shoot();

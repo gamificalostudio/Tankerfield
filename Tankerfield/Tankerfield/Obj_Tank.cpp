@@ -10,6 +10,7 @@
 #include "Log.h"
 #include "M_Map.h"
 #include "M_ObjManager.h"
+#include "M_Window.h"
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
 
@@ -52,7 +53,7 @@ bool Obj_Tank::Start()
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
-	speed = 2.5f;//TODO: Load from xml
+	speed = 8.f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -97,6 +98,7 @@ bool Obj_Tank::Update(float dt)
 	Movement(dt);
 	coll->SetPos(pos_map.x, pos_map.y);
 
+
 	return true;
 }
 
@@ -105,7 +107,7 @@ void Obj_Tank::Movement(float dt)
 	fPoint input_dir(0.f, 0.f);
 	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputMovementKeyboard(input_dir);
+		InputMovementKeyboard(input_dir,dt);
 	}
 	else if (last_input == INPUT_METHOD::CONTROLLER)
 	{
@@ -126,22 +128,26 @@ void Obj_Tank::Movement(float dt)
 	pos_map += velocity;
 }
 
-void Obj_Tank::InputMovementKeyboard(fPoint & input)
+void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
+		//app->render->camera.y -= floor(100.0f * dt);
 		input.y -= 1.f;
 	}
 	if (app->input->GetKey(kb_left) == KEY_DOWN || app->input->GetKey(kb_left) == KEY_REPEAT)
 	{
+		//app->render->camera.x -= floor(100.0f * dt);
 		input.x -= 1.f;
 	}
 	if (app->input->GetKey(kb_down) == KEY_DOWN || app->input->GetKey(kb_down) == KEY_REPEAT)
 	{
+		//app->render->camera.y += floor(100.0f * dt);
 		input.y += 1.f;
 	}
 	if (app->input->GetKey(kb_right) == KEY_DOWN || app->input->GetKey(kb_right) == KEY_REPEAT)
 	{
+		//app->render->camera.x += floor(100.0f * dt);
 		input.x += 1.f;
 	}
 }
@@ -180,7 +186,6 @@ bool Obj_Tank::PostUpdate(float dt)
 	debug_mouse_pos.y += app->render->camera.y;
 	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
-
 
 	return true;
 }
