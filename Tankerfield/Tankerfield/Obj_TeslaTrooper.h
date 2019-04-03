@@ -33,5 +33,29 @@ private:
 
 };
 
+// TODO REMOVE IT 
+class Sensor : public Object
+{
+	Sensor();
+
+	bool Start()
+	{
+
+		return true;
+	}
+
+	void OnTriggerEnter(Collider* c1)
+	{
+		LOG("ENTER");
+	}
+	void OnTrigger(Collider* c1)
+	{
+		LOG("BOOOOOOOOOOOOOOOI");
+	}
+	void OnTriggerExit(Collider* c1)
+	{
+		LOG("EXIT");
+	}
+};
 #endif // !__TESLATROOPER_H__
 

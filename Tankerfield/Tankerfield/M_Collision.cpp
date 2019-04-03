@@ -82,7 +82,7 @@ bool M_Collision::Update(float dt)
 			continue;
 		}
 
-		switch ((*iterator_1)->type)
+		switch ((*iterator_1)->body_type)
 		{
 		case Collider::BODY_TYPE::STATIC:
 			static_colliders.push_back(*iterator_1);
@@ -186,23 +186,25 @@ bool M_Collision::Update(float dt)
 			}
 			else
 			{
+				for (std::list<Collider*>::iterator iter = collider_1->collisions_list.begin(); iter != collider_1->collisions_list.end(); ++iter)
+				{
+					if ((*iter) == collider_2)
+					{
+						collider_1->object->OnTriggerExit(collider_2);
+						collider_1->collisions_list.erase(iter);
+						break;
+					}
+				}
 
-
-				//for (std::vector<Collider::Collision_Info>::iterator iter = collider_1->collisions_info.begin(); iter != collider_1->collisions_info.end(); ++iter)
-				//{
-				//	if ((*iter).collider == collider_2)
-				//	{
-				//		collider_1->object->OnTrigger(collider_2);
-				//	}
-				//}
-
-				//for (std::vector<Collider::Collision_Info>::iterator iter = collider_2->collisions_info.begin(); iter != collider_2->collisions_info.end(); ++iter)
-				//{
-				//	if ((*iter).collider == collider_2)
-				//	{
-				//		collider_2->object->OnTrigger(collider_1);
-				//	}
-				//}
+				for (std::list<Collider*>::iterator iter = collider_2->collisions_list.begin(); iter != collider_2->collisions_list.end(); ++iter)
+				{
+					if ((*iter) == collider_1)
+					{
+						collider_2->object->OnTriggerExit(collider_1);
+						collider_2->collisions_list.erase(iter);
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -226,19 +228,16 @@ bool M_Collision::PostUpdate()
 	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
 
-		switch ((*item)->tag)
+		switch ((*item)->body_type)
 		{
-		case Collider::TAG::NONE: // white
+		case Collider::BODY_TYPE::NONE:
+			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {   0, 255, 0 , 255 });
 			break;
-		case Collider::TAG::WALL: // blue
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, {255, 0, 0 , 255});
+		case Collider::BODY_TYPE::DYNAMIC:
+			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 0 , 255 });
 			break;
-		case Collider::TAG::PLAYER: // green
+		case Collider::BODY_TYPE::STATIC:
 			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
-			break;
-		case Collider::TAG::GOD: // orange
-			break;
-		case Collider::TAG::ENEMY: // violet
 			break;
 		}
 	}
@@ -364,29 +363,20 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 		break;
 	}
 
-
 	c1->SetPos(c1->object->pos_map.x, c1->object->pos_map.y);
 	c2->SetPos(c2->object->pos_map.x, c2->object->pos_map.y);
 }
 
 void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 {
-
-	bool find = false;
-
-	for (std::vector<Collider::Collision_Info>::iterator iter = c1->collisions_info.begin(); iter != c1->collisions_info.end(); ++iter)
+	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
 	{
-		if ((*iter).collider == c2)
-		{
-			c1->object->OnTrigger(c2);
-			find = true;
-		}
+		c1->object->OnTrigger(c2);
 	}
-		
-	if (find == false)
+	else
 	{
+		c1->collisions_list.push_back(c2);
 		c1->object->OnTriggerEnter(c2);
 	}
-
 }
 

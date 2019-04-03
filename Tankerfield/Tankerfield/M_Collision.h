@@ -36,13 +36,6 @@ public:
 		EXIT
 	};
 
-	struct Collision_Info
-	{
-		Collider*			collider;
-		ON_TRIGGER_STATE	on_trigger_state;
-		bool                check = false;
-	};
-
 	enum class BODY_TYPE
 	{
 		NONE,
@@ -74,9 +67,9 @@ public:
 		position = { x, y };
 	}
 
-	void AddRigidBody(const Collider::BODY_TYPE new_type)
+	void AddRigidBody(const Collider::BODY_TYPE new_body_type)
 	{
-		type = new_type;
+		body_type = new_body_type;
 	}
 
 	void Destroy()
@@ -84,7 +77,7 @@ public:
 		to_destroy = true;
 	}
 
-	bool CheckCollision(Collider* coll) const;
+	bool CheckCollision(Collider* collider) const;
 
 private:
 
@@ -98,13 +91,13 @@ private:
 
 	TAG tag = TAG::NONE;
 
-	std::vector<Collision_Info> collisions_info;
+	std::list<Collider*> collisions_list;
 
 	bool to_destroy = false;
 
 	// Body vars ===================================================
 
-	BODY_TYPE type = BODY_TYPE::STATIC;
+	BODY_TYPE body_type = BODY_TYPE::STATIC;
 
 	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
