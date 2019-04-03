@@ -7,7 +7,7 @@
 
 struct UI_ImageDef : public UI_ElementDefinition
 {
-	SDL_Rect draw_rect;
+	iRect draw_rect;
 	bool is_animated = false;
 	Animation image_animation;
 };
@@ -24,7 +24,7 @@ public:
 
 private:
 
-	SDL_Rect draw_rect;
+	iRect draw_rect;
 };
 
 #endif // _IMAGE_H__

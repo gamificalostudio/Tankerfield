@@ -2,7 +2,7 @@
 #define __M_SCENEMANAGER_H__
 
 #include "Module.h"
-#include "SDL\include\SDL_rect.h"
+#include "Rect.h"
 
 class M_SceneManager : public Module
 {
@@ -25,7 +25,7 @@ private:
 
 	Uint32 start_time = 0;
 	Uint32 total_time = 0;
-	SDL_Rect screen;
+	iRect screen;
 	Module* ModuleOff = nullptr;
 	Module* ModuleOn = nullptr;
 };

@@ -106,7 +106,7 @@ bool Object::LoadAnimation(pugi::xml_node & node, Animation & anim)
 {
 	anim.speed = node.attribute("speed").as_float();
 	for (node = node.child("frame"); node; node = node.next_sibling("sprite")) {
-		SDL_Rect frame;
+		iRect frame;
 		frame.x = node.attribute("x").as_int();
 		frame.y = node.attribute("y").as_int();
 		frame.w = node.attribute("w").as_int();

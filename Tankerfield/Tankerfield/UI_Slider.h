@@ -13,7 +13,7 @@ struct UI_SliderDef: public UI_ElementDefinition
 {
 	int                 distance = 100;
 	int                 fixed_y = 0;
-	SDL_Rect            rail_draw_rect = {0,0,0,0};
+	iRect            rail_draw_rect = {0,0,0,0};
 	int                 default_value = 0;
 	UI_ButtonDef   thumb_definition;
 	int                 max_value = 100;

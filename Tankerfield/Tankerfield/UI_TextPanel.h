@@ -39,7 +39,7 @@ private:
 
 	SDL_Texture*           text_texture = nullptr;
 	UI_TextPanelDef   definition;
-	vector<SDL_Rect>       rects;
+	vector<iRect>       rects;
 	uint                   lines = 0;
 	int                    font_height = 0;
 	int                    font_width = 0;

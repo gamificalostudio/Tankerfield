@@ -1,7 +1,7 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
-#include "SDL/include/SDL_rect.h"
+#include "Rect.h"
 #include "Defs.h"
 
 class Animation
@@ -9,7 +9,7 @@ class Animation
 public:
 	bool loop = true;
 	float speed = 1.0f;
-	SDL_Rect * frames = nullptr;
+	iRect * frames = nullptr;
 
 public:
 	float current_frame=0;
@@ -19,15 +19,15 @@ public:
 public:
 	Animation(uint frame_num)
 	{
-		frames = new SDL_Rect[frame_num];
+		frames = new iRect[frame_num];
 	}
 
-	void PushBack(const SDL_Rect& rect)
+	void PushBack(const iRect& rect)
 	{
 		frames[last_frame++] = rect;
 	}
 
-	SDL_Rect& GetCurrentFrame(float dt)
+	iRect& GetCurrentFrame(float dt)
 	{
 		current_frame += speed*dt;
 		if (current_frame >= last_frame)
@@ -39,7 +39,7 @@ public:
 	}
 	
 	//This overloaded GetCurrentFrame is used for Animation arrays where the frame number must concide
-	SDL_Rect& GetCurrentFrame(float dt, float & new_current_frame)
+	iRect& GetCurrentFrame(float dt, float & new_current_frame)
 	{
 		new_current_frame += speed*dt;
 		if (new_current_frame >= last_frame)

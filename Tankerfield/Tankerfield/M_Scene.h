@@ -2,7 +2,7 @@
 #define __M_SCENE_H__
 
 #include "Module.h"
-#include "SDL/include/SDL_rect.h"
+#include "Rect.h"
 
 struct SDL_Texture;
 struct Controller;

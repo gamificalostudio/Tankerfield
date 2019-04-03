@@ -61,8 +61,8 @@ private:
 	float base_angle = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
-	static SDL_Rect * base_rects;
-	static SDL_Rect * turr_rects;
+	static iRect * base_rects;
+	static iRect * turr_rects;
 	static int rects_num;
 
 	float speed = 0.f;

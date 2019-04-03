@@ -18,7 +18,7 @@ bool UI_Image::Draw()
 {
 	// TODO 2: Add animation.h methods
 
-	//SDL_Rect anim_rect = animation.GetLastFrame();
+	//iRect anim_rect = animation.GetLastFrame();
 
 	//section.w = anim_rect.w;
 	//section.h = anim_rect.h;

@@ -5,6 +5,7 @@
 #include "M_Render.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
+#include "SDL/include/SDL_rect.h"
 
 M_Render::M_Render() : Module()
 {
@@ -44,8 +45,8 @@ bool M_Render::Awake(pugi::xml_node& config)
 	{
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
-		camera.x = 0;
-		camera.y = 0;
+		camera.pos.x = 0;
+		camera.pos.y = 0;
 	}
 
 	return ret;
@@ -56,7 +57,12 @@ bool M_Render::Start()
 {
 	LOG("render start");
 	// back background
-	SDL_RenderGetViewport(renderer, &viewport);
+	SDL_Rect viewport_rect;
+	viewport_rect.x = viewport.pos.x;
+	viewport_rect.y = viewport.pos.y;
+	viewport_rect.w = viewport.w;
+	viewport_rect.h = viewport.h;
+	SDL_RenderGetViewport(renderer, &viewport_rect);
 	return true;
 }
 
@@ -85,8 +91,8 @@ bool M_Render::CleanUp()
 // Load Game State
 bool M_Render::Load(pugi::xml_node& data)
 {
-	camera.x = data.child("camera").attribute("x").as_int();
-	camera.y = data.child("camera").attribute("y").as_int();
+	camera.pos.x = data.child("camera").attribute("x").as_int();
+	camera.pos.y = data.child("camera").attribute("y").as_int();
 
 	return true;
 }
@@ -96,8 +102,8 @@ bool M_Render::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node cam = data.append_child("camera");
 
-	cam.append_attribute("x") = camera.x;
-	cam.append_attribute("y") = camera.y;
+	cam.append_attribute("x") = camera.pos.x;
+	cam.append_attribute("y") = camera.pos.y;
 
 	return true;
 }
@@ -107,14 +113,14 @@ void M_Render::SetBackgroundColor(SDL_Color color)
 	background = color;
 }
 
-void M_Render::SetViewPort(const SDL_Rect& rect)
+void M_Render::SetViewPort(const iRect& rect)
 {
-	SDL_RenderSetViewport(renderer, &rect);
+	SDL_RenderSetViewport(renderer, &(SDL_Rect)rect);
 }
 
 void M_Render::ResetViewPort()
 {
-	SDL_RenderSetViewport(renderer, &viewport);
+	SDL_RenderSetViewport(renderer, &(SDL_Rect)viewport);
 }
 
 iPoint M_Render::ScreenToWorld(int x, int y) const
@@ -122,8 +128,8 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 	iPoint ret;
 	int scale = app->win->GetScale();
 
-	ret.x = (x - camera.x / scale);
-	ret.y = (y - camera.y / scale);
+	ret.x = (x - camera.pos.x / scale);
+	ret.y = (y - camera.pos.y / scale);
 
 	return ret;
 }
@@ -136,8 +142,8 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 	uint scale = app->win->GetScale();
 
 	SDL_Rect rect;
-	rect.x = (int)(-camera.x * speed) + screen_x * scale;
-	rect.y = (int)(-camera.y * speed) + screen_y * scale;
+	rect.x = (int)(-camera.pos.x * speed) + screen_x * scale;
+	rect.y = (int)(-camera.pos.y * speed) + screen_y * scale;
 
 	if (section != NULL)
 	{
@@ -171,7 +177,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 	return ret;
 }
 
-bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
+bool M_Render::DrawQuad(const iRect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -182,8 +188,8 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	SDL_Rect rec(rect);
 	if (use_camera)
 	{
-		rec.x = (int)(-camera.x + rect.x * scale);
-		rec.y = (int)(-camera.y + rect.y * scale);
+		rec.x = (int)(-camera.pos.x + rect.pos.x * scale);
+		rec.y = (int)(-camera.pos.y + rect.pos.y * scale);
 		rec.w *= scale;
 		rec.h *= scale;
 	}
@@ -289,8 +295,8 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 {
 	int scale = app->win->GetScale();
 
-	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
-	SDL_Rect cam = { camera.x,camera.y,camera.w,camera.h };
+	iRect r = { x*scale,y*scale,w*scale,h*scale };
+	iRect cam = { camera.x,camera.y,camera.w,camera.h };
 
 	return SDL_HasIntersection(&r, &cam);
 }

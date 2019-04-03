@@ -7,6 +7,7 @@
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL.h"
 #include "Module.h"
+#include "Rect.h"
 #include "Point.h"
 
 
@@ -14,8 +15,6 @@
 #define NUM_MOUSE_BUTTONS 5
 #define MAX_CONTROLLERS 4
 //#define LAST_KEYS_PRESSED_BUFFER 50
-
-struct SDL_Rect;
 
 enum EventWindow
 {
