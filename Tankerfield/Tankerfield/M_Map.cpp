@@ -180,7 +180,7 @@ bool M_Map::Load(const std::string& file_name)
 
 bool M_Map::Unload()
 {
-	if (map_loaded)
+	if (!map_loaded)
 		return false;
 
 	for (std::list<TileSet*>::iterator iter = data.tilesets.begin(); iter != data.tilesets.end(); ++iter)
@@ -202,6 +202,18 @@ bool M_Map::Unload()
 		}
 	}
 	data.mapLayers.clear();
+
+	for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			app->collision->DeleteCollider((*iter));
+
+		}
+	}
+	data.colliders_list.clear();
+
+	data.map_properties.UnloadProperties();
 
 	return true;
 }
@@ -265,8 +277,9 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 				{
 					fPoint pos = layer->GetTilePos(i);
 
-					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
-				}
+					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+					data.colliders_list.push_back(aux);
+			}
 
 			++i;
 		}
@@ -417,6 +430,11 @@ TileSet* M_Map::GetTilesetFromTileId(int id) const
 	return (*item);
 }
 
+uint M_Map::GetMaxLevels()
+{
+	return numLevels;
+}
+
 iPoint M_Map::MapToWorld(int column, int row) const
 {
 	iPoint retVec(0, 0);
@@ -509,8 +527,15 @@ fPoint M_Map::WorldToMapF(float x, float y)
 	return ret;
 }
 
+void Properties::UnloadProperties()
+{
+	std::list<Property*>::iterator item = list.begin();
 
+	while (item != list.end())
+	{
+		RELEASE(*item);
+		++item;
+	}
 
-
-
-
+	list.clear();
+}

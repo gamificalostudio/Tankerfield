@@ -42,7 +42,7 @@ bool M_Scene::Start()
 
 
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
+	
 
 	return true;
 }
@@ -78,6 +78,15 @@ bool M_Scene::Update(float dt)
 		app->render->camera.x += floor(200.0f * dt);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+	{
+		++current_level;
+
+		if (current_level == app->map->GetMaxLevels())
+			current_level = 0;
+
+		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
+	}
 	return true;
 }
 
@@ -97,7 +106,7 @@ bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
 	app->map->Unload();
-
+	app->objectmanager->DeleteObjects();
 
 	return true;
 }

@@ -13,6 +13,7 @@ struct Levels
 
 struct Properties
 {
+
 	struct Property
 	{
 		std::string name;
@@ -21,16 +22,12 @@ struct Properties
 
 	~Properties()
 	{
-		std::list<Property*>::iterator item = list.begin();
-
-		while (item != list.end())
-		{
-			RELEASE(*item);
-			++item;
-		}
-
-		list.clear();
+		UnloadProperties();
 	}
+
+private:
+	std::list<Property*>	list;
+public:
 
 	std::string GetAsString(const char* name, std::string default_value = "") const
 	{
@@ -44,6 +41,7 @@ struct Properties
 		}
 		return ret;
 	}
+	
 	int         GetAsInt(const char* name, int default_value = 0) const
 	{
 		int ret = default_value;
@@ -56,6 +54,7 @@ struct Properties
 		}
 		return ret;
 	}
+	
 	float       GetAsFloat(const char* name, float default_value = 0) const
 	{
 		float ret = default_value;
@@ -69,6 +68,7 @@ struct Properties
 		}
 		return ret;
 	}
+	
 	bool       GetAsBool(const char* name, bool default_value = false) const
 	{
 		bool ret = default_value;
@@ -82,8 +82,6 @@ struct Properties
 		}
 		return ret;
 	}
-
-	std::list<Property*>	list;
 
 	void LoadProperties(pugi::xml_node propertie_node)
 	{
@@ -113,6 +111,8 @@ struct Properties
 			
 		}
 	}
+
+	void UnloadProperties();
 };
 
 // ----------------------------------------------------
@@ -130,6 +130,7 @@ struct MapLayer
 	~MapLayer()
 	{
 		RELEASE(data);
+		
 	}
 
 	inline uint Get(int x, int y) const
@@ -147,6 +148,12 @@ struct MapLayer
 // ----------------------------------------------------
 struct TileSet
 {
+	~TileSet()
+	{
+		if(texture != nullptr)
+			app->tex->UnLoad(texture);
+	}
+
 	SDL_Rect GetTileRect(int id) const;
 
 	std::string			name;
@@ -162,6 +169,7 @@ struct TileSet
 	int					rows;
 	int					offset_x;
 	int					offset_y;
+
 
 
 };
@@ -182,8 +190,11 @@ struct MapData
 	MapTypes			type;
 
 	SDL_Color			background_color;
+
 	std::list<TileSet*>	tilesets;
 	std::list<MapLayer*>	mapLayers;
+	std::list<Collider*>    colliders_list;
+
 	Properties				map_properties;
 };
 
@@ -214,7 +225,7 @@ public:
 
 	TileSet* GetTilesetFromTileId(int id) const;
 
-
+	uint GetMaxLevels();
 
 public:
 
