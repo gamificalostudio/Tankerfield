@@ -48,14 +48,13 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
-		//int tankPosX = app->scene->tank_1->pos.x;
-		//int tankPosY = app->scene->tank_1->pos.y;
+
 
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
 		camera.x = -app->win->screen_surface->w * .5f;
 		camera.y = -app->win->screen_surface->h * .5f;
-		//app->render->camera.y = app->scene->tank_1->pos.y;
+		
 		
 	}
 
@@ -83,15 +82,26 @@ bool M_Render::PostUpdate(float dt)
 	// Camera fix TODO: Move it to camera class
 
 	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
+	fPoint target_pos;
 	
-		/*camera.x = screen_pos.x*1.5f - app->win->screen_surface->w * 0.5f;
-		camera.y = screen_pos.y*1.5f - app->win->screen_surface->h * 0.5f;*/
-	
-		camera.x = screen_pos.x - app->win->screen_surface->w*0.5;
-		camera.y = screen_pos.y - app->win->screen_surface->h*0.5;
-	
-		
+	target_pos.x = camera.x;
+	target_pos.y = camera.y;
 
+	iPoint a;
+	camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.9f);
+	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.9f);
+
+	/*camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, app->scene->tank_1->pos_map.x, 0.9f);
+	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, app->scene->tank_1->pos_map.y, 0.9f);*/
+
+	
+	/*camera.x = screen_pos.x*1.5f - app->win->screen_surface->w * 0.5f;
+	camera.y = screen_pos.y*1.5f - app->win->screen_surface->h * 0.5f;*/
+	
+	//camera.x = screen_pos.x - app->win->screen_surface->w*0.5;
+	//camera.y = screen_pos.y - app->win->screen_surface->h*0.5;
+
+	
 
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
