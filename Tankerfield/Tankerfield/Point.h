@@ -7,30 +7,29 @@
 
 #include <math.h>
 
-#include "Rect.h"
 #include "Defs.h"
 
-template<class TYPE>
+template<class TYPE1>
 class Point
 {
 public:
 
-	TYPE x, y;
+	TYPE1 x, y;
 
 	Point()
 	{}
 
-	Point(const Point<TYPE>& v):
+	Point(const Point<TYPE1>& v):
 		x(v.x),
 		y(v.y)
 	{}
 
-	Point(const TYPE& x, const TYPE& y):
+	Point(const TYPE1& x, const TYPE1& y):
 		x(x),
 		y(y)
 	{}
 
-	Point& create(const TYPE& x, const TYPE& y)
+	Point& create(const TYPE1& x, const TYPE1& y)
 	{
 		this->x = x;
 		this->y = y;
@@ -82,27 +81,27 @@ public:
 		return(*this);
 	}
 
-	Point operator* (const TYPE & num) const {
+	Point operator* (const TYPE1 & num) const {
 		Point r;
 		r.x = x * num;
 		r.y = y * num;
 		return r;
 	}
 
-	const Point operator*= (const TYPE & num) {
+	const Point operator*= (const TYPE1 & num) {
 		x *= num;
 		y *= num;
 		return (*this);
 	}
 
-	Point operator/ (const TYPE & num) const {
+	Point operator/ (const TYPE1 & num) const {
 		Point r;
 		r.x = x / num;
 		r.y = y / num;
 		return r;
 	}
 
-	const Point operator /=(const TYPE& v)
+	const Point operator /=(const TYPE1& v)
 	{
 		x /= v;
 		y /= v;
@@ -178,23 +177,23 @@ public:
 	}
 
 	// Distances ---------------------------------------------
-	TYPE DistanceTo(const Point& v) const
+	TYPE1 DistanceTo(const Point& v) const
 	{
-		TYPE fx = x - v.x;
-		TYPE fy = y - v.y;
+		TYPE1 fx = x - v.x;
+		TYPE1 fy = y - v.y;
 
 		return sqrtf((fx*fx) + (fy*fy));
 	}
 
-	TYPE DistanceNoSqrt(const Point& v) const
+	TYPE1 DistanceNoSqrt(const Point& v) const
 	{
-		TYPE fx = x - v.x;
-		TYPE fy = y - v.y;
+		TYPE1 fx = x - v.x;
+		TYPE1 fy = y - v.y;
 
 		return (fx*fx) + (fy*fy);
 	}
 
-	TYPE DistanceManhattan(const Point& v) const
+	TYPE1 DistanceManhattan(const Point& v) const
 	{
 		return abs(v.x - x) + abs(v.y - y);
 	}

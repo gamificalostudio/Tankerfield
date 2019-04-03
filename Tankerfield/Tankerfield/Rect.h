@@ -3,44 +3,46 @@
 
 #include "Point.h"
 
-template<class TYPE>
+template<class TYPE1, class TYPE2> 
 class Rect
 {
 public:
-	Point<TYPE> pos;
-	TYPE w, h;
+	Point<TYPE1> pos;
+	TYPE2 w, h;
 
 	Rect()
 	{}
 
-	Rect(const Rect<TYPE>& r) :
-		x(r.pos.x),
-		y(r.pos.y),
+	Rect(const Rect<TYPE1, TYPE2>& r) :
 		w(r.w),
 		h(r.h)
-	{}
+	{
+		pos.x = r.pos.x;
+		pos.y = r.pos.y;
+	}
 
-	Rect(const TYPE& x, const TYPE& y, const TYPE & w, const TYPE & h) :
-		x(x),
-		y(y),
+	Rect(const TYPE1& x, const TYPE1& y, const TYPE2 & w, const TYPE2 & h) :
 		w(w),
 		h(h)
-	{}
+	{
+		pos.x = x;
+		pos.y = y;
+	}
 
-	Rect& create(const TYPE& x, const TYPE& y, const TYPE & w, const TYPE & h)
+	Rect& create(const TYPE1& x, const TYPE1& y, const TYPE2 & w, const TYPE2 & h)
 	{
 		this->pos.x = x;
-		this->y = y;
+		this->pos.y = y;
 		this->w = w;
 		this->h = h;
 
 		return(*this);
 	}
 
-	// Math ------------------------------------------------
-	const Rect& operator = (const Rect &r) {
-		x = r.x;
-		y = r.y;
+	const Rect& operator = (const Rect &r)
+	{
+		pos.x = r.pos.x;
+		pos.y = r.pos.y;
 		w = r.w;
 		h = r.h;
 
@@ -49,78 +51,46 @@ public:
 
 	bool operator ==(const Rect& r) const
 	{
-		return (x == r.x && y == r.y && w == r.w && h == r.h);
+		return (pos.x == r.pos.x && pos.y == r.pos.y && w == r.w && h == r.h);
 	}
 
 	bool operator !=(const Rect& r) const
 	{
-		return (x != r.x || y != r.y || w != r.w || h != r.h);
+		return (pos.x != r.pos.x || pos.y != r.pos.y || w != r.w || h != r.h);
 	}
 
-	// Utils ------------------------------------------------
-
-	void Normalize() {
-		double module = sqrt(x * x + y * y);
-		if (module != 0.)
-		{
-			x /= module;
-			y /= module;
-		}
-	}
-
-	//Rotate a vector in radians
-	void Rotate(float angle) {
-		Rect aux = (*this);
-		float angle_cos = cosf(angle);
-		float angle_sin = sinf(angle);
-		x = aux.x * angle_cos - aux.y * angle_sin;
-		y = aux.x * angle_sin + aux.y * angle_cos;
-	}
-
-	//Rotate a vector in degrees
-	void RotateDegree(float angle) {
-		angle *= DEGTORAD;
-		Rect aux = (*this);
-		float angle_cos = cosf(angle);
-		float angle_sin = sinf(angle);
-		x = aux.x * angle_cos - aux.y * angle_sin;
-		y = aux.x * angle_sin + aux.y * angle_cos;
-	}
-
-	explicit operator Rect<int>() const
+	TYPE1 GetTop() const
 	{
-		return Rect<int>((int)x, (int)y);
+		return pos.y;
 	}
 
-	explicit operator Rect<float>() const
+	TYPE1 GetBottom() const
 	{
-		return Rect<float>((float)x, (float)y);
+		return pos.y + h;
 	}
 
-	// Distances ---------------------------------------------
-	TYPE DistanceTo(const Rect& v) const
+	TYPE1 GetLeft() const
 	{
-		TYPE fx = x - v.x;
-		TYPE fy = y - v.y;
-
-		return sqrtf((fx*fx) + (fy*fy));
+		return pos.x;
 	}
 
-	TYPE DistanceNoSqrt(const Rect& v) const
+	TYPE1 GetRight() const
 	{
-		TYPE fx = x - v.x;
-		TYPE fy = y - v.y;
-
-		return (fx*fx) + (fy*fy);
+		return pos.x + w;
 	}
 
-	TYPE DistanceManhattan(const Rect& v) const
+	explicit operator Rect<int, int>() const
 	{
-		return abs(v.x - x) + abs(v.y - y);
+		return Rect<int, int>((int)pos.x, (int)pos.y, (int)w, (int)h);
+	}
+
+	explicit operator Rect<float, float>() const
+	{
+		return Rect<float, float>((float)pos.x, (float)pos.y, (float)w, (float)h);
 	}
 };
 
-typedef Rect<int> iRect;
-typedef Rect<float> fRect;
+typedef Rect<int, int> iRect;
+typedef Rect<float, float> fRect;
 
 #endif
