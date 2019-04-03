@@ -88,11 +88,11 @@ bool M_Render::PostUpdate(float dt)
 	target_pos.y = camera.y;
 
 	iPoint a;
-	camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.9f);
-	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.9f);
+	camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.05f * dt);
+	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.05f * dt);
 
-	/*camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, app->scene->tank_1->pos_map.x, 0.9f);
-	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, app->scene->tank_1->pos_map.y, 0.9f);*/
+	//camera.x = a.lerp(target_pos.x, screen_pos.x - app->win->screen_surface->w*0.5, 0.9f);
+	//camera.y = a.lerp(target_pos.y, screen_pos.y - app->win->screen_surface->h*0.5, 0.9f);
 
 	
 	/*camera.x = screen_pos.x*1.5f - app->win->screen_surface->w * 0.5f;
@@ -100,8 +100,7 @@ bool M_Render::PostUpdate(float dt)
 	
 	//camera.x = screen_pos.x - app->win->screen_surface->w*0.5;
 	//camera.y = screen_pos.y - app->win->screen_surface->h*0.5;
-
-	
+		
 
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);

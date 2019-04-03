@@ -53,7 +53,7 @@ bool Obj_Tank::Start()
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
-	speed = 2.5f;//TODO: Load from xml
+	speed = 20.f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
