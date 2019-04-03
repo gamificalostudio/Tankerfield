@@ -5,8 +5,10 @@
 #ifndef __POINT_H__
 #define __POINT_H__
 
-#include "Defs.h"
 #include <math.h>
+
+#include "Rect.h"
+#include "Defs.h"
 
 template<class TYPE>
 class Point
@@ -18,17 +20,15 @@ public:
 	Point()
 	{}
 
-	Point(const Point<TYPE>& v)
-	{
-		this->x = v.x;
-		this->y = v.y;
-	}
+	Point(const Point<TYPE>& v):
+		x(v.x),
+		y(v.y)
+	{}
 
-	Point(const TYPE& x, const TYPE& y)
-	{
-		this->x = x;
-		this->y = y;
-	}
+	Point(const TYPE& x, const TYPE& y):
+		x(x),
+		y(y)
+	{}
 
 	Point& create(const TYPE& x, const TYPE& y)
 	{
