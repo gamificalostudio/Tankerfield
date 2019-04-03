@@ -61,7 +61,7 @@ bool M_Fonts::CleanUp()
 // Load new texture from file path
 TTF_Font* const M_Fonts::Load(const char* path, int size)
 {
-	BROFILER_CATEGORY("M_FontsLoad", Profiler::Color::Yellow)
+	//BROFILER_CATEGORY("M_FontsLoad", Profiler::Color::Yellow)
 	TTF_Font* font = TTF_OpenFont(path, size);
 
 	if(font == NULL)

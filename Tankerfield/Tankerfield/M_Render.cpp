@@ -71,6 +71,7 @@ bool M_Render::PostUpdate(float dt)
 {
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
 	return true;
 }
 
@@ -131,7 +132,7 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 // Blit to screen
 bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 {
-	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
+	//BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
 	bool ret = true;
 	uint scale = app->win->GetScale();
 
@@ -161,7 +162,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 		pivot.y = pivot_y;
 		p = &pivot;
 	}
-
+	
 	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
 	{
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());

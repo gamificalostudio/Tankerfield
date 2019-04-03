@@ -99,7 +99,7 @@ bool M_Textures::UnLoad(SDL_Texture* texture)
 // Translate a surface into a texture
 SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface)
 {
-	BROFILER_CATEGORY("M_TexturesLoad", Profiler::Color::LightPink)
+	//BROFILER_CATEGORY("M_TexturesLoad", Profiler::Color::LightPink)
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
 
 	if(texture == NULL)

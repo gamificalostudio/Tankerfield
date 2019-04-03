@@ -22,7 +22,7 @@ M_Window::~M_Window()
 // Called before render is available
 bool M_Window::Awake(pugi::xml_node& config)
 {
-	BROFILER_CATEGORY("M_WindowAwake", Profiler::Color::Khaki)
+	//BROFILER_CATEGORY("M_WindowAwake", Profiler::Color::Khaki)
 	LOG("Init SDL window & surface");
 	bool ret = true;
 
