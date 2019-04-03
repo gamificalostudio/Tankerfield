@@ -55,6 +55,14 @@ bool M_Scene::PreUpdate()
 	{
 		control1 = &(*app->input->controllers.begin());
 	}
+
+	iPoint mouse_pos;
+	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
+	}
+
 	return true;
 }
 
