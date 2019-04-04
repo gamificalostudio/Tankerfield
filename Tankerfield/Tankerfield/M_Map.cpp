@@ -224,13 +224,18 @@ bool M_Map::Unload()
 	}
 	data.mapLayers.clear();
 
-	for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
+
+	if (app->on_clean_up == false)
 	{
-		if ((*iter != nullptr))
+		for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
 		{
-		/*	(*iter)->Destroy();*/ // TODO SOLVE MEMORY BUG
+			if ((*iter != nullptr))
+			{
+				(*iter)->Destroy();
+			}
 		}
 	}
+
 	data.colliders_list.clear();
 
 	data.map_properties.UnloadProperties();

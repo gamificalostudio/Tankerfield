@@ -310,6 +310,7 @@ bool App::CleanUp()
 	bool ret = true;
 	std::list<Module*>::reverse_iterator item;
 	item = modules.rbegin();
+	on_clean_up = true;
 
 	while (item != modules.rend() && ret == true)
 	{

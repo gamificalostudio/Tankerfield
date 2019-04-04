@@ -53,7 +53,7 @@ bool Obj_Tank::Start()
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
-	speed = 8.f;//TODO: Load from xml
+	speed = 5.f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -61,11 +61,11 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 300.f, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 50.f, BASIC_BULLET);
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ 1.f,1.f });
+	coll->SetObjOffset({ .0f,- .0f });
 
 	//TODO: Load them from the XML
 	kb_shoot		= SDL_BUTTON_LEFT;
