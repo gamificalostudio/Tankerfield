@@ -18,10 +18,7 @@
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Tank.h"
 #include "Bullet_Basic.h"
-<<<<<<< HEAD
 
-=======
->>>>>>> development
 
 M_ObjManager::M_ObjManager()
 {
