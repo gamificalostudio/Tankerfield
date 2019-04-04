@@ -20,8 +20,6 @@ class Collider;
 
 struct TileSetEntity {
 
-	SDL_Rect GetTileRect(int id) const;
-
 	std::string name;
 	uint tilewidth = 0;
 	uint tileheight = 0;
@@ -53,7 +51,6 @@ public:
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt);
 	virtual bool PostUpdate(float dt);
-	//virtual void Draw();
 	virtual bool CleanUp() { return true; };
 	virtual bool Awake(pugi::xml_node&) { return true; };
 

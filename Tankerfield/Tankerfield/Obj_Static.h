@@ -18,16 +18,17 @@ public:
 
 	bool Awake(pugi::xml_node & static_node) override;
 	bool Start() override;
+	bool PostUpdate(float dt) override;
 
 	//void OnCollision(Collider*, Collider*, float dt);
 
 private:
 
-	void Draw();
 	void SetRect(int x, int y, int w, int h);
 
 private:
 	SDL_Rect frame;
+	SDL_Texture* garage = nullptr;
 	//Type type;
 };
 

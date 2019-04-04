@@ -47,12 +47,16 @@ bool Obj_Static::Start()
 
 	data.tileset.texture = app->tex->Load(app->map->data.objects_path.data()); //Load object texture
 
+	garage = app->tex->Load("Maps/Garage-Sheet.png");
+
 	return true;
 }
 
-void Obj_Static::Draw()
+bool Obj_Static::PostUpdate(float dt)
 {
-	app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y, &frame);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+	app->render->Blit(data.tileset.texture, screen_pos.x, screen_pos.y, &frame);
+	return true;
 }
 
 void Obj_Static::SetRect(int x, int y, int w, int h)
