@@ -10,6 +10,7 @@
 #include "Log.h"
 #include "M_Map.h"
 #include "M_ObjManager.h"
+#include "M_Window.h"
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
 
@@ -52,7 +53,7 @@ bool Obj_Tank::Start()
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
-	speed = 2.5f;//TODO: Load from xml
+	speed = 5.f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -60,10 +61,11 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 50.f, BASIC_BULLET);
 
-	coll = app->collision->AddCollider(pos, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
-	coll->SetType(Collider::TYPE::DYNAMIC);
+	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll->SetObjOffset({ -.4f, -.4f });
 
 	cannon_height = 11.f;
 	cannon_length = 1.f;
@@ -106,7 +108,7 @@ void Obj_Tank::Movement(float dt)
 	fPoint input_dir(0.f, 0.f);
 	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputMovementKeyboard(input_dir);
+		InputMovementKeyboard(input_dir,dt);
 	}
 	else if (last_input == INPUT_METHOD::CONTROLLER)
 	{
@@ -123,30 +125,31 @@ void Obj_Tank::Movement(float dt)
 		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
 	}
 
-	pos += iso_dir * speed * dt;
+	velocity = iso_dir * speed * dt;                                                               
+	pos_map += velocity;
 
-	//Set collider position
-	float width, height;
-	coll->GetSize(width, height);
-	coll->SetPos({ pos.x - width * 0.5f, pos.y - height * 0.5f });
 }
 
-void Obj_Tank::InputMovementKeyboard(fPoint & input)
+void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
+		//app->render->camera.y -= floor(100.0f * dt);
 		input.y -= 1.f;
 	}
 	if (app->input->GetKey(kb_left) == KEY_DOWN || app->input->GetKey(kb_left) == KEY_REPEAT)
 	{
+		//app->render->camera.x -= floor(100.0f * dt);
 		input.x -= 1.f;
 	}
 	if (app->input->GetKey(kb_down) == KEY_DOWN || app->input->GetKey(kb_down) == KEY_REPEAT)
 	{
+		//app->render->camera.y += floor(100.0f * dt);
 		input.y += 1.f;
 	}
 	if (app->input->GetKey(kb_right) == KEY_DOWN || app->input->GetKey(kb_right) == KEY_REPEAT)
 	{
+		//app->render->camera.x += floor(100.0f * dt);
 		input.x += 1.f;
 	}
 }
@@ -156,10 +159,10 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
-bool Obj_Tank::PostUpdate()
+bool Obj_Tank::PostUpdate(float dt)
 {
 
-	fPoint screen_pos = app->map->MapToWorldF(pos.x, pos.y);
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
 
 	// Base =========================================
@@ -183,8 +186,8 @@ bool Obj_Tank::PostUpdate()
 	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 	debug_mouse_pos.x += app->render->camera.x;
 	debug_mouse_pos.y += app->render->camera.y;
-	fPoint shot_pos(pos - app->map->WorldToMapF(0.f, cannon_height));
-	fPoint debug_screen_pos = app->map->MapToWorldF(shot_pos.x, shot_pos.y);
+	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
+	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 0, 255, 0);
 
 
@@ -194,6 +197,15 @@ bool Obj_Tank::PostUpdate()
 bool Obj_Tank::CleanUp()
 {
 	return true;
+}
+
+
+void Obj_Tank::OnTrigger(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::WALL)
+	{
+		LOG("WALL");
+	}
 }
 
 void Obj_Tank::InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir)
@@ -206,11 +218,12 @@ void Obj_Tank::InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoin
 	mouse_pos.y += app->render->camera.y;
 
 	int tile_width = 100, tile_height = 50;
-	fPoint screen_pos = app->map->MapToWorldF(shot_pos.x, shot_pos.y);
+	fPoint screen_pos = app->map->MapToScreenF(shot_pos);
+
 	input_dir = (fPoint)mouse_pos - screen_pos;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_pos = app->map->WorldToMapF(mouse_pos.x,mouse_pos.y);
+	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x,mouse_pos.y);
 
 	iso_dir = map_mouse_pos - shot_pos;
 	iso_dir.Normalize();
@@ -231,7 +244,7 @@ void Obj_Tank::Shoot()
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the cetner of the turret (considers the cannon_height)
-	fPoint shot_pos(pos - app->map->WorldToMapF(0, cannon_height));
+	fPoint shot_pos(pos_map - app->map->ScreenToMapF(  0, cannon_height ));
 
 	fPoint input_dir(0.f, 0.f);
 	fPoint iso_dir;

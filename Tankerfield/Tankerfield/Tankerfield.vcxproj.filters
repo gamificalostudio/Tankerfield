@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp">
       <Filter>Tools\pugixml</Filter>
     </ClCompile>
@@ -47,7 +46,6 @@
     <ClCompile Include="M_Map.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp" />
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -78,26 +76,29 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Tools\Timers</Filter>
     </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>Utils</Filter>
+    <ClCompile Include="M_Collision.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower.cpp">
+      <Filter>Weapons</Filter>
     </ClCompile>
     <ClCompile Include="Bullet_Basic.cpp">
-      <Filter>Modules\Objects</Filter>
+      <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Flamethrower.cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Flamethrower .cpp">
-      <Filter>Modules\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Collision.cpp">
-      <Filter>Modules</Filter>
+    <ClCompile Include="Log.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +117,6 @@
     <ClInclude Include="Object.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="App.h" />
     <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -146,27 +146,6 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Tools\Timers</Filter>
-    </ClInclude>
-    <ClInclude Include="Defs.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet_Basic.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Bullet.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Modules\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon_Flamethrower.h">
-      <Filter>Modules\Objects</Filter>
     </ClInclude>
     <ClInclude Include="M_Audio.h">
       <Filter>Modules</Filter>
@@ -210,16 +189,37 @@
     <ClInclude Include="Module.h">
       <Filter>Modules</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="..\Game\config.xml" />
+    <ClInclude Include="App.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon_Flamethrower.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Basic.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Bullet.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
       <UniqueIdentifier>{d4c7e7c3-72bf-4107-8d08-0ae327873629}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils">
-      <UniqueIdentifier>{97fa8477-870f-46d8-af8d-88f34e52dcbd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tools\pugixml">
       <UniqueIdentifier>{955f6afd-07b6-4448-b805-a9301bc9d5d8}</UniqueIdentifier>
@@ -230,11 +230,25 @@
     <Filter Include="Modules">
       <UniqueIdentifier>{c2bdac2d-285b-47c9-b0c3-1e66b630c4f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Weapons">
-      <UniqueIdentifier>{1fe55f70-340e-4b97-b811-5da11e060649}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Objects">
       <UniqueIdentifier>{4792041f-ce51-4387-beaa-caae693b8a61}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{444322c1-6d72-42bc-bc5f-8008ccc54cc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{e04ab093-71bc-428e-bbd0-6a9ad67abeb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{82e0d428-2283-4035-94a8-f385e7ef9a4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Bullets">
+      <UniqueIdentifier>{7fdb053f-2696-4225-9b31-203b4b8cbd8f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Game\config.xml">
+      <Filter>Core</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

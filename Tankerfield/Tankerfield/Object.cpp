@@ -10,15 +10,12 @@
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
 #include "Log.h"
-//#include "j1Map.h"
-//#include "Player.h"
-//#include "j1Collision.h"
 
 Object::Object()
 {
 }
 
-Object::Object(fPoint pos) : pos(pos)
+Object::Object(fPoint pos) : pos_map(pos)
 {
 }
 
@@ -37,7 +34,7 @@ bool Object::Update(float dt)
 	return true;
 }
 
-bool Object::PostUpdate()
+bool Object::PostUpdate(float dt)
 {
 	return true;
 }

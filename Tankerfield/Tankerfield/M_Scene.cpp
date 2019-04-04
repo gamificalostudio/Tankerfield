@@ -9,10 +9,12 @@
 #include "M_Scene.h"
 #include "M_SceneManager.h"
 #include "M_Map.h"
+#include "M_Pathfinding.h"
 #include "M_ObjManager.h"
 #include "M_Collision.h"
 #include "Point.h"
 #include "Brofiler/Brofiler.h"
+#include "Rect.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -35,12 +37,19 @@ bool M_Scene::Awake(pugi::xml_node&)
 // Called before the first frame
 bool M_Scene::Start()
 {
+	path_tex = app->tex->Load("maps/path.png");
+
 	// Load the first level of the list on first game start -------------------------
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f,0.f));
-	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
+
+	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
+	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(20.f, 20.f));
+
+	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
+
 	return true;
 }
 
@@ -51,6 +60,14 @@ bool M_Scene::PreUpdate()
 	{
 		control1 = &(*app->input->controllers.begin());
 	}
+
+	iPoint mouse_pos;
+	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
+	}
+
 	return true;
 }
 
@@ -75,17 +92,28 @@ bool M_Scene::Update(float dt)
 		app->render->camera.x += floor(200.0f * dt);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+	{
+		++current_level;
+
+		if (current_level == app->map->GetMaxLevels())
+			current_level = 0;
+
+		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
+	}
 	return true;
 }
 
 // Called each loop iteration
-bool M_Scene::PostUpdate()
+bool M_Scene::PostUpdate(float dt)
 {
 	bool ret = true;
 
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	
+	DebugPathfinding();
+
 	return ret;
 }
 
@@ -93,8 +121,75 @@ bool M_Scene::PostUpdate()
 bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	app->map->Unload();
+	app->objectmanager->DeleteObjects();
 
-
+	if (path_tex != nullptr)
+		app->tex->UnLoad(path_tex);
 
 	return true;
+}
+
+void M_Scene::DebugPathfinding()
+{
+	if (test_path)
+	{
+		static iPoint origin;
+		static bool origin_selected = false;
+		static bool createdDebugPath = false;
+
+		iPoint mousePos;
+		app->input->GetMousePosition(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		p = app->map->ScreenToMapI(p.x, p.y);
+
+		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
+		{
+			if (origin_selected == true)
+			{
+				origin_selected = false;
+
+				if (app->pathfinding->CreatePath(origin, p) != -1)
+				{
+					createdDebugPath = true;
+				}
+
+			}
+			else
+			{
+				origin = p;
+				origin_selected = true;
+				createdDebugPath = false;
+				debug_path.clear();
+			}
+		}
+
+		if (createdDebugPath)
+		{
+			uint debugPathSize = debug_path.size();
+			if (debugPathSize == 0)
+			{
+
+				const std::vector<iPoint>* path = app->pathfinding->GetLastPath();
+				uint sizeArray = path->size();
+				for (uint i = 0; i < sizeArray; ++i)
+				{
+					debug_path.push_back(path->at(i));
+				}
+			}
+			else
+			{
+				for (uint i = 0; i < debugPathSize; ++i)
+				{
+					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
+					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y);
+				}
+			}
+
+		}
+
+		p = app->map->MapToScreenI(p.x, p.y);
+
+		app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y);
+	}
 }

@@ -3,7 +3,7 @@
 
 #include "SDL/include/SDL_timer.h"
 #include "Brofiler/Brofiler.h"
-#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
+//#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 
 #include "Defs.h"
 #include "Log.h"
@@ -297,7 +297,7 @@ bool App::PostUpdate()
 			continue;
 		}
 
-		ret = (*item)->PostUpdate();
+		ret = (*item)->PostUpdate(dt);
 	}
 
 	return ret;
@@ -310,6 +310,7 @@ bool App::CleanUp()
 	bool ret = true;
 	std::list<Module*>::reverse_iterator item;
 	item = modules.rbegin();
+	on_clean_up = true;
 
 	while (item != modules.rend() && ret == true)
 	{

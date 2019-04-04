@@ -3,16 +3,34 @@
 
 #define MAX_COLLIDERS 50
 
-#include "Module.h"
-#include "PugiXml/src/pugixml.hpp"
 #include <list>
+#include <vector>
+#include <typeinfo>
+
+#include "PugiXml/src/pugixml.hpp"
+
+#include "Module.h"
 
 class Object;
 class M_Collision;
 
+
 class Collider
 {
 public:
+	
+	enum class TAG : int
+	{
+		NONE = -1,
+		WALL,
+		BULLET,
+		PLAYER,
+		ENEMY,
+		GOD,
+		REWARD_ZONE,
+		MAX
+	};
+
 	enum class ON_TRIGGER_STATE
 	{
 		NONE,
@@ -21,14 +39,11 @@ public:
 		EXIT
 	};
 
-	enum class TAG : int
+	enum class BODY_TYPE
 	{
-		NONE = -1,
-		WALL,
-		PLAYER,
-		ENEMY,
-		GOD,
-		MAX
+		DYNAMIC,
+		STATIC,
+		SENSOR
 	};
 
 	enum class OVERLAP_DIR : int
@@ -41,21 +56,12 @@ public:
 		MAX
 	};
 
-	enum class TYPE
-	{
-		NONE,
-		DYNAMIC,
-		STATIC,
-		SENSOR
-	};
-
-	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,Module* callback = nullptr) :
+	Collider(const fPoint pos,const  float width, const  float height, const TAG tag, Object* object = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
 		tag(tag),
-		object(object),
-		callback(callback)
+		object(object)
 	{}
 
 	void SetPos(const fPoint pos)
@@ -63,9 +69,25 @@ public:
 		position = pos;
 	}
 
-	void SetType(const Collider::TYPE new_type)
+	void SetObjOffset(const fPoint offset)
 	{
-		type = new_type;
+		obj_offset = offset;
+	}
+
+	void SetPosToObj();
+
+	template<typename TYPE>
+
+	TYPE* GetObject() 
+	{
+		if (object != nullptr & typeid(TYPE) == typeid(object))
+		{
+			return (TYPE*)object;
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	void GetSize(float & w, float & h) {
@@ -75,23 +97,41 @@ public:
 
 	bool CheckCollision(Collider*  coll) const;
 
+	TAG GetTag() const
+	{
+		return tag;
+	}
+
+	void AddRigidBody(const Collider::BODY_TYPE new_body_type)
+	{
+		body_type = new_body_type;
+	}
+
+	void Destroy();
+
 private:
 
 	fPoint position = { 0.f , 0.f };
+
+	fPoint obj_offset = { 0.f, 0.f };
 
 	float width = 0.f;
 		
 	float height = 0.f;
 
+	Object * object = nullptr;
+
 	TAG tag = TAG::NONE;
 
-	TYPE type = TYPE::STATIC;
+	std::list<Collider*> collisions_list;
 
-	ON_TRIGGER_STATE on_trigger_state = ON_TRIGGER_STATE::NONE;
+	bool to_destroy = false;
 
-	Module* callback = nullptr;
+	// Body vars ===================================================
 
-	Object * object = nullptr;
+	BODY_TYPE body_type = BODY_TYPE::STATIC;
+
+	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
 	friend M_Collision;
 };
@@ -104,20 +144,21 @@ public:
 
 	virtual ~M_Collision();
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
+	bool PostUpdate(float dt) override;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
-	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, Module* callback = nullptr, Object* object = nullptr);
-
-	bool DeleteCollider(Collider* collider);
+	Collider* AddCollider(fPoint pos, float width , float height, Collider::TAG type, Object* object = nullptr);
 
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
 
+	inline void DoOnTrigger(Collider* c1, Collider *c2);
+
+	inline void DoOnTriggerExit(Collider* c1, Collider *c2);
 
 private:
 
@@ -129,3 +170,5 @@ private:
 };
 
 #endif // __j1Collision_H__
+
+
