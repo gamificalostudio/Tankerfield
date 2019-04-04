@@ -59,14 +59,6 @@ private:
 	uchar* map = nullptr;
 	// we store the created path here
 	std::vector<iPoint> last_path;
-
-
-	std::vector<iPoint> debug_path;
-	bool test_path = true;
-	SDL_Texture* path_tex = nullptr;
-
-
-
 };
 
 // forward declaration
