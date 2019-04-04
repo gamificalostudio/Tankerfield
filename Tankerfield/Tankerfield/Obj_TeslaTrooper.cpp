@@ -144,7 +144,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 			iPoint destination = app->map->ScreenToMapI(target->pos_map.x, targer->pos_map.y);
 			if (app->pathfinding->CreatePath(origin, destination) != -1)
 			{
-				const std::vector<iPoint>* aux = app->pathfinding->GetLastPath();
+				path = *app->pathfinding->GetLastPath();
 			}
 		}
 	}
