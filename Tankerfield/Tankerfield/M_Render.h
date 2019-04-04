@@ -45,6 +45,10 @@ public:
 
 	bool IsOnCamera(const int & x, const int & y, const int & w, const int & h) const;
 
+	void BlitInScreen2(SDL_Rect& rect);
+	void BlitInScreen3(SDL_Rect& rect);
+	void BlitInScreen4(SDL_Rect& rect);
+
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
@@ -55,6 +59,8 @@ public:
 	SDL_Rect		camera;
 	SDL_Rect		viewport;
 	SDL_Color		background;
+
+	bool debug = true;
 };
 
 #endif // __j1RENDER_H__
