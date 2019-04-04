@@ -3,16 +3,17 @@
 
 #include <list>
 
-#include "Animation.h"
-
-#include "Module.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 
+#include "Animation.h"
+
+#include "Module.h"
+#include "Point.h"
 
 enum ObjectType
 {
-  TANK,
+	TANK,
 	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
@@ -36,7 +37,7 @@ public:
 
 	bool Update(float dt) override;
 
-	bool PostUpdate() override;
+	bool PostUpdate(float dt) override;
 
 	bool Load(pugi::xml_node&);
 
@@ -44,11 +45,14 @@ public:
 
 	bool CleanUp() override;
 
-	Object* CreateObject(ObjectType type, float x = 0.0f, float y = 0.0f);
+	Object* CreateObject(ObjectType type, fPoint pos);
+
 	void DeleteObjects();
   
 private:
+
 	std::list<Object*> objects;
+
 };
 
 #endif

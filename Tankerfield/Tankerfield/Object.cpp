@@ -18,7 +18,7 @@ Object::Object()
 {
 }
 
-Object::Object(int x, int y) : pos(x, y)
+Object::Object(fPoint pos) : pos_map(pos)
 {
 }
 
@@ -37,7 +37,7 @@ bool Object::Update(float dt)
 	return true;
 }
 
-bool Object::PostUpdate()
+bool Object::PostUpdate(float dt)
 {
 	return true;
 }

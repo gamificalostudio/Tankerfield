@@ -1,12 +1,18 @@
+#include <list>
+
 #include "Brofiler\Brofiler.h"
 
+#include "Log.h"
 #include "App.h"
 #include "M_Map.h"
-#include "Log.h"
+#include "M_Window.h"
+#include "M_Collision.h"
+#include "M_Input.h"
+#include "M_Pathfinding.h"
 
 M_Map::M_Map()
 {
-	name = "map";
+	name.assign("map");
 }
 
 M_Map::~M_Map()
@@ -46,13 +52,29 @@ bool M_Map::Update(float dt)
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
 
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
+		show_grid = !show_grid;
+
+	if (!map_loaded)
+		return ret;
+
+	return true;
+}
+
+bool M_Map::PostUpdate(float dt)
+{
+	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	bool ret = true;
+
+
 	if (map_loaded == false)
 		return ret;
+
 
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->layer_properties.GetAsBool("NoDraw") == true) {
+		if ((*layer)->visible == false) {
 			continue;
 		}
 
@@ -63,21 +85,48 @@ bool M_Map::Update(float dt)
 				int tile_id = (*layer)->Get(x, y);
 				if (tile_id > 0)
 				{
-					TileSet* tileset = GetTilesetFromTileId(tile_id);
-					if (tileset != nullptr)
+					iPoint pos = MapToScreenI(x, y);
+					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
-						SDL_Rect r = tileset->GetTileRect(tile_id);
-						iPoint pos = MapToWorld(x, y);
-
-
-						app->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						if (tileset != nullptr)
+						{
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+						}
 					}
+
 				}
 			}
 		}
 	}
+
+	//// Draw Grid ==============================================
+	if(show_grid)
+	{
+		iPoint point_1, point_2;
+		for (int i = 0; i <= data.columns; ++i)
+		{
+			point_1 = MapToScreenI(i, 0);
+			point_2 = MapToScreenI(i, data.rows);
+			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		}
+
+		for (int i = 0; i <= data.rows; ++i)
+		{
+			point_1 = MapToScreenI(0, i);
+			point_2 = MapToScreenI(data.columns, i);
+			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+		}
+	}
+
 	return ret;
+}
+
+bool M_Map::CleanUp()
+{
+	Unload();
+	return true;
 }
 
 bool M_Map::Load(const std::string& file_name)
@@ -138,30 +187,79 @@ bool M_Map::Load(const std::string& file_name)
 
 	map_loaded = ret;
 
+	if (map_loaded)
+	{
+		int w, h;
+		uchar* data = NULL;
+		if (CreateWalkabilityMap(w, h, &data))
+			app->pathfinding->SetMap(w, h, data);
+		LOG("Map's walkability successfuly created");
+	}
+
 	return ret;
+}
+
+bool M_Map::Unload()
+{
+	if (!map_loaded)
+		return false;
+
+	for (std::list<TileSet*>::iterator iter = data.tilesets.begin(); iter != data.tilesets.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.tilesets.clear();
+
+	for (std::list<MapLayer*>::iterator iter = data.mapLayers.begin(); iter != data.mapLayers.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.mapLayers.clear();
+
+	for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			app->collision->DeleteCollider((*iter));
+
+		}
+	}
+	data.colliders_list.clear();
+
+	data.map_properties.UnloadProperties();
+
+	return true;
 }
 
 void M_Map::DebugMap() 
 {
 	//LOG("Successfully parsed map XML file: %s", data.loadedLevel);
-	LOG("width: %d height: %d", data.columns, data.rows);
-	LOG("tile_width: %d tile_height: %d", data.tile_width, data.tile_height);
+	LOG("width: %i height: %i", data.columns, data.rows);
+	LOG("tile_width: %i tile_height: %i", data.tile_width, data.tile_height);
 
 	for (std::list<TileSet*>::iterator item = data.tilesets.begin(); item != data.tilesets.end(); ++item)
 	{
 		TileSet* s = (*item);
 		LOG("Tileset ----");
-		LOG("name: %s firstgid: %d", (*s).name, (*s).firstgid);
-		LOG("tile width: %d tile height: %d", s->tile_width, s->tile_height);
-		LOG("spacing: %d margin: %d", s->spacing, s->margin);
+		LOG("name: %s firstgid: %i", (*s).name.data(), (*s).firstgid);
+		LOG("tile width: %i tile height: %i", s->tile_width, s->tile_height);
+		LOG("spacing: %i margin: %i", s->spacing, s->margin);
 	};
 
 	for (std::list<MapLayer*>::iterator item_layer = data.mapLayers.begin(); item_layer != data.mapLayers.end(); ++item_layer)
 	{
 		MapLayer* l = (*item_layer);
 		LOG("Layer ----");
-		LOG("name: %s", l->name);
-		LOG("tile width: %d tile height: %d", l->columns, l->rows);
+		LOG("name: %s", l->name.data());
+		LOG("tile width: %i tile height: %i", l->columns, l->rows);
 	}
 
 }
@@ -174,6 +272,9 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->columns = node.attribute("width").as_int();
 	layer->rows = node.attribute("height").as_int();
 	layer->layer_properties.LoadProperties(node.child("properties"));
+	int visible = node.attribute("visible").as_int(1);
+	layer->visible = (visible == 0) ? false : true;
+	
 	pugi::xml_node layer_data = node.child("data");
 
 	if (layer_data == NULL)
@@ -184,13 +285,24 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
+		
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
 		int i = 0;
 		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
-			layer->data[i++] = tile.attribute("gid").as_int(0);
+			layer->data[i] = tile.attribute("gid").as_int(0);
+
+			if (layer->name == "Colliders" && layer->data[i] != 0u)
+				{
+					fPoint pos = layer->GetTilePos(i);
+
+					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+					data.colliders_list.push_back(aux);
+			}
+
+			++i;
 		}
 	}
 
@@ -292,7 +404,8 @@ bool M_Map::LoadMap()
 		bool ret = false;
 
 		data.map_properties.LoadProperties(map.child("properties"));
-
+		data.offset_x = data.map_properties.GetAsInt("offset_x");
+		data.offset_y = data.map_properties.GetAsInt("offset_y");
 
 		std::string orientation(map.attribute("orientation").as_string());
 		if (orientation == "orthogonal")
@@ -338,27 +451,100 @@ TileSet* M_Map::GetTilesetFromTileId(int id) const
 	return (*item);
 }
 
-iPoint M_Map::MapToWorld(int column, int row) const
+uint M_Map::GetMaxLevels()
 {
-	iPoint retVec(0, 0);
+	return numLevels;
+}
+
+bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
+{
+	bool ret = false;
+
+
+	for (std::list<MapLayer*>::const_iterator item = data.mapLayers.begin(); item != data.mapLayers.end(); ++item)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->layer_properties.GetAsFloat("Navigation", 0) == 0)
+			continue;
+
+		uchar* map = new uchar[layer->columns * layer->rows];
+		memset(map, 1, layer->columns*layer->rows);
+
+		for (int y = 0; y < data.rows; ++y)
+		{
+			for (int x = 0; x < data.columns; ++x)
+			{
+				int i = (y*layer->rows) + x;
+
+				int tile_id = layer->Get(x, y);
+				TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
+
+				if (tileset != NULL)
+				{
+					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
+					/*TileType* ts = tileset->GetTileType(tile_id);
+					if(ts != NULL)
+					{
+					map[i] = ts->properties.Get("walkable", 1);
+					}*/
+				}
+			}
+		}
+
+		*buffer = map;
+		width = data.columns;
+		height = data.rows;
+		ret = true;
+
+		break;
+	}
+
+	return ret;
+}
+
+iPoint M_Map::MapToScreenI(int column, int row) const
+{
+	iPoint screen_pos(0, 0);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:
-		retVec.x = column * data.tile_width;
-		retVec.y = row * data.tile_height;
+		screen_pos.x = column * data.tile_width;
+		screen_pos.y = row * data.tile_height;
 		break;
 	case MapTypes::MAPTYPE_ISOMETRIC:
-		retVec.x = (column - row) * data.tile_width * 0.5f;
-		retVec.y = (column + row) * data.tile_height * 0.5f;
+		screen_pos.x = (column - row) * data.tile_width * 0.5f;
+		screen_pos.y = (column + row) * data.tile_height * 0.5f;
 		break;
 	default:
 		LOG("ERROR: Map type not identified.");
 		break;
 	}
 
-	return retVec;
+	return screen_pos;
 }
 
-iPoint M_Map::WorldToMap(int x, int y) const
+fPoint M_Map::MapToScreenF(const fPoint & map_pos)
+{
+	fPoint screen_pos(0.0F, 0.0F);
+	switch (data.type) {
+	case MapTypes::MAPTYPE_ORTHOGONAL:
+		screen_pos.x = map_pos.x * data.tile_width;
+		screen_pos.y = map_pos.y * data.tile_height;
+		break;
+	case MapTypes::MAPTYPE_ISOMETRIC:
+		screen_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f);
+		screen_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f);
+		break;
+	default:
+		LOG("ERROR: Map type not identified.");
+		break;
+	}
+
+	return screen_pos;
+}
+
+
+iPoint M_Map::ScreenToMapI(int x, int y) const
 {
 	iPoint ret(0, 0);
 
@@ -372,8 +558,8 @@ iPoint M_Map::WorldToMap(int x, int y) const
 
 		float half_width = data.tile_width * 0.5f;
 		float half_height = data.tile_height * 0.5f;
-		ret.x = int((x / half_width + y / half_height) / 2) - 1;
-		ret.y = int((y / half_height - (x / half_width)) / 2);
+		ret.x = int((x / half_width + y / half_height) * 0.5f) - 1;
+		ret.y = int((y / half_height - (x / half_width)) * 0.5f);
 	}
 	else
 	{
@@ -381,4 +567,43 @@ iPoint M_Map::WorldToMap(int x, int y) const
 		ret.x = x; ret.y = y;
 	}
 	return ret;
+}
+
+fPoint M_Map::ScreenToMapF(float x, float y)
+{
+	fPoint ret(0, 0);
+
+	if (data.type == MAPTYPE_ORTHOGONAL)
+	{
+		ret.x = x / data.tile_width;
+		ret.y = y / data.tile_height;
+	}
+	else if (data.type == MAPTYPE_ISOMETRIC)
+	{
+
+		float half_width = data.tile_width * 0.5f;
+		float half_height = data.tile_height * 0.5f;
+		ret.x = ((x / half_width) + y / half_height) * 0.5f;
+		ret.y = ((y / half_height) - x / half_width) * 0.5f;
+		return ret;
+	}
+	else
+	{
+		LOG("Unknown map type");
+		ret.x = x; ret.y = y;
+	}
+	return ret;
+}
+
+void Properties::UnloadProperties()
+{
+	std::list<Property*>::iterator item = list.begin();
+
+	while (item != list.end())
+	{
+		RELEASE(*item);
+		++item;
+	}
+
+	list.clear();
 }

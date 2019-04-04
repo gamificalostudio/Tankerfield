@@ -1,4 +1,9 @@
-//#include "Brofiler/Brofiler.h"
+
+#include <string>
+
+#include "Brofiler/Brofiler.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
 
 #include "Log.h"
 
@@ -11,11 +16,8 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "Obj_TeslaTrooper.h"
-#include "PugiXml/src/pugiconfig.hpp"
-#include "PugiXml/src/pugixml.hpp"
-#include <string>
 #include "Obj_Tank.h"
-#include "Obj_BasicShoot.h"
+#include "Bullet_Basic.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -45,15 +47,7 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); iterator++)
-	{
-		if ((*iterator) != nullptr)
-		{
-			(*iterator)->Start();
-		}
-	}
-	return ret;
+	return true;
 }
 
 bool M_ObjManager::PreUpdate()
@@ -74,14 +68,14 @@ bool M_ObjManager::PreUpdate()
 // Called before render is available
 bool M_ObjManager::Update(float dt)
 {
-	//BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::Green);
-	std::list<Object*>::iterator iterator = objects.begin();
+	BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
 
-	while (iterator != objects.end())
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
 		if ((*iterator) != nullptr)
 		{
 			(*iterator)->Update(dt);
+
 			if ((*iterator)->to_remove)
 			{
 				//When we remove an element from the list, the other elements shift 1 space to our position
@@ -100,19 +94,20 @@ bool M_ObjManager::Update(float dt)
 			++iterator;
 		}
 	}
+	
 	return true;
 }
 
-bool M_ObjManager::PostUpdate()
+bool M_ObjManager::PostUpdate(float dt)
 {
-	//BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::Green);
+	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
 		if ((*iterator) != nullptr)
 		{
-			(*iterator)->PostUpdate();
+			(*iterator)->PostUpdate(dt);
 		}
 	}
 
@@ -122,42 +117,42 @@ bool M_ObjManager::PostUpdate()
 // Called before quitting
 bool M_ObjManager::CleanUp()
 {
-	std::list<Object*>::iterator iterator = objects.begin();
-
-	while (iterator != objects.end())
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 	{
-		if ((*iterator) != nullptr) {
+		if ((*iterator) != nullptr) 
+		{
 			(*iterator)->CleanUp();
 			delete (*iterator);
 			(*iterator) = nullptr;
-			iterator = objects.erase(iterator);
 		}
 	}
+	
 	objects.clear();
 	return true;
 }
 
-Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
+Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 {
 	Object* ret = nullptr;
 	switch (type)
 	{
 	case ObjectType::TESLA_TROOPER:
-		ret = new Obj_TeslaTrooper(x, y);
+		ret = new Obj_TeslaTrooper(pos);
 		ret->type = TESLA_TROOPER;
 		break;
 	case ObjectType::TANK:
-		ret = new Obj_Tank(x, y);
+		ret = new Obj_Tank(pos);
 		ret->type = TANK;
 		break;
 	case ObjectType::BASIC_BULLET:
-		ret = new Obj_BasicShoot(x, y);
+		ret = new Bullet_Basic(pos);
 		ret->type = BASIC_BULLET;
 		break;
 	}
   
 	if (ret != nullptr)
 	{
+		ret->Start();
 		objects.push_back(ret);
 	}
   
@@ -167,18 +162,16 @@ Object* M_ObjManager::CreateObject(ObjectType type, float x, float y)
 
 void M_ObjManager::DeleteObjects()
 {
-	std::list<Object*>::iterator iterator = objects.begin();
-
-	while (iterator != objects.end())
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 	{
 		if ((*iterator) != nullptr)
 		{
 			(*iterator)->CleanUp();
 			delete (*iterator);
 			(*iterator) = nullptr;
-			iterator = objects.erase(iterator);
 		}
 	}
+
 	objects.clear();
 }
 

@@ -1,11 +1,15 @@
+
+#include "Brofiler/Brofiler.h"
+#include "SDL/include/SDL.h"
+#include "SDL_mixer/include/SDL_mixer.h"
+#pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
+
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
 #include "M_Audio.h"
 
-#include "SDL/include/SDL.h"
-#include "SDL_mixer/include/SDL_mixer.h"
-#pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 M_Audio::M_Audio() : Module()
 {
@@ -82,6 +86,7 @@ bool M_Audio::CleanUp()
 // Play a music file
 bool M_Audio::PlayMusic(const char* path, float fade_time)
 {
+	BROFILER_CATEGORY("M_AudioPlayMusic", Profiler::Color::Red)
 	bool ret = true;
 
 	if (!active)

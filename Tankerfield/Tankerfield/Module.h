@@ -5,6 +5,7 @@
 #include "PugiXml/src/pugixml.hpp"
 
 class App;
+class Collider;
 
 class Module
 {
@@ -49,7 +50,7 @@ public:
 	}
 
 	// Called each loop iteration
-	virtual bool PostUpdate()
+	virtual bool PostUpdate(float dt)
 	{
 		return true;
 	}
@@ -69,6 +70,8 @@ public:
 	{
 		return true;
 	}
+
+	virtual void OnTrigger( Collider* c1, Collider* c2) {}
 
 // Enable and disable
 
@@ -93,8 +96,10 @@ public:
 	}
 
 public:
+
 	std::string	name;
-	bool		active;
+
+	bool		active = false;
 
 };
 

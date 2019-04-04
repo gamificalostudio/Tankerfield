@@ -1,12 +1,16 @@
+
+#include "SDL\include\SDL.h"
+#include "SDL_TTF\include\SDL_ttf.h"
+#pragma comment( lib, "SDL_ttf/libx86/SDL2_ttf.lib" )
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
 #include "M_Textures.h"
 #include "M_Fonts.h"
+#include "Brofiler/Brofiler.h"
 
-#include "SDL\include\SDL.h"
-#include "SDL_TTF\include\SDL_ttf.h"
-#pragma comment( lib, "SDL_ttf/libx86/SDL2_ttf.lib" )
+
 
 
 
@@ -60,6 +64,7 @@ bool M_Fonts::CleanUp()
 // Load new texture from file path
 TTF_Font* const M_Fonts::Load(const char* path, int size)
 {
+	BROFILER_CATEGORY("M_FontsLoad", Profiler::Color::Yellow)
 	TTF_Font* font = TTF_OpenFont(path, size);
 
 	if(font == NULL)
