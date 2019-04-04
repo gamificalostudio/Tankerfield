@@ -61,7 +61,7 @@ bool M_Scene::PreUpdate()
 // Called each loop iteration
 bool M_Scene::Update(float dt)
 {
-	//BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
+	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
 	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
 		app->render->camera.y -= floor(200.0f * dt);

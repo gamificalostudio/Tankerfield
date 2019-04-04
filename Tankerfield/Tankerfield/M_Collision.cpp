@@ -45,7 +45,7 @@ M_Collision::~M_Collision()
 
 bool M_Collision::Update(float dt)
 {
-	//BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange)
+	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange)
 	std::list<Collider*> static_colliders;
 	std::list<Collider*> dynamic_colliders;
 	std::list<Collider*> sensor_colliders;
@@ -155,7 +155,7 @@ bool M_Collision::Update(float dt)
 
 bool M_Collision::PostUpdate(float dt)
 {
-	//BROFILER_CATEGORY("M_CollisionPostUpdate", Profiler::Color::Orange)
+	BROFILER_CATEGORY("M_CollisionPostUpdate", Profiler::Color::Orange)
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
 		debug = !debug;
 	}

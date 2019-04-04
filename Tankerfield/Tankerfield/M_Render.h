@@ -55,7 +55,6 @@ public:
 public:
 
 	SDL_Renderer*   renderer;
-	SDL_Renderer*   renderer2;
 	SDL_Rect		camera;
 	SDL_Rect		viewport;
 	SDL_Color		background;

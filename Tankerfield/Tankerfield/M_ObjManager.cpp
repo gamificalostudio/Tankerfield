@@ -67,7 +67,7 @@ bool M_ObjManager::PreUpdate()
 // Called before render is available
 bool M_ObjManager::Update(float dt)
 {
-	//BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
+	BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
 
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
@@ -99,7 +99,7 @@ bool M_ObjManager::Update(float dt)
 
 bool M_ObjManager::PostUpdate(float dt)
 {
-	//BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
+	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)

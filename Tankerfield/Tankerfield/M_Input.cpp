@@ -64,7 +64,7 @@ bool M_Input::Start()
 // Called each loop iteration
 bool M_Input::PreUpdate()
 {
-	//BROFILER_CATEGORY("M_InputPreUpdate", Profiler::Color::Green)
+	BROFILER_CATEGORY("M_InputPreUpdate", Profiler::Color::Green)
 	static SDL_Event event;
 	
 	UpdateKeyboardState();

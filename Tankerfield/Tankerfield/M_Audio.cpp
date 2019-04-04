@@ -83,7 +83,7 @@ bool M_Audio::CleanUp()
 // Play a music file
 bool M_Audio::PlayMusic(const char* path, float fade_time)
 {
-	//BROFILER_CATEGORY("M_AudioPlayMusic", Profiler::Color::Red)
+	BROFILER_CATEGORY("M_AudioPlayMusic", Profiler::Color::Red)
 	bool ret = true;
 
 	if (!active)
