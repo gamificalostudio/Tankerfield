@@ -213,6 +213,9 @@
     <ClInclude Include="Obj_Bullet.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">

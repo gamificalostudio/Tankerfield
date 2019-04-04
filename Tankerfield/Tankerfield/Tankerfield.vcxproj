@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Basic.h" />
+    <ClInclude Include="Circle.h" />
     <ClInclude Include="M_Collision.h" />
     <ClInclude Include="Obj_Bullet.h" />
     <ClInclude Include="UI_Button.h" />

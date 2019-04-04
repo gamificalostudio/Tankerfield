@@ -95,6 +95,10 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	{
 		tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	}
+
+	velocity = { 1.5F,1.5F };
+	range_pos.center = pos_map;
+	range_pos.radius = 0.2;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -145,9 +149,30 @@ bool Obj_TeslaTrooper::Update(float dt)
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
 				path = *app->pathfinding->GetLastPath();
+				if (path.size() > 0)
+					next_pos = (fPoint)(*path.begin());
 			}
 		}
 		timer.Start();
+	}
+
+	if (path.size() > 0)
+	{
+		if (IsOnGoal(next_pos))
+		{
+			path.erase(path.begin());
+			if (path.size() > 0)
+				next_pos = (fPoint)(*path.begin());
+		}
+		else
+		{
+			fPoint move_vect = (fPoint)(next_pos)-pos_map;
+			move_vect.Normalize();
+
+			pos_map += move_vect * velocity * dt;
+			range_pos.center = pos_map;
+		}
+	
 	}
 	return true;
 }
@@ -156,8 +181,8 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 	uint ind = GetRotatedIndex(8, angle);
 	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
-	iPoint pos= app->map->MapToScreenI(pos_map.x, pos_map.y);
-	app->render->Blit(tex, pos.x, pos.y, &rect);
+	fPoint pos= app->map->MapToScreenF((fPoint)pos_map);
+	app->render->Blit(tex, pos.x - rect.w*0.5F, pos.y - rect.h*0.5, &rect);
 
 	//Draw actual postion
 	SDL_Rect frame = { pos.x,pos.y,10,10 };
@@ -175,6 +200,11 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 	}
 
 	return true;
+}
+
+bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
+{
+	return range_pos.IsPointIn(goal);
 }
 
 

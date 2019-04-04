@@ -1,6 +1,7 @@
 #ifndef __OBJ_TESLATROOPER_H__
 #define __OBJ_TESLATROOPER_H__
 
+#include "Circle.h"
 #include "Point.h"
 #include "Animation.h"
 #include "Object.h"
@@ -14,7 +15,6 @@ public:
 	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
 
-public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
@@ -22,7 +22,9 @@ public:
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
+
 private:
+	inline bool IsOnGoal(fPoint goal);
 	int life = 100;
 	int damage = 100;
 	float speed = 1.0f;
@@ -37,6 +39,10 @@ private:
 
 	Object* target = nullptr;
 	std::vector<iPoint> path;
+
+	fPoint next_pos;
+	
+	Circle range_pos;
 };
 
 #endif // !__TESLATROOPER_H__
