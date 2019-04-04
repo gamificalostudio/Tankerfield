@@ -48,11 +48,14 @@ public:
 	Object* CreateObject(ObjectType type, fPoint pos);
 
 	void DeleteObjects();
+
+	Object* GetNearestTank(fPoint pos);
+
   
 private:
 
 	std::list<Object*> objects;
-
+	std::list<Object*> obj_tanks;
 };
 
 #endif

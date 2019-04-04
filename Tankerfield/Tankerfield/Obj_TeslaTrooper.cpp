@@ -15,8 +15,7 @@
 #include "Obj_TeslaTrooper.h"
 #include "M_Input.h"
 #include "Animation.h"
-//#include "j1Map.h"
-//#include "j1Collision.h"
+
 
 //Static variables inicialization
 SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
@@ -99,6 +98,12 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
 }
 
+bool Obj_TeslaTrooper::Start()
+{
+	timer.Start();
+	return true;
+}
+
 bool Obj_TeslaTrooper::PreUpdate()
 {
 	return true;
@@ -127,6 +132,14 @@ bool Obj_TeslaTrooper::Update(float dt)
 	//	to_remove = true;
 	//}
 
+	if (timer.ReadSec() >= 5)
+	{
+		target = app->objectmanager->GetNearestTank(pos_map);
+		if (target != nullptr)
+		{
+
+		}
+	}
 	return true;
 }
 
@@ -134,6 +147,7 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 	uint ind = GetRotatedIndex(8, angle);
 	app->render->Blit(tex, pos_map.x, pos_map.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
+
 
 	return true;
 }

@@ -80,6 +80,8 @@ bool M_ObjManager::Update(float dt)
 			{
 				//When we remove an element from the list, the other elements shift 1 space to our position
 				//So we don't need increment the iterator to go to the next one
+				if ((*iterator)->type == ObjectType::TANK)
+					obj_tanks.erase(iterator);
 				delete((*iterator));
 				(*iterator) = nullptr;
 				iterator = objects.erase(iterator);
@@ -143,6 +145,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::TANK:
 		ret = new Obj_Tank(pos);
 		ret->type = TANK;
+		obj_tanks.push_back(ret);
 		break;
 	case ObjectType::BASIC_BULLET:
 		ret = new Bullet_Basic(pos);
@@ -173,6 +176,26 @@ void M_ObjManager::DeleteObjects()
 	}
 
 	objects.clear();
+}
+
+Object * M_ObjManager::GetNearestTank(fPoint pos)
+{
+	Object* ret = (*obj_tanks.begin());
+	if (ret != nullptr)
+	{
+		float distance = pos.DistanceTo(ret->pos_map);
+		for (std::list<Object*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
+		{
+			float new_distance = pos.DistanceTo((*iter)->pos_map);
+			if (new_distance  < distance)
+			{
+				distance = new_distance;
+				ret = *iter;
+			}
+		}
+	}
+	
+	return ret;
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)

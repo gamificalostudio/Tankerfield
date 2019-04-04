@@ -6,6 +6,7 @@
 #include "Object.h"
 
 struct SDL_Texture;
+class Timer;
 
 class Obj_TeslaTrooper : public Object 
 {
@@ -14,6 +15,7 @@ public:
 	~Obj_TeslaTrooper();
 
 public:
+	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 	bool PostUpdate(float dt) override;
@@ -31,6 +33,9 @@ private:
 	float angle = 0.0f;
 	float new_current_frame = 0.0f;
 	static SDL_Texture* tex;
+	Timer timer;
+
+	Object* target = nullptr;
 };
 
 #endif // !__TESLATROOPER_H__
