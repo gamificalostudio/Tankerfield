@@ -19,6 +19,7 @@
 #include "Obj_Tank.h"
 #include "Bullet_Basic.h"
 
+
 M_ObjManager::M_ObjManager()
 {
 	name.assign("object_manager");
@@ -52,7 +53,7 @@ bool M_ObjManager::Start()
 
 bool M_ObjManager::PreUpdate()
 {
-	//BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Green);
+	BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Lavender);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
