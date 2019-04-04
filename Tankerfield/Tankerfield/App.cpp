@@ -164,7 +164,11 @@ bool App::Update()
 {
 	bool ret = true;
 	PrepareUpdate();
-
+	if (input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
+	{
+		pause = !pause;
+		frame_time.Start();
+	}
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
@@ -201,9 +205,15 @@ void App::PrepareUpdate()
 {
 	frame_count++;
 	last_sec_frame_count++;
-
-	dt = frame_time.ReadSec();
-	frame_time.Start();
+	if (pause)
+	{
+		dt = 0.0F;
+	}
+	else
+	{
+		dt = frame_time.ReadSec();
+		frame_time.Start();
+	}
 }
 
 // ---------------------------------------------
