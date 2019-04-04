@@ -13,6 +13,7 @@
 #include "M_Window.h"
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
+#include "MathUtils.h"
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
@@ -80,6 +81,9 @@ bool Obj_Tank::Start()
 	draw_offset.x = 46;
 	draw_offset.y = 36;
 
+	base_angle_lerp_factor = 15.f;
+	turr_angle_lerp_factor = 15.f;
+
 	return true;
 }
 
@@ -119,7 +123,7 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
+		base_angle = lerp(base_angle, (atan2(input_dir.y, -input_dir.x) * RADTODEG), base_angle_lerp_factor * dt);
 	}
 
 	velocity = iso_dir * speed * dt;                                                               

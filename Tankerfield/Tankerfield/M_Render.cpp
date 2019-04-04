@@ -12,11 +12,7 @@
 #include "Obj_Tank.h"
 #include "M_ObjManager.h"
 #include "M_Scene.h"
-#include "Math_Utils.h"
-
-
-
-
+#include "MathUtils.h"
 
 M_Render::M_Render() : Module()
 {
