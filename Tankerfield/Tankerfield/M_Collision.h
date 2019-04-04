@@ -62,10 +62,13 @@ public:
 		object(object)
 	{}
 
-	void SetPos(const float x,const  float y)
+	void SetPos(const fPoint pos)
 	{
-		position = { x, y };
+		position = pos;
 	}
+
+	void SetPosToObj();
+
 
 	void AddRigidBody(const Collider::BODY_TYPE new_body_type)
 	{
@@ -101,6 +104,8 @@ public:
 private:
 
 	fPoint position = { 0.f , 0.f };
+
+	fPoint obj_offset = { 0.f, 0.f };
 
 	float width = 0.f;
 		

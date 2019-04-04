@@ -37,7 +37,6 @@ bool Obj_Bullet::Update(float dt)
 {
 	pos_map += direction * speed * dt;
 	
-	coll->SetPos(pos_map.x, pos_map.y);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 
 	return true;

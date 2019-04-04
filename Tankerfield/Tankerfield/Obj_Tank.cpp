@@ -95,8 +95,6 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
-	coll->SetPos(pos_map.x, pos_map.y);
-
 	return true;
 }
 

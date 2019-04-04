@@ -8,6 +8,14 @@
 #include "Brofiler/Brofiler.h"
 #include <math.h>
 
+void Collider::SetPosToObj()
+{
+	if (object != nullptr)
+	{
+		position = object->pos_map + obj_offset;
+	}
+}
+
 bool Collider::CheckCollision(Collider*  coll) const
 {
 	return !(coll->position.x >= (position.x + width) || (coll->position.x + coll->width) <= position.x || coll->position.y >= (position.y + height) || (coll->position.y + coll->height) <= position.y);
@@ -52,25 +60,21 @@ bool M_Collision::Update(float dt)
 	std::list<Collider*> sensor_colliders;
 	std::list<Collider*> merged_colliders;
 
-	std::list<Collider*>::iterator iterator_1;
-	std::list<Collider*>::iterator iterator_2;
+	std::list<Collider*>::iterator iterator;
 	Collider* collider_1 = nullptr;
 	Collider* collider_2 = nullptr;
 
 	// Fill body types lists & Destroy colliders =====================
 
-	iterator_1 = colliders.begin();
+	iterator = colliders.begin();
 
-	while (iterator_1 != colliders.end())
+	while (iterator != colliders.end())
 	{
-		if ((*iterator_1)->to_destroy == true)
+		if ((*iterator)->to_destroy == true)
 		{
-			iterator_2 = iterator_1;
-			++iterator_2;
-
-			for (std::list<Collider*>::iterator itr = (*iterator_1)->collisions_list.begin(); itr != (*iterator_1)->collisions_list.end(); ++itr)
+			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
 			{
-				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator_1));
+				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
 
 				if (to_destroy != (*itr)->collisions_list.end())
 				{
@@ -82,30 +86,28 @@ bool M_Collision::Update(float dt)
 
 			// Destroy =============================
 
-			RELEASE(*iterator_1);
-			colliders.erase(iterator_1);
-
-			iterator_1 = iterator_2;
+			RELEASE(*iterator);
+			iterator = colliders.erase(iterator);
 
 			continue;
 		}
 
-		switch ((*iterator_1)->body_type)
+		switch ((*iterator)->body_type)
 		{
 		case Collider::BODY_TYPE::STATIC:
-			static_colliders.push_back(*iterator_1);
-			merged_colliders.push_back(*iterator_1);
+			static_colliders.push_back(*iterator);
+			merged_colliders.push_back(*iterator);
 			break;
 		case Collider::BODY_TYPE::DYNAMIC:
-			dynamic_colliders.push_back(*iterator_1);
-			merged_colliders.push_back(*iterator_1);
+			dynamic_colliders.push_back(*iterator);
+			merged_colliders.push_back(*iterator);
 			break;
 		case Collider::BODY_TYPE::SENSOR:
-			sensor_colliders.push_back(*iterator_1);
+			sensor_colliders.push_back(*iterator);
 			break;
 		}
 
-		++iterator_1;
+		++iterator;
 	}
 
 	// Dynamic VS Dynamic ========================================
@@ -113,10 +115,10 @@ bool M_Collision::Update(float dt)
 	for (std::list<Collider*>::iterator itr_1 = dynamic_colliders.begin(); itr_1 != dynamic_colliders.end(); ++itr_1)
 	{
 		collider_1 = *itr_1;
-		iterator_1 = itr_1;
-		++iterator_1;
+		iterator = itr_1;
+		++iterator;
 
-		for (std::list<Collider*>::iterator itr_2 = iterator_1; itr_2 != dynamic_colliders.end(); ++itr_2)
+		for (std::list<Collider*>::iterator itr_2 = iterator; itr_2 != dynamic_colliders.end(); ++itr_2)
 		{
 			collider_2 = *itr_2;
 
@@ -307,7 +309,7 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 	}
 
 	dynamic_col->last_overlap = (Collider::OVERLAP_DIR)overlap_dir;
-	dynamic_col->SetPos(dynamic_col->object->pos_map.x, dynamic_col->object->pos_map.y);
+	dynamic_col->SetPos(dynamic_col->object->pos_map);
 }
 
 
@@ -352,8 +354,8 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 		break;
 	}
 
-	c1->SetPos(c1->object->pos_map.x, c1->object->pos_map.y);
-	c2->SetPos(c2->object->pos_map.x, c2->object->pos_map.y);
+	c1->SetPos(c1->object->pos_map);
+	c2->SetPos(c2->object->pos_map);
 }
 
 inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)

@@ -46,7 +46,7 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	return true;
+	return ret;
 }
 
 bool M_ObjManager::PreUpdate()
@@ -64,7 +64,6 @@ bool M_ObjManager::PreUpdate()
 	return true;
 }
 
-// Called before render is available
 bool M_ObjManager::Update(float dt)
 {
 	BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
@@ -73,18 +72,26 @@ bool M_ObjManager::Update(float dt)
 	{
 		if ((*iterator) != nullptr)
 		{
+			
 			(*iterator)->Update(dt);
 
 			if ((*iterator)->to_remove)
 			{
-				//When we remove an element from the list, the other elements shift 1 space to our position
-				//So we don't need increment the iterator to go to the next one
 				delete((*iterator));
 				(*iterator) = nullptr;
 				iterator = objects.erase(iterator);
 			}
 			else
 			{
+				// Update Components ======================================
+
+				if ((*iterator)->coll != nullptr)
+				{
+					(*iterator)->coll->SetPosToObj();
+				}
+
+
+
 				++iterator;
 			}
 		}
@@ -147,9 +154,9 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Bullet_Basic(pos);
 		ret->type = BASIC_BULLET;
 		break;
-	case ObjectType::SENSOR:
+	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
-		ret->type = SENSOR;
+		ret->type = REWARD_ZONE;
 	}
   
 	if (ret != nullptr)
@@ -166,15 +173,8 @@ void M_ObjManager::DeleteObjects()
 {
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 	{
-		if ((*iterator) != nullptr)
-		{
-			(*iterator)->CleanUp();
-			delete (*iterator);
-			(*iterator) = nullptr;
-		}
+		(*iterator)->to_remove = true;
 	}
-
-	objects.clear();
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)

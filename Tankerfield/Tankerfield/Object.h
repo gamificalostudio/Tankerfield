@@ -47,7 +47,7 @@ public:
 
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
-	// Collision callbakcs ========================================
+	// Collision callbacks & methods ========================================
 
 	virtual void OnTriggerEnter(Collider * collider) {}
 
