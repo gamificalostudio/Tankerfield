@@ -140,13 +140,14 @@ bool Obj_TeslaTrooper::Update(float dt)
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
 		{
-			iPoint origin = app->map->ScreenToMapI(pos_map.x, pos_map.y);
-			iPoint destination = app->map->ScreenToMapI(target->pos_map.x, target->pos_map.y);
-			if (app->pathfinding->CreatePath(origin, destination) != -1)
+			//iPoint origin = app->map->ScreenToMapI(pos_map.x, pos_map.y);
+			//iPoint destination = app->map->ScreenToMapI(target->pos_map.x, target->pos_map.y);
+			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
 				path = *app->pathfinding->GetLastPath();
 			}
 		}
+		timer.Start();
 	}
 	return true;
 }
@@ -154,11 +155,18 @@ bool Obj_TeslaTrooper::Update(float dt)
 bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 	uint ind = GetRotatedIndex(8, angle);
-	app->render->Blit(tex, pos_map.x, pos_map.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
+	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
 
-	if (path.size() > 0/* && app->scene.*/)
+	app->render->Blit(tex, pos_map.x - rect.w*0.5F, pos_map.y - rect.h, &rect);
+	SDL_Rect pos = { pos_map.x,pos_map.y,10,10 };
+	app->render->DrawQuad(pos,255,0,0,255);
+	if (path.size() > 0 && app->scene->path_tex!=nullptr)
 	{
-
+		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end(); ++iter)
+		{
+			iPoint pos = app->map->MapToScreenI((*iter).x, (*iter).y);
+			app->render->Blit(app->scene->path_tex, pos.x, pos.y);
+		}
 	}
 
 	return true;
