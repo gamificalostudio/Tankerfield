@@ -2,8 +2,10 @@
 
 //#include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
+
 #include "Point.h"
 #include "Log.h"
+#include "Animation.h"
 
 #include "App.h"
 #include "Object.h"
@@ -14,7 +16,8 @@
 #include "M_Pathfinding.h"
 #include "Obj_TeslaTrooper.h"
 #include "M_Input.h"
-#include "Animation.h"
+#include "M_Map.h"
+
 
 
 //Static variables inicialization
@@ -137,7 +140,12 @@ bool Obj_TeslaTrooper::Update(float dt)
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
 		{
-
+			iPoint origin = app->map->ScreenToMapI(pos_map.x, pos_map.y);
+			iPoint destination = app->map->ScreenToMapI(target->pos_map.x, targer->pos_map.y);
+			if (app->pathfinding->CreatePath(origin, destination) != -1)
+			{
+				const std::vector<iPoint>* aux = app->pathfinding->GetLastPath();
+			}
 		}
 	}
 	return true;
