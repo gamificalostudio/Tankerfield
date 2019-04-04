@@ -17,6 +17,7 @@ enum ObjectType
 	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
+	REWARD_ZONE,
 	NO_TYPE
 };
 
@@ -50,8 +51,9 @@ public:
 	void DeleteObjects();
 
 	Object* GetNearestTank(fPoint pos);
-
+	
   
+
 private:
 
 	std::list<Object*> objects;

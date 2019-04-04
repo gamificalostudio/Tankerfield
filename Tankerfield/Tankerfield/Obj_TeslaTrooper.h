@@ -45,5 +45,41 @@ private:
 	Circle range_pos;
 };
 
+// TODO REMOVE IT 
+#include "M_Collision.h"
+
+class Reward_Zone : public Object
+{
+public:
+
+	Reward_Zone(fPoint pos): Object(pos) { }
+
+	~Reward_Zone()
+	{
+	}
+
+	bool Start()
+	{
+		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, this);
+		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		return true;
+	}
+
+	void OnTriggerEnter(Collider* c1)
+	{
+
+	}
+	void OnTrigger(Collider* c1)
+	{
+		if (c1->GetTag() == Collider::TAG::PLAYER)
+		{
+			LOG("REWARD ZONE");
+		}
+	}
+	void OnTriggerExit(Collider* c1)
+	{
+
+	}
+};
 #endif // !__TESLATROOPER_H__
 
