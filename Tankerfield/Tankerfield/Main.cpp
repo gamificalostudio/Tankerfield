@@ -79,8 +79,11 @@ int main(int argc, char* args[])
 
 			// Loop all modules until we are asked to leave ---------------------
 		case LOOP:
+		{
+			BROFILER_FRAME("frame");
 			if (app->Update() == false)
 				state = CLEAN;
+		}
 			break;
 
 			// Cleanup allocated memory -----------------------------------------
