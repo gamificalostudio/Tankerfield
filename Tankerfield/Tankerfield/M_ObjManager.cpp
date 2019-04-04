@@ -1,4 +1,9 @@
+
+#include <string>
+
 #include "Brofiler/Brofiler.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
 
 #include "Log.h"
 
@@ -11,12 +16,8 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "Obj_TeslaTrooper.h"
-#include "PugiXml/src/pugiconfig.hpp"
-#include "PugiXml/src/pugixml.hpp"
-#include <string>
 #include "Obj_Tank.h"
 #include "Bullet_Basic.h"
-#include "Brofiler/Brofiler.h"
 
 M_ObjManager::M_ObjManager()
 {

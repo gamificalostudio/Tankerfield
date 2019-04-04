@@ -1,10 +1,13 @@
 #ifndef __M_MAP_H__
 #define __M_MAP_H__
+
 #include <list>
+
+#include "Log.h"
 #include "Module.h"
 #include "M_Render.h"
 #include "M_Textures.h"
-#include "Log.h"
+
 
 struct Levels
 {
@@ -119,9 +122,9 @@ public:
 struct MapLayer
 {
 	std::string	name;
-	int			columns;
-	int			rows;
-	uint*		data;
+	int			columns = NULL;
+	int			rows = NULL;
+	uint*		data = nullptr;
 	Properties	layer_properties;
 	bool visible = true;
 	MapLayer() : data(NULL)
@@ -157,18 +160,18 @@ struct TileSet
 	SDL_Rect GetTileRect(int id) const;
 
 	std::string			name;
-	int					firstgid;
-	int					margin;
-	int					spacing;
-	int					tile_width;
-	int					tile_height;
-	SDL_Texture*		texture;
-	int					tex_width;
-	int					tex_height;
-	int					columns;
-	int					rows;
-	int					offset_x;
-	int					offset_y;
+	int					firstgid = NULL;
+	int					margin = NULL;
+	int					spacing = NULL;
+	int					tile_width = NULL;
+	int					tile_height = NULL;
+	SDL_Texture*		texture = nullptr;
+	int					tex_width = NULL;
+	int					tex_height = NULL;
+	int					columns = NULL;
+	int					rows = NULL;
+	int					offset_x = NULL;
+	int					offset_y = NULL;
 
 
 
@@ -184,14 +187,14 @@ enum MapTypes
 
 struct MapData
 {
-	int					columns, rows;
-	int					tile_width,	tile_height;
-	int					offset_x, offset_y;
+	int					columns = NULL,	rows = NULL;
+	int					tile_width = NULL,	tile_height = NULL;
+	int					offset_x = NULL, offset_y = NULL;
 	MapTypes			type;
 
 	SDL_Color			background_color;
 
-	std::list<TileSet*>	tilesets;
+	std::list<TileSet*>		tilesets;
 	std::list<MapLayer*>	mapLayers;
 	std::list<Collider*>    colliders_list;
 
@@ -238,7 +241,7 @@ public:
 
 private:
 
-	bool					map_loaded;
+	bool					map_loaded = false;
 	bool					show_grid = false;
 	std::string				folder;
 	uint					numLevels = 0; // counter for num levels

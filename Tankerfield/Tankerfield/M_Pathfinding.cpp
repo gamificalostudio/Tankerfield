@@ -1,4 +1,5 @@
 #include "Brofiler\Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -56,14 +57,14 @@ bool M_Pathfinding::PostUpdate(float dt)
 				origin = p;
 				origin_selected = true;
 				createdDebugPath = false;
-				debugPath.clear();
+				debug_path.clear();
 
 			}
 		}
 
 		if (createdDebugPath)
 		{
-			uint debugPathSize = debugPath.size();
+			uint debugPathSize = debug_path.size();
 			if (debugPathSize == 0)
 			{
 
@@ -71,14 +72,14 @@ bool M_Pathfinding::PostUpdate(float dt)
 				uint sizeArray = path->size();
 				for (uint i = 0; i < sizeArray; ++i)
 				{
-					debugPath.push_back(path->at(i));
+					debug_path.push_back(path->at(i));
 				}
 			}
 			else
 			{
 				for (uint i = 0; i < debugPathSize; ++i)
 				{
-					iPoint pos = app->map->MapToScreenI(debugPath.at(i).x, debugPath.at(i).y);
+					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
 					app->render->Blit(path_tex, pos.x, pos.y);
 				}
 			}

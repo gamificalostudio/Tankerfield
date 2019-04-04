@@ -6,6 +6,7 @@
 #include "SDL\include\SDL_gamecontroller.h"
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL.h"
+
 #include "Module.h"
 #include "Point.h"
 
@@ -144,13 +145,13 @@ private:
 	void UpdateControllers();
 
 private:
-	bool		windowEvents[WE_COUNT];
-	KeyState*	keyboard;
+	bool		window_events[WE_COUNT];
+	KeyState*	keyboard = nullptr;
 	KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
-	int			mouse_motion_x;
-	int			mouse_motion_y;
-	int			mouse_x;
-	int			mouse_y;
+	int			mouse_motion_x = NULL;
+	int			mouse_motion_y = NULL;
+	int			mouse_x = NULL;
+	int			mouse_y = NULL;
 
 public:
 	std::vector<Controller*> controllers;

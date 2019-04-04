@@ -1,3 +1,7 @@
+
+#include "Brofiler/Brofiler.h"
+#include "SDL/include/SDL.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -5,8 +9,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
-#include "Brofiler/Brofiler.h"
-#include "SDL/include/SDL.h"
+
 
 
 #define MAX_KEYS 300
@@ -76,7 +79,7 @@ bool M_Input::PreUpdate()
 		{
 			case SDL_QUIT:
 			{
-				windowEvents[WE_QUIT] = true;
+				window_events[WE_QUIT] = true;
 				break;
 			}
 			case SDL_WINDOWEVENT:
@@ -87,7 +90,7 @@ bool M_Input::PreUpdate()
 				case SDL_WINDOWEVENT_HIDDEN:
 				case SDL_WINDOWEVENT_MINIMIZED:
 				case SDL_WINDOWEVENT_FOCUS_LOST:
-					windowEvents[WE_HIDE] = true;
+					window_events[WE_HIDE] = true;
 					break;
 
 					//case SDL_WINDOWEVENT_ENTER:
@@ -95,7 +98,7 @@ bool M_Input::PreUpdate()
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
 				case SDL_WINDOWEVENT_MAXIMIZED:
 				case SDL_WINDOWEVENT_RESTORED:
-					windowEvents[WE_SHOW] = true;
+					window_events[WE_SHOW] = true;
 					break;
 				}
 				break;
@@ -209,7 +212,7 @@ bool M_Input::CleanUp()
 // ---------
 bool M_Input::GetWindowEvent(EventWindow ev)
 {
-	return windowEvents[ev];
+	return window_events[ev];
 }
 
 // Check key states (includes mouse and joy buttons)
