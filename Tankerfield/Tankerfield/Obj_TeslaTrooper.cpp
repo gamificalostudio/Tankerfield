@@ -158,14 +158,19 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
 	iPoint pos= app->map->MapToScreenI(pos_map.x, pos_map.y);
 	app->render->Blit(tex, pos.x, pos.y, &rect);
-	SDL_Rect frame = { pos_map.x,pos_map.y,10,10 };
+
+	//Draw actual postion
+	SDL_Rect frame = { pos.x,pos.y,10,10 };
 	app->render->DrawQuad(frame,255,0,0,255);
 	if (path.size() > 0 && app->scene->path_tex!=nullptr)
 	{
 		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end(); ++iter)
 		{
-			iPoint pos = app->map->MapToScreenI((*iter).x, (*iter).y);
-			app->render->Blit(app->scene->path_tex, pos.x, pos.y);
+			//iPoint pos = app->map->MapToScreenI((*iter).x, (*iter).y);
+			//SDL_Rect rect_aux = { pos.x,pos.y,10,10 };
+			app->render->DrawIsometricQuad((*iter).x, (*iter).y, 1, 1);
+			//app->render->DrawQuad(rect_aux, 255, 0, 0, 255);
+			//app->render->Blit(app->scene->path_tex, pos.x, pos.y);
 		}
 	}
 
