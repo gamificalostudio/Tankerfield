@@ -67,13 +67,12 @@ public:
 		position = pos;
 	}
 
-	void SetPosToObj();
-
-
-	void AddRigidBody(const Collider::BODY_TYPE new_body_type)
+	void SetObjOffset(const fPoint offset)
 	{
-		body_type = new_body_type;
+		obj_offset = offset;
 	}
+
+	void SetPosToObj();
 
 	template<typename TYPE>
 
@@ -94,8 +93,12 @@ public:
 		return tag;
 	}
 
-	void Destroy();
+	void AddRigidBody(const Collider::BODY_TYPE new_body_type)
+	{
+		body_type = new_body_type;
+	}
 
+	void Destroy();
 
 	bool CheckCollision(Collider* collider) const;
 

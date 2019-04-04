@@ -64,6 +64,7 @@ bool Obj_Tank::Start()
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll->SetObjOffset({ 1.f,1.f });
 
 	//TODO: Load them from the XML
 	kb_shoot		= SDL_BUTTON_LEFT;

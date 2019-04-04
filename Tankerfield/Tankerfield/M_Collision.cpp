@@ -306,21 +306,22 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
 	case Collider::OVERLAP_DIR::LEFT:
-		dynamic_col->object->pos_map.x = static_col->position.x - dynamic_col->width;
+		dynamic_col->position.x = static_col->position.x - dynamic_col->width;
 		break;
 	case Collider::OVERLAP_DIR::RIGHT:
-		dynamic_col->object->pos_map.x = static_col->position.x + static_col->width;
+		dynamic_col->position.x = static_col->position.x + static_col->width;
 		break;
 	case Collider::OVERLAP_DIR::UP:
-		dynamic_col->object->pos_map.y = static_col->position.y - dynamic_col->height;
+		dynamic_col->position.y = static_col->position.y - dynamic_col->height;
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
-		dynamic_col->object->pos_map.y = static_col->position.y + static_col->height;
+		dynamic_col->position.y = static_col->position.y + static_col->height;
 		break;
 	}
 
+	dynamic_col->object->pos_map = dynamic_col->position - dynamic_col->obj_offset;
 	dynamic_col->last_overlap = (Collider::OVERLAP_DIR)overlap_dir;
-	dynamic_col->SetPos(dynamic_col->object->pos_map);
+
 }
 
 
@@ -347,26 +348,26 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
 	case Collider::OVERLAP_DIR::RIGHT:
-		c1->object->pos_map.x -= distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
-		c2->object->pos_map.x += distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+		c1->position.x -= distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+		c2->position.x += distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
 
 		break;
 	case Collider::OVERLAP_DIR::LEFT:
-		c1->object->pos_map.x += distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
-		c2->object->pos_map.x -= distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+		c1->position.x += distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+		c2->position.x -= distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
 		break;
 	case Collider::OVERLAP_DIR::UP:
-		c1->object->pos_map.y -= distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
-		c2->object->pos_map.y += distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+		c1->position.y -= distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+		c2->position.y += distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
-		c1->object->pos_map.y += distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
-		c2->object->pos_map.y -= distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		c1->position.y += distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		c2->position.y -= distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
 		break;
 	}
 
-	c1->SetPos(c1->object->pos_map);
-	c2->SetPos(c2->object->pos_map);
+	c1->object->pos_map = c1->position - c1->obj_offset;
+	c2->object->pos_map = c2->position - c2->obj_offset;
 }
 
 inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
