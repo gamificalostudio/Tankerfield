@@ -42,6 +42,13 @@ bool Object::PostUpdate(float dt)
 	return true;
 }
 
+//void Object::Draw() {
+//	if (current_animation != nullptr)
+//		app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y, &current_animation->frames[current_animation->GetNumCurrentFrame()], 1.0F, true);
+//	else
+//		app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y);
+//}
+
 //angle should be in degrees
 uint Object::GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, float fist_rect_dir)
 {

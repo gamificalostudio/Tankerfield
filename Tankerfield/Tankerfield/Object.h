@@ -18,6 +18,28 @@ enum ROTATION_DIR {
 struct SDL_Texture;
 class Collider;
 
+struct TileSetEntity {
+
+	SDL_Rect GetTileRect(int id) const;
+
+	std::string name;
+	uint tilewidth = 0;
+	uint tileheight = 0;
+	uint spacing = 0;
+	uint margin = 0;
+	uint tilecount = 0;
+	uint columns = 0;
+	std::string imagePath;
+	SDL_Texture* texture = nullptr;
+	uint width = 0;
+	uint height = 0;
+};
+
+struct ObjectInfo
+{
+	TileSetEntity tileset;
+};
+
 class Object 
 {
 public:
@@ -31,6 +53,7 @@ public:
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt);
 	virtual bool PostUpdate(float dt);
+	//virtual void Draw();
 	virtual bool CleanUp() { return true; };
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
@@ -53,10 +76,13 @@ public:
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
 	fPoint pivot		= { 0.f, 0.f };
+	iPoint size			= { 0, 0 };
 	bool to_remove = false;//Set it to true if you want the object to be removed
 	//
 	Animation* current_animation = nullptr;
-	
+
+	ObjectInfo data;
+
 	Collider* coll = nullptr;
 };
 

@@ -16,6 +16,8 @@ public:
 	Obj_Static(fPoint pos);
 	~Obj_Static();
 
+	bool Awake(pugi::xml_node & static_node) override;
+	bool Start() override;
 
 	//void OnCollision(Collider*, Collider*, float dt);
 

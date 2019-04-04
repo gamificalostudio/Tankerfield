@@ -24,3 +24,41 @@ Obj_Static::Obj_Static(fPoint pos) : Object(pos)
 Obj_Static::~Obj_Static()
 {
 }
+
+bool Obj_Static::Awake(pugi::xml_node & static_node)
+{
+	return true;
+}
+
+bool Obj_Static::Start()
+{
+	SetRect(0, 0, 180, 185);
+	SetPivot(90.f, 92.f);
+
+	size = iPoint(frame.w, frame.h);
+
+	if (app->map->data.type == MAPTYPE_ISOMETRIC) { //If map is isometric, we have to transform orthogonal position to isometric position
+		pos_map.x /= app->map->data.tile_width * 0.5f;
+		pos_map.y /= app->map->data.tile_height;
+
+		iPoint pos = app->map->MapToScreenI(pos_map.x + 1, pos_map.y + 1);
+		pos_map.create(pos.x, pos.y);
+	}
+
+	data.tileset.texture = app->tex->Load(app->map->data.objects_path.data()); //Load object texture
+
+	return true;
+}
+
+void Obj_Static::Draw()
+{
+	app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y, &frame);
+}
+
+void Obj_Static::SetRect(int x, int y, int w, int h)
+{
+	frame.x = x;
+	frame.y = y;
+	frame.w = w;
+	frame.h = h;
+}

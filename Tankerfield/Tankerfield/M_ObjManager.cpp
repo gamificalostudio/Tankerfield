@@ -14,6 +14,7 @@
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
+#include <algorithm>
 #include "Obj_Tank.h"
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
@@ -96,6 +97,38 @@ bool M_ObjManager::Update(float dt)
 	}
 	
 	return true;
+}
+
+bool M_ObjManager::UpdateAll(float dt)
+{
+	bool ret = true;
+
+	//TODO 4: Save entities on camera during update iteration in draw_entities vector and iterate after update iteration
+	//move draw function, entities_drawn++ and DrawDebugQuad to the new iteration
+
+	std::list<Object*> draw_objects;
+	uint objects_drawn = 0;
+
+	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item) {
+		if (*item != nullptr) {
+			ret = (*item)->Update(dt);
+
+			if (app->render->IsOnCamera((*item)->pos_map.x, (*item)->pos_map.y, (*item)->size.x, (*item)->size.y)) {
+				draw_objects.push_back(*item);
+			}
+		}
+	}
+
+	//std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
+
+	for (std::list<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item) {
+		//(*item)->Draw();
+		objects_drawn++;
+	}
+
+	draw_objects.clear();
+
+	return ret;
 }
 
 bool M_ObjManager::PostUpdate(float dt)
@@ -191,4 +224,10 @@ bool M_ObjManager::Save(pugi::xml_node& save) const
 	bool ret = true;
 
 	return ret;
+}
+
+
+bool M_ObjManager::SortByYPos(const Object * ent1, const Object * ent2)
+{
+	return ent1->pivot.y + ent1->pos_map.y < ent2->pivot.y + ent2->pos_map.y;
 }

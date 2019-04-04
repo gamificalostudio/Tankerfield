@@ -67,28 +67,26 @@ bool M_Map::PostUpdate(float dt)
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->visible == false) {
-			continue;
-		}
+		if ((*layer)->visible && (*layer)->layer_properties.draw) {
 
-		for (int y = 0; y < data.rows; ++y)
-		{
-			for (int x = 0; x < data.columns; ++x)
+			for (int y = 0; y < data.rows; ++y)
 			{
-				int tile_id = (*layer)->Get(x, y);
-				if (tile_id > 0)
+				for (int x = 0; x < data.columns; ++x)
 				{
-					iPoint pos = MapToScreenI(x, y);
-					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
+					int tile_id = (*layer)->Get(x, y);
+					if (tile_id > 0)
 					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
-						if (tileset != nullptr)
+						iPoint pos = MapToScreenI(x, y);
+						if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 						{
-							SDL_Rect r = tileset->GetTileRect(tile_id);
-							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+							TileSet* tileset = GetTilesetFromTileId(tile_id);
+							if (tileset != nullptr)
+							{
+								SDL_Rect r = tileset->GetTileRect(tile_id);
+								app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+							}
 						}
 					}
-
 				}
 			}
 		}
@@ -215,6 +213,7 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	
 	pugi::xml_node layer_data = node.child("data");
 
+
 	if (layer_data == NULL)
 	{
 		LOG("Error parsing map xml file: Cannot find 'layer/data' tag.");
@@ -233,10 +232,15 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			layer->data[i] = tile.attribute("gid").as_int(0);
 
 			if (layer->name == "Colliders" && layer->data[i] != 0u)
-				{
-					fPoint pos = layer->GetTilePos(i);
-					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
-				}
+			{
+				fPoint pos = layer->GetTilePos(i);
+				app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+			}
+
+			if (layer->name == "Buildings")
+			{
+				layer->layer_properties.draw = node.child("properties").child("property").attribute("value").as_bool(true);
+			}
 
 			++i;
 		}
@@ -340,6 +344,8 @@ bool M_Map::LoadMap()
 		bool ret = false;
 
 		data.map_properties.LoadProperties(map.child("properties"));
+		data.objects_path = data.map_properties.GetAsString("object_texture");
+		data.map_properties.draw = data.map_properties.GetAsBool("NoDraw");
 		data.offset_x = data.map_properties.GetAsInt("offset_x");
 		data.offset_y = data.map_properties.GetAsInt("offset_y");
 

@@ -37,6 +37,8 @@ public:
 
 	bool Update(float dt) override;
 
+	bool UpdateAll(float dt);
+
 	bool PostUpdate(float dt) override;
 
 	bool Load(pugi::xml_node&);
@@ -46,6 +48,8 @@ public:
 	bool CleanUp() override;
 
 	Object* CreateObject(ObjectType type, fPoint pos);
+
+	static bool SortByYPos(const Object * ent1, const Object * ent2);
 
 	void DeleteObjects();
   

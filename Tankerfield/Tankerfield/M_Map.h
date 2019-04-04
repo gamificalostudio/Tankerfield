@@ -103,7 +103,6 @@ struct Properties
 			else if (type == "bool")
 			{
 				p->value = new bool(iter.attribute("value").as_bool());
-				
 			}
 			else 
 			{
@@ -113,6 +112,8 @@ struct Properties
 			
 		}
 	}
+
+	bool draw = true;
 };
 
 // ----------------------------------------------------
@@ -179,8 +180,8 @@ struct MapData
 	int					columns, rows;
 	int					tile_width,	tile_height;
 	int					offset_x, offset_y;
+	std::string			objects_path;
 	MapTypes			type;
-
 	SDL_Color			background_color;
 	std::list<TileSet*>	tilesets;
 	std::list<MapLayer*>	mapLayers;
@@ -211,7 +212,6 @@ public:
 	fPoint ScreenToMapF(float x, float y);
 
 	TileSet* GetTilesetFromTileId(int id) const;
-
 
 
 public:

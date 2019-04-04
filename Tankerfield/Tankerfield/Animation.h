@@ -38,6 +38,10 @@ public:
 		return frames[(int)current_frame];
 	}
 	
+	int GetNumCurrentFrame() {
+		return (int)current_frame;
+	}
+
 	//This overloaded GetCurrentFrame is used for Animation arrays where the frame number must concide
 	SDL_Rect& GetCurrentFrame(float dt, float & new_current_frame)
 	{
