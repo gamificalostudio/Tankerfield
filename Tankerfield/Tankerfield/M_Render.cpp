@@ -72,7 +72,6 @@ bool M_Render::PostUpdate(float dt)
 {
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
-<<<<<<< HEAD
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		debug = !debug;
@@ -88,8 +87,6 @@ bool M_Render::PostUpdate(float dt)
 		}
 	}
 
-=======
->>>>>>> parent of 19d5658... commenting brofiler
 	return true;
 }
 
@@ -183,7 +180,6 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 
 	if (SDL_HasIntersection(&rect, &cam))
 	{
-<<<<<<< HEAD
 		SDL_Point* p = NULL;
 		SDL_Point pivot;
 
@@ -195,7 +191,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 		}
 		if (rect.x + rect.w >= cam.w)
 		{
-	
+
 			sect.w = cam.w - rect.x;
 			rect.w = cam.w - rect.x;
 		}
@@ -206,12 +202,12 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 		}
 		if (rect.x < 0)
 		{
-			float d = - rect.x;
+			float d = -rect.x;
 			rect.x = 0;
 			sect.x = d;
 			sect.w -= d;
 			rect.w -= d;
-			
+
 			//rect.x = 0;
 		}
 		if (rect.y < 0)
@@ -246,7 +242,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 			}
 			//rect_cam.x += 100;
 			//sect.x += 100;
-			DrawLine(camera.x + camera.w, 0, camera.x+camera.w, 2000,0,0,0);
+			DrawLine(camera.x + camera.w, 0, camera.x + camera.w, 2000, 0, 0, 0);
 			DrawLine(0, camera.y + camera.h, 2000, camera.y + camera.h, 0, 0, 0);
 			if (SDL_RenderCopyEx(renderer, texture, &sect, &rect_cam, angle, p, SDL_FLIP_NONE) != 0)
 			{
@@ -254,20 +250,8 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 				ret = false;
 			}
 		}
-		
-	}
-	else {
-=======
-		pivot.x = pivot_x;
-		pivot.y = pivot_y;
-		p = &pivot;
-	}
 
-	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
-	{
-		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
->>>>>>> parent of 19d5658... commenting brofiler
-		ret = false;
+
 	}
 
 	return ret;
