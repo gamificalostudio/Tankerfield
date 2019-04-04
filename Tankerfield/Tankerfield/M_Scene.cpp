@@ -14,6 +14,7 @@
 #include "M_Collision.h"
 #include "Point.h"
 #include "Brofiler/Brofiler.h"
+#include "Rect.h"
 
 M_Scene::M_Scene() : Module()
 {
