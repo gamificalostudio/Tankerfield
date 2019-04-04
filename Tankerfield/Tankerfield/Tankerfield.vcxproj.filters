@@ -100,6 +100,9 @@
     <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="Math_Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -214,6 +217,10 @@
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Circle.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="Math_Utils.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,7 @@
 #include "Obj_Tank.h"
 #include "M_ObjManager.h"
 #include "M_Scene.h"
+#include "Math_Utils.h"
 
 
 
@@ -92,9 +93,8 @@ bool M_Render::PostUpdate(float dt)
 	target_pos.x = camera.x;
 	target_pos.y = camera.y;
 
-	iPoint a;
-	camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.6f);
-	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.6f);
+	camera.x = lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.6f);
+	camera.y = lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.6f);
 
 		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
