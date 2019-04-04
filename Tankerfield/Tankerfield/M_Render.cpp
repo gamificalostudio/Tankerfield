@@ -6,6 +6,7 @@
 #include "Point.h"
 
 #include "App.h"
+#include "M_Input.h"
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
@@ -51,13 +52,11 @@ bool M_Render::Awake(pugi::xml_node& config)
 	else
 	{
 
-
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
 		camera.x = -app->win->screen_surface->w * .5f;
 		camera.y = -app->win->screen_surface->h * .5f;
-		
-		
+	
 	}
 
 	return ret;
@@ -95,6 +94,21 @@ bool M_Render::PostUpdate(float dt)
 		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		debug = !debug;
+		if (!debug)
+		{
+			camera.w = app->win->screen_surface->w;
+			camera.h = app->win->screen_surface->h;
+		}
+		else
+		{
+			camera.w *= 0.5f;
+			camera.h *= 0.5f;
+		}
+	}
 
 	return true;
 }
@@ -164,6 +178,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 	rect.x = (int)(-camera.x * speed) + screen_x * scale;
 	rect.y = (int)(-camera.y * speed) + screen_y * scale;
 
+	SDL_Rect sect(*section);
 	if (section != NULL)
 	{
 		rect.w = section->w;
@@ -177,20 +192,89 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 	rect.w *= scale;
 	rect.h *= scale;
 
-	SDL_Point* p = NULL;
-	SDL_Point pivot;
+	//Don't blit if the sprite is out of the screen
+	uint width, height = 0;
+	app->win->GetWindowSize(width, height);
+	SDL_Rect cam;
+	cam.x = 0;
+	cam.y = 0;
+	cam.w = camera.w;
+	cam.h = camera.h;
 
-	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+	if (SDL_HasIntersection(&rect, &cam))
 	{
-		pivot.x = pivot_x;
-		pivot.y = pivot_y;
-		p = &pivot;
-	}
+		SDL_Point* p = NULL;
+		SDL_Point pivot;
 
-	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
-	{
-		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
-		ret = false;
+		if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+		{
+			pivot.x = pivot_x;
+			pivot.y = pivot_y;
+			p = &pivot;
+		}
+		if (rect.x + rect.w >= cam.w)
+		{
+
+			sect.w = cam.w - rect.x;
+			rect.w = cam.w - rect.x;
+		}
+		if (rect.y + rect.h >= cam.h)
+		{
+			sect.h = cam.h - rect.y;
+			rect.h = cam.h - rect.y;
+		}
+		if (rect.x < 0)
+		{
+			float d = -rect.x;
+			rect.x = 0;
+			sect.x = d;
+			sect.w -= d;
+			rect.w -= d;
+
+			//rect.x = 0;
+		}
+		if (rect.y < 0)
+		{
+			float d = -rect.y;
+			rect.y = 0;
+			sect.y = d;
+			sect.h -= d;
+			rect.h -= d;
+		}
+		for (uint i = 1; i <= 4; ++i)
+		{
+			SDL_Rect rect_cam(rect);
+			if (debug)
+			{
+				switch (i)
+				{
+				case 1:
+
+					break;
+				case 2:
+					rect_cam.x += cam.w;
+					break;
+				case 3:
+					rect_cam.y += cam.h;
+					break;
+				case 4:
+					rect_cam.x += cam.w;
+					rect_cam.y += cam.h;
+					break;
+				}
+			}
+			//rect_cam.x += 100;
+			//sect.x += 100;
+			DrawLine(camera.x + camera.w, 0, camera.x + camera.w, 2000, 0, 0, 0);
+			DrawLine(0, camera.y + camera.h, 2000, camera.y + camera.h, 0, 0, 0);
+			if (SDL_RenderCopyEx(renderer, texture, &sect, &rect_cam, angle, p, SDL_FLIP_NONE) != 0)
+			{
+				LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+				ret = false;
+			}
+		}
+
+
 	}
 
 	return ret;
@@ -265,7 +349,7 @@ bool M_Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
 	int result = -1;
-
+	
 	if (use_camera)
 		result = SDL_RenderDrawLine(renderer, -camera.x + x1 * scale, -camera.y + y1 * scale, -camera.x + x2 * scale, -camera.y + y2 * scale);
 	else
@@ -321,12 +405,18 @@ bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	return ret;
 }
 
-bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int & h) const
+void M_Render::BlitInScreen2(SDL_Rect& rect)
 {
-	int scale = app->win->GetScale();
+	rect.x += rect.w;
+}
 
-	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
-	SDL_Rect cam = { camera.x,camera.y,camera.w,camera.h };
+void M_Render::BlitInScreen3(SDL_Rect& rect)
+{
+	rect.y += rect.h;
+}
 
-	return SDL_HasIntersection(&r, &cam);
+void M_Render::BlitInScreen4(SDL_Rect& rect)
+{
+	rect.x += rect.w;
+	rect.y += rect.h;
 }
