@@ -30,7 +30,7 @@ public:
 	virtual bool Start() { return true; };
 	virtual bool PreUpdate() { return true; };
 	virtual bool Update(float dt);
-	virtual bool PostUpdate();
+	virtual bool PostUpdate(float dt);
 	virtual bool CleanUp() { return true; };
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
@@ -48,7 +48,7 @@ public:
 public:
 
 	int type = 0;
-	fPoint pos			= { 0.f, 0.f };
+	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
 	bool to_remove = false;//Set it to true if you want the object to be removed

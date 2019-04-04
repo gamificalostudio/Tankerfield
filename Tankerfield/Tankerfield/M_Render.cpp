@@ -1,10 +1,21 @@
+
+#include "Brofiler/Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
+#include "Point.h"
+
 #include "App.h"
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
-#include "Brofiler/Brofiler.h"
+#include "Obj_Tank.h"
+#include "M_ObjManager.h"
+#include "M_Scene.h"
+
+
+
+
 
 M_Render::M_Render() : Module()
 {
@@ -42,10 +53,14 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
+
+
 		camera.w = app->win->screen_surface->w;
 		camera.h = app->win->screen_surface->h;
-		camera.x = 0;
-		camera.y = 0;
+		camera.x = -app->win->screen_surface->w * .5f;
+		camera.y = -app->win->screen_surface->h * .5f;
+		
+		
 	}
 
 	return ret;
@@ -67,10 +82,24 @@ bool M_Render::PreUpdate()
 	return true;
 }
 
-bool M_Render::PostUpdate()
+bool M_Render::PostUpdate(float dt)
 {
+	// Camera fix TODO: Move it to camera class
+
+	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
+	fPoint target_pos;
+	
+	target_pos.x = camera.x;
+	target_pos.y = camera.y;
+
+	iPoint a;
+	camera.x = a.lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.6f);
+	camera.y = a.lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.6f);
+
+		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
 	return true;
 }
 
@@ -122,22 +151,22 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 	iPoint ret;
 	int scale = app->win->GetScale();
 
-	ret.x = (x - camera.x / scale);
-	ret.y = (y - camera.y / scale);
+	ret.x = (x + camera.x / scale);
+	ret.y = (y + camera.y / scale);
 
 	return ret;
 }
 
 // Blit to screen
-bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 {
 	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
 	bool ret = true;
 	uint scale = app->win->GetScale();
 
 	SDL_Rect rect;
-	rect.x = (int)(-camera.x * speed) + x * scale;
-	rect.y = (int)(-camera.y * speed) + y * scale;
+	rect.x = (int)(-camera.x * speed) + screen_x * scale;
+	rect.y = (int)(-camera.y * speed) + screen_y * scale;
 
 	if (section != NULL)
 	{
@@ -204,13 +233,13 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 	fPoint point_1, point_2, point_3, point_4;
 
 	// top_left 
-	point_1 = app->map->MapToWorldF(x, y);
+	point_1 = app->map->MapToScreenF({x, y});
 	// top_right
-	point_2 = app->map->MapToWorldF(x + w, y);
+	point_2 = app->map->MapToScreenF({x + w, y});
 	// bot_right
-	point_3 = app->map->MapToWorldF(x + w, y + h);
+	point_3 = app->map->MapToScreenF({x + w, y + h});
 	// bot_left
-	point_4 = app->map->MapToWorldF(x, y + h);
+	point_4 = app->map->MapToScreenF({x, y + h});
 
 	app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
 	app->render->DrawLine(point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);

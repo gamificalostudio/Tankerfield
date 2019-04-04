@@ -3,16 +3,30 @@
 
 #define MAX_COLLIDERS 50
 
-#include "Module.h"
-#include "PugiXml/src/pugixml.hpp"
 #include <list>
+#include <assert.h>
+
+#include "PugiXml/src/pugixml.hpp"
+
+#include "Module.h"
 
 class Object;
 class M_Collision;
 
+
+
 class Collider
 {
 public:
+	
+	enum class TYPE
+	{
+		NONE,
+		DYNAMIC,
+		STATIC,
+		SENSOR
+	};
+
 	enum class ON_TRIGGER_STATE
 	{
 		NONE,
@@ -41,14 +55,6 @@ public:
 		MAX
 	};
 
-	enum class TYPE
-	{
-		NONE,
-		DYNAMIC,
-		STATIC,
-		SENSOR
-	};
-
 	Collider(const fPoint pos ,const  float width ,const  float height, const TAG tag, Object* object = nullptr ,Module* callback = nullptr) :
 		position(pos),
 		width(width),
@@ -60,6 +66,7 @@ public:
 
 	void SetPos(const float x,const  float y)
 	{
+		assert(type != TYPE::STATIC);
 		position = { x, y };
 	}
 
@@ -88,6 +95,8 @@ private:
 
 	Object * object = nullptr;
 
+	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
+
 	friend M_Collision;
 };
 
@@ -99,11 +108,11 @@ public:
 
 	virtual ~M_Collision();
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
+	bool PostUpdate(float dt) override;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
 	Collider *AddCollider(fPoint pos, float width , float height, Collider::TAG type, Module* callback = nullptr, Object* object = nullptr);
 

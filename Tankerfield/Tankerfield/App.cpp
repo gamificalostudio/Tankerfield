@@ -297,7 +297,7 @@ bool App::PostUpdate()
 			continue;
 		}
 
-		ret = (*item)->PostUpdate();
+		ret = (*item)->PostUpdate(dt);
 	}
 
 	return ret;

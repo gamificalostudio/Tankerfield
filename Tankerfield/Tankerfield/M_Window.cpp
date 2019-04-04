@@ -1,10 +1,14 @@
+
+#include "Brofiler/Brofiler.h"
+#include "SDL/include/SDL.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
 #include "M_Window.h"
-#include "Brofiler/Brofiler.h"
 
-#include "SDL/include/SDL.h"
+
+
 
 
 M_Window::M_Window() : Module()

@@ -1,9 +1,13 @@
 #include "Brofiler\Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
 #include "M_Pathfinding.h"
-
+#include "M_input.h"
+#include "M_render.h"
+#include "M_Textures.h"
+#include "M_map.h"
 
 M_Pathfinding::M_Pathfinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
@@ -14,6 +18,82 @@ M_Pathfinding::M_Pathfinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LEN
 M_Pathfinding::~M_Pathfinding()
 {
 	RELEASE_ARRAY(map);
+}
+
+bool M_Pathfinding::Start()
+{
+	path_tex = app->tex->Load("maps/path.png");
+	return true;
+}
+
+bool M_Pathfinding::PostUpdate(float dt)
+{
+	if (test_path)
+	{
+		static iPoint origin;
+		static bool origin_selected = false;
+		static bool createdDebugPath = false;
+
+		iPoint mousePos;
+		app->input->GetMousePosition(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		p = app->map->MapToScreenI(p.x , p.y );
+		
+		if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KeyState::KEY_DOWN)
+		{
+			if (origin_selected == true)
+			{
+
+				origin_selected = false;
+
+				if (CreatePath(origin, p) != -1)
+				{
+					createdDebugPath = true;
+				}
+
+			}
+			else
+			{
+				origin = p;
+				origin_selected = true;
+				createdDebugPath = false;
+				debug_path.clear();
+
+			}
+		}
+
+		if (createdDebugPath)
+		{
+			uint debugPathSize = debug_path.size();
+			if (debugPathSize == 0)
+			{
+
+				const std::vector<iPoint>* path = app->pathfinding->GetLastPath();
+				uint sizeArray = path->size();
+				for (uint i = 0; i < sizeArray; ++i)
+				{
+					debug_path.push_back(path->at(i));
+				}
+			}
+			else
+			{
+				for (uint i = 0; i < debugPathSize; ++i)
+				{
+					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
+					app->render->Blit(path_tex, pos.x, pos.y);
+				}
+			}
+
+		}
+
+		p = app->map->MapToScreenI(p.x, p.y);
+
+		app->render->Blit(path_tex, p.x, p.y + 16);
+	}
+
+	
+
+	return true;
 }
 
 // Called before quitting
@@ -174,7 +254,6 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
-	
 	BROFILER_CATEGORY("CRATE PATH", Profiler::Color::LightBlue);
 	last_path.clear();
 
