@@ -3,7 +3,7 @@
 
 #include "SDL/include/SDL_timer.h"
 #include "Brofiler/Brofiler.h"
-#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
+//#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 
 #include "Defs.h"
 #include "Log.h"
