@@ -1,3 +1,8 @@
+
+#include "Brofiler/Brofiler.h"
+#include "SDL/include/SDL_render.h"
+#include "SDL/include/SDL_timer.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -8,9 +13,7 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "M_SceneManager.h"
-#include "Brofiler/Brofiler.h"
-#include "SDL/include/SDL_render.h"
-#include "SDL/include/SDL_timer.h"
+
 
 M_SceneManager::M_SceneManager():Module()
 {
@@ -46,8 +49,8 @@ bool M_SceneManager::Update(float dt)
 	{
 		if (now >= total_time)
 		{
-			ModuleOff->Disable();
-			ModuleOn->Enable();
+			module_off->Disable();
+			module_on->Enable();
 
 			total_time += total_time;
 			start_time = SDL_GetTicks();
@@ -77,8 +80,8 @@ bool M_SceneManager::FadeToBlack(Module* module_off, Module* module_on, float ti
 	BROFILER_CATEGORY("M_SceneManagerFadeToBlack", Profiler::Color::Purple)
 	bool ret = false;
 
-	ModuleOff = module_off;
-	ModuleOn = module_on;
+	module_off = module_off;
+	module_on = module_on;
 
 	if (current_step == fade_step::none)
 	{

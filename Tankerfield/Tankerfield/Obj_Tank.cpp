@@ -10,8 +10,10 @@
 #include "Log.h"
 #include "M_Map.h"
 #include "M_ObjManager.h"
+#include "M_Window.h"
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
+#include "MathUtils.h"
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
@@ -52,7 +54,7 @@ bool Obj_Tank::Start()
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
-	speed = 2.5f;//TODO: Load from xml
+	speed = 5.f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -60,10 +62,11 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 50.f, BASIC_BULLET);
 
-	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
-	coll->SetType(Collider::TYPE::DYNAMIC);
+	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll->SetObjOffset({ .0f,- .0f });
 
 	//TODO: Load them from the XML
 	kb_shoot		= SDL_BUTTON_LEFT;
@@ -77,6 +80,9 @@ bool Obj_Tank::Start()
 
 	draw_offset.x = 46;
 	draw_offset.y = 36;
+
+	base_angle_lerp_factor = 15.f;
+	turr_angle_lerp_factor = 15.f;
 
 	return true;
 }
@@ -95,8 +101,6 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
-	coll->SetPos(pos_map.x, pos_map.y);
-
 	return true;
 }
 
@@ -105,7 +109,7 @@ void Obj_Tank::Movement(float dt)
 	fPoint input_dir(0.f, 0.f);
 	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputMovementKeyboard(input_dir);
+		InputMovementKeyboard(input_dir,dt);
 	}
 	else if (last_input == INPUT_METHOD::CONTROLLER)
 	{
@@ -119,29 +123,33 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
+		base_angle = lerp(base_angle, (atan2(input_dir.y, -input_dir.x) * RADTODEG), base_angle_lerp_factor * dt);
 	}
 
 	velocity = iso_dir * speed * dt;                                                               
 	pos_map += velocity;
 }
 
-void Obj_Tank::InputMovementKeyboard(fPoint & input)
+void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
+		//app->render->camera.y -= floor(100.0f * dt);
 		input.y -= 1.f;
 	}
 	if (app->input->GetKey(kb_left) == KEY_DOWN || app->input->GetKey(kb_left) == KEY_REPEAT)
 	{
+		//app->render->camera.x -= floor(100.0f * dt);
 		input.x -= 1.f;
 	}
 	if (app->input->GetKey(kb_down) == KEY_DOWN || app->input->GetKey(kb_down) == KEY_REPEAT)
 	{
+		//app->render->camera.y += floor(100.0f * dt);
 		input.y += 1.f;
 	}
 	if (app->input->GetKey(kb_right) == KEY_DOWN || app->input->GetKey(kb_right) == KEY_REPEAT)
 	{
+		//app->render->camera.x += floor(100.0f * dt);
 		input.x += 1.f;
 	}
 }
@@ -181,7 +189,6 @@ bool Obj_Tank::PostUpdate(float dt)
 	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
-
 	return true;
 }
 
@@ -189,6 +196,15 @@ bool Obj_Tank::CleanUp()
 {
 	return true;
 }
+
+void Obj_Tank::OnTrigger(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::WALL)
+	{
+		LOG("WALL");
+	}
+}
+
 
 void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 {

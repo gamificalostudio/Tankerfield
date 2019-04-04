@@ -1,11 +1,19 @@
+
+#include "Brofiler/Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
+#include "Point.h"
+
 #include "App.h"
 #include "M_Input.h"
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
-#include "Brofiler/Brofiler.h"
+#include "Obj_Tank.h"
+#include "M_ObjManager.h"
+#include "M_Scene.h"
+#include "MathUtils.h"
 
 M_Render::M_Render() : Module()
 {
@@ -43,10 +51,12 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
-		camera.w = app->win->screen_surface->w/2;
-		camera.h = app->win->screen_surface->h/2;
-		camera.x = 0;
-		camera.y = 0;
+
+		camera.w = app->win->screen_surface->w;
+		camera.h = app->win->screen_surface->h;
+		camera.x = -app->win->screen_surface->w * .5f;
+		camera.y = -app->win->screen_surface->h * .5f;
+	
 	}
 
 	return ret;
@@ -70,8 +80,21 @@ bool M_Render::PreUpdate()
 
 bool M_Render::PostUpdate(float dt)
 {
+	// Camera fix TODO: Move it to camera class
+
+	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
+	fPoint target_pos;
+	
+	target_pos.x = camera.x;
+	target_pos.y = camera.y;
+
+	camera.x = lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.6f);
+	camera.y = lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.6f);
+
+		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		debug = !debug;
@@ -138,8 +161,8 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 	iPoint ret;
 	int scale = app->win->GetScale();
 
-	ret.x = (x - camera.x / scale);
-	ret.y = (y - camera.y / scale);
+	ret.x = (x + camera.x / scale);
+	ret.y = (y + camera.y / scale);
 
 	return ret;
 }
@@ -305,6 +328,17 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 
 	return true;
 }
+
+void M_Render::DrawIsometricLine(fPoint point_1, fPoint point_2, SDL_Color color)
+{
+	fPoint p_1, p_2;
+
+	p_1 = app->map->MapToScreenF(point_1);
+	p_2 = app->map->MapToScreenF(point_2);
+
+	app->render->DrawLine(p_1.x, p_1.y, p_2.x, p_2.y, color.r, color.g, color.b, color.a, true);
+}
+
 
 bool M_Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
