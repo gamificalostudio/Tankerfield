@@ -5,8 +5,7 @@
 #include "Animation.h"
 #include "Object.h"
 
-#include "Obj_Tank.h"
-
+struct SDL_Texture;
 
 class Obj_TeslaTrooper : public Object 
 {
@@ -17,7 +16,7 @@ public:
 public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool PostUpdate() override;
+	bool PostUpdate(float dt) override;
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
@@ -27,12 +26,11 @@ private:
 	float speed = 1.0f;
 
 	bool death = false;
-private:
+
 	Animation* walking = nullptr;
 	float angle = 0.0f;
 	float new_current_frame = 0.0f;
-
-
+	static SDL_Texture* tex;
 };
 
 // TODO REMOVE IT 

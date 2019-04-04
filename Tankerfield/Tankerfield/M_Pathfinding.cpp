@@ -1,9 +1,13 @@
 #include "Brofiler\Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
 #include "M_Pathfinding.h"
-
+#include "M_input.h"
+#include "M_render.h"
+#include "M_Textures.h"
+#include "M_map.h"
 
 M_Pathfinding::M_Pathfinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
@@ -14,6 +18,20 @@ M_Pathfinding::M_Pathfinding() : Module(), map(NULL), last_path(DEFAULT_PATH_LEN
 M_Pathfinding::~M_Pathfinding()
 {
 	RELEASE_ARRAY(map);
+}
+
+bool M_Pathfinding::Start()
+{
+
+
+	return true;
+}
+
+bool M_Pathfinding::PostUpdate(float dt)
+{
+
+
+	return true;
 }
 
 // Called before quitting
@@ -174,7 +192,6 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 {
-	
 	BROFILER_CATEGORY("CRATE PATH", Profiler::Color::LightBlue);
 	last_path.clear();
 

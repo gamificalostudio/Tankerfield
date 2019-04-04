@@ -50,8 +50,11 @@ bool Obj_Bullet::PostUpdate()
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	SDL_Rect * rect = &rects[ind];
-	app->render->Blit(tex, screen_pos.x - rect->w * 0.5f, screen_pos.y - rect->h * 0.5f, rect);
+	app->render->Blit(
+		tex,
+		screen_pos.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
+		screen_pos.y - 14,
+		&rects[ind]);
 
 	return true;
 }

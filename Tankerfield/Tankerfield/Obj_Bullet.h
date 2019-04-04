@@ -24,10 +24,6 @@ public:
 	bool PostUpdate();
 	
 	void OnTrigger(Collider* collider_1);
-	//Do damage to entity
-		//Show explosion particle
-		//Sound
-	//}
 
 public:
 

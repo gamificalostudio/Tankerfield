@@ -1,3 +1,9 @@
+
+#include "Brofiler/Brofiler.h"
+
+#include "Log.h"
+#include "Defs.h"
+
 #include "App.h"
 #include "M_Input.h"
 #include "M_Render.h"
@@ -218,16 +224,20 @@ bool M_Collision::Update(float dt)
 	return true;
 }
 
-bool M_Collision::PostUpdate()
+
+bool M_Collision::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("M_CollisionPostUpdate", Profiler::Color::Orange)
-		if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
-			debug = !debug;
-		}
+	BROFILER_CATEGORY("M_CollisionPostUpdate", Profiler::Color::Orange);
+
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
+		debug = !debug;
+	}
 
 	if (debug == true)
+	{
 		return true;
-
+	}
+	
 	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
 		switch ((*item)->body_type)

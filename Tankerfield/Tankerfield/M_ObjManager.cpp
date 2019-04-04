@@ -1,4 +1,9 @@
+
+#include <string>
+
 #include "Brofiler/Brofiler.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
 
 #include "Log.h"
 
@@ -11,12 +16,9 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "Obj_TeslaTrooper.h"
-#include "PugiXml/src/pugiconfig.hpp"
-#include "PugiXml/src/pugixml.hpp"
-#include <string>
 #include "Obj_Tank.h"
 #include "Bullet_Basic.h"
-#include "Brofiler/Brofiler.h"
+
 
 M_ObjManager::M_ObjManager()
 {
@@ -51,7 +53,7 @@ bool M_ObjManager::Start()
 
 bool M_ObjManager::PreUpdate()
 {
-	//BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Green);
+	BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Lavender);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
@@ -106,7 +108,7 @@ bool M_ObjManager::Update(float dt)
 	return true;
 }
 
-bool M_ObjManager::PostUpdate()
+bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
@@ -115,7 +117,7 @@ bool M_ObjManager::PostUpdate()
 	{
 		if ((*iterator) != nullptr)
 		{
-			(*iterator)->PostUpdate();
+			(*iterator)->PostUpdate(dt);
 		}
 	}
 

@@ -3,11 +3,12 @@
 
 #include <list>
 
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
+
 #include "Animation.h"
 
 #include "Module.h"
-#include "PugiXml/src/pugiconfig.hpp"
-#include "PugiXml/src/pugixml.hpp"
 #include "Point.h"
 
 enum ObjectType
@@ -37,7 +38,7 @@ public:
 
 	bool Update(float dt) override;
 
-	bool PostUpdate() override;
+	bool PostUpdate(float dt) override;
 
 	bool Load(pugi::xml_node&);
 
@@ -46,10 +47,6 @@ public:
 	bool CleanUp() override;
 
 	Object* CreateObject(ObjectType type, fPoint pos);
-
-private:
-
-	void DeleteObject(Object * obj);
 
 	void DeleteObjects();
 

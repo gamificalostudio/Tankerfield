@@ -34,7 +34,7 @@ bool Object::Update(float dt)
 	return true;
 }
 
-bool Object::PostUpdate()
+bool Object::PostUpdate(float dt)
 {
 	return true;
 }

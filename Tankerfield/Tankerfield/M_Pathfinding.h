@@ -1,26 +1,36 @@
 #ifndef __M_PATHFINDING_H__
 #define __M_PATHFINDING_H__
 
-#include "Module.h"
-#include "Point.h"
 #include <vector>
 #include <list>
 #include <algorithm>
 
+#include "Module.h"
+#include "Point.h"
+#include "M_Textures.h"
+
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
+
+struct SDL_Texture;
+
 
 class M_Pathfinding : public Module
 {
 public:
-
+	
 	M_Pathfinding();
 
 	// Destructor
 	~M_Pathfinding();
 
+	bool Start() override;
+
+	//Here were going to DebugPathfinding
+	bool PostUpdate(float dt) override;
+
 	// Called before quitting
-	bool CleanUp();
+	bool CleanUp() override;
 
 	// Sets up the walkability map
 	void SetMap(uint width, uint height, uchar* data);
@@ -43,10 +53,10 @@ public:
 private:
 
 	// size of the map
-	uint width;
-	uint height;
+	uint width = NULL;
+	uint height = NULL;
 	// all map walkability values [0..255]
-	uchar* map;
+	uchar* map = nullptr;
 	// we store the created path here
 	std::vector<iPoint> last_path;
 };
@@ -72,8 +82,8 @@ struct PathNode
 	int CalculateF(const iPoint& destination);
 
 	// -----------
-	int g;
-	int h;
+	int g = NULL;
+	int h = NULL;
 	iPoint pos;
 	const PathNode* parent; // needed to reconstruct the path in the end
 };

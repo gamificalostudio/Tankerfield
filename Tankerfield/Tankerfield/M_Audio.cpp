@@ -1,12 +1,15 @@
+
+#include "Brofiler/Brofiler.h"
+#include "SDL/include/SDL.h"
+#include "SDL_mixer/include/SDL_mixer.h"
+#pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
+
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
 #include "M_Audio.h"
-#include "Brofiler/Brofiler.h"
 
-#include "SDL/include/SDL.h"
-#include "SDL_mixer/include/SDL_mixer.h"
-#pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 M_Audio::M_Audio() : Module()
 {

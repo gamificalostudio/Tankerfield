@@ -1,3 +1,5 @@
+#include "Brofiler/Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -18,7 +20,7 @@
 #include "UI_Checkbox.h"
 #include "UI_TextPanel.h"
 
-#include "Brofiler/Brofiler.h"
+
 
 M_UI::M_UI() : Module()
 {
@@ -229,7 +231,7 @@ bool M_UI::Update(float dt)
 }
 
 // Called after all Updates
-bool M_UI::PostUpdate()
+bool M_UI::PostUpdate(float dt)
 {
 	// Draw all UI objects ====================================
 	DrawUI(main_object);

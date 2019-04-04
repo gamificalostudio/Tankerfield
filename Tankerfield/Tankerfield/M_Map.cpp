@@ -1,17 +1,18 @@
+#include <list>
+
 #include "Brofiler\Brofiler.h"
 
 #include "Log.h"
-
 #include "App.h"
 #include "M_Map.h"
 #include "M_Window.h"
 #include "M_Collision.h"
 #include "M_Input.h"
-
+#include "M_Pathfinding.h"
 
 M_Map::M_Map()
 {
-	name = "map";
+	name.assign("map");
 }
 
 M_Map::~M_Map()
@@ -48,17 +49,23 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
-	
+	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	bool ret = true;
+
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
 		show_grid = !show_grid;
+
+	if (!map_loaded)
+		return ret;
 
 	return true;
 }
 
-bool M_Map::PostUpdate()
+bool M_Map::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
+
 
 	if (map_loaded == false)
 		return ret;
@@ -114,6 +121,12 @@ bool M_Map::PostUpdate()
 	}
 
 	return ret;
+}
+
+bool M_Map::CleanUp()
+{
+	Unload();
+	return true;
 }
 
 bool M_Map::Load(const std::string& file_name)
@@ -174,7 +187,55 @@ bool M_Map::Load(const std::string& file_name)
 
 	map_loaded = ret;
 
+	if (map_loaded)
+	{
+		int w, h;
+		uchar* data = NULL;
+		if (CreateWalkabilityMap(w, h, &data))
+			app->pathfinding->SetMap(w, h, data);
+		LOG("Map's walkability successfuly created");
+	}
+
 	return ret;
+}
+
+bool M_Map::Unload()
+{
+	if (!map_loaded)
+		return false;
+
+	for (std::list<TileSet*>::iterator iter = data.tilesets.begin(); iter != data.tilesets.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.tilesets.clear();
+
+	for (std::list<MapLayer*>::iterator iter = data.mapLayers.begin(); iter != data.mapLayers.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.mapLayers.clear();
+
+	for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+		/*	(*iter)->Destroy();*/
+		}
+	}
+	data.colliders_list.clear();
+
+	data.map_properties.UnloadProperties();
+
+	return true;
 }
 
 void M_Map::DebugMap() 
@@ -235,8 +296,10 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			if (layer->name == "Colliders" && layer->data[i] != 0u)
 				{
 					fPoint pos = layer->GetTilePos(i);
-					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
-				}
+
+					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+					data.colliders_list.push_back(aux);
+			}
 
 			++i;
 		}
@@ -387,6 +450,58 @@ TileSet* M_Map::GetTilesetFromTileId(int id) const
 	return (*item);
 }
 
+uint M_Map::GetMaxLevels()
+{
+	return numLevels;
+}
+
+bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
+{
+	bool ret = false;
+
+
+	for (std::list<MapLayer*>::const_iterator item = data.mapLayers.begin(); item != data.mapLayers.end(); ++item)
+	{
+		MapLayer* layer = *item;
+
+		if (layer->layer_properties.GetAsFloat("Navigation", 0) == 0)
+			continue;
+
+		uchar* map = new uchar[layer->columns * layer->rows];
+		memset(map, 1, layer->columns*layer->rows);
+
+		for (int y = 0; y < data.rows; ++y)
+		{
+			for (int x = 0; x < data.columns; ++x)
+			{
+				int i = (y*layer->rows) + x;
+
+				int tile_id = layer->Get(x, y);
+				TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
+
+				if (tileset != NULL)
+				{
+					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
+					/*TileType* ts = tileset->GetTileType(tile_id);
+					if(ts != NULL)
+					{
+					map[i] = ts->properties.Get("walkable", 1);
+					}*/
+				}
+			}
+		}
+
+		*buffer = map;
+		width = data.columns;
+		height = data.rows;
+		ret = true;
+
+		break;
+	}
+
+	return ret;
+}
+
 iPoint M_Map::MapToScreenI(int column, int row) const
 {
 	iPoint screen_pos(0, 0);
@@ -479,8 +594,15 @@ fPoint M_Map::ScreenToMapF(float x, float y)
 	return ret;
 }
 
+void Properties::UnloadProperties()
+{
+	std::list<Property*>::iterator item = list.begin();
 
+	while (item != list.end())
+	{
+		RELEASE(*item);
+		++item;
+	}
 
-
-
-
+	list.clear();
+}

@@ -37,7 +37,7 @@ public:
 
 	virtual bool Update(float dt);
 
-	virtual bool PostUpdate();
+	virtual bool PostUpdate(float dt);
 
 	virtual bool CleanUp() { return true; };
 

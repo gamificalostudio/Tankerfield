@@ -1,12 +1,15 @@
 #ifndef __M_UI_H__
 #define __M_UI_H__
 
-#include "Module.h"
-#include "SDL_ttf/include/SDL_ttf.h"
-#include "Animation.h"
-#include "Point.h"
 #include <string>
 #include <list>
+
+#include "SDL_ttf/include/SDL_ttf.h"
+
+#include "Module.h"
+#include "Animation.h"
+#include "Point.h"
+
 
 #define CURSOR_WIDTH 2
 
@@ -48,17 +51,17 @@ public:
 
 	virtual ~M_UI();
 
-	bool Awake(pugi::xml_node& node);
+	bool Awake(pugi::xml_node& node) override;
 
-	bool Start();
+	bool Start() override;
 
-	bool PreUpdate();
+	bool PreUpdate() override;
 
-	bool Update(float dt);
+	bool Update(float dt) override;
 
-	bool PostUpdate();
+	bool PostUpdate(float dt) override;
 
-	bool CleanUp();
+	bool CleanUp() override;
 
 	SDL_Texture* GetAtlas() const;
 
@@ -106,7 +109,7 @@ private:
 	bool debug = false;
 
 	// Atlas Texture ---------------------------------------
-	SDL_Texture* atlas;
+	SDL_Texture* atlas = nullptr;
 
 	// Objects ---------------------------------------------
 	list<UI_Element*> objects_list;
