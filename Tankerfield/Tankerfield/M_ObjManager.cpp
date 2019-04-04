@@ -72,11 +72,15 @@ bool M_ObjManager::Update(float dt)
 	{
 		if ((*iterator) != nullptr)
 		{
-			
 			(*iterator)->Update(dt);
 
 			if ((*iterator)->to_remove)
 			{
+				if ((*iterator)->coll != nullptr)
+				{
+					(*iterator)->coll->Destroy();
+				}
+
 				delete((*iterator));
 				(*iterator) = nullptr;
 				iterator = objects.erase(iterator);
@@ -89,8 +93,6 @@ bool M_ObjManager::Update(float dt)
 				{
 					(*iterator)->coll->SetPosToObj();
 				}
-
-
 
 				++iterator;
 			}
