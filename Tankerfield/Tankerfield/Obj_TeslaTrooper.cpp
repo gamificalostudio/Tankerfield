@@ -156,10 +156,10 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 	uint ind = GetRotatedIndex(8, angle);
 	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
-
-	app->render->Blit(tex, pos_map.x - rect.w*0.5F, pos_map.y - rect.h, &rect);
-	SDL_Rect pos = { pos_map.x,pos_map.y,10,10 };
-	app->render->DrawQuad(pos,255,0,0,255);
+	iPoint pos= app->map->MapToScreenI(pos_map.x, pos_map.y);
+	app->render->Blit(tex, pos.x, pos.y, &rect);
+	SDL_Rect frame = { pos_map.x,pos_map.y,10,10 };
+	app->render->DrawQuad(frame,255,0,0,255);
 	if (path.size() > 0 && app->scene->path_tex!=nullptr)
 	{
 		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end(); ++iter)

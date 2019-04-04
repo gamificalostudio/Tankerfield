@@ -62,7 +62,7 @@ bool M_Scene::PreUpdate()
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y);
-	//mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);

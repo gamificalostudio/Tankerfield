@@ -45,7 +45,7 @@ public:
 
 	bool CleanUp() override;
 
-	Object* CreateObject(ObjectType type, fPoint pos);
+	Object* CreateObject(ObjectType type, fPoint map_pos);
 
 	void DeleteObjects();
 
