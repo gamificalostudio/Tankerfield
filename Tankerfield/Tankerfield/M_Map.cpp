@@ -228,7 +228,7 @@ bool M_Map::Unload()
 	{
 		if ((*iter != nullptr))
 		{
-		/*	(*iter)->Destroy();*/
+		/*	(*iter)->Destroy();*/ // TODO SOLVE MEMORY BUG
 		}
 	}
 	data.colliders_list.clear();

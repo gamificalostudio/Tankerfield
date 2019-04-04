@@ -21,7 +21,7 @@ public:
 
 	bool Update(float dt);
 
-	bool PostUpdate();
+	bool PostUpdate(float dt);
 	
 	void OnTrigger(Collider* collider_1);
 
