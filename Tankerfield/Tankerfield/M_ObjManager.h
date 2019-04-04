@@ -46,14 +46,18 @@ public:
 
 	bool CleanUp() override;
 
-	Object* CreateObject(ObjectType type, fPoint pos);
+	Object* CreateObject(ObjectType type, fPoint map_pos);
 
 	void DeleteObjects();
+
+	Object* GetNearestTank(fPoint pos);
+	
+  
 
 private:
 
 	std::list<Object*> objects;
-
+	std::list<Object*> obj_tanks;
 };
 
 #endif

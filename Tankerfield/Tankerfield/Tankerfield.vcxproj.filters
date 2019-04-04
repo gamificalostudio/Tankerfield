@@ -76,6 +76,9 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Tools\Timers</Filter>
     </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="M_Collision.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -96,9 +99,6 @@
     </ClCompile>
     <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
-    </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +146,15 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Tools\Timers</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="M_Audio.h">
       <Filter>Modules</Filter>
@@ -204,22 +213,16 @@
     <ClInclude Include="Obj_Bullet.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="Point.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Defs.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Log.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Tools</Filter>
+    <ClInclude Include="Circle.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
       <UniqueIdentifier>{d4c7e7c3-72bf-4107-8d08-0ae327873629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{97fa8477-870f-46d8-af8d-88f34e52dcbd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tools\pugixml">
       <UniqueIdentifier>{955f6afd-07b6-4448-b805-a9301bc9d5d8}</UniqueIdentifier>

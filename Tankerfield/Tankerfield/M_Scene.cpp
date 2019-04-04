@@ -48,7 +48,7 @@ bool M_Scene::Start()
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(20.f, 20.f));
 
-	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
+	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
 
 	return true;
 }
@@ -63,6 +63,8 @@ bool M_Scene::PreUpdate()
 
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);

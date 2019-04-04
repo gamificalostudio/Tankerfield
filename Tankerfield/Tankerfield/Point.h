@@ -88,7 +88,15 @@ public:
 		return r;
 	}
 
+	Point operator* (const Point & v) const {
+		Point r;
+		r.x = x * v.x;
+		r.y = y * v.y;
+		return r;
+	}
+
 	const Point operator*= (const TYPE1 & num) {
+
 		x *= num;
 		y *= num;
 		return (*this);
