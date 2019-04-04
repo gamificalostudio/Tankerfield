@@ -83,7 +83,7 @@ bool M_UI::PreUpdate()
 
 	// Hover States ============================================
 
-	iRect object_rect;
+	SDL_Rect object_rect;
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
@@ -443,7 +443,7 @@ void M_UI::DrawUI(UI_Element * object)
 	
 	if (debug && object->state != ObjectState::hidden)
 	{
-		iRect rect;
+		SDL_Rect rect;
 		rect.x = object->position.x - object->section.w / 2;
 		rect.y = object->position.y - object->section.h / 2;
 		rect.w = object->section.w;

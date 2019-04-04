@@ -18,8 +18,8 @@ SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
 int Obj_Tank::rects_num = 128;
-iRect * Obj_Tank::base_rects = new iRect[rects_num];
-iRect * Obj_Tank::turr_rects = new iRect[rects_num];
+SDL_Rect * Obj_Tank::base_rects = new SDL_Rect[rects_num];
+SDL_Rect * Obj_Tank::turr_rects = new SDL_Rect[rects_num];
 
 Obj_Tank::Obj_Tank() : Object()
 {

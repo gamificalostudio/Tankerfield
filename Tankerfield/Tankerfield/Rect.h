@@ -2,7 +2,6 @@
 #define __RECT_H__
 
 #include "Point.h"
-#include "SDL/include/SDL_rect.h"
 
 template<class TYPE1, class TYPE2> 
 class Rect
@@ -88,16 +87,6 @@ public:
 	explicit operator Rect<float, float>() const
 	{
 		return Rect<float, float>((float)pos.x, (float)pos.y, (float)w, (float)h);
-	}
-
-	explicit operator SDL_Rect () const
-	{
-		SDL_Rect r;
-		r.x = pos.x;
-		r.y = pos.y;
-		r.w = w;
-		r.h = h;
-		return r;
 	}
 };
 

@@ -16,7 +16,7 @@ struct UI_ButtonDef: public UI_ElementDefinition
 {
 public:
 	UI_ButtonDef() {}
-	UI_ButtonDef(iRect idle_rect, iRect hover_rect, iRect pushed_rect) : idle_rect(idle_rect), hover_rect(hover_rect), pushed_rect(pushed_rect) {}
+	UI_ButtonDef(SDL_Rect idle_rect, SDL_Rect hover_rect, SDL_Rect pushed_rect) : idle_rect(idle_rect), hover_rect(hover_rect), pushed_rect(pushed_rect) {}
 
 	SDL_Rect idle_rect = {0,0,0,0};
 	SDL_Rect pushed_rect = { 0,0,0,0 };

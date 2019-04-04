@@ -46,7 +46,7 @@ enum class PivotPos
 struct UI_ElementDefinition
 {
 	PivotPos   pivot = PivotPos::center;
-	iRect   section = { 0,0,0,0 };
+	SDL_Rect   section = { 0,0,0,0 };
 	fPoint     draw_offset = { 0.f, 0.f };
 
 };
@@ -93,7 +93,7 @@ protected:
 	fPoint                position = { 0.f, 0.f };
 	fPoint                relative_position = { 0.f, 0.f };
 	PivotPos              pivot = PivotPos::center;
-	iRect			  section = {0, 0, 0, 0};
+	SDL_Rect			  section = {0, 0, 0, 0};
 	fPoint                section_offset = { 0.f, 0.f };
 	fPoint                draw_offset = { 0.f, 0.f };
 	UI_Listener        * listener = nullptr;
