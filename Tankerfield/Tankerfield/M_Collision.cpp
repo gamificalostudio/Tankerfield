@@ -16,6 +16,17 @@ void Collider::SetPosToObj()
 	}
 }
 
+void Collider::Destroy()
+{
+	if (object != nullptr)
+	{
+		object->coll = nullptr;
+	}
+
+	to_destroy = true;
+	
+}
+
 bool Collider::CheckCollision(Collider*  coll) const
 {
 	return !(coll->position.x >= (position.x + width) || (coll->position.x + coll->width) <= position.x || coll->position.y >= (position.y + height) || (coll->position.y + coll->height) <= position.y);

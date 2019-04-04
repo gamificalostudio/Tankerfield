@@ -46,7 +46,6 @@ public:
 
 	~Reward_Zone()
 	{
-		coll->Destroy();
 	}
 
 	bool Start()

@@ -94,10 +94,8 @@ public:
 		return tag;
 	}
 
-	void Destroy()
-	{
-		to_destroy = true;
-	}
+	void Destroy();
+
 
 	bool CheckCollision(Collider* collider) const;
 

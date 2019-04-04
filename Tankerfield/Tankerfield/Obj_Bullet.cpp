@@ -15,7 +15,6 @@ Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 
 Obj_Bullet::~Obj_Bullet()
 {
-	coll->Destroy();
 }
 
 bool Obj_Bullet::Start()
