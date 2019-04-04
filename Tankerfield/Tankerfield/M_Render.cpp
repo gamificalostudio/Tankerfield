@@ -1,5 +1,10 @@
+
+#include "Brofiler/Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
+#include "Point.h"
+
 #include "App.h"
 #include "M_Window.h"
 #include "M_Render.h"
@@ -7,9 +12,9 @@
 #include "Obj_Tank.h"
 #include "M_ObjManager.h"
 #include "M_Scene.h"
-#include "Point.h"
 
-#include "Brofiler/Brofiler.h"
+
+
 
 
 M_Render::M_Render() : Module()

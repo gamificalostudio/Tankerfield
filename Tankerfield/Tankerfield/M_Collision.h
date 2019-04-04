@@ -3,10 +3,12 @@
 
 #define MAX_COLLIDERS 50
 
-#include "Module.h"
-#include "PugiXml/src/pugixml.hpp"
 #include <list>
 #include <assert.h>
+
+#include "PugiXml/src/pugixml.hpp"
+
+#include "Module.h"
 
 class Object;
 class M_Collision;

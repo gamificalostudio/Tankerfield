@@ -53,15 +53,15 @@ public:
 private:
 
 	// size of the map
-	uint width;
-	uint height;
+	uint width = NULL;
+	uint height = NULL;
 	// all map walkability values [0..255]
-	uchar* map;
+	uchar* map = nullptr;
 	// we store the created path here
 	std::vector<iPoint> last_path;
 
 
-	std::vector<iPoint> debugPath;
+	std::vector<iPoint> debug_path;
 	bool test_path = true;
 	SDL_Texture* path_tex = nullptr;
 
@@ -90,8 +90,8 @@ struct PathNode
 	int CalculateF(const iPoint& destination);
 
 	// -----------
-	int g;
-	int h;
+	int g = NULL;
+	int h = NULL;
 	iPoint pos;
 	const PathNode* parent; // needed to reconstruct the path in the end
 };

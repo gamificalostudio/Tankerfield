@@ -1,11 +1,17 @@
+
+#include "Brofiler/Brofiler.h"
+
+#include "Log.h"
+#include "Defs.h"
+
 #include "App.h"
 #include "M_Input.h"
 #include "M_Render.h"
 #include "M_Collision.h"
 #include "Object.h"
-#include "Defs.h"
-#include "Log.h"
-#include "Brofiler/Brofiler.h"
+
+
+
 
 bool Collider::CheckCollision(Collider*  coll) const
 {

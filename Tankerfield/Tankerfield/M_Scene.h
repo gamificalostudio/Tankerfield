@@ -3,8 +3,10 @@
 
 #include <vector>
 
-#include "Module.h"
+
 #include "SDL/include/SDL_rect.h"
+
+#include "Module.h"
 
 struct SDL_Texture;
 struct Controller;
@@ -14,10 +16,6 @@ class M_Scene : public Module
 {
 private:
 	Controller** control1 = nullptr;
-
-
-	
-
 
 public:
 	int current_level = 0;
@@ -54,7 +52,7 @@ public:
 
 private:
 	/* Debug pathfinding */
-	std::vector<iPoint> debugPath;
+	std::vector<iPoint> debug_path;
 	bool test_path = true;
 	SDL_Texture* path_tex = nullptr;
 
