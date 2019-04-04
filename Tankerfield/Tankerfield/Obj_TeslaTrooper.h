@@ -36,6 +36,7 @@ private:
 	Timer timer;
 
 	Object* target = nullptr;
+	std::vector<iPoint> path;
 };
 
 #endif // !__TESLATROOPER_H__

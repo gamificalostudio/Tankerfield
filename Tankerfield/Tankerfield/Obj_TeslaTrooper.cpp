@@ -141,7 +141,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 		if (target != nullptr)
 		{
 			iPoint origin = app->map->ScreenToMapI(pos_map.x, pos_map.y);
-			iPoint destination = app->map->ScreenToMapI(target->pos_map.x, targer->pos_map.y);
+			iPoint destination = app->map->ScreenToMapI(target->pos_map.x, target->pos_map.y);
 			if (app->pathfinding->CreatePath(origin, destination) != -1)
 			{
 				path = *app->pathfinding->GetLastPath();
@@ -156,6 +156,10 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 	uint ind = GetRotatedIndex(8, angle);
 	app->render->Blit(tex, pos_map.x, pos_map.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
 
+	if (path.size() > 0/* && app->scene.*/)
+	{
+
+	}
 
 	return true;
 }
