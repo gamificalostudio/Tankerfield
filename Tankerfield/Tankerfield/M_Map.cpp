@@ -228,8 +228,7 @@ bool M_Map::Unload()
 	{
 		if ((*iter != nullptr))
 		{
-			app->collision->DeleteCollider((*iter));
-
+		/*	(*iter)->Destroy();*/ // TODO SOLVE MEMORY BUG
 		}
 	}
 	data.colliders_list.clear();

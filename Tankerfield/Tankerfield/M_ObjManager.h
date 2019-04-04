@@ -17,6 +17,7 @@ enum ObjectType
 	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
+	REWARD_ZONE,
 	NO_TYPE
 };
 
@@ -48,7 +49,7 @@ public:
 	Object* CreateObject(ObjectType type, fPoint pos);
 
 	void DeleteObjects();
-  
+
 private:
 
 	std::list<Object*> objects;
