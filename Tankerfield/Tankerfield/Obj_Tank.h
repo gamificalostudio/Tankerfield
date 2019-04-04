@@ -35,6 +35,8 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
+	
+	void OnTrigger(Collider* c1);
 
 private:
 	void Movement(float dt);

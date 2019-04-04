@@ -60,7 +60,7 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 1.f, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 0.0f, BASIC_BULLET);
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -189,6 +189,15 @@ bool Obj_Tank::CleanUp()
 {
 	return true;
 }
+
+void Obj_Tank::OnTrigger(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::WALL)
+	{
+		LOG("WALL");
+	}
+}
+
 
 void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 {

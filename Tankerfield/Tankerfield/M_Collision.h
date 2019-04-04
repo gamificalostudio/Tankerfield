@@ -7,7 +7,7 @@
 #include "PugiXml/src/pugixml.hpp"
 #include <list>
 #include <vector>
-#include <assert.h>
+#include <typeinfo>
 
 class Object;
 class M_Collision;
@@ -25,6 +25,7 @@ public:
 		PLAYER,
 		ENEMY,
 		GOD,
+		REWARD_ZONE,
 		MAX
 	};
 
@@ -38,7 +39,6 @@ public:
 
 	enum class BODY_TYPE
 	{
-		NONE,
 		DYNAMIC,
 		STATIC,
 		SENSOR
@@ -70,6 +70,25 @@ public:
 	void AddRigidBody(const Collider::BODY_TYPE new_body_type)
 	{
 		body_type = new_body_type;
+	}
+
+	template<typename TYPE>
+
+	TYPE* GetObject() 
+	{
+		if (object != nullptr & typeid(TYPE) == typeid(object))
+		{
+			return (TYPE*)object;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	TAG GetTag() const
+	{
+		return tag;
 	}
 
 	void Destroy()
@@ -138,3 +157,5 @@ private:
 };
 
 #endif // __j1Collision_H__
+
+

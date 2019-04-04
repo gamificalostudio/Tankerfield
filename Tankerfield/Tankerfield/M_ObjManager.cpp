@@ -148,7 +148,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = BASIC_BULLET;
 		break;
 	case ObjectType::SENSOR:
-		ret = new Sensor(pos);
+		ret = new Reward_Zone(pos);
 		ret->type = SENSOR;
 	}
   

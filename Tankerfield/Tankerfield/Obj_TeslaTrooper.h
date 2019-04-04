@@ -5,6 +5,8 @@
 #include "Animation.h"
 #include "Object.h"
 
+#include "Obj_Tank.h"
+
 
 class Obj_TeslaTrooper : public Object 
 {
@@ -36,35 +38,38 @@ private:
 // TODO REMOVE IT 
 #include "M_Collision.h"
 
-class Sensor : public Object
+class Reward_Zone : public Object
 {
 public:
 
-	Sensor(fPoint pos): Object(pos) { }
+	Reward_Zone(fPoint pos): Object(pos) { }
 
-	~Sensor()
+	~Reward_Zone()
 	{
 		coll->Destroy();
 	}
 
 	bool Start()
 	{
-		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::NONE, this);
+		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, this);
 		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 		return true;
 	}
 
 	void OnTriggerEnter(Collider* c1)
 	{
-		LOG("ENTER");
+
 	}
 	void OnTrigger(Collider* c1)
 	{
-		LOG("BOOOOOOOOOOOOOOOI");
+		if (c1->GetTag() == Collider::TAG::PLAYER)
+		{
+			LOG("REWARD ZONE");
+		}
 	}
 	void OnTriggerExit(Collider* c1)
 	{
-		LOG("EXIT");
+
 	}
 };
 #endif // !__TESLATROOPER_H__

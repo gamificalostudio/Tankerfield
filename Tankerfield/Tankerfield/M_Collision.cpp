@@ -13,44 +13,32 @@ bool Collider::CheckCollision(Collider*  coll) const
 	return !(coll->position.x >= (position.x + width) || (coll->position.x + coll->width) <= position.x || coll->position.y >= (position.y + height) || (coll->position.y + coll->height) <= position.y);
 }
 
-
 M_Collision::M_Collision()
 {
 	name.assign("Module_Collision");
 
-	matrix[(int)Collider::TAG::WALL][(int)Collider::TAG::WALL] = false;
-	matrix[(int)Collider::TAG::WALL][(int)Collider::TAG::PLAYER] = false;
-	matrix[(int)Collider::TAG::WALL][(int)Collider::TAG::ENEMY] = false;
-	matrix[(int)Collider::TAG::WALL][(int)Collider::TAG::GOD] = false;
-	matrix[(int)Collider::TAG::WALL][(int)Collider::TAG::BULLET] = false;
+	for (int i = 0; i < (int)Collider::TAG::MAX; ++i)
+	{
+		for (int j = 0; j < (int)Collider::TAG::MAX; ++j)
+		{
+			matrix[i][j] = false;
+		}
+	}
+
+	matrix[(int)Collider::TAG::WALL][(int)Collider::TAG::BULLET] = true;
 
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::WALL] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::PLAYER] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::ENEMY] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::GOD] = true;
-	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::BULLET] = false;
-
-	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::WALL] = false;
-	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::PLAYER] = false;
-	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::ENEMY] = false;
-	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::GOD] = false;
-	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET] = false;
-
-	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::WALL] = false;
-	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::PLAYER] = false;
-	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::ENEMY] = false;
-	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::GOD] = false;
-	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::BULLET] = false;
 
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::WALL] = true;
-	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::PLAYER] = false;
-	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::ENEMY] = false;
-	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::GOD] = false;
-	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::BULLET] = false;
+
+	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
+
+
 
 }
-
-//Destructor
 
 M_Collision::~M_Collision()
 {}
@@ -62,14 +50,14 @@ bool M_Collision::Update(float dt)
 	std::list<Collider*> static_colliders;
 	std::list<Collider*> dynamic_colliders;
 	std::list<Collider*> sensor_colliders;
+	std::list<Collider*> merged_colliders;
+
 	std::list<Collider*>::iterator iterator_1;
 	std::list<Collider*>::iterator iterator_2;
 	Collider* collider_1 = nullptr;
 	Collider* collider_2 = nullptr;
 
-	bool do_overlap = false;
-
-	// Destroy colliders ==========================================
+	// Fill body types lists & Destroy colliders =====================
 
 	iterator_1 = colliders.begin();
 
@@ -102,25 +90,22 @@ bool M_Collision::Update(float dt)
 			continue;
 		}
 
-		++iterator_1;
-	}
-
-	// Fill body types  lists ============================================== 
-
-	for (std::list<Collider*>::iterator itr = colliders.begin(); itr != colliders.end(); ++itr)
-	{
-		switch ((*itr)->body_type)
+		switch ((*iterator_1)->body_type)
 		{
 		case Collider::BODY_TYPE::STATIC:
-			static_colliders.push_back(*itr);
+			static_colliders.push_back(*iterator_1);
+			merged_colliders.push_back(*iterator_1);
 			break;
 		case Collider::BODY_TYPE::DYNAMIC:
-			dynamic_colliders.push_back(*itr);
+			dynamic_colliders.push_back(*iterator_1);
+			merged_colliders.push_back(*iterator_1);
 			break;
 		case Collider::BODY_TYPE::SENSOR:
-			sensor_colliders.push_back(*itr);
+			sensor_colliders.push_back(*iterator_1);
 			break;
 		}
+
+		++iterator_1;
 	}
 
 	// Dynamic VS Dynamic ========================================
@@ -139,21 +124,15 @@ bool M_Collision::Update(float dt)
 			{
 				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
 				{
-					collider_1->object->OnTrigger(collider_1);
-					do_overlap = true;
+					collider_1->object->OnTrigger(collider_2);
 				}
 				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->object)
 				{
-					collider_2->object->OnTrigger(collider_2);
-					do_overlap = true;
+					collider_2->object->OnTrigger(collider_1);
 				}
-				if (do_overlap == true)
-				{
-					SolveOverlapDD(collider_1, collider_2);
-				}
+			
+				SolveOverlapDD(collider_1, collider_2);
 			}
-
-			do_overlap = false;
 		}
 	}
 
@@ -171,53 +150,60 @@ bool M_Collision::Update(float dt)
 			{
 				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
 				{
-					collider_1->object->OnTrigger(collider_1);
-					do_overlap = true;
+					collider_1->object->OnTrigger(collider_2);
 				}
 				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->object)
 				{
-					collider_2->object->OnTrigger(collider_2);
-					do_overlap = true;
-				}
-				if (do_overlap == true)
-				{
-					SolveOverlapDS(collider_2, collider_1);
+					collider_2->object->OnTrigger(collider_1);
 				}
 
-				do_overlap = false;
+				SolveOverlapDS(collider_2, collider_1);
 			}
 		}
 	}
 
-	// Dynamic VS Sensors ========================================
+	// Dynamic & Static VS Sensors ================================
 
 	for (std::list<Collider*>::iterator itr_1 = sensor_colliders.begin(); itr_1 != sensor_colliders.end(); ++itr_1)
 	{
 		collider_1 = (*itr_1);
 
-		for (std::list<Collider*>::iterator itr_2 = dynamic_colliders.begin(); itr_2 != dynamic_colliders.end(); ++itr_2)
+		for (std::list<Collider*>::iterator itr_2 = merged_colliders.begin(); itr_2 != merged_colliders.end(); ++itr_2)
 		{
 			collider_2 = (*itr_2);
 
+			if (collider_1 == collider_2)
+			{
+				continue;
+			}
+
 			if (collider_1->CheckCollision(collider_2))
 			{
-				DoOnTrigger(collider_1, collider_2);
-				DoOnTrigger(collider_2, collider_1);
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
+				{
+					DoOnTrigger(collider_1, collider_2);
+				}
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->object)
+				{
+					DoOnTrigger(collider_2, collider_1);
+				}
 			}
 			else
 			{
-				if (collider_1->collisions_list.empty() == false)
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object  && collider_1->collisions_list.empty() == false)
+				{
 					DoOnTriggerExit(collider_1, collider_2);
-				if (collider_1->collisions_list.empty() == false)
+				}
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_2->object && collider_2->collisions_list.empty() == false)
+				{
 					DoOnTriggerExit(collider_2, collider_1);
+				}
 			}
 		}
 	}
 
 	return true;
 }
-
-// Called before render is available
 
 bool M_Collision::PostUpdate()
 {
@@ -248,7 +234,6 @@ bool M_Collision::PostUpdate()
 	return true;
 }
 
-// Called before quitting
 bool M_Collision::CleanUp()
 {
 	LOG("Freeing all colliders");
@@ -277,13 +262,6 @@ Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Colli
 
 void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
-	// Calculate directions ===========================================================
-	bool directions[(int)Collider::OVERLAP_DIR::MAX];
-	directions[(int)Collider::OVERLAP_DIR::LEFT] = dynamic_col->object->velocity.x > 0;
-	directions[(int)Collider::OVERLAP_DIR::RIGHT] = dynamic_col->object->velocity.x < 0;
-	directions[(int)Collider::OVERLAP_DIR::UP] = dynamic_col->object->velocity.y > 0;
-	directions[(int)Collider::OVERLAP_DIR::DOWN] = dynamic_col->object->velocity.y < 0;
-
 	// Calculate between colliders overlap ============================================
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
 	distances[(int)Collider::OVERLAP_DIR::LEFT] = dynamic_col->position.x + dynamic_col->width - static_col->position.x;
