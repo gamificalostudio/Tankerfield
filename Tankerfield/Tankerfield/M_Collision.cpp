@@ -252,6 +252,11 @@ bool M_Collision::PostUpdate(float dt)
 			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
 			break;
 		}
+
+		if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
+		{
+			app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255});
+		}
 	}
 
 	return true;

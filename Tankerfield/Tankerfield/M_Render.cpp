@@ -249,6 +249,17 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 	return true;
 }
 
+void M_Render::DrawIsometricLine(fPoint point_1, fPoint point_2, SDL_Color color)
+{
+	fPoint p_1, p_2;
+
+	p_1 = app->map->MapToScreenF(point_1);
+	p_2 = app->map->MapToScreenF(point_2);
+
+	app->render->DrawLine(p_1.x, p_1.y, p_2.x, p_2.y, color.r, color.g, color.b, color.a, true);
+}
+
+
 bool M_Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;

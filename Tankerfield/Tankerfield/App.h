@@ -84,6 +84,7 @@ private:
 	bool SavegameNow() const;
 
 public:
+	bool				on_clean_up = false;
 	// Modules
 	M_Window*			win = nullptr;
 	M_Input*			input = nullptr;
