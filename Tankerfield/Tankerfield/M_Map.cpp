@@ -86,16 +86,13 @@ bool M_Map::PostUpdate(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToScreenI(x, y);
-					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
-					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
-						if (tileset != nullptr)
-						{
-							SDL_Rect r = tileset->GetTileRect(tile_id);
-							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
-						}
-					}
 
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
+					if (tileset != nullptr)
+					{
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+					}
 				}
 			}
 		}
