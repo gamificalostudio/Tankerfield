@@ -50,11 +50,13 @@ public:
 
 	void DebugPathfinding();
 
+public:
+	SDL_Texture* path_tex = nullptr;
+
 private:
 	/* Debug pathfinding */
 	std::vector<iPoint> debug_path;
 	bool test_path = true;
-	SDL_Texture* path_tex = nullptr;
 
 	iPoint path_tex_offset = { 0, 16 };
 };

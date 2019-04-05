@@ -66,17 +66,17 @@ bool M_Map::PostUpdate(float dt)
 	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
 	bool ret = true;
 
-
 	if (map_loaded == false)
 		return ret;
-
 
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->visible == false) {
+		if ((*layer)->visible == false)
 			continue;
-		}
+
+		if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
+			continue;
 
 		for (int y = 0; y < data.rows; ++y)
 		{
@@ -86,16 +86,13 @@ bool M_Map::PostUpdate(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToScreenI(x, y);
-					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
-					{
-						TileSet* tileset = GetTilesetFromTileId(tile_id);
-						if (tileset != nullptr)
-						{
-							SDL_Rect r = tileset->GetTileRect(tile_id);
-							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
-						}
-					}
 
+					TileSet* tileset = GetTilesetFromTileId(tile_id);
+					if (tileset != nullptr)
+					{
+						SDL_Rect r = tileset->GetTileRect(tile_id);
+						app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+					}
 				}
 			}
 		}
@@ -126,6 +123,7 @@ bool M_Map::PostUpdate(float dt)
 bool M_Map::CleanUp()
 {
 	Unload();
+
 	return true;
 }
 
@@ -224,14 +222,18 @@ bool M_Map::Unload()
 	}
 	data.mapLayers.clear();
 
-	for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
-	{
-		if ((*iter != nullptr))
-		{
-			app->collision->DeleteCollider((*iter));
 
+	if (app->on_clean_up == false)
+	{
+		for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
+		{
+			if ((*iter != nullptr))
+			{
+				(*iter)->Destroy();
+			}
 		}
 	}
+
 	data.colliders_list.clear();
 
 	data.map_properties.UnloadProperties();
@@ -285,7 +287,6 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
-		
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
@@ -443,12 +444,22 @@ SDL_Rect TileSet::GetTileRect(int id) const
 
 TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
-	std::list<TileSet*>::const_reverse_iterator item = data.tilesets.rbegin();
-	for (item; item != data.tilesets.rend() && id < (*item)->firstgid; ++item)
+	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
+	TileSet* set = *item;
+	
+	while (item != data.tilesets.end())
 	{
+		if (id < (*item)->firstgid)
+		{
+			set = *prev(item);
+			break;
+		}
+
+		set = *item;
+		++item;
 	}
 
-	return (*item);
+	return set;
 }
 
 uint M_Map::GetMaxLevels()
@@ -459,7 +470,6 @@ uint M_Map::GetMaxLevels()
 bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 {
 	bool ret = false;
-
 
 	for (std::list<MapLayer*>::const_iterator item = data.mapLayers.begin(); item != data.mapLayers.end(); ++item)
 	{

@@ -13,6 +13,7 @@
 #include "M_Window.h"
 #include "PerfTimer.h"
 #include "Weapon_Flamethrower.h"
+#include "MathUtils.h"
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
@@ -53,7 +54,7 @@ bool Obj_Tank::Start()
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
 
-	speed = 8.f;//TODO: Load from xml
+	speed = 5.f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -61,10 +62,11 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 50.f, BASIC_BULLET);
 
-	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
-	coll->SetType(Collider::TYPE::DYNAMIC);
+	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll->SetObjOffset({ .0f,- .0f });
 
 	//TODO: Load them from the XML
 	kb_shoot		= SDL_BUTTON_LEFT;
@@ -78,6 +80,8 @@ bool Obj_Tank::Start()
 
 	draw_offset.x = 46;
 	draw_offset.y = 36;
+
+	base_angle_lerp_factor = 15.f;
 
 	return true;
 }
@@ -96,9 +100,6 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
-	coll->SetPos(pos_map.x, pos_map.y);
-
-
 	return true;
 }
 
@@ -121,7 +122,12 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
+		float target_angle = ClampRotation(atan2(input_dir.y, -input_dir.x) * RADTODEG);
+		//if (abs((target_angle + 360) - base_angle) < abs(target_angle - base_angle)) {
+		//	target_angle += 360;
+		//}
+		//LOG("target angle %f", target_angle);
+		base_angle = ClampRotation(lerp(base_angle, target_angle, base_angle_lerp_factor * dt));
 	}
 
 	velocity = iso_dir * speed * dt;                                                               
@@ -194,6 +200,15 @@ bool Obj_Tank::CleanUp()
 {
 	return true;
 }
+
+void Obj_Tank::OnTrigger(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::WALL)
+	{
+		LOG("WALL");
+	}
+}
+
 
 void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 {

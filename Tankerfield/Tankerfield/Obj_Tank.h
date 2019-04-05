@@ -29,12 +29,15 @@ public:
 	~Obj_Tank();
 
 public:
+
 	bool Awake(pugi::xml_node & tank_node) override;
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 	bool PostUpdate(float dt) override;
 	bool CleanUp() override;
+
+	void OnTrigger(Collider* c1);
 
 private:
 	void Movement(float dt);
@@ -59,6 +62,7 @@ private:
 	static SDL_Texture * turr_shadow_tex;
 
 	float base_angle = 0.f;
+	float base_angle_lerp_factor = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
 	static SDL_Rect * base_rects;

@@ -19,6 +19,7 @@
 #include "Obj_Tank.h"
 #include "Bullet_Basic.h"
 
+
 M_ObjManager::M_ObjManager()
 {
 	name.assign("object_manager");
@@ -47,12 +48,12 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	return true;
+	return ret;
 }
 
 bool M_ObjManager::PreUpdate()
 {
-	//BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Green);
+	BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Lavender);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
@@ -65,7 +66,6 @@ bool M_ObjManager::PreUpdate()
 	return true;
 }
 
-// Called before render is available
 bool M_ObjManager::Update(float dt)
 {
 	BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
@@ -80,12 +80,28 @@ bool M_ObjManager::Update(float dt)
 			{
 				//When we remove an element from the list, the other elements shift 1 space to our position
 				//So we don't need increment the iterator to go to the next one
+				if ((*iterator)->type == ObjectType::TANK)
+					obj_tanks.erase(iterator);
+
+				if ((*iterator)->coll != nullptr)
+				{
+					(*iterator)->coll->Destroy();
+				}
+
+
 				delete((*iterator));
 				(*iterator) = nullptr;
 				iterator = objects.erase(iterator);
 			}
 			else
 			{
+				// Update Components ======================================
+
+				if ((*iterator)->coll != nullptr)
+				{
+					(*iterator)->coll->SetPosToObj();
+				}
+
 				++iterator;
 			}
 		}
@@ -143,11 +159,15 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::TANK:
 		ret = new Obj_Tank(pos);
 		ret->type = TANK;
+		obj_tanks.push_back(ret);
 		break;
 	case ObjectType::BASIC_BULLET:
 		ret = new Bullet_Basic(pos);
 		ret->type = BASIC_BULLET;
 		break;
+	case ObjectType::REWARD_ZONE:
+		ret = new Reward_Zone(pos);
+		ret->type = REWARD_ZONE;
 	}
   
 	if (ret != nullptr)
@@ -164,15 +184,28 @@ void M_ObjManager::DeleteObjects()
 {
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 	{
-		if ((*iterator) != nullptr)
+		(*iterator)->to_remove = true;
+	}
+}
+
+Object * M_ObjManager::GetNearestTank(fPoint pos)
+{
+	Object* ret = (*obj_tanks.begin());
+	if (ret != nullptr)
+	{
+		float distance = pos.DistanceTo(ret->pos_map);
+		for (std::list<Object*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
 		{
-			(*iterator)->CleanUp();
-			delete (*iterator);
-			(*iterator) = nullptr;
+			float new_distance = pos.DistanceTo((*iter)->pos_map);
+			if (new_distance  < distance)
+			{
+				distance = new_distance;
+				ret = *iter;
+			}
 		}
 	}
-
-	objects.clear();
+	
+	return ret;
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)
