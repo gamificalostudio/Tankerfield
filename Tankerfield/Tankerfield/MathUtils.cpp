@@ -1,6 +1,7 @@
 #include "MathUtils.h"
 
-float lerp(float v0, float v1, float t) {
+//Returns the interpolated value from the current value to the target value with the given a factor
+float lerp(float curr_value, float trg_value, float factor) {
 
-	return (1.f - t)*v0 + t * v1;
+	return (1.f - factor)*curr_value + factor * trg_value;
 }
