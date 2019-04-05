@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="isometric" renderorder="left-up" width="75" height="75" tilewidth="60" tileheight="29" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="left-up" width="75" height="75" tilewidth="60" tileheight="29" infinite="0" nextobjectid="1">
  <tileset firstgid="1" name="FlatTiles" tilewidth="59" tileheight="29" spacing="2" tilecount="196" columns="14">
   <image source="FlatTiles.png" width="854" height="433"/>
  </tileset>
@@ -9,7 +9,7 @@
  <tileset firstgid="297" name="meta" tilewidth="60" tileheight="29" tilecount="1" columns="1">
   <image source="meta.png" width="60" height="30"/>
  </tileset>
- <layer id="1" name="Ground" width="75" height="75">
+ <layer name="Ground" width="75" height="75">
   <data>
    <tile gid="50"/>
    <tile gid="50"/>
@@ -5638,7 +5638,7 @@
    <tile gid="50"/>
   </data>
  </layer>
- <layer id="2" name="Separations" width="75" height="75">
+ <layer name="Separations" width="75" height="75">
   <data>
    <tile/>
    <tile/>
@@ -11267,7 +11267,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="3" name="Colliders" width="75" height="75">
+ <layer name="Colliders" width="75" height="75" visible="0">
   <properties>
    <property name="Navigation" type="float" value="1"/>
   </properties>
