@@ -64,7 +64,6 @@ private:
 	float base_angle = 0.f;
 	float base_angle_lerp_factor = 0.f;
 	float turr_angle = 0.f;
-	float turr_angle_lerp_factor = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
 	static SDL_Rect * base_rects;
 	static SDL_Rect * turr_rects;

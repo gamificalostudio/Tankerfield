@@ -82,7 +82,6 @@ bool Obj_Tank::Start()
 	draw_offset.y = 36;
 
 	base_angle_lerp_factor = 15.f;
-	turr_angle_lerp_factor = 15.f;
 
 	return true;
 }
@@ -124,9 +123,9 @@ void Obj_Tank::Movement(float dt)
 	if (!iso_dir.IsZero())
 	{
 		float target_angle = ClampRotation(atan2(input_dir.y, -input_dir.x) * RADTODEG);
-		if (abs((target_angle + 360) - base_angle) < abs(target_angle - base_angle)) {
-			target_angle += 360;
-		}
+		//if (abs((target_angle + 360) - base_angle) < abs(target_angle - base_angle)) {
+		//	target_angle += 360;
+		//}
 		//LOG("target angle %f", target_angle);
 		base_angle = ClampRotation(lerp(base_angle, target_angle, base_angle_lerp_factor * dt));
 	}
