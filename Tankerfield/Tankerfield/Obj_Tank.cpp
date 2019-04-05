@@ -304,7 +304,6 @@ void Obj_Tank::SelectInputMethod()
 		shot_input = INPUT_METHOD::KEYBOARD_MOUSE;
 		SDL_ShowCursor(SDL_ENABLE);
 	}
-	bool has_input = (!(*controller)->GetJoystick(gamepad_aim).IsZero() || (*controller)->GetAxis(gamepad_shoot) > 0);
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
