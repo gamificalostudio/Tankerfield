@@ -168,20 +168,136 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
-bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+//bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+//{
+//	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
+//	bool ret = true;
+//	uint scale = app->win->GetScale();
+//
+//	SDL_Rect rect;
+//	rect.x = (int)(-camera.x * speed) + screen_x * scale;
+//	rect.y = (int)(-camera.y * speed) + screen_y * scale;
+//
+//	SDL_Rect sect{0,0,0,0};
+//	if (section != NULL)
+//	{
+//		sect = *section;
+//		rect.w = section->w;
+//		rect.h = section->h;
+//	}
+//	else
+//	{
+//		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+//	}
+//
+//	rect.w *= scale;
+//	rect.h *= scale;
+//
+//	//Don't blit if the sprite is out of the screen
+//	uint width, height = 0;
+//	app->win->GetWindowSize(width, height);
+//	SDL_Rect cam;
+//	cam.x = 0;
+//	cam.y = 0;
+//	cam.w = camera.w;
+//	cam.h = camera.h;
+//
+//	if (SDL_HasIntersection(&rect, &cam))
+//	{
+//		SDL_Point* p = NULL;
+//		SDL_Point pivot;
+//
+//		if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+//		{
+//			pivot.x = pivot_x;
+//			pivot.y = pivot_y;
+//			p = &pivot;
+//		}
+//		if (rect.x + rect.w >= cam.w)
+//		{
+//
+//			sect.w = cam.w - rect.x;
+//			rect.w = cam.w - rect.x;
+//		}
+//		if (rect.y + rect.h >= cam.h)
+//		{
+//			sect.h = cam.h - rect.y;
+//			rect.h = cam.h - rect.y;
+//		}
+//		if (rect.x < 0)
+//		{
+//			float d = -rect.x;
+//			rect.x = 0;
+//			sect.x = d;
+//			sect.w -= d;
+//			rect.w -= d;
+//
+//			//rect.x = 0;
+//		}
+//		if (rect.y < 0)
+//		{
+//			float d = -rect.y;
+//			rect.y = 0;
+//			sect.y = d;
+//			sect.h -= d;
+//			rect.h -= d;
+//		}
+//		for (uint i = 1; i <= 4; ++i)
+//		{
+//			SDL_Rect rect_cam(rect);
+//			if (debug)
+//			{
+//				switch (i)
+//				{
+//				case 1:
+//
+//					break;
+//				case 2:
+//					rect_cam.x += cam.w;
+//					break;
+//				case 3:
+//					rect_cam.y += cam.h;
+//					break;
+//				case 4:
+//					rect_cam.x += cam.w;
+//					rect_cam.y += cam.h;
+//					break;
+//				}
+//			}
+//			else
+//			{
+//				i = 4;
+//			}
+//			//rect_cam.x += 100;
+//			//sect.x += 100;
+//			DrawLine(camera.x + camera.w, 0, camera.x + camera.w, 2000, 0, 0, 0);
+//			DrawLine(0, camera.y + camera.h, 2000, camera.y + camera.h, 0, 0, 0);
+//			if (SDL_RenderCopyEx(renderer, texture, &sect, &rect_cam, angle, p, SDL_FLIP_NONE) != 0)
+//			{
+//				LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+//				ret = false;
+//			}
+//		}
+//
+//
+//	}
+//
+//	return ret;
+//}
+
+bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 {
 	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
+
 	bool ret = true;
 	uint scale = app->win->GetScale();
 
 	SDL_Rect rect;
-	rect.x = (int)(-camera.x * speed) + screen_x * scale;
-	rect.y = (int)(-camera.y * speed) + screen_y * scale;
+	rect.x = (int)(-camera.x * speed) + x * scale;
+	rect.y = (int)(-camera.y * speed) + y * scale;
 
-	SDL_Rect sect{0,0,0,0};
 	if (section != NULL)
 	{
-		sect = *section;
 		rect.w = section->w;
 		rect.h = section->h;
 	}
@@ -202,8 +318,8 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 	cam.w = camera.w;
 	cam.h = camera.h;
 
-	if (SDL_HasIntersection(&rect, &cam))
-	{
+	
+
 		SDL_Point* p = NULL;
 		SDL_Point pivot;
 
@@ -213,74 +329,13 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 			pivot.y = pivot_y;
 			p = &pivot;
 		}
-		if (rect.x + rect.w >= cam.w)
-		{
 
-			sect.w = cam.w - rect.x;
-			rect.w = cam.w - rect.x;
-		}
-		if (rect.y + rect.h >= cam.h)
+		if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
 		{
-			sect.h = cam.h - rect.y;
-			rect.h = cam.h - rect.y;
+			LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+			ret = false;
 		}
-		if (rect.x < 0)
-		{
-			float d = -rect.x;
-			rect.x = 0;
-			sect.x = d;
-			sect.w -= d;
-			rect.w -= d;
-
-			//rect.x = 0;
-		}
-		if (rect.y < 0)
-		{
-			float d = -rect.y;
-			rect.y = 0;
-			sect.y = d;
-			sect.h -= d;
-			rect.h -= d;
-		}
-		for (uint i = 1; i <= 4; ++i)
-		{
-			SDL_Rect rect_cam(rect);
-			if (debug)
-			{
-				switch (i)
-				{
-				case 1:
-
-					break;
-				case 2:
-					rect_cam.x += cam.w;
-					break;
-				case 3:
-					rect_cam.y += cam.h;
-					break;
-				case 4:
-					rect_cam.x += cam.w;
-					rect_cam.y += cam.h;
-					break;
-				}
-			}
-			else
-			{
-				i = 4;
-			}
-			//rect_cam.x += 100;
-			//sect.x += 100;
-			DrawLine(camera.x + camera.w, 0, camera.x + camera.w, 2000, 0, 0, 0);
-			DrawLine(0, camera.y + camera.h, 2000, camera.y + camera.h, 0, 0, 0);
-			if (SDL_RenderCopyEx(renderer, texture, &sect, &rect_cam, angle, p, SDL_FLIP_NONE) != 0)
-			{
-				LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
-				ret = false;
-			}
-		}
-
-
-	}
+	
 
 	return ret;
 }
