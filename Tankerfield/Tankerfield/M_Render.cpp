@@ -264,6 +264,10 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 					break;
 				}
 			}
+			else
+			{
+				i = 4;
+			}
 			//rect_cam.x += 100;
 			//sect.x += 100;
 			DrawLine(camera.x + camera.w, 0, camera.x + camera.w, 2000, 0, 0, 0);
