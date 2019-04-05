@@ -122,12 +122,16 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		float target_angle = ClampRotation(atan2(input_dir.y, -input_dir.x) * RADTODEG);
-		//if (abs((target_angle + 360) - base_angle) < abs(target_angle - base_angle)) {
-		//	target_angle += 360;
-		//}
-		//LOG("target angle %f", target_angle);
-		base_angle = ClampRotation(lerp(base_angle, target_angle, base_angle_lerp_factor * dt));
+		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
+		//Calculate how many turns has the base angle and apply them to the target angle
+		float turns = floor(base_angle / 360.f);
+		target_angle += 360.f * turns;
+		//Check which distance is shorter. Rotating clockwise or counter-clockwise
+		if (abs((target_angle + 360.f) - base_angle) < abs(target_angle - base_angle))
+		{
+			target_angle += 360.f;
+		}
+		base_angle = lerp(base_angle, target_angle, base_angle_lerp_factor * dt);
 	}
 
 	velocity = iso_dir * speed * dt;                                                               
@@ -165,9 +169,7 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::PostUpdate(float dt)
 {
-
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-
 
 	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
