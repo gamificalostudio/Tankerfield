@@ -88,8 +88,8 @@ bool M_Render::PostUpdate(float dt)
 	target_pos.x = camera.x;
 	target_pos.y = camera.y;
 
-	camera.x = lerp(screen_pos.x - app->win->screen_surface->w*0.5, target_pos.x, 0.6f);
-	camera.y = lerp(screen_pos.y - app->win->screen_surface->h*0.5, target_pos.y, 0.6f);
+	camera.x = lerp(screen_pos.x - camera.w * 0.5f, target_pos.x, 0.6f);
+	camera.y = lerp(screen_pos.y - camera.h * 0.5f, target_pos.y, 0.6f);
 
 		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
@@ -178,9 +178,10 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_
 	rect.x = (int)(-camera.x * speed) + screen_x * scale;
 	rect.y = (int)(-camera.y * speed) + screen_y * scale;
 
-	SDL_Rect sect(*section);
+	SDL_Rect sect{0,0,0,0};
 	if (section != NULL)
 	{
+		sect = *section;
 		rect.w = section->w;
 		rect.h = section->h;
 	}
