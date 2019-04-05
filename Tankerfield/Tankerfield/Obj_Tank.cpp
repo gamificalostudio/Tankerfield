@@ -106,11 +106,11 @@ bool Obj_Tank::Update(float dt)
 void Obj_Tank::Movement(float dt)
 {
 	fPoint input_dir(0.f, 0.f);
-	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
+	if (move_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputMovementKeyboard(input_dir,dt);
 	}
-	else if (last_input == INPUT_METHOD::CONTROLLER)
+	else if (move_input == INPUT_METHOD::CONTROLLER)
 	{
 		InputMovementController(input_dir);
 	}
@@ -248,11 +248,11 @@ void Obj_Tank::Shoot()
 	//1. Get the direction
 	fPoint input_dir(0.f, 0.f);
 	fPoint iso_dir;
-	if (last_input == INPUT_METHOD::KEYBOARD_MOUSE)
+	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputShotMouse(input_dir, iso_dir);
 	}
-	else if (last_input == INPUT_METHOD::CONTROLLER)
+	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
 		InputShotController(input_dir, iso_dir);
 	}
@@ -281,23 +281,36 @@ bool Obj_Tank::IsShooting() {
 //Prioritize controller if both inputs are being pressed at the same time
 void Obj_Tank::SelectInputMethod()
 {
-	if (last_input != INPUT_METHOD::KEYBOARD_MOUSE
+	//Move input
+	if (move_input != INPUT_METHOD::KEYBOARD_MOUSE
 		&& (app->input->GetKey(kb_up) != KEY_IDLE
 		|| app->input->GetKey(kb_left) != KEY_IDLE
 		|| app->input->GetKey(kb_down) != KEY_IDLE
-		|| app->input->GetKey(kb_right) != KEY_IDLE
-		|| app->input->GetMouseButton(kb_shoot) != KEY_IDLE))
+		|| app->input->GetKey(kb_right) != KEY_IDLE))
 	{
-		last_input = INPUT_METHOD::KEYBOARD_MOUSE;
+		move_input = INPUT_METHOD::KEYBOARD_MOUSE;
+	}
+	if (move_input != INPUT_METHOD::CONTROLLER
+		&& (controller != nullptr
+		&& !(*controller)->GetJoystick(gamepad_move).IsZero()))
+	{
+		move_input = INPUT_METHOD::CONTROLLER;
+	}
+
+	//Shot input
+	if (shot_input != INPUT_METHOD::KEYBOARD_MOUSE
+		&& app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
+	{
+		shot_input = INPUT_METHOD::KEYBOARD_MOUSE;
 		SDL_ShowCursor(SDL_ENABLE);
 	}
-	if (last_input != INPUT_METHOD::CONTROLLER
+	bool has_input = (!(*controller)->GetJoystick(gamepad_aim).IsZero() || (*controller)->GetAxis(gamepad_shoot) > 0);
+	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
-		&& (!(*controller)->GetJoystick(gamepad_move).IsZero()
-		|| !(*controller)->GetJoystick(gamepad_move).IsZero()
+		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
 		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
-		last_input = INPUT_METHOD::CONTROLLER;
+		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
 	}
 }
