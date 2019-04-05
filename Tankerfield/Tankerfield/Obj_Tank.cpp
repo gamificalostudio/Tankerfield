@@ -81,7 +81,7 @@ bool Obj_Tank::Start()
 	draw_offset.x = 46;
 	draw_offset.y = 36;
 
-	base_angle_lerp_factor = 15.f;
+	base_angle_lerp_factor = 11.25f;
 
 	return true;
 }
