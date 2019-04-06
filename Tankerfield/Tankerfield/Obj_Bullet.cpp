@@ -54,12 +54,11 @@ bool Obj_Bullet::PostUpdate(float dt)
 	//	width,
 	//	height);
 
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		tex,
-		screen_pos.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
-		screen_pos.y - 14,
+		pos_screen.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
+		pos_screen.y - 14,
 		&rects[ind]);
 
 	return true;

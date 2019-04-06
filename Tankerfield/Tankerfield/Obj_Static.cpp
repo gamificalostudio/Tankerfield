@@ -44,14 +44,13 @@ bool Obj_Static::Start()
 
 bool Obj_Static::PostUpdate(float dt)
 {
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-	app->render->Blit(data.tileset.texture, screen_pos.x - 142, screen_pos.y - 167, &frame);
+	app->render->Blit(data.tileset.texture, pos_screen.x - 142, pos_screen.y - 167, &frame);
 
-	fPoint pivot_pos = app->map->MapToScreenF(pivot);
+	//fPoint pivot_pos = app->map->MapToScreenF(pivot);
 
-	SDL_Rect debug_pivot = { pivot.x - 3, pivot.y - 3, 6, 6 };
+	//SDL_Rect debug_pivot = { pivot.x - 3, pivot.y - 3, 6, 6 };
 	//debug_pivot.y += 87;
-	app->render->DrawQuad(debug_pivot, 0, 255, 150);
+	//app->render->DrawQuad(debug_pivot, 0, 255, 150);
 
 	return true;
 }

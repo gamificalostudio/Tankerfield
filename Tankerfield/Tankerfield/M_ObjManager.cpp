@@ -113,6 +113,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		{
 			if (app->render->IsOnCamera((*item)->pos_map.x, (*item)->pos_map.y, (*item)->size.x, (*item)->size.y))
 			{
+				(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
 				draw_objects.push_back(*item);
 			}
 		}
@@ -210,8 +211,13 @@ bool M_ObjManager::Save(pugi::xml_node& save) const
 
 bool M_ObjManager::SortByYPos(Object * ent1, Object * ent2)
 {
-	ent1->pos_screen = app->map->MapToScreenF(ent1->pos_map);
-	ent2->pos_screen = app->map->MapToScreenF(ent2->pos_map);
+	//ent1->pos_screen = app->map->MapToScreenF(ent1->pos_map);
+	//ent2->pos_screen = app->map->MapToScreenF(ent2->pos_map);
 
 	return ent1->pivot.y + ent1->pos_screen.y < ent2->pivot.y + ent2->pos_screen.y;
+}
+
+void M_ObjManager::DrawDebug(Object * ent)
+{
+	SDL_Rect section = { ent->pos_map.x, ent->pos_map.y, ent->size.x, ent->size.y };
 }

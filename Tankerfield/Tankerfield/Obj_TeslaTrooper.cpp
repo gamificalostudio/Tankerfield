@@ -15,7 +15,7 @@
 #include "Obj_TeslaTrooper.h"
 #include "M_Input.h"
 #include "Animation.h"
-//#include "j1Map.h"
+#include "M_Map.h"
 //#include "j1Collision.h"
 
 //Static variables inicialization
@@ -142,8 +142,11 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 
 	uint ind = GetRotatedIndex(8, angle);
-	app->render->Blit(tex, pos_map.x, pos_map.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
+	app->render->Blit(tex, pos_screen.x, pos_screen.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
 
+	//fPoint pivot_pos = app->map->MapToScreenF(pivot);
+	//SDL_Rect debug_pivot = { pivot.x - 3, pivot.y - 3, 6, 6 };
+	//app->render->DrawQuad(debug_pivot, 0, 255, 150);
 	return true;
 }
 

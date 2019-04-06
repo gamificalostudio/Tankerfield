@@ -49,6 +49,8 @@ public:
 
 	static bool SortByYPos(Object * ent1, Object * ent2);
 
+	void DrawDebug(Object * ent);
+
 	void DeleteObjects();
   
 private:
