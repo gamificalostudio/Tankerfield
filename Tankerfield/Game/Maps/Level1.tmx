@@ -10,7 +10,7 @@
  <tileset firstgid="185" name="Meta" tilewidth="60" tileheight="30" tilecount="2" columns="2">
   <image source="Meta.png" width="120" height="30"/>
  </tileset>
- <layer id="1" name="Capa de Patrones 1" width="40" height="40" visible="0">
+ <layer id="1" name="Capa de Patrones 1" width="40" height="40">
   <properties>
    <property name="Nodraw" type="int" value="0"/>
   </properties>
@@ -1623,15 +1623,6 @@
    <property name="Nodraw" type="int" value="0"/>
   </properties>
   <data>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1663,15 +1654,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1705,7 +1687,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="185"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1743,10 +1724,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
-   <tile gid="185"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1786,8 +1763,31 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="185"/>
-   <tile gid="185"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="186"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -2063,7 +2063,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="186"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2223,7 +2223,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="186"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2303,7 +2303,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="186"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2423,7 +2423,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="186"/>
    <tile/>
    <tile/>
    <tile/>
