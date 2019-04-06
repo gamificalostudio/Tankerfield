@@ -18,6 +18,7 @@
 #include "Obj_Tank.h"
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
+#include "M_Map.h"
 #include "Brofiler/Brofiler.h"
 
 M_ObjManager::M_ObjManager()
@@ -99,49 +100,29 @@ bool M_ObjManager::Update(float dt)
 	return true;
 }
 
-bool M_ObjManager::UpdateAll(float dt)
-{
-	bool ret = true;
-
-	//TODO 4: Save entities on camera during update iteration in draw_entities vector and iterate after update iteration
-	//move draw function, entities_drawn++ and DrawDebugQuad to the new iteration
-
-	std::list<Object*> draw_objects;
-	uint objects_drawn = 0;
-
-	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item) {
-		if (*item != nullptr) {
-			ret = (*item)->Update(dt);
-
-			if (app->render->IsOnCamera((*item)->pos_map.x, (*item)->pos_map.y, (*item)->size.x, (*item)->size.y)) {
-				draw_objects.push_back(*item);
-			}
-		}
-	}
-
-	//std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
-
-	for (std::list<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item) {
-		//(*item)->Draw();
-		objects_drawn++;
-	}
-
-	draw_objects.clear();
-
-	return ret;
-}
-
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	std::vector<Object*> draw_objects;
+
+	for (std::list<Object*>::iterator item = objects.begin(); item!= objects.end(); ++item)
 	{
-		if ((*iterator) != nullptr)
+		if (*item != nullptr)
 		{
-			(*iterator)->PostUpdate(dt);
+			if (app->render->IsOnCamera((*item)->pos_map.x, (*item)->pos_map.y, (*item)->size.x, (*item)->size.y))
+			{
+				draw_objects.push_back(*item);
+			}
 		}
+	}
+
+	std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
+
+	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+	{
+		(*item)->PostUpdate(dt);
 	}
 
 	return true;
@@ -227,7 +208,10 @@ bool M_ObjManager::Save(pugi::xml_node& save) const
 }
 
 
-bool M_ObjManager::SortByYPos(const Object * ent1, const Object * ent2)
+bool M_ObjManager::SortByYPos(Object * ent1, Object * ent2)
 {
-	return ent1->pivot.y + ent1->pos_map.y < ent2->pivot.y + ent2->pos_map.y;
+	ent1->pos_screen = app->map->MapToScreenF(ent1->pos_map);
+	ent2->pos_screen = app->map->MapToScreenF(ent2->pos_map);
+
+	return ent1->pivot.y + ent1->pos_screen.y < ent2->pivot.y + ent2->pos_screen.y;
 }

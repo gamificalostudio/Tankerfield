@@ -18,7 +18,7 @@ enum ROTATION_DIR {
 struct SDL_Texture;
 class Collider;
 
-struct TileSetEntity {
+struct TileSetObject {
 
 	std::string name;
 	uint tilewidth = 0;
@@ -35,7 +35,7 @@ struct TileSetEntity {
 
 struct ObjectInfo
 {
-	TileSetEntity tileset;
+	TileSetObject tileset;
 };
 
 class Object 
@@ -61,8 +61,9 @@ public:
 	float ClampRotation(float angle);
 	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = 90);
 
-	void SetPivot(const float &x, const float &y);
-  
+	void SetPivot(const float &x, const float &y);  
+	void SetRect(int x, int y, int w, int h);
+
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
@@ -70,6 +71,7 @@ public:
 
 	int type = 0;
 	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
+	fPoint pos_screen	= { 0.f, 0.f };
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
 	fPoint pivot		= { 0.f, 0.f };
@@ -81,6 +83,8 @@ public:
 	ObjectInfo data;
 
 	Collider* coll = nullptr;
+
+	SDL_Rect frame;
 };
 
 #endif

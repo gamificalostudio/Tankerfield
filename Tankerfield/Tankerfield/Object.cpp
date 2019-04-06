@@ -93,6 +93,14 @@ void Object::SetPivot(const float & x, const float & y)
 	pivot.create(x, y);
 }
 
+void Object::SetRect(int x, int y, int w, int h)
+{
+	frame.x = x;
+	frame.y = y;
+	frame.w = w;
+	frame.h = h;
+}
+
 bool Object::LoadRects(pugi::xml_node const & node, SDL_Rect * rects)
 {
 	//Inicialization

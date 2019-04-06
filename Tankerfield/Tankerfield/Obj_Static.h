@@ -24,10 +24,10 @@ public:
 
 private:
 
-	void SetRect(int x, int y, int w, int h);
+
 
 private:
-	SDL_Rect frame;
+
 	SDL_Texture* garage = nullptr;
 	//Type type;
 };

@@ -32,22 +32,12 @@ bool Obj_Static::Awake(pugi::xml_node & static_node)
 
 bool Obj_Static::Start()
 {
-	SetRect(0, 0, 180, 185);
-	SetPivot(90.f, 92.f);
+	SetRect(286, 448, 286, 224);
+	SetPivot(0, 0);
 
 	size = iPoint(frame.w, frame.h);
 
-	if (app->map->data.type == MAPTYPE_ISOMETRIC) { //If map is isometric, we have to transform orthogonal position to isometric position
-		pos_map.x /= app->map->data.tile_width * 0.5f;
-		pos_map.y /= app->map->data.tile_height;
-
-		iPoint pos = app->map->MapToScreenI(pos_map.x + 1, pos_map.y + 1);
-		pos_map.create(pos.x, pos.y);
-	}
-
 	data.tileset.texture = app->tex->Load(app->map->data.objects_path.data()); //Load object texture
-
-	garage = app->tex->Load("Maps/Garage-Sheet.png");
 
 	return true;
 }
@@ -55,14 +45,13 @@ bool Obj_Static::Start()
 bool Obj_Static::PostUpdate(float dt)
 {
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-	app->render->Blit(data.tileset.texture, screen_pos.x, screen_pos.y, &frame);
-	return true;
-}
+	app->render->Blit(data.tileset.texture, screen_pos.x - 142, screen_pos.y - 167, &frame);
 
-void Obj_Static::SetRect(int x, int y, int w, int h)
-{
-	frame.x = x;
-	frame.y = y;
-	frame.w = w;
-	frame.h = h;
+	fPoint pivot_pos = app->map->MapToScreenF(pivot);
+
+	SDL_Rect debug_pivot = { pivot.x - 3, pivot.y - 3, 6, 6 };
+	//debug_pivot.y += 87;
+	app->render->DrawQuad(debug_pivot, 0, 255, 150);
+
+	return true;
 }
