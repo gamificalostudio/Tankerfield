@@ -64,17 +64,17 @@ bool Obj_Tank::Start()
 	if (rotate_base == nullptr)
 	{
 		rotate_base = new Animation;
-		rotate_base->LoadFrames(tank_node.child("animations").child("rotate_base"));
+		rotate_base->LoadAnimation(tank_node.child("animations").child("rotate_base"));
 		rotate_base->rotation = COUNTER_CLOCKWISE;
-		rotate_base->first_dir = 315;
+		rotate_base->first_dir_angle = 315;
 	}
 	curr_anim = rotate_base;
 	if (rotate_turr == nullptr)
 	{
 		rotate_turr = new Animation;
-		rotate_turr->LoadFrames(tank_node.child("animations").child("rotate_turr"));
+		rotate_turr->LoadAnimation(tank_node.child("animations").child("rotate_turr"));
 		rotate_turr->rotation = COUNTER_CLOCKWISE;
-		rotate_turr->first_dir = 315;
+		rotate_turr->first_dir_angle = 315;
 	}
 
 	speed = 2.5f;//TODO: Load from xml

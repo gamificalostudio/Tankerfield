@@ -33,7 +33,7 @@
   <object>
     <tesla_trooper>
       <animations>
-        <walk>
+        <walk speed="5" rotation="counter-clockwise" first_dir_angle ="90">
           <dir>
             <!--starts in frame number 8-->
             <frame x= "528" y= "0" w="66" h="76" />
@@ -420,7 +420,7 @@
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
       </spritesheets>
       <animations>
-        <rotate_base speed ="1">
+        <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>
             <frame x="0"   y="0"   w="112" h="67"/>
           </dir>
@@ -806,7 +806,7 @@
             <frame x="112" y="938" w="112" h="67"/>
           </dir>
         </rotate_base>
-        <rotate_turr speed ="1">
+        <rotate_turr speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>
             <frame x="0"   y="0"   w="112" h="67"/>
           </dir>
@@ -1199,7 +1199,7 @@
       <life value ="1000"/>
       <tex path="textures/objects/bullet.png"/>
       <animations>
-        <rotate>
+        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>
             <frame x="0"   y="0"   w="67" h="42"/>
           </dir>

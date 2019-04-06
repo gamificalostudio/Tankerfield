@@ -28,7 +28,7 @@ public:
 	bool loop				= true;
 	int loops				= 0;
 
-	float first_dir			= 0.f;//The angle on the first sprite
+	float first_dir_angle	= 0.f;//The angle on the first sprite
 	ROTATION_DIR rotation	= ROTATION_DIR::COUNTER_CLOCKWISE;
 
 public:
@@ -49,12 +49,26 @@ public:
 
 	SDL_Rect & GetFrame(float angle, float dt)
 	{
-		uint ind = GetRotatedIndex(max_dirs, angle, ROTATION_DIR::COUNTER_CLOCKWISE, first_dir);
+		uint ind = GetRotatedIndex(max_dirs, angle, ROTATION_DIR::COUNTER_CLOCKWISE, first_dir_angle);
 		return frames[ind][(uint)current_frame];
 	}
 
-	bool LoadFrames(pugi::xml_node const & node)
+	bool LoadAnimation(pugi::xml_node const & node)
 	{
+		//Load animation variables
+		speed = node.attribute("speed").as_float();
+		std::string rotation_string = node.attribute("rotation").as_string();
+		if (rotation_string == "clockwise")
+		{
+			rotation = ROTATION_DIR::CLOCKWISE;
+		}
+		else if (rotation_string == "counter-clockwise")
+		{
+			rotation = ROTATION_DIR::COUNTER_CLOCKWISE;
+		}
+		first_dir_angle = node.attribute("first_dir_angle").as_float();;
+
+		//Load animation frames
 		uint dir_num = 0u;
 		for (pugi::xml_node dir_iter = node.child("dir"); dir_iter; dir_iter = dir_iter.next_sibling("dir"))
 		{
@@ -114,6 +128,7 @@ public:
 
 private:
 	//angle should be in degrees
+	//TODO: Add support for clockwise spritesheets
 	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, float fist_rect_dir)
 	{
 		//Account for the spritesheet not starting at the 0 degree rotation

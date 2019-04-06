@@ -37,7 +37,7 @@ bool Obj_TeslaTrooper::Start()
 	if (walk == nullptr)
 	{
 		walk = new Animation;
-		walk->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
+		walk->LoadAnimation(tesla_trooper_node.child("animations").child("walk"));
 	}
 	curr_anim = walk;
 	return true;
