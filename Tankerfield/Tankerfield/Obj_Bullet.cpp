@@ -24,7 +24,9 @@ bool Obj_Bullet::Start()
 	{
 		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	}
-
+	SetRect(0, 0, 67, 42);
+	SetPivot(0, 0);
+	size = iPoint(frame.w, frame.h);
 	return true;
 }
 

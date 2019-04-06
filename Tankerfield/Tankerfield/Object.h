@@ -84,7 +84,7 @@ public:
 
 	Collider* coll = nullptr;
 
-	SDL_Rect frame;
+	SDL_Rect frame = {0, 0, 0, 0};
 };
 
 #endif

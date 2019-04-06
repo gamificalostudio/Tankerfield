@@ -99,6 +99,14 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
 }
 
+bool Obj_TeslaTrooper::Start()
+{
+	SetRect(0, 0, 66, 76);
+	SetPivot(0, 0);
+	size = iPoint(frame.w, frame.h);
+	return true;
+}
+
 bool Obj_TeslaTrooper::PreUpdate()
 {
 	return true;
