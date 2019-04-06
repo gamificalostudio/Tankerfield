@@ -38,8 +38,6 @@ https://github.com/Sersius
 
 https://github.com/AitorVelez
 
-discord bot says hello to the team
-
 # License
 
 MIT License
