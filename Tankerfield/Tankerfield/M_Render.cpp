@@ -51,12 +51,40 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
+		Camera* camera_aux = nullptr;
+		camera_aux = new Camera();
+		camera_aux->rect.w = app->win->screen_surface->w * .5f;
+		camera_aux->rect.h = app->win->screen_surface->h * .5f;
+		camera_aux->rect.x = -app->win->screen_surface->w;
+		camera_aux->rect.y = -app->win->screen_surface->h;
 
-		camera.w = app->win->screen_surface->w;
-		camera.h = app->win->screen_surface->h;
-		camera.x = -app->win->screen_surface->w * .5f;
-		camera.y = -app->win->screen_surface->h * .5f;
-	
+		Camera* camera_aux2 = nullptr;
+		camera_aux2 = new Camera();
+		camera_aux2->rect.w = app->win->screen_surface->w * .5f;
+		camera_aux2->rect.h = app->win->screen_surface->h * .5f;
+		camera_aux2->rect.x = 2;
+		camera_aux2->rect.y = -app->win->screen_surface->h;
+
+		Camera* camera_aux3 = nullptr;
+		camera_aux3 = new Camera();
+		camera_aux3->rect.w = app->win->screen_surface->w * .5f;
+		camera_aux3->rect.h = app->win->screen_surface->h * .5f;
+		camera_aux3->rect.x = 3;
+		camera_aux3->rect.y = -app->win->screen_surface->h;
+
+		Camera* camera_aux4 = nullptr;
+		camera_aux4 = new Camera();
+		camera_aux4->rect.w = app->win->screen_surface->w * .5f;
+		camera_aux4->rect.h = app->win->screen_surface->h * .5f;
+		camera_aux4->rect.x = 4;
+		camera_aux4->rect.y = -app->win->screen_surface->h;
+
+		camera.push_back(camera_aux);
+		camera.push_back(camera_aux2);
+		camera.push_back(camera_aux3);
+		camera.push_back(camera_aux4);
+
+		
 	}
 
 	return ret;
@@ -82,20 +110,13 @@ bool M_Render::PostUpdate(float dt)
 {
 	// Camera fix TODO: Move it to camera class
 
-	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
-	fPoint target_pos;
-	
-	target_pos.x = camera.x;
-	target_pos.y = camera.y;
 
-	camera.x = lerp(screen_pos.x - camera.w * 0.5f, target_pos.x, 0.6f);
-	camera.y = lerp(screen_pos.y - camera.h * 0.5f, target_pos.y, 0.6f);
 
 		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		debug = !debug;
 		if (!debug)
@@ -108,7 +129,7 @@ bool M_Render::PostUpdate(float dt)
 			camera.w *= 0.5f;
 			camera.h *= 0.5f;
 		}
-	}
+	}*/
 
 	return true;
 }
@@ -124,8 +145,8 @@ bool M_Render::CleanUp()
 // Load Game State
 bool M_Render::Load(pugi::xml_node& data)
 {
-	camera.x = data.child("camera").attribute("x").as_int();
-	camera.y = data.child("camera").attribute("y").as_int();
+	/*camera.x = data.child("camera").attribute("x").as_int();
+	camera.y = data.child("camera").attribute("y").as_int();*/
 
 	return true;
 }
@@ -133,10 +154,10 @@ bool M_Render::Load(pugi::xml_node& data)
 // Save Game State
 bool M_Render::Save(pugi::xml_node& data) const
 {
-	pugi::xml_node cam = data.append_child("camera");
+	/*pugi::xml_node cam = data.append_child("camera");
 
 	cam.append_attribute("x") = camera.x;
-	cam.append_attribute("y") = camera.y;
+	cam.append_attribute("y") = camera.y;*/
 
 	return true;
 }
@@ -161,27 +182,146 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 	iPoint ret;
 	int scale = app->win->GetScale();
 
-	ret.x = (x + camera.x / scale);
-	ret.y = (y + camera.y / scale);
+	std::list<Camera*>::iterator camera = app->render->camera.begin();
+
+	ret.x = (x + (*camera)->rect.x / scale);
+	ret.y = (y + (*camera)->rect.y / scale);
 
 	return ret;
 }
 
 // Blit to screen
-//bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* current_camera, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+{
+	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
+	bool ret = true;
+	uint scale = app->win->GetScale();
+	
+	SDL_Rect camera = current_camera->rect;
+
+	SDL_Rect rect;
+	rect.x = (int)(-camera.x * speed) + screen_x * scale;
+	rect.y = (int)(-camera.y * speed) + screen_y * scale;
+
+	SDL_Rect sect{0,0,0,0};
+	if (section != NULL)
+	{
+		sect = *section;
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+	}
+
+	rect.w *= scale;
+	rect.h *= scale;
+
+
+	SDL_Rect cam_screen;
+	cam_screen.x = 0;
+	cam_screen.y = 0;
+	cam_screen.w = camera.w;
+	cam_screen.h = camera.h;
+
+	//Don't blit if the sprite is out of the screen
+	if (SDL_HasIntersection(&rect, &cam_screen))
+	{
+		SDL_Point* p = NULL;
+		SDL_Point pivot;
+
+		if (pivot_x != INT_MAX && pivot_y != INT_MAX)
+		{
+			pivot.x = pivot_x;
+			pivot.y = pivot_y;
+			p = &pivot;
+		}
+		if (rect.x + rect.w >= camera.w)
+		{
+
+			sect.w = camera.w - rect.x;
+			rect.w = camera.w - rect.x;
+		}
+		if (rect.y + rect.h >= cam_screen.h)
+		{
+			sect.h = camera.h - rect.y;
+			rect.h = camera.h - rect.y;
+		}
+		if (rect.x < 0)
+		{
+			float d = -rect.x;
+			rect.x = 0;
+			sect.x += d;
+			sect.w -= d;
+			rect.w -= d;
+
+			//rect.x = 0;
+		}
+		if (rect.y < 0)
+		{
+			float d = -rect.y;
+			rect.y = 0;
+			sect.y += d;
+			sect.h -= d;
+			rect.h -= d;
+		}
+		//for (uint i = 1; i <= 4; ++i)
+		//{
+			SDL_Rect rect_cam(rect);
+		//	if (debug)
+			//{
+				switch (current_camera->number_player)
+				{
+				case 1:
+
+					break;
+				case 2:
+					rect_cam.x += camera.w;
+					break;
+				case 3:
+					rect_cam.y += camera.h;
+					break;
+				case 4:
+					rect_cam.x += camera.w;
+					rect_cam.y += camera.h;
+					break;
+				}
+		//	}
+			//else
+			//{
+			//	i = 4;
+			//}
+
+
+			DrawLine(camera.x + camera.w, 0, camera.x + camera.w, 2000, 0, 0, 0);
+			DrawLine(0, camera.y + camera.h, 2000, camera.y + camera.h, 0, 0, 0);
+			if (SDL_RenderCopyEx(renderer, texture, &sect, &rect_cam, angle, p, SDL_FLIP_NONE) != 0)
+			{
+				LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+				ret = false;
+			}
+	//	}
+
+
+	}
+
+	return ret;
+}
+
+//bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
 //{
 //	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
+//
 //	bool ret = true;
 //	uint scale = app->win->GetScale();
 //
 //	SDL_Rect rect;
-//	rect.x = (int)(-camera.x * speed) + screen_x * scale;
-//	rect.y = (int)(-camera.y * speed) + screen_y * scale;
+//	rect.x = (int)(-camera.x * speed) + x * scale;
+//	rect.y = (int)(-camera.y * speed) + y * scale;
 //
-//	SDL_Rect sect{0,0,0,0};
 //	if (section != NULL)
 //	{
-//		sect = *section;
 //		rect.w = section->w;
 //		rect.h = section->h;
 //	}
@@ -202,8 +342,8 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 //	cam.w = camera.w;
 //	cam.h = camera.h;
 //
-//	if (SDL_HasIntersection(&rect, &cam))
-//	{
+//	
+//
 //		SDL_Point* p = NULL;
 //		SDL_Point pivot;
 //
@@ -213,137 +353,21 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 //			pivot.y = pivot_y;
 //			p = &pivot;
 //		}
-//		if (rect.x + rect.w >= cam.w)
-//		{
 //
-//			sect.w = cam.w - rect.x;
-//			rect.w = cam.w - rect.x;
-//		}
-//		if (rect.y + rect.h >= cam.h)
+//		if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
 //		{
-//			sect.h = cam.h - rect.y;
-//			rect.h = cam.h - rect.y;
+//			LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+//			ret = false;
 //		}
-//		if (rect.x < 0)
-//		{
-//			float d = -rect.x;
-//			rect.x = 0;
-//			sect.x = d;
-//			sect.w -= d;
-//			rect.w -= d;
-//
-//			//rect.x = 0;
-//		}
-//		if (rect.y < 0)
-//		{
-//			float d = -rect.y;
-//			rect.y = 0;
-//			sect.y = d;
-//			sect.h -= d;
-//			rect.h -= d;
-//		}
-//		for (uint i = 1; i <= 4; ++i)
-//		{
-//			SDL_Rect rect_cam(rect);
-//			if (debug)
-//			{
-//				switch (i)
-//				{
-//				case 1:
-//
-//					break;
-//				case 2:
-//					rect_cam.x += cam.w;
-//					break;
-//				case 3:
-//					rect_cam.y += cam.h;
-//					break;
-//				case 4:
-//					rect_cam.x += cam.w;
-//					rect_cam.y += cam.h;
-//					break;
-//				}
-//			}
-//			else
-//			{
-//				i = 4;
-//			}
-//			//rect_cam.x += 100;
-//			//sect.x += 100;
-//			DrawLine(camera.x + camera.w, 0, camera.x + camera.w, 2000, 0, 0, 0);
-//			DrawLine(0, camera.y + camera.h, 2000, camera.y + camera.h, 0, 0, 0);
-//			if (SDL_RenderCopyEx(renderer, texture, &sect, &rect_cam, angle, p, SDL_FLIP_NONE) != 0)
-//			{
-//				LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
-//				ret = false;
-//			}
-//		}
-//
-//
-//	}
+//	
 //
 //	return ret;
 //}
 
-bool M_Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
-{
-	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
-
-	bool ret = true;
-	uint scale = app->win->GetScale();
-
-	SDL_Rect rect;
-	rect.x = (int)(-camera.x * speed) + x * scale;
-	rect.y = (int)(-camera.y * speed) + y * scale;
-
-	if (section != NULL)
-	{
-		rect.w = section->w;
-		rect.h = section->h;
-	}
-	else
-	{
-		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-	}
-
-	rect.w *= scale;
-	rect.h *= scale;
-
-	//Don't blit if the sprite is out of the screen
-	uint width, height = 0;
-	app->win->GetWindowSize(width, height);
-	SDL_Rect cam;
-	cam.x = 0;
-	cam.y = 0;
-	cam.w = camera.w;
-	cam.h = camera.h;
-
-	
-
-		SDL_Point* p = NULL;
-		SDL_Point pivot;
-
-		if (pivot_x != INT_MAX && pivot_y != INT_MAX)
-		{
-			pivot.x = pivot_x;
-			pivot.y = pivot_y;
-			p = &pivot;
-		}
-
-		if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, p, SDL_FLIP_NONE) != 0)
-		{
-			LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
-			ret = false;
-		}
-	
-
-	return ret;
-}
-
 bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
-	uint scale = app->win->GetScale();
+	/*uint scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -364,7 +388,7 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
-
+*/
 	return ret;
 }
 
@@ -403,7 +427,7 @@ void M_Render::DrawIsometricLine(fPoint point_1, fPoint point_2, SDL_Color color
 bool M_Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	uint scale = app->win->GetScale();
+	/*uint scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -420,14 +444,14 @@ bool M_Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 
 		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
-
+*/
 	return ret;
 }
 
 bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	uint scale = app->win->GetScale();
+	/*uint scale = app->win->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -461,7 +485,7 @@ bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
-
+*/
 	return ret;
 }
 

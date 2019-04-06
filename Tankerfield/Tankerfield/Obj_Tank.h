@@ -8,6 +8,7 @@
 
 struct Controller;
 struct SDL_Texture;
+class Camera;
 
 enum class WEAPON_TYPE {
 	BASIC,
@@ -53,7 +54,7 @@ private:
 
 public:
 	WEAPON_TYPE weapon_type = WEAPON_TYPE::BASIC;
-
+	Camera* camera_player = nullptr;
 private:
 
 	static SDL_Texture * base_tex;
@@ -93,6 +94,8 @@ private:
 	Joystick gamepad_move					= Joystick::INVALID;
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_INVALID;
+
+	
 };
 
 #endif

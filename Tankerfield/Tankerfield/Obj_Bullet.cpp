@@ -50,12 +50,15 @@ bool Obj_Bullet::PostUpdate(float dt)
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	app->render->Blit(
-		tex,
-		screen_pos.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
-		screen_pos.y - 14,
-		&rects[ind]);
-
+	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	{
+		app->render->Blit(
+			tex,
+			screen_pos.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
+			screen_pos.y - 14,
+			(*item_cam),
+			&rects[ind]);
+	}
 	return true;
 }
 

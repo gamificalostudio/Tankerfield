@@ -15,6 +15,7 @@
 #include "Point.h"
 #include "Brofiler/Brofiler.h"
 #include "Rect.h"
+#include "Obj_Tank.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -49,7 +50,14 @@ bool M_Scene::Start()
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(20.f, 20.f));
+	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(30.f, 30.f));
+	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(40.f, 40.f));
+	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(50.f, 50.f));
 
+	tank_1->camera_player->number_player = 1;
+	tank_2->camera_player->number_player = 2;
+	tank_3->camera_player->number_player = 3;
+	tank_4->camera_player->number_player = 4;
 	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
 
 	return true;
@@ -79,7 +87,7 @@ bool M_Scene::PreUpdate()
 bool M_Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	/*if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
 		app->render->camera.y -= floor(200.0f * dt);
 	}
@@ -94,7 +102,7 @@ bool M_Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		app->render->camera.x += floor(200.0f * dt);
-	}
+	}*/
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 	{
@@ -186,14 +194,19 @@ void M_Scene::DebugPathfinding()
 				for (uint i = 0; i < debugPathSize; ++i)
 				{
 					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
-					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y);
+					for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+					{
+						app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y, (*item_cam));
+					}
 				}
 			}
 
 		}
 
 		p = app->map->MapToScreenI(p.x, p.y);
-
-		app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y);
+		for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+		{
+			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
+		}
 	}
 }

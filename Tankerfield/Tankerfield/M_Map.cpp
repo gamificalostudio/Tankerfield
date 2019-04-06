@@ -9,6 +9,8 @@
 #include "M_Collision.h"
 #include "M_Input.h"
 #include "M_Pathfinding.h"
+#include "M_Scene.h"
+#include "Obj_Tank.h"
 
 M_Map::M_Map()
 {
@@ -90,15 +92,18 @@ bool M_Map::PostUpdate(float dt)
 					rect.y = pos.y;
 					rect.w = data.tile_width;
 					rect.h = data.tile_height;
-					if (SDL_HasIntersection(&rect, &app->render->camera))
+				//	if (SDL_HasIntersection(&rect, &app->scene->tank_1->camera_player->rect))
+					//{
+					for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 						if (tileset != nullptr)
 						{
 							SDL_Rect r = tileset->GetTileRect(tile_id);
-							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, (*item_cam), &r);
 						}
 					}
+				//	}
 				}
 			}
 		}

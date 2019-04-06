@@ -82,7 +82,16 @@ bool Obj_Tank::Start()
 	draw_offset.y = 36;
 
 	base_angle_lerp_factor = 11.25f;
+	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	{
+		if (!(*item_cam)->assigned)
+		{
+			camera_player = (*item_cam);
+			camera_player->assigned = true;
+			break;
 
+		}
+	}
 	return true;
 }
 
@@ -173,25 +182,40 @@ bool Obj_Tank::PostUpdate(float dt)
 
 	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	app->render->Blit(
-		base_tex,
-		screen_pos.x - draw_offset.x,
-		screen_pos.y - draw_offset.y,
-		&base_rects[ind_base]);
-
+	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	{
+		app->render->Blit(
+			base_tex,
+			screen_pos.x - draw_offset.x,
+			screen_pos.y - draw_offset.y,
+			(*item_cam),
+			&base_rects[ind_base]);
+	}
 	// Turret =======================================
 	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	app->render->Blit(
-		turr_tex,
-		screen_pos.x - draw_offset.x,
-		screen_pos.y - draw_offset.y,
-		&turr_rects[ind_turr]);
+	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	{
+		app->render->Blit(
+			turr_tex,
+			screen_pos.x - draw_offset.x,
+			screen_pos.y - draw_offset.y,
+			(*item_cam),
+			&turr_rects[ind_turr]);
+	}
+	//Camera centration
+	fPoint target_pos;
+
+	target_pos.x = camera_player->rect.x;
+	target_pos.y = camera_player->rect.y;
+
+	camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.6f);
+	camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.6f);
 
 	//DEBUG
 	iPoint debug_mouse_pos = { 0, 0 };
 	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
-	debug_mouse_pos.x += app->render->camera.x;
-	debug_mouse_pos.y += app->render->camera.y;
+	debug_mouse_pos.x += camera_player->rect.x;
+	debug_mouse_pos.y += camera_player->rect.y;
 	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
@@ -218,8 +242,8 @@ void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_pos.x += app->render->camera.x;
-	mouse_pos.y += app->render->camera.y;
+	mouse_pos.x += camera_player->rect.x;
+	mouse_pos.y += camera_player->rect.y;
 
 	int tile_width = 100, tile_height = 50;
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);

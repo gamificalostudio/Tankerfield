@@ -4,7 +4,12 @@
 #include "SDL/include/SDL.h"
 #include "Point.h"
 #include "Module.h"
-
+class Camera {
+public:
+	SDL_Rect rect{ 0,0,0,0 };
+	bool assigned = false;
+	uint number_player = 0;
+};
 class M_Render : public Module
 {
 public:
@@ -37,7 +42,7 @@ public:
 	iPoint ScreenToWorld(int x, int y) const;
 
 	// Draw & Blit
-	bool Blit(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX) const;
+	bool Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* camera, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivot_x = INT_MAX, int pivot_y = INT_MAX) const;
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 	bool DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color = {255,255,255,255});
 	void DrawIsometricLine(fPoint point_1, fPoint point_2, SDL_Color color);
@@ -56,11 +61,14 @@ public:
 public:
 
 	SDL_Renderer*   renderer = nullptr;
-	SDL_Rect		camera;
+	std::list<Camera*>			camera;
 	SDL_Rect		viewport;
 	SDL_Color		background;
 
 	bool debug = true;
 };
+
+
+
 
 #endif // __j1RENDER_H__
