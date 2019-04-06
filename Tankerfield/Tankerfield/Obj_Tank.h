@@ -93,6 +93,8 @@ private:
 	Joystick gamepad_move					= Joystick::INVALID;
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_INVALID;
+
+	fPoint velocity							= { 0.f, 0.f };
 };
 
 #endif
