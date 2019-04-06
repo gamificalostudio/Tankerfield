@@ -124,6 +124,10 @@ bool M_ObjManager::PostUpdate(float dt)
 	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 	{
 		(*item)->PostUpdate(dt);
+
+		if (app->scene->draw_debug) {
+			(*item)->DrawDebug();
+		}
 	}
 
 	return true;
@@ -153,19 +157,19 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	{
 	case ObjectType::TESLA_TROOPER:
 		ret = new Obj_TeslaTrooper(pos);
-		ret->type = TESLA_TROOPER;
+		ret->type = ObjectType::TESLA_TROOPER;
 		break;
 	case ObjectType::TANK:
 		ret = new Obj_Tank(pos);
-		ret->type = TANK;
+		ret->type = ObjectType::TANK;
 		break;
 	case ObjectType::BASIC_BULLET:
 		ret = new Bullet_Basic(pos);
-		ret->type = BASIC_BULLET;
+		ret->type = ObjectType::BASIC_BULLET;
 		break;
 	case ObjectType::STATIC:
 		ret = new Obj_Static(pos);
-		ret->type = STATIC;
+		ret->type = ObjectType::STATIC;
 		break;
 	}
   
@@ -215,9 +219,4 @@ bool M_ObjManager::SortByYPos(Object * ent1, Object * ent2)
 	//ent2->pos_screen = app->map->MapToScreenF(ent2->pos_map);
 
 	return ent1->pivot.y + ent1->pos_screen.y < ent2->pivot.y + ent2->pos_screen.y;
-}
-
-void M_ObjManager::DrawDebug(Object * ent)
-{
-	SDL_Rect section = { ent->pos_map.x, ent->pos_map.y, ent->size.x, ent->size.y };
 }

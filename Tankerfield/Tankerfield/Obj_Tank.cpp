@@ -58,13 +58,13 @@ bool Obj_Tank::Start()
 	sin_45 = sinf(-45 * DEGTORAD);
 
 	SetRect(0, 0, 112, 67);
-	SetPivot(30.f, 15.f);
+	SetPivot(0.f, 15.f);
 
 	size = iPoint(frame.w, frame.h);
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, ObjectType::BASIC_BULLET);
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, nullptr, this);
 	coll->SetType(Collider::TYPE::DYNAMIC);

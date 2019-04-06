@@ -6,6 +6,7 @@
 #include "PugiXml\src\pugixml.hpp"
 #include "Point.h"
 #include "Animation.h"
+#include "M_ObjManager.h"
 
 #include "PerfTimer.h"
 
@@ -64,18 +65,21 @@ public:
 	void SetPivot(const float &x, const float &y);  
 	void SetRect(int x, int y, int w, int h);
 
+	void DrawDebug();
+
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
 public:
 
-	int type = 0;
+	ObjectType type = ObjectType::NO_TYPE;
 	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	fPoint pos_screen	= { 0.f, 0.f };
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
 	fPoint pivot		= { 0.f, 0.f };
 	iPoint size			= { 0, 0 };
+	iPoint draw_offset	= { 0, 0 };	//Pixels to the center of the player. Used to center the player sprite.
 	bool to_remove = false;//Set it to true if you want the object to be removed
 	//
 	Animation* current_animation = nullptr;

@@ -135,3 +135,26 @@ bool Object::LoadAnimation(pugi::xml_node & node, Animation & anim)
 	}
 	return true;
 }
+
+void Object::DrawDebug()
+{
+	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, size.x, size.y };
+
+	switch (type)
+	{
+	case ObjectType::TANK:
+		app->render->DrawQuad(section, 255, 0, 0, 80);
+		break;
+	case ObjectType::STATIC:
+		app->render->DrawQuad(section, 0, 255, 0, 80);
+		break;
+	case ObjectType::TESLA_TROOPER:
+		app->render->DrawQuad(section, 0, 0, 255, 80);
+		break;
+
+		default:
+			break;
+	}
+
+	app->render->DrawCircle(pos_screen.x + pivot.x, pos_screen.y + pivot.y, 3, 0, 255, 0);
+}

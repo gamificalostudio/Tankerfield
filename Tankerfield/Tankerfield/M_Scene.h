@@ -42,6 +42,8 @@ public:
 	// Called before quitting
 	bool CleanUp() override;
 
+	bool draw_debug = false;
+
 private:
 
 };

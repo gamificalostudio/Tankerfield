@@ -10,10 +10,9 @@
 #include "PugiXml/src/pugixml.hpp"
 #include "Point.h"
 
-enum ObjectType
+enum class ObjectType
 {
 	TANK,
-	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
 	STATIC,
@@ -48,8 +47,6 @@ public:
 	Object* CreateObject(ObjectType type, fPoint pos);
 
 	static bool SortByYPos(Object * ent1, Object * ent2);
-
-	void DrawDebug(Object * ent);
 
 	void DeleteObjects();
   
