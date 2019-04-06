@@ -71,7 +71,12 @@ bool M_Map::PostUpdate(float dt)
 	if (map_loaded == false)
 		return ret;
 
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	SDL_Rect rect;
+	iPoint pos;
+	SDL_Rect r;
+	TileSet* tileset;
+
+	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
 		for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 		{
@@ -82,6 +87,7 @@ bool M_Map::PostUpdate(float dt)
 
 			if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
 				continue;
+
 			for (int y = 0; y < data.rows; ++y)
 			{
 				for (int x = 0; x < data.columns; ++x)
@@ -89,8 +95,8 @@ bool M_Map::PostUpdate(float dt)
 					int tile_id = (*layer)->Get(x, y);
 					if (tile_id > 0)
 					{
-						iPoint pos = MapToScreenI(x, y);
-						SDL_Rect rect;
+						pos = MapToScreenI(x, y);
+
 						rect.x = pos.x;
 						rect.y = pos.y;
 						rect.w = data.tile_width;
@@ -98,11 +104,10 @@ bool M_Map::PostUpdate(float dt)
 
 						if (SDL_HasIntersection(&rect, &(*item_cam)->rect))
 						{
-
-							TileSet* tileset = GetTilesetFromTileId(tile_id);
+							tileset = GetTilesetFromTileId(tile_id);
 							if (tileset != nullptr)
 							{
-								SDL_Rect r = tileset->GetTileRect(tile_id);
+								r = tileset->GetTileRect(tile_id);
 								app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, (*item_cam), &r);
 
 							}
