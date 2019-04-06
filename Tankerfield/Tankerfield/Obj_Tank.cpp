@@ -68,6 +68,7 @@ bool Obj_Tank::Start()
 		rotate_base->rotation = COUNTER_CLOCKWISE;
 		rotate_base->first_dir = 315;
 	}
+	curr_anim = rotate_base;
 	if (rotate_turr == nullptr)
 	{
 		rotate_turr = new Animation;
@@ -143,7 +144,7 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		base_angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
+		angle = (atan2(input_dir.y, -input_dir.x) * RADTODEG);
 	}
 
 	velocity = iso_dir * speed * dt;                                                               
@@ -180,6 +181,7 @@ bool Obj_Tank::PostUpdate(float dt)
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
+	LOG("angle : %f", angle);
 
 	// Base =========================================
 	app->render->Blit(
@@ -193,7 +195,7 @@ bool Obj_Tank::PostUpdate(float dt)
 		turr_tex,
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
-		&rotate_turr->GetFrame(angle, dt));
+		&rotate_turr->GetFrame(turr_angle, dt));
 
 	//DEBUG
 	iPoint debug_mouse_pos = { 0, 0 };

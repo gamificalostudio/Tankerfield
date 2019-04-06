@@ -58,7 +58,6 @@ private:
 	static SDL_Texture * base_shadow_tex;
 	static SDL_Texture * turr_shadow_tex;
 
-	float base_angle = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
 	static Animation * rotate_base;

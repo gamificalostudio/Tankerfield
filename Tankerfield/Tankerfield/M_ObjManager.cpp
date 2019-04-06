@@ -109,7 +109,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
-		if ((*iterator) != nullptr)
+		if ((*iterator) != nullptr && (*iterator)->curr_anim != nullptr)//TODO: Integrate sprite sorting. With sprite sorting it will check curr_anim before this
 		{
 			(*iterator)->PostUpdate(dt);
 		}

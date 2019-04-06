@@ -22,8 +22,10 @@ bool Obj_Bullet::Start()
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
 	if (anim == nullptr)
 	{
-		anim->LoadFrames(bullet_node.child("animations").child("rotate"));//TODO: Optimize. Rects are loaded every time a bullet is created
+		anim = new Animation;
+		anim->LoadFrames(bullet_node.child("animations").child("rotate"));
 	}
+	curr_anim = anim;
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());

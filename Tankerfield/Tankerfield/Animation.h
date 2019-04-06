@@ -58,6 +58,8 @@ public:
 		uint dir_num = 0u;
 		for (pugi::xml_node dir_iter = node.child("dir"); dir_iter; dir_iter = dir_iter.next_sibling("dir"))
 		{
+			frames.push_back(std::vector<SDL_Rect>());
+			uint frame_num = 0u;
 			for (pugi::xml_node frame_iter = dir_iter.child("frame"); frame_iter; frame_iter = frame_iter.next_sibling("frame"))
 			{
 				SDL_Rect new_frame =
@@ -68,7 +70,10 @@ public:
 					frame_iter.attribute("h").as_int()
 				};
 				frames[dir_num].push_back(new_frame);
+				if (frame_num > max_frames) { max_frames = frame_num; }
+				frame_num++;
 			}
+			if (dir_num > max_dirs) { max_dirs = dir_num; }
 			dir_num++;
 		}
 		return true;
