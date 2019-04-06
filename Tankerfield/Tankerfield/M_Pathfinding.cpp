@@ -166,37 +166,37 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	if (directions_state[(int)DIRECTIONS::WEST] = app->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
-	// NORTH_EAST
-	if (directions_state[(int)DIRECTIONS::NORTH] && directions_state[(int)DIRECTIONS::EAST])
-	{
-		cell.create(pos.x + 1, pos.y + 1);
-		if (directions_state[(int)DIRECTIONS::NORTH_EAST] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
+	//// NORTH_EAST
+	//if (directions_state[(int)DIRECTIONS::NORTH] && directions_state[(int)DIRECTIONS::EAST])
+	//{
+	//	cell.create(pos.x + 1, pos.y + 1);
+	//	if (directions_state[(int)DIRECTIONS::NORTH_EAST] = app->pathfinding->IsWalkable(cell))
+	//		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	//}
 
-	// SOUTH_EAST
-	if (directions_state[(int)DIRECTIONS::SOUTH] && directions_state[(int)DIRECTIONS::EAST])
-	{
-		cell.create(pos.x + 1, pos.y - 1);
-		if (directions_state[(int)DIRECTIONS::SOUTH_EAST] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
+	//// SOUTH_EAST
+	//if (directions_state[(int)DIRECTIONS::SOUTH] && directions_state[(int)DIRECTIONS::EAST])
+	//{
+	//	cell.create(pos.x + 1, pos.y - 1);
+	//	if (directions_state[(int)DIRECTIONS::SOUTH_EAST] = app->pathfinding->IsWalkable(cell))
+	//		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	//}
 
-	// WEST_SOUTH
-	if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::SOUTH])
-	{
-		cell.create(pos.x - 1, pos.y - 1);
-		if (directions_state[(int)DIRECTIONS::WEST_SOUTH] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
+	//// WEST_SOUTH
+	//if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::SOUTH])
+	//{
+	//	cell.create(pos.x - 1, pos.y - 1);
+	//	if (directions_state[(int)DIRECTIONS::WEST_SOUTH] = app->pathfinding->IsWalkable(cell))
+	//		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	//}
 
-	// WEST_NORTH
-	if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::NORTH])
-	{
-		cell.create(pos.x - 1, pos.y + 1);
-		if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
+	//// WEST_NORTH
+	//if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::NORTH])
+	//{
+	//	cell.create(pos.x - 1, pos.y + 1);
+	//	if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
+	//		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	//}
 
 
 	return list_to_fill.list.size();

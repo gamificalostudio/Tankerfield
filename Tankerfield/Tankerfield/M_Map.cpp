@@ -495,16 +495,12 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 
 				if (tileset != NULL)
 				{
-					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
-					/*TileType* ts = tileset->GetTileType(tile_id);
-					if(ts != NULL)
-					{
-					map[i] = ts->properties.Get("walkable", 1);
-					}*/
+					map[i] = ((tile_id - tileset->firstgid) > 0) ? 0 : 1;
+				
 				}
 			}
 		}
-
+	
 		*buffer = map;
 		width = data.columns;
 		height = data.rows;
