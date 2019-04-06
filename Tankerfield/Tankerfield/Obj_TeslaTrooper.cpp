@@ -33,6 +33,7 @@ bool Obj_TeslaTrooper::Start()
 	{
 		tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	}
+	curr_tex = tex;
 	if (walk == nullptr)
 	{
 		walk = new Animation;
@@ -51,12 +52,6 @@ bool Obj_TeslaTrooper::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 	{
 		angle -= 45;
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
-	{
-		life -= 100;
-		LOG("life: %i", life);
 	}
 
 	if (life <= 0)

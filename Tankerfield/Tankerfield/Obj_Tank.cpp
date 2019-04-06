@@ -181,8 +181,6 @@ bool Obj_Tank::PostUpdate(float dt)
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
-	LOG("angle : %f", angle);
-
 	// Base =========================================
 	app->render->Blit(
 		base_tex,
