@@ -58,6 +58,7 @@ M_Collision::M_Collision()
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::GOD] = true;
 
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::WALL] = true;
+	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::ENEMY] = true;
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
 

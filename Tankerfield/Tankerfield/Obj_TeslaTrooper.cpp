@@ -99,6 +99,10 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	velocity = { 1.5F,1.5F };
 	range_pos.center = pos_map;
 	range_pos.radius = 0.2;
+
+	coll = app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll->SetObjOffset({ .0f,-.0f });
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
