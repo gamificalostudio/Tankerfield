@@ -4,20 +4,22 @@
 #include "SDL/include/SDL_rect.h"
 #include "Defs.h"
 #include <vector>
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
+
+enum ROTATION_DIR {
+	CLOCKWISE,
+	COUNTER_CLOCKWISE,
+	INVALID
+};
 
 class Animation
 {
-	enum ROTATION_DIR {
-		CLOCKWISE,
-		COUNTER_CLOCKWISE,
-		INVALID
-	};
-
 public:
 	//frames[direction, current_frame]
-	std::vector<std::vector <SDL_Rect*>> frames;
+	std::vector<std::vector <SDL_Rect>> frames;
 
-	float speed = 1.0f;
+	float speed				= 1.0f;
 	float current_frame		= 0.f;
 
 	int max_dirs			= 0;
@@ -26,7 +28,8 @@ public:
 	bool loop				= true;
 	int loops				= 0;
 
-	float first_dir			= 0.f;
+	float first_dir			= 0.f;//The angle on the first sprite
+	ROTATION_DIR rotation	= ROTATION_DIR::COUNTER_CLOCKWISE;
 
 public:
 	Animation()
@@ -44,10 +47,31 @@ public:
 		}
 	}
 
-	SDL_Rect& GetFrame(float angle, float dt)
+	SDL_Rect & GetFrame(float angle, float dt)
 	{
 		uint ind = GetRotatedIndex(max_dirs, angle, ROTATION_DIR::COUNTER_CLOCKWISE, first_dir);
 		return frames[ind][(uint)current_frame];
+	}
+
+	bool LoadFrames(pugi::xml_node const & node)
+	{
+		uint dir_num = 0u;
+		for (pugi::xml_node dir_iter = node.child("dir"); dir_iter; dir_iter = dir_iter.next_sibling("dir"))
+		{
+			for (pugi::xml_node frame_iter = dir_iter.child("frame"); frame_iter; frame_iter = frame_iter.next_sibling("frame"))
+			{
+				SDL_Rect new_frame =
+				{
+					frame_iter.attribute("x").as_int(),
+					frame_iter.attribute("y").as_int(),
+					frame_iter.attribute("w").as_int(),
+					frame_iter.attribute("h").as_int()
+				};
+				frames[dir_num].push_back(new_frame);
+			}
+			dir_num++;
+		}
+		return true;
 	}
 
 	//Used before loading rects
@@ -57,7 +81,7 @@ public:
 		frames.resize(directions);
 		for (uint i = 0u; i < directions; ++i)
 		{
-			frames[i].resize[frames_per_direction];
+			frames[i].resize(frames_per_direction);
 		}
 		max_frames = frames_per_direction - 1;
 	}
@@ -90,8 +114,8 @@ private:
 		//Account for the spritesheet not starting at the 0 degree rotation
 		angle -= fist_rect_dir;
 		angle = ClampRotation(angle);
-		float ind = (angle * rect_num) / 360;
-		if (fmod(ind, 1) >= 0.5f)
+		float ind = (angle * rect_num) / 360.f;
+		if (fmod(ind, 1.f) >= 0.5f)
 		{
 			ceil(ind);
 		}
@@ -102,7 +126,7 @@ private:
 		//If it's the last frame, start over again
 		if (ind == rect_num)
 		{
-			ind = 0;
+			ind = 0.f;
 		}
 		return (uint)ind;
 	}

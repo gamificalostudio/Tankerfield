@@ -16,7 +16,6 @@ public:
 public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool PostUpdate(float dt) override;
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 

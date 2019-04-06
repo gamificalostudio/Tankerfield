@@ -61,8 +61,8 @@ private:
 	float base_angle = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
-	static SDL_Rect * base_rects;
-	static SDL_Rect * turr_rects;
+	static Animation * rotate_base;
+	static Animation * rotate_turr;
 	static int rects_num;
 
 	float speed = 0.f;
@@ -88,6 +88,8 @@ private:
 	Joystick gamepad_move					= Joystick::INVALID;
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_INVALID;
+
+	fPoint velocity							= { 0.f, 0.f };
 };
 
 #endif

@@ -14,9 +14,8 @@ public:
 
 	//No need to rewrite them if they do the same
 
-	bool Start();
-	bool Update(float dt);
-	virtual bool PostUpdate(float dt) override;
+	bool Start() override;
+	bool Update(float dt) override;
 	//OnCollision{
 	//Do damage to entity
 		//Show explosion particle
@@ -34,7 +33,7 @@ public:
 	//Particle impact_particle
 	static SDL_Texture * tex;
 	static int rects_num;
-	static SDL_Rect * rects;
+	static Animation * anim;
 	float angle = 0.f;
 };
 
