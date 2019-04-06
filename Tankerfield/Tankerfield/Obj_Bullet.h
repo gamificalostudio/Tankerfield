@@ -34,7 +34,6 @@ public:
 	static SDL_Texture * tex;
 	static int rects_num;
 	static Animation * anim;
-	float angle = 0.f;
 };
 
 #endif
