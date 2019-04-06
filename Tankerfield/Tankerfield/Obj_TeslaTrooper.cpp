@@ -20,21 +20,25 @@
 
 //Static variables inicialization
 SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
+Animation * Obj_TeslaTrooper::walk = nullptr;
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
+{}
+
+bool Obj_TeslaTrooper::Start()
 {
+	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
+
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	}
-}
-
-Obj_TeslaTrooper::~Obj_TeslaTrooper()
-{
-}
-
-bool Obj_TeslaTrooper::PreUpdate()
-{
+	if (walk == nullptr)
+	{
+		walk = new Animation;
+		walk->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
+	}
+	curr_anim = walk;
 	return true;
 }
 
