@@ -68,7 +68,6 @@ bool M_Map::PostUpdate(float dt)
 
 	if (map_loaded == false)
 		return ret;
-
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
@@ -77,7 +76,7 @@ bool M_Map::PostUpdate(float dt)
 
 		if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
 			continue;
-
+		
 		for (int y = 0; y < data.rows; ++y)
 		{
 			for (int x = 0; x < data.columns; ++x)
@@ -86,7 +85,12 @@ bool M_Map::PostUpdate(float dt)
 				if (tile_id > 0)
 				{
 					iPoint pos = MapToScreenI(x, y);
-					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
+					SDL_Rect rect;
+					rect.x = pos.x;
+					rect.y = pos.y;
+					rect.w = data.tile_width;
+					rect.h = data.tile_height;
+					if (SDL_HasIntersection(&rect, &app->render->camera))
 					{
 						TileSet* tileset = GetTilesetFromTileId(tile_id);
 						if (tileset != nullptr)
@@ -95,12 +99,11 @@ bool M_Map::PostUpdate(float dt)
 							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
 						}
 					}
-
 				}
 			}
 		}
 	}
-
+	
 	//// Draw Grid ==============================================
 	if(show_grid)
 	{
@@ -447,6 +450,7 @@ SDL_Rect TileSet::GetTileRect(int id) const
 
 TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
+	BROFILER_CATEGORY("GetTilesetFromTileId", Profiler::Color::DarkBlue)
 	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
 	TileSet* set = *item;
 	
@@ -514,6 +518,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 
 iPoint M_Map::MapToScreenI(int column, int row) const
 {
+	
 	iPoint screen_pos(0, 0);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:

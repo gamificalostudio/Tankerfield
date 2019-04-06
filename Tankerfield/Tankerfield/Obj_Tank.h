@@ -62,6 +62,7 @@ private:
 	static SDL_Texture * turr_shadow_tex;
 
 	float base_angle = 0.f;
+	float base_angle_lerp_factor = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
 	static SDL_Rect * base_rects;
@@ -80,7 +81,8 @@ private:
 
 	std::map<WEAPON_TYPE, Weapon*> weapons;
 
-	INPUT_METHOD last_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
+	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
+	INPUT_METHOD shot_input					= INPUT_METHOD::KEYBOARD_MOUSE;
 	//- Keyboard inputs
 	int kb_shoot							= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;

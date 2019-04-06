@@ -7,13 +7,7 @@ struct Circle
 	float radius;
 	bool IsPointIn(fPoint point)
 	{
-		if (point.x >= (center.x - radius)
-			&& point.x <= (center.x + radius)
-			&& point.y >= (center.y - radius)
-			&& point.y <= (center.y + radius))
-			return true;
-		else
-			return false;
+		return (point.DistanceNoSqrt(center) < radius * radius);
 	}
 };
 
