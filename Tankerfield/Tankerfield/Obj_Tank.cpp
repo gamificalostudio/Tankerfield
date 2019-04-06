@@ -82,7 +82,7 @@ bool Obj_Tank::Start()
 	draw_offset.y = 36;
 
 	base_angle_lerp_factor = 11.25f;
-	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
 		if (!(*item_cam)->assigned)
 		{
@@ -182,7 +182,7 @@ bool Obj_Tank::PostUpdate(float dt)
 
 	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
 		app->render->Blit(
 			base_tex,
@@ -193,7 +193,7 @@ bool Obj_Tank::PostUpdate(float dt)
 	}
 	// Turret =======================================
 	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
 		app->render->Blit(
 			turr_tex,

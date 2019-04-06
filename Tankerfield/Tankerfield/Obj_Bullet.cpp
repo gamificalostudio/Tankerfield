@@ -50,7 +50,7 @@ bool Obj_Bullet::PostUpdate(float dt)
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
 		app->render->Blit(
 			tex,

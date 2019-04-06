@@ -4,6 +4,7 @@
 #include "SDL/include/SDL.h"
 #include "Point.h"
 #include "Module.h"
+#include <vector>
 class Camera {
 public:
 	SDL_Rect rect{ 0,0,0,0 };
@@ -60,10 +61,10 @@ public:
 
 public:
 
-	SDL_Renderer*   renderer = nullptr;
-	std::list<Camera*>			camera;
-	SDL_Rect		viewport;
-	SDL_Color		background;
+	SDL_Renderer*					renderer = nullptr;
+	std::vector<Camera*>			camera;
+	SDL_Rect						viewport;
+	SDL_Color						background;
 
 	bool debug = true;
 };

@@ -182,7 +182,7 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 	uint ind = GetRotatedIndex(8, angle);
 	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
 	fPoint pos= app->map->MapToScreenF((fPoint)pos_map);
-	for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
 		app->render->Blit(tex, pos.x - rect.w*0.5F, pos.y - rect.h*0.5, (*item_cam), &rect);
 	}

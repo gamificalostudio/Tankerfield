@@ -194,7 +194,7 @@ void M_Scene::DebugPathfinding()
 				for (uint i = 0; i < debugPathSize; ++i)
 				{
 					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
-					for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+					for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 					{
 						app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y, (*item_cam));
 					}
@@ -204,7 +204,7 @@ void M_Scene::DebugPathfinding()
 		}
 
 		p = app->map->MapToScreenI(p.x, p.y);
-		for (std::list<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+		for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 		{
 			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
 		}

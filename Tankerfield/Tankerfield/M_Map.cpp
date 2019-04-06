@@ -67,34 +67,35 @@ bool M_Map::PostUpdate(float dt)
 {
 	
 	bool ret = true;
-	std::list<Camera*>::iterator item_cam;
+	std::vector<Camera*>::iterator item_cam;
 	if (map_loaded == false)
 		return ret;
-	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
+
+	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
-		BROFILER_CATEGORY("MAP DRAW postUpdate1", Profiler::Color::DeepPink);
-
-		if ((*layer)->visible == false)
-			continue;
-
-		if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
-			continue;
-		for (int y = 0; y < data.rows; ++y)
+		for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 		{
-			for (int x = 0; x < data.columns; ++x)
-			{
-				int tile_id = (*layer)->Get(x, y);
-				if (tile_id > 0)
-				{
-					iPoint pos = MapToScreenI(x, y);
-					SDL_Rect rect;
-					rect.x = pos.x;
-					rect.y = pos.y;
-					rect.w = data.tile_width;
-					rect.h = data.tile_height;
+			BROFILER_CATEGORY("MAP DRAW postUpdate1", Profiler::Color::DeepPink);
 
-					for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+			if ((*layer)->visible == false)
+				continue;
+
+			if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
+				continue;
+			for (int y = 0; y < data.rows; ++y)
+			{
+				for (int x = 0; x < data.columns; ++x)
+				{
+					int tile_id = (*layer)->Get(x, y);
+					if (tile_id > 0)
 					{
+						iPoint pos = MapToScreenI(x, y);
+						SDL_Rect rect;
+						rect.x = pos.x;
+						rect.y = pos.y;
+						rect.w = data.tile_width;
+						rect.h = data.tile_height;
+
 						if (SDL_HasIntersection(&rect, &(*item_cam)->rect))
 						{
 
@@ -107,6 +108,7 @@ bool M_Map::PostUpdate(float dt)
 							}
 
 						}
+
 					}
 				}
 			}

@@ -182,7 +182,7 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 	iPoint ret;
 	int scale = app->win->GetScale();
 
-	std::list<Camera*>::iterator camera = app->render->camera.begin();
+	std::vector<Camera*>::iterator camera = app->render->camera.begin();
 
 	ret.x = (x + (*camera)->rect.x / scale);
 	ret.y = (y + (*camera)->rect.y / scale);
