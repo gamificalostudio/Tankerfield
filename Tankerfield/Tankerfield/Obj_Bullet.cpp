@@ -5,7 +5,6 @@
 #include "Animation.h"
 
 SDL_Texture * Obj_Bullet::tex = nullptr;
-int Obj_Bullet::rects_num = 64;
 Animation * Obj_Bullet::anim = nullptr;
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)

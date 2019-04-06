@@ -62,7 +62,6 @@ private:
 	fPoint shot_dir = { 0.f, 0.f };
 	static Animation * rotate_base;
 	static Animation * rotate_turr;
-	static int rects_num;
 
 	float speed = 0.f;
 	Controller ** controller = nullptr;

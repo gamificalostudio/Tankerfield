@@ -32,7 +32,6 @@ public:
 	//SFX impact_sound
 	//Particle impact_particle
 	static SDL_Texture * tex;
-	static int rects_num;
 	static Animation * anim;
 };
 
