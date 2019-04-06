@@ -14,6 +14,17 @@
 
 struct SDL_Texture;
 
+enum class DIRECTIONS
+{
+	NORTH,
+	EAST,
+	SOUTH,
+	WEST,
+	NORTH_EAST,
+	SOUTH_EAST,
+	WEST_SOUTH,
+	WEST_NORTH
+};
 
 class M_Pathfinding : public Module
 {
