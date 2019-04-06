@@ -167,7 +167,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 			//Change sprite direction
 			angle = atan2(move_vect.y, move_vect.x)  * RADTODEG;
-			LOG("angle: %f", angle);
+			
 		}
 	
 	}
