@@ -188,7 +188,7 @@ bool Obj_Tank::PostUpdate(float dt)
 		base_tex,
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
-		&rotate_base->GetFrame(angle, dt));
+		&curr_anim->GetFrame(angle, dt));
 
 	// Turret =======================================
 	app->render->Blit(
