@@ -7,17 +7,22 @@
 
 class Animation
 {
-public:
-	bool loop = true;
-	float speed = 1.0f;
-	std::vector<std::vector <SDL_Rect*>> frames;
-	//First position is the direction that the object is facing
-	//Second position is the frame
+
 
 public:
-	float current_frame=0;
-	int last_frame = 0;
-	int loops = 0;
+	//frames[direction, current_frame]
+	std::vector<std::vector <SDL_Rect*>> frames;
+
+	float speed = 1.0f;
+	float current_frame		= 0.f;
+
+	int max_dirs			= 0;
+	int max_frames			= 0;
+
+	bool loop				= true;
+	int loops				= 0;
+
+	float first_dir			= 0.f;
 
 public:
 	Animation(uint directions, uint frames_per_direction)
@@ -25,15 +30,20 @@ public:
 
 	}
 
-	SDL_Rect& GetCurrentFrame(float angle, float dt)
+	void NextFrame(float dt)
 	{
 		current_frame += speed * dt;
-		if (current_frame >= last_frame)
+		if (current_frame >= max_frames)
 		{
-			current_frame = (loop) ? 0.0f : last_frame - 1;
+			current_frame = (loop) ? 0.0f : max_frames - 1;
 			loops++;
 		}
-		return frames[(int)current_frame].;
+	}
+
+	SDL_Rect& GetFrame(float angle, float dt)
+	{
+		uint ind = GetRotatedIndex(max_dirs, angle, ROTATION_DIR::COUNTER_CLOCKWISE, first_dir);
+		return frames[ind][(uint)current_frame];
 	}
 
 	//Used before loading rects
@@ -45,20 +55,8 @@ public:
 		{
 			frames[i].resize[frames_per_direction];
 		}
-		last_frame = frames_per_direction - 1;
+		frames = frames_per_direction - 1;
 	}
-	
-	//This overloaded GetCurrentFrame is used for Animation arrays where the frame number must concide
-	SDL_Rect& GetCurrentFrame(float dt, float & new_current_frame)
-	{
-		new_current_frame += speed*dt;
-		if (new_current_frame >= last_frame)
-		{
-			new_current_frame = (loop) ? 0.0f : last_frame - 1;
-			loops++;
-		}
-		return frames[(int)new_current_frame];
-	}//What's most eacy to use? Create a method to allocate size? Create a method to get the nimber of xml lines?
 
 	bool Finished() const
 	{

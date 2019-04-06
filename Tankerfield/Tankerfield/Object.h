@@ -36,11 +36,6 @@ public:
 
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) const { return true; };
-
-	//Clamps the rotation from 0 to 360 degrees
-	float ClampRotation(float angle);
-	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = 90);
-
   
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
@@ -48,14 +43,17 @@ public:
 public:
 
 	int type = 0;
-	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
-	fPoint velocity		= { 0.f, 0.f };
-	fPoint acceleration = { 0.f, 0.f };
-	bool to_remove = false;//Set it to true if you want the object to be removed
-	//
-	Animation* current_animation = nullptr;
-	
+	fPoint pos_map				= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	Collider* coll = nullptr;
+	bool to_remove				= false;//Set it to true if you want the object to be removed
+
+	//Used in Object::PostUpdate(float dt)
+	SDL_Texture * curr_tex		= nullptr;//Points the current texture. Shouldn't allocate memory. Just assign the pointer to other textures already created.
+
+	//Used in Object::PostUpdate(float dt) and for sprite sorting
+	Animation * curr_anim		= nullptr;//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created.
+	float angle					= 0.f;//Direction that the object is facing
+	iPoint draw_offset			= { 0.f, 0.f };//Change it to make the object not render from the top left in the position
 };
 
 #endif

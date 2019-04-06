@@ -10,9 +10,7 @@
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
 #include "Log.h"
-//#include "j1Map.h"
-//#include "Player.h"
-//#include "j1Collision.h"
+#include "M_Map.h"
 
 Object::Object()
 {
@@ -39,6 +37,13 @@ bool Object::Update(float dt)
 
 bool Object::PostUpdate(float dt)
 {
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+
+	app->render->Blit(
+		curr_tex, screen_pos.x - draw_offset.x,
+		screen_pos.y - draw_offset.y,
+		/*curr_anim->GetCurrentFrame(dt)*/);
+
 	return true;
 }
 
