@@ -17,7 +17,8 @@
 #include "Obj_TeslaTrooper.h"
 #include "M_Input.h"
 #include "M_Map.h"
-
+#include "M_Collision.h"
+#include "Obj_Bullet.h"
 
 
 //Static variables inicialization
@@ -122,14 +123,6 @@ bool Obj_TeslaTrooper::PreUpdate()
 
 bool Obj_TeslaTrooper::Update(float dt)
 {
-	if(app->input->GetKey(SDL_SCANCODE_W)==KEY_DOWN)
-	{
-		angle += 45;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-	{
-		angle -= 45;
-	}
 
 	//if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
 	//{
@@ -178,6 +171,8 @@ bool Obj_TeslaTrooper::Update(float dt)
 		}
 	
 	}
+
+
 	return true;
 }
 
@@ -211,8 +206,11 @@ bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 	return range_pos.IsPointIn(goal);
 }
 
-
-
-
-
-
+void Obj_TeslaTrooper::OnTrigger(Collider* collider)
+{
+	life -= damage;
+	if (life <= 0)
+	{
+		to_remove = true;
+	}
+}

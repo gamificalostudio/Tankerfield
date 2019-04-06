@@ -22,11 +22,12 @@ public:
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
+	void OnTrigger(Collider* collider);
 
 private:
 	inline bool IsOnGoal(fPoint goal);
 	int life = 100;
-	int damage = 100;
+	int damage = 50;
 	float speed = 1.0f;
 
 	bool death = false;
