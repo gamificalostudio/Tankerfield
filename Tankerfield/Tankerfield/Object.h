@@ -9,12 +9,6 @@
 
 #include "PerfTimer.h"
 
-enum ROTATION_DIR {
-	CLOCKWISE,
-	COUNTER_CLOCKWISE,
-	INVALID
-};
-
 struct SDL_Texture;
 class Collider;
 

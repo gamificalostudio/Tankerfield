@@ -7,7 +7,11 @@
 
 class Animation
 {
-
+	enum ROTATION_DIR {
+		CLOCKWISE,
+		COUNTER_CLOCKWISE,
+		INVALID
+	};
 
 public:
 	//frames[direction, current_frame]
@@ -25,7 +29,7 @@ public:
 	float first_dir			= 0.f;
 
 public:
-	Animation(uint directions, uint frames_per_direction)
+	Animation()
 	{
 
 	}
@@ -48,14 +52,14 @@ public:
 
 	//Used before loading rects
 	//Resizes the std::2Dvector frames so that it doesn't need to change size when rects are loaded00
-	void Resize()
+	void Resize(uint directions, uint frames_per_direction)
 	{
 		frames.resize(directions);
 		for (uint i = 0u; i < directions; ++i)
 		{
 			frames[i].resize[frames_per_direction];
 		}
-		frames = frames_per_direction - 1;
+		max_frames = frames_per_direction - 1;
 	}
 
 	bool Finished() const
