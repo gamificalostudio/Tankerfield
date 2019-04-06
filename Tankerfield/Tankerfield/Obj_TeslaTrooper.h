@@ -27,7 +27,7 @@ public:
 private:
 	inline bool IsOnGoal(fPoint goal);
 	int life = 100;
-	int damage = 50;
+	int tesla_damage = 50;
 	float speed = 1.0f;
 
 	bool death = false;

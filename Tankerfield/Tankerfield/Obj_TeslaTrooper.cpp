@@ -18,7 +18,6 @@
 #include "M_Input.h"
 #include "M_Map.h"
 #include "M_Collision.h"
-#include "Obj_Bullet.h"
 
 
 //Static variables inicialization
@@ -208,9 +207,12 @@ bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 
 void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
-	life -= damage;
-	if (life <= 0)
+	if (collider->GetTag() == Collider::TAG::BULLET)
 	{
-		to_remove = true;
+		life -= tesla_damage; //Right now the damage dealt is the damage of the enemy for test purposes
+		if (life <= 0)
+		{
+			to_remove = true;
+		}
 	}
 }
