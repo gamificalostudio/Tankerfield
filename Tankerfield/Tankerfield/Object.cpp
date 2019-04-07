@@ -54,10 +54,9 @@ SDL_Rect * Object::GetRect()
 {
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
-	SDL_Rect rect;
+	SDL_Rect rect = curr_anim->GetFrame(angle);
 	rect.x = screen_pos.x - draw_offset.x;
-	rect.x = screen_pos.y - draw_offset.y;
-	curr_anim->GetFrame(angle);
+	rect.y = screen_pos.y - draw_offset.y;
 
 	return &rect;
 }
