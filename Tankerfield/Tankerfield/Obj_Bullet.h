@@ -16,14 +16,12 @@ public:
 	~Obj_Bullet();
 
 	//No need to rewrite them if they do the same
-
-	bool Start();
-
-	bool Update(float dt);
-
-	bool PostUpdate(float dt);
+  
+	bool Start() override;
+	bool Update(float dt) override;
+	bool PostUpdate(float dt) override;
 	
-	void OnTrigger(Collider* collider_1);
+	void OnTrigger(Collider* collider_1) override;
 
 public:
 
@@ -40,10 +38,7 @@ public:
 	float time_between_bullets = 0.f;
 
 	static SDL_Texture * tex;
-
-	static int rects_num;
-
-	static SDL_Rect * rects;
+	static Animation * anim;
 
 	float angle = 0.f;
 

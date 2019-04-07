@@ -58,7 +58,6 @@ bool M_Scene::Start()
 	tank_2->camera_player->number_player = 2;
 	tank_3->camera_player->number_player = 3;
 	tank_4->camera_player->number_player = 4;
-	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
 
 	return true;
 }

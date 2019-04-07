@@ -12,13 +12,6 @@
 struct SDL_Texture;
 class Collider;
 
-enum ROTATION_DIR 
-{
-	CLOCKWISE,
-	COUNTER_CLOCKWISE,
-	INVALID
-};
-
 class Object 
 {
 public:
@@ -47,6 +40,10 @@ public:
 
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
+public:
+  
+	fPoint pos_map				= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
+
 	// Collision callbacks & methods ========================================
 
 	virtual void OnTriggerEnter(Collider * collider) {}
@@ -72,16 +69,14 @@ public:
 	// Transform (all units represented in map) ==================
 
 	fPoint pos_map		= { 0.f, 0.f };
-
-	fPoint velocity		= { 0.f, 0.f };
-
-	fPoint acceleration = { 0.f, 0.f };
-
-	bool to_remove = false;//Set it to true if you want the object to be removed
-	
-	Animation* current_animation = nullptr;
-	
 	Collider* coll = nullptr;
+	bool to_remove				= false;//Set it to true if you want the object to be removed
+	//Used in Object::PostUpdate(float dt)
+	SDL_Texture * curr_tex		= nullptr;//Points the current texture. Shouldn't allocate memory. Just assign the pointer to other textures already created.
+	//Used in Object::PostUpdate(float dt) and for sprite sorting
+	Animation * curr_anim		= nullptr;//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created.
+	float angle					= 0.f;//Direction that the object is facing
+	iPoint draw_offset			= { 0.f, 0.f };//Change it to make the object not render from the top left in the position
 };
 
 #endif

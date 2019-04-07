@@ -13,12 +13,11 @@ class Obj_TeslaTrooper : public Object
 {
 public:
 	Obj_TeslaTrooper(fPoint pos);
-	~Obj_TeslaTrooper();
 
+public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool PostUpdate(float dt) override;
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
@@ -31,7 +30,7 @@ private:
 
 	bool death = false;
 
-	Animation* walking = nullptr;
+	static Animation* walk;
 	float angle = 0.0f;
 	float new_current_frame = 0.0f;
 	static SDL_Texture* tex;

@@ -19,9 +19,8 @@ SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
-int Obj_Tank::rects_num = 128;
-SDL_Rect * Obj_Tank::base_rects = new SDL_Rect[rects_num];
-SDL_Rect * Obj_Tank::turr_rects = new SDL_Rect[rects_num];
+Animation * Obj_Tank::rotate_base = nullptr;
+Animation * Obj_Tank::rotate_turr = nullptr;
 
 Obj_Tank::Obj_Tank() : Object()
 {
@@ -46,13 +45,38 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
-	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
-	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	if (base_tex == nullptr)
+	{
+		Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
+	}
+	if (base_shadow_tex == nullptr)
+	{
+		Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+	}
+	if (turr_tex == nullptr)
+	{
+		Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	}
+	if(turr_shadow_tex == nullptr)
+	{
+		Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	}
 
-	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
-	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
+	if (rotate_base == nullptr)
+	{
+		rotate_base = new Animation;
+		rotate_base->LoadAnimation(tank_node.child("animations").child("rotate_base"));
+		rotate_base->rotation = COUNTER_CLOCKWISE;
+		rotate_base->first_dir_angle = 315;
+	}
+	curr_anim = rotate_base;
+	if (rotate_turr == nullptr)
+	{
+		rotate_turr = new Animation;
+		rotate_turr->LoadAnimation(tank_node.child("animations").child("rotate_turr"));
+		rotate_turr->rotation = COUNTER_CLOCKWISE;
+		rotate_turr->first_dir_angle = 315;
+	}
 
 	speed = 5.f;//TODO: Load from xml
 	
@@ -133,14 +157,14 @@ void Obj_Tank::Movement(float dt)
 	{
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
-		float turns = floor(base_angle / 360.f);
+		float turns = floor(angle / 360.f);
 		target_angle += 360.f * turns;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - base_angle) < abs(target_angle - base_angle))
+		if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
-		base_angle = lerp(base_angle, target_angle, base_angle_lerp_factor * dt);
+		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
 	}
 
 	velocity = iso_dir * speed * dt;                                                               
@@ -180,27 +204,24 @@ bool Obj_Tank::PostUpdate(float dt)
 {
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
-	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
-		app->render->Blit(
-			base_tex,
-			screen_pos.x - draw_offset.x,
-			screen_pos.y - draw_offset.y,
-			(*item_cam),
-			&base_rects[ind_base]);
+	app->render->Blit(
+		base_tex,
+		screen_pos.x - draw_offset.x,
+		screen_pos.y - draw_offset.y,
+		&curr_anim->GetFrame(angle, dt));
 	}
 	// Turret =======================================
 	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
-		app->render->Blit(
-			turr_tex,
-			screen_pos.x - draw_offset.x,
-			screen_pos.y - draw_offset.y,
-			(*item_cam),
-			&turr_rects[ind_turr]);
+	app->render->Blit(
+		turr_tex,
+		screen_pos.x - draw_offset.x,
+		screen_pos.y - draw_offset.y,
+		&rotate_turr->GetFrame(turr_angle, dt));
 	}
 	//Camera centration
 	fPoint target_pos;
