@@ -11267,7 +11267,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="3" name="Colliders" width="75" height="75">
+ <layer id="3" name="Colliders" width="75" height="75" visible="0">
   <properties>
    <property name="Navigation" type="float" value="1"/>
   </properties>
