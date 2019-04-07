@@ -107,8 +107,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	check_path_time		= 1.f;
 	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ .0f,-.0f });
-
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -118,10 +116,9 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 bool Obj_TeslaTrooper::Start()
 {
 
-	SetRect(0, 0, 66, 50);
-	SetPivot(17, 20);
-
-	draw_offset = { 15, 11 };
+	SetRect(0, 0, 66, 76);
+	draw_offset = { 32, 38 };
+	coll->SetObjOffset({ -.25f, -.25f });
 
 	timer.Start();
 
@@ -202,15 +199,15 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
     &rect);
   
 	//Draw actual postion
-	SDL_Rect frame = { pos_screen.x,pos_screen.y,10,10 };
-	app->render->DrawQuad(frame,255,0,0,255);
-	if (path.size() >= 2)
-	{
-		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end()-1; ++iter)
-		{
-			app->render->DrawIsometricLine((*iter), (*(iter + 1)), {255,255,255,255});
-		}
-	}
+	//SDL_Rect frame = { pos_screen.x,pos_screen.y,10,10 };
+	//app->render->DrawQuad(frame,255,0,0,255);
+	//if (path.size() >= 2)
+	//{
+	//	for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end()-1; ++iter)
+	//	{
+	//		app->render->DrawIsometricLine((*iter), (*(iter + 1)), {255,255,255,255});
+	//	}
+	//}
 
 
 	//fPoint pivot_pos = app->map->MapToScreenF(pivot);

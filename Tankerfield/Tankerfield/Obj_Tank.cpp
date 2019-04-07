@@ -62,7 +62,6 @@ bool Obj_Tank::Start()
 	sin_45 = sinf(-45 * DEGTORAD);
 
 	SetRect(0, 0, 93, 57);
-	SetPivot(0.f, 12.f);
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
