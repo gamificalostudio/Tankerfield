@@ -187,15 +187,15 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 	//Draw actual postion
 	SDL_Rect frame = { pos_screen.x,pos_screen.y,10,10 };
 	app->render->DrawQuad(frame,255,0,0,255);
-	if (path.size() > 0 && app->scene->path_tex!=nullptr)
+	if (path.size() >= 2)
 	{
-		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end(); ++iter)
+		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end()-1; ++iter)
 		{
-			//iPoint pos = app->map->MapToScreenI((*iter).x, (*iter).y);
-			//SDL_Rect rect_aux = { pos.x,pos.y,10,10 };
-			app->render->DrawIsometricQuad((*iter).x, (*iter).y, 1, 1);
-			//app->render->DrawQuad(rect_aux, 255, 0, 0, 255);
-			//app->render->Blit(app->scene->path_tex, pos.x, pos.y);
+			
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter+1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, {255,255,255,255});
+			//app->render->DrawIsometricQuad((*iter).x, (*iter).y, 1, 1);
 		}
 	}
 
