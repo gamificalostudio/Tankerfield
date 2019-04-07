@@ -204,8 +204,6 @@ bool Obj_Tank::PostUpdate(float dt)
 	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
 	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 0, 255, 0);
-	debug_screen_pos = app->map->MapToScreenF(pos_map);
-	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
 	return true;
 }
