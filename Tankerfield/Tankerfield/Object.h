@@ -33,6 +33,8 @@ public:
 
 	virtual bool PostUpdate(float dt, Camera * camera);
 
+	SDL_Rect * GetRect();
+
 	virtual bool CleanUp() { return true; };
 
 	virtual bool Awake(pugi::xml_node&) { return true; };

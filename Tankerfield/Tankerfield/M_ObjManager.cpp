@@ -128,7 +128,7 @@ bool M_ObjManager::PostUpdate(float dt)
 	{
 		for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 		{
-			if (SDL_HasIntersection(&(*iterator)->curr_anim->GetFrame((*iterator)->angle), &(*item_cam)->rect))
+			if (SDL_HasIntersection((*iterator)->GetRect(), &(*item_cam)->rect))
 			{
 				if ((*iterator) != nullptr && (*iterator)->curr_anim != nullptr)//TODO: Integrate sprite sorting. With sprite sorting it will check curr_anim before this
 				{

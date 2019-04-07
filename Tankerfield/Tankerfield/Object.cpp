@@ -48,3 +48,16 @@ bool Object::PostUpdate(float dt, Camera * camera)
 
 	return true;
 }
+
+//Returns the rect to be drawn
+SDL_Rect * Object::GetRect()
+{
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+
+	SDL_Rect rect;
+	rect.x = screen_pos.x - draw_offset.x;
+	rect.x = screen_pos.y - draw_offset.y;
+	curr_anim->GetFrame(angle);
+
+	return &rect;
+}
