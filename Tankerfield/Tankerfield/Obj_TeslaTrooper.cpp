@@ -18,7 +18,7 @@
 #include "M_Input.h"
 #include "M_Map.h"
 #include "M_Collision.h"
-
+#include "Weapon.h"
 
 //Static variables inicialization
 SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
@@ -100,7 +100,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	range_pos.center = pos_map;
 	range_pos.radius = 0.2;
 
-	coll = app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY, this);
+	coll = app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ .0f,-.0f });
 }
@@ -209,7 +209,8 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET)
 	{
-		life -= tesla_damage; //Right now the damage dealt is the damage of the enemy for test purposes
+		
+		life -= collider->damage;
 		if (life <= 0)
 		{
 			to_remove = true;

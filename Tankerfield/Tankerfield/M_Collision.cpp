@@ -284,9 +284,9 @@ bool M_Collision::CleanUp()
 	return true;
 }
 
-Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Collider::TAG type, Object* object)
+Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage, Object* object)
 {
-	Collider* collider = new Collider(pos, width, height, type, object);
+	Collider* collider = new Collider(pos, width, height, damage, type, object);
 	colliders.push_back(collider);
 	return  collider;
 }
@@ -411,4 +411,3 @@ inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
 		c1->collisions_list.erase(iter);
 	}
 }
-

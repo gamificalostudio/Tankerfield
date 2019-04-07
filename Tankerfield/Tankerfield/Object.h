@@ -65,6 +65,8 @@ public:
 
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
+	void SetDamage(float damage);
+
 public:
 
 	int type = 0;

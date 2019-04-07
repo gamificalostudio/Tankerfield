@@ -61,7 +61,7 @@ public:
 
 	bool Start()
 	{
-		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, this);
+		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, 0.f,this);
 		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 		return true;
 	}

@@ -31,8 +31,6 @@ public:
 
 	fPoint direction = { 0.f, 0.f };
 
-	int damage = 0;
-
 	float bullet_life_ms = 0.f;
 
 	PerfTimer bullet_life_ms_timer;
