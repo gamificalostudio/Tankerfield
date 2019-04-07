@@ -113,7 +113,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		{
 			(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
 
-			if (app->render->IsOnCamera((*item)->pos_screen.x, (*item)->pos_screen.y, (*item)->frame.w, (*item)->frame.h))
+			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
 			{
 				draw_objects.push_back(*item);
 			}
