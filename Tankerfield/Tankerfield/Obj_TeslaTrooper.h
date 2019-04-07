@@ -29,15 +29,15 @@ public:
 
 
 private:
-	TROOPER_STATE state = TROOPER_STATE::GET_PATH;
-	fPoint move_vect;
 	inline bool IsOnGoal(fPoint goal);
-	int life = 100;
-	int damage = 100;
 
-	bool death = false;
-
-	Animation* walking = nullptr;
+	TROOPER_STATE state		= TROOPER_STATE::GET_PATH;
+	fPoint move_vect		= { 0.0f, 0.0f };
+	int life				= 100;
+	int damage				= 100;
+	bool death				= false;
+	float follow_range		= 0.0f;
+	Animation* animation	= nullptr;
 	float angle = 0.0f;
 	float new_current_frame = 0.0f;
 	static SDL_Texture* tex;

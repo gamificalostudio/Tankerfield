@@ -28,81 +28,81 @@ SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	//Inicialize animations
-	walking = new Animation[8] { {8}, {8}, {8}, {8}, {8}, {8}, {8}, {8} };
-	walking[0].PushBack({ 528,0,66,76 });//8
-	walking[0].PushBack({ 594,0,66,76 });
-	walking[0].PushBack({ 660,0,66,76 });
-	walking[0].PushBack({ 726,0,66,76 });
-	walking[0].PushBack({ 792,0,66,76 });
-	walking[0].PushBack({ 858,0,66,76 });
-	walking[0].speed=5.0f;
+	animation = new Animation[8] { {8}, {8}, {8}, {8}, {8}, {8}, {8}, {8} };
+	animation[0].PushBack({ 528,0,66,76 });//8
+	animation[0].PushBack({ 594,0,66,76 });
+	animation[0].PushBack({ 660,0,66,76 });
+	animation[0].PushBack({ 726,0,66,76 });
+	animation[0].PushBack({ 792,0,66,76 });
+	animation[0].PushBack({ 858,0,66,76 });
+	animation[0].speed=5.0f;
 
-	walking[1].PushBack({ 924,0,66,76 });//14
-	walking[1].PushBack({ 990,0,66,76 });
-	walking[1].PushBack({ 1056,0,66,76 });
-	walking[1].PushBack({ 1122,0,66,76 });
-	walking[1].PushBack({ 1188,0,66,76 });
-	walking[1].PushBack({ 1254,0,66,76 });
-	walking[1].speed = 5.0f;
+	animation[1].PushBack({ 924,0,66,76 });//14
+	animation[1].PushBack({ 990,0,66,76 });
+	animation[1].PushBack({ 1056,0,66,76 });
+	animation[1].PushBack({ 1122,0,66,76 });
+	animation[1].PushBack({ 1188,0,66,76 });
+	animation[1].PushBack({ 1254,0,66,76 });
+	animation[1].speed = 5.0f;
 
-	walking[2].PushBack({ 1320,0,66,76 });//20
-	walking[2].PushBack({ 1386,0,66,76 });
-	walking[2].PushBack({ 1452,0,66,76 });
-	walking[2].PushBack({ 1518,0,66,76 });
-	walking[2].PushBack({ 1584,0,66,76 });
-	walking[2].PushBack({ 1650,0,66,76 });
-	walking[2].speed = 5.0f;
+	animation[2].PushBack({ 1320,0,66,76 });//20
+	animation[2].PushBack({ 1386,0,66,76 });
+	animation[2].PushBack({ 1452,0,66,76 });
+	animation[2].PushBack({ 1518,0,66,76 });
+	animation[2].PushBack({ 1584,0,66,76 });
+	animation[2].PushBack({ 1650,0,66,76 });
+	animation[2].speed = 5.0f;
 
-	walking[3].PushBack({ 1716,0,66,76 });//26
-	walking[3].PushBack({ 1782,0,66,76 });
-	walking[3].PushBack({ 1848,0,66,76 });
-	walking[3].PushBack({ 1914,0,66,76 });
-	walking[3].PushBack({ 1980,0,66,76 });
-	walking[3].PushBack({ 0,76,66,76 });
-	walking[3].speed = 5.0f;
+	animation[3].PushBack({ 1716,0,66,76 });//26
+	animation[3].PushBack({ 1782,0,66,76 });
+	animation[3].PushBack({ 1848,0,66,76 });
+	animation[3].PushBack({ 1914,0,66,76 });
+	animation[3].PushBack({ 1980,0,66,76 });
+	animation[3].PushBack({ 0,76,66,76 });
+	animation[3].speed = 5.0f;
 	//32
-	walking[4].PushBack({ 66,76,66,76 });
-	walking[4].PushBack({ 132,76,66,76 });
-	walking[4].PushBack({ 198,76,66,76 });
-	walking[4].PushBack({ 264,76,66,76 });
-	walking[4].PushBack({ 330,76,66,76 });
-	walking[4].PushBack({ 396,76,66,76 });
-	walking[4].speed = 5.0f;
+	animation[4].PushBack({ 66,76,66,76 });
+	animation[4].PushBack({ 132,76,66,76 });
+	animation[4].PushBack({ 198,76,66,76 });
+	animation[4].PushBack({ 264,76,66,76 });
+	animation[4].PushBack({ 330,76,66,76 });
+	animation[4].PushBack({ 396,76,66,76 });
+	animation[4].speed = 5.0f;
 	//38
-	walking[5].PushBack({ 462,76,66,76 });
-	walking[5].PushBack({ 528,76,66,76 });
-	walking[5].PushBack({ 594,76,66,76 });
-	walking[5].PushBack({ 660,76,66,76 });
-	walking[5].PushBack({ 726,76,66,76 });
-	walking[5].PushBack({ 792,76,66,76 });
-	walking[5].speed = 5.0f;
+	animation[5].PushBack({ 462,76,66,76 });
+	animation[5].PushBack({ 528,76,66,76 });
+	animation[5].PushBack({ 594,76,66,76 });
+	animation[5].PushBack({ 660,76,66,76 });
+	animation[5].PushBack({ 726,76,66,76 });
+	animation[5].PushBack({ 792,76,66,76 });
+	animation[5].speed = 5.0f;
 	//44
-	walking[6].PushBack({ 858,76,66,76 });
-	walking[6].PushBack({ 924,76,66,76 });
-	walking[6].PushBack({ 990,76,66,76 });
-	walking[6].PushBack({ 1056,76,66,76 });
-	walking[6].PushBack({ 1122,76,66,76 });
-	walking[6].PushBack({ 924,76,66,76 });
-	walking[6].speed = 5.0f;
+	animation[6].PushBack({ 858,76,66,76 });
+	animation[6].PushBack({ 924,76,66,76 });
+	animation[6].PushBack({ 990,76,66,76 });
+	animation[6].PushBack({ 1056,76,66,76 });
+	animation[6].PushBack({ 1122,76,66,76 });
+	animation[6].PushBack({ 924,76,66,76 });
+	animation[6].speed = 5.0f;
 	//49
-	walking[7].PushBack({ 1188,76,66,76 });
-	walking[7].PushBack({ 1254,76,66,76 });
-	walking[7].PushBack({ 1320,76,66,76 });
-	walking[7].PushBack({ 1386,76,66,76 });
-	walking[7].PushBack({ 1452,76,66,76 });
-	walking[7].PushBack({ 1518,76,66,76 });
-	walking[7].speed = 5.0f;
+	animation[7].PushBack({ 1188,76,66,76 });
+	animation[7].PushBack({ 1254,76,66,76 });
+	animation[7].PushBack({ 1320,76,66,76 });
+	animation[7].PushBack({ 1386,76,66,76 });
+	animation[7].PushBack({ 1452,76,66,76 });
+	animation[7].PushBack({ 1518,76,66,76 });
+	animation[7].speed = 5.0f;
 
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	}
 
-	speed = 1.5F;
-	range_pos.center = pos_map;
-	range_pos.radius = 0.5f;
-
-	check_path_time = 1.f;
+	speed				= 1.5F;
+	range_pos.center	= pos_map;
+	range_pos.radius	= 0.5f;
+	follow_range		= 10.0f;
+	check_path_time		= 1.f;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -125,12 +125,12 @@ bool Obj_TeslaTrooper::Update(float dt)
 	switch (state)
 	{
 	case TROOPER_STATE::GET_PATH:
+		path.clear();
 		target = app->objectmanager->GetNearestTank(pos_map);
-		if (target != nullptr)
+		if (target != nullptr && pos_map.DistanceManhattan(target->pos_map) <= follow_range)
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
 				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
-				path.clear();
 				for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
 				{
 					path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
@@ -180,7 +180,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 	uint ind = GetRotatedIndex(8, angle, ROTATION_DIR::COUNTER_CLOCKWISE, -45);
-	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
+	SDL_Rect rect = animation[ind].GetCurrentFrame(dt, new_current_frame);
 	fPoint pos_screen= app->map->MapToScreenF(pos_map);
 	app->render->Blit(
 		tex,
