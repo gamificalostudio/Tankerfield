@@ -10,7 +10,7 @@ struct SDL_Texture;
 class Timer;
 enum class TROOPER_STATE
 {
-	IDLE,
+	GET_PATH,
 	MOVE,
 	RECHEAD_POINT
 };
@@ -29,7 +29,7 @@ public:
 
 
 private:
-	TROOPER_STATE state = TROOPER_STATE::IDLE;
+	TROOPER_STATE state = TROOPER_STATE::GET_PATH;
 	fPoint move_vect;
 	inline bool IsOnGoal(fPoint goal);
 	int life = 100;
@@ -44,7 +44,7 @@ private:
 	Timer timer;
 
 	Object* target = nullptr;
-	std::vector<iPoint> path;
+	std::vector<fPoint> path;
 
 	fPoint next_pos;
 	

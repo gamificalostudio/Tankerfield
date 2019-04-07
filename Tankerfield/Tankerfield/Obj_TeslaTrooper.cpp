@@ -124,12 +124,17 @@ bool Obj_TeslaTrooper::Update(float dt)
 {
 	switch (state)
 	{
-	case TROOPER_STATE::IDLE:
+	case TROOPER_STATE::GET_PATH:
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
-				path = *app->pathfinding->GetLastPath();
+				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
+				path.clear();
+				for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
+				{
+					path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
+				}
 				state = TROOPER_STATE::RECHEAD_POINT;
 			}
 		timer.Start();
@@ -147,12 +152,11 @@ bool Obj_TeslaTrooper::Update(float dt)
 	case TROOPER_STATE::RECHEAD_POINT:
 		{
 			if (timer.ReadSec() >= check_path_time)
-				state = TROOPER_STATE::IDLE;
+				state = TROOPER_STATE::GET_PATH;
 
 			else if (path.size() > 0)
 			{
 				next_pos = (fPoint)(*path.begin());
-				next_pos += {0.5F, 0.5F};
 				move_vect = (fPoint)(next_pos)-pos_map;
 				move_vect.Normalize();
 
@@ -161,7 +165,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 				state = TROOPER_STATE::MOVE;
 			}
 			else
-				state = TROOPER_STATE::IDLE;
+				state = TROOPER_STATE::GET_PATH;
 
 		}
 		break;
@@ -189,11 +193,9 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 	app->render->DrawQuad(frame,255,0,0,255);
 	if (path.size() >= 2)
 	{
-		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end()-1; ++iter)
+		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end()-1; ++iter)
 		{
-			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
-			fPoint point2 = { (*(iter+1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-			app->render->DrawIsometricLine(point1, point2, {255,255,255,255});
+			app->render->DrawIsometricLine((*iter), (*(iter + 1)), {255,255,255,255});
 		}
 	}
 
