@@ -22,12 +22,16 @@ public:
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
+	void OnTrigger(Collider* collider);
 
 private:
 	inline bool IsOnGoal(fPoint goal);
 	int life = 100;
-	int damage = 100;
 
+	float speed = 1.0f;
+  
+	int damage = 100;
+  
 	bool death = false;
 
 	Animation* walking = nullptr;
@@ -62,7 +66,7 @@ public:
 
 	bool Start()
 	{
-		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, this);
+		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, 0.f,this);
 		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 		return true;
 	}

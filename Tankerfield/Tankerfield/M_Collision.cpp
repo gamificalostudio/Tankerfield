@@ -58,6 +58,9 @@ M_Collision::M_Collision()
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::GOD] = true;
 
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::WALL] = true;
+	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::ENEMY] = true;
+
+	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET] = true;
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
 
@@ -281,9 +284,9 @@ bool M_Collision::CleanUp()
 	return true;
 }
 
-Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Collider::TAG type, Object* object)
+Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage, Object* object)
 {
-	Collider* collider = new Collider(pos, width, height, type, object);
+	Collider* collider = new Collider(pos, width, height, damage, type, object);
 	colliders.push_back(collider);
 	return  collider;
 }
@@ -408,4 +411,3 @@ inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
 		c1->collisions_list.erase(iter);
 	}
 }
-

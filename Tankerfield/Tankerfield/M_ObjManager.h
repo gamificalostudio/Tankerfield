@@ -52,7 +52,6 @@ public:
 
 	Object* GetNearestTank(fPoint pos);
 	
-  
 
 private:
 

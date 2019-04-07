@@ -62,9 +62,9 @@ bool Obj_Tank::Start()
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 10.f, 2000.f, 50.f, BASIC_BULLET);
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(50, 10.f, 2000.f, 50.f, BASIC_BULLET);
 
-	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER, this);
+	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ .0f,- .0f });
 
