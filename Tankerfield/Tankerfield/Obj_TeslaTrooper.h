@@ -8,7 +8,12 @@
 
 struct SDL_Texture;
 class Timer;
-
+enum class TROOPER_STATE
+{
+	IDLE,
+	MOVE,
+	RECHEAD_POINT
+};
 class Obj_TeslaTrooper : public Object 
 {
 public:
@@ -24,6 +29,8 @@ public:
 
 
 private:
+	TROOPER_STATE state = TROOPER_STATE::IDLE;
+	fPoint move_vect;
 	inline bool IsOnGoal(fPoint goal);
 	int life = 100;
 	int damage = 100;

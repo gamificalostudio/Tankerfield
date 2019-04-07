@@ -231,7 +231,7 @@ int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 	int ret = -1;
 
-	if (!IsWalkable(origin) || !IsWalkable(destination))
+	if (origin == destination || !IsWalkable(origin) || !IsWalkable(destination) )
 	{
 		return ret = -1;
 	}

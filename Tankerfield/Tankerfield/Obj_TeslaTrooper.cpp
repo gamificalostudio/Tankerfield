@@ -1,6 +1,8 @@
 #include <list>
+#include <assert.h>
+#include <vector>
 
-//#include "Brofiler/Brofiler.h"
+#include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
 
 #include "Point.h"
@@ -9,12 +11,12 @@
 
 #include "App.h"
 #include "Object.h"
+#include "Obj_TeslaTrooper.h"
 #include "M_Textures.h"
 #include "M_ObjManager.h"
 #include "M_Render.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
-#include "Obj_TeslaTrooper.h"
 #include "M_Input.h"
 #include "M_Map.h"
 
@@ -98,7 +100,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 	speed = 1.5F;
 	range_pos.center = pos_map;
-	range_pos.radius = 0.2f;
+	range_pos.radius = 0.5f;
 
 	check_path_time = 1.f;
 }
@@ -120,57 +122,54 @@ bool Obj_TeslaTrooper::PreUpdate()
 
 bool Obj_TeslaTrooper::Update(float dt)
 {
-	//if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
-	//{
-	//	life -= 100;
-	//	LOG("life: %i", life);
-	//}
-
-	//if (life <= 0)
-	//{
-	//	death = true;
-	//	to_remove = true;
-	//}
-
-	if (timer.ReadSec() >= check_path_time)
+	switch (state)
 	{
+	case TROOPER_STATE::IDLE:
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
-		{
-			//iPoint origin = app->map->ScreenToMapI(pos_map.x, pos_map.y);
-			//iPoint destination = app->map->ScreenToMapI(target->pos_map.x, target->pos_map.y);
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
 				path = *app->pathfinding->GetLastPath();
-				if (path.size() > 0)
-					next_pos = (fPoint)(*path.begin());
+				state = TROOPER_STATE::RECHEAD_POINT;
 			}
-		}
 		timer.Start();
-	}
+		break;
+	case TROOPER_STATE::MOVE:
 
-	if (path.size() > 0)
-	{
-		if (IsOnGoal(next_pos))
-		{
-			path.erase(path.begin());
-			if (path.size() > 0)
-				next_pos = (fPoint)(*path.begin());
-		}
-		else
-		{
-			fPoint move_vect = (fPoint)(next_pos)-pos_map;
-			move_vect.Normalize();
-
+			if (IsOnGoal(next_pos))
+			{
+				path.erase(path.begin());
+				state = TROOPER_STATE::RECHEAD_POINT;
+			}
 			pos_map += move_vect * speed * dt;
 			range_pos.center = pos_map;
+		break;
+	case TROOPER_STATE::RECHEAD_POINT:
+		{
+			if (timer.ReadSec() >= check_path_time)
+				state = TROOPER_STATE::IDLE;
 
-			//Change sprite direction
-			angle = atan2(move_vect.y, move_vect.x)  * RADTODEG;
-			
+			else if (path.size() > 0)
+			{
+				next_pos = (fPoint)(*path.begin());
+				next_pos += {0.5F, 0.5F};
+				move_vect = (fPoint)(next_pos)-pos_map;
+				move_vect.Normalize();
+
+				//Change sprite direction
+				angle = atan2(move_vect.y, move_vect.x)  * RADTODEG;
+				state = TROOPER_STATE::MOVE;
+			}
+			else
+				state = TROOPER_STATE::IDLE;
+
 		}
-	
+		break;
+	default:
+		assert(true && "A tesla trooper have no state");
+		break;
 	}
+
 	return true;
 }
 
