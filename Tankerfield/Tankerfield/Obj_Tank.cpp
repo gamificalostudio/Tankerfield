@@ -57,8 +57,8 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	SetRect(0, 0, 112, 67);
-	SetPivot(0.f, 15.f);
+	SetRect(0, 0, 93, 57);
+	SetPivot(0.f, 12.f);
 
 	size = iPoint(frame.w, frame.h);
 

@@ -101,8 +101,11 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 
 bool Obj_TeslaTrooper::Start()
 {
-	SetRect(0, 0, 66, 76);
-	SetPivot(0, 0);
+	SetRect(0, 0, 66, 50);
+	SetPivot(17, 20);
+
+	draw_offset = { 15, 11 };
+
 	size = iPoint(frame.w, frame.h);
 	return true;
 }
@@ -142,7 +145,7 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 
 	uint ind = GetRotatedIndex(8, angle);
-	app->render->Blit(tex, pos_screen.x, pos_screen.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
+	app->render->Blit(tex, pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
 
 	//fPoint pivot_pos = app->map->MapToScreenF(pivot);
 	//SDL_Rect debug_pivot = { pivot.x - 3, pivot.y - 3, 6, 6 };

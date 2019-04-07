@@ -32,8 +32,8 @@ bool Obj_Static::Awake(pugi::xml_node & static_node)
 
 bool Obj_Static::Start()
 {
-	SetRect(286, 448, 286, 224);
-	SetPivot(0, 0);
+	SetRect(324, 504, 203, 164);
+	SetPivot(105, 116);
 
 	size = iPoint(frame.w, frame.h);
 
@@ -44,7 +44,7 @@ bool Obj_Static::Start()
 
 bool Obj_Static::PostUpdate(float dt)
 {
-	app->render->Blit(data.tileset.texture, pos_screen.x - 142, pos_screen.y - 167, &frame);
+	app->render->Blit(data.tileset.texture, pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, &frame);
 
 	//fPoint pivot_pos = app->map->MapToScreenF(pivot);
 
