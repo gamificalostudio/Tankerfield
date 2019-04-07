@@ -124,11 +124,14 @@ bool M_ObjManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
-		if ((*iterator) != nullptr && (*iterator)->curr_anim != nullptr)//TODO: Integrate sprite sorting. With sprite sorting it will check curr_anim before this
+		for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 		{
-			(*iterator)->PostUpdate(dt);
+			if ((*iterator) != nullptr && (*iterator)->curr_anim != nullptr)//TODO: Integrate sprite sorting. With sprite sorting it will check curr_anim before this
+			{
+				(*iterator)->PostUpdate(dt, (*item_cam));
+			}
 		}
 	}
 

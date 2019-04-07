@@ -35,7 +35,7 @@ public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool PostUpdate(float dt) override;
+	bool PostUpdate(float dt, Camera * camera) override;
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);

@@ -200,30 +200,26 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
-bool Obj_Tank::PostUpdate(float dt)
+bool Obj_Tank::PostUpdate(float dt, Camera * camera)
 {
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
-	{
 	app->render->Blit(
 		base_tex,
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
-		(*item_cam),
+		camera,
 		&curr_anim->GetFrame(angle, dt));
-	}
+
 	// Turret =======================================
 
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
-	{
 	app->render->Blit(
 		turr_tex,
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
-		(*item_cam),
+		camera,
 		&rotate_turr->GetFrame(turr_angle, dt));
-	}
+
 	//Camera centration
 	fPoint target_pos;
 
