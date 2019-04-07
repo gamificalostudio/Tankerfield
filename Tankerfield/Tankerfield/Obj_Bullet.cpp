@@ -53,18 +53,6 @@ bool Obj_Bullet::Update(float dt)
 	{
 		to_remove = true;
 	}
-  
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
-	{
-		app->render->Blit(
-			tex,
-			screen_pos.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
-			screen_pos.y - 14,
-			(*item_cam),
-			&rects[ind]);
-	}
 	return true;
 }
 

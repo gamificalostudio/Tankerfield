@@ -41,9 +41,6 @@ public:
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
 public:
-  
-	fPoint pos_map				= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
-
 	// Collision callbacks & methods ========================================
 
 	virtual void OnTriggerEnter(Collider * collider) {}
@@ -51,24 +48,13 @@ public:
 	virtual void OnTrigger(Collider * collider) {}
 
 	virtual void OnTriggerExit(Collider * collider) {}
-
-	// Clamps the rotation from 0 to 360 degrees ==================
-
-	float ClampRotation(float angle);
-
-	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = 90);
-
-	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
-
-	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
-
 public:
 
 	int type = 0;
 
 	// Transform (all units represented in map) ==================
 
-	fPoint pos_map		= { 0.f, 0.f };
+	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	Collider* coll = nullptr;
 	bool to_remove				= false;//Set it to true if you want the object to be removed
 	//Used in Object::PostUpdate(float dt)

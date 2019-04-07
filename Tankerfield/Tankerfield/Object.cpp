@@ -39,11 +39,15 @@ bool Object::PostUpdate(float dt)
 {
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
-	app->render->Blit(
-		curr_tex,
-		screen_pos.x - draw_offset.x,
-		screen_pos.y - draw_offset.y,
-		&curr_anim->GetFrame(angle, dt));
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	{
+		app->render->Blit(
+			curr_tex,
+			screen_pos.x - draw_offset.x,
+			screen_pos.y - draw_offset.y,
+			(*item_cam),
+			&curr_anim->GetFrame(angle, dt));
+	}
 
 	return true;
 }

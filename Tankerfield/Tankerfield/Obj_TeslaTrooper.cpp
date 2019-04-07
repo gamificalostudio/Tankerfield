@@ -44,14 +44,12 @@ bool Obj_TeslaTrooper::Start()
 	}
 	curr_anim = walk;
 
-	velocity = { 1.5F,1.5F };
+	speed = 1.5f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.2;
-}
 
-bool Obj_TeslaTrooper::Start()
-{
 	timer.Start();
+
 	return true;
 }
 
@@ -109,7 +107,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 			fPoint move_vect = (fPoint)(next_pos)-pos_map;
 			move_vect.Normalize();
 
-			pos_map += move_vect * velocity * dt;
+			pos_map += move_vect * speed * dt;
 			range_pos.center = pos_map;
 		}
 	

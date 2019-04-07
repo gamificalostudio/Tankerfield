@@ -204,23 +204,24 @@ bool Obj_Tank::PostUpdate(float dt)
 {
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
-	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
 	app->render->Blit(
 		base_tex,
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
+		(*item_cam),
 		&curr_anim->GetFrame(angle, dt));
 	}
 	// Turret =======================================
-	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
+
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
 	app->render->Blit(
 		turr_tex,
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
+		(*item_cam),
 		&rotate_turr->GetFrame(turr_angle, dt));
 	}
 	//Camera centration

@@ -19,7 +19,6 @@ public:
   
 	bool Start() override;
 	bool Update(float dt) override;
-	bool PostUpdate(float dt) override;
 	
 	void OnTrigger(Collider* collider_1) override;
 
@@ -39,8 +38,6 @@ public:
 
 	static SDL_Texture * tex;
 	static Animation * anim;
-
-	float angle = 0.f;
 
 	//SFX impact_sound
 
