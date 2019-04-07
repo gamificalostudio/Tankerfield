@@ -8,7 +8,12 @@
 
 struct SDL_Texture;
 class Timer;
-
+enum class TROOPER_STATE
+{
+	GET_PATH,
+	MOVE,
+	RECHEAD_POINT
+};
 class Obj_TeslaTrooper : public Object 
 {
 public:
@@ -26,29 +31,29 @@ public:
 
 private:
 	inline bool IsOnGoal(fPoint goal);
-	int life = 100;
 
-	float speed = 1.0f;
-  
-	int damage = 100;
-  
-	bool death = false;
-
-	Animation* walking = nullptr;
-	float angle = 0.0f;
-	float new_current_frame = 0.0f;
-	static SDL_Texture* tex;
+	TROOPER_STATE state			= TROOPER_STATE::GET_PATH;
+	fPoint move_vect			= { 0.0f, 0.0f };
+	int life					= 100;
+	int damage					= 100;
+	bool death					= false;
+	float follow_range			= 0.0f;
+	Animation* animation		= nullptr;
+	float angle					= 0.0f;
+	float new_current_frame		= 0.0f;
+	static SDL_Texture* tex;	
+	float check_path_time		= 0.f;
+	float speed					= 0.f;
 	Timer timer;
 
 	Object* target = nullptr;
-	std::vector<iPoint> path;
+	std::vector<fPoint> path;
 
 	fPoint next_pos;
 	
 	Circle range_pos;
 
-	float check_path_time = 0.f;
-	float speed = 0.f;
+	
 };
 
 // TODO REMOVE IT 
