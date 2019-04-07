@@ -51,13 +51,11 @@ public:
 	virtual void OnTrigger(Collider * collider) {}
 
 	virtual void OnTriggerExit(Collider * collider) {}
-
 public:
 
 	int type = 0;
 
 	// Transform (all units represented in map) ==================
-
 
 	fPoint pos_map				= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	Collider* coll				= nullptr;
@@ -68,7 +66,6 @@ public:
 	Animation * curr_anim		= nullptr;//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created.
 	float angle					= 0.f;//Direction that the object is facing
 	iPoint draw_offset			= { 0.f, 0.f };//Change it to make the object not render from the top left in the position
-
 };
 
 #endif

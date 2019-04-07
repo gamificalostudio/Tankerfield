@@ -143,61 +143,27 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
 	iPoint cell;
-	bool directions_state[8];
 	uint before = list_to_fill.list.size();
 
-	// NORTH
+	// north
 	cell.create(pos.x, pos.y + 1);
-	if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
+	if (app->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
-	// EAST
-	cell.create(pos.x + 1, pos.y);
-	if (directions_state[(int)DIRECTIONS::EAST] = app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
-	// SOUTH
+	// south
 	cell.create(pos.x, pos.y - 1);
-	if (directions_state[(int)DIRECTIONS::SOUTH] = app->pathfinding->IsWalkable(cell))
+	if (app->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
-	// WEST
+	// east
+	cell.create(pos.x + 1, pos.y);
+	if (app->pathfinding->IsWalkable(cell))
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+
+	// west
 	cell.create(pos.x - 1, pos.y);
-	if (directions_state[(int)DIRECTIONS::WEST] = app->pathfinding->IsWalkable(cell))
+	if (app->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
-	// NORTH_EAST
-	if (directions_state[(int)DIRECTIONS::NORTH] && directions_state[(int)DIRECTIONS::EAST])
-	{
-		cell.create(pos.x + 1, pos.y + 1);
-		if (directions_state[(int)DIRECTIONS::NORTH_EAST] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
-
-	// SOUTH_EAST
-	if (directions_state[(int)DIRECTIONS::SOUTH] && directions_state[(int)DIRECTIONS::EAST])
-	{
-		cell.create(pos.x + 1, pos.y - 1);
-		if (directions_state[(int)DIRECTIONS::SOUTH_EAST] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
-
-	// WEST_SOUTH
-	if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::SOUTH])
-	{
-		cell.create(pos.x - 1, pos.y - 1);
-		if (directions_state[(int)DIRECTIONS::WEST_SOUTH] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
-
-	// WEST_NORTH
-	if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::NORTH])
-	{
-		cell.create(pos.x - 1, pos.y + 1);
-		if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
-			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-	}
-
 
 	return list_to_fill.list.size();
 }
@@ -216,7 +182,7 @@ int PathNode::Score() const
 int PathNode::CalculateF(const iPoint& destination)
 {
 	g = parent->g + 1;
-	h = pos.DistanceNoSqrt(destination);
+	h = pos.DistanceTo(destination);
 
 	return g + h;
 }
@@ -233,9 +199,10 @@ int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 	if (!IsWalkable(origin) || !IsWalkable(destination))
 	{
-		return ret = -1;
+		ret = -1;
 	}
-	
+	else
+	{
 		PathList open;
 		PathList close;
 
@@ -247,54 +214,70 @@ int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			PathNode* current_node = (PathNode*)open.GetNodeLowestScore();
 			close.list.push_back(*current_node);
 
-			// Important: back() returns a reference of the last element, and end() returns an iterator to the last element. Therefore, we use back().
-			if (current_node->pos == destination)
+			// It is needed to create a temporary list in order to use the erase() function in order to find it.
+			for (std::list<PathNode>::iterator item = open.list.begin(); item != open.list.end(); item++)
 			{
-				const PathNode* node = nullptr;
-				for (node = &(*current_node); node->pos != origin; node = node->parent) {
-					last_path.push_back(node->pos);
-				}
-				last_path.push_back(node->pos);
-				std::reverse(last_path.begin(), last_path.end());
-				return ret = last_path.size();
-			}
-
-			std::list<PathNode>::iterator it = open.list.begin();
-			while (it != open.list.end()) {
-
-				if (&(*it) == &(*current_node))
-					break;
-				++it;
-			}
-			open.list.erase(it);
-
-			// TODO 5: Fill a list of all adjancent nodes
-			PathList childs;
-			close.list.back().FindWalkableAdjacents(childs);
-
-			// TODO 6: Iterate adjancent nodes:					
-			std::list<PathNode>::iterator child_node = childs.list.begin();
-			while (child_node != childs.list.end())
-			{
-				if (!close.Find((*child_node).pos) != NULL)	// ignore nodes in the closed list
+				if (&(*item) == &(*current_node))
 				{
-					(*child_node).CalculateF(destination); // If it is NOT found, calculate its F and add it to the open list
-					if (open.Find((*child_node).pos) != NULL) // If it is already in the open list, check if it is a better path (compare G)
+					open.list.erase(item);
+					break;
+				}
+			}
+
+			// Important: back() returns a reference of the last element, and end() returns an iterator to the last element. Therefore, we use back().
+			if (close.list.back().pos == destination)
+			{
+				for (PathNode it = close.list.back(); it.parent != nullptr; it = *close.Find(it.parent->pos))
+				{
+					last_path.push_back(it.pos);
+
+					if (it.parent == nullptr)
 					{
-						if ((*open.Find((*child_node).pos)).g > (*child_node).g)
+						last_path.push_back(close.list.front().pos);
+					}
+				}
+
+				std::reverse(last_path.begin(), last_path.end());
+
+				return last_path.size();
+			}
+			else
+			{
+				PathList neighbours;
+				close.list.back().FindWalkableAdjacents(neighbours);
+
+				std::list<PathNode>::iterator it = neighbours.list.begin();
+
+				while (it != neighbours.list.end())
+				{
+					if (close.Find(it->pos) != NULL)
+					{
+						it++;
+						continue;
+					}
+					else if (open.Find(it->pos) != NULL)
+					{
+						PathNode temp_path = *open.Find(it->pos);
+
+						it->CalculateF(destination);
+						if (temp_path.g > it->g)
 						{
-							PathNode old_node = *open.Find((*child_node).pos); // If it is a better path, Update the parent
-							old_node.parent = (*child_node).parent;
+							temp_path.parent = it->parent;
 						}
 					}
-					else open.list.push_back(*child_node);
+					else
+					{
+						it->CalculateF(destination);
+						open.list.push_back(*it);
+					}
+
+					it++;
 				}
-				++child_node;
+
+				neighbours.list.clear();
 			}
-
-
 		}
-	
+	}
 
 	return ret;
 }
