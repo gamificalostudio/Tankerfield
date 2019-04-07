@@ -48,8 +48,10 @@ bool Obj_Tank::Start()
 
 	Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
 	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
 	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
 	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
 	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
@@ -176,9 +178,6 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::PostUpdate(float dt)
 {
-
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-
 	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
@@ -204,8 +203,29 @@ bool Obj_Tank::PostUpdate(float dt)
 	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
 	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 0, 255, 0);
-	debug_screen_pos = app->map->MapToScreenF(pos_map);
-	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
+
+	return true;
+}
+
+bool Obj_Tank::DrawShadow()
+{
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+
+	// Base =========================================
+	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
+	app->render->Blit(
+		base_shadow_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		&base_rects[ind_base]);
+
+	// Turret =======================================
+	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
+	app->render->Blit(
+		turr_shadow_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		&turr_rects[ind_turr]);
 
 	return true;
 }

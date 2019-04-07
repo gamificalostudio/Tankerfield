@@ -136,6 +136,7 @@ bool M_ObjManager::PostUpdate(float dt)
 			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
 			{
 				draw_objects.push_back(*item);
+				(*item)->DrawShadow();
 			}
 		}
 	}
