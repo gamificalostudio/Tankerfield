@@ -91,6 +91,13 @@ public:
 		}
 	}
 
+	void GetSize(float & w, float & h) {
+		w = width;
+		h = height;
+	}
+
+	bool CheckCollision(Collider*  coll) const;
+
 	TAG GetTag() const
 	{
 		return tag;
@@ -102,13 +109,13 @@ public:
 	}
 
 	void Destroy();
-
+  
 	bool CheckCollision(Collider* collider) const;
 
 public:
 
 	float damage = 0.f;
-
+  
 private:
 
 	fPoint position = { 0.f , 0.f };
