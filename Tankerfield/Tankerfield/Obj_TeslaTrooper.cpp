@@ -117,7 +117,6 @@ bool Obj_TeslaTrooper::Start()
 {
 
 	SetRect(0, 0, 66, 76);
-	SetPivot(0, 0);
 	draw_offset = { 32, 38 };
 	coll->SetObjOffset({ -.25f, -.25f });
 
