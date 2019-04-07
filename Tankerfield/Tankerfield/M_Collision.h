@@ -79,7 +79,7 @@ public:
 
 	template<typename TYPE>
 
-	TYPE* GetObject() 
+	TYPE* GetObj() 
 	{
 		if (object != nullptr & typeid(TYPE) == typeid(object))
 		{
