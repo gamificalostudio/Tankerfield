@@ -10,11 +10,16 @@
 
 #include "PerfTimer.h"
 
-enum ROTATION_DIR {
+struct SDL_Texture;
+class Collider;
+
+enum ROTATION_DIR 
+{
 	CLOCKWISE,
 	COUNTER_CLOCKWISE,
 	INVALID
 };
+
 
 struct SDL_Texture;
 class Collider;
@@ -44,33 +49,58 @@ class Object
 public:
 
 	Object();
+
 	Object(fPoint pos);
+
 	virtual ~Object();
+
 	const Collider* GetCollider() const;
 	
 	virtual bool Start() { return true; };
+
 	virtual bool PreUpdate() { return true; };
+
 	virtual bool Update(float dt);
+
 	virtual bool PostUpdate(float dt);
+
 	virtual bool CleanUp() { return true; };
+
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
 	virtual bool Load(pugi::xml_node&) { return true; };
+
 	virtual bool Save(pugi::xml_node&) const { return true; };
 
-	//Clamps the rotation from 0 to 360 degrees
+	// Collision callbacks & methods ========================================
+
+	virtual void OnTriggerEnter(Collider * collider) {}
+
+	virtual void OnTrigger(Collider * collider) {}
+
+	virtual void OnTriggerExit(Collider * collider) {}
+
+	// Clamps the rotation from 0 to 360 degrees ==================
+
 	float ClampRotation(float angle);
-	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = 90);
+
 
 	void SetPivot(const float &x, const float &y);  
 	void SetRect(int x, int y, int w, int h);
 
 	void DrawDebug();
 
+	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = -90);
+
+
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
+
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
+	void SetDamage(float damage);
+
 public:
+
 
 	ObjectType type = ObjectType::NO_TYPE;
 	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
@@ -79,8 +109,9 @@ public:
 	fPoint acceleration = { 0.f, 0.f };
 	fPoint pivot		= { 0.f, 0.f };
 	iPoint draw_offset	= { 0, 0 };	//Pixels to the center of the player. Used to center the player sprite.
+
 	bool to_remove = false;//Set it to true if you want the object to be removed
-	//
+	
 	Animation* current_animation = nullptr;
 
 	ObjectInfo data;

@@ -103,6 +103,9 @@
     <ClCompile Include="Obj_Static.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="MathUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -218,6 +221,13 @@
     </ClInclude>
     <ClInclude Include="Obj_Static.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="MathUtils.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

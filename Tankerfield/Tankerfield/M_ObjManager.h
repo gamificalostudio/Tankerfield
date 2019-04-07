@@ -3,11 +3,12 @@
 
 #include <list>
 
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
+
 #include "Animation.h"
 
 #include "Module.h"
-#include "PugiXml/src/pugiconfig.hpp"
-#include "PugiXml/src/pugixml.hpp"
 #include "Point.h"
 
 enum class ObjectType
@@ -16,6 +17,7 @@ enum class ObjectType
 	TESLA_TROOPER,
 	BASIC_BULLET,
 	STATIC,
+	REWARD_ZONE,
 	NO_TYPE
 };
 
@@ -44,16 +46,19 @@ public:
 
 	bool CleanUp() override;
 
-	Object* CreateObject(ObjectType type, fPoint pos);
+	Object* CreateObject(ObjectType type, fPoint map_pos);
 
 	static bool SortByYPos(Object * obj1, Object * obj2);
 
 	void DeleteObjects();
-  
+
+	Object* GetNearestTank(fPoint pos);
+	
+
 private:
 
 	std::list<Object*> objects;
-
+	std::list<Object*> obj_tanks;
 };
 
 #endif

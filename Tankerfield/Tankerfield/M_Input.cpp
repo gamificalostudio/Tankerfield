@@ -1,3 +1,7 @@
+
+#include "Brofiler/Brofiler.h"
+#include "SDL/include/SDL.h"
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -5,8 +9,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
-#include "Brofiler/Brofiler.h"
-#include "SDL/include/SDL.h"
+
 
 
 #define MAX_KEYS 300
@@ -76,7 +79,7 @@ bool M_Input::PreUpdate()
 		{
 			case SDL_QUIT:
 			{
-				windowEvents[WE_QUIT] = true;
+				window_events[WE_QUIT] = true;
 				break;
 			}
 			case SDL_WINDOWEVENT:
@@ -87,7 +90,7 @@ bool M_Input::PreUpdate()
 				case SDL_WINDOWEVENT_HIDDEN:
 				case SDL_WINDOWEVENT_MINIMIZED:
 				case SDL_WINDOWEVENT_FOCUS_LOST:
-					windowEvents[WE_HIDE] = true;
+					window_events[WE_HIDE] = true;
 					break;
 
 					//case SDL_WINDOWEVENT_ENTER:
@@ -95,7 +98,7 @@ bool M_Input::PreUpdate()
 				case SDL_WINDOWEVENT_FOCUS_GAINED:
 				case SDL_WINDOWEVENT_MAXIMIZED:
 				case SDL_WINDOWEVENT_RESTORED:
-					windowEvents[WE_SHOW] = true;
+					window_events[WE_SHOW] = true;
 					break;
 				}
 				break;
@@ -166,11 +169,19 @@ bool M_Input::PreUpdate()
 				{
 					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
 					{
-						if((*iter)->haptic!=nullptr)
+						if ((*iter)->haptic != nullptr)
+						{
 							SDL_HapticClose((*iter)->haptic);
+							(*iter)->haptic = nullptr;
+						}
+							
 
 						if ((*iter)->ctr_pointer != nullptr)
-						SDL_GameControllerClose((*iter)->ctr_pointer);
+						{
+							SDL_GameControllerClose((*iter)->ctr_pointer);
+							(*iter)->ctr_pointer = nullptr;
+						}
+						
 
 						delete (*iter);
 						(*iter) = nullptr;
@@ -201,7 +212,7 @@ bool M_Input::CleanUp()
 // ---------
 bool M_Input::GetWindowEvent(EventWindow ev)
 {
-	return windowEvents[ev];
+	return window_events[ev];
 }
 
 // Check key states (includes mouse and joy buttons)
@@ -297,28 +308,41 @@ Controller** M_Input::GetAbleController()
 	return ret;
 }
 
+Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
+{
+
+		if (this == nullptr || ctr_pointer == nullptr)
+			return 0;
+
+		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+		if (abs(value) > dead_zone)
+		{
+			return value;
+		}
+		else
+		{
+			return 0;
+		}
+	
+}
+
 //This funtion returns axis and triggers state value
 // The state is a value ranging from -32768 to 32767.
-
 //strengh -> from 0 to 1
 //length  -> strength of the rumble to play as a 0-1 float value
-
 int Controller::PlayRumble(float strengh, Uint32 length)
 {
-	if (haptic != nullptr)
-	{
-		return SDL_HapticRumblePlay(haptic, strengh, length);
-	}
-	else
-	{
+	if (this == nullptr || haptic == nullptr)
 		return 0;
-	}
+
+	return SDL_HapticRumblePlay(haptic, strengh, length);
+	
 }
 
 int Controller::StopRumble()
 {
-	if (haptic != nullptr)
-		return SDL_HapticRumbleStop(haptic);
-	else
+	if (this == nullptr || haptic == nullptr)
 		return 0;
+
+	return SDL_HapticRumbleStop(haptic);
 }

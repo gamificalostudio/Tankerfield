@@ -127,6 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet_Basic.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
     <ClCompile Include="Obj_Static.cpp" />
@@ -164,9 +165,12 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Basic.h" />
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
     <ClInclude Include="Obj_Bullet.h" />
     <ClInclude Include="Obj_Static.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Checkbox.h" />
     <ClInclude Include="UI_Image.h" />

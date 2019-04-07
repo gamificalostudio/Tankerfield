@@ -10,9 +10,7 @@
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
 #include "Log.h"
-//#include "j1Map.h"
-//#include "Player.h"
-//#include "j1Collision.h"
+#include "M_Collision.h"
 
 Object::Object()
 {
@@ -165,3 +163,16 @@ void Object::DrawDebug()
 
 	app->render->DrawCircle(pos_screen.x + pivot.x, pos_screen.y + pivot.y, 3, 0, 255, 0);
 }
+
+void Object::SetDamage(float damage)
+{
+	if (coll != nullptr)
+	{
+		coll->damage = damage;
+	}
+	else
+	{
+		LOG("Collider is nullptr");
+	}
+}
+

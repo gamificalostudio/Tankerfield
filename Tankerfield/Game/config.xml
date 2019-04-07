@@ -23,7 +23,7 @@
   </gui>
 
   <map>
-   <folder>Maps/</folder>
+   <folder>maps/</folder>
       <levels>
         <level name="Sprite_sorting.tmx"/>
       </levels>
