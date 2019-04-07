@@ -133,7 +133,22 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
+	CameraMovement(dt);
+
 	return true;
+}
+
+void Obj_Tank::CameraMovement(float dt)
+{
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+	fPoint target_pos =
+	{
+		(float)camera_player->rect.x,
+		(float)camera_player->rect.y
+	};
+
+	camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.6f/*37.5f * dt*/);
+	camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.6f/*37.5f * dt*/);
 }
 
 void Obj_Tank::Movement(float dt)
@@ -220,14 +235,7 @@ bool Obj_Tank::PostUpdate(float dt, Camera * camera)
 		camera,
 		&rotate_turr->GetFrame(turr_angle));
 
-	//Camera centration
-	fPoint target_pos;
-
-	target_pos.x = camera_player->rect.x;
-	target_pos.y = camera_player->rect.y;
-
-	camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.6f);
-	camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.6f);
+	//Camera centrin
 
 	//DEBUG
 	iPoint debug_mouse_pos = { 0, 0 };

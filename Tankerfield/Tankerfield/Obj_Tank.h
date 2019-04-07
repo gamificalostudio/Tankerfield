@@ -35,6 +35,7 @@ public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
+	void CameraMovement(float dt);
 	bool PostUpdate(float dt, Camera * camera) override;
 	bool CleanUp() override;
 
