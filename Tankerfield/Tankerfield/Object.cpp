@@ -63,11 +63,18 @@ uint Object::GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, f
 	{
 		ind = ind + 1;
 	}
+
+	if (rot_dir == ROTATION_DIR::CLOCKWISE)
+	{
+		ind = rect_num - ind;
+	}
+
 	//If it's the last frame, start over again
 	if (ind == rect_num)
 	{
 		ind = 0;
 	}
+
 	return (uint)ind;
 }
 
