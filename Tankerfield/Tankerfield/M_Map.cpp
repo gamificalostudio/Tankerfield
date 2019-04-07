@@ -532,16 +532,12 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 
 				if (tileset != NULL)
 				{
-					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
-					/*TileType* ts = tileset->GetTileType(tile_id);
-					if(ts != NULL)
-					{
-					map[i] = ts->properties.Get("walkable", 1);
-					}*/
+					map[i] = ((tile_id - tileset->firstgid) > 0) ? 0 : 1;
+				
 				}
 			}
 		}
-
+	
 		*buffer = map;
 		width = data.columns;
 		height = data.rows;
@@ -609,7 +605,7 @@ iPoint M_Map::ScreenToMapI(int x, int y) const
 
 		float half_width = data.tile_width * 0.5f;
 		float half_height = data.tile_height * 0.5f;
-		ret.x = int((x / half_width + y / half_height) * 0.5f) - 1;
+		ret.x = int((x / half_width + y / half_height) * 0.5f);
 		ret.y = int((y / half_height - (x / half_width)) * 0.5f);
 	}
 	else

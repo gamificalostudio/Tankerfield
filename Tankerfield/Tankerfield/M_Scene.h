@@ -60,7 +60,7 @@ private:
 	std::vector<iPoint> debug_path;
 	bool test_path = true;
 
-	iPoint path_tex_offset = { 0, 16 };
+	iPoint path_tex_offset = { -30, 0 };
 };
 
 #endif // __j1SCENE_H__

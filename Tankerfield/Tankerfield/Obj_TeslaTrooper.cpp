@@ -44,9 +44,11 @@ bool Obj_TeslaTrooper::Start()
 	}
 	curr_anim = walk;
 
+
 	speed = 1.5f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.2;
+
 
 	timer.Start();
 
@@ -55,6 +57,7 @@ bool Obj_TeslaTrooper::Start()
 
 bool Obj_TeslaTrooper::Update(float dt)
 {
+
 	if(app->input->GetKey(SDL_SCANCODE_W)==KEY_DOWN)
 	{
 		angle += 45;
@@ -64,7 +67,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 		angle -= 45;
 	}
 
-  
+
 	//if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
 	//{
 	//	life -= 100;
@@ -77,7 +80,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 	//	to_remove = true;
 	//}
 
-	if (timer.ReadSec() >= 5)
+	if (timer.ReadSec() >= check_path_time)
 	{
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
@@ -109,11 +112,16 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 			pos_map += move_vect * speed * dt;
 			range_pos.center = pos_map;
+
+			//Change sprite direction
+			angle = atan2(move_vect.y, move_vect.x)  * RADTODEG;
+			
 		}
 	
 	}
 	return true;
 }
+
 
 bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 {

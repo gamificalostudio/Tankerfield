@@ -25,7 +25,6 @@ private:
 	inline bool IsOnGoal(fPoint goal);
 	int life = 100;
 	int damage = 100;
-	float speed = 1.0f;
 
 	bool death = false;
 
@@ -41,6 +40,9 @@ private:
 	fPoint next_pos;
 	
 	Circle range_pos;
+
+	float check_path_time = 0.f;
+	float speed = 0.f;
 };
 
 // TODO REMOVE IT 
