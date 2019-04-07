@@ -25,7 +25,7 @@
   <map>
    <folder>maps/</folder>
       <levels>
-        <level name="Level1.tmx"/>
+        <level name="Sprite_sorting.tmx"/>
       </levels>
   
   </map>

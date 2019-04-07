@@ -129,6 +129,9 @@ private:
 	//XML document
 	pugi::xml_document	config_file;
 	pugi::xml_node		app_config;
+
+	bool				pause = false;
+
 };
 
 extern App* app;

@@ -44,11 +44,17 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
+	app->audio->PlayMusic("audio/Music/indeep.ogg",0.0f);
+
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(20.f, 20.f));
 
-	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
+	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
+
+	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
 
 	return true;
 }
@@ -63,6 +69,8 @@ bool M_Scene::PreUpdate()
 
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
@@ -92,6 +100,9 @@ bool M_Scene::Update(float dt)
 		app->render->camera.x += floor(200.0f * dt);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		draw_debug = !draw_debug;
+
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 	{
 		++current_level;
@@ -101,6 +112,7 @@ bool M_Scene::Update(float dt)
 
 		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
 	}
+
 	return true;
 }
 

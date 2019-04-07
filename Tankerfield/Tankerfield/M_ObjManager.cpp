@@ -16,9 +16,15 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "Obj_TeslaTrooper.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
+#include <string>
+#include <algorithm>
 #include "Obj_Tank.h"
+#include "Obj_Static.h"
 #include "Bullet_Basic.h"
-
+#include "M_Map.h"
+#include "Brofiler/Brofiler.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -78,10 +84,16 @@ bool M_ObjManager::Update(float dt)
 
 			if ((*iterator)->to_remove)
 			{
+				//When we remove an element from the list, the other elements shift 1 space to our position
+				//So we don't need increment the iterator to go to the next one
+				if ((*iterator)->type == ObjectType::TANK)
+					obj_tanks.erase(iterator);
+
 				if ((*iterator)->coll != nullptr)
 				{
 					(*iterator)->coll->Destroy();
 				}
+
 
 				delete((*iterator));
 				(*iterator) = nullptr;
@@ -113,13 +125,33 @@ bool M_ObjManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
 	std::list<Object*>::iterator iterator;
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	std::vector<Object*> draw_objects;
+
+	for (std::list<Object*>::iterator item = objects.begin(); item!= objects.end(); ++item)
 	{
-		if ((*iterator) != nullptr)
+		if (*item != nullptr)
 		{
-			(*iterator)->PostUpdate(dt);
+			(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
+
+			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
+			{
+				draw_objects.push_back(*item);
+			}
 		}
 	}
+
+	std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
+
+	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+	{
+		(*item)->PostUpdate(dt);
+
+		if (app->scene->draw_debug) {
+			(*item)->DrawDebug();
+		}
+	}
+
+	draw_objects.clear();
 
 	return true;
 }
@@ -148,15 +180,20 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	{
 	case ObjectType::TESLA_TROOPER:
 		ret = new Obj_TeslaTrooper(pos);
-		ret->type = TESLA_TROOPER;
+		ret->type = ObjectType::TESLA_TROOPER;
 		break;
 	case ObjectType::TANK:
 		ret = new Obj_Tank(pos);
-		ret->type = TANK;
+		ret->type = ObjectType::TANK;
+		obj_tanks.push_back(ret);
 		break;
 	case ObjectType::BASIC_BULLET:
 		ret = new Bullet_Basic(pos);
-		ret->type = BASIC_BULLET;
+		ret->type = ObjectType::BASIC_BULLET;
+		break;
+	case ObjectType::STATIC:
+		ret = new Obj_Static(pos);
+		ret->type = ObjectType::STATIC;
 		break;
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
@@ -181,6 +218,26 @@ void M_ObjManager::DeleteObjects()
 	}
 }
 
+Object * M_ObjManager::GetNearestTank(fPoint pos)
+{
+	Object* ret = (*obj_tanks.begin());
+	if (ret != nullptr)
+	{
+		float distance = pos.DistanceTo(ret->pos_map);
+		for (std::list<Object*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
+		{
+			float new_distance = pos.DistanceTo((*iter)->pos_map);
+			if (new_distance  < distance)
+			{
+				distance = new_distance;
+				ret = *iter;
+			}
+		}
+	}
+	
+	return ret;
+}
+
 bool M_ObjManager::Load(pugi::xml_node& load)
 {
 	bool ret = true;
@@ -193,4 +250,10 @@ bool M_ObjManager::Save(pugi::xml_node& save) const
 	bool ret = true;
 
 	return ret;
+}
+
+
+bool M_ObjManager::SortByYPos(Object * obj1, Object * obj2)
+{
+	return obj1->pivot.y + obj1->pos_screen.y < obj2->pivot.y + obj2->pos_screen.y;
 }
