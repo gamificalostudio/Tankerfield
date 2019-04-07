@@ -19,7 +19,7 @@ class Obj_TeslaTrooper : public Object
 public:
 	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
-
+  
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;

@@ -104,7 +104,6 @@ public:
 			else if (type == "bool")
 			{
 				p->value = new bool(iter.attribute("value").as_bool());
-				
 			}
 			else 
 			{
@@ -115,6 +114,7 @@ public:
 		}
 	}
 
+	bool draw = true;
 	void UnloadProperties();
 };
 
@@ -187,11 +187,12 @@ enum MapTypes
 
 struct MapData
 {
+	std::string			objects_path;
 	int					columns = NULL,	rows = NULL;
 	int					tile_width = NULL,	tile_height = NULL;
 	int					offset_x = NULL, offset_y = NULL;
+  
 	MapTypes			type;
-
 	SDL_Color			background_color;
 
 	std::list<TileSet*>		tilesets;

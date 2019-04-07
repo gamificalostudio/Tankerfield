@@ -59,10 +59,13 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
+	SetRect(0, 0, 93, 57);
+	SetPivot(0.f, 12.f);
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(50, 10.f, 2000.f, 50.f, BASIC_BULLET);
+
+	weapons[WEAPON_TYPE::BASIC] = new Weapon(50, 10.f, 2000.f, 50.f, ObjectType::BASIC_BULLET);
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -169,22 +172,23 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::PostUpdate(float dt)
 {
+
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
 	// Base =========================================
 	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		base_tex,
-		screen_pos.x - draw_offset.x,
-		screen_pos.y - draw_offset.y,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
 		&base_rects[ind_base]);
 
 	// Turret =======================================
 	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		turr_tex,
-		screen_pos.x - draw_offset.x,
-		screen_pos.y - draw_offset.y,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
 		&turr_rects[ind_turr]);
 
 	//DEBUG
@@ -192,6 +196,7 @@ bool Obj_Tank::PostUpdate(float dt)
 	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 	debug_mouse_pos.x += app->render->camera.x;
 	debug_mouse_pos.y += app->render->camera.y;
+
 	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
 	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
@@ -222,8 +227,7 @@ void Obj_Tank::InputShotMouse(fPoint & input_dir, fPoint & iso_dir)
 	mouse_pos.y += app->render->camera.y;
 
 	int tile_width = 100, tile_height = 50;
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-	input_dir = (fPoint)mouse_pos - screen_pos;
+	input_dir = (fPoint)mouse_pos - pos_screen;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
 	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x,mouse_pos.y);

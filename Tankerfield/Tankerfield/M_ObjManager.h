@@ -11,12 +11,12 @@
 #include "Module.h"
 #include "Point.h"
 
-enum ObjectType
+enum class ObjectType
 {
 	TANK,
-	PLAYER,
 	TESLA_TROOPER,
 	BASIC_BULLET,
+	STATIC,
 	REWARD_ZONE,
 	NO_TYPE
 };
@@ -47,6 +47,8 @@ public:
 	bool CleanUp() override;
 
 	Object* CreateObject(ObjectType type, fPoint map_pos);
+
+	static bool SortByYPos(Object * obj1, Object * obj2);
 
 	void DeleteObjects();
 

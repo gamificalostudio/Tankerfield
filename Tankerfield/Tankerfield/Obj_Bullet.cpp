@@ -27,8 +27,11 @@ bool Obj_Bullet::Start()
 		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	}
 
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET,0.f,this);
+	SetRect(0, 0, 67, 42);
+	SetPivot(0, 0);
 
+	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET,0.f,this);
+  
 	return true;
 }
 
@@ -49,11 +52,12 @@ bool Obj_Bullet::PostUpdate(float dt)
 	}
 
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		tex,
-		screen_pos.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
-		screen_pos.y - 14,
+		pos_screen.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
+		pos_screen.y - 14,
 		&rects[ind]);
 
 	return true;
