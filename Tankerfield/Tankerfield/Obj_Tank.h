@@ -8,6 +8,7 @@
 
 struct Controller;
 struct SDL_Texture;
+class Camera;
 
 enum class WEAPON_TYPE {
 	BASIC,
@@ -29,6 +30,7 @@ public:
 	~Obj_Tank();
 
 public:
+
 	bool Awake(pugi::xml_node & tank_node) override;
 	bool Start() override;
 	bool PreUpdate() override;
@@ -36,9 +38,11 @@ public:
 	bool PostUpdate(float dt) override;
 	bool CleanUp() override;
 
+	void OnTrigger(Collider* c1);
+
 private:
 	void Movement(float dt);
-	void InputMovementKeyboard(fPoint & input);
+	void InputMovementKeyboard(fPoint & input,float dt);
 	void InputMovementController(fPoint & input);
 
 	void Shoot();
@@ -50,7 +54,7 @@ private:
 
 public:
 	WEAPON_TYPE weapon_type = WEAPON_TYPE::BASIC;
-
+	Camera* camera_player = nullptr;
 private:
 
 	static SDL_Texture * base_tex;
@@ -58,6 +62,7 @@ private:
 	static SDL_Texture * base_shadow_tex;
 	static SDL_Texture * turr_shadow_tex;
 
+	float base_angle_lerp_factor = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
 	static Animation * rotate_base;
@@ -73,7 +78,8 @@ private:
 
 	std::map<WEAPON_TYPE, Weapon*> weapons;
 
-	INPUT_METHOD last_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
+	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
+	INPUT_METHOD shot_input					= INPUT_METHOD::KEYBOARD_MOUSE;
 	//- Keyboard inputs
 	int kb_shoot							= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;

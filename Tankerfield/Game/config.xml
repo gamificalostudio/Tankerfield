@@ -23,9 +23,9 @@
   </gui>
 
   <map>
-   <folder>Maps/</folder>
+   <folder>maps/</folder>
       <levels>
-        <level name="Level1.tmx"/>
+        <level name="SnowMap.tmx"/>
       </levels>
   
   </map>

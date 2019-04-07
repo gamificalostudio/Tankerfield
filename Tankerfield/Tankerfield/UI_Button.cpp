@@ -43,9 +43,10 @@ bool UI_Button::Draw()
 
 	section.w = current_frame.w;
 	section.h = current_frame.h;
-	
-	app->render->Blit(app->ui->GetAtlas(), position.x - section.w*0.5f, position.y - section.h*0.5f, &current_frame, false, 0.0f);
-
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	{
+		app->render->Blit(app->ui->GetAtlas(), position.x - section.w*0.5f, position.y - section.h*0.5f, (*item_cam), &current_frame, false, 0.0f);
+	}
 	return true;
 }
 
