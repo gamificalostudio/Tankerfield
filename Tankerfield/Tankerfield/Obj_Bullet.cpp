@@ -56,8 +56,6 @@ bool Obj_Bullet::PostUpdate(float dt)
 		to_remove = true;
 	}
 
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-
 	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		tex,

@@ -66,6 +66,8 @@ public:
 
 	virtual bool PostUpdate(float dt);
 
+	virtual bool DrawShadow() { return true; }
+
 	virtual bool CleanUp() { return true; };
 
 	virtual bool Awake(pugi::xml_node&) { return true; };
