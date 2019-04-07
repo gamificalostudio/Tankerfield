@@ -67,7 +67,7 @@ bool M_Map::PostUpdate(float dt)
 {
 	
 	bool ret = true;
-	//std::vector<Camera*>::iterator item_cam;
+	std::vector<Camera*>::iterator item_cam;
 	if (map_loaded == false)
 		return ret;
 
@@ -93,8 +93,8 @@ bool M_Map::PostUpdate(float dt)
 
 				if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
 					continue;
-				//for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-			//	{
+				for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+				{
 					for (y = 0; y < data.rows; ++y)
 					{
 					
@@ -113,14 +113,14 @@ bool M_Map::PostUpdate(float dt)
 								rect.w = data.tile_width;
 								rect.h = data.tile_height;
 
-								if (SDL_HasIntersection(&rect, &app->scene->tank_1->camera_player->rect/*&(*item_cam)->rect*/))
+								if (SDL_HasIntersection(&rect, /*&app->scene->tank_1->camera_player->rect*/&(*item_cam)->rect))
 								{
 									//	BROFILER_CATEGORY("MAP DRAW intersected", Profiler::Color::DeepPink);
 									tileset = GetTilesetFromTileId(tile_id);
 									if (tileset != nullptr)
 									{
 										r = tileset->GetTileRect(tile_id);
-										app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, app->scene->tank_1->camera_player, &r);
+										app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, (*item_cam)/*app->scene->tank_1->camera_player*/, &r);
 
 									}
 
@@ -131,7 +131,7 @@ bool M_Map::PostUpdate(float dt)
 
 						}
 					}	
-			//	}
+				}
 			
 		}
 	
