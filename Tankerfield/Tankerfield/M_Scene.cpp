@@ -45,7 +45,7 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
-	app->audio->PlayMusic("audio/Music/indeep.ogg",0.0f);
+	//app->audio->PlayMusic("audio/Music/indeep.ogg",0.0f);
 
 	//app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
 	//app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));

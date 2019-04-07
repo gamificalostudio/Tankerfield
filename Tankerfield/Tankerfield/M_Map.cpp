@@ -67,58 +67,74 @@ bool M_Map::PostUpdate(float dt)
 {
 	
 	bool ret = true;
-	std::vector<Camera*>::iterator item_cam;
+	//std::vector<Camera*>::iterator item_cam;
 	if (map_loaded == false)
 		return ret;
 
 	SDL_Rect rect;
 	iPoint pos;
 	SDL_Rect r;
-	TileSet* tileset;
+	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
+	TileSet* tileset = (*item);
+	std::list<MapLayer*>::iterator layer;
+	int y;
+	int x;
+	int tile_id;
 
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-	{
-		for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
+	
+	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
+		for (layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 		{
-			BROFILER_CATEGORY("MAP DRAW postUpdate1", Profiler::Color::DeepPink);
+			BROFILER_CATEGORY("MAP DRAW layer", Profiler::Color::DeepPink);
+			
+				//BROFILER_CATEGORY("MAP DRAW camera", Profiler::Color::DeepPink);
+				if ((*layer)->visible == false)
+					continue;
 
-			if ((*layer)->visible == false)
-				continue;
-
-			if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
-				continue;
-
-			for (int y = 0; y < data.rows; ++y)
-			{
-				for (int x = 0; x < data.columns; ++x)
-				{
-					int tile_id = (*layer)->Get(x, y);
-					if (tile_id > 0)
+				if ((*layer)->layer_properties.GetAsInt("Nodraw") != 0)
+					continue;
+				//for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+			//	{
+					for (y = 0; y < data.rows; ++y)
 					{
-						pos = MapToScreenI(x, y);
-
-						rect.x = pos.x;
-						rect.y = pos.y;
-						rect.w = data.tile_width;
-						rect.h = data.tile_height;
-
-						if (SDL_HasIntersection(&rect, &(*item_cam)->rect))
+					
+					//BROFILER_CATEGORY("MAP DRAW rows", Profiler::Color::DeepPink);
+						for (x = 0; x < data.columns; ++x)
 						{
-							tileset = GetTilesetFromTileId(tile_id);
-							if (tileset != nullptr)
+
+							//BROFILER_CATEGORY("MAP DRAW columns", Profiler::Color::DeepPink);
+							tile_id = (*layer)->Get(x, y);
+							if (tile_id > 0)
 							{
-								r = tileset->GetTileRect(tile_id);
-								app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, (*item_cam), &r);
+								pos = MapToScreenI(x, y);
+
+								rect.x = pos.x;
+								rect.y = pos.y;
+								rect.w = data.tile_width;
+								rect.h = data.tile_height;
+
+								if (SDL_HasIntersection(&rect, &app->scene->tank_1->camera_player->rect/*&(*item_cam)->rect*/))
+								{
+									//	BROFILER_CATEGORY("MAP DRAW intersected", Profiler::Color::DeepPink);
+									tileset = GetTilesetFromTileId(tile_id);
+									if (tileset != nullptr)
+									{
+										r = tileset->GetTileRect(tile_id);
+										app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, app->scene->tank_1->camera_player, &r);
+
+									}
+
+								}
+
 
 							}
 
 						}
-
-					}
-				}
-			}
+					}	
+			//	}
+			
 		}
-	}
+	
 	
 	//// Draw Grid ==============================================
 	if(show_grid)
@@ -455,6 +471,7 @@ bool M_Map::LoadMap()
 
 SDL_Rect TileSet::GetTileRect(int id) const
 {
+	BROFILER_CATEGORY("MAP DRAW GetTileRect", Profiler::Color::DeepPink);
 	int relative_id = id - firstgid;
 	SDL_Rect rect = { 0, 0, 0, 0 };
 	rect.w = tile_width;
@@ -538,7 +555,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 
 iPoint M_Map::MapToScreenI(int column, int row) const
 {
-	
+	BROFILER_CATEGORY("MAP DRAW mapToScreen", Profiler::Color::DeepPink);
 	iPoint screen_pos(0, 0);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:
