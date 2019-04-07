@@ -45,8 +45,8 @@ private:
 	void InputMovementController(fPoint & input);
 
 	void Shoot();
-	void InputShotMouse(fPoint & input_dir, fPoint & iso_dir);
-	void InputShotController(fPoint & input, fPoint & iso_dir);
+	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
+	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool IsShooting();
 
 	void SelectInputMethod();
@@ -70,6 +70,8 @@ private:
 	static int rects_num;
 
 	float speed = 0.f;
+	float cannon_height = 0.f;//Used to calculate the shot position
+	float cannon_length = 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
 	Controller ** controller = nullptr;
 
 	float cos_45 = 0.f;
