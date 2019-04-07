@@ -96,13 +96,15 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 		tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	}
 
-	velocity = { 1.5F,1.5F };
+	speed = 1.5F;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.2;
 
 	coll = app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ .0f,-.0f });
+
+	check_path_time = 1.f;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -122,7 +124,6 @@ bool Obj_TeslaTrooper::PreUpdate()
 
 bool Obj_TeslaTrooper::Update(float dt)
 {
-
 	//if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
 	//{
 	//	life -= 100;
@@ -135,7 +136,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 	//	to_remove = true;
 	//}
 
-	if (timer.ReadSec() >= 5)
+	if (timer.ReadSec() >= check_path_time)
 	{
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
@@ -165,8 +166,12 @@ bool Obj_TeslaTrooper::Update(float dt)
 			fPoint move_vect = (fPoint)(next_pos)-pos_map;
 			move_vect.Normalize();
 
-			pos_map += move_vect * velocity * dt;
+			pos_map += move_vect * speed * dt;
 			range_pos.center = pos_map;
+
+			//Change sprite direction
+			angle = atan2(move_vect.y, move_vect.x)  * RADTODEG;
+			
 		}
 	
 	}
@@ -177,13 +182,17 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
-	uint ind = GetRotatedIndex(8, angle);
+	uint ind = GetRotatedIndex(8, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 0);
 	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
-	fPoint pos= app->map->MapToScreenF((fPoint)pos_map);
-	app->render->Blit(tex, pos.x - rect.w*0.5F, pos.y - rect.h*0.5, &rect);
+	fPoint pos_screen= app->map->MapToScreenF(pos_map);
+	app->render->Blit(
+		tex,
+		pos_screen.x - rect.w * 0.5F,
+		pos_screen.y - rect.h * 0.5F,
+		&rect);
 
 	//Draw actual postion
-	SDL_Rect frame = { pos.x,pos.y,10,10 };
+	SDL_Rect frame = { pos_screen.x,pos_screen.y,10,10 };
 	app->render->DrawQuad(frame,255,0,0,255);
 	if (path.size() > 0 && app->scene->path_tex!=nullptr)
 	{

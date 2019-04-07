@@ -143,27 +143,61 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
 	iPoint cell;
+	bool directions_state[8];
 	uint before = list_to_fill.list.size();
 
-	// north
+	// NORTH
 	cell.create(pos.x, pos.y + 1);
-	if (app->pathfinding->IsWalkable(cell))
+	if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
-	// south
-	cell.create(pos.x, pos.y - 1);
-	if (app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
-
-	// east
+	// EAST
 	cell.create(pos.x + 1, pos.y);
-	if (app->pathfinding->IsWalkable(cell))
+	if (directions_state[(int)DIRECTIONS::EAST] = app->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
-	// west
-	cell.create(pos.x - 1, pos.y);
-	if (app->pathfinding->IsWalkable(cell))
+	// SOUTH
+	cell.create(pos.x, pos.y - 1);
+	if (directions_state[(int)DIRECTIONS::SOUTH] = app->pathfinding->IsWalkable(cell))
 		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+
+	// WEST
+	cell.create(pos.x - 1, pos.y);
+	if (directions_state[(int)DIRECTIONS::WEST] = app->pathfinding->IsWalkable(cell))
+		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+
+	// NORTH_EAST
+	if (directions_state[(int)DIRECTIONS::NORTH] && directions_state[(int)DIRECTIONS::EAST])
+	{
+		cell.create(pos.x + 1, pos.y + 1);
+		if (directions_state[(int)DIRECTIONS::NORTH_EAST] = app->pathfinding->IsWalkable(cell))
+			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	}
+
+	// SOUTH_EAST
+	if (directions_state[(int)DIRECTIONS::SOUTH] && directions_state[(int)DIRECTIONS::EAST])
+	{
+		cell.create(pos.x + 1, pos.y - 1);
+		if (directions_state[(int)DIRECTIONS::SOUTH_EAST] = app->pathfinding->IsWalkable(cell))
+			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	}
+
+	// WEST_SOUTH
+	if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::SOUTH])
+	{
+		cell.create(pos.x - 1, pos.y - 1);
+		if (directions_state[(int)DIRECTIONS::WEST_SOUTH] = app->pathfinding->IsWalkable(cell))
+			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	}
+
+	// WEST_NORTH
+	if (directions_state[(int)DIRECTIONS::WEST] && directions_state[(int)DIRECTIONS::NORTH])
+	{
+		cell.create(pos.x - 1, pos.y + 1);
+		if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
+			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	}
+
 
 	return list_to_fill.list.size();
 }
@@ -182,7 +216,7 @@ int PathNode::Score() const
 int PathNode::CalculateF(const iPoint& destination)
 {
 	g = parent->g + 1;
-	h = pos.DistanceTo(destination);
+	h = pos.DistanceNoSqrt(destination);
 
 	return g + h;
 }
@@ -199,10 +233,9 @@ int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 
 	if (!IsWalkable(origin) || !IsWalkable(destination))
 	{
-		ret = -1;
+		return ret = -1;
 	}
-	else
-	{
+	
 		PathList open;
 		PathList close;
 
@@ -214,70 +247,54 @@ int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 			PathNode* current_node = (PathNode*)open.GetNodeLowestScore();
 			close.list.push_back(*current_node);
 
-			// It is needed to create a temporary list in order to use the erase() function in order to find it.
-			for (std::list<PathNode>::iterator item = open.list.begin(); item != open.list.end(); item++)
-			{
-				if (&(*item) == &(*current_node))
-				{
-					open.list.erase(item);
-					break;
-				}
-			}
-
 			// Important: back() returns a reference of the last element, and end() returns an iterator to the last element. Therefore, we use back().
-			if (close.list.back().pos == destination)
+			if (current_node->pos == destination)
 			{
-				for (PathNode it = close.list.back(); it.parent != nullptr; it = *close.Find(it.parent->pos))
-				{
-					last_path.push_back(it.pos);
-
-					if (it.parent == nullptr)
-					{
-						last_path.push_back(close.list.front().pos);
-					}
+				const PathNode* node = nullptr;
+				for (node = &(*current_node); node->pos != origin; node = node->parent) {
+					last_path.push_back(node->pos);
 				}
-
+				last_path.push_back(node->pos);
 				std::reverse(last_path.begin(), last_path.end());
-
-				return last_path.size();
+				return ret = last_path.size();
 			}
-			else
+
+			std::list<PathNode>::iterator it = open.list.begin();
+			while (it != open.list.end()) {
+
+				if (&(*it) == &(*current_node))
+					break;
+				++it;
+			}
+			open.list.erase(it);
+
+			// TODO 5: Fill a list of all adjancent nodes
+			PathList childs;
+			close.list.back().FindWalkableAdjacents(childs);
+
+			// TODO 6: Iterate adjancent nodes:					
+			std::list<PathNode>::iterator child_node = childs.list.begin();
+			while (child_node != childs.list.end())
 			{
-				PathList neighbours;
-				close.list.back().FindWalkableAdjacents(neighbours);
-
-				std::list<PathNode>::iterator it = neighbours.list.begin();
-
-				while (it != neighbours.list.end())
+				if (!close.Find((*child_node).pos) != NULL)	// ignore nodes in the closed list
 				{
-					if (close.Find(it->pos) != NULL)
+					(*child_node).CalculateF(destination); // If it is NOT found, calculate its F and add it to the open list
+					if (open.Find((*child_node).pos) != NULL) // If it is already in the open list, check if it is a better path (compare G)
 					{
-						it++;
-						continue;
-					}
-					else if (open.Find(it->pos) != NULL)
-					{
-						PathNode temp_path = *open.Find(it->pos);
-
-						it->CalculateF(destination);
-						if (temp_path.g > it->g)
+						if ((*open.Find((*child_node).pos)).g > (*child_node).g)
 						{
-							temp_path.parent = it->parent;
+							PathNode old_node = *open.Find((*child_node).pos); // If it is a better path, Update the parent
+							old_node.parent = (*child_node).parent;
 						}
 					}
-					else
-					{
-						it->CalculateF(destination);
-						open.list.push_back(*it);
-					}
-
-					it++;
+					else open.list.push_back(*child_node);
 				}
-
-				neighbours.list.clear();
+				++child_node;
 			}
+
+
 		}
-	}
+	
 
 	return ret;
 }

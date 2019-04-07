@@ -59,7 +59,7 @@ public:
 
 	float ClampRotation(float angle);
 
-	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = 90);
+	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir = ROTATION_DIR::COUNTER_CLOCKWISE, float fist_rect_dir = -90);
 
 	bool LoadRects(pugi::xml_node const &node, SDL_Rect * rects);
 
@@ -74,10 +74,6 @@ public:
 	// Transform (all units represented in map) ==================
 
 	fPoint pos_map		= { 0.f, 0.f };
-
-	fPoint velocity		= { 0.f, 0.f };
-
-	fPoint acceleration = { 0.f, 0.f };
 
 	bool to_remove = false;//Set it to true if you want the object to be removed
 	
