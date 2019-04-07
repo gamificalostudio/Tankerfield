@@ -130,6 +130,8 @@ bool M_ObjManager::PostUpdate(float dt)
 		}
 	}
 
+	draw_objects.clear();
+
 	return true;
 }
 
