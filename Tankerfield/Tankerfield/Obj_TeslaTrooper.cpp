@@ -191,11 +191,9 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 	{
 		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end()-1; ++iter)
 		{
-			
 			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
 			fPoint point2 = { (*(iter+1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
 			app->render->DrawIsometricLine(point1, point2, {255,255,255,255});
-			//app->render->DrawIsometricQuad((*iter).x, (*iter).y, 1, 1);
 		}
 	}
 
