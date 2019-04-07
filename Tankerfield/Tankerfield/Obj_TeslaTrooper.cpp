@@ -166,7 +166,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 			range_pos.center = pos_map;
 
 			//Change sprite direction
-			angle = atan2(move_vect.y, move_vect.x)  * RADTODEG;
+			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG;
 			
 		}
 	
@@ -176,7 +176,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
-	uint ind = GetRotatedIndex(8, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 0);
+	uint ind = GetRotatedIndex(8, angle, ROTATION_DIR::COUNTER_CLOCKWISE, -45);
 	SDL_Rect rect = walking[ind].GetCurrentFrame(dt, new_current_frame);
 	fPoint pos_screen= app->map->MapToScreenF(pos_map);
 	app->render->Blit(
