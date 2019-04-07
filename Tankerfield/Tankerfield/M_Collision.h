@@ -109,8 +109,6 @@ public:
 	}
 
 	void Destroy();
-  
-	bool CheckCollision(Collider* collider) const;
 
 public:
 

@@ -197,7 +197,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		break;
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
-		ret->type = REWARD_ZONE;
+		ret->type = ObjectType::REWARD_ZONE;
 	}
   
 	if (ret != nullptr)
