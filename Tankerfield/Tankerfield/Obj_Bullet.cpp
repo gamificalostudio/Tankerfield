@@ -27,7 +27,7 @@ bool Obj_Bullet::Start()
 		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	}
 
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET, this);
+	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET,0.f,this);
 
 	return true;
 }

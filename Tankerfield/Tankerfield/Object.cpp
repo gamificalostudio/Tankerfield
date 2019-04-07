@@ -10,6 +10,7 @@
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
 #include "Log.h"
+#include "M_Collision.h"
 
 Object::Object()
 {
@@ -111,4 +112,16 @@ bool Object::LoadAnimation(pugi::xml_node & node, Animation & anim)
 		anim.PushBack(frame);
 	}
 	return true;
+}
+
+void Object::SetDamage(float damage)
+{
+	if (coll != nullptr)
+	{
+		coll->damage = damage;
+	}
+	else
+	{
+		LOG("Collider is nullptr");
+	}
 }

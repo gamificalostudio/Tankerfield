@@ -56,10 +56,11 @@ public:
 		MAX
 	};
 
-	Collider(const fPoint pos,const  float width, const  float height, const TAG tag, Object* object = nullptr) :
+	Collider(const fPoint pos,const  float width, const  float height, const float damage, const TAG tag, Object* object = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
+		damage(damage),
 		tag(tag),
 		object(object)
 	{}
@@ -104,6 +105,10 @@ public:
 
 	bool CheckCollision(Collider* collider) const;
 
+public:
+
+	float damage = 0.f;
+
 private:
 
 	fPoint position = { 0.f , 0.f };
@@ -145,7 +150,7 @@ public:
 
 	bool CleanUp() override;
 
-	Collider* AddCollider(fPoint pos, float width , float height, Collider::TAG type, Object* object = nullptr);
+	Collider* AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage=0.f, Object* object = nullptr);
 
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 

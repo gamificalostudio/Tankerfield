@@ -27,20 +27,23 @@ public:
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
+	void OnTrigger(Collider* collider);
 
 private:
 	inline bool IsOnGoal(fPoint goal);
 
-	TROOPER_STATE state		= TROOPER_STATE::GET_PATH;
-	fPoint move_vect		= { 0.0f, 0.0f };
-	int life				= 100;
-	int damage				= 100;
-	bool death				= false;
-	float follow_range		= 0.0f;
-	Animation* animation	= nullptr;
-	float angle = 0.0f;
-	float new_current_frame = 0.0f;
-	static SDL_Texture* tex;
+	TROOPER_STATE state			= TROOPER_STATE::GET_PATH;
+	fPoint move_vect			= { 0.0f, 0.0f };
+	int life					= 100;
+	int damage					= 100;
+	bool death					= false;
+	float follow_range			= 0.0f;
+	Animation* animation		= nullptr;
+	float angle					= 0.0f;
+	float new_current_frame		= 0.0f;
+	static SDL_Texture* tex;	
+	float check_path_time		= 0.f;
+	float speed					= 0.f;
 	Timer timer;
 
 	Object* target = nullptr;
@@ -50,8 +53,7 @@ private:
 	
 	Circle range_pos;
 
-	float check_path_time = 0.f;
-	float speed = 0.f;
+	
 };
 
 // TODO REMOVE IT 
@@ -69,7 +71,7 @@ public:
 
 	bool Start()
 	{
-		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, this);
+		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, 0.f,this);
 		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 		return true;
 	}
