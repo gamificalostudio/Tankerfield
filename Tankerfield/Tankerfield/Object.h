@@ -10,6 +10,8 @@
 
 #include "PerfTimer.h"
 
+#define ISO_COMPENSATION 45 //The isometric view is turned 45 degrees to the right. Used to compensate the difference between the vectors in the isometric space and the angle we need in the spritesheets.
+
 struct SDL_Texture;
 class Collider;
 

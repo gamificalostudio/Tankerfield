@@ -174,7 +174,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 				move_vect.Normalize();
 
 				//Change sprite direction
-				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG;
+				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG + ISO_COMPENSATION;
 				state = TROOPER_STATE::MOVE;
 			}
 			else
@@ -193,7 +193,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
 
-	uint ind = GetRotatedIndex(8, angle, ROTATION_DIR::COUNTER_CLOCKWISE, -45);
+	uint ind = GetRotatedIndex(8, angle);
 	SDL_Rect rect = animation[ind].GetCurrentFrame(dt, new_current_frame);
 	app->render->Blit(
     tex,
