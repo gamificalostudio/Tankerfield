@@ -138,7 +138,7 @@ bool Object::LoadAnimation(pugi::xml_node & node, Animation & anim)
 
 void Object::DrawDebug()
 {
-	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, size.x, size.y };
+	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, frame.w, frame.h };
 
 	switch (type)
 	{

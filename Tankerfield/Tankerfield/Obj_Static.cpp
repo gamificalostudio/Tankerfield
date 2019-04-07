@@ -35,8 +35,6 @@ bool Obj_Static::Start()
 	SetRect(324, 504, 203, 164);
 	SetPivot(105, 116);
 
-	size = iPoint(frame.w, frame.h);
-
 	data.tileset.texture = app->tex->Load(app->map->data.objects_path.data()); //Load object texture
 
 	return true;

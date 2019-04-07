@@ -26,7 +26,6 @@ bool Obj_Bullet::Start()
 	}
 	SetRect(0, 0, 67, 42);
 	SetPivot(0, 0);
-	size = iPoint(frame.w, frame.h);
 	return true;
 }
 

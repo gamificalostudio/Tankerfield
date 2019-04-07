@@ -106,7 +106,6 @@ bool Obj_TeslaTrooper::Start()
 
 	draw_offset = { 15, 11 };
 
-	size = iPoint(frame.w, frame.h);
 	return true;
 }
 

@@ -78,7 +78,6 @@ public:
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
 	fPoint pivot		= { 0.f, 0.f };
-	iPoint size			= { 0, 0 };
 	iPoint draw_offset	= { 0, 0 };	//Pixels to the center of the player. Used to center the player sprite.
 	bool to_remove = false;//Set it to true if you want the object to be removed
 	//

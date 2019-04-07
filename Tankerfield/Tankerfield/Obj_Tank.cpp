@@ -60,8 +60,6 @@ bool Obj_Tank::Start()
 	SetRect(0, 0, 93, 57);
 	SetPivot(0.f, 12.f);
 
-	size = iPoint(frame.w, frame.h);
-
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
 	weapons[WEAPON_TYPE::BASIC] = new Weapon(10, 25, 600, 100, ObjectType::BASIC_BULLET);
