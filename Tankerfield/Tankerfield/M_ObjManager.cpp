@@ -111,9 +111,10 @@ bool M_ObjManager::PostUpdate(float dt)
 	{
 		if (*item != nullptr)
 		{
-			if (app->render->IsOnCamera((*item)->pos_map.x, (*item)->pos_map.y, (*item)->frame.w, (*item)->frame.h))
+			(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
+
+			if (app->render->IsOnCamera((*item)->pos_screen.x, (*item)->pos_screen.y, (*item)->frame.w, (*item)->frame.h))
 			{
-				(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
 				draw_objects.push_back(*item);
 			}
 		}
@@ -215,10 +216,7 @@ bool M_ObjManager::Save(pugi::xml_node& save) const
 }
 
 
-bool M_ObjManager::SortByYPos(Object * ent1, Object * ent2)
+bool M_ObjManager::SortByYPos(Object * obj1, Object * obj2)
 {
-	//ent1->pos_screen = app->map->MapToScreenF(ent1->pos_map);
-	//ent2->pos_screen = app->map->MapToScreenF(ent2->pos_map);
-
-	return ent1->pivot.y + ent1->pos_screen.y < ent2->pivot.y + ent2->pos_screen.y;
+	return obj1->pivot.y + obj1->pos_screen.y < obj2->pivot.y + obj2->pos_screen.y;
 }

@@ -46,7 +46,7 @@ public:
 
 	Object* CreateObject(ObjectType type, fPoint pos);
 
-	static bool SortByYPos(Object * ent1, Object * ent2);
+	static bool SortByYPos(Object * obj1, Object * obj2);
 
 	void DeleteObjects();
   
