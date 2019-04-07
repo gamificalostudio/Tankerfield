@@ -47,7 +47,7 @@ public:
 		}
 	}
 
-	SDL_Rect & GetFrame(float angle, float dt)
+	SDL_Rect & GetFrame(float angle)
 	{
 		uint ind = GetRotatedIndex(max_dirs, angle, ROTATION_DIR::COUNTER_CLOCKWISE, first_dir_angle);
 		return frames[ind][(uint)current_frame];

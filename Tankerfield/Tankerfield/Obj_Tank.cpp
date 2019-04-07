@@ -209,7 +209,7 @@ bool Obj_Tank::PostUpdate(float dt, Camera * camera)
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
 		camera,
-		&curr_anim->GetFrame(angle, dt));
+		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
 
@@ -218,7 +218,7 @@ bool Obj_Tank::PostUpdate(float dt, Camera * camera)
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
 		camera,
-		&rotate_turr->GetFrame(turr_angle, dt));
+		&rotate_turr->GetFrame(turr_angle));
 
 	//Camera centration
 	fPoint target_pos;

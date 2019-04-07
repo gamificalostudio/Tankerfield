@@ -44,7 +44,7 @@ bool Object::PostUpdate(float dt, Camera * camera)
 		screen_pos.x - draw_offset.x,
 		screen_pos.y - draw_offset.y,
 		camera,
-		&curr_anim->GetFrame(angle, dt));
+		&curr_anim->GetFrame(angle));
 
 	return true;
 }
