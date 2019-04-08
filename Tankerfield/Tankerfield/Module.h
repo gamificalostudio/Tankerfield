@@ -71,6 +71,8 @@ public:
 		return true;
 	}
 
+	virtual void OnTrigger( Collider* c1, Collider* c2) {}
+
 // Enable and disable
 
 	bool IsEnabled() const { return enabled; }
@@ -97,7 +99,7 @@ public:
 
 	std::string	name;
 
-	bool		active = false;
+	bool		active;
 
 };
 

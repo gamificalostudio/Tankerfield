@@ -5,31 +5,32 @@
 #ifndef __POINT_H__
 #define __POINT_H__
 
+#include "Defs.h"
 #include <math.h>
 
-#include "Defs.h"
-
-template<class TYPE1>
+template<class TYPE>
 class Point
 {
 public:
 
-	TYPE1 x, y;
+	TYPE x, y;
 
 	Point()
 	{}
 
-	Point(const Point<TYPE1>& v):
-		x(v.x),
-		y(v.y)
-	{}
+	Point(const Point<TYPE>& v)
+	{
+		this->x = v.x;
+		this->y = v.y;
+	}
 
-	Point(const TYPE1& x, const TYPE1& y):
-		x(x),
-		y(y)
-	{}
+	Point(const TYPE& x, const TYPE& y)
+	{
+		this->x = x;
+		this->y = y;
+	}
 
-	Point& create(const TYPE1& x, const TYPE1& y)
+	Point& create(const TYPE& x, const TYPE& y)
 	{
 		this->x = x;
 		this->y = y;
@@ -81,35 +82,27 @@ public:
 		return(*this);
 	}
 
-	Point operator* (const TYPE1 & num) const {
+	Point operator* (const TYPE & num) const {
 		Point r;
 		r.x = x * num;
 		r.y = y * num;
 		return r;
 	}
 
-	Point operator* (const Point & v) const {
-		Point r;
-		r.x = x * v.x;
-		r.y = y * v.y;
-		return r;
-	}
-
-	const Point operator*= (const TYPE1 & num) {
-
+	const Point operator*= (const TYPE & num) {
 		x *= num;
 		y *= num;
 		return (*this);
 	}
 
-	Point operator/ (const TYPE1 & num) const {
+	Point operator/ (const TYPE & num) const {
 		Point r;
 		r.x = x / num;
 		r.y = y / num;
 		return r;
 	}
 
-	const Point operator /=(const TYPE1& v)
+	const Point operator /=(const TYPE& v)
 	{
 		x /= v;
 		y /= v;
@@ -172,7 +165,6 @@ public:
 		float angle_sin = sinf(angle);
 		x = aux.x * angle_cos - aux.y * angle_sin;
 		y = aux.x * angle_sin + aux.y * angle_cos;
-
 	}
 
 	explicit operator Point<int> () const
@@ -186,23 +178,23 @@ public:
 	}
 
 	// Distances ---------------------------------------------
-	TYPE1 DistanceTo(const Point& v) const
+	TYPE DistanceTo(const Point& v) const
 	{
-		TYPE1 fx = x - v.x;
-		TYPE1 fy = y - v.y;
+		TYPE fx = x - v.x;
+		TYPE fy = y - v.y;
 
 		return sqrtf((fx*fx) + (fy*fy));
 	}
 
-	TYPE1 DistanceNoSqrt(const Point& v) const
+	TYPE DistanceNoSqrt(const Point& v) const
 	{
-		TYPE1 fx = x - v.x;
-		TYPE1 fy = y - v.y;
+		TYPE fx = x - v.x;
+		TYPE fy = y - v.y;
 
 		return (fx*fx) + (fy*fy);
 	}
 
-	TYPE1 DistanceManhattan(const Point& v) const
+	TYPE DistanceManhattan(const Point& v) const
 	{
 		return abs(v.x - x) + abs(v.y - y);
 	}
