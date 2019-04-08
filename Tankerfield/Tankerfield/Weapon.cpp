@@ -11,13 +11,8 @@
 
 void WeaponInfo::LoadProperties(const pugi::xml_node & node)
 {
-	damage = node.child("damage").text().as_int();
-	bullet_speed = node.child("bullet_speed").text().as_float();
-	bullet_life_ms = node.child("bullet_life_ms").text().as_float();
-	time_between_bullets = node.child("time_between_bullets").text().as_float();
+	bullet_damage = node.child("bullet_damage").attribute("value").as_int();
+	bullet_speed = node.child("bullet_speed").attribute("value").as_float();
+	bullet_life_ms = node.child("bullet_life_ms").attribute("value").as_float();
+	time_between_bullets = node.child("time_between_bullets").attribute("value").as_float();
 }
-
-//void WeaponInfo::Shoot(const fPoint & pos, fPoint & dir, float angle)
-//{
-
-//}

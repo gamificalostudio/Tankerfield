@@ -73,9 +73,10 @@ bool Obj_Tank::Start()
 
 	if (weapons_info == nullptr)
 	{
+		pugi::xml_node weapons_node = app->config.child("weapons");
 		weapons_info = new WeaponInfo[(uint)WEAPON::MAX];
-		weapons_info[(uint)WEAPON::BASIC].LoadProperties(tank_node.child("basic"));
-		//weapons[WEAPON::BASIC] = new WeaponInfo(50, 10.f, 2000.f, 50.f, ObjectType::BASIC_BULLET);
+		weapons_info[(uint)WEAPON::BASIC].LoadProperties(weapons_node.child("basic"));
+		weapons_info[(uint)WEAPON::FLAMETHROWER].LoadProperties(weapons_node.child("flamethrower"));
 	}
 
 	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
@@ -366,11 +367,12 @@ void Obj_Tank::SelectInputMethod()
 
 void Obj_Tank::ShootBasic()
 {
+	LOG("shooting basic shot");
 	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
 	bullet->SetBulletProperties(
 		weapons_info[(uint)basic_shot].bullet_speed,
 		weapons_info[(uint)basic_shot].bullet_life_ms,
-		weapons_info[(uint)basic_shot].damage,
+		weapons_info[(uint)basic_shot].bullet_damage,
 		shot_dir,
 		turr_angle);
 }
