@@ -200,6 +200,7 @@ struct MapData
 	std::list<Collider*>    colliders_list;
 
 	Properties				map_properties;
+	
 };
 
 class M_Map : public Module

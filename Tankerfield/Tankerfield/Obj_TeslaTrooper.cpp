@@ -192,11 +192,7 @@ bool Obj_TeslaTrooper::PostUpdate(float dt)
 
 	uint ind = GetRotatedIndex(8, angle);
 	SDL_Rect rect = animation[ind].GetCurrentFrame(dt, new_current_frame);
-	app->render->Blit(
-    tex,
-    pos_screen.x - draw_offset.x,
-    pos_screen.y - draw_offset.y,
-    &rect);
+	app->render->Blit(tex, pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, &rect);
   
 	//Draw actual postion
 	//SDL_Rect frame = { pos_screen.x,pos_screen.y,10,10 };

@@ -348,18 +348,6 @@ bool M_Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 		set->rows = set->tex_height / set->tile_height;
 	}
 
-	//Loading animation
-	//Currently each tileset can only hold one animation - tiled map editor restriction
-	//if (tileset_node.child("tile").child("animation")) {
-	//	set->anim = new Animation;
-
-	//	for (pugi::xml_node frame_node = tileset_node.child("tile").child("animation").child("frame"); frame_node; frame_node = frame_node.next_sibling()) {
-	//		set->anim->PushBack(set->GetTileRect(frame_node.attribute("tileid").as_int() + set->firstgid));
-	//	}
-	//	pugi::xml_node speed_node = tileset_node.child("tile").child("animation").child("frame");
-	//	set->anim->speed = speed_node.attribute("duration").as_float() * set->animSpeedFactor;
-	//}
-
 	return ret;
 }
 
