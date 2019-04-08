@@ -13,14 +13,16 @@
 #include "M_Window.h"
 #include "PerfTimer.h"
 #include "MathUtils.h"
+#include "Obj_Bullet.h"
 
-SDL_Texture * Obj_Tank::base_tex = nullptr;
-SDL_Texture * Obj_Tank::turr_tex = nullptr;
-SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
-SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
-Animation * Obj_Tank::rotate_base = nullptr;
-Animation * Obj_Tank::rotate_turr = nullptr;
-WeaponInfo * Obj_Tank::weapons_info = nullptr;
+SDL_Texture * Obj_Tank::base_tex			= nullptr;
+SDL_Texture * Obj_Tank::turr_tex			= nullptr;
+SDL_Texture * Obj_Tank::base_shadow_tex		= nullptr;
+SDL_Texture * Obj_Tank::turr_shadow_tex		= nullptr;
+Animation   * Obj_Tank::rotate_base			= nullptr;
+Animation   * Obj_Tank::rotate_turr			= nullptr;
+WeaponInfo  * Obj_Tank::weapons_info		= nullptr;
+//void       (* Obj_Tank::shot_function)()	= nullptr;//TODO: Test if function pointers can be static or they are executing the function on other tanks
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 {}
@@ -72,13 +74,11 @@ bool Obj_Tank::Start()
 	if (weapons_info == nullptr)
 	{
 		weapons_info = new WeaponInfo[(uint)WEAPON::MAX];
-		weapons_info[BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
+		weapons_info[(uint)WEAPON::BASIC].LoadProperties(tank_node.child("basic"));
+		//weapons[WEAPON::BASIC] = new WeaponInfo(50, 10.f, 2000.f, 50.f, ObjectType::BASIC_BULLET);
 	}
 
-	weapons[WEAPON::FLAMETHROWER] = new Weapon_Flamethrower();
-	//weapons[WEAPON_TYPE::BASIC] = n
-
-	weapons[WEAPON::BASIC] = new WeaponInfo(50, 10.f, 2000.f, 50.f, ObjectType::BASIC_BULLET);
+	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -101,6 +101,8 @@ bool Obj_Tank::Start()
 	draw_offset.y = 46;
 
 	base_angle_lerp_factor = 11.25f;
+
+	time_between_bullets_timer.Start();
 
 	return true;
 }
@@ -306,18 +308,24 @@ void Obj_Tank::Shoot()
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
-	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons[weapon_type]->time_between_bullets)
+	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
 	{
-		weapons[weapon_type]->Shoot(shot_pos + shot_dir * cannon_length, shot_dir, turr_angle);
-		time_between_bullets_timer.Start();
+		(this->*shot_function[(uint)basic_shot])();
+		//->Shoot(shot_pos + shot_dir * cannon_length, shot_dir, turr_angle);
+		//time_between_bullets_timer.Start();
 	}
 }
 
-bool Obj_Tank::IsShooting() {
-	return ((app->input->GetMouseButton(kb_shoot) == KEY_DOWN
-		|| app->input->GetMouseButton(kb_shoot) == KEY_REPEAT)
-		|| (controller != nullptr
-			&& (*controller)->GetAxis(gamepad_shoot) > 0));
+bool Obj_Tank::IsShooting()
+{
+	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
+	{
+		return app->input->GetMouseButton(kb_shoot) == KEY_DOWN || app->input->GetMouseButton(kb_shoot) == KEY_REPEAT;
+	}
+	else if (shot_input == INPUT_METHOD::CONTROLLER)
+	{
+		return (*controller)->GetAxis(gamepad_shoot) > 0;
+	}
 }
 
 //Select the input method depending on the last input pressed
@@ -355,4 +363,19 @@ void Obj_Tank::SelectInputMethod()
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
 	}
+}
+
+void Obj_Tank::ShootBasic()
+{
+	//Obj_Bullet * bullet;
+	//bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, pos);
+	//bullet->SetDamage(damage);
+	//bullet->direction = dir;
+	//bullet->bullet_life_ms = bullet_life_ms;
+	//bullet->speed = speed;
+	//bullet->angle = angle;
+}
+
+void Obj_Tank::ShootFlameThrower()
+{
 }

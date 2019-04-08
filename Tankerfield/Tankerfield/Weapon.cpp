@@ -9,7 +9,7 @@
 #include "Log.h"
 #include "Object.h"
 
-void WeaponInfo::LoadProperties(pugi::xml_node & node)
+void WeaponInfo::LoadProperties(const pugi::xml_node & node)
 {
 	damage = node.child("damage").text().as_int();
 	bullet_speed = node.child("bullet_speed").text().as_float();
@@ -19,10 +19,5 @@ void WeaponInfo::LoadProperties(pugi::xml_node & node)
 
 //void WeaponInfo::Shoot(const fPoint & pos, fPoint & dir, float angle)
 //{
-//	bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type, pos);
-//	bullet->SetDamage(damage);
-//	bullet->direction = dir;
-//	bullet->bullet_life_ms = bullet_life_ms;
-//	bullet->speed = speed;
-//	bullet->angle = angle;
+
 //}

@@ -38,16 +38,23 @@ public:
 	void OnTrigger(Collider* c1);
 
 private:
+	//- Movement
 	void Movement(float dt);
 	void InputMovementKeyboard(fPoint & input,float dt);
 	void InputMovementController(fPoint & input);
 
+	//- Shooting
 	void Shoot();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool IsShooting();
 
+	//- Input
 	void SelectInputMethod();
+
+	//- Weapons methods
+	void ShootBasic();
+	void ShootFlameThrower();
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)
@@ -73,8 +80,12 @@ private:
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
 	PerfTimer time_between_bullets_timer;
 
-	//-- Secondary shoot
-	WEAPON weapon_type						= WEAPON::BASIC;
+	//-- Basic shoot
+	uint basic_shot							= (uint)WEAPON::BASIC;
+
+	//-- Main shoot
+	uint main_shot							= (uint)WEAPON::BASIC;
+	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
