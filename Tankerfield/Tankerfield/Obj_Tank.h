@@ -2,7 +2,7 @@
 #define __OBJ_TANK_H__
 
 #include "Object.h"
-#include "Weapon.h"
+#include "WeaponInfo.h"
 #include <map>
 #include "M_Input.h"
 

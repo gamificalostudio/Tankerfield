@@ -21,7 +21,7 @@
 #include "Animation.h"
 #include "M_Map.h"
 #include "M_Collision.h"
-#include "Weapon.h"
+#include "WeaponInfo.h"
 
 //Static variables inicialization
 SDL_Texture * Obj_TeslaTrooper::tex = nullptr;

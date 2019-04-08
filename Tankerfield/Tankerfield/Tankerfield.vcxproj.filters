@@ -88,9 +88,6 @@
     <ClCompile Include="App.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet_Basic.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -102,6 +99,9 @@
     </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponInfo.cpp">
+      <Filter>Weapons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -204,9 +204,6 @@
     <ClInclude Include="App.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet_Basic.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -224,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponInfo.h">
+      <Filter>Weapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

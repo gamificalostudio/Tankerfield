@@ -1,4 +1,4 @@
-#include "Weapon.h"
+#include "WeaponInfo.h"
 #include "App.h"
 #include "M_UITest.h"
 #include "M_Input.h"
