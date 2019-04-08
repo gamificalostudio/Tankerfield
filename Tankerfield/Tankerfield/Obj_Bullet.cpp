@@ -5,8 +5,7 @@
 #include "M_Collision.h"
 
 SDL_Texture * Obj_Bullet::tex = nullptr;
-int Obj_Bullet::rects_num = 64;
-SDL_Rect * Obj_Bullet::rects = nullptr;
+Animation * Obj_Bullet::anim = nullptr;
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
@@ -21,19 +20,21 @@ bool Obj_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
 
-	if (rects == nullptr)
+	if (anim == nullptr)
 	{
-		rects = new SDL_Rect[rects_num];
-		LoadRects(bullet_node.child("animations").child("rotate"), rects);
+		anim = new Animation;
+		anim->LoadAnimation(bullet_node.child("animations").child("rotate"));
 	}
-
+	curr_anim = anim;
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	}
-
-	SetRect(0, 0, 67, 42);
-	SetPivot(0, 0);
+	curr_tex = tex;
+	if (draw_offset.IsZero())
+	{
+		draw_offset = { 35, 14 };
+	}
 
 	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET,0.f,this);
   
@@ -44,24 +45,12 @@ bool Obj_Bullet::Update(float dt)
 {
 	pos_map += direction * speed * dt;
 	
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-
-	return true;
-}
-
-bool Obj_Bullet::PostUpdate(float dt)
-{
 	if (bullet_life_ms_timer.ReadMs() >= bullet_life_ms)
 	{
 		to_remove = true;
 	}
 
-	uint ind = GetRotatedIndex(rects_num, angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
-	app->render->Blit(
-		tex,
-		pos_screen.x - 35,//TODO: Change when we have the new spritesheet with the bullet rotated from its center
-		pos_screen.y - 14,
-		&rects[ind]);
+	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 
 	return true;
 }

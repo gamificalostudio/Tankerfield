@@ -19,49 +19,55 @@ SDL_Texture * Obj_Tank::base_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_tex = nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
-int Obj_Tank::rects_num = 128;
-SDL_Rect * Obj_Tank::base_rects = new SDL_Rect[rects_num];
-SDL_Rect * Obj_Tank::turr_rects = new SDL_Rect[rects_num];
-
-Obj_Tank::Obj_Tank() : Object()
-{
-
-}
+Animation * Obj_Tank::rotate_base = nullptr;
+Animation * Obj_Tank::rotate_turr = nullptr;
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
-{
-
-}
-
-Obj_Tank::~Obj_Tank()
-{
-}
-
-bool Obj_Tank::Awake(pugi::xml_node &)
-{
-	return true;
-}
+{}
 
 bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
-	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
-	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
-	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
+	if (base_tex == nullptr)
+	{
+		Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
+	}
+	if (base_shadow_tex == nullptr)
+	{
+		Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+		SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
+	}
+	if (turr_tex == nullptr)
+	{
+		Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	}
+	if (turr_shadow_tex == nullptr)
+	{
+		Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+		SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
+	}
 
-	LoadRects(tank_node.child("animations").child("rotate_base"), base_rects);
-	LoadRects(tank_node.child("animations").child("rotate_turr"), turr_rects);
+	if (rotate_base == nullptr)
+	{
+		rotate_base = new Animation;
+		rotate_base->LoadAnimation(tank_node.child("animations").child("rotate_base"));
+		rotate_base->rotation = COUNTER_CLOCKWISE;
+		rotate_base->first_dir_angle = 315;
+	}
+	curr_anim = rotate_base;
+	if (rotate_turr == nullptr)
+	{
+		rotate_turr = new Animation;
+		rotate_turr->LoadAnimation(tank_node.child("animations").child("rotate_turr"));
+		rotate_turr->rotation = COUNTER_CLOCKWISE;
+		rotate_turr->first_dir_angle = 315;
+	}
 
-	speed = 5.f;//TODO: Load from xml
+	speed = 2.5f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
-
-	SetRect(0, 0, 93, 57);
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
@@ -131,14 +137,14 @@ void Obj_Tank::Movement(float dt)
 	{
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
-		float turns = floor(base_angle / 360.f);
+		float turns = floor(angle / 360.f);
 		target_angle += 360.f * turns;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - base_angle) < abs(target_angle - base_angle))
+		if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
-		base_angle = lerp(base_angle, target_angle, base_angle_lerp_factor * dt);
+		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
 	}
 
 	velocity = iso_dir * speed * dt;                                                               
@@ -178,20 +184,18 @@ void Obj_Tank::InputMovementController(fPoint & input)
 bool Obj_Tank::PostUpdate(float dt)
 {
 	// Base =========================================
-	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		base_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-		&base_rects[ind_base]);
+		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
-	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		turr_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-		&turr_rects[ind_turr]);
+		&rotate_turr->GetFrame(turr_angle));
 
 	//DEBUG
 	iPoint debug_mouse_pos = { 0, 0 };
@@ -211,20 +215,18 @@ bool Obj_Tank::DrawShadow()
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
 	// Base =========================================
-	uint ind_base = GetRotatedIndex(rects_num, base_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		base_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-		&base_rects[ind_base]);
+		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
-	uint ind_turr = GetRotatedIndex(rects_num, turr_angle, ROTATION_DIR::COUNTER_CLOCKWISE, 315);
 	app->render->Blit(
 		turr_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-		&turr_rects[ind_turr]);
+		&rotate_turr->GetFrame(turr_angle));
 
 	return true;
 }

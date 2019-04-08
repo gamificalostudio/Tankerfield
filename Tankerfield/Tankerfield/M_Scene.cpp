@@ -54,7 +54,7 @@ bool M_Scene::Start()
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
 	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
 
-	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
+	//app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
 
 	return true;
 }
