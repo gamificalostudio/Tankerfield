@@ -70,6 +70,8 @@ private:
 	static SDL_Rect * turr_rects;
 	static int rects_num;
 
+	int life = 100;
+
 	float speed = 0.f;
 	float cannon_height = 0.f;//Used to calculate the shot position
 	float cannon_length = 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)

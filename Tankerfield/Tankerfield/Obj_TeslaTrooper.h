@@ -77,10 +77,10 @@ private:
 	bool TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const;
 
 	/* Attack properties */
-	uint attack_frequency = 3000;
+	float attack_frequency = 3000.0f;
 	iPoint attack_range = { 60, 30 };
-	bool attack available = true;
-	PerfTimer timer;
+	bool attack_available = true;
+	PerfTimer perf_timer;
 };
 
 // TODO REMOVE IT 

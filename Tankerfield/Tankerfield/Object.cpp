@@ -141,6 +141,11 @@ bool Object::LoadAnimation(pugi::xml_node & node, Animation & anim)
 	return true;
 }
 
+int Object::GetHitPoints() const
+{
+	return this->hit_points;
+}
+
 void Object::DrawDebug()
 {
 	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, frame.w, frame.h };
@@ -176,3 +181,7 @@ void Object::SetDamage(float damage)
 	}
 }
 
+void Object::ReduceHitPoints(const int & hit_points)
+{
+	this->hit_points -= hit_points;
+}

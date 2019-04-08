@@ -101,7 +101,10 @@ public:
 
 	bool LoadAnimation(pugi::xml_node &node, Animation &anim);
 
+	int GetHitPoints() const;
+
 	void SetDamage(float damage);
+	void ReduceHitPoints(const int& hit_points);
 
 public:
 
@@ -123,6 +126,10 @@ public:
 	Collider* coll = nullptr;
 
 	SDL_Rect frame = {0, 0, 0, 0};
+
+private:
+	// Different than life in Obj_Tank.h. This is used when an object is attacked and no colliders are necessary.
+	int hit_points = 100;
 };
 
 #endif

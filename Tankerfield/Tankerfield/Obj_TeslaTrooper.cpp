@@ -188,10 +188,26 @@ bool Obj_TeslaTrooper::Update(float dt)
 	{
 		fPoint enemy_screen_pos = app->map->MapToScreenF(fPoint(this->pos_map.x, this->pos_map.y));
 		fPoint target_screen_pos = app->map->MapToScreenF(fPoint(target->pos_map.x, target->pos_map.y));
+		
 		if (TeslaTrooperCanAttack(enemy_screen_pos, target_screen_pos))
 		{
-			//timer.Start();
+			perf_timer.Start();
+			attack_available = false;
 
+			if (perf_timer.ReadMs() > (double)attack_frequency)
+			{
+				if (attack_available)
+				{
+					target->ReduceHitPoints(25);
+				}
+				
+				attack_available = true;
+			}
+
+			if (target->GetHitPoints() < 0)
+			{
+				// TODO/TOFIX target->to_remove = true;
+			}
 		}
 	}
 
@@ -245,12 +261,6 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 
 bool Obj_TeslaTrooper::TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const
 {
-	/*return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + attack_range.x)
-		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - attack_range.x - enemy_width)
-		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + attack_range.y)
-		|| (enemy_screen_pos.y < target_screen_pos.y && enemy_screen_pos.y > target_screen_pos.y - attack_range.y - enemy_height));
-		*/
-
 	return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + (float)attack_range.x)
 		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - (float)attack_range.x)
 		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + (float)attack_range.y)
