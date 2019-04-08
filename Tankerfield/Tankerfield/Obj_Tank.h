@@ -74,6 +74,7 @@ private:
 	float base_angle_lerp_factor			= 0.f;
 
 	//- Shooting
+	fPoint turr_pos							= { 0.f, 0.f };//The position of the turret in the map
 	float turr_angle						= 0.f;
 	fPoint shot_dir							= { 0.f, 0.f };
 	float cannon_height						= 0.f;//Used to calculate the shot position

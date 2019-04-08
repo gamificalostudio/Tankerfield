@@ -253,7 +253,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	}
 }
 
-void Obj_Tank::InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir)
+void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
 {
 	iPoint mouse_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
@@ -264,13 +264,13 @@ void Obj_Tank::InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoin
 
 	int tile_width = 100, tile_height = 50;
   
-	fPoint screen_pos = app->map->MapToScreenF(shot_pos);
+	fPoint screen_pos = app->map->MapToScreenF(turr_pos);
 	input_dir = (fPoint)mouse_pos - screen_pos;
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
 	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x,mouse_pos.y);
 
-	iso_dir = map_mouse_pos - shot_pos;
+	iso_dir = map_mouse_pos - turr_pos;
 	iso_dir.Normalize();
 }
 
@@ -288,18 +288,18 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 void Obj_Tank::Shoot()
 {
 	//fPoint Obj_Tank::pos is on the center of the base
-	//fPoint shot_pos is on the cetner of the turret (considers the cannon_height)
-	fPoint shot_pos(pos_map - app->map->ScreenToMapF(  0, cannon_height ));
+	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
+	fPoint pos_map_turr(pos_map - app->map->ScreenToMapF(  0, cannon_height ));
 
 	fPoint input_dir(0.f, 0.f);
 	fPoint iso_dir;
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputShotMouse(shot_pos, input_dir, iso_dir);
+		InputShotMouse(pos_map_turr, input_dir, iso_dir);
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		InputShotController(shot_pos, input_dir, iso_dir);
+		InputShotController(pos_map_turr, input_dir, iso_dir);
 	}
 
 	if (!input_dir.IsZero())
@@ -311,8 +311,7 @@ void Obj_Tank::Shoot()
 	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
 	{
 		(this->*shot_function[(uint)basic_shot])();
-		//->Shoot(shot_pos + shot_dir * cannon_length, shot_dir, turr_angle);
-		//time_between_bullets_timer.Start();
+		time_between_bullets_timer.Start();
 	}
 }
 
@@ -367,13 +366,13 @@ void Obj_Tank::SelectInputMethod()
 
 void Obj_Tank::ShootBasic()
 {
-	//Obj_Bullet * bullet;
-	//bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, pos);
-	//bullet->SetDamage(damage);
-	//bullet->direction = dir;
-	//bullet->bullet_life_ms = bullet_life_ms;
-	//bullet->speed = speed;
-	//bullet->angle = angle;
+	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
+	bullet->SetBulletProperties(
+		weapons_info[(uint)basic_shot].bullet_speed,
+		weapons_info[(uint)basic_shot].bullet_life_ms,
+		weapons_info[(uint)basic_shot].damage,
+		shot_dir,
+		turr_angle);
 }
 
 void Obj_Tank::ShootFlameThrower()

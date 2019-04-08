@@ -23,6 +23,8 @@ public:
 	
 	void OnTrigger(Collider* collider_1);
 
+	void SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle);
+
 public:
 
 	float speed = 0.f;
@@ -32,8 +34,6 @@ public:
 	float bullet_life_ms = 0.f;
 
 	PerfTimer bullet_life_ms_timer;
-
-	float time_between_bullets = 0.f;
 
 	static SDL_Texture * tex;
 
