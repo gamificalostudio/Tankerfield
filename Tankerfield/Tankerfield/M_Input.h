@@ -6,7 +6,6 @@
 #include "SDL\include\SDL_gamecontroller.h"
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL.h"
-
 #include "Module.h"
 #include "Point.h"
 
@@ -14,7 +13,6 @@
 //#define NUM_KEYS 352
 #define NUM_MOUSE_BUTTONS 5
 #define MAX_CONTROLLERS 4
-#define DEAD_ZONE 2500
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
@@ -66,8 +64,6 @@ public:
 	
 	iPoint GetJoystick(Joystick joystick)
 	{
-		if (this == nullptr)
-			return iPoint(0, 0);
 		switch (joystick)
 		{
 		case Joystick::LEFT:
@@ -79,8 +75,18 @@ public:
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEAD_ZONE);
-	
+	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = 1000)
+	{
+		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+		if (abs(value) > dead_zone)
+		{
+			return value;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
@@ -145,13 +151,13 @@ private:
 	void UpdateControllers();
 
 private:
-	bool		window_events[WE_COUNT];
-	KeyState*	keyboard = nullptr;
+	bool		windowEvents[WE_COUNT];
+	KeyState*	keyboard;
 	KeyState	mouse_buttons[NUM_MOUSE_BUTTONS];
-	int			mouse_motion_x = NULL;
-	int			mouse_motion_y = NULL;
-	int			mouse_x = NULL;
-	int			mouse_y = NULL;
+	int			mouse_motion_x;
+	int			mouse_motion_y;
+	int			mouse_x;
+	int			mouse_y;
 
 public:
 	std::vector<Controller*> controllers;

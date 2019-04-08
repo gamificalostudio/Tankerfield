@@ -35,10 +35,7 @@ UI_Slider::~UI_Slider()
 
 bool UI_Slider::Draw()
 {
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
-	{
-		app->render->Blit(app->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f, position.y - definition.rail_draw_rect.h * 0.5f, (*item_cam), &definition.rail_draw_rect, false, 0.0f);
-	}
+	app->render->Blit(app->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f , position.y - definition.rail_draw_rect.h * 0.5f, &definition.rail_draw_rect, false, 0.0f);
 	return true;
 }
 

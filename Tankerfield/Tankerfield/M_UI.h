@@ -1,15 +1,12 @@
 #ifndef __M_UI_H__
 #define __M_UI_H__
 
-#include <string>
-#include <list>
-
-#include "SDL_ttf/include/SDL_ttf.h"
-
 #include "Module.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 #include "Animation.h"
 #include "Point.h"
-
+#include <string>
+#include <list>
 
 #define CURSOR_WIDTH 2
 
@@ -109,7 +106,7 @@ private:
 	bool debug = false;
 
 	// Atlas Texture ---------------------------------------
-	SDL_Texture* atlas = nullptr;
+	SDL_Texture* atlas;
 
 	// Objects ---------------------------------------------
 	list<UI_Element*> objects_list;

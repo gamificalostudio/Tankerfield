@@ -1,5 +1,3 @@
-#include "Brofiler/Brofiler.h"
-
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -20,7 +18,7 @@
 #include "UI_Checkbox.h"
 #include "UI_TextPanel.h"
 
-
+#include "Brofiler/Brofiler.h"
 
 M_UI::M_UI() : Module()
 {

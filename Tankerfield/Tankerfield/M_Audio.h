@@ -2,7 +2,6 @@
 #define __M_AUDIO_H__
 
 #include <list>
-
 #include "Module.h"
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
