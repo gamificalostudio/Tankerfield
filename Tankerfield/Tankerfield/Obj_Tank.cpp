@@ -290,17 +290,17 @@ void Obj_Tank::Shoot()
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
-	fPoint pos_map_turr(pos_map - app->map->ScreenToMapF(  0, cannon_height ));
+	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
 
 	fPoint input_dir(0.f, 0.f);
 	fPoint iso_dir;
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputShotMouse(pos_map_turr, input_dir, iso_dir);
+		InputShotMouse(turr_pos, input_dir, iso_dir);
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		InputShotController(pos_map_turr, input_dir, iso_dir);
+		InputShotController(turr_pos, input_dir, iso_dir);
 	}
 
 	if (!input_dir.IsZero())
