@@ -225,8 +225,10 @@
     <ClInclude Include="Circle.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h" />
     <ClInclude Include="MathUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

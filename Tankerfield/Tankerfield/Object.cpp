@@ -11,6 +11,7 @@
 #include "M_Pathfinding.h"
 #include "Log.h"
 #include "M_Collision.h"
+#include "M_Map.h"
 
 Object::Object()
 {
@@ -37,6 +38,12 @@ bool Object::Update(float dt)
 
 bool Object::PostUpdate(float dt)
 {
+	app->render->Blit(
+		curr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		&frame);
+
 	return true;
 }
 
