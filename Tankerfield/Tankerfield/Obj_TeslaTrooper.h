@@ -23,7 +23,6 @@ public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool PostUpdate(float dt) override;
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
@@ -38,10 +37,7 @@ private:
 	int damage					= 100;
 	bool death					= false;
 	float follow_range			= 0.0f;
-	Animation* animation		= nullptr;
-	float angle					= 0.0f;
-	float new_current_frame		= 0.0f;
-	static SDL_Texture* tex;	
+	float new_current_frame		= 0.0f;	
 	float check_path_time		= 0.f;
 	float speed					= 0.f;
 	Timer timer;
@@ -52,8 +48,8 @@ private:
 	fPoint next_pos;
 	
 	Circle range_pos;
-
-	
+	static Animation* walk;
+	static SDL_Texture * tex;
 };
 
 // TODO REMOVE IT 

@@ -20,8 +20,6 @@ public:
 	bool Start();
 
 	bool Update(float dt);
-
-	bool PostUpdate(float dt);
 	
 	void OnTrigger(Collider* collider_1);
 
@@ -39,11 +37,7 @@ public:
 
 	static SDL_Texture * tex;
 
-	static int rects_num;
-
-	static SDL_Rect * rects;
-
-	float angle = 0.f;
+	static Animation * anim;
 
 	//SFX impact_sound
 

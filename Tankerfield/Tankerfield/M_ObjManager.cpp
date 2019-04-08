@@ -132,8 +132,13 @@ bool M_ObjManager::PostUpdate(float dt)
 		if (*item != nullptr)
 		{
 			(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
+			
+			if ((*item)->curr_anim != nullptr) {
+				(*item)->frame = &(*item)->curr_anim->GetFrame((*item)->angle);
+			}
 
-			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
+			if ((*iterator)->curr_anim != nullptr &&
+				app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->curr_anim->GetFrame().w, (*item)->curr_anim->GetFrame().h))
 			{
 				draw_objects.push_back(*item);
 				(*item)->DrawShadow();

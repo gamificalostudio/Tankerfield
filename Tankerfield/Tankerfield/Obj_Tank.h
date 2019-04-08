@@ -66,8 +66,8 @@ private:
 	float base_angle_lerp_factor = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };
-	static SDL_Rect * base_rects;
-	static SDL_Rect * turr_rects;
+	static Animation * rotate_base;
+	static Animation * rotate_turr;
 	static int rects_num;
 
 	float speed = 0.f;
