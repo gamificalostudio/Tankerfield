@@ -31,7 +31,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
-
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load("textures/Objects/shk-sheet.png");
@@ -113,8 +112,48 @@ bool Obj_TeslaTrooper::Update(float dt)
 		break;
 	}
 
+	if (target != nullptr)
+	{
+		fPoint enemy_screen_pos = app->map->MapToScreenF(fPoint(this->pos_map.x, this->pos_map.y));
+		fPoint target_screen_pos = app->map->MapToScreenF(fPoint(target->pos_map.x, target->pos_map.y));
+		
+		if (!attack_available)
+		{
+			if (TeslaTrooperCanAttack(enemy_screen_pos, target_screen_pos))
+			{
+				current_state = CURRENT_POS_STATE::STATE_ATTACKING;
+				attack_available = true;
+				perf_timer.Start();
+			}
+			else
+			{
+				current_state = CURRENT_POS_STATE::STATE_WAITING;
+				attack_available = false;
+			}
+		}
+
+		if (current_state == CURRENT_POS_STATE::STATE_ATTACKING)
+		{
+			if (perf_timer.ReadMs() > (double)attack_frequency)
+			{
+				target->ReduceHitPoints(25);
+				attack_available = false;
+			}
+		}
+
+		if (target->GetHitPoints() < 0)
+		{
+			// target->to_remove = true;   // CRASH !
+			
+			/* Used for debugging :) TOBEDELETED*/
+			int i = 0;
+			int j = 0;
+		}
+	}
+
 	return true;
 }
+
 
 bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 {
@@ -125,11 +164,18 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET)
 	{
-		
 		life -= collider->damage;
 		if (life <= 0)
 		{
 			to_remove = true;
 		}
 	}
+}
+
+bool Obj_TeslaTrooper::TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const
+{
+	return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + (float)attack_range.x)
+		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - (float)attack_range.x)
+		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + (float)attack_range.y)
+		|| (enemy_screen_pos.y < target_screen_pos.y && enemy_screen_pos.y > target_screen_pos.y - (float)attack_range.y));
 }

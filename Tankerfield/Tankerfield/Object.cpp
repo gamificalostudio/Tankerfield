@@ -54,6 +54,12 @@ bool Object::Draw(float dt)
 //		app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y);
 //}
 
+
+int Object::GetHitPoints() const
+{
+	return this->hit_points;
+}
+
 void Object::DrawDebug()
 {
 	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, frame.w, frame.h };
@@ -88,6 +94,11 @@ void Object::SetDamage(float damage)
 	}
 }
 
+void Object::ReduceHitPoints(const int & hit_points)
+{
+	this->hit_points -= hit_points;
+}
+
 void Object::CalculateDrawVariables()
 {
 	pos_screen = app->map->MapToScreenF(pos_map);
@@ -96,4 +107,3 @@ void Object::CalculateDrawVariables()
 		frame = curr_anim->GetFrame(angle);
 	}
 }
-

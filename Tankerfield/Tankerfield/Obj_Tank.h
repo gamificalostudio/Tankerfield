@@ -65,6 +65,9 @@ private:
 	static Animation * rotate_base;
 	static Animation * rotate_turr;
 	static WeaponInfo * weapons_info;
+  
+  //-Logic
+	int life = 100;
 
 	//- Movement
 	float speed								= 0.f;
