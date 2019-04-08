@@ -3,7 +3,7 @@
 
 #include "SDL/include/SDL_timer.h"
 #include "Brofiler/Brofiler.h"
-//#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
+#pragma comment(lib, "Brofiler/ProfilerCore32.lib")
 
 #include "Defs.h"
 #include "Log.h"
@@ -164,11 +164,7 @@ bool App::Update()
 {
 	bool ret = true;
 	PrepareUpdate();
-	if (input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
-	{
-		pause = !pause;
-		frame_time.Start();
-	}
+
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
@@ -205,15 +201,9 @@ void App::PrepareUpdate()
 {
 	frame_count++;
 	last_sec_frame_count++;
-	if (pause)
-	{
-		dt = 0.0F;
-	}
-	else
-	{
-		dt = frame_time.ReadSec();
-		frame_time.Start();
-	}
+
+	dt = frame_time.ReadSec();
+	frame_time.Start();
 }
 
 // ---------------------------------------------
@@ -320,7 +310,6 @@ bool App::CleanUp()
 	bool ret = true;
 	std::list<Module*>::reverse_iterator item;
 	item = modules.rbegin();
-	on_clean_up = true;
 
 	while (item != modules.rend() && ret == true)
 	{

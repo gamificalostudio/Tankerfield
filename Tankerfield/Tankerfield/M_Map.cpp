@@ -1,18 +1,17 @@
-#include <list>
-
 #include "Brofiler\Brofiler.h"
 
 #include "Log.h"
+
 #include "App.h"
 #include "M_Map.h"
 #include "M_Window.h"
 #include "M_Collision.h"
 #include "M_Input.h"
-#include "M_Pathfinding.h"
+
 
 M_Map::M_Map()
 {
-	name.assign("map");
+	name = "map";
 }
 
 M_Map::~M_Map()
@@ -49,14 +48,9 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
-	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
-	bool ret = true;
-
+	
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
 		show_grid = !show_grid;
-
-	if (!map_loaded)
-		return ret;
 
 	return true;
 }
@@ -68,35 +62,38 @@ bool M_Map::PostUpdate(float dt)
 
 	if (map_loaded == false)
 		return ret;
+
+
 	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
 	{
 
-		if ((*layer)->visible && (*layer)->layer_properties.draw) {
+		if ((*layer)->visible == false) {
+			continue;
+		}
 
-			for (int y = 0; y < data.rows; ++y)
+		for (int y = 0; y < data.rows; ++y)
+		{
+			for (int x = 0; x < data.columns; ++x)
 			{
-				for (int x = 0; x < data.columns; ++x)
+				int tile_id = (*layer)->Get(x, y);
+				if (tile_id > 0)
 				{
-
-					int tile_id = (*layer)->Get(x, y);
-					if (tile_id > 0)
+					iPoint pos = MapToScreenI(x, y);
+					if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
 					{
-						iPoint pos = MapToScreenI(x, y);
-						if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
+						TileSet* tileset = GetTilesetFromTileId(tile_id);
+						if (tileset != nullptr)
 						{
-							TileSet* tileset = GetTilesetFromTileId(tile_id);
-							if (tileset != nullptr)
-							{
-								SDL_Rect r = tileset->GetTileRect(tile_id);
-								app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
-							}
+							SDL_Rect r = tileset->GetTileRect(tile_id);
+							app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
 						}
 					}
+
 				}
 			}
 		}
 	}
-	
+
 	//// Draw Grid ==============================================
 	if(show_grid)
 	{
@@ -117,13 +114,6 @@ bool M_Map::PostUpdate(float dt)
 	}
 
 	return ret;
-}
-
-bool M_Map::CleanUp()
-{
-	Unload();
-
-	return true;
 }
 
 bool M_Map::Load(const std::string& file_name)
@@ -184,60 +174,7 @@ bool M_Map::Load(const std::string& file_name)
 
 	map_loaded = ret;
 
-	if (map_loaded)
-	{
-		int w, h;
-		uchar* data = NULL;
-		if (CreateWalkabilityMap(w, h, &data))
-			app->pathfinding->SetMap(w, h, data);
-		LOG("Map's walkability successfuly created");
-	}
-
 	return ret;
-}
-
-bool M_Map::Unload()
-{
-	if (!map_loaded)
-		return false;
-
-	for (std::list<TileSet*>::iterator iter = data.tilesets.begin(); iter != data.tilesets.end(); ++iter)
-	{
-		if ((*iter != nullptr))
-		{
-			delete (*iter);
-
-		}
-	}
-	data.tilesets.clear();
-
-	for (std::list<MapLayer*>::iterator iter = data.mapLayers.begin(); iter != data.mapLayers.end(); ++iter)
-	{
-		if ((*iter != nullptr))
-		{
-			delete (*iter);
-
-		}
-	}
-	data.mapLayers.clear();
-
-
-	if (app->on_clean_up == false)
-	{
-		for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
-		{
-			if ((*iter != nullptr))
-			{
-				(*iter)->Destroy();
-			}
-		}
-	}
-
-	data.colliders_list.clear();
-
-	data.map_properties.UnloadProperties();
-
-	return true;
 }
 
 void M_Map::DebugMap() 
@@ -278,7 +215,6 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	
 	pugi::xml_node layer_data = node.child("data");
 
-
 	if (layer_data == NULL)
 	{
 		LOG("Error parsing map xml file: Cannot find 'layer/data' tag.");
@@ -287,6 +223,7 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
+		
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
@@ -296,17 +233,10 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			layer->data[i] = tile.attribute("gid").as_int(0);
 
 			if (layer->name == "Colliders" && layer->data[i] != 0u)
-			{
+				{
 					fPoint pos = layer->GetTilePos(i);
-
-					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
-					data.colliders_list.push_back(aux);
-			}
-
-			if (layer->name == "Buildings")
-			{
-				layer->layer_properties.draw = node.child("properties").child("property").attribute("value").as_bool(true);
-			}
+					app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
+				}
 
 			++i;
 		}
@@ -410,8 +340,6 @@ bool M_Map::LoadMap()
 		bool ret = false;
 
 		data.map_properties.LoadProperties(map.child("properties"));
-		data.objects_path = data.map_properties.GetAsString("object_texture");
-		data.map_properties.draw = data.map_properties.GetAsBool("NoDraw");
 		data.offset_x = data.map_properties.GetAsInt("offset_x");
 		data.offset_y = data.map_properties.GetAsInt("offset_y");
 
@@ -451,75 +379,16 @@ SDL_Rect TileSet::GetTileRect(int id) const
 
 TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
-	BROFILER_CATEGORY("GetTilesetFromTileId", Profiler::Color::DarkBlue)
-	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
-	TileSet* set = *item;
-	
-	while (item != data.tilesets.end())
+	std::list<TileSet*>::const_reverse_iterator item = data.tilesets.rbegin();
+	for (item; item != data.tilesets.rend() && id < (*item)->firstgid; ++item)
 	{
-		if (id < (*item)->firstgid)
-		{
-			set = *prev(item);
-			break;
-		}
-
-		set = *item;
-		++item;
 	}
 
-	return set;
-}
-
-uint M_Map::GetMaxLevels()
-{
-	return numLevels;
-}
-
-bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
-{
-	bool ret = false;
-
-	for (std::list<MapLayer*>::const_iterator item = data.mapLayers.begin(); item != data.mapLayers.end(); ++item)
-	{
-		MapLayer* layer = *item;
-
-		if (layer->layer_properties.GetAsFloat("Navigation", 0) == 0)
-			continue;
-
-		uchar* map = new uchar[layer->columns * layer->rows];
-		memset(map, 1, layer->columns*layer->rows);
-
-		for (int y = 0; y < data.rows; ++y)
-		{
-			for (int x = 0; x < data.columns; ++x)
-			{
-				int i = (y*layer->rows) + x;
-
-				int tile_id = layer->Get(x, y);
-				TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
-
-				if (tileset != NULL)
-				{
-					map[i] = ((tile_id - tileset->firstgid) > 0) ? 0 : 1;
-				
-				}
-			}
-		}
-	
-		*buffer = map;
-		width = data.columns;
-		height = data.rows;
-		ret = true;
-
-		break;
-	}
-
-	return ret;
+	return (*item);
 }
 
 iPoint M_Map::MapToScreenI(int column, int row) const
 {
-	
 	iPoint screen_pos(0, 0);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:
@@ -573,7 +442,7 @@ iPoint M_Map::ScreenToMapI(int x, int y) const
 
 		float half_width = data.tile_width * 0.5f;
 		float half_height = data.tile_height * 0.5f;
-		ret.x = int((x / half_width + y / half_height) * 0.5f);
+		ret.x = int((x / half_width + y / half_height) * 0.5f) - 1;
 		ret.y = int((y / half_height - (x / half_width)) * 0.5f);
 	}
 	else
@@ -610,15 +479,8 @@ fPoint M_Map::ScreenToMapF(float x, float y)
 	return ret;
 }
 
-void Properties::UnloadProperties()
-{
-	std::list<Property*>::iterator item = list.begin();
 
-	while (item != list.end())
-	{
-		RELEASE(*item);
-		++item;
-	}
 
-	list.clear();
-}
+
+
+

@@ -1,8 +1,3 @@
-
-#include "SDL\include\SDL.h"
-#include "SDL_TTF\include\SDL_ttf.h"
-#pragma comment( lib, "SDL_ttf/libx86/SDL2_ttf.lib" )
-
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -10,7 +5,9 @@
 #include "M_Fonts.h"
 #include "Brofiler/Brofiler.h"
 
-
+#include "SDL\include\SDL.h"
+#include "SDL_TTF\include\SDL_ttf.h"
+#pragma comment( lib, "SDL_ttf/libx86/SDL2_ttf.lib" )
 
 
 

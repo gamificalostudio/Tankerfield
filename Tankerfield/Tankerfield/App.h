@@ -84,7 +84,6 @@ private:
 	bool SavegameNow() const;
 
 public:
-	bool				on_clean_up = false;
 	// Modules
 	M_Window*			win = nullptr;
 	M_Input*			input = nullptr;
@@ -129,9 +128,6 @@ private:
 	//XML document
 	pugi::xml_document	config_file;
 	pugi::xml_node		app_config;
-
-	bool				pause = false;
-
 };
 
 extern App* app;
