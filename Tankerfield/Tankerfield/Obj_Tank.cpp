@@ -367,7 +367,6 @@ void Obj_Tank::SelectInputMethod()
 
 void Obj_Tank::ShootBasic()
 {
-	LOG("shooting basic shot");
 	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
 	bullet->SetBulletProperties(
 		weapons_info[(uint)basic_shot].bullet_speed,
