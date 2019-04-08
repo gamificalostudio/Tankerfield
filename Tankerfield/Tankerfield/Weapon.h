@@ -1,31 +1,22 @@
 #ifndef __WEAPON_H__
 #define __WEAPON_H__
 
-#include "Object.h"
-#include "PerfTimer.h"
-#include "M_ObjManager.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
 
-class Obj_Bullet;
+//Class which ONLY holds information about the weapons.
+//It doesn't have any functionality more than loading the properties
 
-class Weapon
+class WeaponInfo
 {
 public:
-	Weapon();
-	Weapon(int damage, float speed, float life, float time_between_bullet, ObjectType type);
-	~Weapon();
+	void LoadProperties(const pugi::xml_node & node);
 
 public:
-	virtual void Shoot(const fPoint & pos, fPoint & direction, float angle);
-
-private:
-	Obj_Bullet * bullet = nullptr;
-
-public:
-	int damage = 0;
-	float speed = 0.f;
-	float bullet_life_ms = 0.f;
-	float time_between_bullets = 0.f;
-	ObjectType bullet_type;
+	int bullet_damage			= 0;
+	float bullet_speed			= 0.f;
+	float bullet_life_ms		= 0.f;
+	float time_between_bullets	= 0.f;
 };
 
 #endif

@@ -160,7 +160,6 @@
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
     <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="Weapon_Flamethrower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -203,7 +202,6 @@
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />
     <ClInclude Include="Weapon.h" />
-    <ClInclude Include="Weapon_Flamethrower.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml">
