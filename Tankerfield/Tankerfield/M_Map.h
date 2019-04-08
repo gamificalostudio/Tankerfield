@@ -147,7 +147,17 @@ struct MapLayer
 	}
 
 };
-
+struct ObjectGroup
+{
+	std::string name;
+	Properties	properties;
+	uint size			= 0;
+	SDL_Rect* objects	= nullptr;
+	~ObjectGroup()
+	{
+		delete[] objects;
+	}
+};
 // ----------------------------------------------------
 struct TileSet
 {
@@ -196,8 +206,9 @@ struct MapData
 	SDL_Color			background_color;
 
 	std::list<TileSet*>		tilesets;
-	std::list<MapLayer*>	mapLayers;
+	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
+	std::list<ObjectGroup*> object_layers;
 
 	Properties				map_properties;
 	
@@ -253,6 +264,7 @@ private:
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
+	bool LoadObjectGroup(const pugi::xml_node& object_group_node, ObjectGroup* object_group);
 	void DebugMap();
 };
 #endif // __j1MAP_H__

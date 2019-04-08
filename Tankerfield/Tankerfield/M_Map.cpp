@@ -68,7 +68,7 @@ bool M_Map::PostUpdate(float dt)
 
 	if (map_loaded == false)
 		return ret;
-	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
+	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
 	{
 
 		if ((*layer)->visible && (*layer)->layer_properties.draw) {
@@ -173,7 +173,7 @@ bool M_Map::Load(const std::string& file_name)
 		ret = LoadLayer(layer, lay);
 
 		if (ret == true)
-			data.mapLayers.push_back(lay);
+			data.map_layers.push_back(lay);
 	}
 
 
@@ -211,7 +211,7 @@ bool M_Map::Unload()
 	}
 	data.tilesets.clear();
 
-	for (std::list<MapLayer*>::iterator iter = data.mapLayers.begin(); iter != data.mapLayers.end(); ++iter)
+	for (std::list<MapLayer*>::iterator iter = data.map_layers.begin(); iter != data.map_layers.end(); ++iter)
 	{
 		if ((*iter != nullptr))
 		{
@@ -219,7 +219,7 @@ bool M_Map::Unload()
 
 		}
 	}
-	data.mapLayers.clear();
+	data.map_layers.clear();
 
 
 	if (app->on_clean_up == false)
@@ -255,7 +255,7 @@ void M_Map::DebugMap()
 		LOG("spacing: %i margin: %i", s->spacing, s->margin);
 	};
 
-	for (std::list<MapLayer*>::iterator item_layer = data.mapLayers.begin(); item_layer != data.mapLayers.end(); ++item_layer)
+	for (std::list<MapLayer*>::iterator item_layer = data.map_layers.begin(); item_layer != data.map_layers.end(); ++item_layer)
 	{
 		MapLayer* l = (*item_layer);
 		LOG("Layer ----");
@@ -314,6 +314,22 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 
 	return ret;
 }
+
+bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGroup * object_group)
+{
+	bool ret = true;
+	object_group->name = object_group_node.attribute("name").as_string();
+	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
+	{
+		++object_group->size;
+	}
+	object_group->objects = new SDL_Rect[object_group->size];
+	object_group->properties.LoadProperties(object_group_node.child("properties"));
+
+	return ret;
+}
+
+
 
 bool M_Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 {
@@ -467,7 +483,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 {
 	bool ret = false;
 
-	for (std::list<MapLayer*>::const_iterator item = data.mapLayers.begin(); item != data.mapLayers.end(); ++item)
+	for (std::list<MapLayer*>::const_iterator item = data.map_layers.begin(); item != data.map_layers.end(); ++item)
 	{
 		MapLayer* layer = *item;
 
