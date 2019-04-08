@@ -19,11 +19,9 @@ class Obj_TeslaTrooper : public Object
 public:
 	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
-  
-	bool Start() override;
-	bool PreUpdate() override;
+
 	bool Update(float dt) override;
-	bool CleanUp() { return true; };
+
 	bool Awake(pugi::xml_node&) { return true; };
 
 	void OnTrigger(Collider* collider);

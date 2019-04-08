@@ -24,13 +24,10 @@ enum class INPUT_METHOD {
 class Obj_Tank : public Object
 {
 public:
-	Obj_Tank();
 	Obj_Tank(fPoint pos);
-	~Obj_Tank();
 
 public:
 
-	bool Awake(pugi::xml_node & tank_node) override;
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
@@ -62,7 +59,6 @@ private:
 	static SDL_Texture * base_shadow_tex;
 	static SDL_Texture * turr_shadow_tex;
 
-	float base_angle = 0.f;
 	float base_angle_lerp_factor = 0.f;
 	float turr_angle = 0.f;
 	fPoint shot_dir = { 0.f, 0.f };

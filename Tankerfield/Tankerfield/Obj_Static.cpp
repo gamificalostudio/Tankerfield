@@ -32,7 +32,7 @@ bool Obj_Static::Awake(pugi::xml_node & static_node)
 
 bool Obj_Static::Start()
 {
-	rect = { 324, 504, 203, 164 };
+	frame = { 324, 504, 203, 164 };
 	pivot = { 105, 116 };
 
 	data.tileset.texture = app->tex->Load(app->map->data.objects_path.data()); //Load object texture

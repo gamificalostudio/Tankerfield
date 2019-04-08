@@ -22,6 +22,9 @@ SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
 Animation * Obj_Tank::rotate_base = nullptr;
 Animation * Obj_Tank::rotate_turr = nullptr;
 
+Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
+{}
+
 bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
@@ -65,8 +68,6 @@ bool Obj_Tank::Start()
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
-
-	rect = { 0, 0, 93, 57 };
 
 	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
 	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
@@ -136,14 +137,14 @@ void Obj_Tank::Movement(float dt)
 	{
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
-		float turns = floor(base_angle / 360.f);
+		float turns = floor(angle / 360.f);
 		target_angle += 360.f * turns;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - base_angle) < abs(target_angle - base_angle))
+		if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
-		base_angle = lerp(base_angle, target_angle, base_angle_lerp_factor * dt);
+		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
 	}
 
 	velocity = iso_dir * speed * dt;                                                               
@@ -185,16 +186,16 @@ bool Obj_Tank::PostUpdate(float dt)
 	// Base =========================================
 	app->render->Blit(
 		base_tex,
-		screen_pos.x - draw_offset.x,
-		screen_pos.y - draw_offset.y,
-		&curr_anim->GetFrame(angle, dt));
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
 	app->render->Blit(
 		turr_tex,
-		screen_pos.x - draw_offset.x,
-		screen_pos.y - draw_offset.y,
-		&rotate_turr->GetFrame(turr_angle, dt));
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		&rotate_turr->GetFrame(turr_angle));
 
 	//DEBUG
 	iPoint debug_mouse_pos = { 0, 0 };
@@ -218,14 +219,14 @@ bool Obj_Tank::DrawShadow()
 		base_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-		&curr_anim->GetFrame(angle, dt));
+		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
 	app->render->Blit(
 		turr_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-		&curr_anim->GetFrame(angle, dt));
+		&rotate_turr->GetFrame(turr_angle));
 
 	return true;
 }

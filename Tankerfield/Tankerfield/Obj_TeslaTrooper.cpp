@@ -29,29 +29,8 @@ Animation * Obj_TeslaTrooper::walk = nullptr;
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
-
-	if (tex == nullptr)
-	{
-		tex = app->tex->Load("textures/Objects/shk-sheet.png");
-	}
-
-
-	speed				= 1.5F;
-	range_pos.center	= pos_map;
-	range_pos.radius	= 0.5f;
-	follow_range		= 10.0f;
-	check_path_time		= 1.f;
-	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-}
-
-Obj_TeslaTrooper::~Obj_TeslaTrooper()
-{
-}
-
-bool Obj_TeslaTrooper::Start()
-{
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
+
 
 	if (tex == nullptr)
 	{
@@ -64,19 +43,20 @@ bool Obj_TeslaTrooper::Start()
 		walk->LoadAnimation(tesla_trooper_node.child("animations").child("walk"));
 	}
 	curr_anim = walk;
-
-	SetRect(0, 0, 66, 76);
+	speed				= 1.5F;
+	range_pos.center	= pos_map;
+	range_pos.radius	= 0.5f;
+	follow_range		= 10.0f;
+	check_path_time		= 1.f;
+	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	draw_offset = { 32, 38 };
 	coll->SetObjOffset({ -.25f, -.25f });
-
 	timer.Start();
-
-	return true;
 }
 
-bool Obj_TeslaTrooper::PreUpdate()
+Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
-	return true;
 }
 
 bool Obj_TeslaTrooper::Update(float dt)

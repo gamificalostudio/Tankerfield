@@ -123,7 +123,6 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
-	std::list<Object*>::iterator iterator;
 
 	std::vector<Object*> draw_objects;
 
@@ -134,11 +133,10 @@ bool M_ObjManager::PostUpdate(float dt)
 			(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
 			
 			if ((*item)->curr_anim != nullptr) {
-				(*item)->frame = &(*item)->curr_anim->GetFrame((*item)->angle);
+				(*item)->frame = (*item)->curr_anim->GetFrame((*item)->angle);
 			}
 
-			if ((*iterator)->curr_anim != nullptr &&
-				app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->curr_anim->GetFrame().w, (*item)->curr_anim->GetFrame().h))
+			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
 			{
 				draw_objects.push_back(*item);
 				(*item)->DrawShadow();

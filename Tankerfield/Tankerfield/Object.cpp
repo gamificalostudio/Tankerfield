@@ -49,7 +49,7 @@ bool Object::PostUpdate(float dt)
 
 void Object::DrawDebug()
 {
-	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, rect.w, rect.h };
+	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, frame.w, frame.h };
 
 	switch (type)
 	{
@@ -62,9 +62,8 @@ void Object::DrawDebug()
 	case ObjectType::TESLA_TROOPER:
 		app->render->DrawQuad(section, 0, 0, 255, 80);
 		break;
-
-		default:
-			break;
+	default:
+		break;
 	}
 
 	app->render->DrawCircle(pos_screen.x + pivot.x, pos_screen.y + pivot.y, 3, 0, 255, 0);
