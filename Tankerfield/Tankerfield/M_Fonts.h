@@ -1,14 +1,16 @@
 #ifndef __M_FONTS_H__
 #define __M_FONTS_H__
 
-#include "Module.h"
-#include "SDL\include\SDL_pixels.h"
 #include <list>
-using namespace std;
+
+#include "SDL\include\SDL_pixels.h"
+
+#include "Module.h"
 
 #define DEFAULT_FONT "fonts/open_sans/OpenSans-Regular.ttf"
 #define DEFAULT_FONT_SIZE 12
 
+using namespace std;
 struct SDL_Texture;
 struct _TTF_Font;
 
@@ -40,7 +42,7 @@ public:
 public:
 
 	list <_TTF_Font*>	fonts;
-	_TTF_Font*			default_font;
+	_TTF_Font*			default_font = nullptr;
 };
 
 

@@ -1,36 +1,96 @@
 #ifndef __OBJ_TESLATROOPER_H__
 #define __OBJ_TESLATROOPER_H__
 
+#include "Circle.h"
 #include "Point.h"
 #include "Animation.h"
 #include "Object.h"
 
 struct SDL_Texture;
-
+class Timer;
+enum class TROOPER_STATE
+{
+	GET_PATH,
+	MOVE,
+	RECHEAD_POINT
+};
 class Obj_TeslaTrooper : public Object 
 {
 public:
 	Obj_TeslaTrooper(fPoint pos);
-
-public:
+	~Obj_TeslaTrooper();
+  
 	bool Start() override;
+	bool PreUpdate() override;
 	bool Update(float dt) override;
+	bool PostUpdate(float dt) override;
 	bool CleanUp() { return true; };
 	bool Awake(pugi::xml_node&) { return true; };
 
+	void OnTrigger(Collider* collider);
+
 private:
-	int life = 100;
-	int damage = 100;
-	float speed = 1.0f;
+	inline bool IsOnGoal(fPoint goal);
 
-	bool death = false;
+	TROOPER_STATE state			= TROOPER_STATE::GET_PATH;
+	fPoint move_vect			= { 0.0f, 0.0f };
+	int life					= 100;
+	int damage					= 100;
+	bool death					= false;
+	float follow_range			= 0.0f;
+	Animation* animation		= nullptr;
+	float angle					= 0.0f;
+	float new_current_frame		= 0.0f;
+	static SDL_Texture* tex;	
+	float check_path_time		= 0.f;
+	float speed					= 0.f;
+	Timer timer;
 
-	static Animation* walk;
-	float angle = 0.0f;
-	float new_current_frame = 0.0f;
-	static SDL_Texture * tex;
+	Object* target = nullptr;
+	std::vector<fPoint> path;
 
+	fPoint next_pos;
+	
+	Circle range_pos;
+
+	
 };
 
+// TODO REMOVE IT 
+#include "M_Collision.h"
+
+class Reward_Zone : public Object
+{
+public:
+
+	Reward_Zone(fPoint pos): Object(pos) { }
+
+	~Reward_Zone()
+	{
+	}
+
+	bool Start()
+	{
+		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, 0.f,this);
+		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		return true;
+	}
+
+	void OnTriggerEnter(Collider* c1)
+	{
+
+	}
+	void OnTrigger(Collider* c1)
+	{
+		if (c1->GetTag() == Collider::TAG::PLAYER)
+		{
+			LOG("REWARD ZONE");
+		}
+	}
+	void OnTriggerExit(Collider* c1)
+	{
+
+	}
+};
 #endif // !__TESLATROOPER_H__
 

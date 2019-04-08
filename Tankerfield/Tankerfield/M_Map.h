@@ -1,10 +1,13 @@
 #ifndef __M_MAP_H__
 #define __M_MAP_H__
+
 #include <list>
+
+#include "Log.h"
 #include "Module.h"
 #include "M_Render.h"
 #include "M_Textures.h"
-#include "Log.h"
+
 
 struct Levels
 {
@@ -13,6 +16,7 @@ struct Levels
 
 struct Properties
 {
+
 	struct Property
 	{
 		std::string name;
@@ -21,16 +25,12 @@ struct Properties
 
 	~Properties()
 	{
-		std::list<Property*>::iterator item = list.begin();
-
-		while (item != list.end())
-		{
-			RELEASE(*item);
-			++item;
-		}
-
-		list.clear();
+		UnloadProperties();
 	}
+
+private:
+	std::list<Property*>	list;
+public:
 
 	std::string GetAsString(const char* name, std::string default_value = "") const
 	{
@@ -44,6 +44,7 @@ struct Properties
 		}
 		return ret;
 	}
+	
 	int         GetAsInt(const char* name, int default_value = 0) const
 	{
 		int ret = default_value;
@@ -56,6 +57,7 @@ struct Properties
 		}
 		return ret;
 	}
+	
 	float       GetAsFloat(const char* name, float default_value = 0) const
 	{
 		float ret = default_value;
@@ -69,6 +71,7 @@ struct Properties
 		}
 		return ret;
 	}
+	
 	bool       GetAsBool(const char* name, bool default_value = false) const
 	{
 		bool ret = default_value;
@@ -82,8 +85,6 @@ struct Properties
 		}
 		return ret;
 	}
-
-	std::list<Property*>	list;
 
 	void LoadProperties(pugi::xml_node propertie_node)
 	{
@@ -103,7 +104,6 @@ struct Properties
 			else if (type == "bool")
 			{
 				p->value = new bool(iter.attribute("value").as_bool());
-				
 			}
 			else 
 			{
@@ -113,15 +113,18 @@ struct Properties
 			
 		}
 	}
+
+	bool draw = true;
+	void UnloadProperties();
 };
 
 // ----------------------------------------------------
 struct MapLayer
 {
 	std::string	name;
-	int			columns;
-	int			rows;
-	uint*		data;
+	int			columns = NULL;
+	int			rows = NULL;
+	uint*		data = nullptr;
 	Properties	layer_properties;
 	bool visible = true;
 	MapLayer() : data(NULL)
@@ -130,6 +133,7 @@ struct MapLayer
 	~MapLayer()
 	{
 		RELEASE(data);
+		
 	}
 
 	inline uint Get(int x, int y) const
@@ -147,21 +151,28 @@ struct MapLayer
 // ----------------------------------------------------
 struct TileSet
 {
+	~TileSet()
+	{
+		if(texture != nullptr)
+			app->tex->UnLoad(texture);
+	}
+
 	SDL_Rect GetTileRect(int id) const;
 
 	std::string			name;
-	int					firstgid;
-	int					margin;
-	int					spacing;
-	int					tile_width;
-	int					tile_height;
-	SDL_Texture*		texture;
-	int					tex_width;
-	int					tex_height;
-	int					columns;
-	int					rows;
-	int					offset_x;
-	int					offset_y;
+	int					firstgid = NULL;
+	int					margin = NULL;
+	int					spacing = NULL;
+	int					tile_width = NULL;
+	int					tile_height = NULL;
+	SDL_Texture*		texture = nullptr;
+	int					tex_width = NULL;
+	int					tex_height = NULL;
+	int					columns = NULL;
+	int					rows = NULL;
+	int					offset_x = NULL;
+	int					offset_y = NULL;
+
 
 
 };
@@ -176,14 +187,18 @@ enum MapTypes
 
 struct MapData
 {
-	int					columns, rows;
-	int					tile_width,	tile_height;
-	int					offset_x, offset_y;
+	std::string			objects_path;
+	int					columns = NULL,	rows = NULL;
+	int					tile_width = NULL,	tile_height = NULL;
+	int					offset_x = NULL, offset_y = NULL;
+  
 	MapTypes			type;
-
 	SDL_Color			background_color;
-	std::list<TileSet*>	tilesets;
+
+	std::list<TileSet*>		tilesets;
 	std::list<MapLayer*>	mapLayers;
+	std::list<Collider*>    colliders_list;
+
 	Properties				map_properties;
 };
 
@@ -199,8 +214,12 @@ public:
 	bool Update(float dt) override;
 
 	bool PostUpdate(float dt) override;
+	
+	bool CleanUp() override;
 
 	bool Load(const std::string & file_name);
+
+	bool Unload();
 
 	iPoint MapToScreenI(int column, int row) const;
 
@@ -212,7 +231,9 @@ public:
 
 	TileSet* GetTilesetFromTileId(int id) const;
 
-
+	uint GetMaxLevels();
+  
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
 public:
 
@@ -221,8 +242,8 @@ public:
 
 private:
 
-	bool					map_loaded;
-	bool					show_grid = true;
+	bool					map_loaded = false;
+	bool					show_grid = false;
 	std::string				folder;
 	uint					numLevels = 0; // counter for num levels
 	pugi::xml_document		map_file;
