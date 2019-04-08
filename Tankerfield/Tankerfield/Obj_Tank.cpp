@@ -12,7 +12,6 @@
 #include "M_ObjManager.h"
 #include "M_Window.h"
 #include "PerfTimer.h"
-#include "Weapon_Flamethrower.h"
 #include "MathUtils.h"
 
 SDL_Texture * Obj_Tank::base_tex = nullptr;
@@ -21,6 +20,7 @@ SDL_Texture * Obj_Tank::base_shadow_tex = nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex = nullptr;
 Animation * Obj_Tank::rotate_base = nullptr;
 Animation * Obj_Tank::rotate_turr = nullptr;
+WeaponInfo * Obj_Tank::weapons_info = nullptr;
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 {}
@@ -69,10 +69,16 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	weapons[WEAPON_TYPE::FLAMETHROWER] = new Weapon_Flamethrower();
-	//weapons[WEAPON_TYPE::BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
+	if (weapons_info == nullptr)
+	{
+		weapons_info = new WeaponInfo[(uint)WEAPON::MAX];
+		weapons_info[BASIC] = new Weapon(tank_node.child("basic").attribute("damage").as_float(), );
+	}
 
-	weapons[WEAPON_TYPE::BASIC] = new Weapon(50, 10.f, 2000.f, 50.f, ObjectType::BASIC_BULLET);
+	weapons[WEAPON::FLAMETHROWER] = new Weapon_Flamethrower();
+	//weapons[WEAPON_TYPE::BASIC] = n
+
+	weapons[WEAPON::BASIC] = new WeaponInfo(50, 10.f, 2000.f, 50.f, ObjectType::BASIC_BULLET);
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);

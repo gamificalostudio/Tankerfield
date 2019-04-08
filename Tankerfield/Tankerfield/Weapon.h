@@ -4,28 +4,21 @@
 #include "Object.h"
 #include "PerfTimer.h"
 #include "M_ObjManager.h"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "PugiXml/src/pugixml.hpp"
 
 class Obj_Bullet;
 
-class Weapon
+class WeaponInfo
 {
 public:
-	Weapon();
-	Weapon(int damage, float speed, float life, float time_between_bullet, ObjectType type);
-	~Weapon();
-
-public:
-	virtual void Shoot(const fPoint & pos, fPoint & direction, float angle);
+	void LoadProperties(pugi::xml_node & node);
 
 private:
-	Obj_Bullet * bullet = nullptr;
-
-public:
-	int damage = 0;
-	float speed = 0.f;
-	float bullet_life_ms = 0.f;
-	float time_between_bullets = 0.f;
-	ObjectType bullet_type;
+	int damage					= 0;
+	float bullet_speed			= 0.f;
+	float bullet_life_ms		= 0.f;
+	float time_between_bullets	= 0.f;
 };
 
 #endif

@@ -9,29 +9,20 @@
 #include "Log.h"
 #include "Object.h"
 
-Weapon::Weapon()
+void WeaponInfo::LoadProperties(pugi::xml_node & node)
 {
+	damage = node.child("damage").text().as_int();
+	bullet_speed = node.child("bullet_speed").text().as_float();
+	bullet_life_ms = node.child("bullet_life_ms").text().as_float();
+	time_between_bullets = node.child("time_between_bullets").text().as_float();
 }
 
-Weapon::Weapon(int damage, float speed, float life, float time_betwen_bulltes, ObjectType type) :
-	damage(damage),
-	speed(speed),
-	bullet_life_ms(life),
-	bullet_type(type),
-	time_between_bullets(time_betwen_bulltes)
-{
-}
-
-Weapon::~Weapon()
-{
-}
-
-void Weapon::Shoot(const fPoint & pos, fPoint & dir, float angle)
-{
-	bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type, pos);
-	bullet->SetDamage(damage);
-	bullet->direction = dir;
-	bullet->bullet_life_ms = bullet_life_ms;
-	bullet->speed = speed;
-	bullet->angle = angle;
-}
+//void WeaponInfo::Shoot(const fPoint & pos, fPoint & dir, float angle)
+//{
+//	bullet = (Obj_Bullet*)app->objectmanager->CreateObject(bullet_type, pos);
+//	bullet->SetDamage(damage);
+//	bullet->direction = dir;
+//	bullet->bullet_life_ms = bullet_life_ms;
+//	bullet->speed = speed;
+//	bullet->angle = angle;
+//}
