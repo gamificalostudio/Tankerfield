@@ -184,12 +184,22 @@ bool Obj_TeslaTrooper::Update(float dt)
 		break;
 	}
 
+	if (target != nullptr)
+	{
+		fPoint enemy_screen_pos = app->map->MapToScreenF(fPoint(this->pos_map.x, this->pos_map.y));
+		fPoint target_screen_pos = app->map->MapToScreenF(fPoint(target->pos_map.x, target->pos_map.y));
+		if (TeslaTrooperCanAttack(enemy_screen_pos, target_screen_pos))
+		{
+			//timer.Start();
+
+		}
+	}
+
 	return true;
 }
 
 bool Obj_TeslaTrooper::PostUpdate(float dt)
 {
-
 	uint ind = GetRotatedIndex(8, angle);
 	SDL_Rect rect = animation[ind].GetCurrentFrame(dt, new_current_frame);
 	app->render->Blit(
@@ -225,11 +235,24 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET)
 	{
-		
 		life -= collider->damage;
 		if (life <= 0)
 		{
 			to_remove = true;
 		}
 	}
+}
+
+bool Obj_TeslaTrooper::TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const
+{
+	/*return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + attack_range.x)
+		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - attack_range.x - enemy_width)
+		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + attack_range.y)
+		|| (enemy_screen_pos.y < target_screen_pos.y && enemy_screen_pos.y > target_screen_pos.y - attack_range.y - enemy_height));
+		*/
+
+	return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + (float)attack_range.x)
+		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - (float)attack_range.x)
+		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + (float)attack_range.y)
+		|| (enemy_screen_pos.y < target_screen_pos.y && enemy_screen_pos.y > target_screen_pos.y - (float)attack_range.y));
 }
