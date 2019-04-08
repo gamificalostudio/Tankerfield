@@ -31,7 +31,7 @@ public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool PostUpdate(float dt) override;
+	bool Draw(float dt) override;
 	bool DrawShadow() override;
 	bool CleanUp() override;
 

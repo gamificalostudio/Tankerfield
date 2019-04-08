@@ -36,7 +36,7 @@ bool Object::Update(float dt)
 	return true;
 }
 
-bool Object::PostUpdate(float dt)
+bool Object::Draw(float dt)
 {
 	app->render->Blit(
 		curr_tex,

@@ -181,7 +181,7 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
-bool Obj_Tank::PostUpdate(float dt)
+bool Obj_Tank::Draw(float dt)
 {
 	// Base =========================================
 	app->render->Blit(

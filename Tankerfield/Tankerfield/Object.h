@@ -57,7 +57,7 @@ public:
 
 	virtual bool Update(float dt);
 
-	virtual bool PostUpdate(float dt);
+	virtual bool Draw(float dt);
 
 	virtual bool DrawShadow() { return true; }
 

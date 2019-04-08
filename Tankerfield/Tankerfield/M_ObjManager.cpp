@@ -149,7 +149,7 @@ bool M_ObjManager::PostUpdate(float dt)
 	//Draw the objects above the shadows
 	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 	{
-		(*item)->PostUpdate(dt);
+		(*item)->Draw(dt);
 
 		if (app->scene->draw_debug) {
 			(*item)->DrawDebug();
