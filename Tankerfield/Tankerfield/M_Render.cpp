@@ -486,7 +486,6 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 	int scale = app->win->GetScale();
 
 	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
-	SDL_Rect cam = { camera.x,camera.y,camera.w,camera.h };
 
-	return SDL_HasIntersection(&r, &cam);
+	return SDL_HasIntersection(&r, &camera);
 }

@@ -130,22 +130,23 @@ bool M_ObjManager::PostUpdate(float dt)
 	{
 		if (*item != nullptr)
 		{
-			(*item)->pos_screen = app->map->MapToScreenF((*item)->pos_map);
-			
-			if ((*item)->curr_anim != nullptr) {
-				(*item)->frame = (*item)->curr_anim->GetFrame((*item)->angle);
-			}
-
+			(*item)->CalculateDrawVariables();
 			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
 			{
 				draw_objects.push_back(*item);
-				(*item)->DrawShadow();
 			}
 		}
 	}
 
 	std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
 
+	//Draw all the shadows first
+	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+	{
+		(*item)->DrawShadow();
+	}
+
+	//Draw the objects above the shadows
 	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 	{
 		(*item)->PostUpdate(dt);

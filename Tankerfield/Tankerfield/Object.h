@@ -77,11 +77,11 @@ public:
 
 	virtual void OnTriggerExit(Collider * collider) {}
 
-	// Clamps the rotation from 0 to 360 degrees ==================
-
 	void DrawDebug();
 
 	void SetDamage(float damage);
+
+	void CalculateDrawVariables();//Avoids calculating variables multiple times during a single update. Only called on M_ObjManager::PostUpdate().
 
 public:
 
