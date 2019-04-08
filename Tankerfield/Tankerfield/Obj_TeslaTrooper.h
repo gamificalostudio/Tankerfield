@@ -79,7 +79,8 @@ private:
 	/* Attack properties */
 	float attack_frequency = 3000.0f;
 	iPoint attack_range = { 60, 30 };
-	bool attack_available = true;
+	bool attack_available = false;
+
 	PerfTimer perf_timer;
 };
 

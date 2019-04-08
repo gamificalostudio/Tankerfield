@@ -189,25 +189,37 @@ bool Obj_TeslaTrooper::Update(float dt)
 		fPoint enemy_screen_pos = app->map->MapToScreenF(fPoint(this->pos_map.x, this->pos_map.y));
 		fPoint target_screen_pos = app->map->MapToScreenF(fPoint(target->pos_map.x, target->pos_map.y));
 		
-		if (TeslaTrooperCanAttack(enemy_screen_pos, target_screen_pos))
+		if (!attack_available)
 		{
-			perf_timer.Start();
-			attack_available = false;
+			if (TeslaTrooperCanAttack(enemy_screen_pos, target_screen_pos))
+			{
+				current_state = CURRENT_POS_STATE::STATE_ATTACKING;
+				attack_available = true;
+				perf_timer.Start();
+			}
+			else
+			{
+				current_state = CURRENT_POS_STATE::STATE_WAITING;
+				attack_available = false;
+			}
+		}
 
+		if (current_state == CURRENT_POS_STATE::STATE_ATTACKING)
+		{
 			if (perf_timer.ReadMs() > (double)attack_frequency)
 			{
-				if (attack_available)
-				{
-					target->ReduceHitPoints(25);
-				}
-				
-				attack_available = true;
+				target->ReduceHitPoints(25);
+				attack_available = false;
 			}
+		}
 
-			if (target->GetHitPoints() < 0)
-			{
-				// TODO/TOFIX target->to_remove = true;
-			}
+		if (target->GetHitPoints() < 0)
+		{
+			// TODO/TOFIX target->to_remove = true;
+			
+			/* Used for debugging :) */
+			int i = 0;
+			int j = 0;
 		}
 	}
 
