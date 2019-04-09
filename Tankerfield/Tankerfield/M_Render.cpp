@@ -220,13 +220,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
 	}
 
-	//Current camera in screen position
-	SDL_Rect cam_screen;
-	cam_screen.x = 0;
-	cam_screen.y = 0;
-	cam_screen.w = current_camera->rect.w;
-	cam_screen.h = current_camera->rect.h;
-
+	//Pivot ==================================================
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
 
@@ -237,21 +231,22 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 		p = &pivot;
 	}
 
-	//Limit right ===================
+	//Limit ===================================================================
+	//Limit right 
 	if (rect_in_screen.x + rect_in_screen.w >= current_camera->rect.w)
 	{
 		spritesheet_rect.w = current_camera->rect.w - rect_in_screen.x;
 		rect_in_screen.w = current_camera->rect.w - rect_in_screen.x;
 	}
 	 
-	//Limit down =====================
-	if (rect_in_screen.y + rect_in_screen.h >= cam_screen.h)
+	//Limit down 
+	if (rect_in_screen.y + rect_in_screen.h >= current_camera->rect.h)
 	{
 		spritesheet_rect.h = current_camera->rect.h - rect_in_screen.y;
 		rect_in_screen.h = current_camera->rect.h - rect_in_screen.y;
 	}
 
-	//Limit left =====================
+	//Limit left 
 	if (rect_in_screen.x <= 0)
 	{		
 		spritesheet_rect.x -= rect_in_screen.x;;
@@ -260,7 +255,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 		rect_in_screen.x = 0;
 	}
 
-	//Limit up ===================
+	//Limit up 
 	if (rect_in_screen.y <= 0)
 	{
 		spritesheet_rect.y -= rect_in_screen.y;
@@ -298,7 +293,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 		break;
 	}
 
-	//Print the rect_in_screen =====================
+	//Print the rect_in_screen ============================================
 	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, p, SDL_FLIP_NONE) != 0)
 	{
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
@@ -308,7 +303,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 
 	//SDL_RenderSetViewport(renderer, &cam_screen);
 
-	// Print the lines in the limits ======================= (don't working "DrawLine")
+	// Print the lines in the limits ============================================== (don't working "DrawLine")
 	DrawLine(current_camera->rect.x + current_camera->rect.w, 0, current_camera->rect.x + current_camera->rect.w, 2000, 0, 0, 0);
 	DrawLine(0, current_camera->rect.y + current_camera->rect.h, 2000, current_camera->rect.y + current_camera->rect.h, 0, 0, 0);
 	
