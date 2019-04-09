@@ -66,9 +66,8 @@ private:
 	// In milliseconds
 	int time_between_rounds = 0;
 	int initial_generated_units = 0;
-	int min_range = 0;
-	int max_range = 0;
-	float min_distance_from_player = 0;
+	int distance_range = 0;
+	int min_distance_from_center = 0;
 };
 
 #endif // __j1SCENE_H__

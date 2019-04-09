@@ -37,7 +37,8 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
-
+	distance_range = config.child("distance_range").attribute("value").as_int();
+	min_distance_from_center = config.child("min_distance_from_center").attribute("value").as_int();
 
 	return ret;
 }
@@ -68,10 +69,34 @@ bool M_Scene::Start()
 	srand(time(NULL));
 	for (int i = 0; i < initial_generated_units; i++)
 	{
-		iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
+		//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
+		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
+			rand() % (distance_range * 2 + 1) - distance_range };
 
-		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-			fPoint((float)random_tile_position.x + min_distance_from_player, (float)random_tile_position.y + min_distance_from_player));
+		if (random_tile_position.x >= 0 && random_tile_position.y >= 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint((float)random_tile_position.x + (float)min_distance_from_center,
+				(float)random_tile_position.y + (float)min_distance_from_center));
+		}
+		else if (random_tile_position.x < 0 && random_tile_position.y < 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint((float)random_tile_position.x - (float)min_distance_from_center,
+				(float)random_tile_position.y - (float)min_distance_from_center));
+		}
+		else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint((float)random_tile_position.x + (float)min_distance_from_center,
+				(float)random_tile_position.y - (float)min_distance_from_center));
+		}
+		else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint((float)random_tile_position.x - (float)min_distance_from_center,
+				(float)random_tile_position.y + (float)min_distance_from_center));
+		}
 	}
 
 	return true;

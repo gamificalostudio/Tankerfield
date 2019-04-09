@@ -31,8 +31,10 @@
   </map>
 
   <scene>
-    <time_between_rounds value ="5000"/>
-    <initial_generated_units value ="10"/>
+    <time_between_rounds value="5000"/>
+    <initial_generated_units value="10"/>
+    <distance_range value="5"/>
+    <min_distance_from_center value="2"/>
   </scene>
 
   <object>
