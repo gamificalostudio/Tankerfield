@@ -1105,6 +1105,13 @@
       <bullet_life_ms value ="2000"/>
       <time_between_bullets value ="500"/>
     </flamethrower>
+    <double_missile>
+      <bullet_damage value ="200"/>
+      <bullet_speed value="10"/>
+      <bullet_life_ms value="5000"/>
+      <time_between_bullets value="0"/>
+      <number_of_bullets value="2"/>
+    </double_missile>
   </weapons>
 
 </config>

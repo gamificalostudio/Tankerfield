@@ -12,6 +12,7 @@ struct SDL_Texture;
 enum class WEAPON {
 	BASIC,
 	FLAMETHROWER,
+	DOUBLE_MISSILE,
 	MAX
 };
 
@@ -55,6 +56,7 @@ private:
 	//- Weapons methods
 	void ShootBasic();
 	void ShootFlameThrower();
+	void ShootDoubleMissile();
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)

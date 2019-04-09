@@ -77,9 +77,11 @@ bool Obj_Tank::Start()
 		weapons_info = new WeaponInfo[(uint)WEAPON::MAX];
 		weapons_info[(uint)WEAPON::BASIC].LoadProperties(weapons_node.child("basic"));
 		weapons_info[(uint)WEAPON::FLAMETHROWER].LoadProperties(weapons_node.child("flamethrower"));
+		weapons_info[(uint)WEAPON::DOUBLE_MISSILE].LoadProperties(weapons_node.child("double_missile"));
 	}
 
 	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -378,4 +380,23 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootFlameThrower()
 {
+}
+
+void Obj_Tank::ShootDoubleMissile()
+{
+	Obj_Bullet * left_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
+	Obj_Bullet * right_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
+	left_missile->SetBulletProperties(
+		weapons_info[(uint)basic_shot].bullet_speed,
+		weapons_info[(uint)basic_shot].bullet_life_ms,
+		weapons_info[(uint)basic_shot].bullet_damage,
+		shot_dir,
+		turr_angle);
+
+	right_missile->SetBulletProperties(
+		weapons_info[(uint)basic_shot].bullet_speed,
+		weapons_info[(uint)basic_shot].bullet_life_ms,
+		weapons_info[(uint)basic_shot].bullet_damage,
+		shot_dir,
+		turr_angle);
 }
