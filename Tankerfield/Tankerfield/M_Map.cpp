@@ -3,12 +3,14 @@
 #include "Brofiler\Brofiler.h"
 
 #include "Log.h"
+
 #include "App.h"
 #include "M_Map.h"
 #include "M_Window.h"
 #include "M_Collision.h"
 #include "M_Input.h"
 #include "M_Pathfinding.h"
+
 
 M_Map::M_Map()
 {
@@ -340,12 +342,16 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	{
 		++object_group->size;
 	}
-	object_group->objects = new SDL_Rect[object_group->size];
+	object_group->objects = new Rect<float, float>[object_group->size];
 	
 	uint i = 0;
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
 	{
-		object_group->objects[i] = { obj_node.attribute("x").as_int(0), obj_node.attribute("y").as_int(0),obj_node.attribute("w").as_int(0),obj_node.attribute("h").as_int(0) };
+		object_group->objects[i].create(
+			obj_node.attribute("x").as_int(0),
+			obj_node.attribute("y").as_int(0),
+			obj_node.attribute("width").as_int(0),
+			obj_node.attribute("height").as_int(0));
 		
 		++i;
 	}
@@ -355,18 +361,9 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		for (i = 0; i < object_group->size; ++i)
 		{
 			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].x - object_group->objects[i].y),  (float)(object_group->objects[i].x + object_group->objects[i].y)/2 };
-			pos = app->map->ScreenToMapF(pos.x, pos.y);
-			// To map to screen
-			//pos = app->map->MapToScreenF(pos);
-			//To screen to map
-			//	pos = app->map->ScreenToMapF(pos.x, pos.y);
-			// fPoint pos = (fPoint)app->render->ScreenToWorld(object_group->objects[i].x, object_group->objects[i].y);
-			//fPoint pos = app->map->ScreenToMapF((float)object_group->objects[i].x, (float)object_group->objects[i].y);
-			//fPoint mesure = app->map->ScreenToMapF((float)object_group->objects[i].w, (float)object_group->objects[i].h);
-
-			
-			app->collision->AddCollider(pos, 1, 1, Collider::TAG::WALL);
+			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y/ data.tile_height) };
+			fPoint mesure = { (float)object_group->objects[i].w / data.tile_height, (float)object_group->objects[i].h / data.tile_height };
+			app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
 		}
 	}
 	

@@ -4,6 +4,8 @@
 #include <list>
 
 #include "Log.h"
+#include "Rect.h"
+
 #include "Module.h"
 #include "M_Render.h"
 #include "M_Textures.h"
@@ -152,7 +154,7 @@ struct ObjectGroup
 	std::string name;
 	Properties	properties;
 	uint size			= 0;
-	SDL_Rect* objects	= nullptr;
+	Rect<float, float>* objects	= nullptr;
 	~ObjectGroup()
 	{
 		delete[] objects;
