@@ -345,14 +345,31 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	uint i = 0;
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
 	{
-		object_group->objects[i] = { obj_node.attribute("x").as_int(0),obj_node.attribute("y").as_int(0),obj_node.attribute("w").as_int(0),obj_node.attribute("h").as_int(0) };
+		object_group->objects[i] = { obj_node.attribute("x").as_int(0), obj_node.attribute("y").as_int(0),obj_node.attribute("w").as_int(0),obj_node.attribute("h").as_int(0) };
+		
 		++i;
 	}
 	
 	if (object_group->name == "Colliders")
 	{
-		
+		for (i = 0; i < object_group->size; ++i)
+		{
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].x - object_group->objects[i].y),  (float)(object_group->objects[i].x + object_group->objects[i].y)/2 };
+			pos = app->map->ScreenToMapF(pos.x, pos.y);
+			// To map to screen
+			//pos = app->map->MapToScreenF(pos);
+			//To screen to map
+			//	pos = app->map->ScreenToMapF(pos.x, pos.y);
+			// fPoint pos = (fPoint)app->render->ScreenToWorld(object_group->objects[i].x, object_group->objects[i].y);
+			//fPoint pos = app->map->ScreenToMapF((float)object_group->objects[i].x, (float)object_group->objects[i].y);
+			//fPoint mesure = app->map->ScreenToMapF((float)object_group->objects[i].w, (float)object_group->objects[i].h);
+
+			
+			app->collision->AddCollider(pos, 1, 1, Collider::TAG::WALL);
+		}
 	}
+	
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
 
 	return ret;
