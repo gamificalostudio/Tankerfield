@@ -159,7 +159,6 @@
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
-    <ClCompile Include="WaveSystem.cpp" />
     <ClCompile Include="WeaponInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -202,7 +201,6 @@
     <ClInclude Include="UI_Slider.h" />
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />
-    <ClInclude Include="WaveSystem.h" />
     <ClInclude Include="WeaponInfo.h" />
   </ItemGroup>
   <ItemGroup>
