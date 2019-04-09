@@ -164,9 +164,9 @@ bool M_Map::Load(const std::string& file_name)
 		data.tilesets.push_back(set);
 	}
 
-	// Load layer info ----------------------------------------------
-	pugi::xml_node layer;
-	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
+	// Load layer info --------------------------------------------------------------------------------------
+	
+	for (pugi::xml_node layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
 		MapLayer* lay = new MapLayer();
 
@@ -175,7 +175,17 @@ bool M_Map::Load(const std::string& file_name)
 		if (ret == true)
 			data.map_layers.push_back(lay);
 	}
+	// Load object layer info -----------------------------------------------------------------------------
 
+	for (pugi::xml_node obj_layer = map_file.child("map").child("objectgroup"); obj_layer && ret; obj_layer = obj_layer.next_sibling("objectgroup"))
+	{
+		ObjectGroup* obj_lay = new ObjectGroup();
+
+		ret = LoadObjectGroup(obj_layer, obj_lay);
+
+		if (ret == true)
+			data.object_layers.push_back(obj_lay);
+	}
 
 	if (ret == true)
 	{
