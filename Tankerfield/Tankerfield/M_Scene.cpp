@@ -85,19 +85,19 @@ bool M_Scene::Start()
 		else if (random_tile_position.x < 0 && random_tile_position.y < 0)
 		{
 			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 - (float)random_tile_position.x - (float)min_distance_from_center,
-				map_columns / 2 - (float)random_tile_position.y - (float)min_distance_from_center));
+				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
+				map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
 		}
 		else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
 		{
 			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
 				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-				map_columns / 2 - (float)random_tile_position.y - (float)min_distance_from_center));
+				map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
 		}
 		else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
 		{
 			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 - (float)random_tile_position.x - (float)min_distance_from_center,
+				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
 				map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
 		}
 	}
