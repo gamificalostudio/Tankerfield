@@ -38,6 +38,7 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
 
+
 	return ret;
 }
 
@@ -67,8 +68,10 @@ bool M_Scene::Start()
 	srand(time(NULL));
 	for (int i = 0; i < initial_generated_units; i++)
 	{
-		iPoint random_tile_position = { 1 + rand() % 10, 1 + rand() % 10 };
-		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint((float)random_tile_position.x, (float)random_tile_position.y));
+		iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
+
+		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+			fPoint((float)random_tile_position.x + min_distance_from_player, (float)random_tile_position.y + min_distance_from_player));
 	}
 
 	return true;
