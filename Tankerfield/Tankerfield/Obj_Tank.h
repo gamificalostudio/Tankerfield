@@ -87,7 +87,7 @@ private:
 	PerfTimer time_between_bullets_timer;
 
 	//-- Basic shoot
-	uint basic_shot							= (uint)WEAPON::BASIC;
+	uint basic_shot							= (uint)WEAPON::DOUBLE_MISSILE;
 
 	//-- Main shoot
 	uint main_shot							= (uint)WEAPON::BASIC;

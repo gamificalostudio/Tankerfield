@@ -384,8 +384,12 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ShootDoubleMissile()
 {
-	Obj_Bullet * left_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
-	Obj_Bullet * right_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
+	fPoint double_missiles_offset = shot_dir;
+	double_missiles_offset.RotateDegree(90);
+	float missiles_offset = 0.2f;
+
+	Obj_Bullet * left_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length+double_missiles_offset*missiles_offset);
+	Obj_Bullet * right_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length-double_missiles_offset*missiles_offset);
 	left_missile->SetBulletProperties(
 		weapons_info[(uint)basic_shot].bullet_speed,
 		weapons_info[(uint)basic_shot].bullet_life_ms,
