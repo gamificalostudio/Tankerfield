@@ -199,30 +199,28 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 {
 	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
 	bool ret = true;
+
 	uint scale = app->win->GetScale();
 
-	SDL_Rect rect_to_blit;
+	SDL_Rect rect_in_screen;
 	SDL_Rect spritesheet_rect{ 0,0,0,0 };
 
-	rect_to_blit.x = (int)(-current_camera->rect.x * speed) + screen_x * scale;
-	rect_to_blit.y = (int)(-current_camera->rect.y * speed) + screen_y * scale;
-
+	//Transform the rect in the word to the rect in screen =======================
+	rect_in_screen.x = (int)(-current_camera->rect.x * speed) + screen_x * scale;
+	rect_in_screen.y = (int)(-current_camera->rect.y * speed) + screen_y * scale;
 
 	if (section != NULL)
 	{
 		spritesheet_rect = *section;
-		rect_to_blit.w = section->w;
-		rect_to_blit.h = section->h;
+		rect_in_screen.w = section->w * scale;
+		rect_in_screen.h = section->h * scale;
 	}
 	else
 	{
-		SDL_QueryTexture(texture, NULL, NULL, &rect_to_blit.w, &rect_to_blit.h);
+		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
 	}
 
-	rect_to_blit.w *= scale;
-	rect_to_blit.h *= scale;
-
-
+	//Current camera in screen position
 	SDL_Rect cam_screen;
 	cam_screen.x = 0;
 	cam_screen.y = 0;
@@ -238,39 +236,43 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 		pivot.y = pivot_y;
 		p = &pivot;
 	}
-	if (rect_to_blit.x + rect_to_blit.w >= current_camera->rect.w)
-	{
-		spritesheet_rect.w = current_camera->rect.w - rect_to_blit.x;
-		rect_to_blit.w = current_camera->rect.w - rect_to_blit.x;
-	}
-	if (rect_to_blit.y + rect_to_blit.h >= cam_screen.h)
-	{
-		spritesheet_rect.h = current_camera->rect.h - rect_to_blit.y;
-		rect_to_blit.h = current_camera->rect.h - rect_to_blit.y;
-	}
-	if (rect_to_blit.x <= 0)
-	{
-		float d = -rect_to_blit.x;
-		rect_to_blit.x = 0;
-		spritesheet_rect.x += d;
-		spritesheet_rect.w -= d;
-		rect_to_blit.w -= d;
 
-		//rect.x = 0;
-	}
-	if (rect_to_blit.y <= 0)
+	//Limit right ===================
+	if (rect_in_screen.x + rect_in_screen.w >= current_camera->rect.w)
 	{
-		float d = -rect_to_blit.y;
-		rect_to_blit.y = 0;
-		spritesheet_rect.y += d;
-		spritesheet_rect.h -= d;
-		rect_to_blit.h -= d;
+		spritesheet_rect.w = current_camera->rect.w - rect_in_screen.x;
+		rect_in_screen.w = current_camera->rect.w - rect_in_screen.x;
 	}
-	
-	
-	SDL_Rect rect_in_screen(rect_to_blit);
+	 
+	//Limit down =====================
+	if (rect_in_screen.y + rect_in_screen.h >= cam_screen.h)
+	{
+		spritesheet_rect.h = current_camera->rect.h - rect_in_screen.y;
+		rect_in_screen.h = current_camera->rect.h - rect_in_screen.y;
+	}
+
+	//Limit left =====================
+	if (rect_in_screen.x <= 0)
+	{		
+		spritesheet_rect.x -= rect_in_screen.x;;
+		spritesheet_rect.w += rect_in_screen.x;;
+		rect_in_screen.w += rect_in_screen.x;;
+		rect_in_screen.x = 0;
+	}
+
+	//Limit up ===================
+	if (rect_in_screen.y <= 0)
+	{
+		spritesheet_rect.y -= rect_in_screen.y;
+		spritesheet_rect.h += rect_in_screen.y;
+		rect_in_screen.h += rect_in_screen.y;
+		rect_in_screen.y = 0;
+	}
+
 	//	if (debug)
 		//{
+
+	//Move the rect_in_screen to their correct screen =========================== 
 	switch (current_camera->number_player)
 	{
 	case 2:
@@ -295,6 +297,8 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 		cam_screen.h += current_camera->rect.h;*/
 		break;
 	}
+
+	//Print the rect_in_screen =====================
 	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, p, SDL_FLIP_NONE) != 0)
 	{
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
@@ -303,6 +307,8 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 	}
 
 	//SDL_RenderSetViewport(renderer, &cam_screen);
+
+	// Print the lines in the limits ======================= (don't working "DrawLine")
 	DrawLine(current_camera->rect.x + current_camera->rect.w, 0, current_camera->rect.x + current_camera->rect.w, 2000, 0, 0, 0);
 	DrawLine(0, current_camera->rect.y + current_camera->rect.h, 2000, current_camera->rect.y + current_camera->rect.h, 0, 0, 0);
 	
