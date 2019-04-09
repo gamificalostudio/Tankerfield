@@ -291,6 +291,14 @@ Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Colli
 	return  collider;
 }
 
+Collider * M_Collision::AddCollider(float x, float y, float width, float height, Collider::TAG type, float damage, Object * object)
+{
+	fPoint pos(x, y);
+	Collider* collider = new Collider(pos, width, height, damage, type, object);
+	colliders.push_back(collider);
+	return  collider;
+}
+
 void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
 	// Calculate between colliders overlap ============================================
