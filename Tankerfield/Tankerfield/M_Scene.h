@@ -60,6 +60,12 @@ private:
 	bool test_path = true;
 
 	iPoint path_tex_offset = { -30, 0 };
+
+private:
+	/* Wave System */
+	// In milliseconds
+	int time_between_rounds = 0;
+	int initial_generated_units = 0;
 };
 
 #endif // __j1SCENE_H__

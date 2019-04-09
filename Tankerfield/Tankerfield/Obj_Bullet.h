@@ -20,10 +20,10 @@ public:
 	bool Start();
 
 	bool Update(float dt);
-
-	bool PostUpdate(float dt);
 	
 	void OnTrigger(Collider* collider_1);
+
+	void SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle);
 
 public:
 
@@ -35,15 +35,9 @@ public:
 
 	PerfTimer bullet_life_ms_timer;
 
-	float time_between_bullets = 0.f;
-
 	static SDL_Texture * tex;
 
-	static int rects_num;
-
-	static SDL_Rect * rects;
-
-	float angle = 0.f;
+	static Animation * anim;
 
 	//SFX impact_sound
 

@@ -5,26 +5,37 @@
 #include "Point.h"
 #include "Animation.h"
 #include "Object.h"
+#include "PerfTimer.h"
 
 struct SDL_Texture;
 class Timer;
+
 enum class TROOPER_STATE
 {
 	GET_PATH,
 	MOVE,
 	RECHEAD_POINT
 };
+
+/* Enemy state */
+enum class CURRENT_POS_STATE
+{
+	STATE_UNKNOWN = -1,
+
+	STATE_WAITING,
+	STATE_GOING_TO_ATTACK,
+	STATE_GOING_TO_WAIT,
+	STATE_ATTACKING
+};
+
 class Obj_TeslaTrooper : public Object 
 {
 public:
 	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
-  
-	bool Start() override;
-	bool PreUpdate() override;
+
 	bool Update(float dt) override;
-	bool PostUpdate(float dt) override;
-	bool CleanUp() { return true; };
+
 	bool Awake(pugi::xml_node&) { return true; };
 
 	void OnTrigger(Collider* collider);
@@ -38,10 +49,7 @@ private:
 	int damage					= 100;
 	bool death					= false;
 	float follow_range			= 0.0f;
-	Animation* animation		= nullptr;
-	float angle					= 0.0f;
-	float new_current_frame		= 0.0f;
-	static SDL_Texture* tex;	
+	float new_current_frame		= 0.0f;	
 	float check_path_time		= 0.f;
 	float speed					= 0.f;
 	Timer timer;
@@ -53,7 +61,24 @@ private:
 	
 	Circle range_pos;
 
-	
+	// ----------
+
+	int enemy_width = 66;
+	int enemy_height = 76;
+
+	CURRENT_POS_STATE current_state = CURRENT_POS_STATE::STATE_WAITING;
+
+	bool TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const;
+
+	/* Attack properties */
+	float attack_frequency = 3000.0f;
+	iPoint attack_range = { 60, 30 };
+	bool attack_available = false;
+	PerfTimer perf_timer;
+
+	static Animation* walk;
+	static SDL_Texture * tex;
+
 };
 
 // TODO REMOVE IT 
