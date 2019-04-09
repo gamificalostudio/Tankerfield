@@ -126,6 +126,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
+		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 		for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 		{
 			if (SDL_HasIntersection((*iterator)->GetRect(), &(*item_cam)->rect))
@@ -136,7 +137,9 @@ bool M_ObjManager::PostUpdate(float dt)
 				}
 			}
 		}
+
 	}
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 
 	return true;
 }

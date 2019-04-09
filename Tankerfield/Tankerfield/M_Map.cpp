@@ -95,6 +95,7 @@ bool M_Map::PostUpdate(float dt)
 					continue;
 				for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 				{
+					SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 					for (y = 0; y < data.rows; ++y)
 					{
 					
@@ -132,6 +133,7 @@ bool M_Map::PostUpdate(float dt)
 						}
 					}	
 				}
+				SDL_RenderSetClipRect(app->render->renderer, nullptr);
 			
 		}
 	

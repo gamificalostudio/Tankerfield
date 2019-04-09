@@ -58,6 +58,12 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_1_pos_screen = app->map->MapToScreenF(app->scene->tank_1->pos_map);
 		camera_aux->rect.x = tank_1_pos_screen.x - camera_aux->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux->rect.y = tank_1_pos_screen.y + camera_aux->rect.h+40; //Magic numbres to pos the camera with the player in center
+		camera_aux->viewport = { 
+			0,
+			0, 
+			(int)(app->win->screen_surface->w * .5f), 
+			(int)(app->win->screen_surface->h * .5f) 
+		};
 
 		Camera* camera_aux2 = nullptr;
 		camera_aux2 = new Camera();
@@ -66,6 +72,12 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_2_pos_screen = app->map->MapToScreenF(app->scene->tank_2->pos_map);
 		camera_aux2->rect.x = tank_2_pos_screen.x - camera_aux2->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux2->rect.y = tank_2_pos_screen.y + camera_aux2->rect.h *2 -30; //Magic numbres to pos the camera with the player in center
+		camera_aux2->viewport = { 
+			(int)(app->win->screen_surface->w * .5f),
+			0,
+			(int)(app->win->screen_surface->w * .5f),
+			(int)(app->win->screen_surface->h * .5f) 
+		};
 
 		Camera* camera_aux3 = nullptr;
 		camera_aux3 = new Camera();
@@ -74,6 +86,13 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_3_pos_screen = app->map->MapToScreenF(app->scene->tank_3->pos_map);
 		camera_aux3->rect.x = tank_3_pos_screen.x - camera_aux3->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux3->rect.y = tank_3_pos_screen.y + camera_aux3->rect.h*2.75f-10; //Magic numbres to pos the camera with the player in center
+		camera_aux3->viewport = { 
+			0,
+			(int)(app->win->screen_surface->h * .5f),
+			(int)(app->win->screen_surface->w * .5f),
+			(int)(app->win->screen_surface->h * .5f)
+		};
+
 
 		Camera* camera_aux4 = nullptr;
 		camera_aux4 = new Camera();
@@ -82,6 +101,13 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_4_pos_screen = app->map->MapToScreenF(app->scene->tank_4->pos_map);
 		camera_aux4->rect.x = tank_4_pos_screen.x - camera_aux4->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux4->rect.y = tank_4_pos_screen.y + camera_aux4->rect.h*3.5f+10; //Magic numbres to pos the camera with the player in center
+		camera_aux4->viewport = { 
+			(int)(app->win->screen_surface->w * .5f),
+			(int)(app->win->screen_surface->h * .5f),
+			(int)(app->win->screen_surface->w * .5f), 
+			(int)(app->win->screen_surface->h * .5f) 
+		};
+
 
 		camera.push_back(camera_aux);
 		camera.push_back(camera_aux2);
@@ -231,67 +257,15 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 		p = &pivot;
 	}
 
-	//Limit ===================================================================
-	//Limit right 
-	if (rect_in_screen.x + rect_in_screen.w >= current_camera->rect.w)
-	{
-		spritesheet_rect.w = current_camera->rect.w - rect_in_screen.x;
-		rect_in_screen.w = current_camera->rect.w - rect_in_screen.x;
-	}
-	 
-	//Limit down 
-	if (rect_in_screen.y + rect_in_screen.h >= current_camera->rect.h)
-	{
-		spritesheet_rect.h = current_camera->rect.h - rect_in_screen.y;
-		rect_in_screen.h = current_camera->rect.h - rect_in_screen.y;
-	}
-
-	//Limit left 
-	if (rect_in_screen.x <= 0)
-	{		
-		spritesheet_rect.x -= rect_in_screen.x;;
-		spritesheet_rect.w += rect_in_screen.x;;
-		rect_in_screen.w += rect_in_screen.x;;
-		rect_in_screen.x = 0;
-	}
-
-	//Limit up 
-	if (rect_in_screen.y <= 0)
-	{
-		spritesheet_rect.y -= rect_in_screen.y;
-		spritesheet_rect.h += rect_in_screen.y;
-		rect_in_screen.h += rect_in_screen.y;
-		rect_in_screen.y = 0;
-	}
-
 	//	if (debug)
 		//{
 
 	//Move the rect_in_screen to their correct screen =========================== 
-	switch (current_camera->number_player)
-	{
-	case 2:
-		rect_in_screen.x += current_camera->rect.w;
-		//cam_screen.x += current_camera->rect.w;
+	
 
-	//	cam_screen.w += current_camera->rect.w;
-		break;
-	case 3:
-		//cam_screen.y += current_camera->rect.h;
-
-		rect_in_screen.y += current_camera->rect.h;
-		//cam_screen.h += current_camera->rect.h;
-		break;
-	case 4:
-		/*cam_screen.x += current_camera->rect.w;
-		cam_screen.y += current_camera->rect.h;*/
-
-		rect_in_screen.x += current_camera->rect.w;
-		rect_in_screen.y += current_camera->rect.h;
-		/*cam_screen.w += current_camera->rect.w;
-		cam_screen.h += current_camera->rect.h;*/
-		break;
-	}
+	
+	rect_in_screen.x += current_camera->viewport.x;
+	rect_in_screen.y += current_camera->viewport.y;
 
 	//Print the rect_in_screen ============================================
 	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, p, SDL_FLIP_NONE) != 0)

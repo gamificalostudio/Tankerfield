@@ -8,6 +8,7 @@
 class Camera {
 public:
 	SDL_Rect rect{ 0,0,0,0 };
+	SDL_Rect viewport{ 0,0,0,0 };
 	bool assigned = false;
 	uint number_player = 0;
 };
