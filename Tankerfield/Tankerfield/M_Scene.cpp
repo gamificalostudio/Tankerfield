@@ -53,11 +53,11 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
-	app->audio->PlayMusic("audio/Music/indeep.ogg",0.0f);
+	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
 
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(5.f, 5.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(19.f, 19.f));
 
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
@@ -73,29 +73,32 @@ bool M_Scene::Start()
 		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
 			rand() % (distance_range * 2 + 1) - distance_range };
 
+		// TODO: At this point, we know the map columns / rows -> 40. We must get these values without magic numbers.
+		int map_rows = 40, map_columns = 40;
+
 		if (random_tile_position.x >= 0 && random_tile_position.y >= 0)
 		{
 			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint((float)random_tile_position.x + (float)min_distance_from_center,
-				(float)random_tile_position.y + (float)min_distance_from_center));
+				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
+				map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
 		}
 		else if (random_tile_position.x < 0 && random_tile_position.y < 0)
 		{
 			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint((float)random_tile_position.x - (float)min_distance_from_center,
-				(float)random_tile_position.y - (float)min_distance_from_center));
+				fPoint(map_rows / 2 - (float)random_tile_position.x - (float)min_distance_from_center,
+				map_columns / 2 - (float)random_tile_position.y - (float)min_distance_from_center));
 		}
 		else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
 		{
 			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint((float)random_tile_position.x + (float)min_distance_from_center,
-				(float)random_tile_position.y - (float)min_distance_from_center));
+				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
+				map_columns / 2 - (float)random_tile_position.y - (float)min_distance_from_center));
 		}
 		else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
 		{
 			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint((float)random_tile_position.x - (float)min_distance_from_center,
-				(float)random_tile_position.y + (float)min_distance_from_center));
+				fPoint(map_rows / 2 - (float)random_tile_position.x - (float)min_distance_from_center,
+				map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
 		}
 	}
 
