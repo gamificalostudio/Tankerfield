@@ -305,13 +305,13 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		{
 			layer->data[i] = tile.attribute("gid").as_int(0);
 
-			if (layer->name == "Colliders" && layer->data[i] != 0u)
+		/*	if (layer->name == "Colliders" && layer->data[i] != 0u)
 			{
 					fPoint pos = layer->GetTilePos(i);
 
 					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
 					data.colliders_list.push_back(aux);
-			}
+			}*/
 
 			if (layer->name == "Buildings")
 			{
@@ -328,12 +328,31 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGroup * object_group)
 {
 	bool ret = true;
+	if (object_group_node == NULL)
+	{
+		RELEASE(object_group);
+		return ret = false;
+	}
+
 	object_group->name = object_group_node.attribute("name").as_string();
+	
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
 	{
 		++object_group->size;
 	}
 	object_group->objects = new SDL_Rect[object_group->size];
+	
+	uint i = 0;
+	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
+	{
+		object_group->objects[i] = { obj_node.attribute("x").as_int(0),obj_node.attribute("y").as_int(0),obj_node.attribute("w").as_int(0),obj_node.attribute("h").as_int(0) };
+		++i;
+	}
+	
+	if (object_group->name == "Colliders")
+	{
+		
+	}
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
 
 	return ret;
