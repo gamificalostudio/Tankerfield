@@ -88,7 +88,15 @@ public:
 		return r;
 	}
 
+	Point operator* (const Point & v) const {
+		Point r;
+		r.x = x * v.x;
+		r.y = y * v.y;
+		return r;
+	}
+
 	const Point operator*= (const TYPE1 & num) {
+
 		x *= num;
 		y *= num;
 		return (*this);
@@ -165,13 +173,6 @@ public:
 		x = aux.x * angle_cos - aux.y * angle_sin;
 		y = aux.x * angle_sin + aux.y * angle_cos;
 
-	}
-	
-	//Linear interpolation
-
-	float lerp(float posx, float posy, float t){
-
-		return (1.f - t)*posx + t * posy;
 	}
 
 	explicit operator Point<int> () const

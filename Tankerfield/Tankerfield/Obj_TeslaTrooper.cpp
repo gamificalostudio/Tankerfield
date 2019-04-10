@@ -1,145 +1,181 @@
 #include <list>
+#include <assert.h>
+#include <vector>
 
-//#include "Brofiler/Brofiler.h"
+#include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
+
 #include "Point.h"
 #include "Log.h"
+#include "Animation.h"
 
 #include "App.h"
 #include "Object.h"
+#include "Obj_TeslaTrooper.h"
 #include "M_Textures.h"
 #include "M_ObjManager.h"
 #include "M_Render.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
-#include "Obj_TeslaTrooper.h"
 #include "M_Input.h"
 #include "Animation.h"
-//#include "j1Map.h"
-//#include "j1Collision.h"
+#include "M_Map.h"
+#include "M_Collision.h"
+#include "WeaponInfo.h"
 
 //Static variables inicialization
 SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
+Animation * Obj_TeslaTrooper::walk = nullptr;
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
-	//Inicialize animations
-	walking = new Animation[8] { {8}, {8}, {8}, {8}, {8}, {8}, {8}, {8} };
-	walking[0].PushBack({ 528,0,66,76 });//8
-	walking[0].PushBack({ 594,0,66,76 });
-	walking[0].PushBack({ 660,0,66,76 });
-	walking[0].PushBack({ 726,0,66,76 });
-	walking[0].PushBack({ 792,0,66,76 });
-	walking[0].PushBack({ 858,0,66,76 });
-	walking[0].speed=5.0f;
-
-	walking[1].PushBack({ 924,0,66,76 });//14
-	walking[1].PushBack({ 990,0,66,76 });
-	walking[1].PushBack({ 1056,0,66,76 });
-	walking[1].PushBack({ 1122,0,66,76 });
-	walking[1].PushBack({ 1188,0,66,76 });
-	walking[1].PushBack({ 1254,0,66,76 });
-	walking[1].speed = 5.0f;
-
-	walking[2].PushBack({ 1320,0,66,76 });//20
-	walking[2].PushBack({ 1386,0,66,76 });
-	walking[2].PushBack({ 1452,0,66,76 });
-	walking[2].PushBack({ 1518,0,66,76 });
-	walking[2].PushBack({ 1584,0,66,76 });
-	walking[2].PushBack({ 1650,0,66,76 });
-	walking[2].speed = 5.0f;
-
-	walking[3].PushBack({ 1716,0,66,76 });//26
-	walking[3].PushBack({ 1782,0,66,76 });
-	walking[3].PushBack({ 1848,0,66,76 });
-	walking[3].PushBack({ 1914,0,66,76 });
-	walking[3].PushBack({ 1980,0,66,76 });
-	walking[3].PushBack({ 0,76,66,76 });
-	walking[3].speed = 5.0f;
-	//32
-	walking[4].PushBack({ 66,76,66,76 });
-	walking[4].PushBack({ 132,76,66,76 });
-	walking[4].PushBack({ 198,76,66,76 });
-	walking[4].PushBack({ 264,76,66,76 });
-	walking[4].PushBack({ 330,76,66,76 });
-	walking[4].PushBack({ 396,76,66,76 });
-	walking[4].speed = 5.0f;
-	//38
-	walking[5].PushBack({ 462,76,66,76 });
-	walking[5].PushBack({ 528,76,66,76 });
-	walking[5].PushBack({ 594,76,66,76 });
-	walking[5].PushBack({ 660,76,66,76 });
-	walking[5].PushBack({ 726,76,66,76 });
-	walking[5].PushBack({ 792,76,66,76 });
-	walking[5].speed = 5.0f;
-	//44
-	walking[6].PushBack({ 858,76,66,76 });
-	walking[6].PushBack({ 924,76,66,76 });
-	walking[6].PushBack({ 990,76,66,76 });
-	walking[6].PushBack({ 1056,76,66,76 });
-	walking[6].PushBack({ 1122,76,66,76 });
-	walking[6].PushBack({ 924,76,66,76 });
-	walking[6].speed = 5.0f;
-	//49
-	walking[7].PushBack({ 1188,76,66,76 });
-	walking[7].PushBack({ 1254,76,66,76 });
-	walking[7].PushBack({ 1320,76,66,76 });
-	walking[7].PushBack({ 1386,76,66,76 });
-	walking[7].PushBack({ 1452,76,66,76 });
-	walking[7].PushBack({ 1518,76,66,76 });
-	walking[7].speed = 5.0f;
+	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
 	if (tex == nullptr)
 	{
 		tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	}
+	curr_tex = tex;
+	if (walk == nullptr)
+	{
+		walk = new Animation;
+		walk->LoadAnimation(tesla_trooper_node.child("animations").child("walk"));
+	}
+	curr_anim = walk;
+	speed				= 1.5F;
+	range_pos.center	= pos_map;
+	range_pos.radius	= 0.5f;
+	follow_range		= 10.0f;
+	check_path_time		= 1.f;
+	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	draw_offset = { 32, 38 };
+	coll->SetObjOffset({ -.25f, -.25f });
+	timer.Start();
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
 }
 
-bool Obj_TeslaTrooper::PreUpdate()
-{
-	return true;
-}
-
 bool Obj_TeslaTrooper::Update(float dt)
 {
-	if(app->input->GetKey(SDL_SCANCODE_W)==KEY_DOWN)
+	switch (state)
 	{
-		angle += 45;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-	{
-		angle -= 45;
+	case TROOPER_STATE::GET_PATH:
+		path.clear();
+		target = app->objectmanager->GetNearestTank(pos_map);
+		if (target != nullptr && pos_map.DistanceManhattan(target->pos_map) <= follow_range)
+			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+			{
+				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
+				for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
+				{
+					path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
+				}
+				state = TROOPER_STATE::RECHEAD_POINT;
+			}
+		timer.Start();
+		break;
+	case TROOPER_STATE::MOVE:
+
+			if (IsOnGoal(next_pos))
+			{
+				path.erase(path.begin());
+				state = TROOPER_STATE::RECHEAD_POINT;
+			}
+			pos_map += move_vect * speed * dt;
+			range_pos.center = pos_map;
+		break;
+	case TROOPER_STATE::RECHEAD_POINT:
+		{
+			if (timer.ReadSec() >= check_path_time)
+				state = TROOPER_STATE::GET_PATH;
+
+			else if (path.size() > 0)
+			{
+				next_pos = (fPoint)(*path.begin());
+				move_vect = (fPoint)(next_pos)-pos_map;
+				move_vect.Normalize();
+
+				//Change sprite direction
+				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
+				state = TROOPER_STATE::MOVE;
+			}
+			else
+				state = TROOPER_STATE::GET_PATH;
+
+		}
+		break;
+	default:
+		assert(true && "A tesla trooper have no state");
+		break;
 	}
 
-	//if (app->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
-	//{
-	//	life -= 100;
-	//	LOG("life: %i", life);
-	//}
+	if (target != nullptr)
+	{
+		fPoint enemy_screen_pos = app->map->MapToScreenF(fPoint(this->pos_map.x, this->pos_map.y));
+		fPoint target_screen_pos = app->map->MapToScreenF(fPoint(target->pos_map.x, target->pos_map.y));
+		
+		if (!attack_available)
+		{
+			if (TeslaTrooperCanAttack(enemy_screen_pos, target_screen_pos))
+			{
+				current_state = CURRENT_POS_STATE::STATE_ATTACKING;
+				attack_available = true;
+				perf_timer.Start();
+			}
+			else
+			{
+				current_state = CURRENT_POS_STATE::STATE_WAITING;
+				attack_available = false;
+			}
+		}
 
-	//if (life <= 0)
-	//{
-	//	death = true;
-	//	to_remove = true;
-	//}
+		if (current_state == CURRENT_POS_STATE::STATE_ATTACKING)
+		{
+			if (perf_timer.ReadMs() > (double)attack_frequency)
+			{
+				target->ReduceHitPoints(25);
+				attack_available = false;
+			}
+		}
+
+		if (target->GetHitPoints() < 0)
+		{
+			// target->to_remove = true;   // CRASH !
+			
+			/* Used for debugging :) TOBEDELETED*/
+			int i = 0;
+			int j = 0;
+		}
+	}
 
 	return true;
 }
 
-bool Obj_TeslaTrooper::PostUpdate(float dt)
+
+bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 {
-	uint ind = GetRotatedIndex(8, angle);
-	app->render->Blit(tex, pos_map.x, pos_map.y, &walking[ind].GetCurrentFrame(dt, new_current_frame));
-
-	return true;
+	return range_pos.IsPointIn(goal);
 }
 
+void Obj_TeslaTrooper::OnTrigger(Collider* collider)
+{
+	if (collider->GetTag() == Collider::TAG::BULLET)
+	{
+		life -= collider->damage;
+		if (life <= 0)
+		{
+			to_remove = true;
+		}
+	}
+}
 
-
-
-
-
+bool Obj_TeslaTrooper::TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const
+{
+	return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + (float)attack_range.x)
+		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - (float)attack_range.x)
+		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + (float)attack_range.y)
+		|| (enemy_screen_pos.y < target_screen_pos.y && enemy_screen_pos.y > target_screen_pos.y - (float)attack_range.y));
+}

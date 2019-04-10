@@ -46,17 +46,26 @@ public:
 	// Called before quitting
 	bool CleanUp() override;
 
+	bool draw_debug = false;
 	// ---------
 
 	void DebugPathfinding();
+
+public:
+	SDL_Texture* path_tex = nullptr;
 
 private:
 	/* Debug pathfinding */
 	std::vector<iPoint> debug_path;
 	bool test_path = true;
-	SDL_Texture* path_tex = nullptr;
 
-	iPoint path_tex_offset = { 0, 16 };
+	iPoint path_tex_offset = { -30, 0 };
+
+private:
+	/* Wave System */
+	// In milliseconds
+	int time_between_rounds = 0;
+	int initial_generated_units = 0;
 };
 
 #endif // __j1SCENE_H__

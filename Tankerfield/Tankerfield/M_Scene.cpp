@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <ctime>
+
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
@@ -26,10 +29,14 @@ M_Scene::~M_Scene()
 {}
 
 // Called before render is available
-bool M_Scene::Awake(pugi::xml_node&)
+bool M_Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
+
+	/* Wave System setup */
+	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
+	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
 
 	return ret;
 }
@@ -44,11 +51,25 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
+	app->audio->PlayMusic("audio/Music/indeep.ogg",0.0f);
+
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(20.f, 20.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(5.f, 5.f));
 
-	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(-10.f, -10.f));
+	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
+	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
+
+	//app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
+
+	/* Generate first wave units */
+	srand(time(NULL));
+	for (int i = 0; i < initial_generated_units; i++)
+	{
+		iPoint random_tile_position = { 1 + rand() % 10, 1 + rand() % 10 };
+		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint((float)random_tile_position.x, (float)random_tile_position.y));
+	}
 
 	return true;
 }
@@ -63,6 +84,8 @@ bool M_Scene::PreUpdate()
 
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
@@ -92,6 +115,9 @@ bool M_Scene::Update(float dt)
 		app->render->camera.x += floor(200.0f * dt);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+		draw_debug = !draw_debug;
+
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 	{
 		++current_level;
@@ -101,6 +127,7 @@ bool M_Scene::Update(float dt)
 
 		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
 	}
+
 	return true;
 }
 
