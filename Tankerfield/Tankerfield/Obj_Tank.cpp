@@ -127,6 +127,7 @@ bool Obj_Tank::PreUpdate()
 bool Obj_Tank::Update(float dt)
 {
 	Shoot();
+	Item();
 	Movement(dt);
 	return true;
 }
@@ -400,4 +401,16 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootFlameThrower()
 {
+}
+
+void Obj_Tank::Item()
+{
+	if(item != ObjectType::NO_TYPE
+		&& (app->input->GetKey(kb_item) == KEY_DOWN
+			|| app->input->GetMouseButton(gamepad_item) == KEY_DOWN))
+	{
+		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
+		new_item->caster = this;
+		item = ObjectType::NO_TYPE;
+	}
 }
