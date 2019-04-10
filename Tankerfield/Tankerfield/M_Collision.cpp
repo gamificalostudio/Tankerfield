@@ -94,12 +94,13 @@ bool M_Collision::Update(float dt)
 		{
 			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
 			{
+				//TODO This produce the BUG ------------------------------------------------------------------------------------------------------
 				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
 
 				if (to_destroy != (*itr)->collisions_list.end())
 				{
 					LOG("DESTROYED");
-					(*itr)->collisions_list.erase(to_destroy);
+					/*itr = */(*itr)->collisions_list.erase(to_destroy);
 					break;
 				}
 			}
@@ -286,6 +287,14 @@ bool M_Collision::CleanUp()
 
 Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage, Object* object)
 {
+	Collider* collider = new Collider(pos, width, height, damage, type, object);
+	colliders.push_back(collider);
+	return  collider;
+}
+
+Collider * M_Collision::AddCollider(float x, float y, float width, float height, Collider::TAG type, float damage, Object * object)
+{
+	fPoint pos(x, y);
 	Collider* collider = new Collider(pos, width, height, damage, type, object);
 	colliders.push_back(collider);
 	return  collider;

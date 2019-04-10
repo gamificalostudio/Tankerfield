@@ -4,6 +4,8 @@
 #include <list>
 
 #include "Log.h"
+#include "Rect.h"
+
 #include "Module.h"
 #include "M_Render.h"
 #include "M_Textures.h"
@@ -32,87 +34,16 @@ private:
 	std::list<Property*>	list;
 public:
 
-	std::string GetAsString(const char* name, std::string default_value = "") const
-	{
-		std::string ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				return ret = *(std::string*)(*item)->value;
-			}
-		}
-		return ret;
-	}
+	std::string GetAsString(const char* name, std::string default_value = "") const;
 	
-	int         GetAsInt(const char* name, int default_value = 0) const
-	{
-		int ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				return ret = *(int*)(*item)->value;
-			}
-		}
-		return ret;
-	}
+	int  GetAsInt(const char* name, int default_value = 0) const;
 	
-	float       GetAsFloat(const char* name, float default_value = 0) const
-	{
-		float ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				ret = *(float*)(*item)->value;
-				return ret;
-			}
-		}
-		return ret;
-	}
-	
-	bool       GetAsBool(const char* name, bool default_value = false) const
-	{
-		bool ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				ret = *(bool*)(*item)->value;
-				return ret;
-			}
-		}
-		return ret;
-	}
+	float GetAsFloat(const char* name, float default_value = 0) const;
 
-	void LoadProperties(pugi::xml_node propertie_node)
-	{
-		for (pugi::xml_node iter = propertie_node.child("property"); iter; iter = iter.next_sibling("property"))
-		{
-			Property* p = new Property();
-			p->name = iter.attribute("name").as_string();
-			std::string type = iter.attribute("type").as_string();
-			if (type == "int")
-			{
-				p->value = new int(iter.attribute("value").as_int());
-			}
-			else if (type == "float")
-			{
-				p->value = new float(iter.attribute("value").as_float());
-			}
-			else if (type == "bool")
-			{
-				p->value = new bool(iter.attribute("value").as_bool());
-			}
-			else 
-			{
-				p->value = new std::string(iter.attribute("value").as_string());
-			}
-			list.push_back(p);
-			
-		}
-	}
+	
+	bool GetAsBool(const char* name, bool default_value = false) const;
+
+	void LoadProperties(pugi::xml_node propertie_node);
 
 	bool draw = true;
 	void UnloadProperties();
@@ -147,7 +78,21 @@ struct MapLayer
 	}
 
 };
-
+struct ObjectGroup
+{
+	std::string name;
+	Properties	properties;
+	uint size			= 0;
+	Rect<float, float>* objects	= nullptr;
+	~ObjectGroup()
+	{
+		if (objects != nullptr)
+		{
+			delete[] objects;
+			objects = nullptr;
+		}
+	}
+};
 // ----------------------------------------------------
 struct TileSet
 {
@@ -196,10 +141,22 @@ struct MapData
 	SDL_Color			background_color;
 
 	std::list<TileSet*>		tilesets;
-	std::list<MapLayer*>	mapLayers;
+	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
-
+	std::list<ObjectGroup*> object_layers;
+	
 	Properties				map_properties;
+
+	Rect<float, float>*		screen_tile_rect = nullptr;
+	~MapData()
+	{
+		if (screen_tile_rect != nullptr)
+		{
+			delete[] screen_tile_rect;
+			screen_tile_rect = nullptr;
+		}
+	}
+	
 };
 
 class M_Map : public Module
@@ -252,6 +209,9 @@ private:
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
+	bool LoadObjectGroup(const pugi::xml_node& object_group_node, ObjectGroup* object_group);
+
 	void DebugMap();
+
 };
 #endif // __j1MAP_H__
