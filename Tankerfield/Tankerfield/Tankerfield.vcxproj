@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
+    <RootNamespace>Tankerfield</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <NoEntryPoint>false</NoEntryPoint>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Bullet_Basic.cpp" />
+    <ClCompile Include="MathUtils.cpp" />
+    <ClCompile Include="M_Collision.cpp" />
+    <ClCompile Include="Obj_Bullet.cpp" />
+    <ClCompile Include="Obj_Static.cpp" />
+    <ClCompile Include="UI_Button.cpp" />
+    <ClCompile Include="UI_Checkbox.cpp" />
+    <ClCompile Include="UI_Image.cpp" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="M_Audio.cpp" />
+    <ClCompile Include="M_Fonts.cpp" />
+    <ClCompile Include="M_Input.cpp" />
+    <ClCompile Include="M_Map.cpp" />
+    <ClCompile Include="M_Pathfinding.cpp" />
+    <ClCompile Include="PerfTimer.cpp" />
+    <ClCompile Include="M_Render.cpp" />
+    <ClCompile Include="M_Scene.cpp" />
+    <ClCompile Include="M_Textures.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="M_Window.cpp" />
+    <ClCompile Include="UI_Label.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="M_UI.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="M_ObjManager.cpp" />
+    <ClCompile Include="Obj_Tank.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="PugiXml\src\pugixml.cpp" />
+    <ClCompile Include="M_SceneManager.cpp" />
+    <ClCompile Include="Obj_TeslaTrooper.cpp" />
+    <ClCompile Include="UI_Slider.cpp" />
+    <ClCompile Include="UI_TextPanel.cpp" />
+    <ClCompile Include="UI_Element.cpp" />
+    <ClCompile Include="WeaponInfo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Bullet_Basic.h" />
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="MathUtils.h" />
+    <ClInclude Include="M_Collision.h" />
+    <ClInclude Include="Obj_Bullet.h" />
+    <ClInclude Include="Obj_Static.h" />
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="UI_Button.h" />
+    <ClInclude Include="UI_Checkbox.h" />
+    <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="App.h" />
+    <ClInclude Include="M_Audio.h" />
+    <ClInclude Include="M_Fonts.h" />
+    <ClInclude Include="M_Input.h" />
+    <ClInclude Include="M_Map.h" />
+    <ClInclude Include="Module.h" />
+    <ClInclude Include="M_Pathfinding.h" />
+    <ClInclude Include="PerfTimer.h" />
+    <ClInclude Include="M_Render.h" />
+    <ClInclude Include="M_Scene.h" />
+    <ClInclude Include="M_Textures.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="M_Window.h" />
+    <ClInclude Include="UI_Label.h" />
+    <ClInclude Include="M_UI.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="M_ObjManager.h" />
+    <ClInclude Include="Obj_Tank.h" />
+    <ClInclude Include="Defs.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
+    <ClInclude Include="PugiXml\src\pugixml.hpp" />
+    <ClInclude Include="M_SceneManager.h" />
+    <ClInclude Include="Obj_TeslaTrooper.h" />
+    <ClInclude Include="UI_Slider.h" />
+    <ClInclude Include="UI_TextPanel.h" />
+    <ClInclude Include="UI_Element.h" />
+    <ClInclude Include="WeaponInfo.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\Game\config.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

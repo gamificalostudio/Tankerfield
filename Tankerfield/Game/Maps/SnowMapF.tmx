@@ -16828,7 +16828,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="Separations" width="75" height="112">
+ <layer name="Separations" width="75" height="112" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -25232,7 +25232,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="Colliders" width="75" height="112" visible="0">
+ <layer name="Colliders" width="75" height="112">
   <properties>
    <property name="Navigation" type="float" value="1"/>
   </properties>
