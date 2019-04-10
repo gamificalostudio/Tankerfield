@@ -89,21 +89,23 @@ bool Obj_Tank::Start()
 	cannon_length = 1.f;
 
 	//TODO: Load them from the XML
-	kb_shoot		= SDL_BUTTON_LEFT;
+	kb_shoot_basic		= SDL_BUTTON_RIGHT;
+	kb_shoot_special	= SDL_BUTTON_LEFT;
 	kb_up			= SDL_SCANCODE_W;
 	kb_left			= SDL_SCANCODE_A;
 	kb_down			= SDL_SCANCODE_S;
 	kb_right		= SDL_SCANCODE_D;
 	gamepad_move	= Joystick::LEFT;
 	gamepad_aim		= Joystick::RIGHT;
-	gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_TRIGGERLEFT;
+	gamepad_shoot_special	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
 
 	base_angle_lerp_factor = 11.25f;
 
-	time_between_bullets_timer.Start();
+	basic_shot_timer.Start();
 
 	return true;
 }
@@ -309,22 +311,41 @@ void Obj_Tank::Shoot()
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
-	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
+	//- Special shoot (prioritize first the special shot)
+	if (IsShootingSpecial() && special_shot_timer.ReadMs() >= weapons_info[(uint)special_shot].time_between_bullets)
+	{
+		(this->*shot_function[(uint)special_shot])();
+		special_shot_timer.Start();
+	}
+	//- Basic shoot
+	else if (IsShootingBasic() && basic_shot_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
 	{
 		(this->*shot_function[(uint)basic_shot])();
-		time_between_bullets_timer.Start();
+		basic_shot_timer.Start();
 	}
 }
 
-bool Obj_Tank::IsShooting()
+bool Obj_Tank::IsShootingSpecial()
 {
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		return app->input->GetMouseButton(kb_shoot) == KEY_DOWN || app->input->GetMouseButton(kb_shoot) == KEY_REPEAT;
+		return app->input->GetMouseButton(kb_shoot_special) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_special) == KEY_REPEAT;
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot) > 0;
+		return (*controller)->GetAxis(gamepad_shoot_special) > 0;
+	}
+}
+
+bool Obj_Tank::IsShootingBasic()
+{
+	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
+	{
+		return app->input->GetMouseButton(kb_shoot_basic) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_basic) == KEY_REPEAT;
+	}
+	else if (shot_input == INPUT_METHOD::CONTROLLER)
+	{
+		return (*controller)->GetAxis(gamepad_shoot_basic) > 0;
 	}
 }
 
@@ -350,7 +371,7 @@ void Obj_Tank::SelectInputMethod()
 
 	//Shot input
 	if (shot_input != INPUT_METHOD::KEYBOARD_MOUSE
-		&& app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
+		&& app->input->GetMouseButton(kb_shoot_basic) != KEY_IDLE)
 	{
 		shot_input = INPUT_METHOD::KEYBOARD_MOUSE;
 		SDL_ShowCursor(SDL_ENABLE);
@@ -358,7 +379,7 @@ void Obj_Tank::SelectInputMethod()
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
+		|| (*controller)->GetAxis(gamepad_shoot_basic) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
