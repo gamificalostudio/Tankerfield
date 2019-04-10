@@ -18,6 +18,7 @@
 #include "Point.h"
 #include "Brofiler/Brofiler.h"
 #include "Rect.h"
+#include "Object.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -39,6 +40,7 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
 	distance_range = config.child("distance_range").attribute("value").as_int();
 	min_distance_from_center = config.child("min_distance_from_center").attribute("value").as_int();
+	check_complete_round = config.child("check_complete_round").attribute("value").as_int();
 
 	return ret;
 }
@@ -157,6 +159,24 @@ bool M_Scene::Update(float dt)
 			current_level = 0;
 
 		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
+	}
+
+	/* Check if a round is over. It is only checked after x time. */
+	accumulated_time += dt * 1000;
+	if (accumulated_time >= (float)check_complete_round)
+	{
+		perform_objects_check = true;
+	}
+
+	if (perform_objects_check)
+	{
+		if (app->objectmanager->GetObjects().size() == 0) // TOFIX: Here we are checking objects of type static I think too...
+		{
+			// Generate new wave
+		}
+
+		accumulated_time = 0.0f;
+		perform_objects_check = false;
 	}
 
 	return true;

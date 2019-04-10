@@ -54,6 +54,7 @@ public:
 
 	Object* GetNearestTank(fPoint pos);
 	
+	std::list<Object*> GetObjects() const;
 
 private:
 
