@@ -93,7 +93,7 @@ private:
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 
 	//- Items
-	ITEM item								= ITEM::MAX_TYPE;
+	ObjectType item							= ObjectType::NO_TYPE;
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
@@ -102,6 +102,8 @@ private:
 
 	//-- Keyboard inputs
 	int kb_shoot							= 0;
+	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_interact				= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
@@ -111,6 +113,8 @@ private:
 	Joystick gamepad_move					= Joystick::INVALID;
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_INVALID;
+	SDL_GameControllerButton gamepad_interact	= SDL_CONTROLLER_BUTTON_INVALID;
+	SDL_GameControllerButton gamepad_item		= SDL_CONTROLLER_BUTTON_INVALID;
 
 };
 

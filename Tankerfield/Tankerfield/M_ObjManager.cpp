@@ -25,6 +25,8 @@
 #include "Bullet_Basic.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
+#include "Obj_Item.h"
+#include "Item_HealthBag.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -203,6 +205,9 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+	case ObjectType::HEALTH_BAG:
+		ret = new Item_HealthBag(pos);
+		ret->type = ObjectType::HEALTH_BAG;
 	}
   
 	if (ret != nullptr)

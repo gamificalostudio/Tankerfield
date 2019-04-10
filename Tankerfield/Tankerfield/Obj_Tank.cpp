@@ -94,9 +94,13 @@ bool Obj_Tank::Start()
 	kb_left			= SDL_SCANCODE_A;
 	kb_down			= SDL_SCANCODE_S;
 	kb_right		= SDL_SCANCODE_D;
+	kb_item			= SDL_SCANCODE_F;
+	kb_interact		= SDL_SCANCODE_SPACE;
 	gamepad_move	= Joystick::LEFT;
 	gamepad_aim		= Joystick::RIGHT;
 	gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
+	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;

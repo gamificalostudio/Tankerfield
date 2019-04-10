@@ -5,6 +5,9 @@
 
 class Item_HealthBag : public Obj_Item
 {
+public:
+	Item_HealthBag(fPoint pos);
+
 	bool Use() override;
 };
 

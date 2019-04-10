@@ -3,17 +3,12 @@
 
 #include "Object.h"
 
-enum class ITEM
-{
-	HEALTH_BAG,
-	MAX_TYPE
-};
-
 class Obj_Tank;
 
 class Obj_Item : public Object
 {
 public:
+	Obj_Item(fPoint pos);
 	virtual bool Use();
 
 public:
