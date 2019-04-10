@@ -28,7 +28,6 @@ public:
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
-		EXPLOSION,
 		MAX
 	};
 
@@ -114,6 +113,8 @@ public:
 public:
 
 	float damage = 0.f;
+
+	bool to_destroy = false;
   
 private:
 
@@ -131,7 +132,6 @@ private:
 
 	std::list<Collider*> collisions_list;
 
-	bool to_destroy = false;
 
 	// Body vars ===================================================
 

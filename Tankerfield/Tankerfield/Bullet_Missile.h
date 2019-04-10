@@ -22,6 +22,12 @@ public:
 
 	Collider* explosion = nullptr;
 
+private:
+
+	int explosion_t;
+
+	PerfTimer explosion_time;
+
 };
 
 #endif

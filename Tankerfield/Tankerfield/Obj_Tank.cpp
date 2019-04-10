@@ -391,6 +391,7 @@ void Obj_Tank::ShootDoubleMissile()
 
 	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length+double_missiles_offset*missiles_offset);
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length-double_missiles_offset*missiles_offset);
+
 	left_missile->SetBulletProperties(
 		weapons_info[(uint)basic_shot].bullet_speed,
 		weapons_info[(uint)basic_shot].bullet_life_ms,

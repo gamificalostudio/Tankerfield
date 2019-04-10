@@ -59,8 +59,6 @@ M_Collision::M_Collision()
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
 
-	matrix[(int)Collider::TAG::EXPLOSION][(int)Collider::TAG::ENEMY] = true;
-
 }
 
 M_Collision::~M_Collision()
