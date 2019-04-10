@@ -103,6 +103,9 @@
     <ClCompile Include="WeaponInfo.cpp">
       <Filter>Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet_Missile.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -224,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="WeaponInfo.h">
       <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Missile.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
