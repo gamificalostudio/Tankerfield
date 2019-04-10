@@ -100,7 +100,7 @@ bool M_Collision::Update(float dt)
 				if (to_destroy != (*itr)->collisions_list.end())
 				{
 					LOG("DESTROYED");
-					/*itr = */(*itr)->collisions_list.erase(to_destroy);
+					(*itr)->collisions_list.erase(to_destroy);
 					break;
 				}
 			}

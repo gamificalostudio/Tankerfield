@@ -147,7 +147,8 @@ struct MapData
 	
 	Properties				map_properties;
 
-	Rect<float, float>*		screen_tile_rect = nullptr;
+	
+	iRect*		screen_tile_rect = nullptr;
 	~MapData()
 	{
 		if (screen_tile_rect != nullptr)

@@ -79,18 +79,19 @@ bool M_Map::PostUpdate(float dt)
 			{
 				for (int x = 0; x < data.columns; ++x)
 				{
-
-					int tile_id = (*layer)->Get(x, y);
+					int array_pos = (y * data.columns) + x;
+					int tile_id = (*layer)->data[array_pos];
 					if (tile_id > 0)
 					{
-						iPoint pos = MapToScreenI(x, y);
-						if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
+						//iPoint pos = MapToScreenI(x, y);
+						SDL_Rect rect = (data.screen_tile_rect[array_pos]).operator SDL_Rect();
+						if (SDL_HasIntersection(&rect, &app->render->camera))
 						{
 							TileSet* tileset = GetTilesetFromTileId(tile_id);
 							if (tileset != nullptr)
 							{
 								SDL_Rect r = tileset->GetTileRect(tile_id);
-								app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
+								app->render->Blit(tileset->texture, rect.x, rect.y, &r);
 							}
 						}
 					}
@@ -462,18 +463,6 @@ bool M_Map::LoadMap()
 		data.offset_x = data.map_properties.GetAsInt("offset_x");
 		data.offset_y = data.map_properties.GetAsInt("offset_y");
 
-		uint size = data.columns*data.rows;
-		data.screen_tile_rect = new Rect<float, float>[size];
-		for (float x = 0; x < data.columns; ++x)
-		{
-			for (float y = 0; y < data.rows; ++y)
-			{
-				fPoint pos = app->map->MapToScreenF({x,y});
-				data.screen_tile_rect[(int)(y*data.columns + x)].create(pos.x, pos.y, data.tile_width, data.tile_height);
-			}
-		}
-
-
 		std::string orientation(map.attribute("orientation").as_string());
 		if (orientation == "orthogonal")
 		{
@@ -492,6 +481,19 @@ bool M_Map::LoadMap()
 		{
 			data.type = MAPTYPE_UNKNOWN;
 		}
+
+		data.screen_tile_rect = new iRect[data.columns*data.rows];
+		for (int y = 0; y < data.rows; ++y)
+		{
+			for (int x = 0; x < data.columns; ++x)
+			{
+				iPoint pos = app->map->MapToScreenI(x,y);
+				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
+			}
+		}
+
+
+		
 	}
 
 	return ret;
@@ -500,11 +502,13 @@ bool M_Map::LoadMap()
 SDL_Rect TileSet::GetTileRect(int id) const
 {
 	int relative_id = id - firstgid;
-	SDL_Rect rect = { 0, 0, 0, 0 };
-	rect.w = tile_width;
-	rect.h = tile_height;
-	rect.x = margin + ((rect.w + spacing) * (relative_id % columns));
-	rect.y = margin + ((rect.h + spacing) * (relative_id / columns));
+	SDL_Rect rect = { 
+		margin + ((tile_width + spacing) * (relative_id % columns)),
+		margin + ((tile_height + spacing) * (relative_id / columns)),
+		tile_width,
+		tile_height,
+		 };
+
 	return rect;
 }
 
