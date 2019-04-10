@@ -252,7 +252,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::WALL)
 	{
-		LOG("WALL");
+
 	}
 }
 

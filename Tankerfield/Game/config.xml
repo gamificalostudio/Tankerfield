@@ -30,6 +30,11 @@
   
   </map>
 
+  <scene>
+    <time_between_rounds value ="5000"/>
+    <initial_generated_units value ="10"/>
+  </scene>
+
   <object>
     <tesla_trooper>
       <animations>

@@ -158,6 +158,8 @@ public:
 
 	Collider* AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage=0.f, Object* object = nullptr);
 
+	Collider* AddCollider(float x, float y, float width, float height, Collider::TAG type, float damage = 0.f, Object* object = nullptr);
+
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap

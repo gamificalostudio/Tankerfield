@@ -3,12 +3,14 @@
 #include "Brofiler\Brofiler.h"
 
 #include "Log.h"
+
 #include "App.h"
 #include "M_Map.h"
 #include "M_Window.h"
 #include "M_Collision.h"
 #include "M_Input.h"
 #include "M_Pathfinding.h"
+
 
 M_Map::M_Map()
 {
@@ -68,7 +70,7 @@ bool M_Map::PostUpdate(float dt)
 
 	if (map_loaded == false)
 		return ret;
-	for (std::list<MapLayer*>::iterator layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
+	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
 	{
 
 		if ((*layer)->visible && (*layer)->layer_properties.draw) {
@@ -164,18 +166,28 @@ bool M_Map::Load(const std::string& file_name)
 		data.tilesets.push_back(set);
 	}
 
-	// Load layer info ----------------------------------------------
-	pugi::xml_node layer;
-	for (layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
+	// Load layer info --------------------------------------------------------------------------------------
+	
+	for (pugi::xml_node layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
 		MapLayer* lay = new MapLayer();
 
 		ret = LoadLayer(layer, lay);
 
 		if (ret == true)
-			data.mapLayers.push_back(lay);
+			data.map_layers.push_back(lay);
 	}
+	// Load object layer info -----------------------------------------------------------------------------
 
+	for (pugi::xml_node obj_layer = map_file.child("map").child("objectgroup"); obj_layer && ret; obj_layer = obj_layer.next_sibling("objectgroup"))
+	{
+		ObjectGroup* obj_lay = new ObjectGroup();
+
+		ret = LoadObjectGroup(obj_layer, obj_lay);
+
+		if (ret == true)
+			data.object_layers.push_back(obj_lay);
+	}
 
 	if (ret == true)
 	{
@@ -211,7 +223,7 @@ bool M_Map::Unload()
 	}
 	data.tilesets.clear();
 
-	for (std::list<MapLayer*>::iterator iter = data.mapLayers.begin(); iter != data.mapLayers.end(); ++iter)
+	for (std::list<MapLayer*>::iterator iter = data.map_layers.begin(); iter != data.map_layers.end(); ++iter)
 	{
 		if ((*iter != nullptr))
 		{
@@ -219,7 +231,7 @@ bool M_Map::Unload()
 
 		}
 	}
-	data.mapLayers.clear();
+	data.map_layers.clear();
 
 
 	if (app->on_clean_up == false)
@@ -255,7 +267,7 @@ void M_Map::DebugMap()
 		LOG("spacing: %i margin: %i", s->spacing, s->margin);
 	};
 
-	for (std::list<MapLayer*>::iterator item_layer = data.mapLayers.begin(); item_layer != data.mapLayers.end(); ++item_layer)
+	for (std::list<MapLayer*>::iterator item_layer = data.map_layers.begin(); item_layer != data.map_layers.end(); ++item_layer)
 	{
 		MapLayer* l = (*item_layer);
 		LOG("Layer ----");
@@ -295,13 +307,13 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		{
 			layer->data[i] = tile.attribute("gid").as_int(0);
 
-			if (layer->name == "Colliders" && layer->data[i] != 0u)
+		/*	if (layer->name == "Colliders" && layer->data[i] != 0u)
 			{
 					fPoint pos = layer->GetTilePos(i);
 
 					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
 					data.colliders_list.push_back(aux);
-			}
+			}*/
 
 			if (layer->name == "Buildings")
 			{
@@ -314,6 +326,53 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 
 	return ret;
 }
+
+bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGroup * object_group)
+{
+	bool ret = true;
+	if (object_group_node == NULL)
+	{
+		RELEASE(object_group);
+		return ret = false;
+	}
+
+	object_group->name = object_group_node.attribute("name").as_string();
+	
+	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
+	{
+		++object_group->size;
+	}
+	object_group->objects = new Rect<float, float>[object_group->size];
+	
+	uint i = 0;
+	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
+	{
+		object_group->objects[i].create(
+			obj_node.attribute("x").as_int(0),
+			obj_node.attribute("y").as_int(0),
+			obj_node.attribute("width").as_int(0),
+			obj_node.attribute("height").as_int(0));
+		
+		++i;
+	}
+	
+	if (object_group->name == "Colliders")
+	{
+		for (i = 0; i < object_group->size; ++i)
+		{
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y/ data.tile_height) };
+			fPoint mesure = { (float)object_group->objects[i].w / data.tile_height, (float)object_group->objects[i].h / data.tile_height };
+			app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
+		}
+	}
+	
+	object_group->properties.LoadProperties(object_group_node.child("properties"));
+
+	return ret;
+}
+
+
 
 bool M_Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 {
@@ -347,18 +406,6 @@ bool M_Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 		set->columns = tileset_node.attribute("columns").as_int(0);
 		set->rows = set->tex_height / set->tile_height;
 	}
-
-	//Loading animation
-	//Currently each tileset can only hold one animation - tiled map editor restriction
-	//if (tileset_node.child("tile").child("animation")) {
-	//	set->anim = new Animation;
-
-	//	for (pugi::xml_node frame_node = tileset_node.child("tile").child("animation").child("frame"); frame_node; frame_node = frame_node.next_sibling()) {
-	//		set->anim->PushBack(set->GetTileRect(frame_node.attribute("tileid").as_int() + set->firstgid));
-	//	}
-	//	pugi::xml_node speed_node = tileset_node.child("tile").child("animation").child("frame");
-	//	set->anim->speed = speed_node.attribute("duration").as_float() * set->animSpeedFactor;
-	//}
 
 	return ret;
 }
@@ -479,7 +526,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 {
 	bool ret = false;
 
-	for (std::list<MapLayer*>::const_iterator item = data.mapLayers.begin(); item != data.mapLayers.end(); ++item)
+	for (std::list<MapLayer*>::const_iterator item = data.map_layers.begin(); item != data.map_layers.end(); ++item)
 	{
 		MapLayer* layer = *item;
 
