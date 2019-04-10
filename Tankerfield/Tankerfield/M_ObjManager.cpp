@@ -205,9 +205,11 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+		break;
 	case ObjectType::HEALTH_BAG:
 		ret = new Item_HealthBag(pos);
 		ret->type = ObjectType::HEALTH_BAG;
+		break;
 	}
   
 	if (ret != nullptr)

@@ -9,9 +9,10 @@ Item_HealthBag::Item_HealthBag(fPoint pos) : Obj_Item(pos)
 
 bool Item_HealthBag::Use()
 {
-	caster->SetLife(caster->GetMaxLife());
-
-	to_remove = true;
-
+	if (caster != nullptr)
+	{
+		caster->SetLife(caster->GetMaxLife());
+		to_remove = true;
+	}
 	return true;
 }

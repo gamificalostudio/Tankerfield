@@ -9,6 +9,8 @@ class Obj_Item : public Object
 {
 public:
 	Obj_Item(fPoint pos);
+
+	//Called a single time after the creation of the item
 	virtual bool Use();
 
 public:
