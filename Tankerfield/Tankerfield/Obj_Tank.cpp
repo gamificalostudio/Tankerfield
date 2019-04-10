@@ -111,6 +111,8 @@ bool Obj_Tank::Start()
 
 	life = max_life = 100;
 
+	item = ObjectType::HEALTH_BAG;
+
 	return true;
 }
 
@@ -405,9 +407,17 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::Item()
 {
+	if (app->input->GetKey(kb_item) == KEY_DOWN) {
+		LOG("kb item");
+	}
+
+	if ((*controller)->GetButtonState(gamepad_item) == KEY_DOWN) {
+		LOG("kb controller");
+	}
+
 	if(item != ObjectType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
-			|| app->input->GetMouseButton(gamepad_item) == KEY_DOWN))
+			|| (*controller)->GetButtonState(gamepad_item) == KEY_DOWN))
 	{
 		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
 		new_item->caster = this;
