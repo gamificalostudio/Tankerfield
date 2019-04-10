@@ -109,7 +109,7 @@ public:
 	{
 		if (c1->GetTag() == Collider::TAG::PLAYER)
 		{
-			LOG("REWARD ZONE");
+			/*LOG("REWARD ZONE");*/
 		}
 	}
 	void OnTriggerExit(Collider* c1)
