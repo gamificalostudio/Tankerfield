@@ -92,9 +92,10 @@ bool M_ObjManager::Update(float dt)
 
 				if ((*iterator)->coll != nullptr)
 				{
+					(*iterator)->coll->object = nullptr;
 					(*iterator)->coll->Destroy();
+					(*iterator)->coll = nullptr;
 				}
-
 
 				delete((*iterator));
 				(*iterator) = nullptr;

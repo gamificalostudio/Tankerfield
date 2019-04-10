@@ -140,6 +140,7 @@ private:
 	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
 	friend M_Collision;
+	friend M_ObjManager;
 };
 
 class M_Collision : public Module

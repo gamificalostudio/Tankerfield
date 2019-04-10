@@ -13,7 +13,7 @@ Bullet_Missile::~Bullet_Missile()
 
 void Bullet_Missile::OnTrigger(Collider * collider_1)
 {
-	explosion=app->collision->AddCollider(pos_map, 5.f, 5.f, Collider::TAG::EXPLOSION, 200.f, this);
+	explosion=app->collision->AddCollider(pos_map, 5.f, 5.f, Collider::TAG::EXPLOSION, 200.f, nullptr);
 	explosion->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 	to_remove = true;
 }

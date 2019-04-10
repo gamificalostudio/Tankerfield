@@ -24,11 +24,6 @@ void Collider::SetPosToObj()
 
 void Collider::Destroy()
 {
-	if (object != nullptr)
-	{
-		object->coll = nullptr;
-	}
-
 	to_destroy = true;
 	
 }
