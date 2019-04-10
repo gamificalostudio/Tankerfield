@@ -100,7 +100,6 @@ bool M_Collision::Update(float dt)
 				{
 					LOG("DESTROYED");
 					(*itr)->collisions_list.erase(to_destroy);
-					break;
 				}
 			}
 
