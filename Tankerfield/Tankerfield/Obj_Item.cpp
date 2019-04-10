@@ -1,6 +1,6 @@
-#include "Obj_PickUp.h"
+#include "Obj_Item.h"
 
-bool Obj_PickUp::Use()
+bool Obj_Item::Use()
 {
 	return true;
 }

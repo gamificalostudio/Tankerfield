@@ -3,17 +3,11 @@
 
 #include "Object.h"
 #include "WeaponInfo.h"
-#include <map>
 #include "M_Input.h"
+#include "Obj_Item.h"
 
 struct Controller;
 struct SDL_Texture;
-
-enum class WEAPON {
-	BASIC,
-	FLAMETHROWER,
-	MAX
-};
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -36,6 +30,12 @@ public:
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);
+
+public:
+	//- Logic
+	void SetLife(int life);
+	int GetLife();
+	int GetMaxLife();
 
 private:
 	//- Movement
@@ -66,8 +66,9 @@ private:
 	static Animation * rotate_turr;
 	static WeaponInfo * weapons_info;
   
-  //-Logic
-	int life = 100;
+	//-Logic
+	int life								= 0;
+	int max_life							= 0;
 
 	//- Movement
 	float speed								= 0.f;
@@ -87,9 +88,12 @@ private:
 	//-- Basic shoot
 	uint basic_shot							= (uint)WEAPON::BASIC;
 
-	//-- Main shoot
-	uint main_shot							= (uint)WEAPON::BASIC;
+	//-- Special shoot
+	uint special_shoot						= (uint)WEAPON::BASIC;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
+
+	//- Items
+	ITEM item								= ITEM::MAX_TYPE;
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input

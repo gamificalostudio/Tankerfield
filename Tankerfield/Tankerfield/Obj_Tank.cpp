@@ -105,6 +105,8 @@ bool Obj_Tank::Start()
 
 	time_between_bullets_timer.Start();
 
+	life = max_life = 100;
+
 	return true;
 }
 
@@ -252,6 +254,22 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	{
 		LOG("WALL");
 	}
+}
+
+void Obj_Tank::SetLife(int life)
+{
+	//TODO: Update UI bars
+	this->life = life;
+}
+
+int Obj_Tank::GetLife()
+{
+	return life;
+}
+
+int Obj_Tank::GetMaxLife()
+{
+	return max_life;
 }
 
 void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
