@@ -16,6 +16,7 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "Obj_TeslaTrooper.h"
+#include "Obj_Brute.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
@@ -203,6 +204,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+	case ObjectType::BRUTE:
+		ret = new Obj_Brute(pos);
+		ret->type = ObjectType::BRUTE;
+		break;
 	}
   
 	if (ret != nullptr)

@@ -18,6 +18,7 @@ enum class ObjectType
 	BASIC_BULLET,
 	STATIC,
 	REWARD_ZONE,
+	BRUTE,
 	NO_TYPE
 };
 

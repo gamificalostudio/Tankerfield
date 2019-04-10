@@ -129,6 +129,7 @@
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
+    <ClCompile Include="Obj_Brute.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
     <ClCompile Include="Obj_Static.cpp" />
     <ClCompile Include="UI_Button.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Circle.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
+    <ClInclude Include="Obj_Brute.h" />
     <ClInclude Include="Obj_Bullet.h" />
     <ClInclude Include="Obj_Static.h" />
     <ClInclude Include="Rect.h" />

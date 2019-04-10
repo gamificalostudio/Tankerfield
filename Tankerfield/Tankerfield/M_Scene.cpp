@@ -90,6 +90,10 @@ bool M_Scene::PreUpdate()
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
 	}
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
+	}
 
 	return true;
 }
