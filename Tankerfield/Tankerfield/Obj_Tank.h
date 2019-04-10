@@ -56,6 +56,10 @@ private:
 	void ShootBasic();
 	void ShootFlameThrower();
 
+	//- TankDeath
+
+	void ReviveTank();
+
 private:
 	//- Static variables (remember to inicialize them in the .cpp)
 	static SDL_Texture * base_tex;
@@ -67,7 +71,7 @@ private:
 	static WeaponInfo * weapons_info;
   
   //-Logic
-	int life = 100;
+	int life = 0;
 
 	//- Movement
 	float speed								= 0.f;

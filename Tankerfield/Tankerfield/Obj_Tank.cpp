@@ -9,6 +9,7 @@
 #include "M_Input.h"
 #include "Log.h"
 #include "M_Map.h"
+#include "M_Scene.h"
 #include "M_ObjManager.h"
 #include "M_Window.h"
 #include "PerfTimer.h"
@@ -182,6 +183,10 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
 	{
 		//app->render->camera.x += floor(100.0f * dt);
 		input.x += 1.f;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+		app->scene->tank_1->life == 0;
 	}
 }
 
@@ -378,4 +383,14 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootFlameThrower()
 {
+}
+
+void Obj_Tank::ReviveTank()
+{
+	if (app->scene->tank_1->life == 0)
+	{	
+		app->scene->tank_1->speed == 0;
+		app->scene->tank_1->pos_screen.x = 80;
+		app->scene->tank_1->pos_screen.y = 80;
+	}
 }
