@@ -23,6 +23,7 @@
 #include "Obj_Tank.h"
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
+#include "Bullet_Missile.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
 
@@ -195,6 +196,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::BASIC_BULLET:
 		ret = new Bullet_Basic(pos);
 		ret->type = ObjectType::BASIC_BULLET;
+		break;
+	case ObjectType::BULLET_MISSILE:
+		ret = new Bullet_Missile(pos);
+		ret->type = ObjectType::BULLET_MISSILE;
 		break;
 	case ObjectType::STATIC:
 		ret = new Obj_Static(pos);

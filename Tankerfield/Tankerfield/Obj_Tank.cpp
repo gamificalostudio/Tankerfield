@@ -14,6 +14,7 @@
 #include "PerfTimer.h"
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
+#include "Bullet_Missile.h"
 
 SDL_Texture * Obj_Tank::base_tex			= nullptr;
 SDL_Texture * Obj_Tank::turr_tex			= nullptr;
@@ -388,8 +389,8 @@ void Obj_Tank::ShootDoubleMissile()
 	double_missiles_offset.RotateDegree(90);
 	float missiles_offset = 0.2f;
 
-	Obj_Bullet * left_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length+double_missiles_offset*missiles_offset);
-	Obj_Bullet * right_missile = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length-double_missiles_offset*missiles_offset);
+	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length+double_missiles_offset*missiles_offset);
+	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length-double_missiles_offset*missiles_offset);
 	left_missile->SetBulletProperties(
 		weapons_info[(uint)basic_shot].bullet_speed,
 		weapons_info[(uint)basic_shot].bullet_life_ms,
