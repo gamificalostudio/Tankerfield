@@ -318,7 +318,7 @@ void Obj_Tank::Shoot()
 		special_shot_timer.Start();
 	}
 	//- Basic shoot
-	else if (IsShootingBasic() && basic_shot_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
+	else if (!IsShootingSpecial() && IsShootingBasic() && basic_shot_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
 	{
 		(this->*shot_function[(uint)basic_shot])();
 		basic_shot_timer.Start();
