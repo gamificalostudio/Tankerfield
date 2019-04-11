@@ -156,23 +156,24 @@ public:
 	}
 
 	//Rotate a vector in radians
-	void Rotate(float angle) {
+	Point Rotate(float angle) {
 		Point aux = (*this);
 		float angle_cos = cosf(angle);
 		float angle_sin = sinf(angle);
 		x = aux.x * angle_cos - aux.y * angle_sin;
 		y = aux.x * angle_sin + aux.y * angle_cos;
+		return(*this);
 	}
 
 	//Rotate a vector in degrees
-	void RotateDegree(float angle) {
+	Point RotateDegree(float angle) {
 		angle *= DEGTORAD;
 		Point aux = (*this);
 		float angle_cos = cosf(angle);
 		float angle_sin = sinf(angle);
 		x = aux.x * angle_cos - aux.y * angle_sin;
 		y = aux.x * angle_sin + aux.y * angle_cos;
-
+		return(*this);
 	}
 
 	explicit operator Point<int> () const

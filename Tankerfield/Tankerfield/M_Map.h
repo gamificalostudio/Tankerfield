@@ -9,7 +9,6 @@
 #include "Module.h"
 #include "M_Render.h"
 #include "M_Textures.h"
-#include "Brofiler/Brofiler.h"
 
 
 struct Levels
@@ -141,7 +140,6 @@ struct MapLayer
 
 	inline uint Get(int x, int y) const
 	{
-		//BROFILER_CATEGORY("MAP DRAW Get", Profiler::Color::DeepPink);
 		return data[(y*columns) + x];
 	}
 

@@ -41,7 +41,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 		walk = new Animation(tesla_trooper_node.child("animations").child("walk"));
 	}
 	curr_anim = walk;
-
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
@@ -141,10 +140,6 @@ bool Obj_TeslaTrooper::Update(float dt)
 			}
 		}
 
-
-		//	pos_map += move_vect * speed * dt;
-		//	range_pos.center = pos_map;
-
 		if (target->GetHitPoints() < 0)
 		{
 			// target->to_remove = true;   // CRASH !
@@ -152,7 +147,6 @@ bool Obj_TeslaTrooper::Update(float dt)
 			/* Used for debugging :) TOBEDELETED*/
 			int i = 0;
 			int j = 0;
-
 		}
 	}
 
@@ -167,7 +161,7 @@ bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 
 void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET)
+	if ((collider->GetTag() == Collider::TAG::BULLET))
 	{
 		life -= collider->damage;
 		if (life <= 0)

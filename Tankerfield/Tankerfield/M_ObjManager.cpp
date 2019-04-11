@@ -23,6 +23,8 @@
 #include "Obj_Tank.h"
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
+#include "Bullet_Missile.h"
+#include "Obj_Explosion.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
@@ -95,9 +97,10 @@ bool M_ObjManager::Update(float dt)
 
 				if ((*iterator)->coll != nullptr)
 				{
+					(*iterator)->coll->object = nullptr;
 					(*iterator)->coll->Destroy();
+					(*iterator)->coll = nullptr;
 				}
-
 
 				delete((*iterator));
 				(*iterator) = nullptr;
@@ -131,44 +134,41 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
+
 	std::vector<Object*> draw_objects;
 
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (std::list<Object*>::iterator item = objects.begin(); item!= objects.end(); ++item)
 	{
-		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
-
-   	for (std::list<Object*>::iterator item = objects.begin(); item!= objects.end(); ++item)
-  	{
-	  	if (*item != nullptr)
-  		{
-        (*item)->CalculateDrawVariables();
-        if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
-        {
-          draw_objects.push_back(*item);
+		if (*item != nullptr)
+		{
+			(*item)->CalculateDrawVariables();
+			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h))
+			{
+				draw_objects.push_back(*item);
 			}
 		}
+	}
 
-    std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
+	std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
 
-    //Draw all the shadows first
-    for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
-    {
-      (*item)->DrawShadow();
-    }
+	//Draw all the shadows first
+	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+	{
+		(*item)->DrawShadow();
+	}
 
-    //Draw the objects above the shadows
-    for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
-    {
-      (*item)->Draw(dt);
+	//Draw the objects above the shadows
+	for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+	{
+		(*item)->Draw(dt);
 
-      if (app->scene->draw_debug) {
-        (*item)->DrawDebug();
-      }
-    }
+		if (app->scene->draw_debug) {
+			(*item)->DrawDebug();
+		}
+	}
 
-    draw_objects.clear();
-    }
-    SDL_RenderSetClipRect(app->render->renderer, nullptr);
+	draw_objects.clear();
+
 	return true;
 }
 
@@ -207,6 +207,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Bullet_Basic(pos);
 		ret->type = ObjectType::BASIC_BULLET;
 		break;
+	case ObjectType::BULLET_MISSILE:
+		ret = new Bullet_Missile(pos);
+		ret->type = ObjectType::BULLET_MISSILE;
+		break;
 	case ObjectType::STATIC:
 		ret = new Obj_Static(pos);
 		ret->type = ObjectType::STATIC;
@@ -214,6 +218,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+		break;
+	case ObjectType::EXPLOSION:
+		ret = new Obj_Explosion(pos);
+		ret->type = ObjectType::EXPLOSION;
 		break;
 	case ObjectType::HEALTH_BAG:
 		ret = new Item_HealthBag(pos);
