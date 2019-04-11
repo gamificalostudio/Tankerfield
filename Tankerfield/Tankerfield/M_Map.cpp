@@ -10,6 +10,7 @@
 #include "M_Collision.h"
 #include "M_Input.h"
 #include "M_Pathfinding.h"
+#include "M_Scene.h"
 
 
 M_Map::M_Map()
@@ -71,6 +72,7 @@ bool M_Map::PostUpdate(float dt)
 	if (map_loaded == false)
 		return ret;
 
+	std::vector<Camera*>::iterator item_cam;
 	SDL_Rect rect;
 	iPoint pos;
 	SDL_Rect r;
@@ -83,7 +85,7 @@ bool M_Map::PostUpdate(float dt)
 
 	
 	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
-		for (layer = data.mapLayers.begin(); layer != data.mapLayers.end(); ++layer)
+		for (layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
 		{
 			BROFILER_CATEGORY("MAP DRAW layer", Profiler::Color::DeepPink);
 			
@@ -109,7 +111,7 @@ bool M_Map::PostUpdate(float dt)
 							{
 								pos = MapToScreenI(x, y);
 
-								rect.x = pos.x;
+								rect.x = pos.x-data.tile_width*0.5f;
 								rect.y = pos.y;
 								rect.w = data.tile_width;
 								rect.h = data.tile_height;
@@ -166,9 +168,9 @@ bool M_Map::PostUpdate(float dt)
 	}
 
 	// Print the lines in the limits ============================================== (don't working "DrawLine")(no puede estar en el blit, se hace cada vez)
-	Camera* cam1 = app->scene->tank_1->camera_player;
-	SDL_RenderDrawLine(app->render->renderer, cam1->rect.x + cam1->rect.w, 0, cam1->rect.x + cam1->rect.w, 2000);
-	SDL_RenderDrawLine(app->render->renderer, 0, cam1->rect.y + cam1->rect.h, 2000, cam1->rect.y + cam1->rect.h);
+	//Camera* cam1 = app->scene->tank_1->camera_player;
+	//SDL_RenderDrawLine(app->render->renderer, cam1->rect.x + cam1->rect.w, 0, cam1->rect.x + cam1->rect.w, 2000);
+	//SDL_RenderDrawLine(app->render->renderer, 0, cam1->rect.y + cam1->rect.h, 2000, cam1->rect.y + cam1->rect.h);
 
 	return ret;
 }

@@ -8,6 +8,7 @@
 
 struct Controller;
 struct SDL_Texture;
+class Camera;
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -25,6 +26,8 @@ public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
+
+	void CameraMovement(float dt);
 
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera) override;
@@ -124,6 +127,8 @@ private:
 	SDL_GameControllerButton gamepad_item		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_special	= SDL_CONTROLLER_AXIS_INVALID;
+public:
+	Camera* camera_player					= nullptr;
 };
 
 #endif

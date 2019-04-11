@@ -21,6 +21,8 @@ public:
 	int current_level = 0;
 	Obj_Tank * tank_1 = nullptr;
 	Obj_Tank * tank_2 = nullptr;
+	Obj_Tank * tank_3 = nullptr;
+	Obj_Tank * tank_4 = nullptr;
 public:
 
 	M_Scene();

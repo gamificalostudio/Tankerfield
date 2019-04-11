@@ -41,11 +41,9 @@ bool Object::Draw(float dt, Camera * camera)
 {
 	app->render->Blit(
 		curr_tex,
-
-=======
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-    camera,
+		camera,
 		&frame);
 
 	return true;
@@ -123,4 +121,5 @@ void Object::CalculateDrawVariables()
 	if (curr_anim != nullptr) {
 		frame = curr_anim->GetFrame(angle);
 	}
+}
 

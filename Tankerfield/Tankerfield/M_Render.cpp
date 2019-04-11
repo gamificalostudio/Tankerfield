@@ -141,15 +141,6 @@ bool M_Render::PostUpdate(float dt)
 {
 	// Camera fix TODO: Move it to camera class
 
-	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
-	fPoint target_pos;
-	
-	target_pos.x = camera.x;
-	target_pos.y = camera.y;
-
-	camera.x = lerp(screen_pos.x - camera.w * 0.5f, target_pos.x, 0.6f);
-	camera.y = lerp(screen_pos.y - camera.h * 0.5f, target_pos.y, 0.6f);
-
 		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
@@ -214,8 +205,8 @@ bool M_Render::CleanUp()
 // Load Game State
 bool M_Render::Load(pugi::xml_node& data)
 {
-	camera.x = data.child("camera").attribute("x").as_int();
-	camera.y = data.child("camera").attribute("y").as_int();
+	//camera.x = data.child("camera").attribute("x").as_int();
+	//camera.y = data.child("camera").attribute("y").as_int();
 
 	return true;
 }
@@ -250,9 +241,9 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 {
 	iPoint ret;
 	int scale = app->win->GetScale();
-
-	ret.x = (x + camera.x / scale);
-	ret.y = (y + camera.y / scale);
+	
+	ret.x = (x + app->scene->tank_1->camera_player->rect.x / scale);
+	ret.y = (y + app->scene->tank_1->camera_player->rect.y / scale);
 
 	return ret;
 }
@@ -368,7 +359,7 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	std::vector<Camera*>::iterator item_cam;
 	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
-			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 		if (use_camera)
 		{
 			rec.x = (int)(-(*item_cam)->rect.x + rect.x * scale);
@@ -560,6 +551,6 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 
 	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
 
-	return SDL_HasIntersection(&r, &camera);
+	return SDL_HasIntersection(&r, &camera->rect);
 }
 

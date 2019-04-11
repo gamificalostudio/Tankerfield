@@ -66,8 +66,7 @@ bool M_Scene::Start()
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(50.f, 50.f));
 
 	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
-  
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(19.f, 19.f));
+
 
 	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
 
@@ -105,7 +104,7 @@ bool M_Scene::PreUpdate()
 bool M_Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	/*if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
 		app->render->camera.y -= floor(200.0f * dt);
 	}
@@ -120,7 +119,7 @@ bool M_Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		app->render->camera.x += floor(200.0f * dt);
-	}
+	}*/
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
@@ -189,6 +188,7 @@ void M_Scene::DebugPathfinding()
 {
 	if (test_path)
 	{
+		std::vector<Camera*>::iterator item_cam;
 		static iPoint origin;
 		static bool origin_selected = false;
 		static bool createdDebugPath = false;
@@ -237,7 +237,13 @@ void M_Scene::DebugPathfinding()
 				for (uint i = 0; i < debugPathSize; ++i)
 				{
 					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
-					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y);
+					
+					for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+					{
+						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
+					}
+					SDL_RenderSetClipRect(app->render->renderer, nullptr);
 				}
 			}
 
@@ -245,7 +251,11 @@ void M_Scene::DebugPathfinding()
 
 		p = app->map->MapToScreenI(p.x, p.y);
 
-		app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y);
+		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		{
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
+		}SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
 }
 
