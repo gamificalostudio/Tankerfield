@@ -60,7 +60,7 @@ bool M_Scene::Start()
 
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(19.f, 19.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(5.f, 5.f));
 
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
 	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));

@@ -81,7 +81,7 @@ private:
 	//-Logic
 	int life								= 0;
 	int max_life							= 0;
-
+	bool alive								= true;
 
 	//- Movement
 	float speed								= 0.f;
