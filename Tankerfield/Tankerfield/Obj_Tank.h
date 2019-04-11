@@ -34,8 +34,10 @@ public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool Draw(float dt) override;
-	bool DrawShadow() override;
+
+	bool Draw(float dt, Camera * camera) override;
+	bool DrawShadow(Camera * camera) override;
+
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);

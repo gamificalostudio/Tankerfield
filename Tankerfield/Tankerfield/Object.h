@@ -18,6 +18,7 @@ class Collider;
 
 struct SDL_Texture;
 class Collider;
+class Camera;
 
 struct TileSetObject {
 
@@ -57,9 +58,12 @@ public:
 
 	virtual bool Update(float dt);
 
-	virtual bool Draw(float dt);
 
-	virtual bool DrawShadow() { return true; }
+	//SDL_Rect * GetRect();
+
+	virtual bool Draw(float dt, Camera * camera);
+
+	virtual bool DrawShadow(Camera * camera) { return true; }
 
 	virtual bool CleanUp() { return true; };
 
@@ -76,6 +80,7 @@ public:
 	virtual void OnTrigger(Collider * collider) {}
 
 	virtual void OnTriggerExit(Collider * collider) {}
+
 
 	void DrawDebug();
 
@@ -108,6 +113,7 @@ public:
 	iPoint draw_offset		= { 0.f, 0.f };		//Change it to make the object not render from the top left in the position //Pixels to the center of the player. Used to center the player sprite. Used in Object::PostUpdate(float dt) and for sprite sorting
 	fPoint pivot			= { 0.f, 0.f };		//Offset from the position. Used for sprite sorting.
 	SDL_Rect frame			= { 0, 0, 0, 0 };	//A rect representing the sprite. Used for camera culling. Automatically set if you use curr_anim.
+
 };
 
 #endif
