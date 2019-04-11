@@ -48,5 +48,7 @@ bool Item_HealthBag::Use()
 	}
 	curr_tex = tex;
 
+	draw_offset = { 17, 65 };
+
 	return true;
 }

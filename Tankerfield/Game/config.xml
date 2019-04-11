@@ -1118,9 +1118,9 @@
 
   <items>
     <health_bag>
-      <texture path ="textures/objects/tank/base.png"/>
+      <texture path ="textures/objects/item/health_bag.png"/>
       <animations>
-        <rotate speed="1" rotation="counter-clockwise" first_dir_angle ="0">
+        <rotate speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <frame num ="0"  x="0"   y="0" w="33" h="32"/>
             <frame num ="1"  x="33"  y="0" w="33" h="32"/>
