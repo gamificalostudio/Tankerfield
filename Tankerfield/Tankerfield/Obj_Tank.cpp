@@ -89,16 +89,21 @@ bool Obj_Tank::Start()
 	cannon_length = 1.f;
 
 	//TODO: Load them from the XML
-	kb_shoot_basic		= SDL_BUTTON_RIGHT;
-	kb_shoot_special	= SDL_BUTTON_LEFT;
-	kb_up			= SDL_SCANCODE_W;
+  kb_up			  = SDL_SCANCODE_W;
 	kb_left			= SDL_SCANCODE_A;
 	kb_down			= SDL_SCANCODE_S;
 	kb_right		= SDL_SCANCODE_D;
+	kb_shoot_basic		= SDL_BUTTON_RIGHT;
+	kb_shoot_special	= SDL_BUTTON_LEFT;
+	kb_item			= SDL_SCANCODE_F;
+	kb_interact		= SDL_SCANCODE_SPACE;
+  
 	gamepad_move	= Joystick::LEFT;
 	gamepad_aim		= Joystick::RIGHT;
 	gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_TRIGGERLEFT;
 	gamepad_shoot_special	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+  gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+  gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -106,6 +111,10 @@ bool Obj_Tank::Start()
 	base_angle_lerp_factor = 11.25f;
 
 	basic_shot_timer.Start();
+
+	life = max_life = 100;
+
+	item = ObjectType::HEALTH_BAG;
 
 	return true;
 }
@@ -123,6 +132,7 @@ bool Obj_Tank::PreUpdate()
 bool Obj_Tank::Update(float dt)
 {
 	Shoot();
+	Item();
 	Movement(dt);
 	return true;
 }
@@ -254,6 +264,22 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	{
 
 	}
+}
+
+void Obj_Tank::SetLife(int life)
+{
+	//TODO: Update UI bars
+	this->life = life;
+}
+
+int Obj_Tank::GetLife()
+{
+	return life;
+}
+
+int Obj_Tank::GetMaxLife()
+{
+	return max_life;
 }
 
 void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
@@ -399,4 +425,17 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootFlameThrower()
 {
+}
+
+void Obj_Tank::Item()
+{
+	if(item != ObjectType::NO_TYPE
+		&& (app->input->GetKey(kb_item) == KEY_DOWN
+			|| (*controller)->GetButtonState(gamepad_item) == KEY_DOWN))
+	{
+		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
+		new_item->caster = this;
+		new_item->Use();
+		item = ObjectType::NO_TYPE;
+	}
 }

@@ -4,6 +4,12 @@
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 
+enum class WEAPON {
+	BASIC,
+	FLAMETHROWER,
+	MAX
+};
+
 //Class which ONLY holds information about the weapons.
 //It doesn't have any functionality more than loading the properties
 
