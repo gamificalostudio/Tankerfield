@@ -34,10 +34,7 @@ void UI_Label::SetText(String text)
 
 bool UI_Label::Draw()
 {
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
-	{
-		app->render->Blit(label_texture, position.x - section.w * 0.5f, position.y - section.h * 0.5f, (*item_cam), &section);
-	}
+	app->render->Blit(label_texture, position.x- section.w * 0.5f, position.y - section.h * 0.5f , &section, false, 0.0f);
 
 	return false;
 }
