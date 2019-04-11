@@ -4,8 +4,8 @@
 #include "App.h"
 #include "Log.h"
 
-UI_Element::UI_Element(const fPoint position, UI_ElementDefinition definition, UI_Listener *listener) 
-	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset) {}
+UI_Element::UI_Element(const fPoint position, const UI_ElementDefinition definition, UI_Listener *listener) 
+	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section){}
 
 UI_Element::~UI_Element()
 {
@@ -26,7 +26,7 @@ bool UI_Element::UpdateRelativePosition()
 bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &draw_rect);
+	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section);
 
 	return true;
 }
@@ -78,30 +78,61 @@ fRect UI_Element::GetSection()
 	fPoint pos;
 	fRect  ret;
 
-	switch (pivot.pos_x)
+	if (sprite_section.w == 0 || sprite_section.h == 0)
 	{
-	case Pivot::POS_X::CENTER:
-		pos.x = position.x - (float)sprite_section.w * .5f + section_offset.x;
-		break;
-	case Pivot::POS_X::LEFT:
-		pos.x = position.x + section_offset.x;
-		break;
-	case Pivot::POS_X::RIGHT:
-		pos.x = position.x - (float)sprite_section.w + section_offset.x;
-		break;
+		switch (pivot.pos_x)
+		{
+		case Pivot::POS_X::CENTER:
+			pos.x = position.x -section_width * .5f + section_offset.x;
+			break;
+		case Pivot::POS_X::LEFT:
+			pos.x = position.x + section_offset.x;
+			break;
+		case Pivot::POS_X::RIGHT:
+			pos.x = position.x - section_width + section_offset.x;
+			break;
+		}
+
+		switch (pivot.pos_y)
+		{
+		case Pivot::POS_Y::CENTER:
+			pos.y = position.y - section_height * .5f + section_offset.y;
+			break;
+		case Pivot::POS_Y::UP:
+			pos.y = position.y + section_offset.y;
+			break;
+		case Pivot::POS_Y::DOWN:
+			pos.y = position.y - section_height + section_offset.y;
+			break;
+		}
 	}
-	
-	switch (pivot.pos_y)
+	else
 	{
-	case Pivot::POS_Y::CENTER:
-		pos.y = position.y - (float)sprite_section.h * .5f + section_offset.y;
-		break;		
-	case Pivot::POS_Y::UP:
-		pos.y = position.y + section_offset.y;
-		break;		
-	case Pivot::POS_Y::DOWN:
-		pos.y = position.y - (float)sprite_section.h + section_offset.y;
-		break;
+		switch (pivot.pos_x)
+		{
+		case Pivot::POS_X::CENTER:
+			pos.x = position.x - (float)sprite_section.w * .5f + section_offset.x;
+			break;
+		case Pivot::POS_X::LEFT:
+			pos.x = position.x + section_offset.x;
+			break;
+		case Pivot::POS_X::RIGHT:
+			pos.x = position.x - (float)sprite_section.w + section_offset.x;
+			break;
+		}
+
+		switch (pivot.pos_y)
+		{
+		case Pivot::POS_Y::CENTER:
+			pos.y = position.y - (float)sprite_section.h * .5f + section_offset.y;
+			break;
+		case Pivot::POS_Y::UP:
+			pos.y = position.y + section_offset.y;
+			break;
+		case Pivot::POS_Y::DOWN:
+			pos.y = position.y - (float)sprite_section.h + section_offset.y;
+			break;
+		}
 	}
 
 	ret.create(pos.x, pos.y, section_width, section_height);

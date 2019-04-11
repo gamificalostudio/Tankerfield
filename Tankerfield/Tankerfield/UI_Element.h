@@ -60,7 +60,7 @@ struct UI_ElementDefinition
 	fPoint     section_offset = { 0.f, 0.f };
 	float      section_width = 0.f;
 	float      section_height= 0.f;
-	
+	SDL_Rect   sprite_section = { 0, 0, 0, 0};
 
 };
 
@@ -68,7 +68,7 @@ class UI_Element
 {
 public:
 
-	UI_Element(const fPoint position, UI_ElementDefinition definition, UI_Listener *listener);
+	UI_Element(const fPoint position, const UI_ElementDefinition definition, UI_Listener *listener);
 	
 	virtual ~UI_Element();
 
@@ -99,6 +99,7 @@ public:
 
 	String                name;
 	fPoint                position = { 0.f, 0.f };
+	SDL_Rect              sprite_section = { 0, 0, 0, 0};
 	float                 section_width = 0.f;
 	float                 section_height = 0.f;
 	fPoint                section_offset = { 0.f, 0.f };
@@ -112,7 +113,6 @@ protected:
 	
 	fPoint                relative_position = { 0.f, 0.f };
 	Pivot                 pivot;
-	SDL_Rect              sprite_section = { 0, 0, 0, 0};
 	UI_Listener         * listener = nullptr;
 
 	// Properties ========================================

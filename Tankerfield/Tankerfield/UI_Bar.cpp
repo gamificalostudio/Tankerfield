@@ -4,8 +4,9 @@
 #include "App.h"
 
 UI_Bar::UI_Bar(fPoint position, UI_BarDef definition, UI_Listener* listener) : UI_Element(position, definition, listener)
-, direction(definition.direction), color_1(definition.color_1), color_2(definition.color_2)
+, direction(definition.direction), color_1(definition.color_1), color_2(definition.color_2), value(definition.value)
 {
+	
 }
 
 
@@ -18,6 +19,19 @@ bool UI_Bar::Draw()
 {
 	fRect back_rect = GetSection();
 	SDL_Rect     percent_rect;
+
+	// Draw back rect
+	app->render->DrawQuad((SDL_Rect)back_rect, color_2.r, color_2.g, color_2.b, color_2.a, true, false);
+
+	if (value > 1.f)
+	{
+		value = 1.f;
+	}
+	else if (value <= 0.f)
+	{
+		value = 0.f;
+		return true;
+	}
 
 	switch (direction)
 	{
@@ -35,10 +49,12 @@ bool UI_Bar::Draw()
 		break;
 	}
 
-	// Draw back rect
-	app->render->DrawQuad((SDL_Rect)back_rect, color_2.r, color_2.g, color_2.b, color_2.a, true, false);
 	// Draw percent rect
 	app->render->DrawQuad(percent_rect, color_1.r, color_1.g, color_1.b, color_1.a, true, false);
+
+	// Draw sprite 
+	SDL_Rect draw_pos = GetDrawRect();
+	app->render->BlitUI(app->ui->GetAtlas(), draw_pos.x, draw_pos.y, &sprite_section);
 
 	return true;
 }

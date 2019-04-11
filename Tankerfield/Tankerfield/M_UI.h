@@ -26,6 +26,7 @@ class UI_Slider;
 class UI_Label;
 class UI_Checkbox;
 class UI_TextPanel;
+class UI_Bar;
 
 struct UI_ElementDefinition;
 struct UI_ButtonDef;
@@ -34,6 +35,7 @@ struct UI_ImageDef;
 struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
+struct UI_BarDef;
 
 enum class ClickState
 {
@@ -89,19 +91,21 @@ public:
 
 	// Creation functions ---------------------------------------------------------
 
-	UI_Element* CreateObject(const fPoint position, UI_ElementDefinition definition, UI_Listener* listener = nullptr);
+	UI_Element	 * CreateObject(const fPoint position, const UI_ElementDefinition definition, UI_Listener* listener = nullptr);
 
-	UI_Label* CreateLabel(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener = nullptr);
+	UI_Label	 * CreateLabel(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener = nullptr);
 
-	UI_Image* CreateImage(const fPoint position, UI_ImageDef definition, UI_Listener* listener = nullptr);
+	UI_Image	 * CreateImage(const fPoint position, const UI_ImageDef definition, UI_Listener* listener = nullptr);
 
-	UI_Button* CreateButton(const fPoint position, UI_ButtonDef definition, UI_Listener* listener = nullptr);
+	UI_Button	 * CreateButton(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener = nullptr);
 
-	UI_Slider* CreateSlider(const fPoint position, UI_SliderDef definition, UI_Listener* listener = nullptr);
+	UI_Slider	 * CreateSlider(const fPoint position, const UI_SliderDef definition, UI_Listener* listener = nullptr);
 
-	UI_Checkbox* CreateCheckbox(const fPoint position, UI_CheckboxDef definition, UI_Listener* listener = nullptr);
+	UI_Checkbox  * CreateCheckbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener* listener = nullptr);
 
-	UI_TextPanel * CreateTextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener* listener = nullptr);
+	UI_TextPanel * CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener* listener = nullptr);
+
+	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
 
 	// Object functions ----------------------------------------------------------
 
