@@ -10,6 +10,15 @@ struct Controller;
 struct SDL_Texture;
 class Camera;
 
+enum class WEAPON {
+	BASIC,
+	FLAMETHROWER,
+	DOUBLE_MISSILE,
+	MAX
+
+};
+
+
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
@@ -31,6 +40,7 @@ public:
 
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera) override;
+
 
 	bool CleanUp() override;
 
@@ -61,6 +71,7 @@ private:
 	//- Weapons methods
 	void ShootBasic();
 	void ShootFlameThrower();
+	void ShootDoubleMissile();
 
 	//- Item
 	void Item();
@@ -98,7 +109,7 @@ private:
 	PerfTimer basic_shot_timer;
   
 	//-- Special shoot
-	uint special_shoot					= (uint)WEAPON::BASIC;
+	uint special_shoot					= (uint)WEAPON::DOUBLE_MISSILE;
 	PerfTimer special_shot_timer;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 

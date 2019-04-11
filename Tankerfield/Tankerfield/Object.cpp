@@ -36,8 +36,7 @@ bool Object::Update(float dt)
 	return true;
 }
 
-bool Object::Draw(float dt, Camera * camera)
-
+bool Object::Draw(float dt)
 {
 	app->render->Blit(
 		curr_tex,
@@ -48,19 +47,6 @@ bool Object::Draw(float dt, Camera * camera)
 
 	return true;
 }
-
-
-//Returns the rect to be drawn
-//SDL_Rect * Object::GetRect()
-//{
-//	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-
-//	SDL_Rect rect = curr_anim->GetFrame(angle);
-//	rect.x = screen_pos.x - draw_offset.x;
-//	rect.y = screen_pos.y - draw_offset.y;
-
-//	return &rect;
-//}
 
 //void Object::Draw() {
 //	if (current_animation != nullptr)
@@ -90,6 +76,8 @@ void Object::DrawDebug()
 	case ObjectType::TESLA_TROOPER:
 		app->render->DrawQuad(section, 0, 0, 255, 80);
 		break;
+	case ObjectType::EXPLOSION:
+		app->render->DrawQuad(section, 255, 0, 255, 80);
 	default:
 		break;
 	}
@@ -122,4 +110,3 @@ void Object::CalculateDrawVariables()
 		frame = curr_anim->GetFrame(angle);
 	}
 }
-
