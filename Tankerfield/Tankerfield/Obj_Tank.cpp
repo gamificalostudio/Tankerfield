@@ -113,6 +113,17 @@ bool Obj_Tank::Start()
 
 	item = ObjectType::HEALTH_BAG;
 
+	std::vector<Camera*>::iterator item_cam;
+	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	{
+		if (!(*item_cam)->assigned)
+		{
+			(*item_cam)->assigned = true;
+			camera_player = (*item_cam);
+			break;
+		}
+	}
+
 	return true;
 }
 
@@ -285,8 +296,8 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoin
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_pos.x += app->render->camera.x;
-	mouse_pos.y += app->render->camera.y;
+	mouse_pos.x += camera_player->rect.x;
+	mouse_pos.y += camera_player->rect.y;
 
 	int tile_width = 100, tile_height = 50;
   

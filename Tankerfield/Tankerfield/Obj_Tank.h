@@ -8,6 +8,7 @@
 
 struct Controller;
 struct SDL_Texture;
+class Camera;
 
 enum class WEAPON {
 	BASIC,
@@ -34,8 +35,13 @@ public:
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-	bool Draw(float dt) override;
-	bool DrawShadow() override;
+
+	void CameraMovement(float dt);
+
+	bool Draw(float dt, Camera * camera) override;
+	bool DrawShadow(Camera * camera) override;
+
+
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);
@@ -132,6 +138,8 @@ private:
 	SDL_GameControllerButton gamepad_item		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_special	= SDL_CONTROLLER_AXIS_INVALID;
+public:
+	Camera* camera_player					= nullptr;
 };
 
 #endif

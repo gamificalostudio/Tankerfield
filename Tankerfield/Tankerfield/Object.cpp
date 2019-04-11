@@ -42,6 +42,7 @@ bool Object::Draw(float dt)
 		curr_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
+		camera,
 		&frame);
 
 	return true;
