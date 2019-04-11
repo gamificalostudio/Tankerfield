@@ -5,6 +5,7 @@
 
 #include "Log.h"
 #include "Rect.h"
+#include "Quadtree.h"
 
 #include "Module.h"
 #include "M_Render.h"
@@ -197,7 +198,7 @@ public:
 
 	MapData					data;
 	std::list<Levels*>		levels;
-
+	Quadtree*				qt = nullptr;
 private:
 
 	bool					map_loaded = false;

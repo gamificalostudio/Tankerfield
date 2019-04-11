@@ -491,8 +491,8 @@ bool M_Map::LoadMap()
 				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
 			}
 		}
-
-
+		SDL_Rect area = {0,0,10,10};
+		qt = new Quadtree(1, area, 0, 4);
 		
 	}
 
