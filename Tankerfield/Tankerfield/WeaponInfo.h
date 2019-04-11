@@ -7,6 +7,7 @@
 enum class WEAPON {
 	BASIC,
 	FLAMETHROWER,
+	DOUBLE_MISSILE,
 	MAX
 };
 

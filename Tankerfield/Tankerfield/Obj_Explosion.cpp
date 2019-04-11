@@ -18,7 +18,6 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
 	pugi::xml_node explosion_node = app->config.child("object").child("explosion");
 
-	time = SDL_GetTicks();
 	if (explosion_tex == nullptr)
 	{
 		explosion_tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
@@ -42,11 +41,10 @@ Obj_Explosion::~Obj_Explosion()
 
 bool Obj_Explosion::Update(float dt)
 {
-
-	//if (SDL_GetTicks()-time>100) 
-	//{
-	//	to_remove = true;
-	//}
+	if (curr_anim != nullptr&&curr_anim->Finished())
+	{
+		to_remove = true;
+	}
 
 	return true;
 }

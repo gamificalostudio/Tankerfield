@@ -32,8 +32,6 @@ private:
 	Collider* coll_explosion=nullptr;
 
 	// ---
-	Timer timer;
-
 	Animation* explosion_anim;
 	SDL_Texture * explosion_tex;
 };
