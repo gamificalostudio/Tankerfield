@@ -498,13 +498,8 @@ bool M_Map::LoadMap()
 			 0,
 			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
 			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns-1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h};
-			/*SDL_Rect area = { 0,
-			 0,
-			 (data.screen_tile_rect[(data.columns - 1)].GetRight()),
-			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns-1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h};*/
-
 		;
-		data.qt = new Quadtree<SDL_Rect>(area);
+		data.qt = new Quadtree_Map(area);
 		
 	}
 

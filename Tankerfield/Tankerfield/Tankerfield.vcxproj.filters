@@ -88,12 +88,6 @@
     <ClCompile Include="App.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Flamethrower.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet_Basic.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -106,8 +100,12 @@
     <ClCompile Include="MathUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponInfo.cpp" />
     <ClCompile Include="Quadtree.cpp">
-      <Filter>Tools</Filter>
+      <Filter>Tools\QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree_Map.cpp">
+      <Filter>Tools\QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -210,12 +208,6 @@
     <ClInclude Include="App.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon_Flamethrower.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet_Basic.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -232,8 +224,12 @@
     <ClInclude Include="MathUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="WeaponInfo.h" />
     <ClInclude Include="Quadtree.h">
-      <Filter>Tools</Filter>
+      <Filter>Tools\QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree_Map.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +262,9 @@
     </Filter>
     <Filter Include="Objects\Bullets">
       <UniqueIdentifier>{7fdb053f-2696-4225-9b31-203b4b8cbd8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\QuadTree">
+      <UniqueIdentifier>{39b4a6ff-f872-44ca-a2da-c501ec67afb8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

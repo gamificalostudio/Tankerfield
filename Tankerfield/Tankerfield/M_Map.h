@@ -5,7 +5,7 @@
 
 #include "Log.h"
 #include "Rect.h"
-#include "Quadtree.h"
+#include "Quadtree_Map.h"
 
 #include "Module.h"
 #include "M_Render.h"
@@ -150,7 +150,7 @@ struct MapData
 
 	
 	iRect*		screen_tile_rect = nullptr;
-	Quadtree<SDL_Rect>*				qt = nullptr;
+	Quadtree_Map*				qt = nullptr;
 
 	~MapData()
 	{
