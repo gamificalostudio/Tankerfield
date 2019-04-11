@@ -75,19 +75,43 @@ bool M_Map::PostUpdate(float dt)
 
 		if ((*layer)->visible) {
 
-			(*layer)->qt->DrawMap(app->render->camera);
+			if ((*layer)->visible) {
+				for (int y = 0; y < data.rows; ++y)
+				{
+					for (int x = 0; x < data.columns; ++x)
+					{
+						int array_pos = (y * data.columns) + x;
+						int tile_id = (*layer)->data[array_pos];
+						if (tile_id > 0)
+						{
+							//iPoint pos = MapToScreenI(x, y);
+							SDL_Rect rect = (data.screen_tile_rect[array_pos]).operator SDL_Rect();
+							if (SDL_HasIntersection(&rect, &app->render->camera))
+							{
+								TileSet* tileset = GetTilesetFromTileId(tile_id);
+								if (tileset != nullptr)
+								{
+									SDL_Rect r = tileset->GetTileRect(tile_id);
+									app->render->Blit(tileset->texture, rect.x, rect.y, &r);
+								}
+							}
+						}
+					}
+				}
+				//(*layer)->qt->DrawMap(app->render->camera);
 		}
+
+			
 	}
 
-	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
-	{
 
-		if ((*layer)->visible) {
-
-			(*layer)->qt->Draw();
-		}
 	}
-	
+
+	//for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
+	//{
+
+	//	(*layer)->qt->Draw();
+	//}
 	//data.qt->DrawMap(app->render->camera);
 	//// Draw Grid ==============================================
 	if(show_grid)
@@ -296,7 +320,7 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
 			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
 		;
-		layer->qt = new Quadtree_Map(area, 0, 3);
+		layer->qt = new Quadtree_Map(area, 0, 6);
 
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
