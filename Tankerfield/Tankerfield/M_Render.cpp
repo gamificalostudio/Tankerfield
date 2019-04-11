@@ -226,20 +226,22 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
 		bool ret = true;
 
-	//uint scale = app->win->GetScale();
+	uint scale = app->win->GetScale();
 
 	SDL_Rect rect_in_screen;
 	SDL_Rect spritesheet_rect{ 0,0,0,0 };
 
 	//Transform the rect in the word to the rect in screen =======================
-	rect_in_screen.x = -current_camera->rect.x  + screen_x /** scale*/;
-	rect_in_screen.y = -current_camera->rect.y  + screen_y /** scale*/;
+	rect_in_screen.x = -current_camera->rect.x  + screen_x * scale;
+	rect_in_screen.y = -current_camera->rect.y  + screen_y * scale;
+
+
 
 	if (section != NULL)
 	{
 		spritesheet_rect = *section;
-		rect_in_screen.w = section->w/* * scale*/;
-		rect_in_screen.h = section->h/* * scale*/;
+		rect_in_screen.w = section->w * scale;
+		rect_in_screen.h = section->h * scale;
 	}
 	else
 	{
@@ -352,7 +354,7 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 
 bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color)
 {
-	fPoint point_1, point_2, point_3, point_4/*, point_w_h*/;
+	fPoint point_1, point_2, point_3, point_4, point_w_h;
 
 	// top_left 
 	point_1 = app->map->MapToScreenF({x, y});
@@ -360,25 +362,35 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 	point_2 = app->map->MapToScreenF({x + w, y});
 	// bot_right
 	point_3 = app->map->MapToScreenF({x + w, y + h});
-	//point_w_h = app->map->MapToScreenF({ w, h });
+	point_w_h = app->map->MapToScreenF({ w, h });
 	// bot_left
 	point_4 = app->map->MapToScreenF({x, y + h});
 
-	//SDL_Rect rect{ point_1.x, point_2.x, point_w_h.x, point_w_h.y };
 
-	
+
 
 	std::vector<Camera*>::iterator item_cam;
 	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
+		
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
-		//if (SDL_HasIntersection(&rect, &(*item_cam)->rect))
-	//	{
-			app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
-			app->render->DrawLineSplitScreen((*item_cam), point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);
-			app->render->DrawLineSplitScreen((*item_cam), point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, true);
-			app->render->DrawLineSplitScreen((*item_cam), point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, true);
-	//	}
+
+		SDL_Rect rect_tile{
+			point_1.x - app->map->data.tile_width / 2,
+			point_1.y,
+			point_2.x - point_4.x,
+			point_3.y - point_1.y
+		};
+
+		if (SDL_HasIntersection(&rect_tile, &(*item_cam)->rect))
+			{
+
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
+				app->render->DrawLineSplitScreen((*item_cam), point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);
+				app->render->DrawLineSplitScreen((*item_cam), point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, true);
+				app->render->DrawLineSplitScreen((*item_cam), point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, true);
+			
+		}
 	}
 	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	return true;
