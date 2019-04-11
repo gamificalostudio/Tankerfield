@@ -12,12 +12,10 @@
 
 #define ISO_COMPENSATION 45 //The isometric view is turned 45 degrees to the right. Used to compensate the difference between the vectors in the isometric space and the angle we need in the spritesheets.
 
-struct SDL_Texture;
-class Collider;
-
 
 struct SDL_Texture;
 class Collider;
+class Camera;
 
 struct TileSetObject {
 
@@ -57,9 +55,11 @@ public:
 
 	virtual bool Update(float dt);
 
-	virtual bool Draw(float dt);
+	//SDL_Rect * GetRect();
 
-	virtual bool DrawShadow() { return true; }
+	virtual bool Draw(float dt, Camera * camera);
+
+	virtual bool DrawShadow(Camera * camera) { return true; }
 
 	virtual bool CleanUp() { return true; };
 

@@ -71,8 +71,8 @@ bool M_Map::PostUpdate(float dt)
 
 	if (map_loaded == false)
 		return ret;
-  
-  std::vector<Camera*>::iterator item_cam;
+
+	std::vector<Camera*>::iterator item_cam;
 	SDL_Rect rect;
 	iPoint pos;
 	SDL_Rect r;
@@ -82,68 +82,74 @@ bool M_Map::PostUpdate(float dt)
 	int y;
 	int x;
 	int tile_id;
-  
-  BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
+
+	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
 	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
 	{
-  
 
-		if ((*layer)->visible && (*layer)->layer_properties.draw) 
-    {
-      for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-              {
-                    SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
-                for (int y = 0; y < data.rows; ++y)
-                {
-                  for (int x = 0; x < data.columns; ++x)
 
-                  {
+		if ((*layer)->visible && (*layer)->layer_properties.draw)
+		{
+			for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+			{
+				SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+				for (int y = 0; y < data.rows; ++y)
+				{
+					for (int x = 0; x < data.columns; ++x)
 
-                    int tile_id = (*layer)->Get(x, y);
-                    if (tile_id > 0)
-                    {
-                      iPoint pos = MapToScreenI(x, y);
+					{
 
-                          rect.x = pos.x-data.tile_width*0.5f;
-                          rect.y = pos.y;
-                          rect.w = data.tile_width;
-                          rect.h = data.tile_height;
+						int tile_id = (*layer)->Get(x, y);
+						if (tile_id > 0)
+						{
+							iPoint pos = MapToScreenI(x, y);
 
-                      if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height, (*item_cam))))
-                      {
-                        TileSet* tileset = GetTilesetFromTileId(tile_id);
-                        if (tileset != nullptr)
-                        {
+							rect.x = pos.x - data.tile_width*0.5f;
+							rect.y = pos.y;
+							rect.w = data.tile_width;
+							rect.h = data.tile_height;
 
-                            SDL_Rect r = tileset->GetTileRect(tile_id);
-                            app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, (*item_cam)/*app->scene->tank_1->camera_player*/, &r);
-                        }
+							if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height, (*item_cam)))
+							 {
+							  TileSet* tileset = GetTilesetFromTileId(tile_id);
+							  if (tileset != nullptr)
+							  {
 
-                      }
-                    }
-                  }
-                }
-              }
-	    	}
+								  SDL_Rect r = tileset->GetTileRect(tile_id);
+								  app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, (*item_cam)/*app->scene->tank_1->camera_player*/, &r);
+							  }
+
+							}
+						}
+					}
+				}
+			}
+		}
 	}
+
 	
 	//// Draw Grid ==============================================
 	if(show_grid)
 	{
 		iPoint point_1, point_2;
-		for (int i = 0; i <= data.columns; ++i)
+		
+		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 		{
-			point_1 = MapToScreenI(i, 0);
-			point_2 = MapToScreenI(i, data.rows);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			for (int i = 0; i <= data.columns; ++i)
+			{
+				point_1 = MapToScreenI(i, 0);
+				point_2 = MapToScreenI(i, data.rows);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
+			for (int i = 0; i <= data.rows; ++i)
+			{
+				point_1 = MapToScreenI(0, i);
+				point_2 = MapToScreenI(data.columns, i);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
 		}
-
-		for (int i = 0; i <= data.rows; ++i)
-		{
-			point_1 = MapToScreenI(0, i);
-			point_2 = MapToScreenI(data.columns, i);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-		}
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
 
 
