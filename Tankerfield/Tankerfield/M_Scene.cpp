@@ -129,11 +129,10 @@ bool M_Scene::Update(float dt)
 	}
 
 	/* Check if a round is over. It is only checked after x time. */
-	accumulated_time += dt * 1000;
+	accumulated_time += dt * 1000.0f;
 	if (accumulated_time >= (float)check_complete_round)
 	{
 		perform_objects_check = true;
-		initial_generated_units = 12;
 	}
 
 	if (perform_objects_check)
@@ -141,7 +140,8 @@ bool M_Scene::Update(float dt)
 		// == 3 because of the objects that are not enemies. Possible solution 2: check the type of objects with counters and check
 		if (app->objectmanager->GetObjects().size() == 3) // TOFIX: Here we are checking objects of type static I think too...
 		{
-			/* Generate new wave */
+			/* Generate new wave and increase units number */
+			initial_generated_units += 3;
 			CreateEnemyWave();
 		}
 
