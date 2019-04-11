@@ -894,6 +894,37 @@
         </rotate_turr>
       </animations>
     </tank>
+    <explosion>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/explosion-sheet.png"/>
+      <animations>
+        <rotate speed="1.0">
+          <dir>
+            <frame x="0" y="0" w="198" h="128"/>
+            <frame x="198" y="0" w="198" h="128"/>
+            <frame x="396" y="0" w="198" h="128"/>
+            <frame x="594" y="0" w="198" h="128"/>
+            <frame x="792" y="0" w="198" h="128"/>
+            <frame x="990" y="0" w="198" h="128"/>
+            <frame x="1188" y="0" w="198" h="128"/>
+            <frame x="1386" y="0" w="198" h="128"/>
+            <frame x="1584" y="0" w="198" h="128"/>
+            <frame x="1782" y="0" w="198" h="128"/>
+            <frame x="1980" y="0" w="198" h="128"/>
+            <frame x="2178" y="0" w="198" h="128"/>
+            <frame x="2376" y="0" w="198" h="128"/>
+            <frame x="2574" y="0" w="198" h="128"/>
+            <frame x="2772" y="0" w="198" h="128"/>
+            <frame x="2970" y="0" w="198" h="128"/>
+            <frame x="3168" y="0" w="198" h="128"/>
+            <frame x="3366" y="0" w="198" h="128"/>
+            <frame x="3564" y="0" w="198" h="128"/>
+            <frame x="3762" y="0" w="198" h="128"/>
+          </dir>
+        </rotate>
+      </animations>
+    </explosion>
     <basic_bullet>
       <speed value ="0.5"/>
       <life value ="1000"/>
