@@ -89,7 +89,9 @@ bool M_ObjManager::Update(float dt)
 				//When we remove an element from the list, the other elements shift 1 space to our position
 				//So we don't need increment the iterator to go to the next one
 				if ((*iterator)->type == ObjectType::TANK)
+				{
 					obj_tanks.erase(iterator);
+				}
 
 				if ((*iterator)->coll != nullptr)
 				{
@@ -104,10 +106,14 @@ bool M_ObjManager::Update(float dt)
 			else
 			{
 				// Update Components ======================================
-
 				if ((*iterator)->coll != nullptr)
 				{
 					(*iterator)->coll->SetPosToObj();
+				}
+
+				if ((*iterator)->curr_anim != nullptr)
+				{
+					(*iterator)->curr_anim->NextFrame(dt);
 				}
 
 				++iterator;
@@ -248,6 +254,11 @@ Object * M_ObjManager::GetNearestTank(fPoint pos)
 	}
 	
 	return ret;
+}
+
+std::list<Object*> M_ObjManager::GetObjects() const
+{
+	return this->objects;
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)

@@ -47,7 +47,8 @@ private:
 	void Shoot();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
-	bool IsShooting();
+	bool IsShootingBasic();
+	bool IsShootingSpecial();
 
 	//- Input
 	void SelectInputMethod();
@@ -86,13 +87,14 @@ private:
 	fPoint shot_dir							= { 0.f, 0.f };
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
-	PerfTimer time_between_bullets_timer;
 
 	//-- Basic shoot
 	uint basic_shot							= (uint)WEAPON::BASIC;
-
+	PerfTimer basic_shot_timer;
+  
 	//-- Special shoot
-	uint special_shoot						= (uint)WEAPON::BASIC;
+	uint special_shoot					= (uint)WEAPON::BASIC;
+	PerfTimer special_shot_timer;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 
 	//- Items
@@ -104,9 +106,10 @@ private:
 	Controller ** controller = nullptr;
 
 	//-- Keyboard inputs
-	int kb_shoot							= 0;
 	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
-	SDL_Scancode kb_interact				= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_interact			= SDL_SCANCODE_UNKNOWN;
+	int kb_shoot_basic						= 0;
+	int kb_shoot_special					= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
@@ -115,10 +118,10 @@ private:
 	//-- Controller inputs
 	Joystick gamepad_move					= Joystick::INVALID;
 	Joystick gamepad_aim					= Joystick::INVALID;
-	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_INVALID;
 	SDL_GameControllerButton gamepad_interact	= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item		= SDL_CONTROLLER_BUTTON_INVALID;
-
+	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
+	SDL_GameControllerAxis gamepad_shoot_special	= SDL_CONTROLLER_AXIS_INVALID;
 };
 
 #endif
