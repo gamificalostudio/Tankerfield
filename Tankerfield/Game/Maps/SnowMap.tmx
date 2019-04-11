@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="isometric" renderorder="left-up" width="75" height="75" tilewidth="60" tileheight="29" infinite="0" nextlayerid="5" nextobjectid="34">
+<map version="1.2" tiledversion="1.2.3" orientation="isometric" renderorder="left-up" width="75" height="75" tilewidth="60" tileheight="29" infinite="0" nextlayerid="5" nextobjectid="34">
  <tileset firstgid="1" name="FlatTiles" tilewidth="59" tileheight="29" spacing="2" tilecount="196" columns="14">
   <image source="FlatTiles.png" width="854" height="433"/>
  </tileset>
@@ -11267,7 +11267,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="3" name="Colliders" width="75" height="75">
+ <layer id="3" name="Colliders" width="75" height="75" visible="0">
   <properties>
    <property name="Navigation" type="float" value="1"/>
   </properties>

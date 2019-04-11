@@ -73,34 +73,22 @@ bool M_Map::PostUpdate(float dt)
 	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
 	{
 
-		if ((*layer)->visible && (*layer)->layer_properties.draw) {
+		if ((*layer)->visible) {
 
-			for (int y = 0; y < data.rows; ++y)
-			{
-				for (int x = 0; x < data.columns; ++x)
-				{
-					int array_pos = (y * data.columns) + x;
-					int tile_id = (*layer)->data[array_pos];
-					if (tile_id > 0)
-					{
-						//iPoint pos = MapToScreenI(x, y);
-						SDL_Rect rect = (data.screen_tile_rect[array_pos]).operator SDL_Rect();
-						if (SDL_HasIntersection(&rect, &app->render->camera))
-						{
-							TileSet* tileset = GetTilesetFromTileId(tile_id);
-							if (tileset != nullptr)
-							{
-								SDL_Rect r = tileset->GetTileRect(tile_id);
-								app->render->Blit(tileset->texture, rect.x, rect.y, &r);
-							}
-						}
-					}
-				}
-			}
+			(*layer)->qt->DrawMap(app->render->camera);
+		}
+	}
+
+	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
+	{
+
+		if ((*layer)->visible) {
+
+			(*layer)->qt->Draw();
 		}
 	}
 	
-	data.qt->DrawMap(app->render->camera);
+	//data.qt->DrawMap(app->render->camera);
 	//// Draw Grid ==============================================
 	if(show_grid)
 	{
@@ -120,7 +108,7 @@ bool M_Map::PostUpdate(float dt)
 		}
 	}
 
-	data.qt->Draw();
+	//data.qt->Draw();
 
 	return ret;
 }
@@ -303,6 +291,13 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
+		SDL_Rect area = { data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x,
+			 0,
+			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
+			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
+		;
+		layer->qt = new Quadtree_Map(area, 0, 3);
+
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
@@ -316,11 +311,11 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			if (qtile.id != 0)
 			{
 				qtile.rect = { data.screen_tile_rect[i].pos.x, data.screen_tile_rect[i].pos.y, data.tile_width, data.tile_height };
-				data.qt->InsertTile(qtile);
+				layer->qt->InsertTile(qtile);
 			}
 			if (layer->name == "Buildings")
 			{
-				layer->layer_properties.draw = node.child("properties").child("property").attribute("value").as_bool(true);
+				layer->visible = node.child("properties").child("property").attribute("value").as_bool(true);
 			}
 
 			++i;
@@ -461,7 +456,7 @@ bool M_Map::LoadMap()
 
 		data.map_properties.LoadProperties(map.child("properties"));
 		data.objects_path = data.map_properties.GetAsString("object_texture");
-		data.map_properties.draw = data.map_properties.GetAsBool("NoDraw");
+		//data.map_properties.draw = data.map_properties.GetAsBool("NoDraw");
 		data.offset_x = data.map_properties.GetAsInt("offset_x");
 		data.offset_y = data.map_properties.GetAsInt("offset_y");
 
@@ -494,12 +489,7 @@ bool M_Map::LoadMap()
 				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
 			}
 		}
-		SDL_Rect area = { data.screen_tile_rect[(data.rows-1)*(data.columns)].pos.x,
-			 0,
-			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
-			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns-1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h};
-		;
-		data.qt = new Quadtree_Map(area,0,5);
+		
 		
 	}
 

@@ -46,7 +46,6 @@ public:
 
 	void LoadProperties(pugi::xml_node propertie_node);
 
-	bool draw = true;
 	void UnloadProperties();
 };
 
@@ -59,6 +58,7 @@ struct MapLayer
 	uint*		data = nullptr;
 	Properties	layer_properties;
 	bool visible = true;
+	Quadtree_Map*				qt = nullptr;
 	MapLayer() : data(NULL)
 	{}
 
@@ -150,7 +150,7 @@ struct MapData
 
 	
 	iRect*		screen_tile_rect = nullptr;
-	Quadtree_Map*				qt = nullptr;
+
 
 	~MapData()
 	{

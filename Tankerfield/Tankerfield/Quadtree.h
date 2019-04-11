@@ -14,9 +14,11 @@
 enum class QUADRANT
 {
 	NORTH_EAST,
-	NORTH_WEST,
 	SOUTH_EAST,
+	NORTH_WEST,
 	SOUTH_WEST,
+	
+	
 };
 
 class Quadtree 
