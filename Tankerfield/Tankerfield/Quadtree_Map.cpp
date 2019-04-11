@@ -70,17 +70,26 @@ int Quadtree_Map::InsertTile(Tile tile)
 
 void Quadtree_Map::DrawMap(SDL_Rect camera)
 {
-	if (SDL_HasIntersection(&camera, &area))
+	SDL_Rect cam = camera;
+	cam.y -= 30;
+	cam.w += 60;
+	cam.h += 30;
+	if (SDL_HasIntersection(&cam, &area))
 	{
 		if (!isDivided)
 		{
 			for (std::list<Tile>::iterator i = elements.begin(); i != elements.end(); ++i)
 			{
 				Tile tile = (*i);
-				TileSet* tileset = app->map->GetTilesetFromTileId(tile.id);
-				SDL_Rect rect = tileset->GetTileRect(tile.id);
+				if (SDL_HasIntersection(&cam,&tile.rect))
+				{
+					
+					TileSet* tileset = app->map->GetTilesetFromTileId(tile.id);
+					SDL_Rect rect = tileset->GetTileRect(tile.id);
 
-				app->render->Blit(tileset->texture, tile.rect.x, tile.rect.y, &rect);
+					app->render->Blit(tileset->texture, tile.rect.x, tile.rect.y, &rect);
+				}
+				
 			}
 		}
 		else

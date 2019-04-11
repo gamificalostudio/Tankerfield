@@ -10,7 +10,7 @@
  <tileset firstgid="3" name="FlatTiles_field" tilewidth="60" tileheight="30" tilecount="176" columns="8">
   <image source="FlatTiles_field.png" width="480" height="660"/>
  </tileset>
- <layer id="8" name="Capa de Patrones 1" width="39" height="40">
+ <layer id="8" name="Capa de Patrones 1" width="39" height="40" visible="0">
   <properties>
    <property name="Nodraw" type="int" value="0"/>
   </properties>
@@ -1577,7 +1577,7 @@
    <tile gid="36"/>
   </data>
  </layer>
- <layer id="9" name="Colliders" width="39" height="40">
+ <layer id="9" name="Colliders" width="39" height="40" visible="0">
   <properties>
    <property name="Navigation" type="float" value="1"/>
    <property name="Nodraw" type="int" value="0"/>
@@ -3145,7 +3145,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="3" name="Colliders">
+ <objectgroup id="3" name="Colliders" visible="0">
   <properties>
    <property name="dsda" type="float" value="0"/>
    <property name="holio" type="float" value="0"/>

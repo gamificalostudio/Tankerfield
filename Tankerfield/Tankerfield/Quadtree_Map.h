@@ -9,7 +9,7 @@ struct Tile
 	{}
 		uint id;
 		SDL_Rect rect;
-
+		
 };
 
 class Quadtree_Map : public Quadtree
@@ -33,12 +33,6 @@ private:
 
 	void Subdivide() override;
 
-	bool CheckIn(SDL_Rect rect) {
-		return(rect.x > area.x && rect.y > area.y && rect.x + rect.w < area.x + area.w
-			&& rect.y + rect.h < area.y + area.h);
-	};
-
-	
 };
 
 
