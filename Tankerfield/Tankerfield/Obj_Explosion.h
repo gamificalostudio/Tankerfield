@@ -33,8 +33,8 @@ private:
 	Collider* coll_explosion=nullptr;
 	
 	// ---
-	Animation* explosion_anim;
-	SDL_Texture * explosion_tex;
+	static Animation* explosion_anim;
+	static SDL_Texture * explosion_tex;
 };
 
 #endif

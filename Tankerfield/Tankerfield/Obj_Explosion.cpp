@@ -13,6 +13,10 @@
 #include "M_Collision.h"
 #include "M_Map.h"
 #include "Obj_Explosion.h"
+#include "Animation.h"
+
+Animation*  Obj_Explosion::explosion_anim = nullptr;
+SDL_Texture * Obj_Explosion::explosion_tex = nullptr;
 
 Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
@@ -24,8 +28,7 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	}
 	if (explosion_anim == nullptr)
 	{
-		explosion_anim = new Animation;
-		explosion_anim->LoadAnimation(explosion_node.child("animations").child("explosion"));
+		explosion_anim = new Animation(explosion_node.child("animations").child("explosion"));
 	}
 	curr_tex = explosion_tex;
 	curr_anim = explosion_anim;
