@@ -145,21 +145,52 @@ bool M_Render::PostUpdate(float dt)
 		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+	std::vector<Camera*>::iterator item_cam;
 
-	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		debug = !debug;
 		if (!debug)
 		{
-			camera.w = app->win->screen_surface->w;
-			camera.h = app->win->screen_surface->h;
+			
+				
+			
+				camera_saves.push_back(camera.back());
+				camera.pop_back();
+
+				camera_saves.push_back(camera.back());
+				camera.pop_back();
+
+				camera_saves.push_back(camera.back());
+				camera.pop_back();
+				
+				camera.front()->rect.w = app->win->screen_surface->w;
+				camera.front()->rect.h = app->win->screen_surface->h;
+
+				camera.front()->viewport.w = app->win->screen_surface->w;
+				camera.front()->viewport.h = app->win->screen_surface->h;
+			
 		}
 		else
 		{
-			camera.w *= 0.5f;
-			camera.h *= 0.5f;
+			
+				camera.push_back(camera_saves.back());
+				camera_saves.pop_back();
+
+				camera.push_back(camera_saves.back());
+				camera_saves.pop_back();
+
+				camera.push_back(camera_saves.back());
+				camera_saves.pop_back();
+
+				camera.front()->rect.w *= 0.5f;
+				camera.front()->rect.h *= 0.5f;
+
+				camera.front()->viewport.w *= 0.5f;
+				camera.front()->viewport.h *= 0.5f;
+			
 		}
-	}*/
+	}
 
 	return true;
 }
@@ -383,7 +414,7 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 		};
 
 		if (SDL_HasIntersection(&rect_tile, &(*item_cam)->rect))
-			{
+		{
 
 				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
 				app->render->DrawLineSplitScreen((*item_cam), point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);
