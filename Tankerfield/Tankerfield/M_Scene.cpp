@@ -69,40 +69,7 @@ bool M_Scene::Start()
 
 	/* Generate first wave units */
 	srand(time(NULL));
-	for (int i = 0; i < initial_generated_units; i++)
-	{
-		//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
-		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
-			rand() % (distance_range * 2 + 1) - distance_range };
-
-		// TODO: At this point, we know the map columns / rows -> 40. We must get these values without magic numbers.
-		int map_rows = 40, map_columns = 40;
-
-		if (random_tile_position.x >= 0 && random_tile_position.y >= 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-				map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x < 0 && random_tile_position.y < 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-				map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-				map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-				map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-		}
-	}
+	CreateEnemyWave();
 
 	return true;
 }
@@ -175,40 +142,7 @@ bool M_Scene::Update(float dt)
 		if (app->objectmanager->GetObjects().size() == 3) // TOFIX: Here we are checking objects of type static I think too...
 		{
 			/* Generate new wave */
-			for (int i = 0; i < initial_generated_units; i++)
-			{
-				//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
-				iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
-					rand() % (distance_range * 2 + 1) - distance_range };
-
-				// TODO: At this point, we know the map columns / rows -> 40. We must get these values without magic numbers.
-				int map_rows = 40, map_columns = 40;
-
-				if (random_tile_position.x >= 0 && random_tile_position.y >= 0)
-				{
-					app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-						fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-							map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-				}
-				else if (random_tile_position.x < 0 && random_tile_position.y < 0)
-				{
-					app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-						fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-							map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-				}
-				else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
-				{
-					app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-						fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-							map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-				}
-				else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
-				{
-					app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-						fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-							map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-				}
-			}
+			CreateEnemyWave();
 		}
 
 		accumulated_time = 0.0f;
@@ -305,5 +239,43 @@ void M_Scene::DebugPathfinding()
 		p = app->map->MapToScreenI(p.x, p.y);
 
 		app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y);
+	}
+}
+
+void M_Scene::CreateEnemyWave()
+{
+	for (int i = 0; i < initial_generated_units; i++)
+	{
+		//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
+		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
+			rand() % (distance_range * 2 + 1) - distance_range };
+
+		// TODO: At this point, we know the map columns / rows -> 40. We must get these values without magic numbers.
+		int map_rows = 40, map_columns = 40;
+
+		if (random_tile_position.x >= 0 && random_tile_position.y >= 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
+					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
+		}
+		else if (random_tile_position.x < 0 && random_tile_position.y < 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
+					map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
+		}
+		else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
+					map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
+		}
+		else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
+		{
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
+					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
+		}
 	}
 }

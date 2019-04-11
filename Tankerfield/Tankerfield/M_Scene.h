@@ -51,6 +51,9 @@ public:
 
 	void DebugPathfinding();
 
+private:
+	void CreateEnemyWave();
+
 public:
 	SDL_Texture* path_tex = nullptr;
 
