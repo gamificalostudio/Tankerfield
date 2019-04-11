@@ -444,27 +444,26 @@ void Obj_Tank::ReviveTank()
 
 void Obj_Tank::StopTank()
 {
+	
 	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT)
 	{
 		app->scene->tank_1->life = 0;
-	//	alive = false;
-		
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
+	{
+		app->scene->tank_1->life = 10;
+		speed = 4.f;
 	}
 
 	if (app->scene->tank_1->life == 0)
 	{
-		app->scene->tank_1->velocity = { 0.0f,0.0f };
 		app->scene->tank_1->speed = 0;
-		app->scene->tank_1->pos_map = app->scene->tank_1->pos_map;
-		LOG("TANK 1 life is 0");
 	}
 	
 	if (app->scene->tank_2->life == 0)
 	{
-		app->scene->tank_2->velocity = { 0.0f,0.0f };
 		app->scene->tank_2->speed = 0;
-		app->scene->tank_2->pos_map = app->scene->tank_2->pos_map;
-		LOG("TANK 2 life is 0");
 	}
 
 }
