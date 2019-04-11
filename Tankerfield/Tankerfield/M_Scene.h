@@ -76,6 +76,7 @@ private:
 	int min_distance_from_center = 0;
 	int check_complete_round = 0;
 	int object_counter = 0;
+	int enemies_to_increase = 0;
 };
 
 #endif // __j1SCENE_H__

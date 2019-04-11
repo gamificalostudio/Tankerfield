@@ -41,6 +41,7 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	distance_range = config.child("distance_range").attribute("value").as_int();
 	min_distance_from_center = config.child("min_distance_from_center").attribute("value").as_int();
 	check_complete_round = config.child("check_complete_round").attribute("value").as_int();
+	enemies_to_increase = config.child("enemies_to_increase").attribute("value").as_int();
 
 	return ret;
 }
@@ -141,7 +142,7 @@ bool M_Scene::Update(float dt)
 		if (app->objectmanager->GetObjects().size() == 3) // TOFIX: Here we are checking objects of type static I think too...
 		{
 			/* Generate new wave and increase units number */
-			initial_generated_units += 3;
+			initial_generated_units += enemies_to_increase;
 			CreateEnemyWave();
 		}
 
