@@ -425,7 +425,8 @@ void Obj_Tank::Item()
 {
 	if(item != ObjectType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
-			|| (*controller)->GetButtonState(gamepad_item) == KEY_DOWN))
+			|| (controller != nullptr
+				&& (*controller)->GetButtonState(gamepad_item) == KEY_DOWN)))
 	{
 		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
 		new_item->caster = this;
