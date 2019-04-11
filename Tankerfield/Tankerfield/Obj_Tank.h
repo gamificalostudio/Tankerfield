@@ -59,6 +59,7 @@ private:
 	//- TankDeath
 
 	void ReviveTank();
+	void StopTank();
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)

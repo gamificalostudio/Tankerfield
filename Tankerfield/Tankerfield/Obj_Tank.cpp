@@ -72,6 +72,10 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
+	// Tanks life hardcoded 
+
+	app->scene->tank_1->life == 10;
+
 	if (weapons_info == nullptr)
 	{
 		pugi::xml_node weapons_node = app->config.child("weapons");
@@ -123,6 +127,7 @@ bool Obj_Tank::Update(float dt)
 {
 	Shoot();
 	Movement(dt);
+	ReviveTank();
 	return true;
 }
 
@@ -184,9 +189,9 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
 		//app->render->camera.x += floor(100.0f * dt);
 		input.x += 1.f;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT || app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 	{
-		app->scene->tank_1->life == 0;
+		StopTank();
 	}
 }
 
@@ -387,10 +392,16 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ReviveTank()
 {
-	if (app->scene->tank_1->life == 0)
-	{	
-		app->scene->tank_1->speed == 0;
-		app->scene->tank_1->pos_screen.x = 80;
-		app->scene->tank_1->pos_screen.y = 80;
-	}
+	//if (app->scene->tank_1->life == 0)
+	//{	
+	//	app->scene->tank_1->speed == 0;
+	//	app->scene->tank_1->pos_screen.x = 80;
+	//	app->scene->tank_1->pos_screen.y = 80;
+	//}
+}
+
+void Obj_Tank::StopTank()
+{
+	//app->scene->tank_1->velocity = { 0.0f,0.0f };
+
 }
