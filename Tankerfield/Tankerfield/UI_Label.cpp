@@ -27,14 +27,13 @@ void UI_Label::SetText(String text)
 		label_texture = nullptr;
 	}
 
-	app->font->CalcSize( text.c_str() , section.w, section.h, font);
-	section.x = section.y = 0;
+	app->font->CalcSize( text.c_str() , sprite_section.w, sprite_section.h, font);
 	label_texture = app->font->Print( text.c_str(), color, font);
 }
 
 bool UI_Label::Draw()
 {
-	app->render->Blit(label_texture, position.x- section.w * 0.5f, position.y - section.h * 0.5f , &section, false, 0.0f);
+	app->render->Blit(label_texture, position.x, position.y , &sprite_section);
 
 	return false;
 }

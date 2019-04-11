@@ -103,6 +103,9 @@
     <ClCompile Include="WeaponInfo.cpp">
       <Filter>Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Bar.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -224,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="WeaponInfo.h">
       <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Bar.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

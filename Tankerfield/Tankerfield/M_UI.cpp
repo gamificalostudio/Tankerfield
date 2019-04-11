@@ -45,6 +45,13 @@ bool M_UI::Awake(pugi::xml_node& config)
 bool M_UI::Start()
 {
 	atlas = app->tex->Load("textures/ui/atlas.png");
+
+	UI_ImageDef image_def;
+
+	UI_Image* special_weapon_frame = CreateImage({ 0.f,0.f }, image_def, this);
+	UI_Image* basic_weapon_frame = CreateImage({ 0.f,0.f }, image_def, this);
+
+
 	return true;
 }
 
@@ -85,42 +92,40 @@ bool M_UI::PreUpdate()
 
 	// Hover States ============================================
 
-	SDL_Rect object_rect;
+	fRect section;
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
-		if ((*item)->state != ObjectState::visible)
+		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f)
 		{
 			continue;
 		}
 
-		object_rect.x = (*item)->position.x - (*item)->section.w * 0.5f;
-		object_rect.y = (*item)->position.y - (*item)->section.h * 0.5f;
-		object_rect.w = (*item)->section.w;
-		object_rect.h = (*item)->section.h;
-
-		if (mouse_position.x >= object_rect.x && mouse_position.x <= object_rect.x + object_rect.w && mouse_position.y >= object_rect.y && mouse_position.y <= object_rect.y + object_rect.h)
+		section = (*item)->GetSection();
+ 
+		if (mouse_position.x >= section.GetLeft() && mouse_position.x <= section.GetRight() && mouse_position.y >= section.GetTop() && mouse_position.y <= section.GetBottom())
 		{
-			if ((*item)->hover_state == HoverState::None)
+			if ((*item)->hover_state == HoverState::NONE)
 			{
-				(*item)->hover_state = HoverState::On;
+				(*item)->hover_state = HoverState::ENTER;
 			}
 			else
 			{
-				(*item)->hover_state = HoverState::Repeat;
+				(*item)->hover_state = HoverState::REPEAT;
 			}
 		}
 		else
 		{
-			if ((*item)->hover_state == HoverState::On || (*item)->hover_state == HoverState::Repeat)
+			if ((*item)->hover_state == HoverState::ENTER || (*item)->hover_state == HoverState::REPEAT)
 			{
-				(*item)->hover_state = HoverState::Out;
+				(*item)->hover_state = HoverState::EXIT;
 			}
 			else
 			{
-				(*item)->hover_state = HoverState::None;
+				(*item)->hover_state = HoverState::NONE;
 			}
 		}
+
 		(*item)->PreUpdate();
 	}
 
@@ -131,16 +136,17 @@ bool M_UI::PreUpdate()
 	}
 	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
 	{
-		click_state = ClickState::Repeat;
+		click_state = ClickState::REPEAT;
 	}
 	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
 	{
-		click_state = ClickState::Out;
+		click_state = ClickState::EXIT;
 	}
 	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
 
 	{
-		click_state = ClickState::None;
+		click_state = ClickState::NONE;
+
 		selected_object = nullptr;
 	}
 
@@ -156,15 +162,15 @@ bool M_UI::Update(float dt)
 	{
 		switch (click_state)
 		{
-		case ClickState::On:
-			SetCursorOffset(mouse_position - selected_object->GetPosition());
+		case ClickState::ENTER:
+			mouse_offset = mouse_position - selected_object->position;
 			break;
-		case ClickState::Repeat:
-			selected_object->SetPosition(mouse_position - GetMouseOffset());
+		case ClickState::REPEAT:
+			selected_object->position  = mouse_position - mouse_offset;
 			selected_object->UpdateRelativePosition();
 			break;
-		case ClickState::Out:
-			SetCursorOffset({ 0,0 });
+		case ClickState::EXIT:
+			mouse_offset = { 0,0 };
 			break;
 		}
 	}
@@ -174,14 +180,14 @@ bool M_UI::Update(float dt)
 	{
 		switch (click_state)
 		{
-		case ClickState::On:
+		case ClickState::ENTER:
 			selected_object->listener->OnClick(selected_object);
 			break;
-		case ClickState::Repeat:
+		case ClickState::REPEAT:
 			selected_object->listener->RepeatClick(selected_object);
 			break;
-		case ClickState::Out:
-			if (selected_object->hover_state != HoverState::None)
+		case ClickState::EXIT:
+			if (selected_object->hover_state != HoverState::NONE)
 			{
 				selected_object->listener->OutClick(selected_object);
 			}
@@ -205,20 +211,19 @@ bool M_UI::Update(float dt)
 
 		switch ((*item)->hover_state)
 		{
-		case HoverState::On:
+		case HoverState::ENTER:
 			(*item)->listener->OnHover((*item));
 			break;
-		case HoverState::Out:
+		case HoverState::EXIT:
 			(*item)->listener->OutHover((*item));
 			break;
-		case HoverState::Repeat:
+		case HoverState::REPEAT:
 			(*item)->listener->OnHover((*item));
 			break;
 		}
 	}
 
 	UpdateGuiPositions(main_object, fPoint(0, 0));
-
 	
 	// Update objects ==============================================
 
@@ -365,7 +370,7 @@ bool M_UI::DeleteObject(UI_Element * object)
 	return true;
 }
 
-void M_UI::SetStateToBranch(const ObjectState state, UI_Element * branch_root)
+void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
 {
 	if (branch_root == nullptr)
 	{
@@ -381,24 +386,13 @@ void M_UI::SetStateToBranch(const ObjectState state, UI_Element * branch_root)
 
 }
 
-fPoint M_UI::GetMouseOffset() const
-{
-	return mouse_offset;
-}
-
-void M_UI::SetCursorOffset(const fPoint offset)
-{
-	mouse_offset = offset;
-
-}
-
 bool M_UI::SelectClickedObject()
 {
 	list<UI_Element*> clicked_objects;
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
-		if ((*item)->hover_state != HoverState::None  && (*item)->state == ObjectState::visible && (*item)->is_interactive == true)
+		if ((*item)->hover_state != HoverState::NONE  && (*item)->state == ELEMENT_STATE::VISIBLE && (*item)->is_interactive == true)
 		{
 			clicked_objects.push_back((*item));
 		}
@@ -425,7 +419,7 @@ bool M_UI::SelectClickedObject()
 			}
 		}
 		selected_object = nearest_object;
-		click_state = ClickState::On;
+		click_state = ClickState::ENTER;
 	}
 
 	return true;
@@ -438,24 +432,20 @@ void M_UI::DrawUI(UI_Element * object)
 		return;
 	}
 
-	if (object->state != ObjectState::hidden)
+	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
 		object->Draw();
 	}
 	
-	if (debug && object->state != ObjectState::hidden)
+	if (debug && object->state != ELEMENT_STATE::HIDDEN)
 	{
-		SDL_Rect rect;
-		rect.x = object->position.x - object->section.w / 2;
-		rect.y = object->position.y - object->section.h / 2;
-		rect.w = object->section.w;
-		rect.h = object->section.h;
+		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
 		if (selected_object == object)
 		{
 			app->render->DrawQuad(rect, 255, 233, 15, 100, true, true);
 		}
-		else if (object->hover_state != HoverState::None )
+		else if (object->hover_state != HoverState::NONE )
 		{
 			app->render->DrawQuad(rect, 255, 0, 0, 100, true, true);
 		}

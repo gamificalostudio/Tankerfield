@@ -16,8 +16,8 @@
 using namespace std;
 typedef string String;
 
+enum class ELEMENT_STATE;
 class UI_Element;
-enum class ObjectState;
 
 class UI_Listener;
 class UI_Image;
@@ -37,13 +37,33 @@ struct UI_TextPanelDef;
 
 enum class ClickState
 {
-	On,
-	Out,
-	Repeat,
-	None
+	ENTER,
+	EXIT,
+	REPEAT,
+	NONE
 };
 
-class M_UI : public Module
+class UI_Listener
+{
+public:
+	UI_Listener()
+	{}
+
+	virtual bool OnHover(UI_Element* object) { return true; }
+
+	virtual bool RepeatHover(UI_Element* object) { return true; }
+
+	virtual bool OutHover(UI_Element* object) { return true; }
+
+	virtual bool OnClick(UI_Element* object) { return true; }
+
+	virtual bool RepeatClick(UI_Element* object) { return true; }
+
+	virtual bool OutClick(UI_Element* object) { return true; }
+};
+
+
+class M_UI : public Module , public UI_Listener
 {
 public:
 
@@ -68,6 +88,7 @@ public:
 	ClickState GetClickState() const;
 
 	// Creation functions ---------------------------------------------------------
+
 	UI_Element* CreateObject(const fPoint position, UI_ElementDefinition definition, UI_Listener* listener = nullptr);
 
 	UI_Label* CreateLabel(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener = nullptr);
@@ -80,21 +101,17 @@ public:
 
 	UI_Checkbox* CreateCheckbox(const fPoint position, UI_CheckboxDef definition, UI_Listener* listener = nullptr);
 
-	UI_TextPanel * CreateTextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener* listener);
+	UI_TextPanel * CreateTextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener* listener = nullptr);
 
 	// Object functions ----------------------------------------------------------
+
 	UI_Element*  GetClickedObject();
 
 	UI_Element* GetScreen();
 
 	bool DeleteObject(UI_Element* object);
 
-	void SetStateToBranch(const ObjectState state, UI_Element* branch_root);
-
-	// Slider functions ----------------------------------------------------------
-	fPoint GetMouseOffset() const;
-
-	void SetCursorOffset(const fPoint offset);
+	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
 private:
 
@@ -109,16 +126,18 @@ private:
 	bool debug = false;
 
 	// Atlas Texture ---------------------------------------
+
 	SDL_Texture* atlas = nullptr;
 
 	// Objects ---------------------------------------------
+
 	list<UI_Element*> objects_list;
 
 	UI_Element* main_object = nullptr;
 
 	UI_Element* selected_object = nullptr;
 
-	ClickState click_state = ClickState::None;
+	ClickState click_state = ClickState::NONE;
 
 public:
 	// Mouse ----------------------------------------------
@@ -128,27 +147,5 @@ public:
 	fPoint				mouse_offset;
 
 };
-
-
-class UI_Listener
-{
-public:
-	UI_Listener()
-	{}
-
-	virtual bool OnHover(UI_Element* object) { return true; }
-
-	virtual bool RepeatHover(UI_Element* object) { return true; }
-
-	virtual bool OutHover(UI_Element* object) { return true; }
-
-	virtual bool OnClick(UI_Element* object) { return true; }
-
-	virtual bool RepeatClick(UI_Element* object) { return true; }
-
-	virtual bool OutClick(UI_Element* object) { return true; }
-};
-
-
 
 #endif // __MODULE_UI_H__
