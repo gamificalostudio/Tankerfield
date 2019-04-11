@@ -196,8 +196,8 @@ public:
 
 public:
 
-	MapData					data;
-	std::list<Levels*>		levels;
+	MapData							data;
+	std::list<Levels*>				levels;
 	Quadtree<SDL_Rect>*				qt = nullptr;
 private:
 
