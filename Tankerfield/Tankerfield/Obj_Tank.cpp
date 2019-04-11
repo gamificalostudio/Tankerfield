@@ -57,6 +57,7 @@ bool Obj_Tank::Start()
 	curr_anim = rotate_base;
 	if (rotate_turr == nullptr)
 	{
+		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
 	}
 
 	speed = 10.f;
