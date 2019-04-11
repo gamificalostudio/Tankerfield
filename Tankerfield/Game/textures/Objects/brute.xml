@@ -1,0 +1,18 @@
+﻿
+	<meta>
+		<app>http://www.aseprite.org/</app>
+		<version>1.3-dev</version>
+		<image>C:\Users\victo\OneDrive\Documentos\GitHub\Tankerfield\Tankerfield\Game\textures\Objects\brute-sheet.png</image>
+		<format>RGBA8888</format>
+		<size>
+			<w>938</w>
+			<h>7872</h>
+		</size>
+		<scale>1</scale>
+		<layers>
+			<name>Sprite Sheet</name>
+			<opacity>255</opacity>
+			<blendMode>normal</blendMode>
+		</layers>
+	</meta>
+</root>
