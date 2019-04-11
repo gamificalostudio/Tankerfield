@@ -24,15 +24,16 @@ private:
 	SDL_Texture * tex;
 
 	bool death = false;
+
 	float speed = 0.f;
+	float time = 0.f;
 
 	Circle range_pos;
 
 	Collider* coll_explosion=nullptr;
 
 	// ---
-	/* Attack properties */
-	PerfTimer perf_timer;
+	Timer timer;
 
 	Animation* explosion_anim;
 	SDL_Texture * explosion_tex;
