@@ -64,8 +64,15 @@ private:
 private:
 	/* Wave System */
 	// In milliseconds
+	float accumulated_time = 0.0f;
+	bool perform_objects_check = false;
+
 	int time_between_rounds = 0;
 	int initial_generated_units = 0;
+	int distance_range = 0;
+	int min_distance_from_center = 0;
+	int check_complete_round = 0;
+	int object_counter = 0;
 };
 
 #endif // __j1SCENE_H__

@@ -249,6 +249,11 @@ Object * M_ObjManager::GetNearestTank(fPoint pos)
 	return ret;
 }
 
+std::list<Object*> M_ObjManager::GetObjects() const
+{
+	return this->objects;
+}
+
 bool M_ObjManager::Load(pugi::xml_node& load)
 {
 	bool ret = true;
