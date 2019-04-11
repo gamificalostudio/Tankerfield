@@ -213,14 +213,14 @@ bool Obj_Tank::Draw(float dt)
 		&rotate_turr->GetFrame(turr_angle));
 
 	//DEBUG
-	iPoint debug_mouse_pos = { 0, 0 };
-	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
-	debug_mouse_pos.x += app->render->camera.x;
-	debug_mouse_pos.y += app->render->camera.y;
-  
-	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 0, 255, 0);
+	//iPoint debug_mouse_pos = { 0, 0 };
+	//app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
+	//debug_mouse_pos.x += app->render->camera.x;
+	//debug_mouse_pos.y += app->render->camera.y;
+ // 
+	//fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
+	//fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
+	//app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 0, 255, 0);
 
 	return true;
 }
