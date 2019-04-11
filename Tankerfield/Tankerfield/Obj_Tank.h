@@ -3,17 +3,11 @@
 
 #include "Object.h"
 #include "WeaponInfo.h"
-#include <map>
 #include "M_Input.h"
+#include "Obj_Item.h"
 
 struct Controller;
 struct SDL_Texture;
-
-enum class WEAPON {
-	BASIC,
-	FLAMETHROWER,
-	MAX
-};
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -37,6 +31,12 @@ public:
 
 	void OnTrigger(Collider* c1);
 
+public:
+	//- Logic
+	void SetLife(int life);
+	int GetLife();
+	int GetMaxLife();
+
 private:
 	//- Movement
 	void Movement(float dt);
@@ -47,7 +47,8 @@ private:
 	void Shoot();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
-	bool IsShooting();
+	bool IsShootingBasic();
+	bool IsShootingSpecial();
 
 	//- Input
 	void SelectInputMethod();
@@ -56,10 +57,15 @@ private:
 	void ShootBasic();
 	void ShootFlameThrower();
 
+
 	//- TankDeath
 
 	void ReviveTank();
 	void StopTank();
+
+	//- Item
+	void Item();
+
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)
@@ -71,8 +77,11 @@ private:
 	static Animation * rotate_turr;
 	static WeaponInfo * weapons_info;
   
-  //-Logic
-	int life = 0;
+
+	//-Logic
+	int life								= 0;
+	int max_life							= 0;
+
 
 	//- Movement
 	float speed								= 0.f;
@@ -87,14 +96,18 @@ private:
 	fPoint shot_dir							= { 0.f, 0.f };
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
-	PerfTimer time_between_bullets_timer;
 
 	//-- Basic shoot
 	uint basic_shot							= (uint)WEAPON::BASIC;
-
-	//-- Main shoot
-	uint main_shot							= (uint)WEAPON::BASIC;
+	PerfTimer basic_shot_timer;
+  
+	//-- Special shoot
+	uint special_shoot					= (uint)WEAPON::BASIC;
+	PerfTimer special_shot_timer;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
+
+	//- Items
+	ObjectType item							= ObjectType::NO_TYPE;
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
@@ -102,7 +115,10 @@ private:
 	Controller ** controller = nullptr;
 
 	//-- Keyboard inputs
-	int kb_shoot							= 0;
+	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_interact			= SDL_SCANCODE_UNKNOWN;
+	int kb_shoot_basic						= 0;
+	int kb_shoot_special					= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
@@ -111,8 +127,10 @@ private:
 	//-- Controller inputs
 	Joystick gamepad_move					= Joystick::INVALID;
 	Joystick gamepad_aim					= Joystick::INVALID;
-	SDL_GameControllerAxis gamepad_shoot	= SDL_CONTROLLER_AXIS_INVALID;
-
+	SDL_GameControllerButton gamepad_interact	= SDL_CONTROLLER_BUTTON_INVALID;
+	SDL_GameControllerButton gamepad_item		= SDL_CONTROLLER_BUTTON_INVALID;
+	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
+	SDL_GameControllerAxis gamepad_shoot_special	= SDL_CONTROLLER_AXIS_INVALID;
 };
 
 #endif

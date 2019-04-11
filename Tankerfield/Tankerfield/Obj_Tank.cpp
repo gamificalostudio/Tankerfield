@@ -53,28 +53,22 @@ bool Obj_Tank::Start()
 
 	if (rotate_base == nullptr)
 	{
-		rotate_base = new Animation;
-		rotate_base->LoadAnimation(tank_node.child("animations").child("rotate_base"));
-		rotate_base->rotation = COUNTER_CLOCKWISE;
-		rotate_base->first_dir_angle = 315;
+		rotate_base = new Animation (tank_node.child("animations").child("rotate_base"));
 	}
 	curr_anim = rotate_base;
 	if (rotate_turr == nullptr)
 	{
-		rotate_turr = new Animation;
-		rotate_turr->LoadAnimation(tank_node.child("animations").child("rotate_turr"));
-		rotate_turr->rotation = COUNTER_CLOCKWISE;
-		rotate_turr->first_dir_angle = 315;
+		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
 	}
 
-	speed = 2.5f;//TODO: Load from xml
+	speed = 4.f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
 	// Tanks life hardcoded 
 
-	app->scene->tank_1->life == 10;
+	
 
 	if (weapons_info == nullptr)
 	{
@@ -94,21 +88,32 @@ bool Obj_Tank::Start()
 	cannon_length = 1.f;
 
 	//TODO: Load them from the XML
-	kb_shoot		= SDL_BUTTON_LEFT;
-	kb_up			= SDL_SCANCODE_W;
+	kb_up			  = SDL_SCANCODE_W;
 	kb_left			= SDL_SCANCODE_A;
 	kb_down			= SDL_SCANCODE_S;
 	kb_right		= SDL_SCANCODE_D;
+	kb_shoot_basic		= SDL_BUTTON_RIGHT;
+	kb_shoot_special	= SDL_BUTTON_LEFT;
+	kb_item			= SDL_SCANCODE_F;
+	kb_interact		= SDL_SCANCODE_SPACE;
+  
 	gamepad_move	= Joystick::LEFT;
 	gamepad_aim		= Joystick::RIGHT;
-	gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_TRIGGERLEFT;
+	gamepad_shoot_special	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
 
 	base_angle_lerp_factor = 11.25f;
 
-	time_between_bullets_timer.Start();
+	basic_shot_timer.Start();
+
+	life = max_life = 100;
+
+	item = ObjectType::HEALTH_BAG;
 
 	return true;
 }
@@ -126,6 +131,7 @@ bool Obj_Tank::PreUpdate()
 bool Obj_Tank::Update(float dt)
 {
 	Shoot();
+	Item();
 	Movement(dt);
 	ReviveTank();
 	return true;
@@ -260,8 +266,24 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::WALL)
 	{
-		LOG("WALL");
+
 	}
+}
+
+void Obj_Tank::SetLife(int life)
+{
+	//TODO: Update UI bars
+	this->life = life;
+}
+
+int Obj_Tank::GetLife()
+{
+	return life;
+}
+
+int Obj_Tank::GetMaxLife()
+{
+	return max_life;
 }
 
 void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
@@ -319,22 +341,41 @@ void Obj_Tank::Shoot()
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
-	if (IsShooting() && time_between_bullets_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
+	//- Special shoot (prioritize first the special shot)
+	if (IsShootingSpecial() && special_shot_timer.ReadMs() >= weapons_info[(uint)special_shoot].time_between_bullets)
+	{
+		(this->*shot_function[(uint)special_shoot])();
+		special_shot_timer.Start();
+	}
+	//- Basic shoot
+	else if (!IsShootingSpecial() && IsShootingBasic() && basic_shot_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
 	{
 		(this->*shot_function[(uint)basic_shot])();
-		time_between_bullets_timer.Start();
+		basic_shot_timer.Start();
 	}
 }
 
-bool Obj_Tank::IsShooting()
+bool Obj_Tank::IsShootingSpecial()
 {
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		return app->input->GetMouseButton(kb_shoot) == KEY_DOWN || app->input->GetMouseButton(kb_shoot) == KEY_REPEAT;
+		return app->input->GetMouseButton(kb_shoot_special) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_special) == KEY_REPEAT;
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot) > 0;
+		return (*controller)->GetAxis(gamepad_shoot_special) > 0;
+	}
+}
+
+bool Obj_Tank::IsShootingBasic()
+{
+	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
+	{
+		return app->input->GetMouseButton(kb_shoot_basic) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_basic) == KEY_REPEAT;
+	}
+	else if (shot_input == INPUT_METHOD::CONTROLLER)
+	{
+		return (*controller)->GetAxis(gamepad_shoot_basic) > 0;
 	}
 }
 
@@ -360,7 +401,7 @@ void Obj_Tank::SelectInputMethod()
 
 	//Shot input
 	if (shot_input != INPUT_METHOD::KEYBOARD_MOUSE
-		&& app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
+		&& app->input->GetMouseButton(kb_shoot_basic) != KEY_IDLE)
 	{
 		shot_input = INPUT_METHOD::KEYBOARD_MOUSE;
 		SDL_ShowCursor(SDL_ENABLE);
@@ -368,7 +409,7 @@ void Obj_Tank::SelectInputMethod()
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
+		|| (*controller)->GetAxis(gamepad_shoot_basic) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
@@ -390,6 +431,7 @@ void Obj_Tank::ShootFlameThrower()
 {
 }
 
+
 void Obj_Tank::ReviveTank()
 {
 	//if (app->scene->tank_1->life == 0)
@@ -405,3 +447,17 @@ void Obj_Tank::StopTank()
 	//app->scene->tank_1->velocity = { 0.0f,0.0f };
 
 }
+
+void Obj_Tank::Item()
+{
+	if(item != ObjectType::NO_TYPE
+		&& (app->input->GetKey(kb_item) == KEY_DOWN
+			|| (*controller)->GetButtonState(gamepad_item) == KEY_DOWN))
+	{
+		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
+		new_item->caster = this;
+		new_item->Use();
+		item = ObjectType::NO_TYPE;
+	}
+}
+
