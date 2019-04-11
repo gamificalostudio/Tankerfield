@@ -221,41 +221,31 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 }
 
 // Blit to screen
-bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* current_camera, const SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y) const
+bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* current_camera, const SDL_Rect* section) const
 {
 	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
 		bool ret = true;
 
-	uint scale = app->win->GetScale();
+	//uint scale = app->win->GetScale();
 
 	SDL_Rect rect_in_screen;
 	SDL_Rect spritesheet_rect{ 0,0,0,0 };
 
 	//Transform the rect in the word to the rect in screen =======================
-	rect_in_screen.x = (int)(-current_camera->rect.x * speed) + screen_x * scale;
-	rect_in_screen.y = (int)(-current_camera->rect.y * speed) + screen_y * scale;
+	rect_in_screen.x = -current_camera->rect.x  + screen_x /** scale*/;
+	rect_in_screen.y = -current_camera->rect.y  + screen_y /** scale*/;
 
 	if (section != NULL)
 	{
 		spritesheet_rect = *section;
-		rect_in_screen.w = section->w * scale;
-		rect_in_screen.h = section->h * scale;
+		rect_in_screen.w = section->w/* * scale*/;
+		rect_in_screen.h = section->h/* * scale*/;
 	}
 	else
 	{
 		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
 	}
 
-	//Pivot ==================================================
-	SDL_Point* p = NULL;
-	SDL_Point pivot;
-
-	if (pivot_x != INT_MAX && pivot_y != INT_MAX)
-	{
-		pivot.x = pivot_x;
-		pivot.y = pivot_y;
-		p = &pivot;
-	}
 
 	//	if (debug)
 		//{
@@ -267,7 +257,7 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 	rect_in_screen.y += current_camera->viewport.y;
 
 	//Print the rect_in_screen ============================================
-	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, p, SDL_FLIP_NONE) != 0)
+	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, NULL, nullptr, SDL_FLIP_NONE) != 0)
 	{
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;

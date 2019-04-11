@@ -36,7 +36,7 @@ bool UI_Label::Draw()
 {
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
 	{
-		app->render->Blit(label_texture, position.x - section.w * 0.5f, position.y - section.h * 0.5f, (*item_cam), &section, false, 0.0f);
+		app->render->Blit(label_texture, position.x - section.w * 0.5f, position.y - section.h * 0.5f, (*item_cam), &section);
 	}
 	return false;
 }
