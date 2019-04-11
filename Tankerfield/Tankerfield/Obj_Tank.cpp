@@ -243,7 +243,7 @@ bool Obj_Tank::PostUpdate(float dt, Camera * camera)
 	debug_mouse_pos.x += camera_player->rect.x;
 	debug_mouse_pos.y += camera_player->rect.y;
 	fPoint debug_screen_pos = app->map->MapToScreenF(pos_map);
-	app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
+	//app->render->DrawLineSplitScreen(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 99, 38, 127);
 
 	return true;
 }

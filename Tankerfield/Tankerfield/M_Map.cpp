@@ -141,21 +141,36 @@ bool M_Map::PostUpdate(float dt)
 	//// Draw Grid ==============================================
 	if(show_grid)
 	{
-		iPoint point_1, point_2;
-		for (int i = 0; i <= data.columns; ++i)
+		std::vector<Camera*>::iterator item_cam;
+		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 		{
-			point_1 = MapToScreenI(i, 0);
-			point_2 = MapToScreenI(i, data.rows);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-		}
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
-		for (int i = 0; i <= data.rows; ++i)
-		{
-			point_1 = MapToScreenI(0, i);
-			point_2 = MapToScreenI(data.columns, i);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			
+
+		
+			iPoint point_1, point_2;
+			for (int i = 0; i <= data.columns; ++i)
+			{
+				point_1 = MapToScreenI(i, 0);
+				point_2 = MapToScreenI(i, data.rows);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
+
+			for (int i = 0; i <= data.rows; ++i)
+			{
+				point_1 = MapToScreenI(0, i);
+				point_2 = MapToScreenI(data.columns, i);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
 		}
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
+
+	// Print the lines in the limits ============================================== (don't working "DrawLine")(no puede estar en el blit, se hace cada vez)
+	Camera* cam1 = app->scene->tank_1->camera_player;
+	SDL_RenderDrawLine(app->render->renderer, cam1->rect.x + cam1->rect.w, 0, cam1->rect.x + cam1->rect.w, 2000);
+	SDL_RenderDrawLine(app->render->renderer, 0, cam1->rect.y + cam1->rect.h, 2000, cam1->rect.y + cam1->rect.h);
 
 	return ret;
 }
