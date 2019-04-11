@@ -66,7 +66,8 @@ bool Obj_Tank::Start()
 		rotate_turr->first_dir_angle = 315;
 	}
 
-	speed = 2.5f;//TODO: Load from xml
+	speed = 10.f;
+		//2.5f;//TODO: Load from xml
 	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);

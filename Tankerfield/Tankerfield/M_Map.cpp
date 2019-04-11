@@ -489,14 +489,20 @@ bool M_Map::LoadMap()
 		{
 			for (int x = 0; x < data.columns; ++x)
 			{
-				iPoint pos = app->map->MapToScreenI(x,y);
+				
+				iPoint pos = app->map->MapToScreenI(x, y);
 				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
 			}
 		}
-		SDL_Rect area = { data.screen_tile_rect[data.rows*data.columns].pos.x,
-			0,
-			100,
-			data.screen_tile_rect[data.rows * data.columns + data.columns].pos.y + data.screen_tile_rect[data.rows * data.columns + data.columns].h };
+		SDL_Rect area = { data.screen_tile_rect[(data.rows-1)*(data.columns)].pos.x,
+			 0,
+			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
+			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns-1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h};
+			/*SDL_Rect area = { 0,
+			 0,
+			 (data.screen_tile_rect[(data.columns - 1)].GetRight()),
+			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns-1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h};*/
+
 		;
 		data.qt = new Quadtree<SDL_Rect>(area);
 		
