@@ -101,7 +101,6 @@ bool M_Collision::Update(float dt)
 				{
 					LOG("DESTROYED");
 					(*itr)->collisions_list.erase(to_destroy);
-					break;
 				}
 			}
 
@@ -145,16 +144,27 @@ bool M_Collision::Update(float dt)
 
 			if (collider_1->CheckCollision(collider_2))
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
 				{
-					collider_1->object->OnTrigger(collider_2);
+					DoOnTrigger(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->object)
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
 				{
-					collider_2->object->OnTrigger(collider_1);
+					DoOnTrigger(collider_2, collider_1);
 				}
-			
+
 				SolveOverlapDD(collider_1, collider_2);
+			}
+			else
+			{
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
+				{
+					DoOnTriggerExit(collider_1, collider_2);
+				}
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
+				{
+					DoOnTriggerExit(collider_2, collider_1);
+				}
 			}
 		}
 	}
@@ -171,16 +181,27 @@ bool M_Collision::Update(float dt)
 
 			if (collider_1->CheckCollision(collider_2))
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
 				{
-					collider_1->object->OnTrigger(collider_2);
+					DoOnTrigger(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->object)
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
 				{
-					collider_2->object->OnTrigger(collider_1);
+					DoOnTrigger(collider_2, collider_1);
 				}
 
 				SolveOverlapDS(collider_2, collider_1);
+			}
+			else
+			{
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
+				{
+					DoOnTriggerExit(collider_1, collider_2);
+				}
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
+				{
+					DoOnTriggerExit(collider_2, collider_1);
+				}
 			}
 		}
 	}
@@ -202,22 +223,22 @@ bool M_Collision::Update(float dt)
 
 			if (collider_1->CheckCollision(collider_2))
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object)
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
 				{
 					DoOnTrigger(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag] && collider_2->object)
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
 				{
 					DoOnTrigger(collider_2, collider_1);
 				}
 			}
 			else
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->object  && collider_1->collisions_list.empty() == false)
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
 				{
 					DoOnTriggerExit(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_2->object && collider_2->collisions_list.empty() == false)
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
 				{
 					DoOnTriggerExit(collider_2, collider_1);
 				}
@@ -302,6 +323,15 @@ Collider * M_Collision::AddCollider(float x, float y, float width, float height,
 
 void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
+	if ((int)dynamic_col->collisions_list.size() >= 2)
+	{
+		LOG("%i", (int)dynamic_col->collisions_list.size());
+	}
+	else
+	{
+		LOG("NOPE");
+	}
+
 	// Calculate between colliders overlap ============================================
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
 	distances[(int)Collider::OVERLAP_DIR::LEFT] = dynamic_col->position.x + dynamic_col->width - static_col->position.x;
@@ -399,14 +429,22 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 
 inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 {
+	
 	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
 	{
-		c1->object->OnTrigger(c2);
+		if (c1->object != nullptr) 
+		{
+			c1->object->OnTrigger(c2);
+		}
 	}
 	else
 	{
 		c1->collisions_list.push_back(c2);
-		c1->object->OnTriggerEnter(c2);
+
+		if (c1->object != nullptr)
+		{
+			c1->object->OnTriggerEnter(c2);
+		}
 	}
 }
 
@@ -416,7 +454,11 @@ inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
 
 	if (iter != c1->collisions_list.end())
 	{
-		c1->object->OnTriggerExit(c2);
 		c1->collisions_list.erase(iter);
+
+		if (c1->object != nullptr)
+		{
+			c1->object->OnTriggerExit(c2);
+		}
 	}
 }

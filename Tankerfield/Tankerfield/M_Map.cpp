@@ -10,6 +10,7 @@
 #include "M_Collision.h"
 #include "M_Input.h"
 #include "M_Pathfinding.h"
+#include "M_Scene.h"
 
 
 M_Map::M_Map()
@@ -70,72 +71,116 @@ bool M_Map::PostUpdate(float dt)
 
 	if (map_loaded == false)
 		return ret;
-	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
-	{
 
-		if ((*layer)->visible) {
+//<<<<<<< HEAD
+		//if ((*layer)->visible) {
 
-			if ((*layer)->visible) {
-				for (int y = 0; y < data.rows; ++y)
+		//	if ((*layer)->visible) {
+		//		for (int y = 0; y < data.rows; ++y)
+		//		{
+		//			for (int x = 0; x < data.columns; ++x)
+		//			{
+		//				int array_pos = (y * data.columns) + x;
+		//				int tile_id = (*layer)->data[array_pos];
+		//				if (tile_id > 0)
+		//				{
+		//					//iPoint pos = MapToScreenI(x, y);
+		//					SDL_Rect rect = (data.screen_tile_rect[array_pos]).operator SDL_Rect();
+		//					if (SDL_HasIntersection(&rect, &app->render->camera))
+		//					{
+		//						TileSet* tileset = GetTilesetFromTileId(tile_id);
+		//						if (tileset != nullptr)
+		//						{
+		//							SDL_Rect r = tileset->GetTileRect(tile_id);
+		//							app->render->Blit(tileset->texture, rect.x, rect.y, &r);
+//=======
+	std::vector<Camera*>::iterator item_cam;
+	SDL_Rect rect;
+	iPoint pos;
+	SDL_Rect r;
+	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
+	TileSet* tileset = (*item);
+	std::list<MapLayer*>::iterator layer;
+	int y;
+	int x;
+	int tile_id;
+
+	
+	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
+	
+			//BROFILER_CATEGORY("MAP DRAW layer", Profiler::Color::DeepPink);
+			
+				//BROFILER_CATEGORY("MAP DRAW camera", Profiler::Color::DeepPink);
+			
+
+				for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 				{
-					for (int x = 0; x < data.columns; ++x)
+					SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+
+					for (layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
 					{
-						int array_pos = (y * data.columns) + x;
-						int tile_id = (*layer)->data[array_pos];
-						if (tile_id > 0)
-						{
-							//iPoint pos = MapToScreenI(x, y);
-							SDL_Rect rect = (data.screen_tile_rect[array_pos]).operator SDL_Rect();
-							if (SDL_HasIntersection(&rect, &app->render->camera))
-							{
-								TileSet* tileset = GetTilesetFromTileId(tile_id);
-								if (tileset != nullptr)
-								{
-									SDL_Rect r = tileset->GetTileRect(tile_id);
-									app->render->Blit(tileset->texture, rect.x, rect.y, &r);
-								}
-							}
-						}
-					}
+						if ((*layer)->visible == false)
+							continue;
+
+						(*layer)->qt->DrawMap(*(*item_cam));
+					}	
+					SDL_RenderSetClipRect(app->render->renderer, nullptr);
 				}
-				//(*layer)->qt->DrawMap(app->render->camera);
-		}
+					//// Draw Grid ==============================================
+	if(show_grid)
+	{
+		std::vector<Camera*>::iterator item_cam;
+		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		{
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
 			
+
+		
+			iPoint point_1, point_2;
+			for (int i = 0; i <= data.columns; ++i)
+			{
+				point_1 = MapToScreenI(i, 0);
+				point_2 = MapToScreenI(i, data.rows);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
+
+			for (int i = 0; i <= data.rows; ++i)
+			{
+				point_1 = MapToScreenI(0, i);
+				point_2 = MapToScreenI(data.columns, i);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
+		}
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
-
-
-	}
-
-	//for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
+	//			for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
 	//{
 
 	//	(*layer)->qt->Draw();
 	//}
-	//data.qt->DrawMap(app->render->camera);
-	//// Draw Grid ==============================================
-	if(show_grid)
-	{
-		iPoint point_1, point_2;
-		for (int i = 0; i <= data.columns; ++i)
-		{
-			point_1 = MapToScreenI(i, 0);
-			point_2 = MapToScreenI(i, data.rows);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-		}
 
-		for (int i = 0; i <= data.rows; ++i)
-		{
-			point_1 = MapToScreenI(0, i);
-			point_2 = MapToScreenI(data.columns, i);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-		}
-	}
-
-	//data.qt->Draw();
-
-	return ret;
+				return ret = true;
 }
+
+			
+
+				
+	
+	
+//>>>>>>> Split-screen
+
+//
+//<<<<<<< HEAD
+	//data.qt->Draw();
+//=======
+//	// Print the lines in the limits ============================================== (don't working "DrawLine")(no puede estar en el blit, se hace cada vez)
+//	//Camera* cam1 = app->scene->tank_1->camera_player;
+//	//SDL_RenderDrawLine(app->render->renderer, cam1->rect.x + cam1->rect.w, 0, cam1->rect.x + cam1->rect.w, 2000);
+//	//SDL_RenderDrawLine(app->render->renderer, 0, cam1->rect.y + cam1->rect.h, 2000, cam1->rect.y + cam1->rect.h);
+//>>>>>>> Split-screen
+
+
 
 bool M_Map::CleanUp()
 {
@@ -320,7 +365,7 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
 			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
 		;
-		layer->qt = new Quadtree_Map(area, 0, 6);
+		layer->qt = new Quadtree_Map(area, 0, 4);
 
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
@@ -522,6 +567,7 @@ bool M_Map::LoadMap()
 
 SDL_Rect TileSet::GetTileRect(int id) const
 {
+	BROFILER_CATEGORY("MAP DRAW GetTileRect", Profiler::Color::DeepPink);
 	int relative_id = id - firstgid;
 	SDL_Rect rect = { 
 		margin + ((tile_width + spacing) * (relative_id % columns)),
@@ -603,7 +649,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 
 iPoint M_Map::MapToScreenI(int column, int row) const
 {
-	
+	BROFILER_CATEGORY("MAP DRAW mapToScreen", Profiler::Color::DeepPink);
 	iPoint screen_pos(0, 0);
 	switch (data.type) {
 	case MapTypes::MAPTYPE_ORTHOGONAL:

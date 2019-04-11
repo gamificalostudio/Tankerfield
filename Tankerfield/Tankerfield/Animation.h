@@ -34,7 +34,11 @@ public:
 public:
 	Animation()
 	{
+	}
 
+	Animation(pugi::xml_node const & node)
+	{
+		LoadAnimation(node);
 	}
 
 	void NextFrame(float dt)
@@ -93,6 +97,8 @@ public:
 		return true;
 	}
 
+	//TODO: Assert if there is a different number of frames in each direction
+
 	//Used before loading rects
 	//Resizes the std::2Dvector frames so that it doesn't need to change size when rects are loaded00
 	void Resize(uint directions, uint frames_per_direction)
@@ -131,6 +137,12 @@ private:
 	//TODO: Add support for clockwise spritesheets
 	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, float fist_rect_dir)
 	{
+		//Avoid all the calculations if it only has one frame
+		if (max_dirs == 0)
+		{
+			return 0;
+		}
+
 		//Account for the spritesheet not starting at the 0 degree rotation
 		angle -= fist_rect_dir;
 		angle = ClampRotation(angle);

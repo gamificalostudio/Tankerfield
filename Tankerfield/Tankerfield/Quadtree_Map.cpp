@@ -68,9 +68,9 @@ int Quadtree_Map::InsertTile(Tile tile)
 	return ret = -1;
 }
 
-void Quadtree_Map::DrawMap(SDL_Rect camera)
+void Quadtree_Map::DrawMap(const Camera &camera)
 {
-	SDL_Rect cam = camera;
+	SDL_Rect cam = camera.rect;
 	cam.y -= 30;
 	cam.w += 60;
 	cam.h += 30;
@@ -87,7 +87,7 @@ void Quadtree_Map::DrawMap(SDL_Rect camera)
 					TileSet* tileset = app->map->GetTilesetFromTileId(tile.id);
 					SDL_Rect rect = tileset->GetTileRect(tile.id);
 
-					app->render->Blit(tileset->texture, tile.rect.x, tile.rect.y, &rect);
+					app->render->Blit(tileset->texture, tile.rect.x, tile.rect.y, &camera, &rect);
 				}
 				
 			}

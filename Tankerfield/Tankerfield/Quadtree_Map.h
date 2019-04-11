@@ -26,7 +26,7 @@ public:
 	// -1 error
 	int InsertTile(Tile rect);
 
-	void DrawMap(SDL_Rect camera);
+	void DrawMap(const Camera & camera);
 private:
 	std::list<Tile> elements;
 	Quadtree_Map* nodes[4] = { nullptr,nullptr,nullptr,nullptr };

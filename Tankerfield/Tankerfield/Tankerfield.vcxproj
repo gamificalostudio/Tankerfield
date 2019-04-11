@@ -127,9 +127,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet_Basic.cpp" />
+    <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
+    <ClCompile Include="Obj_Item.cpp" />
     <ClCompile Include="Obj_Static.cpp" />
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Quadtree_Map.cpp" />
@@ -167,9 +169,11 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
     <ClInclude Include="Obj_Bullet.h" />
+    <ClInclude Include="Obj_Item.h" />
     <ClInclude Include="Obj_Static.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Quadtree_Map.h" />
