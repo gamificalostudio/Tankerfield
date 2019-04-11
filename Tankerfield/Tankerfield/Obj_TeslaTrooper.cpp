@@ -38,8 +38,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	curr_tex = tex;
 	if (walk == nullptr)
 	{
-		walk = new Animation;
-		walk->LoadAnimation(tesla_trooper_node.child("animations").child("walk"));
+		walk = new Animation(tesla_trooper_node.child("animations").child("walk"));
 	}
 	curr_anim = walk;
 	speed				= 1.5F;

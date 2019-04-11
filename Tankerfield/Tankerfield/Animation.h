@@ -138,7 +138,7 @@ private:
 	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, float fist_rect_dir)
 	{
 		//Avoid all the calculations if it only has one frame
-		if (max_dirs == 1)
+		if (max_dirs == 0)
 		{
 			return 0;
 		}

@@ -52,18 +52,12 @@ bool Obj_Tank::Start()
 
 	if (rotate_base == nullptr)
 	{
-		rotate_base = new Animation;
-		rotate_base->LoadAnimation(tank_node.child("animations").child("rotate_base"));
-		rotate_base->rotation = COUNTER_CLOCKWISE;
-		rotate_base->first_dir_angle = 315;
+		rotate_base = new Animation (tank_node.child("animations").child("rotate_base"));
 	}
 	curr_anim = rotate_base;
 	if (rotate_turr == nullptr)
 	{
-		rotate_turr = new Animation;
-		rotate_turr->LoadAnimation(tank_node.child("animations").child("rotate_turr"));
-		rotate_turr->rotation = COUNTER_CLOCKWISE;
-		rotate_turr->first_dir_angle = 315;
+		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
 	}
 
 	speed = 4.f;//TODO: Load from xml
@@ -89,7 +83,7 @@ bool Obj_Tank::Start()
 	cannon_length = 1.f;
 
 	//TODO: Load them from the XML
-  kb_up			  = SDL_SCANCODE_W;
+	kb_up			  = SDL_SCANCODE_W;
 	kb_left			= SDL_SCANCODE_A;
 	kb_down			= SDL_SCANCODE_S;
 	kb_right		= SDL_SCANCODE_D;
@@ -102,8 +96,8 @@ bool Obj_Tank::Start()
 	gamepad_aim		= Joystick::RIGHT;
 	gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_TRIGGERLEFT;
 	gamepad_shoot_special	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
-  gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-  gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
+	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
