@@ -24,6 +24,7 @@
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
+#include "Obj_Explosion.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
 
@@ -209,6 +210,11 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+		break;
+	case ObjectType::EXPLOSION:
+		ret = new Obj_Explosion(pos);
+		ret->type = ObjectType::EXPLOSION;
+		break;
 	}
   
 	if (ret != nullptr)

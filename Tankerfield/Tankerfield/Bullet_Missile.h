@@ -28,6 +28,8 @@ private:
 
 	PerfTimer explosion_time;
 
+	fPoint explosion_offset = { 1.5f,1.5f };
+
 };
 
 #endif

@@ -75,6 +75,8 @@ void Object::DrawDebug()
 	case ObjectType::TESLA_TROOPER:
 		app->render->DrawQuad(section, 0, 0, 255, 80);
 		break;
+	case ObjectType::EXPLOSION:
+		app->render->DrawQuad(section, 255, 0, 255, 80);
 	default:
 		break;
 	}

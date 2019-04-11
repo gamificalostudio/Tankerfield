@@ -131,6 +131,7 @@
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
+    <ClCompile Include="Obj_Explosion.cpp" />
     <ClCompile Include="Obj_Static.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="Obj_Explosion.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
     <ClInclude Include="Obj_Bullet.h" />
