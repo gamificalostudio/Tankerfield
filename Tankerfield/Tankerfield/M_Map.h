@@ -198,7 +198,7 @@ public:
 
 	MapData					data;
 	std::list<Levels*>		levels;
-	Quadtree*				qt = nullptr;
+	Quadtree<SDL_Rect>*				qt = nullptr;
 private:
 
 	bool					map_loaded = false;

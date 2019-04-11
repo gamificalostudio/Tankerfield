@@ -5,6 +5,7 @@
 #include "Log.h"
 #include "SDL/include/SDL.h"
 
+template  <class TYPE>
 class Quadtree 
 {
 public:

@@ -492,7 +492,7 @@ bool M_Map::LoadMap()
 			}
 		}
 		SDL_Rect area = {0,0,10,10};
-		qt = new Quadtree(1, area, 0, 4);
+		qt = new Quadtree<SDL_Rect>(1, area, 0, 4);
 		
 	}
 
