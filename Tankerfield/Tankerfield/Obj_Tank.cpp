@@ -128,7 +128,22 @@ bool Obj_Tank::Update(float dt)
 	Shoot();
 	Item();
 	Movement(dt);
+	CameraMovement(dt);
+
 	return true;
+}
+
+void Obj_Tank::CameraMovement(float dt)
+{
+	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+	fPoint target_pos =
+	{
+		(float)camera_player->rect.x,
+		(float)camera_player->rect.y
+	};
+
+	camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.6f/*37.5f * dt*/);
+	camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.6f/*37.5f * dt*/);
 }
 
 void Obj_Tank::Movement(float dt)
@@ -196,13 +211,15 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
-bool Obj_Tank::Draw(float dt)
+
+bool Obj_Tank::Draw(float dt, Camera * camera)
 {
 	// Base =========================================
 	app->render->Blit(
 		base_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
+    camera,
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
@@ -210,22 +227,32 @@ bool Obj_Tank::Draw(float dt)
 		turr_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
+    camera,
 		&rotate_turr->GetFrame(turr_angle));
 
+
 	//DEBUG
-	//iPoint debug_mouse_pos = { 0, 0 };
-	//app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
-	//debug_mouse_pos.x += app->render->camera.x;
-	//debug_mouse_pos.y += app->render->camera.y;
- // 
-	//fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-	//fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-	//app->render->DrawLine(debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y, 0, 255, 0);
+
+//	iPoint debug_mouse_pos = { 0, 0 };
+//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
+
+//	debug_mouse_pos.x += camera_player->rect.x;
+//	debug_mouse_pos.y += camera_player->rect.y;
+  
+//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
+//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
+  
+//  std::vector<Camera*>::iterator item_cam;
+//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+//	{
+	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
+//	}
+
 
 	return true;
 }
 
-bool Obj_Tank::DrawShadow()
+bool Obj_Tank::DrawShadow(Camera * camera)
 {
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 
@@ -234,6 +261,7 @@ bool Obj_Tank::DrawShadow()
 		base_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
+    camera,
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
@@ -241,7 +269,9 @@ bool Obj_Tank::DrawShadow()
 		turr_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
+    camera,
 		&rotate_turr->GetFrame(turr_angle));
+
 
 	return true;
 }
