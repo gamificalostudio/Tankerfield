@@ -1577,7 +1577,7 @@
    <tile gid="36"/>
   </data>
  </layer>
- <layer id="9" name="Colliders" width="39" height="40" visible="0">
+ <layer id="9" name="Colliders" width="39" height="40">
   <properties>
    <property name="Navigation" type="float" value="1"/>
    <property name="Nodraw" type="int" value="0"/>

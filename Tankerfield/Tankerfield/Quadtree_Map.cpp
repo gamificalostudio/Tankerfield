@@ -12,13 +12,13 @@ void Quadtree_Map::Subdivide()
 
 	int half_width = area.w*0.5f, half_height = area.h*0.5f;
 
-	nodes[(int)QUADRANT::NORTH_EAST] = new Quadtree_Map({ area.x + half_width , area.y ,half_width,half_height });
+	nodes[(int)QUADRANT::NORTH_EAST] = new Quadtree_Map({ area.x + half_width , area.y ,half_width,half_height }, level+1, max_levels);
 
-	nodes[(int)QUADRANT::NORTH_WEST] = new Quadtree_Map({ area.x, area.y, half_width, half_height });
+	nodes[(int)QUADRANT::NORTH_WEST] = new Quadtree_Map({ area.x, area.y, half_width, half_height }, level + 1, max_levels);
 
-	nodes[(int)QUADRANT::SOUTH_EAST] = new Quadtree_Map({ area.x + half_width, area.y + half_height, half_width, half_height });
+	nodes[(int)QUADRANT::SOUTH_EAST] = new Quadtree_Map({ area.x + half_width, area.y + half_height, half_width, half_height },	level + 1, max_levels);
 
-	nodes[(int)QUADRANT::SOUTH_WEST] = new Quadtree_Map({ area.x, area.y + half_height, half_width, half_height });
+	nodes[(int)QUADRANT::SOUTH_WEST] = new Quadtree_Map({ area.x, area.y + half_height, half_width, half_height }, level + 1, max_levels);
 }
 void Quadtree_Map::Draw() const
 {
@@ -35,7 +35,7 @@ void Quadtree_Map::Draw() const
 int Quadtree_Map::InsertTile(Tile tile)
 {
 	int ret = 0;
-	if (SDL_HasIntersection(&tile.rect,&area))
+	if (!SDL_HasIntersection(&tile.rect,&area))
 	{
 		return ret;
 	}

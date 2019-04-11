@@ -100,6 +100,7 @@ bool M_Map::PostUpdate(float dt)
 		}
 	}
 	
+	data.qt->DrawMap(app->render->camera);
 	//// Draw Grid ==============================================
 	if(show_grid)
 	{
@@ -308,16 +309,15 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		int i = 0;
 		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
+			Tile qtile;
 			layer->data[i] = tile.attribute("gid").as_int(0);
 
-		/*	if (layer->name == "Colliders" && layer->data[i] != 0u)
+			qtile.id = layer->data[i];
+			if (qtile.id != 0)
 			{
-					fPoint pos = layer->GetTilePos(i);
-
-					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
-					data.colliders_list.push_back(aux);
-			}*/
-
+				qtile.rect = { data.screen_tile_rect[i].pos.x, data.screen_tile_rect[i].pos.y, data.tile_width, data.tile_height };
+				data.qt->InsertTile(qtile);
+			}
 			if (layer->name == "Buildings")
 			{
 				layer->layer_properties.draw = node.child("properties").child("property").attribute("value").as_bool(true);
@@ -499,7 +499,7 @@ bool M_Map::LoadMap()
 			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
 			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns-1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h};
 		;
-		data.qt = new Quadtree_Map(area);
+		data.qt = new Quadtree_Map(area,0,5);
 		
 	}
 

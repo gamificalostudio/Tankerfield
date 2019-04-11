@@ -210,9 +210,13 @@ private:
 	pugi::xml_document		map_file;
 
 	bool LoadMap();
+
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
+
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
+
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
+
 	bool LoadObjectGroup(const pugi::xml_node& object_group_node, ObjectGroup* object_group);
 
 	void DebugMap();
