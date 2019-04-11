@@ -899,7 +899,7 @@
       <life value="1000"/>
       <tex path="textures/objects/explosion-sheet.png"/>
       <animations>
-        <explosion speed="1.0">
+        <explosion speed="5">
           <dir>
             <frame x="0" y="0" w="198" h="128"/>
             <frame x="198" y="0" w="198" h="128"/>

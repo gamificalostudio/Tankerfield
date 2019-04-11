@@ -21,7 +21,6 @@ public:
 	bool Awake(pugi::xml_node&) { return true; };
 
 private:
-	SDL_Texture * tex;
 
 	bool death = false;
 
