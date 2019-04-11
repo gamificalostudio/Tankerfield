@@ -13,6 +13,7 @@ class Timer;
 class Obj_Explosion : public Object
 {
 public:
+
 	Obj_Explosion(fPoint pos);
 	~Obj_Explosion();
 
@@ -30,8 +31,6 @@ private:
 	Circle range_pos;
 
 	Collider* coll_explosion=nullptr;
-
-	Timer timer;
 	
 	// ---
 	Animation* explosion_anim;

@@ -222,6 +222,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::EXPLOSION:
 		ret = new Obj_Explosion(pos);
 		ret->type = ObjectType::EXPLOSION;
+		break;
 	case ObjectType::HEALTH_BAG:
 		ret = new Item_HealthBag(pos);
 		ret->type = ObjectType::HEALTH_BAG;
