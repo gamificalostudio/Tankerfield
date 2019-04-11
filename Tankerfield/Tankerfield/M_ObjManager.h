@@ -13,13 +13,22 @@
 
 enum class ObjectType
 {
+	//OTHER
 	TANK,
+	STATIC,
+	REWARD_ZONE,
+
+	//ENEMIES
 	TESLA_TROOPER,
+
+	//BULLETS
 	BASIC_BULLET,
 	BULLET_MISSILE,
 	EXPLOSION,
-	STATIC,
-	REWARD_ZONE,
+
+	//ITEMS
+	HEALTH_BAG,
+
 	NO_TYPE
 };
 
@@ -56,6 +65,7 @@ public:
 
 	Object* GetNearestTank(fPoint pos);
 	
+	std::list<Object*> GetObjects() const;
 
 private:
 
