@@ -2,9 +2,14 @@
 #define __QUADTREE_H__
 
 #include <list>
+
+#include "SDL/include/SDL.h"
+
 #include "Defs.h"
 #include "Log.h"
-#include "SDL/include/SDL.h"
+
+#include "App.h"
+#include  "M_Render.h"
 
 enum class QUADRANT
 {
@@ -59,7 +64,9 @@ public:
 		nodes[(int)QUADRANT::SOUTH_WEST] = new Quadtree({ area.x, area.y + half_height, half_width, half_height });
 	};
 
-	void Draw() const {};
+	void Draw() const {
+		app->render->DrawQuad(area, 0, 0, 255, 255, false);
+	};
 
 	//Return 0 if not added
 	//1 Added 

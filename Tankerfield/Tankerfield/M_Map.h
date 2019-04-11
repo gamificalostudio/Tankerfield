@@ -150,6 +150,8 @@ struct MapData
 
 	
 	iRect*		screen_tile_rect = nullptr;
+	Quadtree<SDL_Rect>*				qt = nullptr;
+
 	~MapData()
 	{
 		if (screen_tile_rect != nullptr)
@@ -198,7 +200,7 @@ public:
 
 	MapData							data;
 	std::list<Levels*>				levels;
-	Quadtree<SDL_Rect>*				qt = nullptr;
+	
 private:
 
 	bool					map_loaded = false;

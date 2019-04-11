@@ -119,6 +119,8 @@ bool M_Map::PostUpdate(float dt)
 		}
 	}
 
+	data.qt->Draw();
+
 	return ret;
 }
 
@@ -491,8 +493,12 @@ bool M_Map::LoadMap()
 				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
 			}
 		}
-		SDL_Rect area = {0,0,10,10};
-		qt = new Quadtree<SDL_Rect>(area);
+		SDL_Rect area = { data.screen_tile_rect[data.rows*data.columns].pos.x,
+			0,
+			100,
+			data.screen_tile_rect[data.rows * data.columns + data.columns].pos.y + data.screen_tile_rect[data.rows * data.columns + data.columns].h };
+		;
+		data.qt = new Quadtree<SDL_Rect>(area);
 		
 	}
 
