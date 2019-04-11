@@ -18,6 +18,8 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
 	pugi::xml_node explosion_node = app->config.child("object").child("explosion");
 
+	timer.Start();
+	time = SDL_GetTicks();
 	if (explosion_tex == nullptr)
 	{
 		explosion_tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
@@ -27,8 +29,8 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 		explosion_anim = new Animation;
 		explosion_anim->LoadAnimation(explosion_node.child("animations").child("explosion"));
 	}
-	curr_anim = explosion_anim;
 	curr_tex = explosion_tex;
+	curr_anim = explosion_anim;
 
 	coll_explosion = app->collision->AddCollider(pos_map, 3.f, 3.f, Collider::TAG::BULLET, 200.f, nullptr);
 	coll_explosion->AddRigidBody(Collider::BODY_TYPE::SENSOR);
@@ -41,10 +43,18 @@ Obj_Explosion::~Obj_Explosion()
 
 bool Obj_Explosion::Update(float dt)
 {
-	if (curr_anim != nullptr&&curr_anim->Finished())
+	/*if (curr_anim != nullptr&&curr_anim->Finished())
+	{
+		to_remove = true;
+	}*/
+
+	if (timer.ReadSec() > 1000)
 	{
 		to_remove = true;
 	}
-
+	if (SDL_GetTicks() - time > 100)
+	{
+		to_remove = true;
+	}
 	return true;
 }

@@ -15,6 +15,7 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "WeaponInfo.h"
 
 SDL_Texture * Obj_Tank::base_tex			= nullptr;
 SDL_Texture * Obj_Tank::turr_tex			= nullptr;
