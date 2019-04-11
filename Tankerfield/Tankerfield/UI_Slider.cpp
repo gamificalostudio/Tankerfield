@@ -39,6 +39,7 @@ bool UI_Slider::Draw()
 	{
 		app->render->Blit(app->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f, position.y - definition.rail_draw_rect.h * 0.5f, (*item_cam), &definition.rail_draw_rect);
 	}
+
 	return true;
 }
 

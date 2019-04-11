@@ -88,20 +88,26 @@
     <ClCompile Include="App.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Weapon.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
-    <ClCompile Include="Weapon_Flamethrower.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet_Basic.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Static.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponInfo.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Item.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Item_HealthBag.cpp">
+      <Filter>Objects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -204,24 +210,32 @@
     <ClInclude Include="App.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Weapon_Flamethrower.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
-    <ClInclude Include="Weapon.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet_Basic.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Bullet.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
+    <ClInclude Include="Obj_Static.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
     <ClInclude Include="Circle.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h" />
     <ClInclude Include="MathUtils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponInfo.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Item.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_HealthBag.h">
+      <Filter>Objects\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +268,9 @@
     </Filter>
     <Filter Include="Objects\Bullets">
       <UniqueIdentifier>{7fdb053f-2696-4225-9b31-203b4b8cbd8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Items">
+      <UniqueIdentifier>{2defc043-2cab-4b6e-9e5d-61c893cf2910}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

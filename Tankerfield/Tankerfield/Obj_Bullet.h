@@ -16,11 +16,14 @@ public:
 	~Obj_Bullet();
 
 	//No need to rewrite them if they do the same
-  
-	bool Start() override;
-	bool Update(float dt) override;
+
+	bool Start();
+
+	bool Update(float dt);
 	
-	void OnTrigger(Collider* collider_1) override;
+	void OnTrigger(Collider* collider_1);
+
+	void SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle);
 
 public:
 
@@ -28,16 +31,15 @@ public:
 
 	fPoint direction = { 0.f, 0.f };
 
-	int damage = 0;
-
 	float bullet_life_ms = 0.f;
 
 	PerfTimer bullet_life_ms_timer;
 
-	float time_between_bullets = 0.f;
-
 	static SDL_Texture * tex;
+
+
 	static Animation * anim;
+
 
 	//SFX impact_sound
 

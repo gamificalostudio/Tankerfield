@@ -21,8 +21,6 @@ public:
 	int current_level = 0;
 	Obj_Tank * tank_1 = nullptr;
 	Obj_Tank * tank_2 = nullptr;
-	Obj_Tank * tank_3 = nullptr;
-	Obj_Tank * tank_4 = nullptr;
 public:
 
 	M_Scene();
@@ -48,9 +46,13 @@ public:
 	// Called before quitting
 	bool CleanUp() override;
 
+	bool draw_debug = false;
 	// ---------
 
 	void DebugPathfinding();
+
+private:
+	void CreateEnemyWave();
 
 public:
 	SDL_Texture* path_tex = nullptr;
@@ -60,7 +62,21 @@ private:
 	std::vector<iPoint> debug_path;
 	bool test_path = true;
 
-	iPoint path_tex_offset = { 0, 16 };
+	iPoint path_tex_offset = { -30, 0 };
+
+private:
+	/* Wave System */
+	// In milliseconds
+	float accumulated_time = 0.0f;
+	bool perform_objects_check = false;
+
+	int time_between_rounds = 0;
+	int initial_generated_units = 0;
+	int distance_range = 0;
+	int min_distance_from_center = 0;
+	int check_complete_round = 0;
+	int object_counter = 0;
+	int enemies_to_increase = 0;
 };
 
 #endif // __j1SCENE_H__

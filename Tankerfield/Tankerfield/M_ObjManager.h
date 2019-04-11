@@ -11,13 +11,22 @@
 #include "Module.h"
 #include "Point.h"
 
-enum ObjectType
+enum class ObjectType
 {
+	//OTHER
 	TANK,
-	PLAYER,
-	TESLA_TROOPER,
-	BASIC_BULLET,
+	STATIC,
 	REWARD_ZONE,
+
+	//ENEMIES
+	TESLA_TROOPER,
+
+	//BULLETS
+	BASIC_BULLET,
+
+	//ITEMS
+	HEALTH_BAG,
+
 	NO_TYPE
 };
 
@@ -48,11 +57,13 @@ public:
 
 	Object* CreateObject(ObjectType type, fPoint map_pos);
 
+	static bool SortByYPos(Object * obj1, Object * obj2);
+
 	void DeleteObjects();
 
 	Object* GetNearestTank(fPoint pos);
 	
-  
+	std::list<Object*> GetObjects() const;
 
 private:
 

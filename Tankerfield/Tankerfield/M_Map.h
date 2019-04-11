@@ -4,6 +4,8 @@
 #include <list>
 
 #include "Log.h"
+#include "Rect.h"
+
 #include "Module.h"
 #include "M_Render.h"
 #include "M_Textures.h"
@@ -105,7 +107,6 @@ public:
 			else if (type == "bool")
 			{
 				p->value = new bool(iter.attribute("value").as_bool());
-				
 			}
 			else 
 			{
@@ -116,6 +117,7 @@ public:
 		}
 	}
 
+	bool draw = true;
 	void UnloadProperties();
 };
 
@@ -149,7 +151,17 @@ struct MapLayer
 	}
 
 };
-
+struct ObjectGroup
+{
+	std::string name;
+	Properties	properties;
+	uint size			= 0;
+	Rect<float, float>* objects	= nullptr;
+	~ObjectGroup()
+	{
+		delete[] objects;
+	}
+};
 // ----------------------------------------------------
 struct TileSet
 {
@@ -189,18 +201,21 @@ enum MapTypes
 
 struct MapData
 {
+	std::string			objects_path;
 	int					columns = NULL,	rows = NULL;
 	int					tile_width = NULL,	tile_height = NULL;
 	int					offset_x = NULL, offset_y = NULL;
+  
 	MapTypes			type;
-
 	SDL_Color			background_color;
 
 	std::list<TileSet*>		tilesets;
-	std::list<MapLayer*>	mapLayers;
+	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
+	std::list<ObjectGroup*> object_layers;
 
 	Properties				map_properties;
+	
 };
 
 class M_Map : public Module
@@ -253,6 +268,9 @@ private:
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
+	bool LoadObjectGroup(const pugi::xml_node& object_group_node, ObjectGroup* object_group);
+
 	void DebugMap();
+
 };
 #endif // __j1MAP_H__

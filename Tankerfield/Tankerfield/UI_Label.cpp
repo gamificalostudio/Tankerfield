@@ -38,6 +38,7 @@ bool UI_Label::Draw()
 	{
 		app->render->Blit(label_texture, position.x - section.w * 0.5f, position.y - section.h * 0.5f, (*item_cam), &section);
 	}
+
 	return false;
 }
 

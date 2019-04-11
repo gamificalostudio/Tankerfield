@@ -127,9 +127,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet_Basic.cpp" />
+    <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
+    <ClCompile Include="Obj_Item.cpp" />
+    <ClCompile Include="Obj_Static.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
     <ClCompile Include="UI_Image.cpp" />
@@ -158,16 +161,18 @@
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
-    <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="Weapon_Flamethrower.cpp" />
+    <ClCompile Include="WeaponInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
     <ClInclude Include="Obj_Bullet.h" />
+    <ClInclude Include="Obj_Item.h" />
+    <ClInclude Include="Obj_Static.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Checkbox.h" />
@@ -200,8 +205,7 @@
     <ClInclude Include="UI_Slider.h" />
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />
-    <ClInclude Include="Weapon.h" />
-    <ClInclude Include="Weapon_Flamethrower.h" />
+    <ClInclude Include="WeaponInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml">

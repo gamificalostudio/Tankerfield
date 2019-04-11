@@ -51,6 +51,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 	}
 	else
 	{
+
 		Camera* camera_aux = nullptr;
 		camera_aux = new Camera();
 		camera_aux->rect.w = app->win->screen_surface->w * .5f;
@@ -114,7 +115,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 		camera.push_back(camera_aux3);
 		camera.push_back(camera_aux4);
 
-		
+	
 	}
 
 	return ret;
@@ -140,7 +141,14 @@ bool M_Render::PostUpdate(float dt)
 {
 	// Camera fix TODO: Move it to camera class
 
+	fPoint screen_pos = app->map->MapToScreenF(app->scene->tank_1->pos_map);
+	fPoint target_pos;
+	
+	target_pos.x = camera.x;
+	target_pos.y = camera.y;
 
+	camera.x = lerp(screen_pos.x - camera.w * 0.5f, target_pos.x, 0.6f);
+	camera.y = lerp(screen_pos.y - camera.h * 0.5f, target_pos.y, 0.6f);
 
 		
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
@@ -206,8 +214,8 @@ bool M_Render::CleanUp()
 // Load Game State
 bool M_Render::Load(pugi::xml_node& data)
 {
-	/*camera.x = data.child("camera").attribute("x").as_int();
-	camera.y = data.child("camera").attribute("y").as_int();*/
+	camera.x = data.child("camera").attribute("x").as_int();
+	camera.y = data.child("camera").attribute("y").as_int();
 
 	return true;
 }
@@ -215,10 +223,10 @@ bool M_Render::Load(pugi::xml_node& data)
 // Save Game State
 bool M_Render::Save(pugi::xml_node& data) const
 {
-	/*pugi::xml_node cam = data.append_child("camera");
+	pugi::xml_node cam = data.append_child("camera");
 
-	cam.append_attribute("x") = camera.x;
-	cam.append_attribute("y") = camera.y;*/
+	//cam.append_attribute("x") = camera.x;
+	//cam.append_attribute("y") = camera.y;
 
 	return true;
 }
@@ -243,10 +251,8 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 	iPoint ret;
 	int scale = app->win->GetScale();
 
-	std::vector<Camera*>::iterator camera = app->render->camera.begin();
-
-	ret.x = (x + (*camera)->rect.x / scale);
-	ret.y = (y + (*camera)->rect.y / scale);
+	ret.x = (x + camera.x / scale);
+	ret.y = (y + camera.y / scale);
 
 	return ret;
 }
@@ -346,6 +352,7 @@ bool M_Render::Blit2(SDL_Texture* texture, int screen_x, int screen_y, Camera* c
 
 	}
 
+
 	return ret;
 }
 
@@ -378,7 +385,9 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 			ret = false;
 		}
 	}
+
 	SDL_RenderSetClipRect(app->render->renderer, nullptr);
+
 
 	return ret;
 }
@@ -494,8 +503,6 @@ bool M_Render::DrawLineNoSplitScreen(int x1, int y1, int x2, int y2, Uint8 r, Ui
 			LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 			ret = false;
 		}
-
-
 	return ret;
 }
 
@@ -543,5 +550,16 @@ bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	}
 
 	return ret;
+}
+
+
+
+bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int & h, Camera* camera) const
+{
+	int scale = app->win->GetScale();
+
+	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
+
+	return SDL_HasIntersection(&r, &camera);
 }
 
