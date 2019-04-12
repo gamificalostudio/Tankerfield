@@ -78,11 +78,11 @@ bool M_UI::Start()
 	rb_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
-	UI_Image* left_tank_life = CreateImage({ full_screen.GetLeft() ,  full_screen.h * .5f }, image_def);
+	UI_Image* left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
 	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 
 	image_def.sprite_section = { 60, 160, 50, 530 };
-	UI_Image* right_tank_life = CreateImage({ full_screen.GetRight() ,  full_screen.h * .5f }, image_def);
+	UI_Image* right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
 
 	return true;

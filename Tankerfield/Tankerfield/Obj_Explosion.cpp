@@ -30,9 +30,9 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	{
 		explosion_anim = new Animation(explosion_node.child("animations").child("explosion"));
 	}
+
 	curr_tex = explosion_tex;
 	curr_anim = explosion_anim;
-
 
 	draw_offset.x = 99;
 	draw_offset.y = 10;

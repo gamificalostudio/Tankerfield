@@ -536,9 +536,8 @@ SDL_Rect TileSet::GetTileRect(int id) const
 	return rect;
 }
 
-TileSet* M_Map::GetTilesetFromTileId(int id) const
+inline TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
-	BROFILER_CATEGORY("GetTilesetFromTileId", Profiler::Color::DarkBlue)
 	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
 	TileSet* set = *item;
 	

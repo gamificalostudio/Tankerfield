@@ -243,7 +243,7 @@ public:
 
 	fPoint ScreenToMapF(float x, float y);
 
-	TileSet* GetTilesetFromTileId(int id) const;
+	inline TileSet* GetTilesetFromTileId(int id) const;
 
 	uint GetMaxLevels();
   
