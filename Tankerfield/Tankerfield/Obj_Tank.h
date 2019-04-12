@@ -14,6 +14,7 @@ enum class WEAPON {
 	BASIC,
 	FLAMETHROWER,
 	DOUBLE_MISSILE,
+	HEALING_SHOT,
 	MAX
 
 };
@@ -72,6 +73,7 @@ private:
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
+	void ShootHealingShot();
 
 	//- Item
 	void Item();
@@ -109,7 +111,7 @@ private:
 	PerfTimer basic_shot_timer;
   
 	//-- Special shoot
-	uint special_shoot					= (uint)WEAPON::DOUBLE_MISSILE;
+	uint special_shoot						= (uint)WEAPON::DOUBLE_MISSILE;
 	PerfTimer special_shot_timer;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 

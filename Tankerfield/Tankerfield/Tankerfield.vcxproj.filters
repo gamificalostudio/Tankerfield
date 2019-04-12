@@ -121,6 +121,9 @@
     <ClCompile Include="Obj_Item.cpp">
       <Filter>Objects\Item</Filter>
     </ClCompile>
+    <ClCompile Include="Healing_Bullet.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -260,6 +263,9 @@
     </ClInclude>
     <ClInclude Include="Obj_Item.h">
       <Filter>Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Healing_Bullet.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -73,10 +73,12 @@ bool Obj_Tank::Start()
 		weapons_info[(uint)WEAPON::BASIC].LoadProperties(weapons_node.child("basic"));
 		weapons_info[(uint)WEAPON::FLAMETHROWER].LoadProperties(weapons_node.child("flamethrower"));
 		weapons_info[(uint)WEAPON::DOUBLE_MISSILE].LoadProperties(weapons_node.child("double_missile"));
+		weapons_info[(uint)WEAPON::HEALING_SHOT].LoadProperties(weapons_node.child("healing_shot"));
 	}
 
 	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -466,16 +468,27 @@ void Obj_Tank::ShootDoubleMissile()
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
 
 	left_missile->SetBulletProperties(
-		weapons_info[(uint)basic_shot].bullet_speed,
-		weapons_info[(uint)basic_shot].bullet_life_ms,
-		weapons_info[(uint)basic_shot].bullet_damage,
+		weapons_info[(uint)special_shoot].bullet_speed,
+		weapons_info[(uint)special_shoot].bullet_life_ms,
+		weapons_info[(uint)special_shoot].bullet_damage,
 		shot_dir,
 		turr_angle);
 
 	right_missile->SetBulletProperties(
-		weapons_info[(uint)basic_shot].bullet_speed,
-		weapons_info[(uint)basic_shot].bullet_life_ms,
-		weapons_info[(uint)basic_shot].bullet_damage,
+		weapons_info[(uint)special_shoot].bullet_speed,
+		weapons_info[(uint)special_shoot].bullet_life_ms,
+		weapons_info[(uint)special_shoot].bullet_damage,
+		shot_dir,
+		turr_angle);
+}
+
+void Obj_Tank::ShootHealingShot()
+{
+	Obj_Bullet * heal_bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
+	heal_bullet->SetBulletProperties(
+		weapons_info[(uint)special_shoot].bullet_speed,
+		weapons_info[(uint)special_shoot].bullet_life_ms,
+		weapons_info[(uint)special_shoot].bullet_damage,
 		shot_dir,
 		turr_angle);
 }

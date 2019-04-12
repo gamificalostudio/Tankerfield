@@ -1,0 +1,20 @@
+#ifndef __HEALING_BULLET_H__
+#define __HEALING_BULLET_H__
+
+#include "PerfTimer.h"
+#include "Point.h"
+#include "Obj_Bullet.h"
+
+struct SDL_Texture;
+
+class Healing_Bullet : public Obj_Bullet
+{
+public:
+	Healing_Bullet(fPoint pos);
+	~Healing_Bullet();
+
+public:
+	//Add functions that are overriden
+};
+
+#endif

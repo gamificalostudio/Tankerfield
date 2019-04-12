@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
+    <ClCompile Include="Healing_Bullet.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="Healing_Bullet.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
