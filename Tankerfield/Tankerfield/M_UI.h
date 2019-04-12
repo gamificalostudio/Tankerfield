@@ -18,6 +18,7 @@ typedef string String;
 
 enum class ELEMENT_STATE;
 class UI_Element;
+class HUD;
 
 class UI_Listener;
 class UI_Image;
@@ -65,7 +66,7 @@ public:
 };
 
 
-class M_UI : public Module , public UI_Listener
+class M_UI : public Module
 {
 public:
 
@@ -145,10 +146,17 @@ private:
 
 public:
 	// Mouse ----------------------------------------------
+	HUD       *hud_player_1 = nullptr;
 
-	fPoint				mouse_position;
+	HUD       *hud_player_2 = nullptr;
 
-	fPoint				mouse_offset;
+	HUD       *hud_player_3 = nullptr;
+
+	HUD       *hud_player_4 = nullptr;
+
+	fPoint	   mouse_position;
+
+	fPoint	   mouse_offset;
 
 };
 

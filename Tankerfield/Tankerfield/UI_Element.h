@@ -32,10 +32,10 @@ public:
 
 	enum class POS_Y
 	{
-		UP,
+		TOP,
 		CENTER,
-		DOWN
-	} pos_y = POS_Y::UP;
+		BOTTOM
+	} pos_y = POS_Y::TOP;
 
 };
 
@@ -102,6 +102,7 @@ public:
 	SDL_Rect              sprite_section = { 0, 0, 0, 0};
 	float                 section_width = 0.f;
 	float                 section_height = 0.f;
+	float                 scale = 1.f;
 	fPoint                section_offset = { 0.f, 0.f };
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	bool			      is_draggable = false;

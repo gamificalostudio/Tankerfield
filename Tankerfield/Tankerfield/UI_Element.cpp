@@ -98,10 +98,10 @@ fRect UI_Element::GetSection()
 		case Pivot::POS_Y::CENTER:
 			pos.y = position.y - section_height * .5f + section_offset.y;
 			break;
-		case Pivot::POS_Y::UP:
+		case Pivot::POS_Y::TOP:
 			pos.y = position.y + section_offset.y;
 			break;
-		case Pivot::POS_Y::DOWN:
+		case Pivot::POS_Y::BOTTOM:
 			pos.y = position.y - section_height + section_offset.y;
 			break;
 		}
@@ -126,10 +126,10 @@ fRect UI_Element::GetSection()
 		case Pivot::POS_Y::CENTER:
 			pos.y = position.y - (float)sprite_section.h * .5f + section_offset.y;
 			break;
-		case Pivot::POS_Y::UP:
+		case Pivot::POS_Y::TOP:
 			pos.y = position.y + section_offset.y;
 			break;
-		case Pivot::POS_Y::DOWN:
+		case Pivot::POS_Y::BOTTOM:
 			pos.y = position.y - (float)sprite_section.h + section_offset.y;
 			break;
 		}
@@ -163,10 +163,10 @@ SDL_Rect UI_Element::GetDrawRect()
 	case Pivot::POS_Y::CENTER:
 		pos.y = position.y - (float)sprite_section.h * .5f;
 		break;
-	case Pivot::POS_Y::UP:
+	case Pivot::POS_Y::TOP:
 		pos.y = position.y;
 		break;
-	case Pivot::POS_Y::DOWN:
+	case Pivot::POS_Y::BOTTOM:
 		pos.y = position.y - (float)sprite_section.h;
 		break;
 	}

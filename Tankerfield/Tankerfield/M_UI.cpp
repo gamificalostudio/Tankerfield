@@ -11,6 +11,8 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 
+#include "HUD.h"
+
 // UI includes --------------------------
 #include "UI_Element.h"
 #include "UI_Image.h"
@@ -46,66 +48,42 @@ bool M_UI::Start()
 {
 	atlas = app->tex->Load("textures/ui/atlas.png");
 
-
 	// Position ======================================
-
-	uint u_screen_width = 0.f, u_screen_height = 0.f;
-	app->win->GetWindowSize(u_screen_width, u_screen_height);
-	float screen_width = (float)u_screen_width, screen_height = (float)u_screen_height;
-
-	fPoint margin = { 30.f, 30.f };
 	fRect full_screen;
-	full_screen.create(0.f, 0.f, screen_width, screen_height);
-	fRect splited_screen;
-	splited_screen.create(0.f, 0.f, screen_width, screen_height);
+	full_screen.create(0.f, 0.f, app->render->camera.w, app->render->camera.h);
+
 
 	// HUD ===========================================
+	hud_player_1 = new HUD(HUD::TYPE::PLAYER_1, nullptr);
+	hud_player_2 = new HUD(HUD::TYPE::PLAYER_2, nullptr);
+	hud_player_3 = new HUD(HUD::TYPE::PLAYER_3, nullptr);
+	hud_player_4 = new HUD(HUD::TYPE::PLAYER_4, nullptr);
 
 	UI_ImageDef image_def;
 
-
-	// Individual player ========================================================
-
-	image_def.sprite_section = { 100, 10, 50, 50 };
-	UI_Image* basic_weapon_frame = CreateImage({ splited_screen.GetLeft() + margin.x , splited_screen.GetTop() + margin.y}, image_def, this);
-	basic_weapon_frame->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::UP);
-
-	image_def.sprite_section = { 100, 70, 70, 70 };
-	UI_Image* item_frame = CreateImage({ splited_screen.GetLeft() + margin.x + 25.f ,splited_screen.GetTop() + margin.y + 90.f }, image_def, this);
-	item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-
-	image_def.sprite_section = { 10, 70, 50, 20 };
-	UI_Image* ammo_image = CreateImage({ splited_screen.GetRight() - 24.f - margin.x , splited_screen.GetTop() + 50.f + margin.y }, image_def, this);
-	ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::UP);
-
-	image_def.sprite_section = { 10, 10, 50, 50 };
-	UI_Image* special_weapon_frame = CreateImage({ splited_screen.GetRight() - 24.f - margin.x ,splited_screen.GetTop() + margin.y }, image_def, this);
-	special_weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::UP);
-
-	UI_BarDef ammo_bar_def(UI_Bar::DIR::DOWN, 0.8f, { 180, 160, 0, 255 }, { 150, 150, 150, 255 });
-	ammo_bar_def.section_width = 12.f;
-	ammo_bar_def.section_height = 128.f;
-	ammo_bar_def.section_offset = { 6.f ,6.f };
-	ammo_bar_def.sprite_section = { 70, 10, 24, 140 };
-
-	UI_Bar* ammo_bar = CreateBar({ splited_screen.GetRight() - margin.x , splited_screen.GetTop() + margin.y }, ammo_bar_def, this);
-	ammo_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::UP);
-
-	UI_BarDef life_bar_def (UI_Bar::DIR::UP, 0.8f, { 0, 160, 0, 255 }, { 150, 150, 150, 255 });
-	life_bar_def.section_width = 20.f;
-	life_bar_def.section_height = 234.f;
-
-	UI_Bar* life_bar = CreateBar({ splited_screen.GetLeft() + 10.f, splited_screen.GetBottom() - 21.f }, life_bar_def, this);
-	life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::DOWN);
-
 	// General 4 players =========================================================
+	image_def.sprite_section = { 170, 10, 50, 50 };
+	UI_Image* lt_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	lt_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+
+	image_def.sprite_section = { 220, 10, 50, 50 };
+	UI_Image* rt_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	rt_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
+
+	image_def.sprite_section = { 170, 60, 50, 50 };
+	UI_Image* lb_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	lb_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+
+	image_def.sprite_section = { 220, 60, 50, 50 };
+	UI_Image* rb_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	rb_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
-	UI_Image* left_tank_life = CreateImage({ full_screen.GetLeft() , full_screen.GetBottom() }, image_def, this);
+	UI_Image* left_tank_life = CreateImage({ full_screen.GetLeft() ,  app->render->camera.h * .5f }, image_def);
 	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 
 	image_def.sprite_section = { 60, 160, 50, 530 };
-	UI_Image* right_tank_life = CreateImage({ full_screen.GetRight() , full_screen.GetBottom() }, image_def, this);
+	UI_Image* right_tank_life = CreateImage({ full_screen.GetRight() ,  app->render->camera.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
 
 	return true;
@@ -255,16 +233,6 @@ bool M_UI::Update(float dt)
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
-		if ((*item)->listener == nullptr)
-		{
-			if ((*item) != main_object)
-			{
-				LOG("Object callback failed, listener was nullptr");
-			}
-
-			continue;
-		}
-
 		switch ((*item)->hover_state)
 		{
 		case HoverState::ENTER:
@@ -294,6 +262,9 @@ bool M_UI::Update(float dt)
 // Called after all Updates
 bool M_UI::PostUpdate(float dt)
 {
+	app->render->DrawQuad({(int) (app->render->camera.w * .5f) - 3,  0, 6, app->render->camera.h }, 150, 150, 150, 255, true, false);
+	app->render->DrawQuad({ 0 ,(int)(app->render->camera.h * .5f) - 3, app->render->camera.w, 6 }, 150, 150, 150, 255, true, false);
+
 	// Draw all UI objects ====================================
 	DrawUI(main_object);
 
