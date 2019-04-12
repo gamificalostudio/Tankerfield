@@ -115,7 +115,7 @@ SDL_Texture* M_Fonts::Print(const char* text, SDL_Color color, _TTF_Font* font)
 	}
 	else
 	{
-		ret = app->tex->LoadSurface(surface);
+		ret = app->tex->LoadTextSurface(surface);
 		SDL_FreeSurface(surface);
 	}
 

@@ -49,14 +49,22 @@ bool M_Textures::Start()
 bool M_Textures::CleanUp()
 {
 	LOG("Freeing textures and Image library");
-	std::map<std::string, SDL_Texture*>::iterator item;
+	
 
-	for(item = textures.begin(); item != textures.end(); item++)
+	for(std::map<std::string, SDL_Texture*>::iterator iter = textures.begin(); iter != textures.end();)
 	{
-		SDL_DestroyTexture((*item).second);
+		SDL_DestroyTexture((*iter).second);
+		iter = textures.erase(iter);
 	}
-
 	textures.clear();
+
+	for (std::list<SDL_Texture*>::iterator iter = text_textures.begin(); iter != text_textures.end();)
+	{
+		SDL_DestroyTexture((*iter));
+		iter = text_textures.erase(iter);
+	}
+	text_textures.clear();
+
 	IMG_Quit();
 	return true;
 }
@@ -70,14 +78,24 @@ SDL_Texture* const M_Textures::Load(const char* path)
 	SDL_Texture* texture = NULL;
 	SDL_Surface* surface = IMG_Load(path);
 
-	if(surface == NULL)
+	std::map<std::string, SDL_Texture *>::iterator iter = textures.find(path);
+	if (iter != textures.end())
 	{
-		LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
+		//Return the texture if it's already been loaded onto the map
+		texture = iter->second;
 	}
 	else
 	{
-		texture = LoadSurface(surface, );
-		SDL_FreeSurface(surface);
+		//Load a new texture if there isn't a texture loaded with that path
+		if (surface == NULL)
+		{
+			LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
+		}
+		else
+		{
+			texture = LoadSurface(surface, path);
+			SDL_FreeSurface(surface);
+		}
 	}
 
 	return texture;
@@ -92,9 +110,10 @@ bool M_Textures::UnLoad(SDL_Texture* texture)
 		{
 			SDL_DestroyTexture((iter->second));
 			textures.erase(iter);
-			break;
+			return true;;
 		}
 	}
+	return false;
 }
 
 // Translate a surface into a texture
@@ -110,6 +129,23 @@ SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface, std::string pat
 	else
 	{
 		textures[path] = texture;
+	}
+
+	return texture;
+}
+
+SDL_Texture * const M_Textures::LoadTextSurface(SDL_Surface* surface)
+{
+	BROFILER_CATEGORY("M_TexturesTextLoad", Profiler::Color::LightPink)
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
+
+	if (texture == NULL)
+	{
+		LOG("Unable to create texture from surface! SDL Error: %s\n", SDL_GetError());
+	}
+	else
+	{
+		text_textures.push_back(texture);
 	}
 
 	return texture;

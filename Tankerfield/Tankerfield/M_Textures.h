@@ -37,12 +37,16 @@ public:
 	// Load Texture
 	SDL_Texture* const	Load(const char* path);
 	bool				UnLoad(SDL_Texture* texture);
-	SDL_Texture* const	LoadSurface(SDL_Surface* surface);
+	SDL_Texture * const LoadTextSurface(SDL_Surface* surface);
 	void				GetSize(const SDL_Texture* texture, uint& width, uint& height) const;
+
+private:
+	SDL_Texture* const	LoadSurface(SDL_Surface* surface, std::string path);
 
 public:
 			//Path		  //Texture pointer
 	std::map<std::string, SDL_Texture *> textures;
+	std::list<SDL_Texture*> text_textures;
 };
 
 

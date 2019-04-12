@@ -121,7 +121,6 @@
     <ClCompile Include="Obj_Item.cpp">
       <Filter>Objects\Item</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -261,9 +260,6 @@
     </ClInclude>
     <ClInclude Include="Obj_Item.h">
       <Filter>Objects\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

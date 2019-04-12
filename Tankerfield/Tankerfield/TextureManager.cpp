@@ -20,7 +20,7 @@ bool TextureManager::RemoveTexture(SDL_Texture * tex)
 
 bool TextureManager::CleanTextures()
 {
-	for (std::list<SDL_Texture*>::iterator iterator = objects.begin(); iterator != objects.end();)
+	for (std::list<SDL_Texture*>::iterator iterator = textures.begin(); iterator != textures.end();)
 	{
 		//Delete textures
 		//Point to nullptr
