@@ -12,7 +12,7 @@
 
 M_Textures::M_Textures() : Module()
 {
-	name.assign("textures");
+	name = "textures";
 }
 
 // Destructor
@@ -49,11 +49,11 @@ bool M_Textures::Start()
 bool M_Textures::CleanUp()
 {
 	LOG("Freeing textures and Image library");
-	std::list<SDL_Texture*>::const_iterator item;
+	std::map<std::string, SDL_Texture*>::iterator item;
 
 	for(item = textures.begin(); item != textures.end(); item++)
 	{
-		SDL_DestroyTexture(*item);
+		SDL_DestroyTexture((*item).second);
 	}
 
 	textures.clear();
@@ -62,6 +62,9 @@ bool M_Textures::CleanUp()
 }
 
 // Load new texture from file path
+// Checks if the texture with the specified path has alredy been loaded
+//	 - If it has, it returns a pointer to that texture
+//	 - If it hasn't, it loads it and returns it
 SDL_Texture* const M_Textures::Load(const char* path)
 {
 	SDL_Texture* texture = NULL;
@@ -73,7 +76,7 @@ SDL_Texture* const M_Textures::Load(const char* path)
 	}
 	else
 	{
-		texture = LoadSurface(surface);
+		texture = LoadSurface(surface, );
 		SDL_FreeSurface(surface);
 	}
 
@@ -83,23 +86,19 @@ SDL_Texture* const M_Textures::Load(const char* path)
 // Unload texture
 bool M_Textures::UnLoad(SDL_Texture* texture)
 {
-	std::list<SDL_Texture*>::const_iterator item;
-
-	for(item = textures.begin(); item != textures.end(); item++)
+	for (std::map<std::string, SDL_Texture *>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
 	{
-		if(texture == (*item))
+		if ((iter->second) == texture)
 		{
-			SDL_DestroyTexture(texture);
-			textures.remove(texture);
-			return true;
+			SDL_DestroyTexture((iter->second));
+			textures.erase(iter);
+			break;
 		}
 	}
-
-	return false;
 }
 
 // Translate a surface into a texture
-SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface)
+SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface, std::string path)
 {
 	BROFILER_CATEGORY("M_TexturesLoad", Profiler::Color::LightPink)
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
@@ -110,7 +109,7 @@ SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface)
 	}
 	else
 	{
-		textures.push_back(texture);
+		textures[path] = texture;
 	}
 
 	return texture;

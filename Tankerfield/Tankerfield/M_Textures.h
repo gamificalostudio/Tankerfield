@@ -2,10 +2,19 @@
 #define __M_TEXTURES_H__
 
 #include "Module.h"
-#include <list>
+#include <map>
+#include <string>
 
 struct SDL_Texture;
 struct SDL_Surface;
+
+enum Textures
+{
+	TANK_BASE,
+	TANK_TURR,
+
+
+};
 
 class M_Textures : public Module
 {
@@ -32,8 +41,8 @@ public:
 	void				GetSize(const SDL_Texture* texture, uint& width, uint& height) const;
 
 public:
-
-	std::list<SDL_Texture*>	textures;
+			//Path		  //Texture pointer
+	std::map<std::string, SDL_Texture *> textures;
 };
 
 
