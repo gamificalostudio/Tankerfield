@@ -16,13 +16,21 @@
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
 
-SDL_Texture * Obj_Tank::base_tex			= nullptr;
+SDL_Texture * Obj_Tank::base_tex_yellow		= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_orange		= nullptr;
+SDL_Texture * Obj_Tank::base_tex_red		= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_light_green= nullptr;
+SDL_Texture * Obj_Tank::base_tex_pink		= nullptr;
+SDL_Texture * Obj_Tank::base_tex_light_blue	= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_dark_blue	= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_purple		= nullptr;
 SDL_Texture * Obj_Tank::turr_tex			= nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex		= nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex		= nullptr;
 Animation   * Obj_Tank::rotate_base			= nullptr;
 Animation   * Obj_Tank::rotate_turr			= nullptr;
 WeaponInfo  * Obj_Tank::weapons_info		= nullptr;
+int			  Obj_Tank::number_of_tanks		= 0;
 //void       (* Obj_Tank::shot_function)()	= nullptr;//TODO: Test if function pointers can be static or they are executing the function on other tanks
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
@@ -32,10 +40,60 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	if (base_tex == nullptr)
+	if (base_tex_yellow == nullptr)
 	{
-		Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
+		Obj_Tank::base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
 	}
+	//if (base_tex_orange == nullptr)
+	//{
+	//	Obj_Tank::base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
+	//}
+	if (base_tex_red == nullptr)
+	{
+		Obj_Tank::base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
+	}
+	//if (base_tex_light_green == nullptr)
+	//{
+	//	Obj_Tank::base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
+	//}
+	if (base_tex_pink == nullptr)
+	{
+		Obj_Tank::base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
+	}
+	if (base_tex_light_blue == nullptr)
+	{
+		Obj_Tank::base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
+	}
+	//if (base_tex_dark_blue == nullptr)
+	//{
+	//	Obj_Tank::base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
+	//}
+	//if (base_tex_purple == nullptr)
+	//{
+	//	Obj_Tank::base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
+	//}
+
+	tank_num = number_of_tanks++;
+
+	switch (tank_num) {
+	case 0:
+		curr_tex = base_tex_red;
+		break;
+	case 1:
+		curr_tex = base_tex_light_blue;
+		break;
+	case 2:
+		curr_tex = base_tex_pink;
+		break;
+	case 3:
+		curr_tex = base_tex_yellow;
+		break;
+	default:
+		curr_tex = base_tex_yellow;
+		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
+		break;
+	}
+
 	if (base_shadow_tex == nullptr)
 	{
 		Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
@@ -228,7 +286,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 {
 	// Base =========================================
 	app->render->Blit(
-		base_tex,
+		curr_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
 		camera,

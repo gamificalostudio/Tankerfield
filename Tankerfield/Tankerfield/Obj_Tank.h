@@ -78,17 +78,26 @@ private:
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)
-	static SDL_Texture * base_tex;
+	static SDL_Texture * base_tex_yellow;
+	//static SDL_Texture * base_tex_orange;
+	static SDL_Texture * base_tex_red;
+	//static SDL_Texture * base_tex_light_green;
+	static SDL_Texture * base_tex_pink;
+	static SDL_Texture * base_tex_light_blue;
+	//static SDL_Texture * base_tex_dark_blue;
+	//static SDL_Texture * base_tex_purple;
 	static SDL_Texture * turr_tex;
 	static SDL_Texture * base_shadow_tex;
 	static SDL_Texture * turr_shadow_tex;
 	static Animation * rotate_base;
 	static Animation * rotate_turr;
 	static WeaponInfo * weapons_info;
+	static int number_of_tanks;
   
 	//-Logic
 	int life								= 0;
 	int max_life							= 0;
+	int tank_num							= 0;//The number of tank. 0 is the first one.
 
 	//- Movement
 	float speed								= 0.f;
@@ -123,7 +132,7 @@ private:
 
 	//-- Keyboard inputs
 	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
-	SDL_Scancode kb_interact			= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_interact				= SDL_SCANCODE_UNKNOWN;
 	int kb_shoot_basic						= 0;
 	int kb_shoot_special					= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;
