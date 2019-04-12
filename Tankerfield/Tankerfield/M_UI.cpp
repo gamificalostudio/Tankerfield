@@ -49,8 +49,7 @@ bool M_UI::Start()
 	atlas = app->tex->Load("textures/ui/atlas.png");
 
 	// Position ======================================
-	fRect full_screen;
-	full_screen.create(0.f, 0.f, app->render->camera.w, app->render->camera.h);
+	fRect full_screen =  app->win->GetWindowRect();
 
 
 	// HUD ===========================================
@@ -63,27 +62,27 @@ bool M_UI::Start()
 
 	// General 4 players =========================================================
 	image_def.sprite_section = { 170, 10, 50, 50 };
-	UI_Image* lt_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	UI_Image* lt_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	lt_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 
 	image_def.sprite_section = { 220, 10, 50, 50 };
-	UI_Image* rt_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	UI_Image* rt_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	rt_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
 
 	image_def.sprite_section = { 170, 60, 50, 50 };
-	UI_Image* lb_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	UI_Image* lb_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	lb_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
 
 	image_def.sprite_section = { 220, 60, 50, 50 };
-	UI_Image* rb_round = CreateImage({ app->render->camera.w * .5f ,  app->render->camera.h * .5f }, image_def);
+	UI_Image* rb_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	rb_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
-	UI_Image* left_tank_life = CreateImage({ full_screen.GetLeft() ,  app->render->camera.h * .5f }, image_def);
+	UI_Image* left_tank_life = CreateImage({ full_screen.GetLeft() ,  full_screen.h * .5f }, image_def);
 	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 
 	image_def.sprite_section = { 60, 160, 50, 530 };
-	UI_Image* right_tank_life = CreateImage({ full_screen.GetRight() ,  app->render->camera.h * .5f }, image_def);
+	UI_Image* right_tank_life = CreateImage({ full_screen.GetRight() ,  full_screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
 
 	return true;
@@ -262,8 +261,10 @@ bool M_UI::Update(float dt)
 // Called after all Updates
 bool M_UI::PostUpdate(float dt)
 {
-	app->render->DrawQuad({(int) (app->render->camera.w * .5f) - 3,  0, 6, app->render->camera.h }, 150, 150, 150, 255, true, false);
-	app->render->DrawQuad({ 0 ,(int)(app->render->camera.h * .5f) - 3, app->render->camera.w, 6 }, 150, 150, 150, 255, true, false);
+	fRect full_screen = app->win->GetWindowRect();
+
+	app->render->DrawQuad({(int) (full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
+	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
 
 	// Draw all UI objects ====================================
 	DrawUI(main_object);

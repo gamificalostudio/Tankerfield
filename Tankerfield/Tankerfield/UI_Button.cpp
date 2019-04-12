@@ -41,7 +41,6 @@ bool UI_Button::Draw()
 		current_frame = definition.idle_rect;
 	}
 
-
 	return true;
 }
 

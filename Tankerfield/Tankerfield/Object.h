@@ -12,12 +12,10 @@
 
 #define ISO_COMPENSATION 45 //The isometric view is turned 45 degrees to the right. Used to compensate the difference between the vectors in the isometric space and the angle we need in the spritesheets.
 
-struct SDL_Texture;
-class Collider;
-
 
 struct SDL_Texture;
 class Collider;
+class Camera;
 
 struct TileSetObject {
 
@@ -57,9 +55,11 @@ public:
 
 	virtual bool Update(float dt);
 
-	virtual bool Draw(float dt);
+	//SDL_Rect * GetRect();
 
-	virtual bool DrawShadow() { return true; }
+	virtual bool Draw(float dt, Camera * camera);
+
+	virtual bool DrawShadow(Camera * camera) { return true; }
 
 	virtual bool CleanUp() { return true; };
 
@@ -89,19 +89,20 @@ public:
 public:
 
 	ObjectType type = ObjectType::NO_TYPE;
-	fPoint pos_map		= { 0.f, 0.f };//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
-	fPoint pos_screen	= { 0.f, 0.f };//The position in the screen. Is measured with pixels. Modifying this value wil have no effect because is overwritten in every frame. Use this instead of calling MapToScreenF.
+	fPoint pos_map		= { 0.f, 0.f };			//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
+	fPoint pos_screen	= { 0.f, 0.f };			//The position in the screen. Is measured with pixels. Modifying this value wil have no effect because is overwritten in every frame. Use this instead of calling MapToScreenF.
 	fPoint velocity		= { 0.f, 0.f };
 	fPoint acceleration = { 0.f, 0.f };
-	bool to_remove = false;//Set it to true if you want the object to be removed
+	bool to_remove = false;						//Set it to true if you want the object to be removed
 	ObjectInfo data;
 	Collider* coll = nullptr;
 
 public:
+
 	// Different than life in Obj_Tank.h. This is used when an object is attacked and no colliders are necessary.
 	int hit_points = 100;
 
-	float angle				= 0.f;//Direction that the object is facing
+	float angle				= 0.f;              //Direction that the object is facing
 	SDL_Texture * curr_tex	= nullptr;			//Points the current texture. Shouldn't allocate memory. Just assign the pointer to other textures already created. Used in Object::PostUpdate(float dt)
 	Animation * curr_anim	= nullptr;			//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created. Used in Object::PostUpdate(float dt) and for sprite sorting
 	iPoint draw_offset		= { 0.f, 0.f };		//Change it to make the object not render from the top left in the position //Pixels to the center of the player. Used to center the player sprite. Used in Object::PostUpdate(float dt) and for sprite sorting

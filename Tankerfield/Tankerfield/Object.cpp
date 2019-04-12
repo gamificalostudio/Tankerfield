@@ -36,16 +36,27 @@ bool Object::Update(float dt)
 	return true;
 }
 
-bool Object::Draw(float dt)
+bool Object::Draw(float dt, Camera * camera)
 {
 	app->render->Blit(
 		curr_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
+		camera,
 		&frame);
 
 	return true;
 }
+//SDL_Rect * Object::GetRect()
+//{
+//	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+
+//	SDL_Rect rect = curr_anim->GetFrame(angle);
+//	rect.x = screen_pos.x - draw_offset.x;
+//	rect.y = screen_pos.y - draw_offset.y;
+
+//	return &rect;
+//}
 
 //void Object::Draw() {
 //	if (current_animation != nullptr)
@@ -75,6 +86,8 @@ void Object::DrawDebug()
 	case ObjectType::TESLA_TROOPER:
 		app->render->DrawQuad(section, 0, 0, 255, 80);
 		break;
+	case ObjectType::EXPLOSION:
+		app->render->DrawQuad(section, 255, 0, 255, 80);
 	default:
 		break;
 	}

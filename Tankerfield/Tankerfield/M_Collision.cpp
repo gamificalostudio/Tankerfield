@@ -24,11 +24,6 @@ void Collider::SetPosToObj()
 
 void Collider::Destroy()
 {
-	if (object != nullptr)
-	{
-		object->coll = nullptr;
-	}
-
 	to_destroy = true;
 	tag = TAG::NONE;
 }
@@ -63,8 +58,6 @@ M_Collision::M_Collision()
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET] = true;
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
-
-
 
 }
 

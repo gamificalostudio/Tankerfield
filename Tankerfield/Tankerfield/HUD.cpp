@@ -15,29 +15,26 @@ HUD::HUD(HUD::TYPE type, Obj_Tank * target): type(type), target(target)
 {
 	// Position ======================================
 
-	uint u_screen_width = 0.f, u_screen_height = 0.f;
-	app->win->GetWindowSize(u_screen_width, u_screen_height);
-	float screen_width = (float)u_screen_width, screen_height = (float)u_screen_height;
-
+	fRect screen = app->win->GetWindowRect();
 	fPoint margin = { 30.f, 30.f };
 	fRect viewport;
 
 	switch (type)
 	{
 	case TYPE::SINGLE_PLAYER:
-		viewport.create(0.f, 0.f, screen_width, screen_height);
+		viewport.create(0.f, 0.f, screen.w, screen.h);
 		break;
 	case TYPE::PLAYER_1:
-		viewport.create(0.f, 0.f, screen_width * .5f, screen_height * .5f);
+		viewport.create(0.f, 0.f, screen.w * .5f, screen.h * .5f);
 		break;
 	case TYPE::PLAYER_2:
-		viewport.create( screen_width * .5f, 0.f, screen_width * .5f, screen_height * .5f);
+		viewport.create(screen.w * .5f, 0.f, screen.w * .5f, screen.h * .5f);
 		break;
 	case TYPE::PLAYER_3:
-		viewport.create(0.f, screen_height * .5f, screen_width * .5f, screen_height * .5f);
+		viewport.create(0.f, screen.h * .5f, screen.w * .5f, screen.h * .5f);
 		break;
 	case TYPE::PLAYER_4:
-		viewport.create(screen_width * .5f, screen_height * .5f, screen_width * .5f, screen_height * .5f);
+		viewport.create(screen.w * .5f, screen.h * .5f, screen.w * .5f, screen.h * .5f);
 		break;
 	}
 

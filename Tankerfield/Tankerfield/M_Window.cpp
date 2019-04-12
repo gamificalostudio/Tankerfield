@@ -7,10 +7,6 @@
 #include "App.h"
 #include "M_Window.h"
 
-
-
-
-
 M_Window::M_Window() : Module()
 {
 	window = NULL;
@@ -111,6 +107,12 @@ void M_Window::GetWindowSize(uint& width, uint& height) const
 {
 	width = this->width;
 	height = this->height;
+}
+
+fRect M_Window::GetWindowRect()
+{
+
+	return fRect( 0.f, 0.f,(float) width, (float)height);
 }
 
 uint M_Window::GetScale() const

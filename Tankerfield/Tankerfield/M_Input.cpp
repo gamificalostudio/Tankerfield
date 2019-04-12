@@ -197,6 +197,8 @@ bool M_Input::PreUpdate()
 		}
 	}
 
+	UpdateControllers();
+
 	return true;
 }
 

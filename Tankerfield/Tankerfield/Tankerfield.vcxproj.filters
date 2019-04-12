@@ -109,6 +109,18 @@
     <ClCompile Include="HUD.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet_Missile.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Item_HealthBag.cpp">
+      <Filter>Objects\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Explosion.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Item.cpp">
+      <Filter>Objects\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -237,6 +249,18 @@
     <ClInclude Include="HUD.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet_Missile.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_HealthBag.h">
+      <Filter>Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Explosion.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Item.h">
+      <Filter>Objects\Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -268,6 +292,9 @@
     </Filter>
     <Filter Include="Objects\Bullets">
       <UniqueIdentifier>{7fdb053f-2696-4225-9b31-203b4b8cbd8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Item">
+      <UniqueIdentifier>{eedbf072-9a41-4b0e-a4ea-f72844692fb0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

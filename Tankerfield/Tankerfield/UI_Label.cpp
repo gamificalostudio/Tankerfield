@@ -33,7 +33,7 @@ void UI_Label::SetText(String text)
 
 bool UI_Label::Draw()
 {
-	app->render->Blit(label_texture, position.x, position.y , &sprite_section);
+	app->render->BlitUI(label_texture, position.x, position.y , &sprite_section);
 
 	return false;
 }
