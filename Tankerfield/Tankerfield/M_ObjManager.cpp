@@ -24,6 +24,7 @@
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
+#include "Healing_Bullet.h"
 #include "Obj_Explosion.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
@@ -214,6 +215,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::BULLET_MISSILE:
 		ret = new Bullet_Missile(pos);
 		ret->type = ObjectType::BULLET_MISSILE;
+		break;
+	case ObjectType::HEALING_BULLET:
+		ret = new Healing_Bullet(pos);
+		ret->type = ObjectType::HEALING_BULLET;
 		break;
 	case ObjectType::STATIC:
 		ret = new Obj_Static(pos);
