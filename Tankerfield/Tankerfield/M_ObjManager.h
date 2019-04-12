@@ -23,6 +23,8 @@ enum class ObjectType
 
 	//BULLETS
 	BASIC_BULLET,
+	BULLET_MISSILE,
+	EXPLOSION,
 
 	//ITEMS
 	HEALTH_BAG,

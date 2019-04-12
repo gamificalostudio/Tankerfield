@@ -37,9 +37,7 @@ public:
 
 	static SDL_Texture * tex;
 
-
 	static Animation * anim;
-
 
 	//SFX impact_sound
 

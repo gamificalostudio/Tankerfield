@@ -37,7 +37,6 @@ bool Object::Update(float dt)
 }
 
 bool Object::Draw(float dt, Camera * camera)
-
 {
 	app->render->Blit(
 		curr_tex,
@@ -48,9 +47,6 @@ bool Object::Draw(float dt, Camera * camera)
 
 	return true;
 }
-
-
-//Returns the rect to be drawn
 //SDL_Rect * Object::GetRect()
 //{
 //	fPoint screen_pos = app->map->MapToScreenF(pos_map);
@@ -90,6 +86,8 @@ void Object::DrawDebug()
 	case ObjectType::TESLA_TROOPER:
 		app->render->DrawQuad(section, 0, 0, 255, 80);
 		break;
+	case ObjectType::EXPLOSION:
+		app->render->DrawQuad(section, 255, 0, 255, 80);
 	default:
 		break;
 	}
@@ -122,4 +120,3 @@ void Object::CalculateDrawVariables()
 		frame = curr_anim->GetFrame(angle);
 	}
 }
-

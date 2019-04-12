@@ -113,6 +113,8 @@ public:
 public:
 
 	float damage = 0.f;
+
+	bool to_destroy = false;
   
 private:
 
@@ -130,7 +132,6 @@ private:
 
 	std::list<Collider*> collisions_list;
 
-	bool to_destroy = false;
 
 	// Body vars ===================================================
 
@@ -139,6 +140,7 @@ private:
 	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
 	friend M_Collision;
+	friend M_ObjManager;
 };
 
 class M_Collision : public Module

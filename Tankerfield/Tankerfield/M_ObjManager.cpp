@@ -23,6 +23,8 @@
 #include "Obj_Tank.h"
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
+#include "Bullet_Missile.h"
+#include "Obj_Explosion.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
@@ -95,9 +97,10 @@ bool M_ObjManager::Update(float dt)
 
 				if ((*iterator)->coll != nullptr)
 				{
+					(*iterator)->coll->object = nullptr;
 					(*iterator)->coll->Destroy();
+					(*iterator)->coll = nullptr;
 				}
-
 
 				delete((*iterator));
 				(*iterator) = nullptr;
@@ -208,6 +211,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Bullet_Basic(pos);
 		ret->type = ObjectType::BASIC_BULLET;
 		break;
+	case ObjectType::BULLET_MISSILE:
+		ret = new Bullet_Missile(pos);
+		ret->type = ObjectType::BULLET_MISSILE;
+		break;
 	case ObjectType::STATIC:
 		ret = new Obj_Static(pos);
 		ret->type = ObjectType::STATIC;
@@ -215,6 +222,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::REWARD_ZONE:
 		ret = new Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+		break;
+	case ObjectType::EXPLOSION:
+		ret = new Obj_Explosion(pos);
+		ret->type = ObjectType::EXPLOSION;
 		break;
 	case ObjectType::HEALTH_BAG:
 		ret = new Item_HealthBag(pos);

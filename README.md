@@ -38,6 +38,14 @@ https://github.com/Sersius
 
 https://github.com/AitorVelez
 
+# Controls
+- Left joystick : Move
+- Right joystick : Aim
+- Left trigger : Special shoot
+- Right trigger : Basic shoot
+- Right shoulder: Use item
+- X button : Interact
+
 # License
 
 MIT License

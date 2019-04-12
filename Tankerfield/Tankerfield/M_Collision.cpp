@@ -24,13 +24,8 @@ void Collider::SetPosToObj()
 
 void Collider::Destroy()
 {
-	if (object != nullptr)
-	{
-		object->coll = nullptr;
-	}
-
 	to_destroy = true;
-	
+	tag = TAG::NONE;
 }
 
 bool Collider::CheckCollision(Collider*  coll) const
@@ -50,12 +45,8 @@ M_Collision::M_Collision()
 		}
 	}
 
-	matrix[(int)Collider::TAG::WALL][(int)Collider::TAG::BULLET] = true;
-
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::WALL] = true;
-	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::PLAYER] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::ENEMY] = true;
-	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::GOD] = true;
 
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::WALL] = true;
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::ENEMY] = true;
@@ -63,8 +54,6 @@ M_Collision::M_Collision()
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET] = true;
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
-
-
 
 }
 
@@ -157,11 +146,11 @@ bool M_Collision::Update(float dt)
 			}
 			else
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
+				if (collider_1->collisions_list.empty() == false)
 				{
 					DoOnTriggerExit(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
+				if (collider_2->collisions_list.empty() == false)
 				{
 					DoOnTriggerExit(collider_2, collider_1);
 				}
@@ -194,11 +183,11 @@ bool M_Collision::Update(float dt)
 			}
 			else
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
+				if (collider_1->collisions_list.empty() == false)
 				{
 					DoOnTriggerExit(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
+				if (collider_2->collisions_list.empty() == false)
 				{
 					DoOnTriggerExit(collider_2, collider_1);
 				}
@@ -234,11 +223,11 @@ bool M_Collision::Update(float dt)
 			}
 			else
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
+				if (collider_1->collisions_list.empty() == false)
 				{
 					DoOnTriggerExit(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
+				if (collider_2->collisions_list.empty() == false)
 				{
 					DoOnTriggerExit(collider_2, collider_1);
 				}
@@ -265,6 +254,11 @@ bool M_Collision::PostUpdate(float dt)
 	
 	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 	{
+		if ((*item)->to_destroy == true)
+		{
+			continue;
+		}
+
 		switch ((*item)->body_type)
 		{
 		case Collider::BODY_TYPE::SENSOR:
@@ -323,15 +317,6 @@ Collider * M_Collision::AddCollider(float x, float y, float width, float height,
 
 void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
-	if ((int)dynamic_col->collisions_list.size() >= 2)
-	{
-		LOG("%i", (int)dynamic_col->collisions_list.size());
-	}
-	else
-	{
-		LOG("NOPE");
-	}
-
 	// Calculate between colliders overlap ============================================
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
 	distances[(int)Collider::OVERLAP_DIR::LEFT] = dynamic_col->position.x + dynamic_col->width - static_col->position.x;

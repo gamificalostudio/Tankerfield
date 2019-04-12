@@ -11,7 +11,7 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="1"/>
+    <resolution width="1080" height="720" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -118,7 +118,14 @@
       <speed value ="1"/>
       <time_between_bullets value ="100"/>
       <spritesheets>
-        <base>textures/objects/tank/base.png</base>
+        <base_yellow>textures/objects/tank/base - yellow.png</base_yellow>
+        <base_orange>textures/objects/tank/base - orange.png</base_orange>
+        <base_red>textures/objects/tank/base - red.png</base_red>
+        <base_light_green>textures/objects/tank/base - light green.png</base_light_green>
+        <base_pink>textures/objects/tank/base - pink.png</base_pink>
+        <base_light_blue>textures/objects/tank/base - light blue.png</base_light_blue>
+        <base_dark_blue>textures/objects/tank/base - dark blue.png</base_dark_blue>
+        <base_purple>textures/objects/tank/base - purple.png</base_purple>
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
         <turr>textures/objects/tank/turr.png</turr>
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
@@ -898,6 +905,37 @@
         </rotate_turr>
       </animations>
     </tank>
+    <explosion>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/explosion-sheet.png"/>
+      <animations>
+        <explosion speed="80">
+          <dir>
+            <frame x="0" y="0" w="198" h="128"/>
+            <frame x="198" y="0" w="198" h="128"/>
+            <frame x="396" y="0" w="198" h="128"/>
+            <frame x="594" y="0" w="198" h="128"/>
+            <frame x="792" y="0" w="198" h="128"/>
+            <frame x="990" y="0" w="198" h="128"/>
+            <frame x="1188" y="0" w="198" h="128"/>
+            <frame x="1386" y="0" w="198" h="128"/>
+            <frame x="1584" y="0" w="198" h="128"/>
+            <frame x="1782" y="0" w="198" h="128"/>
+            <frame x="1980" y="0" w="198" h="128"/>
+            <frame x="2178" y="0" w="198" h="128"/>
+            <frame x="2376" y="0" w="198" h="128"/>
+            <frame x="2574" y="0" w="198" h="128"/>
+            <frame x="2772" y="0" w="198" h="128"/>
+            <frame x="2970" y="0" w="198" h="128"/>
+            <frame x="3168" y="0" w="198" h="128"/>
+            <frame x="3366" y="0" w="198" h="128"/>
+            <frame x="3564" y="0" w="198" h="128"/>
+            <frame x="3762" y="0" w="198" h="128"/>
+          </dir>
+        </explosion>
+      </animations>
+    </explosion>
     <basic_bullet>
       <speed value ="0.5"/>
       <life value ="1000"/>
@@ -1114,6 +1152,13 @@
       <bullet_life_ms value ="2000"/>
       <time_between_bullets value ="500"/>
     </flamethrower>
+    <double_missile>
+      <bullet_damage value ="200"/>
+      <bullet_speed value="10"/>
+      <bullet_life_ms value="5000"/>
+      <time_between_bullets value="1000"/>
+      <number_of_bullets value="2"/>
+    </double_missile>
   </weapons>
 
   <items>

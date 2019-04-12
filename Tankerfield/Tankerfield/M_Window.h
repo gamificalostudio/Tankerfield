@@ -2,10 +2,10 @@
 #define __M_WINDOW_H__
 
 #include "Module.h"
+#include "Rect.h"
 
 struct SDL_Window;
 struct SDL_Surface;
-
 class M_Window : public Module
 {
 public:
@@ -27,6 +27,7 @@ public:
 	// Retrive window size
 	void GetWindowSize(uint& width, uint& height) const;
 
+	fRect GetWindowRect();
 	// Retrieve window scale
 	uint GetScale() const;
 

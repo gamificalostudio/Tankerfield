@@ -56,22 +56,20 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
-
-
-	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
-	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(19.f, 19.f));
-	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(30.f, 30.f));
-	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(40.f, 40.f));
-	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(50.f, 50.f));
-
 	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
 
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 13.5f));
+	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
+	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
+	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
+	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
+
+	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
 	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
 
 	//app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
-
 
 	/* Generate first wave units */
 	srand(time(NULL));
@@ -144,7 +142,7 @@ bool M_Scene::Update(float dt)
 	if (perform_objects_check)
 	{
 		// == 3 because of the objects that are not enemies. Possible solution 2: check the type of objects with counters and check
-		if (app->objectmanager->GetObjects().size() == 3) // TOFIX: Here we are checking objects of type static I think too...
+		if (app->objectmanager->GetObjects().size() == 5) // TOFIX: Here we are checking objects of type static I think too...
 		{
 			/* Generate new wave and increase units number */
 			initial_generated_units += enemies_to_increase;

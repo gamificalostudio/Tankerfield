@@ -14,14 +14,23 @@
 #include "PerfTimer.h"
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
+#include "Bullet_Missile.h"
 
-SDL_Texture * Obj_Tank::base_tex			= nullptr;
+SDL_Texture * Obj_Tank::base_tex_yellow		= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_orange		= nullptr;
+SDL_Texture * Obj_Tank::base_tex_red		= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_light_green= nullptr;
+SDL_Texture * Obj_Tank::base_tex_pink		= nullptr;
+SDL_Texture * Obj_Tank::base_tex_light_blue	= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_dark_blue	= nullptr;
+//SDL_Texture * Obj_Tank::base_tex_purple		= nullptr;
 SDL_Texture * Obj_Tank::turr_tex			= nullptr;
 SDL_Texture * Obj_Tank::base_shadow_tex		= nullptr;
 SDL_Texture * Obj_Tank::turr_shadow_tex		= nullptr;
 Animation   * Obj_Tank::rotate_base			= nullptr;
 Animation   * Obj_Tank::rotate_turr			= nullptr;
 WeaponInfo  * Obj_Tank::weapons_info		= nullptr;
+int			  Obj_Tank::number_of_tanks		= 0;
 //void       (* Obj_Tank::shot_function)()	= nullptr;//TODO: Test if function pointers can be static or they are executing the function on other tanks
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
@@ -31,10 +40,60 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	if (base_tex == nullptr)
+	if (base_tex_yellow == nullptr)
 	{
-		Obj_Tank::base_tex = app->tex->Load(tank_node.child("spritesheets").child("base").text().as_string());
+		Obj_Tank::base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
 	}
+	//if (base_tex_orange == nullptr)
+	//{
+	//	Obj_Tank::base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
+	//}
+	if (base_tex_red == nullptr)
+	{
+		Obj_Tank::base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
+	}
+	//if (base_tex_light_green == nullptr)
+	//{
+	//	Obj_Tank::base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
+	//}
+	if (base_tex_pink == nullptr)
+	{
+		Obj_Tank::base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
+	}
+	if (base_tex_light_blue == nullptr)
+	{
+		Obj_Tank::base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
+	}
+	//if (base_tex_dark_blue == nullptr)
+	//{
+	//	Obj_Tank::base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
+	//}
+	//if (base_tex_purple == nullptr)
+	//{
+	//	Obj_Tank::base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
+	//}
+
+	tank_num = number_of_tanks++;
+
+	switch (tank_num) {
+	case 0:
+		curr_tex = base_tex_red;
+		break;
+	case 1:
+		curr_tex = base_tex_light_blue;
+		break;
+	case 2:
+		curr_tex = base_tex_pink;
+		break;
+	case 3:
+		curr_tex = base_tex_yellow;
+		break;
+	default:
+		curr_tex = base_tex_yellow;
+		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
+		break;
+	}
+
 	if (base_shadow_tex == nullptr)
 	{
 		Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
@@ -73,9 +132,11 @@ bool Obj_Tank::Start()
 		weapons_info = new WeaponInfo[(uint)WEAPON::MAX];
 		weapons_info[(uint)WEAPON::BASIC].LoadProperties(weapons_node.child("basic"));
 		weapons_info[(uint)WEAPON::FLAMETHROWER].LoadProperties(weapons_node.child("flamethrower"));
+		weapons_info[(uint)WEAPON::DOUBLE_MISSILE].LoadProperties(weapons_node.child("double_missile"));
 	}
 
 	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -142,7 +203,6 @@ bool Obj_Tank::Update(float dt)
 	Item();
 	Movement(dt);
 	CameraMovement(dt);
-
 	return true;
 }
 
@@ -224,15 +284,14 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
 }
 
-
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
 	// Base =========================================
 	app->render->Blit(
-		base_tex,
+		curr_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-    camera,
+		camera,
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
@@ -240,27 +299,24 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		turr_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-    camera,
+		camera,
 		&rotate_turr->GetFrame(turr_angle));
 
-
 	//DEBUG
-
-//	iPoint debug_mouse_pos = { 0, 0 };
+	//	iPoint debug_mouse_pos = { 0, 0 };
 //	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 
 //	debug_mouse_pos.x += camera_player->rect.x;
 //	debug_mouse_pos.y += camera_player->rect.y;
-  
+
 //	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
 //	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-  
-//  std::vector<Camera*>::iterator item_cam;
+
+	//  std::vector<Camera*>::iterator item_cam;
 //	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 //	{
 	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
 //	}
-
 
 	return true;
 }
@@ -274,7 +330,7 @@ bool Obj_Tank::DrawShadow(Camera * camera)
 		base_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-    camera,
+		camera,
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
@@ -282,9 +338,8 @@ bool Obj_Tank::DrawShadow(Camera * camera)
 		turr_shadow_tex,
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
-    camera,
+		camera,
 		&rotate_turr->GetFrame(turr_angle));
-
 
 	return true;
 }
@@ -297,10 +352,7 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::WALL)
-	{
 
-	}
 }
 
 void Obj_Tank::SetLife(int life)
@@ -462,6 +514,30 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootFlameThrower()
 {
+}
+
+void Obj_Tank::ShootDoubleMissile()
+{
+	fPoint double_missiles_offset = shot_dir;
+	double_missiles_offset.RotateDegree(90);
+	float missiles_offset = 0.2f;
+
+	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length + double_missiles_offset * missiles_offset);
+	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
+
+	left_missile->SetBulletProperties(
+		weapons_info[(uint)basic_shot].bullet_speed,
+		weapons_info[(uint)basic_shot].bullet_life_ms,
+		weapons_info[(uint)basic_shot].bullet_damage,
+		shot_dir,
+		turr_angle);
+
+	right_missile->SetBulletProperties(
+		weapons_info[(uint)basic_shot].bullet_speed,
+		weapons_info[(uint)basic_shot].bullet_life_ms,
+		weapons_info[(uint)basic_shot].bullet_damage,
+		shot_dir,
+		turr_angle);
 }
 
 void Obj_Tank::Item()
