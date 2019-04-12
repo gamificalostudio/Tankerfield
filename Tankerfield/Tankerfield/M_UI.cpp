@@ -232,16 +232,21 @@ bool M_UI::Update(float dt)
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
+		if ((*item)->listener == nullptr)
+		{
+			continue;
+		}
+
 		switch ((*item)->hover_state)
 		{
 		case HoverState::ENTER:
 			(*item)->listener->OnHover((*item));
 			break;
-		case HoverState::EXIT:
-			(*item)->listener->OutHover((*item));
-			break;
 		case HoverState::REPEAT:
 			(*item)->listener->OnHover((*item));
+			break;
+		case HoverState::EXIT:
+			(*item)->listener->OutHover((*item));
 			break;
 		}
 	}

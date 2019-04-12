@@ -292,10 +292,7 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::WALL)
-	{
 
-	}
 }
 
 void Obj_Tank::SetLife(int life)
