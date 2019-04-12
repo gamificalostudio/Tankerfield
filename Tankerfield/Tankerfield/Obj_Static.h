@@ -27,7 +27,7 @@ private:
 
 private:
 
-	SDL_Texture* garage = nullptr;
+	static SDL_Texture* garage;
 	//Type type;
 };
 
