@@ -10,12 +10,9 @@ UI_Slider::UI_Slider(const fPoint position, const UI_SliderDef definition, UI_Li
 {
 	this->definition = definition;
 
-	section.w = definition.rail_draw_rect.w;
-	section.h = definition.rail_draw_rect.h;
-
 	thumb = app->ui->CreateButton(position, definition.thumb_definition, this);
 	thumb->SetParent(this);
-	thumb->IsDraggable(true);
+	thumb->is_draggable = true;
 
 	point_A = position.x - definition.distance * 0.5f;
 	point_B = position.x + definition.distance * 0.5f;
@@ -60,7 +57,7 @@ void UI_Slider::SetValue(int value)
 
 	current_value = value;
 	int button_axis_value = point_A + (current_value* definition.distance) / 100;
-	thumb->SetPosition(fPoint( (float)button_axis_value, position.y));
+	thumb->position = fPoint( (float)button_axis_value, position.y);
 }
 
 bool UI_Slider::Update(float dt)
@@ -68,22 +65,20 @@ bool UI_Slider::Update(float dt)
 	point_A = position.x - definition.distance * 0.5f;
 	point_B = position.x + definition.distance * 0.5f;
 
-	fPoint pos = thumb->GetPosition();
-
-	if (pos.x <= point_A)
+	if (thumb->position.x <= point_A)
 	{
-		thumb->SetPosition(fPoint(point_A, position.y));
+		thumb->position = fPoint(point_A, position.y);
 	}
-	else if (pos.x >= point_B)
+	else if (thumb->position.x >= point_B)
 	{
-		thumb->SetPosition(fPoint(point_B, position.y));
+		thumb->position = fPoint(point_B, position.y);
 	}
 	else
 	{
-		thumb->SetPosition(fPoint( thumb->GetPosition().x, position.y));
+		thumb->position = fPoint( thumb->position.x, position.y);
 	}
 
-	current_value =   definition.max_value * ( ( (float) (pos.x - point_A) * 1.0f) / (float)definition.distance ) ;
+	current_value =   definition.max_value * ( ( (float) (thumb->position.x - point_A) * 1.0f) / (float)definition.distance ) ;
 
 	return true;
 }

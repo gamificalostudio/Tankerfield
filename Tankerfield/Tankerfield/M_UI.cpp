@@ -11,6 +11,8 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 
+#include "HUD.h"
+
 // UI includes --------------------------
 #include "UI_Element.h"
 #include "UI_Image.h"
@@ -19,7 +21,7 @@
 #include "UI_Slider.h"
 #include "UI_Checkbox.h"
 #include "UI_TextPanel.h"
-
+#include "UI_Bar.h"
 
 
 M_UI::M_UI() : Module()
@@ -45,6 +47,44 @@ bool M_UI::Awake(pugi::xml_node& config)
 bool M_UI::Start()
 {
 	atlas = app->tex->Load("textures/ui/atlas.png");
+
+	// Position ======================================
+	fRect full_screen =  app->win->GetWindowRect();
+
+
+	// HUD ===========================================
+	hud_player_1 = new HUD(HUD::TYPE::PLAYER_1, nullptr);
+	hud_player_2 = new HUD(HUD::TYPE::PLAYER_2, nullptr);
+	hud_player_3 = new HUD(HUD::TYPE::PLAYER_3, nullptr);
+	hud_player_4 = new HUD(HUD::TYPE::PLAYER_4, nullptr);
+
+	UI_ImageDef image_def;
+
+	// General 4 players =========================================================
+	image_def.sprite_section = { 170, 10, 50, 50 };
+	UI_Image* lt_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	lt_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+
+	image_def.sprite_section = { 220, 10, 50, 50 };
+	UI_Image* rt_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	rt_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
+
+	image_def.sprite_section = { 170, 60, 50, 50 };
+	UI_Image* lb_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	lb_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+
+	image_def.sprite_section = { 220, 60, 50, 50 };
+	UI_Image* rb_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	rb_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
+
+	image_def.sprite_section = { 10, 160, 50, 530 };
+	UI_Image* left_tank_life = CreateImage({ full_screen.GetLeft() ,  full_screen.h * .5f }, image_def);
+	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
+
+	image_def.sprite_section = { 60, 160, 50, 530 };
+	UI_Image* right_tank_life = CreateImage({ full_screen.GetRight() ,  full_screen.h * .5f }, image_def);
+	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
+
 	return true;
 }
 
@@ -85,42 +125,40 @@ bool M_UI::PreUpdate()
 
 	// Hover States ============================================
 
-	SDL_Rect object_rect;
+	fRect section;
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
-		if ((*item)->state != ObjectState::visible)
+		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f)
 		{
 			continue;
 		}
 
-		object_rect.x = (*item)->position.x - (*item)->section.w * 0.5f;
-		object_rect.y = (*item)->position.y - (*item)->section.h * 0.5f;
-		object_rect.w = (*item)->section.w;
-		object_rect.h = (*item)->section.h;
-
-		if (mouse_position.x >= object_rect.x && mouse_position.x <= object_rect.x + object_rect.w && mouse_position.y >= object_rect.y && mouse_position.y <= object_rect.y + object_rect.h)
+		section = (*item)->GetSection();
+ 
+		if (mouse_position.x >= section.GetLeft() && mouse_position.x <= section.GetRight() && mouse_position.y >= section.GetTop() && mouse_position.y <= section.GetBottom())
 		{
-			if ((*item)->hover_state == HoverState::None)
+			if ((*item)->hover_state == HoverState::NONE)
 			{
-				(*item)->hover_state = HoverState::On;
+				(*item)->hover_state = HoverState::ENTER;
 			}
 			else
 			{
-				(*item)->hover_state = HoverState::Repeat;
+				(*item)->hover_state = HoverState::REPEAT;
 			}
 		}
 		else
 		{
-			if ((*item)->hover_state == HoverState::On || (*item)->hover_state == HoverState::Repeat)
+			if ((*item)->hover_state == HoverState::ENTER || (*item)->hover_state == HoverState::REPEAT)
 			{
-				(*item)->hover_state = HoverState::Out;
+				(*item)->hover_state = HoverState::EXIT;
 			}
 			else
 			{
-				(*item)->hover_state = HoverState::None;
+				(*item)->hover_state = HoverState::NONE;
 			}
 		}
+
 		(*item)->PreUpdate();
 	}
 
@@ -131,16 +169,17 @@ bool M_UI::PreUpdate()
 	}
 	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
 	{
-		click_state = ClickState::Repeat;
+		click_state = ClickState::REPEAT;
 	}
 	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
 	{
-		click_state = ClickState::Out;
+		click_state = ClickState::EXIT;
 	}
 	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
 
 	{
-		click_state = ClickState::None;
+		click_state = ClickState::NONE;
+
 		selected_object = nullptr;
 	}
 
@@ -156,15 +195,15 @@ bool M_UI::Update(float dt)
 	{
 		switch (click_state)
 		{
-		case ClickState::On:
-			SetCursorOffset(mouse_position - selected_object->GetPosition());
+		case ClickState::ENTER:
+			mouse_offset = mouse_position - selected_object->position;
 			break;
-		case ClickState::Repeat:
-			selected_object->SetPosition(mouse_position - GetMouseOffset());
+		case ClickState::REPEAT:
+			selected_object->position  = mouse_position - mouse_offset;
 			selected_object->UpdateRelativePosition();
 			break;
-		case ClickState::Out:
-			SetCursorOffset({ 0,0 });
+		case ClickState::EXIT:
+			mouse_offset = { 0,0 };
 			break;
 		}
 	}
@@ -174,14 +213,14 @@ bool M_UI::Update(float dt)
 	{
 		switch (click_state)
 		{
-		case ClickState::On:
+		case ClickState::ENTER:
 			selected_object->listener->OnClick(selected_object);
 			break;
-		case ClickState::Repeat:
+		case ClickState::REPEAT:
 			selected_object->listener->RepeatClick(selected_object);
 			break;
-		case ClickState::Out:
-			if (selected_object->hover_state != HoverState::None)
+		case ClickState::EXIT:
+			if (selected_object->hover_state != HoverState::NONE)
 			{
 				selected_object->listener->OutClick(selected_object);
 			}
@@ -193,32 +232,21 @@ bool M_UI::Update(float dt)
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
-		if ((*item)->listener == nullptr)
-		{
-			if ((*item) != main_object)
-			{
-				LOG("Object callback failed, listener was nullptr");
-			}
-
-			continue;
-		}
-
 		switch ((*item)->hover_state)
 		{
-		case HoverState::On:
+		case HoverState::ENTER:
 			(*item)->listener->OnHover((*item));
 			break;
-		case HoverState::Out:
+		case HoverState::EXIT:
 			(*item)->listener->OutHover((*item));
 			break;
-		case HoverState::Repeat:
+		case HoverState::REPEAT:
 			(*item)->listener->OnHover((*item));
 			break;
 		}
 	}
 
 	UpdateGuiPositions(main_object, fPoint(0, 0));
-
 	
 	// Update objects ==============================================
 
@@ -233,9 +261,25 @@ bool M_UI::Update(float dt)
 // Called after all Updates
 bool M_UI::PostUpdate(float dt)
 {
+	fRect full_screen = app->win->GetWindowRect();
+
+	app->render->DrawQuad({(int) (full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
+	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
+
 	// Draw all UI objects ====================================
 	DrawUI(main_object);
 
+	// Debug Positions  =======================================
+	if (debug)
+	{
+		for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+		{
+			if ((*item) != main_object)
+			{
+				app->render->DrawQuad({ (int)(*item)->position.x - 3 , (int)(*item)->position.y - 3,  6, 6 }, 255, 0, 0, 255, true, false);
+			}
+		}
+	}
 	return true;
 }
 
@@ -252,7 +296,7 @@ bool M_UI::PostUpdate(float dt)
 
 // Creation methods =================================================================
 
- UI_Element * M_UI::CreateObject(const fPoint position, UI_ElementDefinition definition, UI_Listener * listener)
+ UI_Element * M_UI::CreateObject(const fPoint position, const UI_ElementDefinition definition, UI_Listener * listener)
  {
 	 UI_Element* object = new UI_Element(position, definition, listener);
 	 object->SetParent(main_object);
@@ -269,7 +313,7 @@ bool M_UI::PostUpdate(float dt)
 
 }
 
-UI_Image* M_UI::CreateImage(const fPoint position, UI_ImageDef definition , UI_Listener* listener)
+UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition , UI_Listener* listener)
 {
 	UI_Image* object = new UI_Image(position, definition, listener);
 	object->SetParent(main_object);
@@ -277,7 +321,7 @@ UI_Image* M_UI::CreateImage(const fPoint position, UI_ImageDef definition , UI_L
 	return object;
 }
 
-UI_Button* M_UI::CreateButton(const fPoint position, UI_ButtonDef definition, UI_Listener* listener)
+UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener)
 {
 	UI_Button* object = new UI_Button(position, definition, listener);
 	object->SetParent(main_object);
@@ -285,7 +329,7 @@ UI_Button* M_UI::CreateButton(const fPoint position, UI_ButtonDef definition, UI
 	return object;
 }
 
-UI_Slider * M_UI::CreateSlider(const fPoint position, UI_SliderDef definition, UI_Listener * listener)
+UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definition, UI_Listener * listener)
 {
 	UI_Slider* object = new UI_Slider(position, definition, listener);
 	object->SetParent(main_object);
@@ -293,7 +337,7 @@ UI_Slider * M_UI::CreateSlider(const fPoint position, UI_SliderDef definition, U
 	return object;
 }
 
-UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, UI_CheckboxDef definition, UI_Listener * listener)
+UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener * listener)
 {
 	UI_Checkbox* object = new UI_Checkbox(position, definition, listener);
 	object->SetParent(main_object);
@@ -301,9 +345,16 @@ UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, UI_CheckboxDef definit
 	return object;
 }
 
-UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, UI_TextPanelDef definition, UI_Listener * listener)
+UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener * listener)
 {
 	UI_TextPanel* object = new UI_TextPanel(position, definition, listener);
+	object->SetParent(main_object);
+	objects_list.push_back(object);
+	return object;
+}
+UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener * listener)
+{
+	UI_Bar* object = new UI_Bar(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
@@ -365,7 +416,7 @@ bool M_UI::DeleteObject(UI_Element * object)
 	return true;
 }
 
-void M_UI::SetStateToBranch(const ObjectState state, UI_Element * branch_root)
+void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
 {
 	if (branch_root == nullptr)
 	{
@@ -381,24 +432,13 @@ void M_UI::SetStateToBranch(const ObjectState state, UI_Element * branch_root)
 
 }
 
-fPoint M_UI::GetMouseOffset() const
-{
-	return mouse_offset;
-}
-
-void M_UI::SetCursorOffset(const fPoint offset)
-{
-	mouse_offset = offset;
-
-}
-
 bool M_UI::SelectClickedObject()
 {
 	list<UI_Element*> clicked_objects;
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
-		if ((*item)->hover_state != HoverState::None  && (*item)->state == ObjectState::visible && (*item)->is_interactive == true)
+		if ((*item)->hover_state != HoverState::NONE  && (*item)->state == ELEMENT_STATE::VISIBLE && (*item)->is_interactive == true)
 		{
 			clicked_objects.push_back((*item));
 		}
@@ -425,7 +465,7 @@ bool M_UI::SelectClickedObject()
 			}
 		}
 		selected_object = nearest_object;
-		click_state = ClickState::On;
+		click_state = ClickState::ENTER;
 	}
 
 	return true;
@@ -438,30 +478,26 @@ void M_UI::DrawUI(UI_Element * object)
 		return;
 	}
 
-	if (object->state != ObjectState::hidden)
+	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
 		object->Draw();
 	}
 	
-	if (debug && object->state != ObjectState::hidden)
+	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
 	{
-		SDL_Rect rect;
-		rect.x = object->position.x - object->section.w / 2;
-		rect.y = object->position.y - object->section.h / 2;
-		rect.w = object->section.w;
-		rect.h = object->section.h;
+		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
 		if (selected_object == object)
 		{
-			app->render->DrawQuad(rect, 255, 233, 15, 100, true, true);
+			app->render->DrawQuad(rect, 255, 233, 15, 100, true, false);
 		}
-		else if (object->hover_state != HoverState::None )
+		else if (object->hover_state != HoverState::NONE )
 		{
-			app->render->DrawQuad(rect, 255, 0, 0, 100, true, true);
+			app->render->DrawQuad(rect, 255, 0, 0, 100, true, false);
 		}
 		else
 		{
-			app->render->DrawQuad(rect, 255, 100, 40, 100, true, true);
+			app->render->DrawQuad(rect, 255, 100, 40, 100, true, false);
 		}
 	}
 

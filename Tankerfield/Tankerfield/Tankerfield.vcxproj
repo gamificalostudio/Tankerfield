@@ -128,13 +128,15 @@
   <ItemGroup>
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
     <ClCompile Include="Obj_Explosion.cpp" />
-    <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="Obj_Item.cpp" />
     <ClCompile Include="Obj_Static.cpp" />
+    <ClCompile Include="UI_Bar.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
     <ClCompile Include="UI_Image.cpp" />
@@ -170,14 +172,16 @@
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
     <ClInclude Include="Circle.h" />
-    <ClInclude Include="Obj_Explosion.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
     <ClInclude Include="Obj_Bullet.h" />
+    <ClInclude Include="Obj_Explosion.h" />
     <ClInclude Include="Obj_Item.h" />
     <ClInclude Include="Obj_Static.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="UI_Bar.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Checkbox.h" />
     <ClInclude Include="UI_Image.h" />

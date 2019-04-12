@@ -244,9 +244,7 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 
 bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* current_camera, const SDL_Rect* section) const
 {
-	BROFILER_CATEGORY("M_RenderBlit", Profiler::Color::DarkBlue)
-		bool ret = true;
-
+	bool ret = true;
 	uint scale = app->win->GetScale();
 
 	SDL_Rect rect_in_screen;
@@ -268,26 +266,44 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* cu
 	{
 		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
 	}
-
-
-	//	if (debug)
-		//{
-		//}
-
-
 	//Move the rect_in_screen to their correct screen =========================== 	
 	rect_in_screen.x += current_camera->viewport.x;
 	rect_in_screen.y += current_camera->viewport.y;
 
 	//Print the rect_in_screen ============================================
-	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, NULL, nullptr, SDL_FLIP_NONE) != 0)
+	if (SDL_RenderCopy(renderer, texture, &spritesheet_rect, &rect_in_screen) )
 	{
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
+	}
+	return ret;
+}
 
+void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section) const
+{
+	uint scale = app->win->GetScale();
+
+	SDL_Rect rect;
+	rect.x = screen_x * scale;
+	rect.y = screen_y * scale;
+
+	if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	return ret;
+	rect.w *= scale;
+	rect.h *= scale;
+
+	if (SDL_RenderCopy(renderer, texture, section, &rect) != 0)
+	{
+		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+	}
 }
 
 bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const

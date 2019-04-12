@@ -42,8 +42,6 @@ private:
 
 	bool PreUpdate();
 
-	bool Update(float dt);
-
 private:
 
 	UI_ButtonDef	definition;
