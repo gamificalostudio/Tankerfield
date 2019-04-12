@@ -53,6 +53,12 @@ public:
 	int GetLife();
 	int GetMaxLife();
 
+public:
+	//-Logic
+	int life = 0;
+	int max_life = 0;
+
+
 private:
 	//- Movement
 	void Movement(float dt);
@@ -87,10 +93,6 @@ private:
 	static Animation * rotate_base;
 	static Animation * rotate_turr;
 	static WeaponInfo * weapons_info;
-  
-	//-Logic
-	int life								= 0;
-	int max_life							= 0;
 
 	//- Movement
 	float speed								= 0.f;

@@ -4,6 +4,7 @@
 #include "PerfTimer.h"
 #include "Point.h"
 #include "Obj_Bullet.h"
+#include "Obj_Tank.h"
 
 struct SDL_Texture;
 
@@ -15,6 +16,11 @@ public:
 
 public:
 	//Add functions that are overriden
+	bool Start();
+	void OnTrigger(Collider* collider);
+
+private:
+	Obj_Tank * receiver;
 };
 
 #endif
