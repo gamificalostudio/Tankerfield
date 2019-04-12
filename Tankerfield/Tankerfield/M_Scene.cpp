@@ -142,7 +142,7 @@ bool M_Scene::Update(float dt)
 	if (perform_objects_check)
 	{
 		// == 3 because of the objects that are not enemies. Possible solution 2: check the type of objects with counters and check
-		if (app->objectmanager->GetObjects().size() == 3) // TOFIX: Here we are checking objects of type static I think too...
+		if (app->objectmanager->GetObjects().size() == 5) // TOFIX: Here we are checking objects of type static I think too...
 		{
 			/* Generate new wave and increase units number */
 			initial_generated_units += enemies_to_increase;
