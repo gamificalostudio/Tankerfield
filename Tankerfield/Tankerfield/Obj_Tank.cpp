@@ -15,6 +15,7 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Healing_Bullet.h"
 
 SDL_Texture * Obj_Tank::base_tex			= nullptr;
 SDL_Texture * Obj_Tank::turr_tex			= nullptr;
@@ -88,14 +89,14 @@ bool Obj_Tank::Start()
 	cannon_length = 1.f;
 
 	//TODO: Load them from the XML
-	kb_up			  = SDL_SCANCODE_W;
-	kb_left			= SDL_SCANCODE_A;
-	kb_down			= SDL_SCANCODE_S;
-	kb_right		= SDL_SCANCODE_D;
+	kb_up				= SDL_SCANCODE_W;
+	kb_left				= SDL_SCANCODE_A;
+	kb_down				= SDL_SCANCODE_S;
+	kb_right			= SDL_SCANCODE_D;
 	kb_shoot_basic		= SDL_BUTTON_RIGHT;
 	kb_shoot_special	= SDL_BUTTON_LEFT;
-	kb_item			= SDL_SCANCODE_F;
-	kb_interact		= SDL_SCANCODE_SPACE;
+	kb_item				= SDL_SCANCODE_F;
+	kb_interact			= SDL_SCANCODE_SPACE;
   
 	gamepad_move	= Joystick::LEFT;
 	gamepad_aim		= Joystick::RIGHT;
@@ -484,7 +485,8 @@ void Obj_Tank::ShootDoubleMissile()
 
 void Obj_Tank::ShootHealingShot()
 {
-	Obj_Bullet * heal_bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
+	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
+
 	heal_bullet->SetBulletProperties(
 		weapons_info[(uint)special_shoot].bullet_speed,
 		weapons_info[(uint)special_shoot].bullet_life_ms,

@@ -111,7 +111,7 @@ private:
 	PerfTimer basic_shot_timer;
   
 	//-- Special shoot
-	uint special_shoot						= (uint)WEAPON::DOUBLE_MISSILE;
+	uint special_shoot						= (uint)WEAPON::HEALING_SHOT;
 	PerfTimer special_shot_timer;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 
