@@ -58,12 +58,16 @@ bool M_Scene::Start()
 
 	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
 
-	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(3.f, 3.f));
-	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(6.f, 6.f));
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(5.f, 5.f));
+
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 13.5f));
+	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
+	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
+	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
+
+	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
 
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
+	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
 	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
 
 	//app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
@@ -99,7 +103,7 @@ bool M_Scene::PreUpdate()
 bool M_Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	/*if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
 		app->render->camera.y -= floor(200.0f * dt);
 	}
@@ -114,7 +118,7 @@ bool M_Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 	{
 		app->render->camera.x += floor(200.0f * dt);
-	}
+	}*/
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
@@ -139,7 +143,7 @@ bool M_Scene::Update(float dt)
 	if (perform_objects_check)
 	{
 		// == 3 because of the objects that are not enemies. Possible solution 2: check the type of objects with counters and check
-		if (app->objectmanager->GetObjects().size() == 3) // TOFIX: Here we are checking objects of type static I think too...
+		if (app->objectmanager->GetObjects().size() == 5) // TOFIX: Here we are checking objects of type static I think too...
 		{
 			/* Generate new wave and increase units number */
 			initial_generated_units += enemies_to_increase;
@@ -183,6 +187,7 @@ void M_Scene::DebugPathfinding()
 {
 	if (test_path)
 	{
+		std::vector<Camera*>::iterator item_cam;
 		static iPoint origin;
 		static bool origin_selected = false;
 		static bool createdDebugPath = false;
@@ -231,7 +236,13 @@ void M_Scene::DebugPathfinding()
 				for (uint i = 0; i < debugPathSize; ++i)
 				{
 					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
-					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y);
+					
+					for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+					{
+						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
+					}
+					SDL_RenderSetClipRect(app->render->renderer, nullptr);
 				}
 			}
 
@@ -239,7 +250,11 @@ void M_Scene::DebugPathfinding()
 
 		p = app->map->MapToScreenI(p.x, p.y);
 
-		app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y);
+		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		{
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
+		}SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
 }
 

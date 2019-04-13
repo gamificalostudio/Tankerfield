@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
     <RootNamespace>Tankerfield</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,12 +127,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet_Basic.cpp" />
+    <ClCompile Include="Bullet_Missile.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
+    <ClCompile Include="Obj_Explosion.cpp" />
     <ClCompile Include="Obj_Item.cpp" />
     <ClCompile Include="Obj_Static.cpp" />
+    <ClCompile Include="UI_Bar.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
     <ClCompile Include="UI_Image.cpp" />
@@ -166,14 +170,18 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Basic.h" />
+    <ClInclude Include="Bullet_Missile.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
     <ClInclude Include="Obj_Bullet.h" />
+    <ClInclude Include="Obj_Explosion.h" />
     <ClInclude Include="Obj_Item.h" />
     <ClInclude Include="Obj_Static.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="UI_Bar.h" />
     <ClInclude Include="UI_Button.h" />
     <ClInclude Include="UI_Checkbox.h" />
     <ClInclude Include="UI_Image.h" />
