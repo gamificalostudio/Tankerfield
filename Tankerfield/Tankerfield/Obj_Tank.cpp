@@ -163,6 +163,7 @@ bool Obj_Tank::Start()
 	gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_TRIGGERLEFT;
 	gamepad_shoot_special	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+	gamepad_revive_tank = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER;
 	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
 	draw_offset.x = 46;
@@ -367,7 +368,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::WALL)
 	{
-		//app->scene->tank_1->life - 1;
+		app->scene->tank_1->life - 1;
 	}
 }
 
@@ -535,35 +536,146 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ReviveTank()
 {
-	
+	switch (tank_num) {
+	case 0:
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
+		{
+			{
+				app->scene->tank_2->speed = 4.f;
+				app->scene->tank_2->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		{
+			{
+				app->scene->tank_3->speed = 4.f;
+				app->scene->tank_3->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		{
+			{
+				app->scene->tank_4->speed = 4.f;
+				app->scene->tank_4->life = 100;
+			}
+		}
+
+		break;
+	case 1:
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		{
+			{
+				app->scene->tank_1->speed = 4.f;
+				app->scene->tank_1->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		{
+			{
+				app->scene->tank_3->speed = 4.f;
+				app->scene->tank_3->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		{
+			{
+				app->scene->tank_4->speed = 4.f;
+				app->scene->tank_4->life = 100;
+			}
+		}
+		break;
+	case 2:
+		/*if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		{
+			{
+				app->scene->tank_1->speed = 4.f;
+				app->scene->tank_1->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		{
+			{
+				app->scene->tank_2->speed = 4.f;
+				app->scene->tank_2->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		{
+			{
+				app->scene->tank_4->speed = 4.f;
+				app->scene->tank_4->life = 100;
+			}
+		}*/
+		break;
+	case 3:
+		/*if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		{
+			{
+				app->scene->tank_1->speed = 4.f;
+				app->scene->tank_1->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		{
+			{
+				app->scene->tank_2->speed = 4.f;
+				app->scene->tank_2->life = 100;
+			}
+		}
+		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		{
+			{
+				app->scene->tank_3->speed = 4.f;
+				app->scene->tank_3->life = 100;
+			}
+		}
+		*/
+		break;
+	}
+
+
+
 
 }
 
 void Obj_Tank::StopTank()
 {
 
-	if (app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KEY_REPEAT)
-	{
+	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)
 		app->scene->tank_1->life = 0;
+	
+	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
+		app->scene->tank_2->life = 0;
+
+	if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
+		app->scene->tank_3->life = 0;
+	
+	switch (tank_num) {
+	case 0:
+		if (life == 0)
+		{
+			app->scene->tank_1->speed = 0;
+		}
+		break;
+	case 1:
+		if (life == 0)
+		{
+			app->scene->tank_2->speed = 0;
+		}
+		break;
+	case 2:
+		if (life == 0)
+		{
+			app->scene->tank_3->speed = 0;
+		}
+		break;
+	case 3:
+		if (life == 0)
+		{
+			app->scene->tank_4->speed = 0;
+		}
+		break;
 	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN || app->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT)
-	{
-		app->scene->tank_1->life = 10;
-		speed = 4.f;
-	}
-
-	if (app->scene->tank_1->life == 0)
-		app->scene->tank_1->speed = 0;
-
-	if (app->scene->tank_2->life == 0)
-		app->scene->tank_2->speed = 0;
-
-	if (app->scene->tank_3->life == 0)
-		app->scene->tank_3->speed = 0;
-
-	if (app->scene->tank_4->life == 0)
-		app->scene->tank_4->speed = 0;
 }
 
 
