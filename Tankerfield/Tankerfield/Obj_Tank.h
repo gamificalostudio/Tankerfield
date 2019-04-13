@@ -52,12 +52,12 @@ public:
 	void SetLife(int life);
 	int GetLife();
 	int GetMaxLife();
-
 public:
 	//-Logic
 	int life = 0;
 	int max_life = 0;
 
+	Obj_Tank* receiver = nullptr;
 
 private:
 	//- Movement
@@ -83,6 +83,7 @@ private:
 
 	//- Item
 	void Item();
+
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)

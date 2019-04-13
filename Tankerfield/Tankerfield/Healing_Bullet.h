@@ -17,10 +17,6 @@ public:
 public:
 	//Add functions that are overriden
 	bool Start();
-	void OnTrigger(Collider* collider);
-
-private:
-	Obj_Tank * receiver;
 };
 
 #endif

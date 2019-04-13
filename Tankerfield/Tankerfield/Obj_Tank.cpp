@@ -295,7 +295,17 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-
+	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
+	{
+		if(receiver->GetMaxLife()>receiver->GetLife())
+		{
+			receiver->SetLife(GetLife() + 5);
+			if (life >= 100) {
+				life = 100;
+			}
+		}
+		
+	}
 }
 
 void Obj_Tank::SetLife(int life)

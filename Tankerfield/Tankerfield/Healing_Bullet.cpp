@@ -38,13 +38,3 @@ bool Healing_Bullet::Start()
 		return true;
 }
 
-void Healing_Bullet::OnTrigger(Collider * collider)
-{
-	//if (collider->GetTag() == Collider::TAG::PLAYER)
-	//{
-	//	receiver->SetLife(receiver->GetLife()+5);
-	//}
-
-	to_remove = true;
-}
-
