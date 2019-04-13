@@ -112,7 +112,8 @@ bool Obj_Tank::Start()
 
 	basic_shot_timer.Start();
 
-	life = max_life = 100;
+	life = 90;
+	max_life = 100;
 
 	item = ObjectType::HEALTH_BAG;
 
@@ -297,14 +298,14 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
+		receiver = this;
 		if(receiver->GetMaxLife()>receiver->GetLife())
 		{
 			receiver->SetLife(GetLife() + 5);
-			if (life >= 100) {
-				life = 100;
+			if (receiver->GetMaxLife()<receiver->GetLife()) {
+				receiver->SetLife(receiver->GetMaxLife());
 			}
 		}
-		
 	}
 }
 
