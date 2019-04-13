@@ -457,20 +457,22 @@ void Obj_Tank::StopTank()
 	}
 
 	if (app->scene->tank_1->life == 0)
-	{
 		app->scene->tank_1->speed = 0;
-	}
-	
+		
 	if (app->scene->tank_2->life == 0)
-	{
 		app->scene->tank_2->speed = 0;
-	}
+	
+	/*if (app->scene->tank_3->life == 0)
+		app->scene->tank_3->speed = 0;
+	
+	if (app->scene->tank_4->life == 0)
+		app->scene->tank_4->speed = 0;*/
 
 }
 
 void Obj_Tank::Item()
 {
-	if(item != ObjectType::NO_TYPE
+	/*if(item != ObjectType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
 			|| (*controller)->GetButtonState(gamepad_item) == KEY_DOWN))
 	{
@@ -478,6 +480,6 @@ void Obj_Tank::Item()
 		new_item->caster = this;
 		new_item->Use();
 		item = ObjectType::NO_TYPE;
-	}
+	}*/
 }
 
