@@ -11,9 +11,10 @@ struct SDL_Texture;
 class Camera;
 
 enum class WEAPON {
-	BASIC,
+	BASIC = -1,
 	FLAMETHROWER,
 	DOUBLE_MISSILE,
+	
 	MAX
 
 };
@@ -49,6 +50,8 @@ public:
 public:
 	//- Logic
 	void SetLife(int life);
+	void SetItem(ObjectType Type);
+	void SetWeapon(WEAPON type);
 	int GetLife();
 	int GetMaxLife();
 

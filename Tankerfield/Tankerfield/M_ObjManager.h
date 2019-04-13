@@ -13,10 +13,14 @@
 
 enum class ObjectType
 {
+	//ITEMS need to be first because the random selection from Obj_PickUp .
+	HEALTH_BAG = 0,
+
 	//OTHER
 	TANK,
 	STATIC,
 	REWARD_ZONE,
+	PICK_UP,
 
 	//ENEMIES
 	TESLA_TROOPER,
@@ -25,9 +29,6 @@ enum class ObjectType
 	BASIC_BULLET,
 	BULLET_MISSILE,
 	EXPLOSION,
-
-	//ITEMS
-	HEALTH_BAG,
 
 	NO_TYPE
 };

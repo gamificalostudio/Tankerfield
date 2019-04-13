@@ -28,6 +28,7 @@ public:
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
+		PICK_UP,
 		MAX
 	};
 

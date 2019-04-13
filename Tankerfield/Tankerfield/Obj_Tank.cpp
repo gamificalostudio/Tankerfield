@@ -359,6 +359,16 @@ void Obj_Tank::SetLife(int life)
 	this->life = life;
 }
 
+void Obj_Tank::SetItem(ObjectType type) 
+{
+	item = type;
+}
+
+void Obj_Tank::SetWeapon(WEAPON type)
+{
+	special_shoot = (uint)type;
+}
+
 int Obj_Tank::GetLife()
 {
 	return life;
