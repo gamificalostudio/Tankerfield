@@ -538,21 +538,21 @@ void Obj_Tank::ReviveTank()
 {
 	switch (tank_num) {
 	case 0:
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -562,21 +562,21 @@ void Obj_Tank::ReviveTank()
 
 		break;
 	case 1:
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -584,52 +584,52 @@ void Obj_Tank::ReviveTank()
 			}
 		}
 		break;
-	case 2:
-		/*if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+	case 2:	
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)				
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
 				app->scene->tank_4->life = 100;
 			}
-		}*/
+		}
 		break;
 	case 3:
-		/*if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if ((*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		*/
+		
 		break;
 	}
 
