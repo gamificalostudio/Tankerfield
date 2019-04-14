@@ -37,7 +37,7 @@ void Obj_PickUp::OnTrigger(Collider* collider)
 	{
  		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /*|| app->input->GetKey(gamepad_interact) == KEY_DOWN*/)
 		{
-			Obj_Tank* player = collider->GetObj<Obj_Tank>();
+			Obj_Tank* player = (Obj_Tank*)collider->GetObj();
 			player->SetPickUp(this);
 		}
 	}
