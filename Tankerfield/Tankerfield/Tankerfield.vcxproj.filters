@@ -121,6 +121,12 @@
     <ClCompile Include="Obj_Item.cpp">
       <Filter>Objects\Item</Filter>
     </ClCompile>
+    <ClCompile Include="M_PickManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_PickUp.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -260,6 +266,12 @@
     </ClInclude>
     <ClInclude Include="Obj_Item.h">
       <Filter>Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="M_PickManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_PickUp.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

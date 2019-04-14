@@ -505,5 +505,7 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 
 	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
 
+	camera->number_player = camera->number_player;
+
 	return SDL_HasIntersection(&r, &camera->rect);
 }

@@ -9,11 +9,14 @@
 struct Controller;
 struct SDL_Texture;
 class Camera;
+class Obj_PickUp;
 
 enum class WEAPON {
-	BASIC,
+	BASIC = -1,
+	DOUBLE_MISSILE, 
 	FLAMETHROWER,
-	DOUBLE_MISSILE,
+	
+	
 	MAX
 
 };
@@ -49,8 +52,13 @@ public:
 public:
 	//- Logic
 	void SetLife(int life);
+	void SetItem(ObjectType Type);
+	void SetWeapon(WEAPON type);
 	int GetLife();
 	int GetMaxLife();
+
+	//- Pick ups
+	void SetPickUp(Obj_PickUp* pick_up);
 
 private:
 	//- Movement
@@ -81,6 +89,7 @@ private:
 
 	//- Item
 	void Item();
+
 
 
 private:

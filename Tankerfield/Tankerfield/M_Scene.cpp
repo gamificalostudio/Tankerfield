@@ -65,6 +65,7 @@ bool M_Scene::Start()
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
+	//app->objectmanager->CreateObject(ObjectType::PICK_UP, fPoint(12.5f, 14.5f));
 
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));

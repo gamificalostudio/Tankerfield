@@ -17,6 +17,7 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Obj_PickUp.h"
 
 SDL_Texture * Obj_Tank::base_tex_yellow		= nullptr;
 //SDL_Texture * Obj_Tank::base_tex_orange		= nullptr;
@@ -183,7 +184,7 @@ bool Obj_Tank::Start()
 
 	
 
-	item = ObjectType::HEALTH_BAG;
+	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
 	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
@@ -369,9 +370,19 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::WALL)
+
+	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	{
+		Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+		if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
+		{
+			SetPickUp(pick_up);
+		}
+  }
+	else if (c1->GetTag() == Collider::TAG::WALL)
 	{
 		app->scene->tank_1->life - 1;
+
 	}
 }
 
@@ -379,6 +390,16 @@ void Obj_Tank::SetLife(int life)
 {
 	//TODO: Update UI bars
 	this->life = life;
+}
+
+void Obj_Tank::SetItem(ObjectType type) 
+{
+	item = type;
+}
+
+void Obj_Tank::SetWeapon(WEAPON type)
+{
+	special_shoot = (uint)type;
 }
 
 int Obj_Tank::GetLife()
@@ -724,5 +745,20 @@ void Obj_Tank::Item()
 		new_item->Use();
 		item = ObjectType::NO_TYPE;
 	}
+}
+
+
+void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
+{
+	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
+	{
+		SetItem(pick_up->type_of_item);
+	}
+	else
+	{
+		SetWeapon(pick_up->type_of_weapon);
+	}
+
+	pick_up->DeletePickUp();
 }
 

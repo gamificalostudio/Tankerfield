@@ -11,8 +11,8 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1080" scale="1"/>
-    <fullscreen value="true"/>
+    <resolution width="1920" height="1050" scale="1"/>
+    <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
@@ -39,6 +39,11 @@
     <enemies_to_increase value="3"/>
   </scene>
 
+  <pick_manager>
+    <percentage_to_spawn value="100"/>
+    
+  </pick_manager>
+  
   <object>
     <tesla_trooper>
       <animations>
