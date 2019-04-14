@@ -641,7 +641,7 @@ void Obj_Tank::ReviveTank()
 void Obj_Tank::StopTank()
 {
 
-	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
 		app->scene->tank_1->life = 0;
 	
 	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
@@ -655,24 +655,28 @@ void Obj_Tank::StopTank()
 		if (life == 0)
 		{
 			app->scene->tank_1->speed = 0;
+			app->scene->tank_1->angle = 0;
 		}
 		break;
 	case 1:
 		if (life == 0)
 		{
 			app->scene->tank_2->speed = 0;
+			app->scene->tank_2->angle = 0;
 		}
 		break;
 	case 2:
 		if (life == 0)
 		{
 			app->scene->tank_3->speed = 0;
+			app->scene->tank_3->angle = 0;
 		}
 		break;
 	case 3:
 		if (life == 0)
 		{
 			app->scene->tank_4->speed = 0;
+			app->scene->tank_4->angle = 0;
 		}
 		break;
 	}
