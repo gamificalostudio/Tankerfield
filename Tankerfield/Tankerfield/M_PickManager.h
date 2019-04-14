@@ -19,15 +19,7 @@ public:
 	virtual ~M_PickManager();
 
 	// Called before render is available
-//	bool Awake(pugi::xml_node&) override;
-
-	// Called before the first frame
-	//bool Start() override;
-
-	//bool Update(float dt) override;
-
-	// Called before quitting
-	//bool CleanUp() override;
+	bool Awake(pugi::xml_node&) override;
 
 	//Create a Pick up random
 	void CreatePickUp(fPoint pos_map);
@@ -35,12 +27,10 @@ public:
 	//Calculate if a pickUp has to be created after enemy die
 	bool PickUpFromEnemy(fPoint pos_map);
 
-public:
 
-	//std::list<SDL_Texture*>	textures;
 
 private:
-	uint percentage_to_spawn = 100;
+	uint percentage_to_spawn = NULL;
 };
 
 

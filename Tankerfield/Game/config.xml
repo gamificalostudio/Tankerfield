@@ -39,6 +39,11 @@
     <enemies_to_increase value="3"/>
   </scene>
 
+  <pick_manager>
+    <percentage_to_spawn value="100"/>
+    
+  </pick_manager>
+  
   <object>
     <tesla_trooper>
       <animations>

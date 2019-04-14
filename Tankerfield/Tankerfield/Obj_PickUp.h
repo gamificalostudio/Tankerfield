@@ -2,36 +2,35 @@
 #define __OBJ_PICKUP_H__
 
 #include "Object.h"
-#include <map>
+#include "Obj_Tank.h"
 
-enum class PICKUP_TYPE : int {
+enum class PICKUP_TYPE {
 	NO_TYPE = -1,
 	ITEM,
 	WEAPON
 };
 
-enum class WEAPON;
 
 class Obj_PickUp : public Object
 {
-private:
-	PICKUP_TYPE type_of_pick_up;
-	WEAPON type_of_weapon;
-	ObjectType type_of_item;
+public:
+	PICKUP_TYPE type_of_pick_up					= PICKUP_TYPE::NO_TYPE;
+	WEAPON type_of_weapon						= WEAPON::BASIC;
+	ObjectType type_of_item						= ObjectType::NO_TYPE;
 
-	std::map<ObjectType, Object*> elements;
 
 
 public:
 
 	Obj_PickUp(fPoint pos);
+
 	~Obj_PickUp();
 
 	bool Awake(pugi::xml_node&) { return true; };
 
 	bool Update(float dt) override;
 
-	void OnTrigger(Collider* collider);
+	//void OnTrigger(Collider* collider) override;
 
 	bool Draw(float dt, Camera* camera);
 
@@ -40,6 +39,10 @@ public:
 	ObjectType RandomItem() const;
 
 	PICKUP_TYPE RandomPickUp();
+
+	void DeletePickUp();
+
+	void SetPickUp(Obj_Tank* player);
 
 };
 

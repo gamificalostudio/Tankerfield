@@ -15,54 +15,23 @@ M_PickManager::M_PickManager() : Module()
 M_PickManager::~M_PickManager()
 {}
 
-//// Called before render is available
-//bool M_Textures::Awake(pugi::xml_node& config)
-//{
-//	LOG("Init Image library");
-//	bool ret = true;
-//	// load support for the PNG image format
-//	int flags = IMG_INIT_PNG;
-//	int init = IMG_Init(flags);
-//
-//	if ((init & flags) != flags)
-//	{
-//		LOG("Could not initialize Image lib. IMG_Init: %s", IMG_GetError());
-//		ret = false;
-//	}
-//
-//	return ret;
-//}
+// Called before render is available
+bool M_PickManager::Awake(pugi::xml_node& config)
+{
+	bool ret = true;
 
-//// Called before the first frame
-//bool M_Textures::Start()
-//{
-//	LOG("start textures");
-//	bool ret = true;
-//	return ret;
-//}
+	percentage_to_spawn = config.child("percentage_to_spawn").attribute("value").as_int();
 
-//// Called before quitting
-//bool M_Textures::CleanUp()
-//{
-//	LOG("Freeing textures and Image library");
-//	std::list<SDL_Texture*>::const_iterator item;
-//
-//	for (item = textures.begin(); item != textures.end(); item++)
-//	{
-//		SDL_DestroyTexture(*item);
-//	}
-//
-//	textures.clear();
-//	IMG_Quit();
-//	return true;
-//}
+	return ret;
+}
+
 
 bool M_PickManager::PickUpFromEnemy(fPoint pos_map)
 {
 	bool ret = false;
-	uint percentage = rand() % 100;
+	uint probability = rand() % 100;
 
-	if (percentage < percentage_to_spawn)
+	if (probability < percentage_to_spawn)
 	{
 		CreatePickUp(pos_map);
 		ret = true;

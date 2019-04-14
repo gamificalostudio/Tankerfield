@@ -15,6 +15,7 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Obj_PickUp.h"
 
 SDL_Texture * Obj_Tank::base_tex_yellow		= nullptr;
 //SDL_Texture * Obj_Tank::base_tex_orange		= nullptr;
@@ -350,7 +351,14 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-
+	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	{
+		Obj_PickUp* pick_up = c1->GetObj<Obj_PickUp>();
+		if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
+		{
+			SetPickUp(pick_up);
+		}
+	}
 }
 
 void Obj_Tank::SetLife(int life)
@@ -560,4 +568,18 @@ void Obj_Tank::Item()
 		new_item->Use();
 		item = ObjectType::NO_TYPE;
 	}
+}
+
+void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
+{
+	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
+	{
+		SetItem(pick_up->type_of_item);
+	}
+	else
+	{
+		SetWeapon(pick_up->type_of_weapon);
+	}
+
+	pick_up->DeletePickUp();
 }

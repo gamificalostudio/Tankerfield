@@ -9,6 +9,7 @@
 struct Controller;
 struct SDL_Texture;
 class Camera;
+class Obj_PickUp;
 
 enum class WEAPON {
 	BASIC = -1,
@@ -78,6 +79,9 @@ private:
 
 	//- Item
 	void Item();
+
+	//- Pick ups
+	void SetPickUp(Obj_PickUp* pick_up);
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)
