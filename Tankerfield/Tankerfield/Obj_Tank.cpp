@@ -170,7 +170,7 @@ bool Obj_Tank::Start()
 
 	life = max_life = 100;
 
-	item = ObjectType::HEALTH_BAG;
+	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
 	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
