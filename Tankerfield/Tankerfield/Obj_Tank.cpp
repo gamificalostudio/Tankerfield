@@ -11,6 +11,7 @@
 #include "M_Map.h"
 #include "M_ObjManager.h"
 #include "M_Window.h"
+#include "M_Audio.h"
 #include "PerfTimer.h"
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
@@ -74,6 +75,8 @@ bool Obj_Tank::Start()
 	//}
 
 	tank_num = number_of_tanks++;
+
+	basic_shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
 	switch (tank_num) {
 	case 0:
@@ -428,12 +431,14 @@ void Obj_Tank::Shoot()
 	if (IsShootingSpecial() && special_shot_timer.ReadMs() >= weapons_info[(uint)special_shoot].time_between_bullets)
 	{
 		(this->*shot_function[(uint)special_shoot])();
+		app->audio->PlayFx(basic_shot_sound);
 		special_shot_timer.Start();
 	}
 	//- Basic shoot
 	else if (!IsShootingSpecial() && IsShootingBasic() && basic_shot_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
 	{
 		(this->*shot_function[(uint)basic_shot])();
+		app->audio->PlayFx(basic_shot_sound);
 		basic_shot_timer.Start();
 	}
 }

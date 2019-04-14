@@ -116,7 +116,8 @@ private:
 	//-- Basic shoot
 	uint basic_shot							= (uint)WEAPON::BASIC;
 	PerfTimer basic_shot_timer;
-  
+	uint basic_shot_sound					= 0;
+
 	//-- Special shoot
 	uint special_shoot					= (uint)WEAPON::DOUBLE_MISSILE;
 	PerfTimer special_shot_timer;
