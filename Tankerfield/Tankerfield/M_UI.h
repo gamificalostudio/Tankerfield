@@ -146,18 +146,19 @@ private:
 
 public:
 	// Mouse ----------------------------------------------
-	Player_GUI       *hud_player_1 = nullptr;
+	Player_GUI  *hud_player_1 = nullptr;
 
-	Player_GUI       *hud_player_2 = nullptr;
+	Player_GUI  *hud_player_2 = nullptr;
 
-	Player_GUI       *hud_player_3 = nullptr;
+	Player_GUI  *hud_player_3 = nullptr;
 
-	Player_GUI       *hud_player_4 = nullptr;
+	Player_GUI  *hud_player_4 = nullptr;
 
-	fPoint	   mouse_position;
+	fPoint		mouse_position;
 
-	fPoint	   mouse_offset;
+	fPoint		mouse_offset;
 
+	Animation* 	arrow_anim = nullptr;
 };
 
 #endif // __MODULE_UI_H__
