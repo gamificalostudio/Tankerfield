@@ -8,7 +8,15 @@ class UI_Image;
 class UI_Label;
 class UI_Bar;
 
-class HUD: public UI_Listener
+
+struct Pickable_Weapon
+{
+	UI_Image* weapon_frame;
+	UI_Image* weapon_icon;
+	int       weapon_level;
+};
+
+class Player_GUI: public UI_Listener
 {
 public:
 
@@ -21,8 +29,8 @@ public:
 		PLAYER_4
 	};
 
-	HUD( HUD::TYPE type, Obj_Tank* target);
-	~HUD();
+	Player_GUI( Player_GUI::TYPE type, Obj_Tank* target);
+	~Player_GUI();
 
 public:
 	
@@ -30,12 +38,13 @@ public:
 
 	Obj_Tank* target = nullptr;
 
-	UI_Image* basic_weapon_frame = nullptr;
-	UI_Image* special_weapon_frame = nullptr;
+	UI_Image* weapon_frame = nullptr;
 	UI_Image* item_frame = nullptr;
 	UI_Image* ammo_image = nullptr;
 	UI_Bar* ammo_bar = nullptr;
 	UI_Bar* life_bar = nullptr;
+
+
 };
 
 #endif // __HUD_H_

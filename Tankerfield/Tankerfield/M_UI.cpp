@@ -53,10 +53,10 @@ bool M_UI::Start()
 
 
 	// HUD ===========================================
-	hud_player_1 = new HUD(HUD::TYPE::PLAYER_1, nullptr);
-	hud_player_2 = new HUD(HUD::TYPE::PLAYER_2, nullptr);
-	hud_player_3 = new HUD(HUD::TYPE::PLAYER_3, nullptr);
-	hud_player_4 = new HUD(HUD::TYPE::PLAYER_4, nullptr);
+	hud_player_1 = new Player_GUI(Player_GUI::TYPE::PLAYER_1, nullptr);
+	hud_player_2 = new Player_GUI(Player_GUI::TYPE::PLAYER_2, nullptr);
+	hud_player_3 = new Player_GUI(Player_GUI::TYPE::PLAYER_3, nullptr);
+	hud_player_4 = new Player_GUI(Player_GUI::TYPE::PLAYER_4, nullptr);
 
 	UI_ImageDef image_def;
 
@@ -84,6 +84,13 @@ bool M_UI::Start()
 	image_def.sprite_section = { 60, 160, 50, 530 };
 	UI_Image* right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
+
+	image_def.sprite_section = { 120, 160, 425, 35 };
+	CreateImage({ full_screen.w * .25f ,  full_screen.h * .25f }, image_def);
+	
+
+
+
 
 	return true;
 }
