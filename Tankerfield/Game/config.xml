@@ -135,6 +135,9 @@
         <turr>textures/objects/tank/turr.png</turr>
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
       </spritesheets>
+      <sounds>
+        <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+      </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>
