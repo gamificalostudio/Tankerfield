@@ -73,8 +73,15 @@ private:
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
 
+
+	//- TankDeath
+
+	void ReviveTank();
+	void StopTank();
+
 	//- Item
 	void Item();
+
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)
@@ -94,10 +101,13 @@ private:
 	static WeaponInfo * weapons_info;
 	static int number_of_tanks;
   
+
 	//-Logic
 	int life								= 0;
 	int max_life							= 0;
+	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
+
 
 	//- Movement
 	float speed								= 0.f;
@@ -144,12 +154,17 @@ private:
 	//-- Controller inputs
 	Joystick gamepad_move					= Joystick::INVALID;
 	Joystick gamepad_aim					= Joystick::INVALID;
-	SDL_GameControllerButton gamepad_interact	= SDL_CONTROLLER_BUTTON_INVALID;
-	SDL_GameControllerButton gamepad_item		= SDL_CONTROLLER_BUTTON_INVALID;
+	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
+	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
+	SDL_GameControllerButton gamepad_revive_tank	= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_special	= SDL_CONTROLLER_AXIS_INVALID;
+
+	
+
 public:
 	Camera* camera_player					= nullptr;
+
 };
 
 #endif
