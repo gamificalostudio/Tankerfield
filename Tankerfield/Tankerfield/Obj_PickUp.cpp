@@ -30,17 +30,18 @@ bool Obj_PickUp::Update(float dt)
 }
 
 //Lo esta haciendo el player ahora
-//void Obj_PickUp::OnTrigger(Collider* collider)
-//{
-//	if (collider->GetTag() == Collider::TAG::PLAYER)
-//	{
-//		Obj_Tank* player = collider->GetObj<Obj_Tank>();
-//		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-//		{
-//			SetPickUp(player);
-//		}
-//	}
-//}
+//
+void Obj_PickUp::OnTrigger(Collider* collider)
+{
+	if (collider->GetTag() == Collider::TAG::PLAYER)
+	{
+ 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /*|| app->input->GetKey(gamepad_interact) == KEY_DOWN*/)
+		{
+			Obj_Tank* player = collider->GetObj<Obj_Tank>();
+			player->SetPickUp(this);
+		}
+	}
+}
 
 bool Obj_PickUp::Draw(float dt, Camera* camera)
 {

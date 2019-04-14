@@ -30,7 +30,7 @@ public:
 
 	bool Update(float dt) override;
 
-	//void OnTrigger(Collider* collider) override;
+	void OnTrigger(Collider * collider);
 
 	bool Draw(float dt, Camera* camera);
 

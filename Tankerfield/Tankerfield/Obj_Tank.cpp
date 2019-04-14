@@ -351,14 +351,14 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::PICK_UP)
-	{
-		Obj_PickUp* pick_up = c1->GetObj<Obj_PickUp>();
-		if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
-		{
-			SetPickUp(pick_up);
-		}
-	}
+	//if (c1->GetTag() == Collider::TAG::PICK_UP)
+	//{
+	//	Obj_PickUp* pick_up = c1->GetObj<Obj_PickUp>();
+	//	if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
+	//	{
+	//		SetPickUp(pick_up);
+	//	}
+	//}
 }
 
 void Obj_Tank::SetLife(int life)

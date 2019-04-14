@@ -56,6 +56,9 @@ public:
 	int GetLife();
 	int GetMaxLife();
 
+	//- Pick ups
+	void SetPickUp(Obj_PickUp* pick_up);
+
 private:
 	//- Movement
 	void Movement(float dt);
@@ -80,8 +83,7 @@ private:
 	//- Item
 	void Item();
 
-	//- Pick ups
-	void SetPickUp(Obj_PickUp* pick_up);
+	
 
 private:
 	//- Static variables (remember to inicialize them in the .cpp)

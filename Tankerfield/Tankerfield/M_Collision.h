@@ -82,7 +82,7 @@ public:
 
 	TYPE* GetObj() 
 	{
-		if (object != nullptr & typeid(TYPE) == typeid(object))
+		if (object != nullptr && typeid(TYPE) == typeid(object))
 		{
 			return (TYPE*)object;
 		}
