@@ -33,14 +33,14 @@ bool Obj_PickUp::Update(float dt)
 //
 void Obj_PickUp::OnTrigger(Collider* collider)
 {
-	if (collider->GetTag() == Collider::TAG::PLAYER)
-	{
- 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /*|| app->input->GetKey(gamepad_interact) == KEY_DOWN*/)
-		{
-			Obj_Tank* player = (Obj_Tank*)collider->GetObj();
-			player->SetPickUp(this);
-		}
-	}
+	//if (collider->GetTag() == Collider::TAG::PLAYER)
+	//{
+ //		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN /*|| app->input->GetKey(gamepad_interact) == KEY_DOWN*/)
+	//	{
+	//		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+	//		player->SetPickUp(this);
+	//	}
+	//}
 }
 
 bool Obj_PickUp::Draw(float dt, Camera* camera)
@@ -63,7 +63,7 @@ PICKUP_TYPE Obj_PickUp::RandomPickUp()
 WEAPON Obj_PickUp::RandomWeapon() const
 {
 	WEAPON type;
-	return type = (WEAPON)(rand() % 2/*number of weapons*/);
+	return type = (WEAPON)(rand() % 1/*number of weapons*/);
 }
 
 ObjectType Obj_PickUp::RandomItem() const

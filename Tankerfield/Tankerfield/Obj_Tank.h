@@ -13,8 +13,9 @@ class Obj_PickUp;
 
 enum class WEAPON {
 	BASIC = -1,
+	DOUBLE_MISSILE, 
 	FLAMETHROWER,
-	DOUBLE_MISSILE,
+	
 	
 	MAX
 
