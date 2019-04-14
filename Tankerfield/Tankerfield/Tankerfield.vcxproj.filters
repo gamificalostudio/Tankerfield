@@ -106,9 +106,6 @@
     <ClCompile Include="UI_Bar.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet_Missile.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -120,6 +117,12 @@
     </ClCompile>
     <ClCompile Include="Obj_Item.cpp">
       <Filter>Objects\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_InGameElement.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_GUI.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,9 +249,6 @@
     <ClInclude Include="UI_Bar.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet_Missile.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -260,6 +260,12 @@
     </ClInclude>
     <ClInclude Include="Obj_Item.h">
       <Filter>Objects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_InGameElement.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_GUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

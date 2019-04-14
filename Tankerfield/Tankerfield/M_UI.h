@@ -27,15 +27,17 @@ class UI_Slider;
 class UI_Label;
 class UI_Checkbox;
 class UI_TextPanel;
+class UI_InGameElement;
 class UI_Bar;
 
-struct UI_ElementDefinition;
+struct UI_ElementDef;
 struct UI_ButtonDef;
 struct UI_LabelDef;
 struct UI_ImageDef;
 struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
+struct UI_InGameElementDef;
 struct UI_BarDef;
 
 enum class ClickState
@@ -92,7 +94,7 @@ public:
 
 	// Creation functions ---------------------------------------------------------
 
-	UI_Element	 * CreateObject(const fPoint position, const UI_ElementDefinition definition, UI_Listener* listener = nullptr);
+	UI_Element	 * CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
 
 	UI_Label	 * CreateLabel(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener = nullptr);
 
@@ -107,6 +109,8 @@ public:
 	UI_TextPanel * CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener* listener = nullptr);
 
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
+
+	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener = nullptr);
 
 	// Object functions ----------------------------------------------------------
 

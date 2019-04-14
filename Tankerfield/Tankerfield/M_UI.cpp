@@ -11,7 +11,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 
-#include "HUD.h"
+#include "Player_GUI.h"
 
 // UI includes --------------------------
 #include "UI_Element.h"
@@ -21,13 +21,14 @@
 #include "UI_Slider.h"
 #include "UI_Checkbox.h"
 #include "UI_TextPanel.h"
+#include "UI_InGameElement.h"
 #include "UI_Bar.h"
 
 
 M_UI::M_UI() : Module()
 {
 	name.assign("ui");
-	main_object = new UI_Element({ 0,0 }, UI_ElementDefinition(), nullptr);
+	main_object = new UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
 }
 
 // Destructor
@@ -59,6 +60,12 @@ bool M_UI::Start()
 	hud_player_2 = new Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
 	hud_player_3 = new Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
 	hud_player_4 = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+
+	UI_InGameElementDef test_def;
+	test_def.object = (Object*)app->scene->tank_2;
+	test_def.player_gui = hud_player_1;
+
+	app->ui->CreateInGameElement({0.f, 0.f}, test_def);
 
 	UI_ImageDef image_def;
 
@@ -254,10 +261,6 @@ bool M_UI::Update(float dt)
 	}
 
 	UpdateGuiPositions(main_object, fPoint(0, 0));
-	
-	// Update players gui ==========================================
-
-	hud_player_1->Update();
 
 	// Update objects ==============================================
 
@@ -307,7 +310,7 @@ bool M_UI::PostUpdate(float dt)
 
 // Creation methods =================================================================
 
- UI_Element * M_UI::CreateObject(const fPoint position, const UI_ElementDefinition definition, UI_Listener * listener)
+ UI_Element * M_UI::CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
  {
 	 UI_Element* object = new UI_Element(position, definition, listener);
 	 object->SetParent(main_object);
@@ -366,6 +369,15 @@ UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDe
 UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener * listener)
 {
 	UI_Bar* object = new UI_Bar(position, definition, listener);
+	object->SetParent(main_object);
+	objects_list.push_back(object);
+	return object;
+}
+
+UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener)
+{
+
+	UI_InGameElement* object = new UI_InGameElement(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;

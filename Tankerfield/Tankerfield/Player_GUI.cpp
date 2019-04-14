@@ -1,8 +1,9 @@
 #include "Brofiler/Brofiler.h"
-#include "HUD.h"
+#include "Player_GUI.h"
 #include "App.h"
 #include "Defs.h"
 #include "Log.h"
+#include <typeinfo>
 
 #include "M_Window.h"
 #include "M_UI.h"
@@ -13,7 +14,7 @@
 #include "UI_Image.h"
 #include "UI_Bar.h"
 
-Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * target): type(type), target(target)
+Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(type), target(player_object)
 {
 	// Position ======================================
 
@@ -130,15 +131,8 @@ Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * target): type(type), ta
 	default:
 		break;
 	}
-
-	
-
 }
 
-void Player_GUI::AddPointer(Object * object)
-{
-	arrow = new Arrow(nullptr, this);
-}
 
 Player_GUI::~Player_GUI()
 {
@@ -153,23 +147,4 @@ Player_GUI::~Player_GUI()
 	ammo_image		= nullptr;
 	ammo_bar		= nullptr;
 	life_bar		= nullptr;
-}
-
-void Player_GUI::Update()
-{
-	arrow->Update();
-}
-
-Arrow::Arrow(Object* target, Player_GUI * player_gui): target(target), player_gui(player_gui)
-{
-	anim = app->ui->arrow_anim;
-	image = app->ui->CreateImage({ player_gui->viewport.GetLeft() + player_gui->viewport.w * 0.5f , player_gui->viewport.GetTop() + player_gui->viewport.h * 0.5f }, UI_ImageDef());
-	LOG("%.2f, %.2f", player_gui->viewport.GetLeft() + player_gui->viewport.w * 0.5f, player_gui->viewport.GetTop() + player_gui->viewport.h * 0.5f);
-	image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-}
-
-void Arrow::Update()
-{
-	fPoint vector = player_gui->target->pos_map - pos_test;
-	image->sprite_section = anim->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
 }

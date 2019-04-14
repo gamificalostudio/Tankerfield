@@ -21,7 +21,7 @@
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
-      <arrow speed="0" rotation="clockwise" first_dir_angle ="0">
+      <arrow speed="0" rotation="clockwise" first_dir_angle ="22.5">
         <dir>
           <frame x= "120" y= "160" w="25" h="25" />
         </dir>

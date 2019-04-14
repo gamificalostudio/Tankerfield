@@ -1,5 +1,5 @@
-#ifndef __HUD_H_
-#define __HUD_H_
+#ifndef __PLAYER_GUI_H_
+#define __PLAYER_GUI_H_
 
 #include "M_UI.h"
 #include <list>
@@ -11,26 +11,7 @@ class UI_Label;
 class UI_Bar;
 class Object;
 
-class Arrow
-{
-public:
-
-	Arrow(Object* point,  Player_GUI * player_gui);
-
-	void Update();
-
-public:
-
-	UI_Image*     image;
-	Animation*    anim = nullptr;
-	Object*       target = nullptr;
-	fPoint        pos_test = { 3.f , 3.f };
-
-private:
-
-	Player_GUI  * player_gui = nullptr;
-};			    
-
+class UI_InGameElement;
 
 class Player_GUI: public UI_Listener
 {
@@ -47,19 +28,15 @@ public:
 
 	Player_GUI( Player_GUI::TYPE type, Obj_Tank* target);
 
-	void AddPointer( Object* object);
+	UI_InGameElement* AddInGameElement(Object* object, Player_GUI* gui);
 
 	~Player_GUI();
-
-	void Update();
 
 public:
 	
 	TYPE type = TYPE::SINGLE_PLAYER;
 
 	Obj_Tank* target = nullptr;
-
-	Arrow * arrow = nullptr;
 
 	// HUD Elements =========================
 
@@ -75,6 +52,7 @@ public:
 
 	fRect viewport;
 
+	std::list<UI_InGameElement*> in_game_elements;
 };
 
-#endif // __HUD_H_
+#endif // __PLAYER_GUI_H_
