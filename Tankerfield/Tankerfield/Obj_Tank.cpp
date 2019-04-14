@@ -16,6 +16,7 @@
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
 #include "Healing_Bullet.h"
+#include "Obj_HealingAnimation.h"
 
 SDL_Texture * Obj_Tank::base_tex			= nullptr;
 SDL_Texture * Obj_Tank::turr_tex			= nullptr;
@@ -306,6 +307,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 				receiver->SetLife(receiver->GetMaxLife());
 			}
 		}
+		app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 	}
 }
 

@@ -15,23 +15,23 @@
 #include "Obj_Explosion.h"
 #include "Animation.h"
 
-Animation*  Obj_Explosion::explosion_anim = nullptr;
-SDL_Texture * Obj_Explosion::explosion_tex = nullptr;
+Animation*  Obj_Explosion::anim = nullptr;
+SDL_Texture * Obj_Explosion::tex = nullptr;
 
 Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
 	pugi::xml_node explosion_node = app->config.child("object").child("explosion");
 
-	if (explosion_tex == nullptr)
+	if (tex == nullptr)
 	{
-		explosion_tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
+		tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
 	}
-	if (explosion_anim == nullptr)
+	if (anim == nullptr)
 	{
-		explosion_anim = new Animation(explosion_node.child("animations").child("explosion"));
+		anim = new Animation(explosion_node.child("animations").child("explosion"));
 	}
-	curr_tex = explosion_tex;
-	curr_anim = explosion_anim;
+	curr_tex = tex;
+	curr_anim = anim;
 
 
 	draw_offset.x = 99;

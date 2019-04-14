@@ -30,6 +30,9 @@ enum class ObjectType
 	//ITEMS
 	HEALTH_BAG,
 
+	//PARTICLES
+	HEALING_ANIMATION,
+
 	NO_TYPE
 };
 

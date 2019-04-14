@@ -84,7 +84,6 @@ private:
 	//- Item
 	void Item();
 
-
 private:
 	//- Static variables (remember to inicialize them in the .cpp)
 	static SDL_Texture * base_tex;
