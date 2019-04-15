@@ -124,8 +124,7 @@ bool Obj_Tank::Start()
 		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
 	}
 
-	speed = 10.f;
-		//2.5f;//TODO: Load from xml
+	speed = 4.f;//TODO: Load from xml
 
 	
 	cos_45 = cosf(-45 * DEGTORAD);
