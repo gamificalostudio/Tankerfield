@@ -37,6 +37,8 @@ public:
 		else return 1;
 	}
 
+	int ReturnNumbreOfLevels(int area_with, int camera_with, uint& levels);
+
 private:
 	std::list<Tile> elements;
 	Quadtree_Map* nodes[4] = { nullptr,nullptr,nullptr,nullptr };

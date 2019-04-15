@@ -6,6 +6,15 @@ Quadtree_Map::Quadtree_Map(SDL_Rect area, uint level, uint max_levels, uint maxE
 
 };
 
+int Quadtree_Map::ReturnNumbreOfLevels(int area_with, int camera_with, uint & levels)
+{
+	int new_area = area_with * 0.25;
+	if (new_area <= camera_with)
+		return levels;
+	else
+		ReturnNumbreOfLevels(new_area, camera_with, ++levels);
+}
+
 void Quadtree_Map::Subdivide()
 {
 	isDivided = true;
