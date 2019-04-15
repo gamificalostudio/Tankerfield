@@ -48,12 +48,12 @@ Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(ty
 
 	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
 	{
-		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 20.f, viewport.GetTop() + margin.y + 20.f }, image_def);
+		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, image_def);
 		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
 	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
 	{
-		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 20.f, viewport.GetBottom() - margin.y + 20.f }, image_def);
+		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetBottom() - margin.y - 30.f }, image_def);
 		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
 
