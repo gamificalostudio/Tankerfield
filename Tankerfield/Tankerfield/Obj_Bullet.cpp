@@ -4,7 +4,6 @@
 #include "M_Map.h"
 #include "M_Collision.h"
 
-SDL_Texture * Obj_Bullet::tex = nullptr;
 Animation * Obj_Bullet::anim = nullptr;
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
@@ -26,11 +25,9 @@ bool Obj_Bullet::Start()
 		anim->LoadAnimation(bullet_node.child("animations").child("rotate"));
 	}
 	curr_anim = anim;
-	if (tex == nullptr)
-	{
-		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
-	}
-	curr_tex = tex;
+
+	curr_tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+
 	if (draw_offset.IsZero())
 	{
 		draw_offset = { 35, 14 };

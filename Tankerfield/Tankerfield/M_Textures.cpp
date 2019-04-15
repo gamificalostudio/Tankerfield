@@ -12,7 +12,7 @@
 
 M_Textures::M_Textures() : Module()
 {
-	name.assign("textures");
+	name = "textures";
 }
 
 // Destructor
@@ -49,32 +49,53 @@ bool M_Textures::Start()
 bool M_Textures::CleanUp()
 {
 	LOG("Freeing textures and Image library");
-	std::list<SDL_Texture*>::const_iterator item;
+	
 
-	for(item = textures.begin(); item != textures.end(); item++)
+	for(std::map<std::string, SDL_Texture*>::iterator iter = textures.begin(); iter != textures.end();)
 	{
-		SDL_DestroyTexture(*item);
+		SDL_DestroyTexture((*iter).second);
+		iter = textures.erase(iter);
 	}
-
 	textures.clear();
+
+	for (std::list<SDL_Texture*>::iterator iter = text_textures.begin(); iter != text_textures.end();)
+	{
+		SDL_DestroyTexture((*iter));
+		iter = text_textures.erase(iter);
+	}
+	text_textures.clear();
+
 	IMG_Quit();
 	return true;
 }
 
 // Load new texture from file path
+// Checks if the texture with the specified path has alredy been loaded
+//	 - If it has, it returns a pointer to that texture
+//	 - If it hasn't, it loads it and returns it
 SDL_Texture* const M_Textures::Load(const char* path)
 {
 	SDL_Texture* texture = NULL;
-	SDL_Surface* surface = IMG_Load(path);
 
-	if(surface == NULL)
+	std::map<std::string, SDL_Texture *>::iterator iter = textures.find(path);
+	if (iter != textures.end())
 	{
-		LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
+		//Return the texture if it's already been loaded onto the map
+		texture = iter->second;
 	}
 	else
 	{
-		texture = LoadSurface(surface);
-		SDL_FreeSurface(surface);
+		SDL_Surface* surface = IMG_Load(path);
+		//Load a new texture if there isn't a texture loaded with that path
+		if (surface == NULL)
+		{
+			LOG("Could not load surface with path: %s. IMG_Load: %s", path, IMG_GetError());
+		}
+		else
+		{
+			texture = LoadSurface(surface, path);
+			SDL_FreeSurface(surface);
+		}
 	}
 
 	return texture;
@@ -83,23 +104,20 @@ SDL_Texture* const M_Textures::Load(const char* path)
 // Unload texture
 bool M_Textures::UnLoad(SDL_Texture* texture)
 {
-	std::list<SDL_Texture*>::const_iterator item;
-
-	for(item = textures.begin(); item != textures.end(); item++)
+	for (std::map<std::string, SDL_Texture *>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
 	{
-		if(texture == (*item))
+		if ((iter->second) == texture)
 		{
-			SDL_DestroyTexture(texture);
-			textures.remove(texture);
-			return true;
+			SDL_DestroyTexture((iter->second));
+			textures.erase(iter);
+			return true;;
 		}
 	}
-
 	return false;
 }
 
 // Translate a surface into a texture
-SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface)
+SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface, std::string path)
 {
 	BROFILER_CATEGORY("M_TexturesLoad", Profiler::Color::LightPink)
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
@@ -110,7 +128,24 @@ SDL_Texture* const M_Textures::LoadSurface(SDL_Surface* surface)
 	}
 	else
 	{
-		textures.push_back(texture);
+		textures[path] = texture;
+	}
+
+	return texture;
+}
+
+SDL_Texture * const M_Textures::LoadTextSurface(SDL_Surface* surface)
+{
+	BROFILER_CATEGORY("M_TexturesTextLoad", Profiler::Color::LightPink)
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(app->render->renderer, surface);
+
+	if (texture == NULL)
+	{
+		LOG("Unable to create texture from surface! SDL Error: %s\n", SDL_GetError());
+	}
+	else
+	{
+		text_textures.push_back(texture);
 	}
 
 	return texture;
