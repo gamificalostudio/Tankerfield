@@ -100,28 +100,22 @@
     <ClCompile Include="MathUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponInfo.cpp">
-      <Filter>Weapons</Filter>
+    <ClCompile Include="WeaponInfo.cpp" />
+    <ClCompile Include="Quadtree_Map.cpp">
+      <Filter>Tools\QuadTree</Filter>
     </ClCompile>
-    <ClCompile Include="UI_Bar.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
+    <ClCompile Include="Item_HealthBag.cpp" />
+    <ClCompile Include="Obj_Item.cpp" />
     <ClCompile Include="Bullet_Missile.cpp">
       <Filter>Objects\Bullets</Filter>
-    </ClCompile>
-    <ClCompile Include="Item_HealthBag.cpp">
-      <Filter>Objects\Item</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Explosion.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Item.cpp">
-      <Filter>Objects\Item</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_InGameElement.cpp">
+    <ClCompile Include="HUD.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Player_GUI.cpp">
+    <ClCompile Include="UI_Bar.cpp">
       <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -237,34 +231,29 @@
     <ClInclude Include="Circle.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="MathUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="WeaponInfo.h" />
+    <ClInclude Include="Quadtree.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
-    <ClInclude Include="WeaponInfo.h">
-      <Filter>Weapons</Filter>
+    <ClInclude Include="Quadtree_Map.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Bar.h">
-      <Filter>UI</Filter>
-    </ClInclude>
+    <ClInclude Include="Item_HealthBag.h" />
+    <ClInclude Include="Obj_Item.h" />
     <ClInclude Include="Bullet_Missile.h">
       <Filter>Objects\Bullets</Filter>
-    </ClInclude>
-    <ClInclude Include="Item_HealthBag.h">
-      <Filter>Objects\Item</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Explosion.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Item.h">
-      <Filter>Objects\Item</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_InGameElement.h">
+    <ClInclude Include="HUD.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Player_GUI.h">
+    <ClInclude Include="UI_Bar.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -299,8 +288,8 @@
     <Filter Include="Objects\Bullets">
       <UniqueIdentifier>{7fdb053f-2696-4225-9b31-203b4b8cbd8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\Item">
-      <UniqueIdentifier>{eedbf072-9a41-4b0e-a4ea-f72844692fb0}</UniqueIdentifier>
+    <Filter Include="Tools\QuadTree">
+      <UniqueIdentifier>{39b4a6ff-f872-44ca-a2da-c501ec67afb8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

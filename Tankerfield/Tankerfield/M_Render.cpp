@@ -242,7 +242,7 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 }
 
 
-bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* current_camera, const SDL_Rect* section) const
+bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const Camera* current_camera, const SDL_Rect* section) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
