@@ -45,7 +45,8 @@ public:
 
 	// Draw & Blit
 	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section) const;
-	bool Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* camera, const SDL_Rect* section = NULL) const;
+	bool Blit(SDL_Texture* texture, int screen_x, int screen_y, const Camera* camera, const SDL_Rect* section = NULL) const;
+
 
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 	bool DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color = {255,255,255,255});

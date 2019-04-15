@@ -86,6 +86,7 @@ bool M_Collision::Update(float dt)
 		{
 			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
 			{
+				//TODO This produce the BUG ------------------------------------------------------------------------------------------------------
 				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
 
 				if (to_destroy != (*itr)->collisions_list.end())

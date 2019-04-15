@@ -35,7 +35,7 @@ public:
 
 	PerfTimer bullet_life_ms_timer;
 
-	static SDL_Texture * tex;
+	SDL_Texture * tex = nullptr;
 
 	static Animation * anim;
 
