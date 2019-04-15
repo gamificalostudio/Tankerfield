@@ -31,6 +31,12 @@ bool UI_Element::Draw()
 	return true;
 }
 
+void UI_Element::SetPos(const fPoint pos)
+{
+	position = pos;
+	UpdateRelativePosition();
+}
+
 bool UI_Element::SetParent(UI_Element * parent)
 {
 	if (parent == nullptr)

@@ -61,11 +61,11 @@ bool M_UI::Start()
 	hud_player_3 = new Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
 	hud_player_4 = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
 
-	UI_InGameElementDef test_def;
+	UI_IG_WeaponDef test_def;
 	test_def.object = (Object*)app->scene->tank_2;
 	test_def.player_gui = hud_player_1;
 
-	app->ui->CreateInGameElement({0.f, 0.f}, test_def);
+	app->ui->CreateInGameWeapon({ 0.F,0.F }, test_def);
 
 	UI_ImageDef image_def;
 
@@ -378,6 +378,13 @@ UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InG
 {
 
 	UI_InGameElement* object = new UI_InGameElement(position, definition, listener);
+	object->SetParent(main_object);
+	objects_list.push_back(object);
+	return object;
+}
+UI_IG_Weapon * M_UI::CreateInGameWeapon(const fPoint position, const UI_IG_WeaponDef definition, UI_Listener * listener)
+{
+	UI_IG_Weapon* object = new UI_IG_Weapon(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;

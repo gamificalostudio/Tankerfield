@@ -22,23 +22,25 @@ class Player_GUI;
 
 class UI_Listener;
 class UI_Image;
+class UI_Bar;
 class UI_Button;
 class UI_Slider;
 class UI_Label;
 class UI_Checkbox;
 class UI_TextPanel;
 class UI_InGameElement;
-class UI_Bar;
+class UI_IG_Weapon;
 
 struct UI_ElementDef;
 struct UI_ButtonDef;
+struct UI_BarDef;
 struct UI_LabelDef;
 struct UI_ImageDef;
 struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
 struct UI_InGameElementDef;
-struct UI_BarDef;
+struct UI_IG_WeaponDef;
 
 enum class ClickState
 {
@@ -111,6 +113,8 @@ public:
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
 
 	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener = nullptr);
+
+	UI_IG_Weapon*   CreateInGameWeapon(const fPoint position, const UI_IG_WeaponDef definition, UI_Listener * listener = nullptr);
 
 	// Object functions ----------------------------------------------------------
 

@@ -80,6 +80,7 @@ public:
 	virtual bool Draw();
 
 	// Common methods =================================
+	void  SetPos( const fPoint pos);
 
 	bool SetParent(UI_Element* parent);
 

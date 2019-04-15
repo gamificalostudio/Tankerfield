@@ -124,6 +124,12 @@
     <ClCompile Include="Player_GUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="M_PickManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_PickUp.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -266,6 +272,12 @@
     </ClInclude>
     <ClInclude Include="Player_GUI.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="M_PickManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_PickUp.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
