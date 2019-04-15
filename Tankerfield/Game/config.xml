@@ -11,7 +11,7 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1040" scale="1"/>
+    <resolution width="1920" height="1050" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -70,6 +70,11 @@
     <enemies_to_increase value="3"/>
   </scene>
 
+  <pick_manager>
+    <percentage_to_spawn value="100"/>
+    
+  </pick_manager>
+  
   <object>
     <tesla_trooper>
       <animations>
@@ -161,6 +166,9 @@
         <turr>textures/objects/tank/turr.png</turr>
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
       </spritesheets>
+      <sounds>
+        <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+      </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>
