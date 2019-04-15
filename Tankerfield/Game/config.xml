@@ -18,9 +18,40 @@
     <fullscreen_window value="false"/>
   </window>
 
-  <gui>
+  <ui>
     <atlas file="ui/atlas.png"/>
-  </gui>
+    <animations>
+      <arrow speed="0" rotation="clockwise" first_dir_angle ="22.5">
+        <dir>
+          <frame x= "120" y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "145" y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "170" y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "195 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "220 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "245 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "270 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "295 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "120" y= "160" w="25" h="25" />
+        </dir>
+      </arrow>
+    </animations>
+  </ui>
 
   <map>
    <folder>Maps/</folder>

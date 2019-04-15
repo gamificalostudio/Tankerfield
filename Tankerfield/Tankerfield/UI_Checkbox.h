@@ -9,7 +9,7 @@
 
 class UI_Listener;
 
-struct UI_CheckboxDef: public UI_ElementDefinition
+struct UI_CheckboxDef: public UI_ElementDef
 {
 	bool                default_value = false;
 	UI_ButtonDef   check_on_button;

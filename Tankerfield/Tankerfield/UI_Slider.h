@@ -9,7 +9,7 @@
 
 class UI_Button;
 
-struct UI_SliderDef: public UI_ElementDefinition
+struct UI_SliderDef: public UI_ElementDef
 {
 	int                 distance = 100;
 	int                 fixed_y = 0;

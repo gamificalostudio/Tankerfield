@@ -128,7 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
-    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Player_GUI.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
@@ -154,6 +154,7 @@
     <ClCompile Include="M_Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="M_Window.cpp" />
+    <ClCompile Include="UI_InGameElement.cpp" />
     <ClCompile Include="UI_Label.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="M_UI.cpp" />
@@ -174,7 +175,7 @@
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
     <ClInclude Include="Circle.h" />
-    <ClInclude Include="HUD.h" />
+    <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="M_Textures.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="M_Window.h" />
+    <ClInclude Include="UI_InGameElement.h" />
     <ClInclude Include="UI_Label.h" />
     <ClInclude Include="M_UI.h" />
     <ClInclude Include="Object.h" />

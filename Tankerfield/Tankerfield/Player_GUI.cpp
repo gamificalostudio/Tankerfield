@@ -1,23 +1,25 @@
 #include "Brofiler/Brofiler.h"
-#include "HUD.h"
+#include "Player_GUI.h"
 #include "App.h"
 #include "Defs.h"
 #include "Log.h"
+#include <typeinfo>
 
 #include "M_Window.h"
 #include "M_UI.h"
 
+#include "Object.h"
+#include "Obj_Tank.h"
+
 #include "UI_Image.h"
 #include "UI_Bar.h"
 
-
-HUD::HUD(HUD::TYPE type, Obj_Tank * target): type(type), target(target)
+Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(type), target(player_object)
 {
 	// Position ======================================
 
 	fRect screen = app->win->GetWindowRect();
 	fPoint margin = { 30.f, 30.f };
-	fRect viewport;
 
 	switch (type)
 	{
@@ -42,29 +44,16 @@ HUD::HUD(HUD::TYPE type, Obj_Tank * target): type(type), target(target)
 
 	// Individual player ========================================================
 
-	image_def.sprite_section = { 100, 10, 50, 50 };
-
-	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
-	{
-		basic_weapon_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x , viewport.GetTop() + margin.y }, image_def);
-		basic_weapon_frame->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
-	}
-	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
-	{
-		basic_weapon_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x , viewport.GetBottom() - margin.y }, image_def);
-		basic_weapon_frame->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
-	}
-
 	image_def.sprite_section = { 100, 70, 70, 70 };
 
 	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
 	{
-		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 25.f ,viewport.GetTop() + margin.y + 90.f }, image_def);
+		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, image_def);
 		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
 	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
 	{
-		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 25.f ,viewport.GetBottom() - margin.y - 90.f }, image_def);
+		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetBottom() - margin.y - 30.f }, image_def);
 		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
 
@@ -85,13 +74,13 @@ HUD::HUD(HUD::TYPE type, Obj_Tank * target): type(type), target(target)
 
 	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
 	{
-		special_weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetTop() + margin.y }, image_def);
-		special_weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetTop() + margin.y }, image_def);
+		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
 	}
 	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
 	{
-		special_weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetBottom() - margin.y }, image_def);
-		special_weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetBottom() - margin.y }, image_def);
+		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 	}
 
 	UI_BarDef ammo_bar_def(UI_Bar::DIR::DOWN, 0.8f, { 180, 160, 0, 255 }, { 80, 80, 80, 255 });
@@ -119,22 +108,22 @@ HUD::HUD(HUD::TYPE type, Obj_Tank * target): type(type), target(target)
 
 	switch (type)
 	{
-	case HUD::TYPE::PLAYER_1:
+	case Player_GUI::TYPE::PLAYER_1:
 		life_bar_def.direction = UI_Bar::DIR::UP;
 		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
 		break;
-	case HUD::TYPE::PLAYER_2:
+	case Player_GUI::TYPE::PLAYER_2:
 		life_bar_def.direction = UI_Bar::DIR::UP;
 		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 		break;
-	case HUD::TYPE::PLAYER_3:
+	case Player_GUI::TYPE::PLAYER_3:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
 		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
 		break;
-	case HUD::TYPE::PLAYER_4:
+	case Player_GUI::TYPE::PLAYER_4:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
 		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
@@ -142,22 +131,20 @@ HUD::HUD(HUD::TYPE type, Obj_Tank * target): type(type), target(target)
 	default:
 		break;
 	}
-
 }
 
-HUD::~HUD()
+
+Player_GUI::~Player_GUI()
 {
-	app->ui->DeleteObject(basic_weapon_frame);
-	app->ui->DeleteObject(special_weapon_frame);
+	app->ui->DeleteObject(weapon_frame);
 	app->ui->DeleteObject(item_frame);
 	app->ui->DeleteObject(ammo_image);
 	app->ui->DeleteObject(ammo_bar);
 	app->ui->DeleteObject(life_bar);
 
-	basic_weapon_frame		= nullptr;
-	special_weapon_frame	= nullptr;
-	item_frame				= nullptr;
-	ammo_image				= nullptr;
-	ammo_bar				= nullptr;
-	life_bar				= nullptr;
+	weapon_frame	= nullptr;
+	item_frame		= nullptr;
+	ammo_image		= nullptr;
+	ammo_bar		= nullptr;
+	life_bar		= nullptr;
 }

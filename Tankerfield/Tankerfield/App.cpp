@@ -245,10 +245,10 @@ void App::FinishUpdate()
 	sprintf_s(title, 256, "Tankerfield | Av.FPS: %.2f", avg_fps);
 	app->win->SetTitle(title);
 
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
-	{
-		SDL_Delay(capped_ms - last_frame_ms);
-	}
+	//if (capped_ms > 0 && last_frame_ms < capped_ms)
+	//{
+	//	SDL_Delay(capped_ms - last_frame_ms);
+	//}
 }
 
 // Call modules before each loop iteration
