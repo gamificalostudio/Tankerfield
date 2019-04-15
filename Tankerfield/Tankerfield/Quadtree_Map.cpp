@@ -68,36 +68,36 @@ int Quadtree_Map::InsertTile(Tile tile)
 	return ret = -1;
 }
 
-void Quadtree_Map::DrawMap(const Camera &camera)
+std::vector<Tile> Quadtree_Map::GetTilesIntersection(const Camera &camera)
 {
 	SDL_Rect cam = camera.rect;
 	cam.y -= 30;
 	cam.w += 60;
 	cam.h += 30;
+	std::vector<Tile> ret;
+
 	if (SDL_HasIntersection(&cam, &area))
 	{
 		if (!isDivided)
 		{
+			
 			for (std::list<Tile>::iterator i = elements.begin(); i != elements.end(); ++i)
 			{
-				Tile tile = (*i);
-				if (SDL_HasIntersection(&cam,&tile.rect))
+				if (SDL_HasIntersection(&cam,&(*i).rect))
 				{
-					
-					TileSet* tileset = app->map->GetTilesetFromTileId(tile.id);
-					SDL_Rect rect = tileset->GetTileRect(tile.id);
-
-					app->render->Blit(tileset->texture, tile.rect.x, tile.rect.y, &camera, &rect);
+					ret.push_back((*i));
 				}
-				
 			}
+			return ret;
 		}
 		else
 		{
 			for (uint i = 0; i < 4; ++i)
 			{
-				nodes[i]->DrawMap(camera);
+				std::vector<Tile> aux = nodes[i]->GetTilesIntersection(camera);
+				ret.insert(ret.end(), aux.begin(), aux.end());
 			}
 		}
 	}
+	return ret;
 };

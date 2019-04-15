@@ -58,7 +58,7 @@ struct MapLayer
 	uint*		data = nullptr;
 	Properties	layer_properties;
 	bool visible = true;
-	Quadtree_Map*				qt = nullptr;
+	
 	MapLayer() : data(NULL)
 	{}
 
@@ -148,6 +148,7 @@ struct MapData
 	
 	Properties				map_properties;
 
+	Quadtree_Map*				qt = nullptr;
 	
 	iRect*		screen_tile_rect = nullptr;
 

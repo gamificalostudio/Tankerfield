@@ -9,6 +9,8 @@ struct Tile
 	{}
 		uint id;
 		SDL_Rect rect;
+		uint layer;
+		uint sorting_value;
 		
 };
 
@@ -26,7 +28,8 @@ public:
 	// -1 error
 	int InsertTile(Tile rect);
 
-	void DrawMap(const Camera & camera);
+	std::vector<Tile> GetTilesIntersection(const Camera & camera);
+
 private:
 	std::list<Tile> elements;
 	Quadtree_Map* nodes[4] = { nullptr,nullptr,nullptr,nullptr };
