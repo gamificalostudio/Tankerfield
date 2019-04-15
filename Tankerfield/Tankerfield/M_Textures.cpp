@@ -76,7 +76,6 @@ bool M_Textures::CleanUp()
 SDL_Texture* const M_Textures::Load(const char* path)
 {
 	SDL_Texture* texture = NULL;
-	SDL_Surface* surface = IMG_Load(path);
 
 	std::map<std::string, SDL_Texture *>::iterator iter = textures.find(path);
 	if (iter != textures.end())
@@ -86,6 +85,7 @@ SDL_Texture* const M_Textures::Load(const char* path)
 	}
 	else
 	{
+		SDL_Surface* surface = IMG_Load(path);
 		//Load a new texture if there isn't a texture loaded with that path
 		if (surface == NULL)
 		{
