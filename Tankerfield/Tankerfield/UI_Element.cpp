@@ -4,7 +4,7 @@
 #include "App.h"
 #include "Log.h"
 
-UI_Element::UI_Element(const fPoint position, const UI_ElementDefinition definition, UI_Listener *listener) 
+UI_Element::UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener) 
 	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section){}
 
 UI_Element::~UI_Element()
