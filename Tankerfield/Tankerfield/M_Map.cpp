@@ -526,7 +526,7 @@ bool M_Map::LoadMap()
 					 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
 					data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
 		;
-		data.qt = new Quadtree_Map(area, 0, 1);
+		data.qt = new Quadtree_Map(area, 0, 4);
 	
 		
 		
