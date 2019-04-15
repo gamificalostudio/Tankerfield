@@ -30,6 +30,13 @@ public:
 
 	std::vector<Tile> GetTilesIntersection(const Camera & camera);
 
+	int compare(const Tile& a, const Tile& b)
+	{
+		if (a.sorting_value < b.sorting_value) return -1;
+		else if (a.sorting_value == b.sorting_value) return 0;
+		else return 1;
+	}
+
 private:
 	std::list<Tile> elements;
 	Quadtree_Map* nodes[4] = { nullptr,nullptr,nullptr,nullptr };

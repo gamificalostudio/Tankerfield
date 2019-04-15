@@ -83,12 +83,21 @@ bool M_Map::PostUpdate(float dt)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
+		//for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
+		//{
+		//	if ((*layer)->visible == false)
+		//		continue;
+
+		//	
+		//}
+
 		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
 		std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
 		{
 			return a.sorting_value < b.sorting_value;
 		});
-
+		//std::qsort(&aux, aux.size(), sizeof(Tile), &Quadtree_Map::compare
+		//);
 		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
 		{
 			TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
@@ -319,6 +328,8 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 
 		if (layer->visible)
 		{
+
+
 			uint i = 0, layernum = data.map_layers.size() + 1;
 			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 			{
@@ -510,13 +521,13 @@ bool M_Map::LoadMap()
 				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
 			}
 		}
-
 		SDL_Rect area = { data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x,
-			 0,
-			 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
-			data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
+					 0,
+					 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
+					data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
 		;
-		data.qt = new Quadtree_Map(area, 0, 4);
+		data.qt = new Quadtree_Map(area, 0, 1);
+	
 		
 		
 	}

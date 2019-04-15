@@ -49,36 +49,7 @@ public:
 	void UnloadProperties();
 };
 
-// ----------------------------------------------------
-struct MapLayer
-{
-	std::string	name;
-	int			columns = NULL;
-	int			rows = NULL;
-	uint*		data = nullptr;
-	Properties	layer_properties;
-	bool visible = true;
-	
-	MapLayer() : data(NULL)
-	{}
 
-	~MapLayer()
-	{
-		RELEASE(data);
-		
-	}
-
-	inline uint Get(int x, int y) const
-	{
-		return data[(y*columns) + x];
-	}
-
-	inline fPoint GetTilePos(int id) const
-	{
-		return fPoint(((id % columns)), ((id / columns)));
-	}
-
-};
 struct ObjectGroup
 {
 	std::string name;
@@ -120,6 +91,37 @@ struct TileSet
 	int					offset_y = NULL;
 
 
+
+};
+
+// ----------------------------------------------------
+struct MapLayer
+{
+	std::string	name;
+	int			columns = NULL;
+	int			rows = NULL;
+	uint*		data = nullptr;
+	Properties	layer_properties;
+	bool visible = true;
+	
+	MapLayer() : data(NULL)
+	{}
+
+	~MapLayer()
+	{
+		RELEASE(data);
+
+	}
+
+	inline uint Get(int x, int y) const
+	{
+		return data[(y*columns) + x];
+	}
+
+	inline fPoint GetTilePos(int id) const
+	{
+		return fPoint(((id % columns)), ((id / columns)));
+	}
 
 };
 
