@@ -147,6 +147,7 @@ public:
 	}
 
 	void Normalize() {
+
 		double module = sqrt(x * x + y * y);
 		if (module != 0.)
 		{

@@ -5,6 +5,7 @@
 
 #include "Log.h"
 #include "Rect.h"
+#include "Quadtree_Map.h"
 
 #include "Module.h"
 #include "M_Render.h"
@@ -34,121 +35,21 @@ private:
 	std::list<Property*>	list;
 public:
 
-	std::string GetAsString(const char* name, std::string default_value = "") const
-	{
-		std::string ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				return ret = *(std::string*)(*item)->value;
-			}
-		}
-		return ret;
-	}
+	std::string GetAsString(const char* name, std::string default_value = "") const;
 	
-	int         GetAsInt(const char* name, int default_value = 0) const
-	{
-		int ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				return ret = *(int*)(*item)->value;
-			}
-		}
-		return ret;
-	}
+	int  GetAsInt(const char* name, int default_value = 0) const;
 	
-	float       GetAsFloat(const char* name, float default_value = 0) const
-	{
-		float ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				ret = *(float*)(*item)->value;
-				return ret;
-			}
-		}
-		return ret;
-	}
-	
-	bool       GetAsBool(const char* name, bool default_value = false) const
-	{
-		bool ret = default_value;
-		for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
-		{
-			if ((*item)->name == name)
-			{
-				ret = *(bool*)(*item)->value;
-				return ret;
-			}
-		}
-		return ret;
-	}
+	float GetAsFloat(const char* name, float default_value = 0) const;
 
-	void LoadProperties(pugi::xml_node propertie_node)
-	{
-		for (pugi::xml_node iter = propertie_node.child("property"); iter; iter = iter.next_sibling("property"))
-		{
-			Property* p = new Property();
-			p->name = iter.attribute("name").as_string();
-			std::string type = iter.attribute("type").as_string();
-			if (type == "int")
-			{
-				p->value = new int(iter.attribute("value").as_int());
-			}
-			else if (type == "float")
-			{
-				p->value = new float(iter.attribute("value").as_float());
-			}
-			else if (type == "bool")
-			{
-				p->value = new bool(iter.attribute("value").as_bool());
-			}
-			else 
-			{
-				p->value = new std::string(iter.attribute("value").as_string());
-			}
-			list.push_back(p);
-			
-		}
-	}
+	
+	bool GetAsBool(const char* name, bool default_value = false) const;
 
-	bool draw = true;
+	void LoadProperties(pugi::xml_node propertie_node);
+
 	void UnloadProperties();
 };
 
-// ----------------------------------------------------
-struct MapLayer
-{
-	std::string	name;
-	int			columns = NULL;
-	int			rows = NULL;
-	uint*		data = nullptr;
-	Properties	layer_properties;
-	bool visible = true;
-	MapLayer() : data(NULL)
-	{}
 
-	~MapLayer()
-	{
-		RELEASE(data);
-		
-	}
-
-	inline uint Get(int x, int y) const
-	{
-		return data[(y*columns) + x];
-	}
-
-	inline fPoint GetTilePos(int id) const
-	{
-		return fPoint(((id % columns)), ((id / columns)));
-	}
-
-};
 struct ObjectGroup
 {
 	std::string name;
@@ -157,7 +58,11 @@ struct ObjectGroup
 	Rect<float, float>* objects	= nullptr;
 	~ObjectGroup()
 	{
-		delete[] objects;
+		if (objects != nullptr)
+		{
+			delete[] objects;
+			objects = nullptr;
+		}
 	}
 };
 // ----------------------------------------------------
@@ -189,6 +94,37 @@ struct TileSet
 
 };
 
+// ----------------------------------------------------
+struct MapLayer
+{
+	std::string	name;
+	int			columns = NULL;
+	int			rows = NULL;
+	uint*		data = nullptr;
+	Properties	layer_properties;
+	bool visible = true;
+	
+	MapLayer() : data(NULL)
+	{}
+
+	~MapLayer()
+	{
+		RELEASE(data);
+
+	}
+
+	inline uint Get(int x, int y) const
+	{
+		return data[(y*columns) + x];
+	}
+
+	inline fPoint GetTilePos(int id) const
+	{
+		return fPoint(((id % columns)), ((id / columns)));
+	}
+
+};
+
 enum MapTypes
 {
 	MAPTYPE_UNKNOWN = 0,
@@ -211,8 +147,22 @@ struct MapData
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
 	std::list<ObjectGroup*> object_layers;
-
+	
 	Properties				map_properties;
+
+	Quadtree_Map*				qt = nullptr;
+	
+	iRect*		screen_tile_rect = nullptr;
+
+
+	~MapData()
+	{
+		if (screen_tile_rect != nullptr)
+		{
+			delete[] screen_tile_rect;
+			screen_tile_rect = nullptr;
+		}
+	}
 	
 };
 
@@ -251,9 +201,9 @@ public:
 
 public:
 
-	MapData					data;
-	std::list<Levels*>		levels;
-
+	MapData							data;
+	std::list<Levels*>				levels;
+	
 private:
 
 	bool					map_loaded = false;
@@ -263,9 +213,13 @@ private:
 	pugi::xml_document		map_file;
 
 	bool LoadMap();
+
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
+
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
+
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
+
 	bool LoadObjectGroup(const pugi::xml_node& object_group_node, ObjectGroup* object_group);
 
 	void DebugMap();

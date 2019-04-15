@@ -5,10 +5,10 @@
 #include "Animation.h"
 #include "UI_Element.h"
 
-struct UI_ImageDef : public UI_ElementDefinition
+struct UI_ImageDef : public UI_ElementDef
 {
 	bool is_animated = false;
-	Animation image_animation;
+	Animation* image_animation = nullptr;
 };
 
 class UI_Image: public UI_Element
@@ -20,6 +20,9 @@ public:
 
 	virtual ~UI_Image();
 
+public:
+
+	Animation* image_animation = nullptr;
 };
 
 #endif // _IMAGE_H__

@@ -22,6 +22,7 @@
 #include "M_UI.h"
 #include "M_ObjManager.h"
 #include "M_Collision.h"
+#include "M_PickManager.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -39,6 +40,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	font = new M_Fonts();
 	ui = new M_UI();
 	objectmanager = new M_ObjManager();
+	pick_manager = new M_PickManager();
 	scmanager = new M_SceneManager();
 	collision = new M_Collision();
   
@@ -54,6 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scmanager);
 	AddModule(scene);
 	AddModule(objectmanager);
+	AddModule(pick_manager);
 	AddModule(collision);
 	AddModule(ui);
 	// render last to swap buffer
@@ -242,10 +245,10 @@ void App::FinishUpdate()
 	sprintf_s(title, 256, "Tankerfield | Av.FPS: %.2f", avg_fps);
 	app->win->SetTitle(title);
 
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
-	{
-		SDL_Delay(capped_ms - last_frame_ms);
-	}
+	//if (capped_ms > 0 && last_frame_ms < capped_ms)
+	//{
+	//	SDL_Delay(capped_ms - last_frame_ms);
+	//}
 }
 
 // Call modules before each loop iteration
@@ -308,6 +311,8 @@ bool App::PostUpdate()
 		}
 
 		ret = (*item)->PostUpdate(dt);
+
+
 	}
 
 	return ret;

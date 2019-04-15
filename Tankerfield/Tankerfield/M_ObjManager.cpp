@@ -29,6 +29,7 @@
 #include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
+#include "Obj_PickUp.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -231,6 +232,9 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Item_HealthBag(pos);
 		ret->type = ObjectType::HEALTH_BAG;
 		break;
+	case ObjectType::PICK_UP:
+		ret = new Obj_PickUp(pos);
+		ret->type = ObjectType::PICK_UP;
 	}
   
 	if (ret != nullptr)
