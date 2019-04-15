@@ -48,7 +48,7 @@ bool Obj_Explosion::Update(float dt)
 	{
 		to_remove = true;
 	}
-	if (frame_explosion == 1)
+	if (frame_explosion == 2)
 	{
 		coll->to_destroy = true;
 		coll = nullptr;
