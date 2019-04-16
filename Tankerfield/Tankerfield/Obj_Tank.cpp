@@ -37,6 +37,12 @@ bool Obj_Tank::Start()
 	base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
 	//base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
 	//base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
+	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
+
+	turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
 	tank_num = number_of_tanks++;
 
@@ -60,14 +66,6 @@ bool Obj_Tank::Start()
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
-
-	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
-
-	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
-
-	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
 	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
 	curr_anim = &rotate_base;
@@ -118,8 +116,6 @@ bool Obj_Tank::Start()
 	max_life = 200;
 
 	//Life inicialistation
-
-	
 
 	//item = ObjectType::HEALTH_BAG;
 
