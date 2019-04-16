@@ -32,6 +32,7 @@ class Obj_Tank : public Object
 {
 public:
 	Obj_Tank(fPoint pos);
+	~Obj_Tank();
 
 public:
 
@@ -141,7 +142,8 @@ private:
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
-	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
+	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;
+	short int gamepad_shoot_last_frame				= 0;
 
 	//- Drawing
 
