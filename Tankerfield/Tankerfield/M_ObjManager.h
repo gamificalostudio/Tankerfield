@@ -68,6 +68,8 @@ public:
 	
 	std::list<Object*> GetObjects() const;
 
+	inline void DrawDebug(const Object* obj);
+
 private:
 
 	std::list<Object*> objects;

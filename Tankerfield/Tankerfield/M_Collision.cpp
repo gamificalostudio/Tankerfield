@@ -258,6 +258,7 @@ bool M_Collision::PostUpdate(float dt)
 	{
 		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 		{
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 			if ((*item)->to_destroy == true)
 			{
 				continue;
@@ -276,10 +277,11 @@ bool M_Collision::PostUpdate(float dt)
 				break;
 			}
 
-			if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
-			{
-				app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255 });
-			}
+			//if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
+			//{
+			//	app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255 }, (*item_cam));
+			//}
+			SDL_RenderSetClipRect(app->render->renderer, nullptr);
 		}
 	}
 	return true;
