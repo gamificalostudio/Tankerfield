@@ -267,7 +267,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		fPoint circlePos = pos_map;
 
 		circlePos = app->map->MapToScreenF(circlePos);
-		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, 0, 255, 0, 100);		//if has to follow the player
+		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);		//if has to follow the player
 																										//only appears when hes dead and disappear when he has been revived
 	}
 

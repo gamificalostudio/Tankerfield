@@ -168,7 +168,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 		  if (app->scene->draw_debug) {
 			  (*item)->DrawDebug((*item_cam));
-			  DrawDebug((*item));
+			  DrawDebug((*item), (*item_cam));
 		  }
 		}
 
@@ -283,7 +283,7 @@ std::list<Object*> M_ObjManager::GetObjects() const
 	return this->objects;
 }
 
-void M_ObjManager::DrawDebug(const Object* obj)
+void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
 {
 	SDL_Rect section = { obj->pos_screen.x - obj->draw_offset.x, obj->pos_screen.y - obj->draw_offset.y, obj->frame.w, obj->frame.h };
 
@@ -305,7 +305,7 @@ void M_ObjManager::DrawDebug(const Object* obj)
 		break;
 	}
 
-	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, 0, 255, 0);
+	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)
