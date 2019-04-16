@@ -64,7 +64,7 @@ bool M_ObjManager::Start()
 
 bool M_ObjManager::PreUpdate()
 {
-	BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Lavender);
+	BROFILER_CATEGORY("Object Manager: PreUpdate", Profiler::Color::Lavender);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
@@ -79,7 +79,7 @@ bool M_ObjManager::PreUpdate()
 
 bool M_ObjManager::Update(float dt)
 {
-	BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
+	BROFILER_CATEGORY("Object Manager: Update", Profiler::Color::ForestGreen);
 
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
@@ -134,7 +134,7 @@ bool M_ObjManager::Update(float dt)
 
 bool M_ObjManager::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
+	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
 	std::vector<Object*> draw_objects;
 
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
