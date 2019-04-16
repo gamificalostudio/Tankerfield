@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationBank.cpp" />
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationBank.h" />
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
     <ClInclude Include="Circle.h" />
