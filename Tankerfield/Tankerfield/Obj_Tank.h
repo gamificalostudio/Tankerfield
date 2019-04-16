@@ -119,6 +119,7 @@ private:
 
 
 	//- Movement
+	float curr_speed						= 0.f;
 	float speed								= 0.f;
 	fPoint velocity							= { 0.f, 0.f };
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
@@ -136,6 +137,8 @@ private:
 
 	float revive_range						= 0.f;
 	float revive_range_squared				= 0.f;
+	int	  revive_life						= 0;
+	
 
 	//-- Basic shoot
 	uint basic_shot							= (uint)WEAPON::BASIC;

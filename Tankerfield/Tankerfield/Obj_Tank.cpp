@@ -124,7 +124,7 @@ bool Obj_Tank::Start()
 		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
 	}
 
-	speed = 4.f;//TODO: Load from xml
+	curr_speed = 4.f;//TODO: Load from xml
 
 	
 	cos_45 = cosf(-45 * DEGTORAD);
@@ -183,6 +183,8 @@ bool Obj_Tank::Start()
 
 	revive_range = 1.5f;
 	revive_range_squared = revive_range * revive_range;
+	revive_life = 100;
+	speed = 0.4f;
 
 
 
@@ -272,7 +274,7 @@ void Obj_Tank::Movement(float dt)
 		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
 	}
 
-	velocity = iso_dir * speed * dt;                                                               
+	velocity = iso_dir * curr_speed * dt;                                                               
 	pos_map += velocity;
 
 }
@@ -325,6 +327,11 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&rotate_turr->GetFrame(turr_angle));
+
+
+	fPoint circlePos = { 3.f,3.f };
+	circlePos = app->map->MapToScreenF(circlePos);
+	app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared*32, 0, 255, 0, 100);
 
 	//DEBUG
 	//	iPoint debug_mouse_pos = { 0, 0 };
@@ -576,7 +583,9 @@ void Obj_Tank::ReviveTank()
 	tank_arr[2] = app->scene->tank_3;
 	tank_arr[3] = app->scene->tank_4;
 
-	
+	//fPoint circlePos = { 3.f,3.f };
+	//circlePos = app->map->MapToScreenF(circlePos);
+	//app->render->DrawCircle(circlePos.x, circlePos.y, revive_range, 0, 255, 0, 100);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -587,8 +596,8 @@ void Obj_Tank::ReviveTank()
 			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map)<=revive_range_squared
 			&& this->life!=0)
 		{
-			tank_arr[i]->speed = 4.f;		
-			tank_arr[i]->life = 50;											
+			tank_arr[i]->curr_speed = speed;
+			tank_arr[i]->life = revive_life;
 		}
 	}
 }
@@ -607,7 +616,7 @@ void Obj_Tank::StopTank()
 
 	if (life == 0)
 	{
-		speed = 0;
+		curr_speed = 0;
 		angle = 0;
 	}
 }
