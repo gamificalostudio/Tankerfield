@@ -154,6 +154,27 @@ bool Obj_TeslaTrooper::Update(float dt)
 	return true;
 }
 
+bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
+{
+	app->render->Blit(
+		curr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&frame);
+	if (path.size() >= 2)
+	{
+		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		{
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 });
+		}
+	}
+	
+	return true;
+}
+
 
 bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 {

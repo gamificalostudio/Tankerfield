@@ -254,33 +254,34 @@ bool M_Collision::PostUpdate(float dt)
 	{
 		return true;
 	}
-	
-	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
-		if ((*item)->to_destroy == true)
+		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 		{
-			continue;
-		}
+			if ((*item)->to_destroy == true)
+			{
+				continue;
+			}
 
-		switch ((*item)->body_type)
-		{
-		case Collider::BODY_TYPE::SENSOR:
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 0, 255, 0 , 255 });
-			break;
-		case Collider::BODY_TYPE::DYNAMIC:
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 0 , 255 });
-			break;
-		case Collider::BODY_TYPE::STATIC:
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
-			break;
-		}
+			switch ((*item)->body_type)
+			{
+			case Collider::BODY_TYPE::SENSOR:
+				app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 0, 255, 0 , 255 }, (*item_cam));
+				break;
+			case Collider::BODY_TYPE::DYNAMIC:
+				app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 0 , 255 }, (*item_cam));
+				break;
+			case Collider::BODY_TYPE::STATIC:
+				app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 }, (*item_cam));
+				break;
+			}
 
-		if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
-		{
-			app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255});
+			if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
+			{
+				app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255 });
+			}
 		}
 	}
-
 	return true;
 }
 

@@ -110,13 +110,13 @@ bool M_Map::PostUpdate(float dt)
 			{
 				point_1 = MapToScreenI(i, 0);
 				point_2 = MapToScreenI(i, data.rows);
-				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+				app->render->DrawLineSplitScreen(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, (*item_cam));
 			}
 			for (int i = 0; i <= data.rows; ++i)
 			{
 				point_1 = MapToScreenI(0, i);
 				point_2 = MapToScreenI(data.columns, i);
-				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+				app->render->DrawLineSplitScreen(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, (*item_cam));
 			}
 		}
 		SDL_RenderSetClipRect(app->render->renderer, nullptr);
