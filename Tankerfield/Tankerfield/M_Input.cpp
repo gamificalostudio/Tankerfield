@@ -310,6 +310,27 @@ Controller** M_Input::GetAbleController()
 	return ret;
 }
 
+KeyState Controller::GetButtonState(SDL_GameControllerButton button)
+{
+	if (this != nullptr)
+		return key_state[button];
+	else
+		return KeyState::KEY_IDLE;
+}
+
+iPoint Controller::GetJoystick(Joystick joystick)
+{
+	if (this == nullptr)
+		return iPoint(0, 0);
+	switch (joystick)
+	{
+	case Joystick::LEFT:
+		return iPoint(GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
+	case Joystick::RIGHT:
+		return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTY));
+	}
+}
+
 Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
 {
 

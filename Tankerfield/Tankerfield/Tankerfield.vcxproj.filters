@@ -112,11 +112,15 @@
     <ClCompile Include="Obj_Explosion.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Bar.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_GUI.cpp" />
+    <ClCompile Include="M_PickManager.cpp" />
+    <ClCompile Include="Obj_PickUp.cpp" />
+    <ClCompile Include="UI_InGameElement.cpp" />
+    <ClCompile Include="M_AnimationBank.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,11 +254,15 @@
     <ClInclude Include="Obj_Explosion.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Bar.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Player_GUI.h" />
+    <ClInclude Include="M_PickManager.h" />
+    <ClInclude Include="Obj_PickUp.h" />
+    <ClInclude Include="UI_InGameElement.h" />
+    <ClInclude Include="M_AnimationBank.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

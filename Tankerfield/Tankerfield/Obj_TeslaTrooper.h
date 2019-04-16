@@ -36,6 +36,8 @@ public:
 
 	bool Update(float dt) override;
 
+	void DrawDebug(const Camera* camera) override;
+
 	bool Awake(pugi::xml_node&) { return true; };
 
 	void OnTrigger(Collider* collider);
@@ -76,8 +78,8 @@ private:
 	bool attack_available = false;
 	PerfTimer perf_timer;
 
-	static Animation* walk;
-	static SDL_Texture * tex;
+	Animation walk;
+	SDL_Texture * tex = nullptr;
 
 };
 

@@ -143,28 +143,32 @@ PathNode::PathNode(const PathNode& node) : g(node.g), h(node.h), pos(node.pos), 
 uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 {
 	iPoint cell;
-	bool directions_state[8];
+	bool directions_state[8] = {false, false, false, false, false, false, false, false};
 	uint before = list_to_fill.list.size();
 
 	// NORTH
 	cell.create(pos.x, pos.y + 1);
-	if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	if (cell.y < app->map->data.rows)
+			if(directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
+				list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// EAST
 	cell.create(pos.x + 1, pos.y);
-	if (directions_state[(int)DIRECTIONS::EAST] = app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	if(cell.x < app->map->data.columns)
+		if (directions_state[(int)DIRECTIONS::EAST] = app->pathfinding->IsWalkable(cell))
+			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// SOUTH
 	cell.create(pos.x, pos.y - 1);
-	if (directions_state[(int)DIRECTIONS::SOUTH] = app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	if(cell.y >= 0)
+		if (directions_state[(int)DIRECTIONS::SOUTH] = app->pathfinding->IsWalkable(cell))
+			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// WEST
 	cell.create(pos.x - 1, pos.y);
-	if (directions_state[(int)DIRECTIONS::WEST] = app->pathfinding->IsWalkable(cell))
-		list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
+	if(cell.x >= 0)
+		if (directions_state[(int)DIRECTIONS::WEST] = app->pathfinding->IsWalkable(cell))
+			list_to_fill.list.push_back(PathNode(-1, -1, cell, this));
 
 	// NORTH_EAST
 	if (directions_state[(int)DIRECTIONS::NORTH] && directions_state[(int)DIRECTIONS::EAST])

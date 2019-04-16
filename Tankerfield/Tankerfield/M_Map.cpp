@@ -73,31 +73,18 @@ bool M_Map::PostUpdate(float dt)
 	if (map_loaded == false)
 		return ret;
 
-
-	
-
-
 	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
 		
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
-		//for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
-		//{
-		//	if ((*layer)->visible == false)
-		//		continue;
-
-		//	
-		//}
-
 		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
 		std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
 		{
 			return a.sorting_value < b.sorting_value;
 		});
-		//std::qsort(&aux, aux.size(), sizeof(Tile), &Quadtree_Map::compare
-		//);
+
 		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
 		{
 			TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
@@ -112,7 +99,6 @@ bool M_Map::PostUpdate(float dt)
 	}
 
 	//// Draw Grid ==============================================
-
 	if(show_grid)
 	{
 		iPoint point_1, point_2;
@@ -124,13 +110,13 @@ bool M_Map::PostUpdate(float dt)
 			{
 				point_1 = MapToScreenI(i, 0);
 				point_2 = MapToScreenI(i, data.rows);
-				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+				app->render->DrawLineSplitScreen(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, (*item_cam));
 			}
 			for (int i = 0; i <= data.rows; ++i)
 			{
 				point_1 = MapToScreenI(0, i);
 				point_2 = MapToScreenI(data.columns, i);
-				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+				app->render->DrawLineSplitScreen(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, (*item_cam));
 			}
 		}
 		SDL_RenderSetClipRect(app->render->renderer, nullptr);

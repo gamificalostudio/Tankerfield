@@ -70,8 +70,8 @@ private:
 	void Shoot();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
-	bool IsShootingBasic();
-	bool IsShootingSpecial();
+	bool PressShot();
+	bool ReleaseShot();
 
 	//- Input
 	void SelectInputMethod();
@@ -81,42 +81,20 @@ private:
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
 
-
 	//- TankDeath
-
 	void ReviveTank();
 	void StopTank();
 
 	//- Item
 	void Item();
 
-
-
 private:
-	//- Static variables (remember to inicialize them in the .cpp)
-	static SDL_Texture * base_tex_yellow;
-	//static SDL_Texture * base_tex_orange;
-	static SDL_Texture * base_tex_red;
-	//static SDL_Texture * base_tex_light_green;
-	static SDL_Texture * base_tex_pink;
-	static SDL_Texture * base_tex_light_blue;
-	//static SDL_Texture * base_tex_dark_blue;
-	//static SDL_Texture * base_tex_purple;
-	static SDL_Texture * turr_tex;
-	static SDL_Texture * base_shadow_tex;
-	static SDL_Texture * turr_shadow_tex;
-	static Animation * rotate_base;
-	static Animation * rotate_turr;
-	static WeaponInfo * weapons_info;
-	static int number_of_tanks;
-  
-
-	//-Logic
+	//- Logic
 	int life								= 0;
 	int max_life							= 0;
 	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
-
+	static int number_of_tanks;
 
 	//- Movement
 	float curr_speed						= 0.f;
@@ -141,13 +119,12 @@ private:
 	
 
 	//-- Basic shoot
-	uint basic_shot							= (uint)WEAPON::BASIC;
-	PerfTimer basic_shot_timer;
-	uint basic_shot_sound					= 0;
-
-	//-- Special shoot
-	uint special_shoot					= (uint)WEAPON::DOUBLE_MISSILE;
-	PerfTimer special_shot_timer;
+	uint shot_type							= (uint)WEAPON::BASIC;
+	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
+	PerfTimer shot_timer;
+	PerfTimer charged_timer;
+	float charge_time						= 0.f;//Charge time in ms
+	uint shot_sound							= 0u;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 
 	//- Items
@@ -161,8 +138,7 @@ private:
 	//-- Keyboard inputs
 	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_interact				= SDL_SCANCODE_UNKNOWN;
-	int kb_shoot_basic						= 0;
-	int kb_shoot_special					= 0;
+	int kb_shoot							= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
@@ -173,14 +149,29 @@ private:
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
-	SDL_GameControllerButton gamepad_revive_tank	= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
-	SDL_GameControllerAxis gamepad_shoot_special	= SDL_CONTROLLER_AXIS_INVALID;
 
-	
+	//- Drawing
+
+	//-- Base
+	Animation rotate_base;
+	SDL_Texture * base_tex_yellow		= nullptr;
+	//SDL_Texture * base_tex_orange		= nullptr;
+	SDL_Texture * base_tex_red			= nullptr;
+	//SDL_Texture * base_tex_light_green= nullptr;
+	SDL_Texture * base_tex_pink			= nullptr;
+	SDL_Texture * base_tex_light_blue	= nullptr;
+	//SDL_Texture * base_tex_dark_blue	= nullptr;
+	//SDL_Texture * base_tex_purple		= nullptr;
+	SDL_Texture * base_shadow_tex		= nullptr;
+
+	//-- Turret
+	Animation rotate_turr;
+	SDL_Texture * turr_tex				= nullptr;
+	SDL_Texture * turr_shadow_tex		= nullptr;
 
 public:
-	Camera* camera_player					= nullptr;
+	Camera* camera_player				= nullptr;
 
 };
 

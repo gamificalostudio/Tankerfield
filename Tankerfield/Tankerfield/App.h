@@ -26,6 +26,7 @@ class M_SceneManager;
 class M_Scene;
 class M_Collision;
 class M_PickManager;
+class M_AnimationBank;
 
 class App
 {
@@ -101,6 +102,7 @@ public:
 	M_SceneManager*		scmanager = nullptr;
 	M_Scene*			scene = nullptr;
 	M_Collision*        collision = nullptr;
+	M_AnimationBank*	anim_bank = nullptr;
   
 	//XML document
 	pugi::xml_node		config;

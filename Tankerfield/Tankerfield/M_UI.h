@@ -162,7 +162,7 @@ public:
 
 	fPoint		mouse_offset;
 
-	Animation* 	arrow_anim = nullptr;
+	Animation	arrow_anim;
 };
 
 #endif // __MODULE_UI_H__
