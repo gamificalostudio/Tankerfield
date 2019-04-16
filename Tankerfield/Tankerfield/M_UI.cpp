@@ -65,7 +65,7 @@ bool M_UI::Start()
 	test_def.object = (Object*)app->scene->tank_2;
 	test_def.player_gui = hud_player_1;
 
-	app->ui->CreateInGameWeapon({ 0.F,0.F }, test_def);
+	test = app->ui->CreateInGameWeapon({ 0.F,0.F }, test_def);
 
 	UI_ImageDef image_def;
 
@@ -124,6 +124,7 @@ bool M_UI::CleanUp()
 bool M_UI::PreUpdate()
 {
 	BROFILER_CATEGORY("M_UIPreupdate", Profiler::Color::Brown)
+
 	int x_mouse = 0, y_mouse = 0;
 	app->input->GetMousePosition(x_mouse, y_mouse);
 	mouse_position = { (float)x_mouse ,(float)y_mouse };
@@ -132,13 +133,19 @@ bool M_UI::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 		debug = !debug;
 
+	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN)
+		--test->current_player_level;
+
+	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+		++test->current_player_level;
+
 	// Hover States ============================================
 
 	fRect section;
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
 	{
-		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f)
+		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->to_destroy == true)
 		{
 			continue;
 		}
@@ -237,6 +244,40 @@ bool M_UI::Update(float dt)
 		}
 	}
 
+	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end();)
+	{
+		if ((*item)->to_destroy == true)
+		{
+			// Delete ui element on parent sons list =========================
+
+			if ((*item)->parent_object != nullptr)
+			{
+				list<UI_Element*> *sons_list = (*item)->parent_object->GetSons();
+				list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), (*item));
+
+				if (son_to_delete == sons_list->end())
+				{
+					LOG("Object not deleted: Not found");
+					return false;
+				}
+
+				sons_list->erase(son_to_delete);
+			}
+
+			// Delete ui element ============================================
+
+			LOG("UI Object deleted");
+			RELEASE((*item));
+			item = objects_list.erase(item);
+		}
+		else
+		{
+			(*item)->Update(dt);
+			++item;
+		}
+	}
+
+
 	// Hover Callbacks =============================================
 
 	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
@@ -261,13 +302,6 @@ bool M_UI::Update(float dt)
 	}
 
 	UpdateGuiPositions(main_object, fPoint(0, 0));
-
-	// Update objects ==============================================
-
-	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
-	{
-		(*item)->Update(dt);
-	}
 
 	return true;
 }
@@ -399,51 +433,6 @@ UI_Element * M_UI::GetClickedObject()
 UI_Element * M_UI::GetScreen()
 {
 	return main_object;
-}
-
-bool M_UI::DeleteObject(UI_Element * object)
-{
-	if (objects_list.empty())
-	{
-		return false;
-	}
-
-	if (object == nullptr)
-	{
-		LOG("Object not deleted: Pointing to nullptr");
-		return false;
-	}
-
-	// Find object to delete =====================================
-
-	list<UI_Element*>::iterator object_to_delete = find(objects_list.begin(), objects_list.end(), object);
-
-	if (object_to_delete == objects_list.end())
-	{
-		LOG("Object not deleted: Not found");
-		return false;
-	}
-
-	// Delete object in parent sons list =========================
-
-	if ((*object_to_delete)->parent_object != nullptr)
-	{
-		list<UI_Element*> *sons_list = (*object_to_delete)->parent_object->GetSons();
-		list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), object);
-
-		if (son_to_delete == sons_list->end())
-		{
-			LOG("Object not deleted: Not found");
-			return false;
-		}
-
-		sons_list->erase(son_to_delete);
-	}
-	LOG("UI Object deleted");
-	RELEASE((*object_to_delete));
-	objects_list.erase(object_to_delete);
-
-	return true;
 }
 
 void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)

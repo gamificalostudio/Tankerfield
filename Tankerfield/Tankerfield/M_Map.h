@@ -189,6 +189,8 @@ public:
 
 	fPoint MapToScreenF(const fPoint & map_pos);
 
+	fPoint MapToCamera(const fPoint map_pos, const Camera* camera);
+
 	iPoint ScreenToMapI(int x, int y) const;
 
 	fPoint ScreenToMapF(float x, float y);

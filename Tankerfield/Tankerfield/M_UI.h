@@ -122,8 +122,6 @@ public:
 
 	UI_Element* GetScreen();
 
-	bool DeleteObject(UI_Element* object);
-
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
 private:
@@ -167,6 +165,8 @@ public:
 	fPoint		mouse_offset;
 
 	Animation* 	arrow_anim = nullptr;
+
+	UI_IG_Weapon* test = nullptr;
 };
 
 #endif // __MODULE_UI_H__

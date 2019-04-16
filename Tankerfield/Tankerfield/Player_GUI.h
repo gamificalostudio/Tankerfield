@@ -28,15 +28,13 @@ public:
 
 	Player_GUI( Player_GUI::TYPE type, Obj_Tank* target);
 
-	UI_InGameElement* AddInGameElement(Object* object, Player_GUI* gui);
-
 	~Player_GUI();
 
 public:
 	
 	TYPE type = TYPE::SINGLE_PLAYER;
 
-	Obj_Tank* target = nullptr;
+	Obj_Tank* player = nullptr;
 
 	// HUD Elements =========================
 
@@ -52,7 +50,10 @@ public:
 
 	fRect viewport;
 
-	std::list<UI_InGameElement*> in_game_elements;
+	fPoint margin = { 80.f, 80.f };
+
+	SDL_Rect viewport_with_margin = { 0,0,0,0 };
+
 };
 
 #endif // __PLAYER_GUI_H_

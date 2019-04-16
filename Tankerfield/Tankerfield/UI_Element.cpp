@@ -26,7 +26,15 @@ bool UI_Element::UpdateRelativePosition()
 bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section);
+
+	if (camera != nullptr)
+	{
+		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, camera);
+	}
+	else
+	{
+		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section);
+	}
 
 	return true;
 }

@@ -7,6 +7,7 @@
 
 #include "M_Window.h"
 #include "M_UI.h"
+#include "M_Render.h"
 
 #include "Object.h"
 #include "Obj_Tank.h"
@@ -14,31 +15,11 @@
 #include "UI_Image.h"
 #include "UI_Bar.h"
 
-Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(type), target(player_object)
+Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(type), player(player_object)
 {
-	// Position ======================================
-
-	fRect screen = app->win->GetWindowRect();
-	fPoint margin = { 30.f, 30.f };
-
-	switch (type)
-	{
-	case TYPE::SINGLE_PLAYER:
-		viewport.create(0.f, 0.f, screen.w, screen.h);
-		break;
-	case TYPE::PLAYER_1:
-		viewport.create(0.f, 0.f, screen.w * .5f, screen.h * .5f);
-		break;
-	case TYPE::PLAYER_2:
-		viewport.create(screen.w * .5f, 0.f, screen.w * .5f, screen.h * .5f);
-		break;
-	case TYPE::PLAYER_3:
-		viewport.create(0.f, screen.h * .5f, screen.w * .5f, screen.h * .5f);
-		break;
-	case TYPE::PLAYER_4:
-		viewport.create(screen.w * .5f, screen.h * .5f, screen.w * .5f, screen.h * .5f);
-		break;
-	}
+	viewport.create( player_object->camera_player->viewport.x, player_object->camera_player->viewport.y , player_object->camera_player->viewport.w, player_object->camera_player->viewport.h);
+	viewport_with_margin = { (int) (viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.GetRight() - margin.x) ,(int)(viewport.GetBottom() - margin.y) };
+	margin = { 30.f, 30.f };
 
 	UI_ImageDef image_def;
 
@@ -136,15 +117,19 @@ Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(ty
 
 Player_GUI::~Player_GUI()
 {
-	app->ui->DeleteObject(weapon_frame);
-	app->ui->DeleteObject(item_frame);
-	app->ui->DeleteObject(ammo_image);
-	app->ui->DeleteObject(ammo_bar);
-	app->ui->DeleteObject(life_bar);
+	if (app->on_clean_up == false)
+	{
+		weapon_frame->to_destroy = true;
+		item_frame->to_destroy = true;
+		ammo_image->to_destroy = true;
+		ammo_bar->to_destroy = true;
+		life_bar->to_destroy = true;
 
-	weapon_frame	= nullptr;
-	item_frame		= nullptr;
-	ammo_image		= nullptr;
-	ammo_bar		= nullptr;
-	life_bar		= nullptr;
+		weapon_frame = nullptr;
+		item_frame = nullptr;
+		ammo_image = nullptr;
+		ammo_bar = nullptr;
+		life_bar = nullptr;
+	}
+
 }

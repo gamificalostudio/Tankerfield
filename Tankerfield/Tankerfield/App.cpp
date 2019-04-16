@@ -242,7 +242,7 @@ void App::FinishUpdate()
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
-	sprintf_s(title, 256, "Tankerfield | Av.FPS: %.2f", avg_fps);
+	sprintf_s(title, 256, "Tankerfield | FPS: %u", frames_on_last_update);
 	app->win->SetTitle(title);
 
 	//if (capped_ms > 0 && last_frame_ms < capped_ms)

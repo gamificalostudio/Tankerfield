@@ -28,7 +28,7 @@ UI_Checkbox::~UI_Checkbox()
 {
 	if (button != nullptr)
 	{
-		app->ui->DeleteObject(button);
+		button->to_destroy = true;
 		button = nullptr;
 	}
 }

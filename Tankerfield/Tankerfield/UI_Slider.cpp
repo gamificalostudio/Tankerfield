@@ -25,7 +25,7 @@ UI_Slider::~UI_Slider()
 {
 	if (thumb != nullptr)
 	{
-		app->ui->DeleteObject(thumb);
+		thumb->to_destroy = true;
 		thumb = nullptr;
 	}
 }

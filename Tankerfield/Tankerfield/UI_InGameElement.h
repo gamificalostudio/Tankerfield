@@ -22,6 +22,8 @@ public:
 
 	virtual bool Update(float dt);
 
+	virtual bool Draw() { return true; };
+
 	void UpdateArrow();
 
 public:
@@ -34,7 +36,7 @@ public:
 
 struct UI_IG_WeaponDef : public UI_InGameElementDef
 {
-	uint weapon_level    = 0u;
+	uint last_player_level    = 0u;
 	uint weapon_type     = 0u;
 };
 
@@ -47,12 +49,19 @@ public:
 
 	bool Update(float dt);
 
+	bool Draw();
+
+	void UpdateLevel();
+
 public: 
 
-	uint                     weapon_level = 0u;
-	UI_Image*                weapon_icon = nullptr;
-	UI_Image*                weapon_frame = nullptr;
-	std::list<UI_Image*>     level_indicators;
+	int last_player_level = 0u;
+	int current_player_level = 0u;
+	int weapon_level = 0u;
+
+	UI_Image*             weapon_icon = nullptr;
+	UI_Image*             weapon_frame = nullptr;
+	std::list<UI_Image*>  level_indicators;
 
 
 };

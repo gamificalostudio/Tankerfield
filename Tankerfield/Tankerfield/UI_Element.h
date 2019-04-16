@@ -15,6 +15,7 @@ typedef string String;
 
 struct SDL_Texture;
 class UI_Listener;
+class Camera;
 
 class Pivot
 {
@@ -108,6 +109,8 @@ public:
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	bool			      is_draggable = false;
 	bool				  is_interactive = false;
+	Camera*               camera = nullptr;
+	bool                  to_destroy = false;
 
 protected:
 
