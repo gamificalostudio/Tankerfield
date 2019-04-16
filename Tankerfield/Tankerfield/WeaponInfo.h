@@ -4,6 +4,8 @@
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 
+
+
 //Class which ONLY holds information about the weapons.
 //It doesn't have any functionality more than loading the properties
 

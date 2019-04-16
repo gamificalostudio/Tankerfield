@@ -9,7 +9,7 @@
 
 class UI_Button;
 
-struct UI_LabelDef : public UI_ElementDefinition
+struct UI_LabelDef : public UI_ElementDef
 {
 	UI_LabelDef(_TTF_Font* font, SDL_Color color = { 255,255,255,255 }): font(font) ,color(color) {}
 

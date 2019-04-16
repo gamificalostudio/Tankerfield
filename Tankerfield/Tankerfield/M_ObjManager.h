@@ -13,12 +13,24 @@
 
 enum class ObjectType
 {
+	//ITEMS need to be first because the random selection from Obj_PickUp .
+	HEALTH_BAG = 0,
+
+	//OTHER
 	TANK,
-	TESLA_TROOPER,
-	BASIC_BULLET,
 	STATIC,
 	REWARD_ZONE,
+	PICK_UP,
+
+	//ENEMIES
+	TESLA_TROOPER,
 	BRUTE,
+
+	//BULLETS
+	BASIC_BULLET,
+	BULLET_MISSILE,
+	EXPLOSION,
+
 	NO_TYPE
 };
 
@@ -55,6 +67,7 @@ public:
 
 	Object* GetNearestTank(fPoint pos);
 	
+	std::list<Object*> GetObjects() const;
 
 private:
 

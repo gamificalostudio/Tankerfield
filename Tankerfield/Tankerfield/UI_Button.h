@@ -12,7 +12,7 @@
 class UI_Label;
 struct UI_ButtonDef;
 
-struct UI_ButtonDef: public UI_ElementDefinition
+struct UI_ButtonDef: public UI_ElementDef
 {
 public:
 	UI_ButtonDef() {}
@@ -41,8 +41,6 @@ public:
 private:
 
 	bool PreUpdate();
-
-	bool Update(float dt);
 
 private:
 

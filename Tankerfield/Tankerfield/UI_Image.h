@@ -5,26 +5,24 @@
 #include "Animation.h"
 #include "UI_Element.h"
 
-struct UI_ImageDef : public UI_ElementDefinition
+struct UI_ImageDef : public UI_ElementDef
 {
-	SDL_Rect draw_rect;
 	bool is_animated = false;
-	Animation image_animation;
+	Animation* image_animation = nullptr;
 };
 
 class UI_Image: public UI_Element
 {
 
 public:
-	UI_Image(const fPoint position, const UI_ImageDef draw_rect, UI_Listener* listener);
+
+	UI_Image(const fPoint position, const UI_ImageDef def, UI_Listener* listener);
 
 	virtual ~UI_Image();
 
-	bool Draw();
+public:
 
-private:
-
-	SDL_Rect draw_rect;
+	Animation* image_animation = nullptr;
 };
 
 #endif // _IMAGE_H__

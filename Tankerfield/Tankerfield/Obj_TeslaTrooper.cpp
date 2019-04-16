@@ -22,6 +22,7 @@
 #include "M_Map.h"
 #include "M_Collision.h"
 #include "WeaponInfo.h"
+#include "M_PickManager.h"
 
 //Static variables inicialization
 SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
@@ -38,8 +39,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	curr_tex = tex;
 	if (walk == nullptr)
 	{
-		walk = new Animation;
-		walk->LoadAnimation(tesla_trooper_node.child("animations").child("walk"));
+		walk = new Animation(tesla_trooper_node.child("animations").child("walk"));
 	}
 	curr_anim = walk;
 	speed				= 1.5F;
@@ -99,7 +99,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 				move_vect.Normalize();
 
 				//Change sprite direction
-				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
+				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG + ISO_COMPENSATION;
 				state = TROOPER_STATE::MOVE;
 			}
 			else
@@ -162,11 +162,12 @@ bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 
 void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET)
+	if ((collider->GetTag() == Collider::TAG::BULLET))
 	{
 		life -= collider->damage;
 		if (life <= 0)
 		{
+			app->pick_manager->PickUpFromEnemy(pos_map);
 			to_remove = true;
 		}
 	}

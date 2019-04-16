@@ -28,6 +28,7 @@ public:
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
+		PICK_UP,
 		MAX
 	};
 
@@ -77,18 +78,9 @@ public:
 
 	void SetPosToObj();
 
-	template<typename TYPE>
-
-	TYPE* GetObj() 
+	Object* GetObj() 
 	{
-		if (object != nullptr & typeid(TYPE) == typeid(object))
-		{
-			return (TYPE*)object;
-		}
-		else
-		{
-			return nullptr;
-		}
+		return object;
 	}
 
 	void GetSize(float & w, float & h) {
@@ -113,6 +105,8 @@ public:
 public:
 
 	float damage = 0.f;
+
+	bool to_destroy = false;
   
 private:
 
@@ -130,7 +124,6 @@ private:
 
 	std::list<Collider*> collisions_list;
 
-	bool to_destroy = false;
 
 	// Body vars ===================================================
 
@@ -139,6 +132,7 @@ private:
 	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
 	friend M_Collision;
+	friend M_ObjManager;
 };
 
 class M_Collision : public Module

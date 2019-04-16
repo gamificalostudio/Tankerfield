@@ -1,5 +1,6 @@
 #include <list>
 
+
 #include "Brofiler\Brofiler.h"
 
 #include "Log.h"
@@ -10,6 +11,7 @@
 #include "M_Collision.h"
 #include "M_Input.h"
 #include "M_Pathfinding.h"
+#include "M_Scene.h"
 
 
 M_Map::M_Map()
@@ -70,57 +72,74 @@ bool M_Map::PostUpdate(float dt)
 
 	if (map_loaded == false)
 		return ret;
-	for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
-	{
 
-		if ((*layer)->visible && (*layer)->layer_properties.draw) {
 
-			for (int y = 0; y < data.rows; ++y)
-			{
-				for (int x = 0; x < data.columns; ++x)
-				{
-
-					int tile_id = (*layer)->Get(x, y);
-					if (tile_id > 0)
-					{
-						iPoint pos = MapToScreenI(x, y);
-						if (app->render->IsOnCamera(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height))
-						{
-							TileSet* tileset = GetTilesetFromTileId(tile_id);
-							if (tileset != nullptr)
-							{
-								SDL_Rect r = tileset->GetTileRect(tile_id);
-								app->render->Blit(tileset->texture, pos.x + data.offset_x, pos.y + data.offset_y, &r);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 	
+
+
+	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
+		
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	{
+		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+
+		//for (std::list<MapLayer*>::iterator layer = data.map_layers.begin(); layer != data.map_layers.end(); ++layer)
+		//{
+		//	if ((*layer)->visible == false)
+		//		continue;
+
+		//	
+		//}
+
+		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
+		std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
+		{
+			return a.sorting_value < b.sorting_value;
+		});
+		//std::qsort(&aux, aux.size(), sizeof(Tile), &Quadtree_Map::compare
+		//);
+		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
+		{
+			TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
+
+			app->render->Blit(tileset->texture,
+				(*sorted_tiles).rect.x,
+				(*sorted_tiles).rect.y,
+				(*item_cam),
+				&tileset->GetTileRect((*sorted_tiles).id));
+		}
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
+	}
+
 	//// Draw Grid ==============================================
+
 	if(show_grid)
 	{
 		iPoint point_1, point_2;
-		for (int i = 0; i <= data.columns; ++i)
+		
+		for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 		{
-			point_1 = MapToScreenI(i, 0);
-			point_2 = MapToScreenI(i, data.rows);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			for (int i = 0; i <= data.columns; ++i)
+			{
+				point_1 = MapToScreenI(i, 0);
+				point_2 = MapToScreenI(i, data.rows);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
+			for (int i = 0; i <= data.rows; ++i)
+			{
+				point_1 = MapToScreenI(0, i);
+				point_2 = MapToScreenI(data.columns, i);
+				app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
+			}
 		}
-
-		for (int i = 0; i <= data.rows; ++i)
-		{
-			point_1 = MapToScreenI(0, i);
-			point_2 = MapToScreenI(data.columns, i);
-			app->render->DrawLine(point_1.x, point_1.y, point_2.x, point_2.y, 255, 255, 255, 255, true);
-		}
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
 
-	return ret;
+	return ret = true;
 }
 
+		
 bool M_Map::CleanUp()
 {
 	Unload();
@@ -282,11 +301,14 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	bool ret = true;
 
 	layer->name = node.attribute("name").as_string();
+
 	layer->columns = node.attribute("width").as_int();
+
 	layer->rows = node.attribute("height").as_int();
+
 	layer->layer_properties.LoadProperties(node.child("properties"));
-	int visible = node.attribute("visible").as_int(1);
-	layer->visible = (visible == 0) ? false : true;
+
+	layer->visible = (node.attribute("visible").as_int(1) == 0) ? false : true;
 	
 	pugi::xml_node layer_data = node.child("data");
 
@@ -299,29 +321,39 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	}
 	else
 	{
+		
+
 		layer->data = new uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
-		int i = 0;
-		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
+		if (layer->visible)
 		{
-			layer->data[i] = tile.attribute("gid").as_int(0);
 
-		/*	if (layer->name == "Colliders" && layer->data[i] != 0u)
+
+			uint i = 0, layernum = data.map_layers.size() + 1;
+			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 			{
-					fPoint pos = layer->GetTilePos(i);
+				Tile qtile;
 
-					Collider* aux = app->collision->AddCollider(pos, 1.F, 1.F, Collider::TAG::WALL);
-					data.colliders_list.push_back(aux);
-			}*/
+				layer->data[i] = tile.attribute("gid").as_int(0);
+				qtile.id = layer->data[i];
+				if (qtile.id != 0)
+				{
+					qtile.rect = { data.screen_tile_rect[i].pos.x, data.screen_tile_rect[i].pos.y, data.tile_width, data.tile_height };
+					qtile.layer = layernum;
+					qtile.sorting_value = i * layernum;
+					data.qt->InsertTile(qtile);
+				}
+				if (layer->name == "Buildings")
+				{
+					layer->visible = node.child("properties").child("property").attribute("value").as_bool(true);
+				}
 
-			if (layer->name == "Buildings")
-			{
-				layer->layer_properties.draw = node.child("properties").child("property").attribute("value").as_bool(true);
+				++i;
 			}
-
-			++i;
 		}
+
+		
 	}
 
 	return ret;
@@ -458,7 +490,6 @@ bool M_Map::LoadMap()
 
 		data.map_properties.LoadProperties(map.child("properties"));
 		data.objects_path = data.map_properties.GetAsString("object_texture");
-		data.map_properties.draw = data.map_properties.GetAsBool("NoDraw");
 		data.offset_x = data.map_properties.GetAsInt("offset_x");
 		data.offset_y = data.map_properties.GetAsInt("offset_y");
 
@@ -480,6 +511,26 @@ bool M_Map::LoadMap()
 		{
 			data.type = MAPTYPE_UNKNOWN;
 		}
+
+		data.screen_tile_rect = new iRect[data.columns*data.rows];
+		for (int y = 0; y < data.rows; ++y)
+		{
+			for (int x = 0; x < data.columns; ++x)
+			{
+				iPoint pos = app->map->MapToScreenI(x, y);
+				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
+			}
+		}
+		SDL_Rect area = { data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x,
+					 0,
+					 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
+					data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
+		;
+
+		uint level = 1;
+		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->camera.begin())->viewport.w*0.25, level);
+		data.qt = new Quadtree_Map(area, 0, level);
+
 	}
 
 	return ret;
@@ -488,17 +539,18 @@ bool M_Map::LoadMap()
 SDL_Rect TileSet::GetTileRect(int id) const
 {
 	int relative_id = id - firstgid;
-	SDL_Rect rect = { 0, 0, 0, 0 };
-	rect.w = tile_width;
-	rect.h = tile_height;
-	rect.x = margin + ((rect.w + spacing) * (relative_id % columns));
-	rect.y = margin + ((rect.h + spacing) * (relative_id / columns));
+	SDL_Rect rect = { 
+		margin + ((tile_width + spacing) * (relative_id % columns)),
+		margin + ((tile_height + spacing) * (relative_id / columns)),
+		tile_width,
+		tile_height,
+		 };
+
 	return rect;
 }
 
-TileSet* M_Map::GetTilesetFromTileId(int id) const
+inline TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
-	BROFILER_CATEGORY("GetTilesetFromTileId", Profiler::Color::DarkBlue)
 	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
 	TileSet* set = *item;
 	
@@ -655,6 +707,88 @@ fPoint M_Map::ScreenToMapF(float x, float y)
 		ret.x = x; ret.y = y;
 	}
 	return ret;
+}
+
+std::string Properties::GetAsString(const char * name, std::string default_value) const
+{
+	std::string ret = default_value;
+	for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+	{
+		if ((*item)->name == name)
+		{
+			return ret = *(std::string*)(*item)->value;
+		}
+	}
+	return ret;
+}
+
+int Properties::GetAsInt(const char * name, int default_value) const
+{
+	int ret = default_value;
+	for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+	{
+		if ((*item)->name == name)
+		{
+			return ret = *(int*)(*item)->value;
+		}
+	}
+	return ret;
+}
+
+float Properties::GetAsFloat(const char * name, float default_value) const
+{
+	float ret = default_value;
+	for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+	{
+		if ((*item)->name == name)
+		{
+			ret = *(float*)(*item)->value;
+			return ret;
+		}
+	}
+	return ret;
+}
+
+bool Properties::GetAsBool(const char * name, bool default_value) const
+{
+	bool ret = default_value;
+	for (std::list<Property*>::const_iterator item = list.begin(); item != list.end(); ++item)
+	{
+		if ((*item)->name == name)
+		{
+			ret = *(bool*)(*item)->value;
+			return ret;
+		}
+	}
+	return ret;
+}
+
+void Properties::LoadProperties(pugi::xml_node propertie_node)
+{
+	for (pugi::xml_node iter = propertie_node.child("property"); iter; iter = iter.next_sibling("property"))
+	{
+		Property* p = new Property();
+		p->name = iter.attribute("name").as_string();
+		std::string type = iter.attribute("type").as_string();
+		if (type == "int")
+		{
+			p->value = new int(iter.attribute("value").as_int());
+		}
+		else if (type == "float")
+		{
+			p->value = new float(iter.attribute("value").as_float());
+		}
+		else if (type == "bool")
+		{
+			p->value = new bool(iter.attribute("value").as_bool());
+		}
+		else
+		{
+			p->value = new std::string(iter.attribute("value").as_string());
+		}
+		list.push_back(p);
+
+	}
 }
 
 void Properties::UnloadProperties()

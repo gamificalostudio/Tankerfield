@@ -6,6 +6,7 @@
 #include "Module.h"
 #include <list>
 #include <string>
+#include "Rect.h"
 
 using namespace std;
 typedef string String;
@@ -15,39 +16,51 @@ typedef string String;
 struct SDL_Texture;
 class UI_Listener;
 
+class Pivot
+{
+public:
+
+	Pivot()
+	{};
+
+	enum class POS_X
+	{
+		LEFT,
+		CENTER,
+		RIGHT
+	} pos_x = POS_X::LEFT;
+
+	enum class POS_Y
+	{
+		TOP,
+		CENTER,
+		BOTTOM
+	} pos_y = POS_Y::TOP;
+
+};
+
 enum class HoverState
 {
-	On,
-	Out,
-	Repeat,
-	None
+	ENTER,
+	EXIT,
+	REPEAT,
+	NONE
 };
 
-enum class ObjectState
+enum class ELEMENT_STATE
 {
-	visible,
-	hidden,
-	locked
+	VISIBLE,
+	HIDDEN,
+	LOCKED
 };
 
-enum class PivotPos
+struct UI_ElementDef
 {
-	center,
-	center_left,
-	center_right,
-	top_center,
-	top_left,
-	top_right,
-	bottom_center,
-	bottom_left,
-	bottom_right
-};
-
-struct UI_ElementDefinition
-{
-	PivotPos   pivot = PivotPos::center;
-	SDL_Rect   section = { 0,0,0,0 };
-	fPoint     draw_offset = { 0.f, 0.f };
+	Pivot      pivot;
+	fPoint     section_offset = { 0.f, 0.f };
+	float      section_width = 0.f;
+	float      section_height= 0.f;
+	SDL_Rect   sprite_section = { 0, 0, 0, 0};
 
 };
 
@@ -55,7 +68,7 @@ class UI_Element
 {
 public:
 
-	UI_Element(const fPoint position, UI_ElementDefinition definition, UI_Listener *listener);
+	UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener);
 	
 	virtual ~UI_Element();
 
@@ -64,46 +77,48 @@ public:
 
 	virtual bool Update(float dt) { return true; }
 
-	virtual bool Draw() { return true; };
+	virtual bool Draw();
 
 	// Common methods =================================
 
-	void SetPosition(const fPoint position);
-
-	void SetState(const ObjectState state);
-
 	bool SetParent(UI_Element* parent);
 
-	void SetPivot(const PivotPos new_pivot);
+	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
 
-	fPoint GetPosition() const;
+	fRect GetSection();
+
+	SDL_Rect GetDrawRect();
 
 	list<UI_Element*>* GetSons(); 
 
 	UI_Element* GetParent();
 
-	void IsDraggable(const bool is_draggable);
-
 	bool UpdateRelativePosition();
+
+public:
+
+	String                name;
+	fPoint                position = { 0.f, 0.f };
+	SDL_Rect              sprite_section = { 0, 0, 0, 0};
+	float                 section_width = 0.f;
+	float                 section_height = 0.f;
+	float                 scale = 1.f;
+	fPoint                section_offset = { 0.f, 0.f };
+	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
+	bool			      is_draggable = false;
+	bool				  is_interactive = false;
 
 protected:
 
 	// Vars ==============================================
-	String                name;
-	fPoint                position = { 0.f, 0.f };
+	
 	fPoint                relative_position = { 0.f, 0.f };
-	PivotPos              pivot = PivotPos::center;
-	SDL_Rect			  section = {0, 0, 0, 0};
-	fPoint                section_offset = { 0.f, 0.f };
-	fPoint                draw_offset = { 0.f, 0.f };
-	UI_Listener        * listener = nullptr;
+	Pivot                 pivot;
+	UI_Listener         * listener = nullptr;
 
 	// Properties ========================================
 
-	ObjectState			  state = ObjectState::visible;
-	HoverState			  hover_state = HoverState::None;
-	bool			      is_draggable = false;
-	bool				  is_interactive = true;
+	HoverState			  hover_state = HoverState::NONE;
 
 	// Hierarchy =========================================
 

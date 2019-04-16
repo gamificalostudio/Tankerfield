@@ -34,7 +34,11 @@ public:
 public:
 	Animation()
 	{
+	}
 
+	Animation(pugi::xml_node const & node)
+	{
+		LoadAnimation(node);
 	}
 
 	void NextFrame(float dt)
@@ -49,7 +53,7 @@ public:
 
 	SDL_Rect & GetFrame(float angle)
 	{
-		uint ind = GetRotatedIndex(max_dirs, angle, ROTATION_DIR::COUNTER_CLOCKWISE, first_dir_angle);
+		uint ind = GetRotatedIndex(angle);
 		return frames[ind][(uint)current_frame];
 	}
 
@@ -84,14 +88,16 @@ public:
 					frame_iter.attribute("h").as_int()
 				};
 				frames[dir_num].push_back(new_frame);
-				if (frame_num > max_frames) { max_frames = frame_num; }
 				frame_num++;
+				if (frame_num > max_frames) { max_frames = frame_num; }
 			}
-			if (dir_num > max_dirs) { max_dirs = dir_num; }
 			dir_num++;
+			if (dir_num > max_dirs) { max_dirs = dir_num; }
 		}
 		return true;
 	}
+
+	//TODO: Assert if there is a different number of frames in each direction
 
 	//Used before loading rects
 	//Resizes the std::2Dvector frames so that it doesn't need to change size when rects are loaded00
@@ -127,24 +133,24 @@ public:
 	}
 
 private:
+
 	//angle should be in degrees
-	//TODO: Add support for clockwise spritesheets
-	uint GetRotatedIndex(uint rect_num, float angle, ROTATION_DIR rot_dir, float fist_rect_dir)
+	uint GetRotatedIndex(float angle)
 	{
+		//Avoid all the calculations if it only has one frame
+		if (max_dirs == 1)
+		{
+			return 0;
+		}
+
 		//Account for the spritesheet not starting at the 0 degree rotation
-		angle -= fist_rect_dir;
+		angle -= first_dir_angle;
+
 		angle = ClampRotation(angle);
-		float ind = (angle * rect_num) / 360.f;
-		if (fmod(ind, 1.f) >= 0.5f)
-		{
-			ceil(ind);
-		}
-		else
-		{
-			floor(ind);
-		}
+		float ind = round((angle * max_dirs) / 360.f);
+
 		//If it's the last frame, start over again
-		if (ind == rect_num)
+		if (ind == max_dirs)
 		{
 			ind = 0.f;
 		}
