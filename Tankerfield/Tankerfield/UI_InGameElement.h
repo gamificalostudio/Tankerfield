@@ -5,8 +5,8 @@
 
 class Object;
 class Player_GUI;
-
 class UI_Image;
+enum class WEAPON;
 
 struct UI_InGameElementDef: public UI_ElementDef
 {
@@ -59,11 +59,10 @@ public:
 	int current_player_level = 0u;
 	int weapon_level = 0u;
 
+	WEAPON                type;
 	UI_Image*             weapon_icon = nullptr;
 	UI_Image*             weapon_frame = nullptr;
 	std::list<UI_Image*>  level_indicators;
-
-
 };
 
 

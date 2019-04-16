@@ -42,6 +42,11 @@ void UI_InGameElement::UpdateArrow()
 
 UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_IG_WeaponDef definition, UI_Listener * listener) : UI_InGameElement(position, definition, listener), last_player_level(definition.last_player_level)
 {
+	last_player_level = 3;
+	current_player_level = 4;
+	weapon_level = 6;
+	type = WEAPON::DOUBLE_MISSILE;
+
 	UI_ImageDef img_def;
 	img_def.sprite_section = { 330, 160, 50, 65 };
 	
@@ -50,9 +55,24 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_IG_WeaponDef definiti
 	weapon_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	weapon_frame->camera = player_gui->player->camera_player;
 
-	last_player_level = 3;
-	current_player_level = 4;
-	weapon_level = 6;
+	switch (type)
+	{
+	case WEAPON::DOUBLE_MISSILE:
+		img_def.sprite_section = { 620, 10, 34, 34 };
+		break;
+	case WEAPON::FLAMETHROWER:
+		img_def.sprite_section = { 580, 10, 34, 34 };
+		break;
+	case WEAPON::BASIC:
+		img_def.sprite_section = { 330, 10, 34, 34 };
+		break;
+	}
+
+	weapon_icon = app->ui->CreateImage(camera_pos - fPoint(0.f, 24.f), img_def);
+	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	weapon_icon->camera = player_gui->player->camera_player;
+	weapon_icon->SetParent(weapon_frame);
+	 
 }
 
 void UI_IG_Weapon::UpdateLevel()

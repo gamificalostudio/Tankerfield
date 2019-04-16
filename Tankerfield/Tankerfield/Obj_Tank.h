@@ -12,13 +12,10 @@ class Camera;
 class Obj_PickUp;
 
 enum class WEAPON {
-	BASIC = -1,
+	BASIC,
 	DOUBLE_MISSILE, 
-	FLAMETHROWER,
-	
-	
+	FLAMETHROWER,	
 	MAX
-
 };
 
 
