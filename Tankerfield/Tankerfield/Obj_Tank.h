@@ -70,8 +70,8 @@ private:
 	void Shoot();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
-	bool IsShootingBasic();
-	bool IsShootingSpecial();
+	bool PressShot();
+	bool ReleaseShot();
 
 	//- Input
 	void SelectInputMethod();
@@ -81,16 +81,12 @@ private:
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
 
-
 	//- TankDeath
-
 	void ReviveTank();
 	void StopTank();
 
 	//- Item
 	void Item();
-
-
 
 private:
 	//- Logic
@@ -118,7 +114,9 @@ private:
 	uint shot_type							= (uint)WEAPON::BASIC;
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
 	PerfTimer shot_timer;
-	uint shot_sound = 0;
+	PerfTimer charged_timer;
+	float charge_time						= 0.f;//Charge time in ms
+	uint shot_sound							= 0u;
 	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
 
 	//- Items
@@ -132,8 +130,7 @@ private:
 	//-- Keyboard inputs
 	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_interact				= SDL_SCANCODE_UNKNOWN;
-	int kb_shoot_basic						= 0;
-	int kb_shoot_special					= 0;
+	int kb_shoot							= 0;
 	SDL_Scancode kb_up						= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
@@ -144,9 +141,7 @@ private:
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
-	SDL_GameControllerButton gamepad_revive_tank	= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
-	SDL_GameControllerAxis gamepad_shoot_special	= SDL_CONTROLLER_AXIS_INVALID;
 
 	//- Drawing
 

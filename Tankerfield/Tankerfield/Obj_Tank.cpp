@@ -90,21 +90,18 @@ bool Obj_Tank::Start()
 	cannon_length = 1.f;
 
 	//TODO: Load them from the XML
-	kb_up			  = SDL_SCANCODE_W;
-	kb_left			= SDL_SCANCODE_A;
-	kb_down			= SDL_SCANCODE_S;
-	kb_right		= SDL_SCANCODE_D;
-	kb_shoot_basic		= SDL_BUTTON_RIGHT;
-	kb_shoot_special	= SDL_BUTTON_LEFT;
-	kb_item			= SDL_SCANCODE_F;
-	kb_interact		= SDL_SCANCODE_SPACE;
+	kb_up				= SDL_SCANCODE_W;
+	kb_left				= SDL_SCANCODE_A;
+	kb_down				= SDL_SCANCODE_S;
+	kb_right			= SDL_SCANCODE_D;
+	kb_shoot			= SDL_BUTTON_LEFT;
+	kb_item				= SDL_SCANCODE_F;
+	kb_interact			= SDL_SCANCODE_SPACE;
   
-	gamepad_move	= Joystick::LEFT;
-	gamepad_aim		= Joystick::RIGHT;
-	gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_TRIGGERLEFT;
-	gamepad_shoot_special	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_move		= Joystick::LEFT;
+	gamepad_aim			= Joystick::RIGHT;
+	gamepad_shoot_basic	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	gamepad_revive_tank = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER;
 	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
 	draw_offset.x = 46;
@@ -131,6 +128,8 @@ bool Obj_Tank::Start()
 			break;
 		}
 	}
+
+	charge_time = 1000.f;
 
 	return true;
 }
@@ -402,43 +401,50 @@ void Obj_Tank::Shoot()
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
-	//- Special shoot (prioritize first the special shot)
-	if (IsShootingSpecial() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+	if (PressShot())
 	{
-		(this->*shot_function[(uint)shot_type])();
-		app->audio->PlayFx(shot_sound);
-		shot_timer.Start();
+		charged_timer.Start();
 	}
-	//- Basic shoot
-	else if (!IsShootingSpecial() && IsShootingBasic() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+
+	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
-		(this->*shot_function[(uint)shot_type])();
-		app->audio->PlayFx(shot_sound);
-		shot_timer.Start();
+		//- Basic shot
+		if (charged_timer.ReadMs() < charge_time) 
+		{
+			LOG("basic shot");
+			(this->*shot_function[(uint)shot_type])();
+			app->audio->PlayFx(shot_sound);
+			shot_timer.Start();
+		}
+		//- Charged shot
+		else
+		{
+			LOG("charged shot");
+		}
 	}
 }
 
-bool Obj_Tank::IsShootingSpecial()
+bool Obj_Tank::PressShot()
 {
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		return app->input->GetMouseButton(kb_shoot_special) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_special) == KEY_REPEAT;
-	}
-	else if (shot_input == INPUT_METHOD::CONTROLLER)
-	{
-		return (*controller)->GetAxis(gamepad_shoot_special) > 0;
-	}
-}
-
-bool Obj_Tank::IsShootingBasic()
-{
-	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
-	{
-		return app->input->GetMouseButton(kb_shoot_basic) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_basic) == KEY_REPEAT;
+		return app->input->GetMouseButton(kb_shoot) == KEY_DOWN;
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
 		return (*controller)->GetAxis(gamepad_shoot_basic) > 0;
+	}
+}
+
+bool Obj_Tank::ReleaseShot()
+{
+	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
+	{
+		return app->input->GetMouseButton(kb_shoot) == KEY_UP;
+	}
+	else if (shot_input == INPUT_METHOD::CONTROLLER)
+	{
+		return (*controller)->GetAxis(gamepad_shoot_basic) < 0;
 	}
 }
 
@@ -464,7 +470,7 @@ void Obj_Tank::SelectInputMethod()
 
 	//Shot input
 	if (shot_input != INPUT_METHOD::KEYBOARD_MOUSE
-		&& app->input->GetMouseButton(kb_shoot_basic) != KEY_IDLE)
+		&& app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
 	{
 		shot_input = INPUT_METHOD::KEYBOARD_MOUSE;
 		SDL_ShowCursor(SDL_ENABLE);
@@ -499,21 +505,21 @@ void Obj_Tank::ReviveTank()
 {
 	switch (tank_num) {
 	case 0:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -523,21 +529,21 @@ void Obj_Tank::ReviveTank()
 
 		break;
 	case 1:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -546,21 +552,21 @@ void Obj_Tank::ReviveTank()
 		}
 		break;
 	case 2:	
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)				
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -569,34 +575,29 @@ void Obj_Tank::ReviveTank()
 		}
 		break;
 	case 3:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		
 		break;
 	}
-
-
-
-
 }
 
 void Obj_Tank::StopTank()
