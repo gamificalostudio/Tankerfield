@@ -10,13 +10,30 @@
 #include "M_Collision.h"
 #include "Obj_Tank.h"
 
+#include "M_UI.h"
+#include "UI_InGameElement.h"
+
 
 Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 {
 	coll = app->collision->AddCollider(pos, 1, 1, Collider::TAG::PICK_UP, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-	
 	type_of_pick_up = RandomPickUp();
+
+	UI_InGameElementDef element_def;
+	element_def.pointed_obj = this;
+
+	switch (type_of_pick_up)
+	{
+	case PICKUP_TYPE::NO_TYPE:
+		break;
+	case PICKUP_TYPE::ITEM:
+		in_game_element = app->ui->CreateInGameItem({ 0.f,0.f} , element_def);
+		break;
+	case PICKUP_TYPE::WEAPON:
+		in_game_element = app->ui->CreateInGameWeapon({ 0.f,0.f }, element_def);
+		break;
+	}
 }
 
 Obj_PickUp::~Obj_PickUp()

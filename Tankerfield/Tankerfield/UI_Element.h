@@ -80,6 +80,8 @@ public:
 
 	virtual bool Draw();
 
+	virtual void Destroy();
+
 	// Common methods =================================
 	void  SetPos( const fPoint pos);
 
@@ -109,13 +111,11 @@ public:
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	bool			      is_draggable = false;
 	bool				  is_interactive = false;
-	Camera*               camera = nullptr;
-	bool                  to_destroy = false;
 
 protected:
 
 	// Vars ==============================================
-	
+	bool                  to_destroy = false;
 	fPoint                relative_position = { 0.f, 0.f };
 	Pivot                 pivot;
 	UI_Listener         * listener = nullptr;

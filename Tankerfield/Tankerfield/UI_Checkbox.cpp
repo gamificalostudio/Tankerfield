@@ -26,9 +26,9 @@ UI_Checkbox::UI_Checkbox(const fPoint position, const UI_CheckboxDef definition,
 
 UI_Checkbox::~UI_Checkbox()
 {
-	if (button != nullptr)
+	if (app->on_clean_up == false && button != nullptr)
 	{
-		button->to_destroy = true;
+		button->Destroy();
 		button = nullptr;
 	}
 }

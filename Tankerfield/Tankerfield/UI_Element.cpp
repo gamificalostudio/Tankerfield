@@ -27,16 +27,14 @@ bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
 
-	if (camera != nullptr)
-	{
-		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, camera);
-	}
-	else
-	{
-		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section);
-	}
+	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
 
 	return true;
+}
+
+void UI_Element::Destroy()
+{
+	to_destroy = true;
 }
 
 void UI_Element::SetPos(const fPoint pos)

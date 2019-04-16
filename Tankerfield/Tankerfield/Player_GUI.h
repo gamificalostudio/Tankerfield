@@ -11,7 +11,7 @@ class UI_Label;
 class UI_Bar;
 class Object;
 
-class UI_InGameElement;
+class UI_PickUpElement;
 
 class Player_GUI: public UI_Listener
 {
@@ -54,6 +54,9 @@ public:
 
 	SDL_Rect viewport_with_margin = { 0,0,0,0 };
 
+private:
+
+	friend M_UI;
 };
 
 #endif // __PLAYER_GUI_H_

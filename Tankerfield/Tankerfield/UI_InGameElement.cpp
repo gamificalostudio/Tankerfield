@@ -5,26 +5,25 @@
 #include "Player_GUI.h"
 
 #include "Obj_Tank.h"
-#include "Obj_Item.h"
+#include "Obj_PickUp.h"
 #include "Object.h"
 
 #include "UI_Image.h"
-//#include <algorithm>
 
-UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener* listener) : UI_Element(position, definition, listener), object(definition.object), player_gui(definition.player_gui)
+UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElementDef definition): UI_Element(position, definition, nullptr),  map_pos(definition.map_pos), pointed_obj(definition.pointed_obj)
 {
-	this->position = { player_gui->viewport.GetLeft() + player_gui->viewport.w * 0.5f, player_gui->viewport.GetTop() + player_gui->viewport.h * 0.5f };
-
 	// Set Arrow =================================================
 
-	UI_ImageDef image_def;
-	image_def.image_animation = app->ui->arrow_anim;
-	arrow_image = app->ui->CreateImage({ 0.f, 0.f}, image_def);
-	arrow_image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	arrow_image->camera = player_gui->player->camera_player;
-
-	// Set Image =================================================
+	if (definition.add_arrow == true)
+	{
+		UI_ImageDef image_def;
+		image_def.image_animation = app->ui->arrow_anim;
+		arrow_image = app->ui->CreateInGameImage({ 0.f, 0.f }, image_def);
+		arrow_image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	}
 }
+
+
 
 bool UI_InGameElement::Update(float dt)
 {
@@ -32,31 +31,53 @@ bool UI_InGameElement::Update(float dt)
 	return true;
 }
 
-void UI_InGameElement::UpdateArrow()
+void UI_InGameElement::Destroy()
 {
-	fPoint vector = player_gui->player->pos_map - object->pos_map;
-	arrow_image->sprite_section = arrow_image->image_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
-	vector.Normalize();
-	arrow_image->SetPos(app->map->MapToCamera(player_gui->player->pos_map - vector * 1.5f, player_gui->player->camera_player));
+	if (arrow_image != nullptr)
+	{
+		arrow_image->Destroy();
+	}
 }
 
-
-UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_IG_WeaponDef definition, UI_Listener * listener) : UI_InGameElement(position, definition, listener), last_player_level(definition.last_player_level)
+void UI_InGameElement::UpdateArrow()
 {
-	last_player_level = 3;
-	current_player_level = 4;
-	weapon_level = 6;
-	type = WEAPON::DOUBLE_MISSILE;
+	if (arrow_image == nullptr)
+	{
+		return;
+	}
+	
+	if (SDL_HasIntersection(&app->ui->current_gui->viewport_with_margin, &main_element->GetDrawRect()))
+	{
+		arrow_image->state = ELEMENT_STATE::HIDDEN;
+	}
+	else
+	{
+		arrow_image->state = ELEMENT_STATE::VISIBLE;
 
+		fPoint vector = app->ui->current_gui->player->pos_map - pointed_obj->pos_map;
+		arrow_image->sprite_section = arrow_image->image_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
+		vector.Normalize();
+		arrow_image->SetPos(app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 1.5f, app->ui->current_gui->player->camera_player));
+	}
+}
+
+UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef definition) : UI_InGameElement(position, definition)
+{
 	UI_ImageDef img_def;
+
+	// Add frame ====================================================
+
 	img_def.sprite_section = { 330, 160, 50, 65 };
 	
-	fPoint camera_pos = app->map->MapToCamera(object->pos_map, player_gui->player->camera_player);
-	weapon_frame = app->ui->CreateImage(camera_pos, img_def);
+	weapon_frame = app->ui->CreateInGameImage({ 0.f ,0.f }, img_def);
 	weapon_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
-	weapon_frame->camera = player_gui->player->camera_player;
+	main_element = weapon_frame;
 
-	switch (type)
+	// Add icon ====================================================
+
+	Obj_PickUp* pick_up_obj = (Obj_PickUp*)pointed_obj;
+	
+	switch (pick_up_obj->type_of_weapon)
 	{
 	case WEAPON::DOUBLE_MISSILE:
 		img_def.sprite_section = { 620, 10, 34, 34 };
@@ -67,11 +88,13 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_IG_WeaponDef definiti
 	case WEAPON::BASIC:
 		img_def.sprite_section = { 330, 10, 34, 34 };
 		break;
+	default:
+		img_def.sprite_section = { 500, 10, 34, 34 };
+		break;
 	}
-
-	weapon_icon = app->ui->CreateImage(camera_pos - fPoint(0.f, 24.f), img_def);
+	img_def.sprite_section = { 620, 10, 34, 34 };
+	weapon_icon = app->ui->CreateInGameImage(weapon_frame->position - fPoint(0.f, 24.f), img_def);
 	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
-	weapon_icon->camera = player_gui->player->camera_player;
 	weapon_icon->SetParent(weapon_frame);
 	 
 }
@@ -96,16 +119,15 @@ void UI_IG_Weapon::UpdateLevel()
 
 		for (std::list <UI_Image*>::iterator iter = level_indicators.begin(); iter != level_indicators.end(); ++iter)
 		{
-			(*iter)->to_destroy = true;
+			(*iter)->Destroy();
 		}
 
 		level_indicators.clear();
 
 		for (int i = 0; i < abs( diference) ; ++i)
 		{
-			UI_Image* aux = app->ui->CreateImage(weapon_frame->position - fPoint(34.f , 59.f -9.f * i), img_def);
+			UI_Image* aux = app->ui->CreateInGameImage(weapon_frame->position - fPoint(34.f , 59.f -9.f * i), img_def);
 			aux->SetParent(weapon_frame);
-			aux->camera = player_gui->player->camera_player;
 			level_indicators.push_back(aux);
 		}
 
@@ -116,69 +138,82 @@ void UI_IG_Weapon::UpdateLevel()
 
 bool UI_IG_Weapon::Update(float dt)
 {
-	weapon_frame->SetPos(app->map->MapToCamera(object->pos_map, player_gui->player->camera_player));
+	weapon_frame->SetPos(app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_gui->player->camera_player));
 	UpdateLevel();
-
-	if (SDL_HasIntersection(&(SDL_Rect)player_gui->viewport, &weapon_frame->GetDrawRect()))
-	{
-		weapon_frame->state = ELEMENT_STATE::VISIBLE;
-	}
-	else
-	{
-		weapon_frame->state = ELEMENT_STATE::HIDDEN;
-	}
-
-	if (SDL_HasIntersection( &player_gui->viewport_with_margin , &weapon_frame->GetDrawRect()))
-	{
-		arrow_image->state = ELEMENT_STATE::HIDDEN;
-	}
-	else
-	{
-		arrow_image->state = ELEMENT_STATE::VISIBLE;
-		UpdateArrow();
-	}
+	UpdateArrow();
 
 	return true;
 }
 
-UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener) : UI_InGameElement(position, definition, listener)
+void UI_IG_Weapon::Destroy()
+{
+	if (arrow_image != nullptr)
+	{
+		arrow_image->Destroy();
+	}
+	if (weapon_frame != nullptr)
+	{
+		weapon_frame->Destroy();
+	}
+	if (weapon_icon != nullptr)
+	{
+		weapon_icon->Destroy();
+	}
+
+	for (std::list <UI_Image*>::iterator iter = level_indicators.begin(); iter != level_indicators.end(); ++iter)
+	{
+		(*iter)->Destroy();
+	}
+}
+
+UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definition) : UI_InGameElement(position, definition)
 {
 	UI_ImageDef img_def;
 
-	fPoint camera_pos = app->map->MapToCamera(object->pos_map, player_gui->player->camera_player);
+	// Add frame ====================================================
 
 	img_def.sprite_section = { 385, 160, 70, 80 };
-	item_frame = app->ui->CreateImage(camera_pos, img_def);
+	item_frame = app->ui->CreateInGameImage({ 0.f, 0.f }, img_def);
 	item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
-	item_frame->camera = player_gui->player->camera_player;
+	main_element = item_frame;
 
-	switch (object->type)
+	// Add icon ====================================================
+
+	switch (pointed_obj->type)
 	{
 	case ObjectType::HEALTH_BAG:
 		img_def.sprite_section = { 490,110,45,45 };
 		break;
 	default:
+		img_def.sprite_section = { 490,110,45,45 };
 		break;
 	}
 
-	item_icon = app->ui->CreateImage(camera_pos + fPoint(0.f, 26.f), img_def);
+	item_icon = app->ui->CreateInGameImage({ 0.f, - 26.f }, img_def);
 	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	item_icon->SetParent(item_frame);
-	item_icon->camera = player_gui->player->camera_player;
 	
-}	
-
+}
 bool UI_IG_Item::Update(float dt)
 {
-	if (SDL_HasIntersection(&player_gui->viewport_with_margin, &item_frame->GetDrawRect()))
-	{
-		arrow_image->state = ELEMENT_STATE::HIDDEN;
-	}
-	else
-	{
-		arrow_image->state = ELEMENT_STATE::VISIBLE;
-		UpdateArrow();
-	}
-
+	item_frame->SetPos(app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_gui->player->camera_player));
+	UpdateArrow();
 	return true;
 }
+
+void UI_IG_Item::Destroy()
+{
+	if (arrow_image != nullptr)
+	{
+		arrow_image->Destroy();
+	}
+	if (item_frame != nullptr)
+	{
+		item_frame->Destroy();
+	}
+	if (item_icon != nullptr)
+	{
+		item_icon->Destroy();
+	}
+}
+

@@ -12,6 +12,7 @@
 #include "M_Scene.h"
 
 #include "Player_GUI.h"
+#include "Obj_Tank.h"
 
 // UI includes --------------------------
 #include "UI_Element.h"
@@ -28,7 +29,8 @@
 M_UI::M_UI() : Module()
 {
 	name.assign("ui");
-	main_object = new UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
+	main_ui_element = new UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
+	main_in_game_element = new UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
 }
 
 // Destructor
@@ -54,18 +56,15 @@ bool M_UI::Start()
 	// Position ======================================
 	fRect full_screen =  app->win->GetWindowRect();
 
-
 	// HUD ===========================================
-	hud_player_1 = new Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
-	hud_player_2 = new Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
-	hud_player_3 = new Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
-	hud_player_4 = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
-
-	UI_IG_WeaponDef test_def;
-	test_def.object = (Object*)app->scene->tank_2;
-	test_def.player_gui = hud_player_1;
-
-	test = app->ui->CreateInGameWeapon({ 0.F,0.F }, test_def);
+	player_1_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	players_guis.push_back(player_1_gui);
+	player_2_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	players_guis.push_back(player_2_gui);
+	player_3_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	players_guis.push_back(player_3_gui);
+	player_4_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	players_guis.push_back(player_4_gui);
 
 	UI_ImageDef image_def;
 
@@ -106,15 +105,15 @@ bool M_UI::CleanUp()
 	atlas = nullptr;
 
 	list<UI_Element*>::iterator object;
-	object = objects_list.begin();
+	object = elements_list.begin();
 
-	while (object != objects_list.end())
+	while (object != elements_list.end())
 	{
 		(*object)->object_sons.clear();
 		RELEASE((*object));
 		++object;
 	}
-	objects_list.clear();
+	elements_list.clear();
 
 	return true;
 }
@@ -133,17 +132,11 @@ bool M_UI::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
 		debug = !debug;
 
-	if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN)
-		--test->current_player_level;
-
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
-		++test->current_player_level;
-
 	// Hover States ============================================
 
 	fRect section;
 
-	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 	{
 		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->to_destroy == true)
 		{
@@ -183,20 +176,20 @@ bool M_UI::PreUpdate()
 	{
 		SelectClickedObject();
 	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_object)
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_element)
 	{
 		click_state = ClickState::REPEAT;
 	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_object)
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_element)
 	{
 		click_state = ClickState::EXIT;
 	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_object)
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_element)
 
 	{
 		click_state = ClickState::NONE;
 
-		selected_object = nullptr;
+		selected_element = nullptr;
 	}
 
 
@@ -205,18 +198,51 @@ bool M_UI::PreUpdate()
 
 bool M_UI::Update(float dt)
 {
-	BROFILER_CATEGORY("M_UIUpdate", Profiler::Color::Brown)
+	BROFILER_CATEGORY("M_UIUpdate", Profiler::Color::Brown);
+
+	for (list < UI_Element*> ::iterator element = in_game_elements.begin(); element != in_game_elements.end(); )
+	{
+		if ((*element)->to_destroy == true)
+		{
+			// Delete ui element on parent sons list =========================
+
+			if ((*element)->parent_object != nullptr)
+			{
+				list<UI_Element*> *sons_list = (*element)->parent_object->GetSons();
+				list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), (*element));
+
+				if (son_to_delete == sons_list->end())
+				{
+					LOG("Object not deleted: Not found");
+					return false;
+				}
+
+				sons_list->erase(son_to_delete);
+			}
+
+			// Delete ui element ============================================
+
+			LOG("UI Object deleted");
+			RELEASE((*element));
+			element = in_game_elements.erase(element);
+		}
+		else
+		{
+			++element;
+		}
+	}
+
 	// Draggable ================================================
-	if (selected_object && selected_object->is_draggable)
+	if (selected_element && selected_element->is_draggable)
 	{
 		switch (click_state)
 		{
 		case ClickState::ENTER:
-			mouse_offset = mouse_position - selected_object->position;
+			mouse_offset = mouse_position - selected_element->position;
 			break;
 		case ClickState::REPEAT:
-			selected_object->position  = mouse_position - mouse_offset;
-			selected_object->UpdateRelativePosition();
+			selected_element->position  = mouse_position - mouse_offset;
+			selected_element->UpdateRelativePosition();
 			break;
 		case ClickState::EXIT:
 			mouse_offset = { 0,0 };
@@ -225,26 +251,26 @@ bool M_UI::Update(float dt)
 	}
 	// Click Callbacks =============================================
 
-	if (selected_object && selected_object->listener)
+	if (selected_element && selected_element->listener)
 	{
 		switch (click_state)
 		{
 		case ClickState::ENTER:
-			selected_object->listener->OnClick(selected_object);
+			selected_element->listener->OnClick(selected_element);
 			break;
 		case ClickState::REPEAT:
-			selected_object->listener->RepeatClick(selected_object);
+			selected_element->listener->RepeatClick(selected_element);
 			break;
 		case ClickState::EXIT:
-			if (selected_object->hover_state != HoverState::NONE)
+			if (selected_element->hover_state != HoverState::NONE)
 			{
-				selected_object->listener->OutClick(selected_object);
+				selected_element->listener->OutClick(selected_element);
 			}
 			break;
 		}
 	}
 
-	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end();)
+	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end();)
 	{
 		if ((*item)->to_destroy == true)
 		{
@@ -268,7 +294,7 @@ bool M_UI::Update(float dt)
 
 			LOG("UI Object deleted");
 			RELEASE((*item));
-			item = objects_list.erase(item);
+			item = elements_list.erase(item);
 		}
 		else
 		{
@@ -280,7 +306,7 @@ bool M_UI::Update(float dt)
 
 	// Hover Callbacks =============================================
 
-	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 	{
 		if ((*item)->listener == nullptr)
 		{
@@ -301,7 +327,7 @@ bool M_UI::Update(float dt)
 		}
 	}
 
-	UpdateGuiPositions(main_object, fPoint(0, 0));
+	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
 	return true;
 }
@@ -311,18 +337,38 @@ bool M_UI::PostUpdate(float dt)
 {
 	fRect full_screen = app->win->GetWindowRect();
 
+	//Split Lines ==========================================================================================================
+
 	app->render->DrawQuad({(int) (full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
 	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
 
-	// Draw all UI objects ====================================
-	DrawUI(main_object);
+	// Draw all In Game elements ====================================
+
+	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
+	{
+		current_gui = (*gui);
+		current_camera = current_gui->player->camera_player;
+
+		for (list<UI_Element*>::iterator element = in_game_elements.begin(); element != in_game_elements.end(); ++element)
+		{
+			(*element)->Update(dt);
+		}
+		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
+
+		DrawUI(main_in_game_element);
+	}
+
+	current_camera = nullptr;
+
+	// Draw all UI elements ====================================
+	DrawUI(main_ui_element);
 
 	// Debug Positions  =======================================
 	if (debug)
 	{
-		for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+		for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 		{
-			if ((*item) != main_object)
+			if ((*item) != main_ui_element)
 			{
 				app->render->DrawQuad({ (int)(*item)->position.x - 3 , (int)(*item)->position.y - 3,  6, 6 }, 255, 0, 0, 255, true, false);
 			}
@@ -347,16 +393,16 @@ bool M_UI::PostUpdate(float dt)
  UI_Element * M_UI::CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
  {
 	 UI_Element* object = new UI_Element(position, definition, listener);
-	 object->SetParent(main_object);
-	 objects_list.push_back(object);
+	 object->SetParent(main_ui_element);
+	 elements_list.push_back(object);
 	 return object;
  }
 
  UI_Label* M_UI::CreateLabel(const fPoint position, const String text,  UI_LabelDef definition, UI_Listener* listener)
 {
 	UI_Label* object = new UI_Label(position, text, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
 	return object;
 
 }
@@ -364,83 +410,90 @@ bool M_UI::PostUpdate(float dt)
 UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition , UI_Listener* listener)
 {
 	UI_Image* object = new UI_Image(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
 	return object;
 }
 
 UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener)
 {
 	UI_Button* object = new UI_Button(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
 	return object;
 }
 
 UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definition, UI_Listener * listener)
 {
 	UI_Slider* object = new UI_Slider(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
 	return object;
 }
 
 UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener * listener)
 {
 	UI_Checkbox* object = new UI_Checkbox(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
 	return object;
 }
 
 UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener * listener)
 {
 	UI_TextPanel* object = new UI_TextPanel(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
 	return object;
 }
 UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener * listener)
 {
 	UI_Bar* object = new UI_Bar(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
 	return object;
 }
 
-UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener)
-{
 
-	UI_InGameElement* object = new UI_InGameElement(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InGameElementDef definition)
+{
+	UI_InGameElement* object = new UI_InGameElement(position, definition);
+	object->SetParent(main_in_game_element);
+	in_game_elements.push_back(object);
 	return object;
 }
-UI_IG_Weapon * M_UI::CreateInGameWeapon(const fPoint position, const UI_IG_WeaponDef definition, UI_Listener * listener)
+UI_IG_Weapon * M_UI::CreateInGameWeapon(const fPoint position, const UI_InGameElementDef definition)
 {
-	UI_IG_Weapon* object = new UI_IG_Weapon(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	UI_IG_Weapon* object = new UI_IG_Weapon(position, definition);
+	object->SetParent(main_in_game_element);
+	in_game_elements.push_back(object);
 	return object;
 }
-UI_IG_Item * M_UI::CreateInGameItem(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener)
+UI_IG_Item * M_UI::CreateInGameItem(const fPoint position, const UI_InGameElementDef definition)
 {
-	UI_IG_Item* object = new UI_IG_Item(position, definition, listener);
-	object->SetParent(main_object);
-	objects_list.push_back(object);
+	UI_IG_Item* object = new UI_IG_Item(position, definition);
+	object->SetParent(main_in_game_element);
+	in_game_elements.push_back(object);
 	return object;
-	return nullptr;
+}
+
+UI_Image* M_UI::CreateInGameImage(const fPoint position, const UI_ImageDef definition)
+{
+	UI_Image* object = new UI_Image(position, definition, nullptr);
+	object->SetParent(main_in_game_element);
+	in_game_elements.push_back(object);
+	return object;
 }
 // ====================================================================================
 
 UI_Element * M_UI::GetClickedObject()
 {
-	return selected_object;
+	return selected_element;
 }
 
 UI_Element * M_UI::GetScreen()
 {
-	return main_object;
+	return main_ui_element;
 }
 
 void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
@@ -463,7 +516,7 @@ bool M_UI::SelectClickedObject()
 {
 	list<UI_Element*> clicked_objects;
 
-	for (list<UI_Element*>::iterator item = objects_list.begin(); item != objects_list.end(); ++item)
+	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 	{
 		if ((*item)->hover_state != HoverState::NONE  && (*item)->state == ELEMENT_STATE::VISIBLE && (*item)->is_interactive == true)
 		{
@@ -491,7 +544,7 @@ bool M_UI::SelectClickedObject()
 				nearest_object = (*item);
 			}
 		}
-		selected_object = nearest_object;
+		selected_element = nearest_object;
 		click_state = ClickState::ENTER;
 	}
 
@@ -514,7 +567,7 @@ void M_UI::DrawUI(UI_Element * object)
 	{
 		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
-		if (selected_object == object)
+		if (selected_element == object)
 		{
 			app->render->DrawQuad(rect, 255, 233, 15, 100, true, false);
 		}

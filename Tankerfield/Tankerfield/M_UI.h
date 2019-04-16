@@ -19,6 +19,7 @@ typedef string String;
 enum class ELEMENT_STATE;
 class UI_Element;
 class Player_GUI;
+class Camera;
 
 class UI_Listener;
 class UI_Image;
@@ -41,8 +42,6 @@ struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
 struct UI_InGameElementDef;
-struct UI_IG_WeaponDef;
-struct UI_IG_ItemDef;
 
 enum class ClickState
 {
@@ -114,11 +113,13 @@ public:
 
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
 
-	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener = nullptr);
+	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition);
 
-	UI_IG_Weapon*   CreateInGameWeapon(const fPoint position, const UI_IG_WeaponDef definition, UI_Listener * listener = nullptr);
+	UI_IG_Weapon*   CreateInGameWeapon(const fPoint position, const UI_InGameElementDef definition);
 
-	UI_IG_Item*   CreateInGameItem(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener = nullptr);
+	UI_IG_Item*   CreateInGameItem(const fPoint position, const UI_InGameElementDef definition);
+
+	UI_Image*     CreateInGameImage(const fPoint position, const UI_ImageDef definition);
 
 	// Object functions ----------------------------------------------------------
 
@@ -144,25 +145,35 @@ private:
 
 	SDL_Texture* atlas = nullptr;
 
-	// Objects ---------------------------------------------
+	// Elements ---------------------------------------------
 
-	list<UI_Element*> objects_list;
+	list<UI_Element*> elements_list;
 
-	UI_Element* main_object = nullptr;
+	list<UI_Element*> in_game_elements;
 
-	UI_Element* selected_object = nullptr;
+	list<Player_GUI*> players_guis;
+
+	UI_Element* main_ui_element = nullptr;
+
+	UI_Element* main_in_game_element = nullptr;
+
+	UI_Element* selected_element = nullptr;
 
 	ClickState click_state = ClickState::NONE;
 
 public:
 	// Mouse ----------------------------------------------
-	Player_GUI  *hud_player_1 = nullptr;
+	Player_GUI* current_gui = nullptr;
 
-	Player_GUI  *hud_player_2 = nullptr;
+	Player_GUI  *player_1_gui = nullptr;
 
-	Player_GUI  *hud_player_3 = nullptr;
+	Player_GUI  *player_2_gui = nullptr;
 
-	Player_GUI  *hud_player_4 = nullptr;
+	Player_GUI  *player_3_gui = nullptr;
+
+	Player_GUI  *player_4_gui = nullptr;
+
+	Camera*     current_camera = nullptr;
 
 	fPoint		mouse_position;
 
@@ -170,7 +181,6 @@ public:
 
 	Animation* 	arrow_anim = nullptr;
 
-	UI_IG_Weapon* test = nullptr;
 };
 
 #endif // __MODULE_UI_H__

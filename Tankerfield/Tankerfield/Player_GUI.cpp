@@ -119,11 +119,11 @@ Player_GUI::~Player_GUI()
 {
 	if (app->on_clean_up == false)
 	{
-		weapon_frame->to_destroy = true;
-		item_frame->to_destroy = true;
-		ammo_image->to_destroy = true;
-		ammo_bar->to_destroy = true;
-		life_bar->to_destroy = true;
+		weapon_frame->Destroy();
+		item_frame->Destroy();
+		ammo_image->Destroy();
+		ammo_bar->Destroy();
+		life_bar->Destroy();
 
 		weapon_frame = nullptr;
 		item_frame = nullptr;
