@@ -375,6 +375,8 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
 		receiver = this;
+		Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+		new_particle->tank = receiver;
 		if (receiver->GetMaxLife() > receiver->GetLife())
 		{
 			receiver->SetLife(GetLife() + 5);
@@ -382,16 +384,15 @@ void Obj_Tank::OnTrigger(Collider * c1)
 				receiver->SetLife(receiver->GetMaxLife());
 			}
 		}
-		app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+		
+	}
 
-
-		if (c1->GetTag() == Collider::TAG::PICK_UP)
+	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	{
+		Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+		if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
 		{
-			Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-			if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
-			{
-				SetPickUp(pick_up);
-			}
+			SetPickUp(pick_up);
 		}
 	}
 }

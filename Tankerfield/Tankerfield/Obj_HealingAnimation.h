@@ -17,10 +17,13 @@ public:
 
 	bool Update(float dt);
 
+public:
+
+	Obj_Tank * tank = nullptr;
+
 private:
 	static Animation* anim;
-	static SDL_Texture * tex;
-
+	SDL_Texture* tex;
 };
 
 #endif
