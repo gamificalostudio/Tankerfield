@@ -32,6 +32,7 @@ class Obj_Tank : public Object
 {
 public:
 	Obj_Tank(fPoint pos);
+	~Obj_Tank();
 
 public:
 
