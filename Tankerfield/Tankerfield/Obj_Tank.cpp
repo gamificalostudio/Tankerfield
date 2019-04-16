@@ -178,8 +178,13 @@ bool Obj_Tank::Start()
 
 	basic_shot_timer.Start();
 
-	life =  100;
+	life =  200;
 	max_life = 200;
+
+	revive_range = 1.5f;
+	revive_range_squared = revive_range * revive_range;
+
+
 
 	//Life inicialistation
 
@@ -571,19 +576,19 @@ void Obj_Tank::ReviveTank()
 	tank_arr[2] = app->scene->tank_3;
 	tank_arr[3] = app->scene->tank_4;
 
+	
+
 	for (int i = 0; i < 4; i++)
 	{
 		if (this != tank_arr[i] 
-			
-			&& abs(pos_map.x - tank_arr[i]->pos_map.x) <= 3.f 
-			&& abs (pos_map.y - tank_arr[i]->pos_map.y) <= 3.f
 			&& controller != nullptr 
 			&& (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN 
 			&& tank_arr[i]->life == 0 
+			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map)<=revive_range_squared
 			&& this->life!=0)
 		{
-			tank_arr[i]->speed = 4.f;
-			tank_arr[i]->life = 50;
+			tank_arr[i]->speed = 4.f;		
+			tank_arr[i]->life = 50;											
 		}
 	}
 }

@@ -132,6 +132,11 @@ private:
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
 
+	//Revive
+
+	float revive_range						= 0.f;
+	float revive_range_squared				= 0.f;
+
 	//-- Basic shoot
 	uint basic_shot							= (uint)WEAPON::BASIC;
 	PerfTimer basic_shot_timer;
