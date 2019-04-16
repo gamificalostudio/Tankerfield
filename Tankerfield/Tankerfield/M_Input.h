@@ -55,27 +55,15 @@ private:
 
 public:
 
-	KeyState GetButtonState(SDL_GameControllerButton button)
-	{
-		return key_state[button];
-	}
+	KeyState GetButtonState(SDL_GameControllerButton button);
+	
 
 	bool attached = false;
 
 public:
 	
-	iPoint GetJoystick(Joystick joystick)
-	{
-		if (this == nullptr)
-			return iPoint(0, 0);
-		switch (joystick)
-		{
-		case Joystick::LEFT:
-			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
-		case Joystick::RIGHT:
-			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTY));
-		}
-	}
+	iPoint GetJoystick(Joystick joystick);
+
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
