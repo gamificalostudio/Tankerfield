@@ -105,7 +105,7 @@ public:
 	float angle				= 0.f;              //Direction that the object is facing
 	SDL_Texture * curr_tex	= nullptr;			//Points the current texture. Shouldn't allocate memory. Just assign the pointer to other textures already created. Used in Object::PostUpdate(float dt)
 	Animation * curr_anim	= nullptr;			//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created. Used in Object::PostUpdate(float dt) and for sprite sorting
-	iPoint draw_offset		= { 0.f, 0.f };		//Change it to make the object not render from the top left in the position //Pixels to the center of the player. Used to center the player sprite. Used in Object::PostUpdate(float dt) and for sprite sorting
+	iPoint draw_offset		= { 0, 0 };		//Change it to make the object not render from the top left in the position //Pixels to the center of the player. Used to center the player sprite. Used in Object::PostUpdate(float dt) and for sprite sorting
 	fPoint pivot			= { 0.f, 0.f };		//Offset from the position. Used for sprite sorting.
 	SDL_Rect frame			= { 0, 0, 0, 0 };	//A rect representing the sprite. Used for camera culling. Automatically set if you use curr_anim.
 };

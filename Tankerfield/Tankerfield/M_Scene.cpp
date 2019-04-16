@@ -58,12 +58,14 @@ bool M_Scene::Start()
 
 	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
 
+
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 13.5f));
 	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
+	//app->objectmanager->CreateObject(ObjectType::PICK_UP, fPoint(12.5f, 14.5f));
 
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
 	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
@@ -142,7 +144,7 @@ bool M_Scene::Update(float dt)
 	if (perform_objects_check)
 	{
 		// == 3 because of the objects that are not enemies. Possible solution 2: check the type of objects with counters and check
-		if (app->objectmanager->GetObjects().size() == 3) // TOFIX: Here we are checking objects of type static I think too...
+		if (app->objectmanager->GetObjects().size() == 5) // TOFIX: Here we are checking objects of type static I think too...
 		{
 			/* Generate new wave and increase units number */
 			initial_generated_units += enemies_to_increase;

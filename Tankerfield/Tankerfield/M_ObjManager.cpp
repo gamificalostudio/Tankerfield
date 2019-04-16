@@ -31,6 +31,7 @@
 #include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
+#include "Obj_PickUp.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -65,7 +66,7 @@ bool M_ObjManager::Start()
 
 bool M_ObjManager::PreUpdate()
 {
-	BROFILER_CATEGORY("EntityManager: PreUpdate", Profiler::Color::Lavender);
+	BROFILER_CATEGORY("Object Manager: PreUpdate", Profiler::Color::Lavender);
 	std::list<Object*>::iterator iterator;
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
@@ -80,7 +81,7 @@ bool M_ObjManager::PreUpdate()
 
 bool M_ObjManager::Update(float dt)
 {
-	BROFILER_CATEGORY("EntityManager: Update", Profiler::Color::ForestGreen);
+	BROFILER_CATEGORY("Object Manager: Update", Profiler::Color::ForestGreen);
 
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
@@ -135,7 +136,7 @@ bool M_ObjManager::Update(float dt)
 
 bool M_ObjManager::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("EntityManager: PostUpdate", Profiler::Color::ForestGreen);
+	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
 	std::vector<Object*> draw_objects;
 
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
@@ -241,6 +242,9 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Item_HealthBag(pos);
 		ret->type = ObjectType::HEALTH_BAG;
 		break;
+	case ObjectType::PICK_UP:
+		ret = new Obj_PickUp(pos);
+		ret->type = ObjectType::PICK_UP;
 	}
   
 	if (ret != nullptr)

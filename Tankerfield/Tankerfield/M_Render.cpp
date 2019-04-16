@@ -242,7 +242,7 @@ iPoint M_Render::ScreenToWorld(int x, int y) const
 }
 
 
-bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* current_camera, const SDL_Rect* section) const
+bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const Camera* current_camera, const SDL_Rect* section) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -504,6 +504,8 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 	int scale = app->win->GetScale();
 
 	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
+
+	camera->number_player = camera->number_player;
 
 	return SDL_HasIntersection(&r, &camera->rect);
 }

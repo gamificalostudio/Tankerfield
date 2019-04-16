@@ -25,12 +25,12 @@ private:
 
 	bool death = false;
 
+	int frame_explosion = 0;
+
 	float speed = 0.f;
 	float time = 0.f;
 
 	Circle range_pos;
-
-	Collider* coll_explosion=nullptr;
 	
 	// ---
 	static Animation* anim;

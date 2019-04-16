@@ -54,7 +54,7 @@ enum class ELEMENT_STATE
 	LOCKED
 };
 
-struct UI_ElementDefinition
+struct UI_ElementDef
 {
 	Pivot      pivot;
 	fPoint     section_offset = { 0.f, 0.f };
@@ -68,7 +68,7 @@ class UI_Element
 {
 public:
 
-	UI_Element(const fPoint position, const UI_ElementDefinition definition, UI_Listener *listener);
+	UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener);
 	
 	virtual ~UI_Element();
 

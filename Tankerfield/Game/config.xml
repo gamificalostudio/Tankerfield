@@ -11,16 +11,47 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1080" scale="1"/>
+    <resolution width="1280" height="720" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
 
-  <gui>
+  <ui>
     <atlas file="ui/atlas.png"/>
-  </gui>
+    <animations>
+      <arrow speed="0" rotation="clockwise" first_dir_angle ="22.5">
+        <dir>
+          <frame x= "120" y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "145" y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "170" y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "195 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "220 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "245 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "270 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "295 " y= "160" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "120" y= "160" w="25" h="25" />
+        </dir>
+      </arrow>
+    </animations>
+  </ui>
 
   <map>
    <folder>Maps/</folder>
@@ -39,6 +70,11 @@
     <enemies_to_increase value="3"/>
   </scene>
 
+  <pick_manager>
+    <percentage_to_spawn value="100"/>
+    
+  </pick_manager>
+  
   <object>
     <tesla_trooper>
       <animations>
@@ -118,11 +154,21 @@
       <speed value ="1"/>
       <time_between_bullets value ="100"/>
       <spritesheets>
-        <base>textures/objects/tank/base.png</base>
+        <base_yellow>textures/objects/tank/base - yellow.png</base_yellow>
+        <base_orange>textures/objects/tank/base - orange.png</base_orange>
+        <base_red>textures/objects/tank/base - red.png</base_red>
+        <base_light_green>textures/objects/tank/base - light green.png</base_light_green>
+        <base_pink>textures/objects/tank/base - pink.png</base_pink>
+        <base_light_blue>textures/objects/tank/base - light blue.png</base_light_blue>
+        <base_dark_blue>textures/objects/tank/base - dark blue.png</base_dark_blue>
+        <base_purple>textures/objects/tank/base - purple.png</base_purple>
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
         <turr>textures/objects/tank/turr.png</turr>
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
       </spritesheets>
+      <sounds>
+        <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+      </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>
@@ -1146,7 +1192,7 @@
       <time_between_bullets value ="500"/>
     </flamethrower>
     <double_missile>
-      <bullet_damage value ="200"/>
+      <bullet_damage value ="0"/>
       <bullet_speed value="10"/>
       <bullet_life_ms value="5000"/>
       <time_between_bullets value="1000"/>

@@ -25,6 +25,7 @@ class M_ObjManager;
 class M_SceneManager;
 class M_Scene;
 class M_Collision;
+class M_PickManager;
 
 class App
 {
@@ -96,6 +97,7 @@ public:
 	M_Fonts*            font = nullptr;
 	M_UI*               ui = nullptr;
 	M_ObjManager*		objectmanager = nullptr;
+	M_PickManager*		pick_manager = nullptr;
 	M_SceneManager*		scmanager = nullptr;
 	M_Scene*			scene = nullptr;
 	M_Collision*        collision = nullptr;

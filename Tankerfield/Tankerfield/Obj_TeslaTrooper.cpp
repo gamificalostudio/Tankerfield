@@ -22,6 +22,7 @@
 #include "M_Map.h"
 #include "M_Collision.h"
 #include "WeaponInfo.h"
+#include "M_PickManager.h"
 
 //Static variables inicialization
 SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
@@ -166,6 +167,7 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		life -= collider->damage;
 		if (life <= 0)
 		{
+			app->pick_manager->PickUpFromEnemy(pos_map);
 			to_remove = true;
 		}
 	}

@@ -29,6 +29,7 @@ public:
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
+		PICK_UP,
 		MAX
 	};
 
@@ -78,18 +79,9 @@ public:
 
 	void SetPosToObj();
 
-	template<typename TYPE>
-
-	TYPE* GetObj() 
+	Object* GetObj() 
 	{
-		if (object != nullptr & typeid(TYPE) == typeid(object))
-		{
-			return (TYPE*)object;
-		}
-		else
-		{
-			return nullptr;
-		}
+		return object;
 	}
 
 	void GetSize(float & w, float & h) {

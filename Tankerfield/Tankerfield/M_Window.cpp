@@ -111,8 +111,7 @@ void M_Window::GetWindowSize(uint& width, uint& height) const
 
 fRect M_Window::GetWindowRect()
 {
-
-	return fRect( 0.f, 0.f,(float) width, (float)height);
+	return fRect( 0.f, 0.f, screen_surface->w, screen_surface->h);
 }
 
 uint M_Window::GetScale() const

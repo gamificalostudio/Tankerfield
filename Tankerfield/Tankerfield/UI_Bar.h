@@ -32,7 +32,7 @@ public:
 
 };
 
-struct UI_BarDef : public UI_ElementDefinition
+struct UI_BarDef : public UI_ElementDef
 {
 	UI_BarDef()
 	{};

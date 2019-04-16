@@ -11,7 +11,7 @@
 using namespace std;
 typedef string String;
 
-struct UI_TextPanelDef: public UI_ElementDefinition
+struct UI_TextPanelDef: public UI_ElementDef
 {
 	String  		      text;
 	_TTF_Font*			  font = nullptr;
