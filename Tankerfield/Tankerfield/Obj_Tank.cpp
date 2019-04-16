@@ -223,7 +223,7 @@ bool Obj_Tank::Update(float dt)
 	Shoot();
 	Item();
 	Movement(dt);
-	StopTank();
+
 	ReviveTank();
 	CameraMovement(dt);
 
@@ -331,7 +331,10 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 	fPoint circlePos = { 3.f,3.f };
 	circlePos = app->map->MapToScreenF(circlePos);
-	app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared*32, 0, 255, 0, 100);
+	app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared*32, 0, 255, 0, 100);		//if has to follow the player
+																									//only appears when hes dead and disappear when he has been revived
+
+	StopTank();
 
 	//DEBUG
 	//	iPoint debug_mouse_pos = { 0, 0 };
@@ -598,6 +601,7 @@ void Obj_Tank::ReviveTank()
 		{
 			tank_arr[i]->curr_speed = speed;
 			tank_arr[i]->life = revive_life;
+			
 		}
 	}
 }
@@ -616,8 +620,14 @@ void Obj_Tank::StopTank()
 
 	if (life == 0)
 	{
+		fPoint circlePos = pos_map;
+
+		circlePos = app->map->MapToScreenF(circlePos);
+		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, 0, 255, 0, 100);		//if has to follow the player
+																										//only appears when hes dead and disappear when he has been revived
 		curr_speed = 0;
 		angle = 0;
+		shot_dir = {0.f,0.f};
 	}
 }
 
