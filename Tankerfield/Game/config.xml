@@ -11,11 +11,11 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1080" scale="1"/>
+    <resolution width="1280" height="720" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
-    <resizable value="false"/>
-    <fullscreen_window value="true"/>
+    <resizable value="true"/>
+    <fullscreen_window value="false"/>
   </window>
 
   <ui>
