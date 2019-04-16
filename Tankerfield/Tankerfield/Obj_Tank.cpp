@@ -124,7 +124,7 @@ bool Obj_Tank::Start()
 		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
 	}
 
-	curr_speed = 4.f;//TODO: Load from xml
+	curr_speed = speed = 4.f;//TODO: Load from xml
 
 	
 	cos_45 = cosf(-45 * DEGTORAD);
@@ -184,7 +184,7 @@ bool Obj_Tank::Start()
 	revive_range = 1.5f;
 	revive_range_squared = revive_range * revive_range;
 	revive_life = 100;
-	speed = 0.4f;
+
 
 
 
@@ -602,7 +602,7 @@ void Obj_Tank::ReviveTank()
 			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map)<=revive_range_squared
 			&& this->life!=0)
 		{
-			tank_arr[i]->curr_speed = 0.4f;
+			tank_arr[i]->curr_speed = speed;
 			tank_arr[i]->life = revive_life;
 			
 		}
