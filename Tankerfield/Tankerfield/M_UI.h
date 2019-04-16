@@ -30,6 +30,7 @@ class UI_Checkbox;
 class UI_TextPanel;
 class UI_InGameElement;
 class UI_IG_Weapon;
+class UI_IG_Item;
 
 struct UI_ElementDef;
 struct UI_ButtonDef;
@@ -41,6 +42,7 @@ struct UI_CheckboxDef;
 struct UI_TextPanelDef;
 struct UI_InGameElementDef;
 struct UI_IG_WeaponDef;
+struct UI_IG_ItemDef;
 
 enum class ClickState
 {
@@ -115,6 +117,8 @@ public:
 	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener = nullptr);
 
 	UI_IG_Weapon*   CreateInGameWeapon(const fPoint position, const UI_IG_WeaponDef definition, UI_Listener * listener = nullptr);
+
+	UI_IG_Item*   CreateInGameItem(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener = nullptr);
 
 	// Object functions ----------------------------------------------------------
 

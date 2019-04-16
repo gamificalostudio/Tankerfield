@@ -5,6 +5,7 @@
 #include "Player_GUI.h"
 
 #include "Obj_Tank.h"
+#include "Obj_Item.h"
 #include "Object.h"
 
 #include "UI_Image.h"
@@ -85,11 +86,11 @@ void UI_IG_Weapon::UpdateLevel()
 
 		if (diference > 0)
 		{
-			img_def.sprite_section = { 390, 160, 15, 9 };
+			img_def.sprite_section = { 460, 160, 15, 9 };
 		}
 		else
 		{
-			img_def.sprite_section = { 390, 170, 15, 9 };
+			img_def.sprite_section = { 460, 170, 15, 9 };
 		}
 
 
@@ -134,14 +135,50 @@ bool UI_IG_Weapon::Update(float dt)
 	else
 	{
 		arrow_image->state = ELEMENT_STATE::VISIBLE;
+		UpdateArrow();
 	}
 
-	UpdateArrow();
 	return true;
 }
 
-bool UI_IG_Weapon::Draw()
+UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener) : UI_InGameElement(position, definition, listener)
 {
+	UI_ImageDef img_def;
+
+	fPoint camera_pos = app->map->MapToCamera(object->pos_map, player_gui->player->camera_player);
+
+	img_def.sprite_section = { 385, 160, 70, 80 };
+	item_frame = app->ui->CreateImage(camera_pos, img_def);
+	item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	item_frame->camera = player_gui->player->camera_player;
+
+	switch (object->type)
+	{
+	case ObjectType::HEALTH_BAG:
+		img_def.sprite_section = { 490,110,45,45 };
+		break;
+	default:
+		break;
+	}
+
+	item_icon = app->ui->CreateImage(camera_pos + fPoint(0.f, 26.f), img_def);
+	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	item_icon->SetParent(item_frame);
+	item_icon->camera = player_gui->player->camera_player;
+	
+}	
+
+bool UI_IG_Item::Update(float dt)
+{
+	if (SDL_HasIntersection(&player_gui->viewport_with_margin, &item_frame->GetDrawRect()))
+	{
+		arrow_image->state = ELEMENT_STATE::HIDDEN;
+	}
+	else
+	{
+		arrow_image->state = ELEMENT_STATE::VISIBLE;
+		UpdateArrow();
+	}
+
 	return true;
 }
-

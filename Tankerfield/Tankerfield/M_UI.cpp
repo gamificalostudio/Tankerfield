@@ -423,6 +423,14 @@ UI_IG_Weapon * M_UI::CreateInGameWeapon(const fPoint position, const UI_IG_Weapo
 	objects_list.push_back(object);
 	return object;
 }
+UI_IG_Item * M_UI::CreateInGameItem(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener)
+{
+	UI_IG_Item* object = new UI_IG_Item(position, definition, listener);
+	object->SetParent(main_object);
+	objects_list.push_back(object);
+	return object;
+	return nullptr;
+}
 // ====================================================================================
 
 UI_Element * M_UI::GetClickedObject()

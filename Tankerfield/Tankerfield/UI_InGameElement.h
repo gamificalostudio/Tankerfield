@@ -4,6 +4,7 @@
 #include "UI_Element.h"
 
 class Object;
+class Obj_Item;
 class Player_GUI;
 class UI_Image;
 enum class WEAPON;
@@ -49,8 +50,6 @@ public:
 
 	bool Update(float dt);
 
-	bool Draw();
-
 	void UpdateLevel();
 
 public: 
@@ -65,6 +64,19 @@ public:
 	std::list<UI_Image*>  level_indicators;
 };
 
+class UI_IG_Item : public UI_InGameElement
+{
+public:
+
+	UI_IG_Item(const fPoint position, const UI_InGameElementDef definition, UI_Listener* listener);
+
+	bool Update(float dt);
+
+public:
+
+	UI_Image*  item_icon = nullptr;
+	UI_Image*  item_frame = nullptr;
+};
 
 #endif // !__UI_IN_GAME_ELEMENT_H_
 
