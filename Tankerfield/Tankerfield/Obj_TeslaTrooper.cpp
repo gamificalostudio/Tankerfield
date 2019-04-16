@@ -23,25 +23,18 @@
 #include "M_Collision.h"
 #include "WeaponInfo.h"
 #include "M_PickManager.h"
-
-//Static variables inicialization
-SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
-Animation * Obj_TeslaTrooper::walk = nullptr;
+#include "M_AnimationBank.h"
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
-	if (tex == nullptr)
-	{
-		tex = app->tex->Load("textures/Objects/shk-sheet.png");
-	}
+	tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	curr_tex = tex;
-	if (walk == nullptr)
-	{
-		walk = new Animation(tesla_trooper_node.child("animations").child("walk"));
-	}
-	curr_anim = walk;
+
+	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
+	curr_anim = &walk;
+
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;

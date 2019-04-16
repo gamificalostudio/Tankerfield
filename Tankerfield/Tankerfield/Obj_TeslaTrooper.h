@@ -78,8 +78,8 @@ private:
 	bool attack_available = false;
 	PerfTimer perf_timer;
 
-	static Animation* walk;
-	static SDL_Texture * tex;
+	Animation walk;
+	SDL_Texture * tex = nullptr;
 
 };
 
