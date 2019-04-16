@@ -77,6 +77,8 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
+	weapon_info.LoadProperties(app->config.child("weapons").child("basic"));
+
 	shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 
