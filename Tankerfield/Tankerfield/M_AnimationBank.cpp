@@ -3,15 +3,17 @@
 Frames * M_AnimationBank::LoadFrames(pugi::xml_node node)
 {
 	Frames * frames = nullptr;
-	std::string anim_name = node.parent().parent().text().as_string() + std::string("_") + node.text().as_string();
-	std::map<std::string, Frames*>::iterator iter = frames_map.find(anim_name);
+
+	std::string final_name = node.parent().parent().name() + std::string("_") + node.name();
+
+	std::map<std::string, Frames*>::iterator iter = frames_map.find(final_name);
 	if (iter != frames_map.end())//If the frame has been loaded
 	{
 		frames = iter->second;
 	}
 	else
 	{
-		frames = frames_map[anim_name] = new Frames(node);
+		frames = frames_map[final_name] = new Frames(node);
 	}
 
 	return frames;
