@@ -100,7 +100,7 @@ bool Obj_Tank::Start()
   
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
-	gamepad_shoot_basic	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_shoot	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
 	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
@@ -405,22 +405,26 @@ void Obj_Tank::Shoot()
 	{
 		charged_timer.Start();
 	}
-
+	
 	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
 		//- Basic shot
 		if (charged_timer.ReadMs() < charge_time) 
 		{
-			LOG("basic shot");
+			//LOG("basic shot");
 			(this->*shot_function[(uint)shot_type])();
 			app->audio->PlayFx(shot_sound);
-			shot_timer.Start();
 		}
 		//- Charged shot
 		else
 		{
-			LOG("charged shot");
+			//LOG("charged shot");
 		}
+		shot_timer.Start();
+	}
+
+	if (controller != nullptr) {
+		LOG("%i", (int)(*controller)->GetAxis(gamepad_shoot));
 	}
 }
 
@@ -432,7 +436,7 @@ bool Obj_Tank::PressShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_basic) > 0;
+		return (*controller)->GetAxis(gamepad_shoot) > 0;
 	}
 }
 
@@ -444,7 +448,7 @@ bool Obj_Tank::ReleaseShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_basic) < 0;
+		return (*controller)->GetAxis(gamepad_shoot) == 0;
 	}
 }
 
@@ -478,7 +482,7 @@ void Obj_Tank::SelectInputMethod()
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot_basic) > 0)))
+		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
