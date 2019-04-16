@@ -77,7 +77,7 @@ private:
 	PerfTimer perf_timer;
 
 	static Animation* walk;
-	static SDL_Texture * tex;
+	SDL_Texture * tex;
 
 };
 

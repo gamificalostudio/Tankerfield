@@ -24,16 +24,15 @@
 #include "WeaponInfo.h"
 
 //Static variables inicialization
-SDL_Texture * Obj_Brute::tex = nullptr;
 Animation * Obj_Brute::walk = nullptr;
 
 Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("tesla_trooper");
+	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
 	if (tex == nullptr)
 	{
-		tex = app->tex->Load("textures/Objects/shk-sheet.png");
+		tex = app->tex->Load("textures/Objects/brute-sheet.png");
 	}
 	curr_tex = tex;
 	if (walk == nullptr)
