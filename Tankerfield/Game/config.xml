@@ -1192,7 +1192,7 @@
       <time_between_bullets value ="500"/>
     </flamethrower>
     <double_missile>
-      <bullet_damage value ="200"/>
+      <bullet_damage value ="0"/>
       <bullet_speed value="10"/>
       <bullet_life_ms value="5000"/>
       <time_between_bullets value="1000"/>
