@@ -53,12 +53,15 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 
 bool Obj_TeslaTrooper::Update(float dt)
 {
+	if (timer.ReadSec() >= check_path_time)
+		state = TROOPER_STATE::GET_PATH;
+
 	switch (state)
 	{
 	case TROOPER_STATE::GET_PATH:
 		path.clear();
+		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map);
-		if (target != nullptr && pos_map.DistanceManhattan(target->pos_map) <= follow_range)
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
 				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
@@ -82,10 +85,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 		break;
 	case TROOPER_STATE::RECHEAD_POINT:
 		{
-			if (timer.ReadSec() >= check_path_time)
-				state = TROOPER_STATE::GET_PATH;
-
-			else if (path.size() > 0)
+			if (path.size() > 0)
 			{
 				next_pos = (fPoint)(*path.begin());
 				move_vect = (fPoint)(next_pos)-pos_map;
@@ -147,6 +147,19 @@ bool Obj_TeslaTrooper::Update(float dt)
 	return true;
 }
 
+void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
+{
+	if (path.size() >= 2)
+	{
+		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		{
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
+		}
+	}
+
+}
 
 bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 {

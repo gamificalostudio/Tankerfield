@@ -36,6 +36,8 @@ public:
 
 	bool Update(float dt) override;
 
+	void DrawDebug(const Camera* camera) override;
+
 	bool Awake(pugi::xml_node&) { return true; };
 
 	void OnTrigger(Collider* collider);

@@ -167,13 +167,16 @@ bool M_ObjManager::PostUpdate(float dt)
 		  (*item)->Draw(dt, (*item_cam));
 
 		  if (app->scene->draw_debug) {
-			(*item)->DrawDebug();
+			  (*item)->DrawDebug((*item_cam));
+			  DrawDebug((*item));
 		  }
 		}
 
 		draw_objects.clear();
+
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
     }
-    SDL_RenderSetClipRect(app->render->renderer, nullptr);
+   
 	return true;
 }
 
@@ -278,6 +281,31 @@ Object * M_ObjManager::GetNearestTank(fPoint pos)
 std::list<Object*> M_ObjManager::GetObjects() const
 {
 	return this->objects;
+}
+
+void M_ObjManager::DrawDebug(const Object* obj)
+{
+	SDL_Rect section = { obj->pos_screen.x - obj->draw_offset.x, obj->pos_screen.y - obj->draw_offset.y, obj->frame.w, obj->frame.h };
+
+	Uint8 alpha = 0;
+	switch (obj->type)
+	{
+	case ObjectType::TANK:
+		app->render->DrawQuad(section, 255, 0, 0, alpha);
+		break;
+	case ObjectType::STATIC:
+		app->render->DrawQuad(section, 0, 255, 0, alpha);
+		break;
+	case ObjectType::TESLA_TROOPER:
+		app->render->DrawQuad(section, 0, 0, 255, alpha);
+		break;
+	case ObjectType::EXPLOSION:
+		app->render->DrawQuad(section, 255, 0, 255, alpha);
+	default:
+		break;
+	}
+
+	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, 0, 255, 0);
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)
