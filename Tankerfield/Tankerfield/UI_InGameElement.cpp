@@ -18,7 +18,7 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 	// Set Arrow =================================================
 
 	UI_ImageDef image_def;
-	image_def.image_animation = app->ui->arrow_anim;
+	image_def.image_animation = &app->ui->arrow_anim;
 	arrow_image = app->ui->CreateImage({ 0.f, 0.f}, image_def);
 	arrow_image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 

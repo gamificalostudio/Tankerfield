@@ -119,7 +119,7 @@
     <ClCompile Include="M_PickManager.cpp" />
     <ClCompile Include="Obj_PickUp.cpp" />
     <ClCompile Include="UI_InGameElement.cpp" />
-    <ClCompile Include="AnimationBank.cpp">
+    <ClCompile Include="M_AnimationBank.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -261,7 +261,7 @@
     <ClInclude Include="M_PickManager.h" />
     <ClInclude Include="Obj_PickUp.h" />
     <ClInclude Include="UI_InGameElement.h" />
-    <ClInclude Include="AnimationBank.h">
+    <ClInclude Include="M_AnimationBank.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>

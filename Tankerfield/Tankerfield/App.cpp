@@ -23,6 +23,7 @@
 #include "M_ObjManager.h"
 #include "M_Collision.h"
 #include "M_PickManager.h"
+#include "M_AnimationBank.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -43,6 +44,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	pick_manager = new M_PickManager();
 	scmanager = new M_SceneManager();
 	collision = new M_Collision();
+	anim_bank = new M_AnimationBank();
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp

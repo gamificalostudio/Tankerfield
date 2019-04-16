@@ -86,7 +86,7 @@ private:
 	bool loop				= true;
 	float first_dir_angle	= 0.f;//The angle on the first sprite
 	ROTATION_DIR rotation	= ROTATION_DIR::COUNTER_CLOCKWISE;
-	float speed = 1.0f;
+	float speed				= 1.0f;
 
 	friend class Animation;
 };
@@ -102,15 +102,6 @@ public:
 
 
 public:
-	Animation()
-	{
-	}
-
-	Animation(pugi::xml_node const & node)
-	{
-		frames->LoadAnimation(node);
-	}
-
 	void NextFrame(float dt)
 	{
 		current_frame += frames->speed * dt;

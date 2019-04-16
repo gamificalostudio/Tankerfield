@@ -18,23 +18,9 @@
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
 #include "Obj_PickUp.h"
+#include "M_AnimationBank.h"
 
-SDL_Texture * Obj_Tank::base_tex_yellow		= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_orange		= nullptr;
-SDL_Texture * Obj_Tank::base_tex_red		= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_light_green= nullptr;
-SDL_Texture * Obj_Tank::base_tex_pink		= nullptr;
-SDL_Texture * Obj_Tank::base_tex_light_blue	= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_dark_blue	= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_purple		= nullptr;
-SDL_Texture * Obj_Tank::turr_tex			= nullptr;
-SDL_Texture * Obj_Tank::base_shadow_tex		= nullptr;
-SDL_Texture * Obj_Tank::turr_shadow_tex		= nullptr;
-Animation   * Obj_Tank::rotate_base			= nullptr;
-Animation   * Obj_Tank::rotate_turr			= nullptr;
-WeaponInfo  * Obj_Tank::weapons_info		= nullptr;
-int			  Obj_Tank::number_of_tanks		= 0;
-//void       (* Obj_Tank::shot_function)()	= nullptr;//TODO: Test if function pointers can be static or they are executing the function on other tanks
+int Obj_Tank::number_of_tanks = 0;
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 {}
@@ -43,42 +29,18 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	if (base_tex_yellow == nullptr)
-	{
-		Obj_Tank::base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
-	}
-	//if (base_tex_orange == nullptr)
-	//{
-	//	Obj_Tank::base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
-	//}
-	if (base_tex_red == nullptr)
-	{
-		Obj_Tank::base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
-	}
-	//if (base_tex_light_green == nullptr)
-	//{
-	//	Obj_Tank::base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
-	//}
-	if (base_tex_pink == nullptr)
-	{
-		Obj_Tank::base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
-	}
-	if (base_tex_light_blue == nullptr)
-	{
-		Obj_Tank::base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
-	}
-	//if (base_tex_dark_blue == nullptr)
-	//{
-	//	Obj_Tank::base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
-	//}
-	//if (base_tex_purple == nullptr)
-	//{
-	//	Obj_Tank::base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
-	//}
+	base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
+	//base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
+	base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
+	//base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
+	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
+	base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
+	//base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
+	//base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
 
 	tank_num = number_of_tanks++;
 
-	basic_shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
+	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
 	switch (tank_num) {
 	case 0:
@@ -99,51 +61,25 @@ bool Obj_Tank::Start()
 		break;
 	}
 
-	if (base_shadow_tex == nullptr)
-	{
-		Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-		SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
-	}
-	if (turr_tex == nullptr)
-	{
-		Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
-	}
-	if (turr_shadow_tex == nullptr)
-	{
-		Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-		SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
-	}
+	Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	if (rotate_base == nullptr)
-	{
-		rotate_base = new Animation (tank_node.child("animations").child("rotate_base"));
-	}
-	curr_anim = rotate_base;
-	if (rotate_turr == nullptr)
-	{
-		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
-	}
+	Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+
+	Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
+
+	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
+	curr_anim = &rotate_base;
+
+	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
 	speed = 4.f;//TODO: Load from xml
 
-	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	// Tanks life hardcoded 
-
-	
-
-	if (weapons_info == nullptr)
-	{
-		pugi::xml_node weapons_node = app->config.child("weapons");
-		weapons_info = new WeaponInfo[(uint)WEAPON::MAX];
-		weapons_info[(uint)WEAPON::BASIC].LoadProperties(weapons_node.child("basic"));
-		weapons_info[(uint)WEAPON::FLAMETHROWER].LoadProperties(weapons_node.child("flamethrower"));
-		weapons_info[(uint)WEAPON::DOUBLE_MISSILE].LoadProperties(weapons_node.child("double_missile"));
-	}
-
-	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
@@ -176,7 +112,7 @@ bool Obj_Tank::Start()
 
 	base_angle_lerp_factor = 11.25f;
 
-	basic_shot_timer.Start();
+	shot_timer.Start();
 
 	life =  100;
 	max_life = 200;
@@ -319,7 +255,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
 		camera,
-		&rotate_turr->GetFrame(turr_angle));
+		&rotate_turr.GetFrame(turr_angle));
 
 	//DEBUG
 	//	iPoint debug_mouse_pos = { 0, 0 };
@@ -358,7 +294,7 @@ bool Obj_Tank::DrawShadow(Camera * camera)
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
 		camera,
-		&rotate_turr->GetFrame(turr_angle));
+		&rotate_turr.GetFrame(turr_angle));
 
 	return true;
 }
@@ -400,7 +336,7 @@ void Obj_Tank::SetItem(ObjectType type)
 
 void Obj_Tank::SetWeapon(WEAPON type)
 {
-	special_shoot = (uint)type;
+	shot_type = (uint)type;
 }
 
 int Obj_Tank::GetLife()
@@ -469,18 +405,18 @@ void Obj_Tank::Shoot()
 	}
 
 	//- Special shoot (prioritize first the special shot)
-	if (IsShootingSpecial() && special_shot_timer.ReadMs() >= weapons_info[(uint)special_shoot].time_between_bullets)
+	if (IsShootingSpecial() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
-		(this->*shot_function[(uint)special_shoot])();
-		app->audio->PlayFx(basic_shot_sound);
-		special_shot_timer.Start();
+		(this->*shot_function[(uint)shot_type])();
+		app->audio->PlayFx(shot_sound);
+		shot_timer.Start();
 	}
 	//- Basic shoot
-	else if (!IsShootingSpecial() && IsShootingBasic() && basic_shot_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
+	else if (!IsShootingSpecial() && IsShootingBasic() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
-		(this->*shot_function[(uint)basic_shot])();
-		app->audio->PlayFx(basic_shot_sound);
-		basic_shot_timer.Start();
+		(this->*shot_function[(uint)shot_type])();
+		app->audio->PlayFx(shot_sound);
+		shot_timer.Start();
 	}
 }
 
@@ -549,9 +485,9 @@ void Obj_Tank::ShootBasic()
 {
 	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
 	bullet->SetBulletProperties(
-		weapons_info[(uint)basic_shot].bullet_speed,
-		weapons_info[(uint)basic_shot].bullet_life_ms,
-		weapons_info[(uint)basic_shot].bullet_damage,
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
 		shot_dir,
 		turr_angle);
 }
@@ -720,16 +656,16 @@ void Obj_Tank::ShootDoubleMissile()
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
 
 	left_missile->SetBulletProperties(
-		weapons_info[(uint)basic_shot].bullet_speed,
-		weapons_info[(uint)basic_shot].bullet_life_ms,
-		weapons_info[(uint)basic_shot].bullet_damage,
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
 		shot_dir,
 		turr_angle);
 
 	right_missile->SetBulletProperties(
-		weapons_info[(uint)basic_shot].bullet_speed,
-		weapons_info[(uint)basic_shot].bullet_life_ms,
-		weapons_info[(uint)basic_shot].bullet_damage,
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
 		shot_dir,
 		turr_angle);
 }

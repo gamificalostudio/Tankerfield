@@ -16,6 +16,8 @@ public:
 
 	Frames* LoadFrames(pugi::xml_node node);
 
+	bool UnloadFrames(Frames * frames);
+
 private:
 
 	std::map<std::string, Frames*> frames_map;
