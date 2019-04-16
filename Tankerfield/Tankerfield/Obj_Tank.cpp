@@ -563,12 +563,25 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ReviveTank()
 {
-	if (this != app->scene->tank_1 && pos_map.x - app->scene->tank_1->pos_map.x <= 3.f && pos_map.y - app->scene->tank_1->pos_map.y <= 3.f && controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+
+	Obj_Tank* arr[4];
+
+	arr[0] = app->scene->tank_1;
+	arr[1] = app->scene->tank_2;
+	arr[2] = app->scene->tank_3;
+	arr[3] = app->scene->tank_4;
+
+	for (int i = 0; i < 4; i++)
 	{
-		app->scene->tank_1->speed = 4.f;
-		app->scene->tank_1->life = 50;
+		if (this != arr[i] && pos_map.x - arr[i]->pos_map.x <= 3.f && pos_map.y - arr[i]->pos_map.y <= 3.f && controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && arr[i]->life == 0 && this->life!=0)
+		{
+			arr[i]->speed = 4.f;
+			arr[i]->life = 50;
+		}
 	}
-	if (this != app->scene->tank_2 && pos_map.x - app->scene->tank_2->pos_map.x <= 3.f && pos_map.y - app->scene->tank_2->pos_map.y <= 3.f && controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+
+	
+/*	if (this != app->scene->tank_2 && pos_map.x - app->scene->tank_2->pos_map.x <= 3.f && pos_map.y - app->scene->tank_2->pos_map.y <= 3.f && controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
 	{
 		app->scene->tank_2->speed = 4.f;
 		app->scene->tank_2->life = 50;
@@ -582,7 +595,7 @@ void Obj_Tank::ReviveTank()
 	{
 		app->scene->tank_4->speed = 4.f;
 		app->scene->tank_4->life = 50;
-	}
+	}*/
 
 }
 
