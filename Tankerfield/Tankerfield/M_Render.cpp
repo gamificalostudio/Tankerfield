@@ -342,7 +342,7 @@ std::vector<Camera*>::iterator item_cam;
 	return ret;
 }
 
-bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color)
+bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color, const Camera* camera)
 {
 	fPoint point_1, point_2, point_3, point_4;
 
@@ -355,45 +355,36 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 	// bot_left
 	point_4 = app->map->MapToScreenF({x, y + h});
 
-	std::vector<Camera*>::iterator item_cam;
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-	{
-
-		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
-
 		SDL_Rect rect_tile{
 			point_1.x - app->map->data.tile_width * 0.5f,
 			point_1.y,
 			point_2.x - point_4.x,
 			point_3.y - point_1.y
 		};
-
-		if (SDL_HasIntersection(&rect_tile, &(*item_cam)->rect))
+		if (SDL_HasIntersection(&rect_tile, &camera->rect))
 		{
-
-			app->render->DrawLineSplitScreen((*item_cam), point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, true);
-			app->render->DrawLineSplitScreen((*item_cam), point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, true);
-			app->render->DrawLineSplitScreen((*item_cam), point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, true);
-			app->render->DrawLineSplitScreen((*item_cam), point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, true);
+			app->render->DrawLineSplitScreen(point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, camera);
+			app->render->DrawLineSplitScreen(point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, camera);
+			app->render->DrawLineSplitScreen(point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, camera);
+			app->render->DrawLineSplitScreen(point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, camera);
 
 		}
-	}
-	SDL_RenderSetClipRect(app->render->renderer, nullptr);
+
 	return true;
 }
 
-void M_Render::DrawIsometricLine(fPoint point_1, fPoint point_2, SDL_Color color)
+void M_Render::DrawIsometricLine(fPoint point_1, fPoint point_2, SDL_Color color, const Camera* camera)
 {
 	fPoint p_1, p_2;
 
 	p_1 = app->map->MapToScreenF(point_1);
 	p_2 = app->map->MapToScreenF(point_2);
 
-	//app->render->DrawLineSplitScreen(p_1.x, p_1.y, p_2.x, p_2.y, color.r, color.g, color.b, color.a, true);
+	app->render->DrawLineSplitScreen(p_1.x, p_1.y, p_2.x, p_2.y, color.r, color.g, color.b, color.a, camera);
 }
 
 
-bool M_Render::DrawLineSplitScreen(Camera* camera, int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const 
+bool M_Render::DrawLineSplitScreen( int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, const Camera* camera) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -403,53 +394,30 @@ bool M_Render::DrawLineSplitScreen(Camera* camera, int x1, int y1, int x2, int y
 
 	int result = -1;
 
-	int x1_in_viewport = x1;
-	int x2_in_viewport = x2;
-	int y1_in_viewport = y1;
-	int y2_in_viewport = y2;
-
-	x1_in_viewport += camera->viewport.x;
-	x2_in_viewport += camera->viewport.x;
-	y1_in_viewport += camera->viewport.y;
-	y2_in_viewport += camera->viewport.y;
-
-	if (use_camera)
-		result = SDL_RenderDrawLine(renderer, -camera->rect.x + x1_in_viewport * scale, -camera->rect.y + y1_in_viewport * scale, -camera->rect.x + x2_in_viewport * scale, -camera->rect.y + y2_in_viewport * scale);
-	else
-		result = SDL_RenderDrawLine(renderer, x1_in_viewport * scale, y1_in_viewport * scale, x2_in_viewport * scale, y2_in_viewport * scale);
-
-	if (result != 0)
+	if (camera != nullptr)
 	{
-		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
-		ret = false;
+	
+		x1 += camera->viewport.x;
+		x2 += camera->viewport.x;
+		y1 += camera->viewport.y;
+		y2 += camera->viewport.y;
+
+		result = SDL_RenderDrawLine(renderer, -camera->rect.x + x1 * scale, -camera->rect.y + y1 * scale, -camera->rect.x + x2 * scale, -camera->rect.y + y2 * scale);
 	}
-
-	return ret;
-}
-
-bool M_Render::DrawLineNoSplitScreen(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
-{
-	bool ret = true;
-	uint scale = app->win->GetScale();
-
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, r, g, b, a);
-
-	int result = -1;
-
-
-	if (use_camera)
-		result = SDL_RenderDrawLine(renderer, -app->scene->tank_1->camera_player->rect.x + x1 * scale, -app->scene->tank_1->camera_player->rect.y + y1 * scale, -app->scene->tank_1->camera_player->rect.x + x2 * scale, -app->scene->tank_1->camera_player->rect.y + y2 * scale);
 	else
+	{
 		result = SDL_RenderDrawLine(renderer, x1 * scale, y1 * scale, x2 * scale, y2 * scale);
+	}
 
 	if (result != 0)
 	{
 		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
+
 	return ret;
 }
+
 bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;

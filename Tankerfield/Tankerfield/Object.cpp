@@ -71,29 +71,6 @@ int Object::GetHitPoints() const
 	return this->hit_points;
 }
 
-void Object::DrawDebug()
-{
-	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, frame.w, frame.h };
-
-	switch (type)
-	{
-	case ObjectType::TANK:
-		app->render->DrawQuad(section, 255, 0, 0, 80);
-		break;
-	case ObjectType::STATIC:
-		app->render->DrawQuad(section, 0, 255, 0, 80);
-		break;
-	case ObjectType::TESLA_TROOPER:
-		app->render->DrawQuad(section, 0, 0, 255, 80);
-		break;
-	case ObjectType::EXPLOSION:
-		app->render->DrawQuad(section, 255, 0, 255, 80);
-	default:
-		break;
-	}
-
-	app->render->DrawCircle(pos_screen.x + pivot.x, pos_screen.y + pivot.y, 3, 0, 255, 0);
-}
 
 void Object::SetDamage(float damage)
 {
