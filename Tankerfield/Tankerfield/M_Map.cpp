@@ -238,6 +238,16 @@ bool M_Map::Unload()
 	}
 	data.map_layers.clear();
 
+	for (std::vector<fPoint*>::iterator iter = data.spawners_position.begin(); iter != data.spawners_position.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+
+		}
+	}
+	data.spawners_position.clear();
+
 
 	if (app->on_clean_up == false)
 	{

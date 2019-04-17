@@ -30,8 +30,6 @@ public:
 
 	bool Update(float dt) override;
 
-	void OnTrigger(Collider * collider);
-
 	bool Draw(float dt, Camera* camera);
 
 	WEAPON RandomWeapon() const;
@@ -41,8 +39,6 @@ public:
 	PICKUP_TYPE RandomPickUp();
 
 	void DeletePickUp();
-
-	void SetPickUp(Obj_Tank* player);
 
 };
 
