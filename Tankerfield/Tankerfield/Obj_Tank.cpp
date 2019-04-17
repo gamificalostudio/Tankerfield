@@ -29,7 +29,7 @@ Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 
 Obj_Tank::~Obj_Tank()
 {
-	//number_of_tanks--;
+	number_of_tanks--;
 }
 
 bool Obj_Tank::Start()
@@ -181,6 +181,9 @@ bool Obj_Tank::Update(float dt)
 
 void Obj_Tank::CameraMovement(float dt)
 {
+	if (camera_player == nullptr)
+		return;
+
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	fPoint target_pos =
 	{
@@ -279,19 +282,19 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 	//DEBUG
 	//	iPoint debug_mouse_pos = { 0, 0 };
-//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
+	//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 
-//	debug_mouse_pos.x += camera_player->rect.x;
-//	debug_mouse_pos.y += camera_player->rect.y;
+	//	debug_mouse_pos.x += camera_player->rect.x;
+	//	debug_mouse_pos.y += camera_player->rect.y;
 
-//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
+	//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
+	//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
 
-	//  std::vector<Camera*>::iterator item_cam;
-//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-//	{
-	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
-//	}
+		//  std::vector<Camera*>::iterator item_cam;
+	//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	//	{
+		//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
+	//	}
 
 	return true;
 }
@@ -374,10 +377,10 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoin
 	iPoint mouse_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 
-	this;
+	
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_pos.x += camera_player->rect.x;
-	mouse_pos.y += camera_player->rect.y;
+	if (camera_player != nullptr)
+		mouse_pos += {camera_player->rect.x, camera_player->rect.y};
 
 	int tile_width = 100, tile_height = 50;
   

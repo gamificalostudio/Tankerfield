@@ -84,7 +84,7 @@ bool M_Scene::PreUpdate()
 
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->camera.begin()));
 	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -170,6 +170,7 @@ bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
 	app->map->Unload();
+	app->collision->CleanUp();
 	app->objectmanager->DeleteObjects();
 
 	if (path_tex != nullptr)
@@ -189,7 +190,7 @@ void M_Scene::DebugPathfinding()
 
 		iPoint mousePos;
 		app->input->GetMousePosition(mousePos.x, mousePos.y);
-		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, (*app->render->camera.begin()));
 		p = app->map->ScreenToMapI(p.x, p.y);
 
 		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)

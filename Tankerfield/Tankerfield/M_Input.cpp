@@ -226,10 +226,15 @@ void M_Input::GetMouseMotion(int& x, int& y)
 }
 
 
-iPoint M_Input::GetMousePos_Tiles()
+
+iPoint M_Input::GetMousePos_Tiles(const Camera * camera)
 {
 	iPoint ret;
-	ret = app->render->ScreenToWorld(mouse_x, mouse_y);
+	if (camera != nullptr)
+		ret = app->render->ScreenToWorld(mouse_x, mouse_y, camera);
+	else
+		ret = app->render->ScreenToWorld(mouse_x, mouse_y, (*app->render->camera.begin()));
+
 	ret = app->map->ScreenToMapI(ret.x, ret.y);
 
 	return ret;

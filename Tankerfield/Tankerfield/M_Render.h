@@ -41,7 +41,7 @@ public:
 	// Utils
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
-	iPoint ScreenToWorld(int x, int y) const;
+	iPoint ScreenToWorld(int x, int y, const Camera* camera) const;
 
 	// Draw & Blit
 	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section) const;

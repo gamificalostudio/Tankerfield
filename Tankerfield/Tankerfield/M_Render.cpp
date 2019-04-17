@@ -230,13 +230,13 @@ void M_Render::ResetViewPort()
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
-iPoint M_Render::ScreenToWorld(int x, int y) const
+iPoint M_Render::ScreenToWorld(int x, int y, const Camera* camera) const
 {
 	iPoint ret;
 	int scale = app->win->GetScale();
 	
-	ret.x = (x + app->scene->tank_1->camera_player->rect.x / scale);
-	ret.y = (y + app->scene->tank_1->camera_player->rect.y / scale);
+	ret.x = (x + camera->rect.x / scale);
+	ret.y = (y + camera->rect.y / scale);
 
 	return ret;
 }

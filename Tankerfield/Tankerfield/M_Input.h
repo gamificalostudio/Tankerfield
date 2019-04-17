@@ -18,6 +18,7 @@
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
+class Camera;
 
 enum EventWindow
 {
@@ -127,7 +128,7 @@ public:
 	void GetMouseMotion(int& x, int& y);
 
 private:
-	iPoint GetMousePos_Tiles();
+	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
 	void UpdateKeyboardState();
 	void UpdateMouseState();
 	void UpdateControllers();
