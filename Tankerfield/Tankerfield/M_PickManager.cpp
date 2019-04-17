@@ -4,6 +4,7 @@
 #include "App.h"
 #include "M_PickManager.h"
 #include "M_ObjManager.h"
+#include "M_Map.h"
 
 
 M_PickManager::M_PickManager() : Module()
@@ -22,6 +23,16 @@ bool M_PickManager::Awake(pugi::xml_node& config)
 
 	percentage_to_spawn = config.child("percentage_to_spawn").attribute("value").as_int();
 
+	return ret;
+}
+
+bool M_PickManager::Start()
+{
+	bool ret = true;
+	for (std::vector<fPoint*>::iterator iterator = app->map->data.spawners_position.begin(); iterator != app->map->data.spawners_position.end(); ++iterator)
+	{
+		CreatePickUp(*(*iterator));
+	}
 	return ret;
 }
 

@@ -329,6 +329,16 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 					qtile.layer = layernum;
 					qtile.sorting_value = i * layernum;
 					data.qt->InsertTile(qtile);
+
+					//Hardcoded take the spawn positions (spawn tile gid == 199)
+					if (qtile.id == 199)
+					{
+						fPoint map_pos = ScreenToMapF(qtile.rect.x + /*offset*/ 30, qtile.rect.y);
+						fPoint* ret = new fPoint;
+						*ret = map_pos;
+
+						data.spawners_position.push_back(ret);
+					}
 				}
 				if (layer->name == "Buildings")
 				{

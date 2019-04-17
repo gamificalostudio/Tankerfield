@@ -147,7 +147,7 @@ struct MapData
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
 	std::list<ObjectGroup*> object_layers;
-	
+	std::vector<fPoint*>	spawners_position;
 	Properties				map_properties;
 
 	Quadtree_Map*				qt = nullptr;
