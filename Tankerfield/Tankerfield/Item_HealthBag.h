@@ -15,8 +15,8 @@ public:
 	bool Use() override;
 
 private:
-	static SDL_Texture * tex;
-	static Animation * anim;
+	SDL_Texture * tex = nullptr;
+	Animation anim;
 };
 
 #endif

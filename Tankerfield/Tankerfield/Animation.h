@@ -6,6 +6,7 @@
 #include <vector>
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
+#include "MathUtils.h"
 
 enum ROTATION_DIR {
 	CLOCKWISE,
@@ -13,48 +14,14 @@ enum ROTATION_DIR {
 	INVALID
 };
 
-class Animation
+//Variables which all of the repeated animations share
+class Frames
 {
-public:
-	//frames[direction, current_frame]
-	std::vector<std::vector <SDL_Rect>> frames;
-
-	float speed				= 1.0f;
-	float current_frame		= 0.f;
-
-	int max_dirs			= 0;
-	int max_frames			= 0;
-
-	bool loop				= true;
-	int loops				= 0;
-
-	float first_dir_angle	= 0.f;//The angle on the first sprite
-	ROTATION_DIR rotation	= ROTATION_DIR::COUNTER_CLOCKWISE;
 
 public:
-	Animation()
+	Frames(pugi::xml_node anim_node)
 	{
-	}
-
-	Animation(pugi::xml_node const & node)
-	{
-		LoadAnimation(node);
-	}
-
-	void NextFrame(float dt)
-	{
-		current_frame += speed * dt;
-		if (current_frame >= max_frames)
-		{
-			current_frame = (loop) ? 0.0f : max_frames - 1;
-			loops++;
-		}
-	}
-
-	SDL_Rect & GetFrame(float angle)
-	{
-		uint ind = GetRotatedIndex(angle);
-		return frames[ind][(uint)current_frame];
+		LoadAnimation(anim_node);
 	}
 
 	bool LoadAnimation(pugi::xml_node const & node)
@@ -76,7 +43,7 @@ public:
 		uint dir_num = 0u;
 		for (pugi::xml_node dir_iter = node.child("dir"); dir_iter; dir_iter = dir_iter.next_sibling("dir"))
 		{
-			frames.push_back(std::vector<SDL_Rect>());
+			rects.push_back(std::vector<SDL_Rect>());
 			uint frame_num = 0u;
 			for (pugi::xml_node frame_iter = dir_iter.child("frame"); frame_iter; frame_iter = frame_iter.next_sibling("frame"))
 			{
@@ -87,7 +54,7 @@ public:
 					frame_iter.attribute("w").as_int(),
 					frame_iter.attribute("h").as_int()
 				};
-				frames[dir_num].push_back(new_frame);
+				rects[dir_num].push_back(new_frame);
 				frame_num++;
 				if (frame_num > max_frames) { max_frames = frame_num; }
 			}
@@ -103,12 +70,52 @@ public:
 	//Resizes the std::2Dvector frames so that it doesn't need to change size when rects are loaded00
 	void Resize(uint directions, uint frames_per_direction)
 	{
-		frames.resize(directions);
+		rects.resize(directions);
 		for (uint i = 0u; i < directions; ++i)
 		{
-			frames[i].resize(frames_per_direction);
+			rects[i].resize(frames_per_direction);
 		}
 		max_frames = frames_per_direction - 1;
+	}
+
+private:
+	//	 direction,  current_frame
+	std::vector<std::vector <SDL_Rect>> rects;
+	int max_dirs			= 0;
+	int max_frames			= 0;
+	bool loop				= true;
+	float first_dir_angle	= 0.f;//The angle on the first sprite
+	ROTATION_DIR rotation	= ROTATION_DIR::COUNTER_CLOCKWISE;
+	float speed				= 1.0f;
+
+	friend class Animation;
+};
+
+//Variables unique to each of the repeated animation
+class Animation
+{
+public:
+	Frames * frames			= nullptr;
+	float current_frame		= 0.f;
+	int loops				= 0;
+
+
+
+public:
+	void NextFrame(float dt)
+	{
+		current_frame += frames->speed * dt;
+		if (current_frame >= frames->max_frames)
+		{
+			current_frame = (frames->loop) ? 0.0f : frames->max_frames - 1;
+			loops++;
+		}
+	}
+
+	SDL_Rect & GetFrame(float angle)
+	{
+		uint ind = GetRotatedIndex(angle);
+		return frames->rects[ind][(uint)current_frame];
 	}
 
 	bool Finished() const
@@ -124,12 +131,12 @@ public:
 
 	void Start()
 	{
-		speed = 0.08f;
+		frames->speed = 0.08f;
 	}
 
 	void Stop()
 	{
-		speed = 0.0f;
+		frames->speed = 0.0f;
 	}
 
 private:
@@ -138,42 +145,28 @@ private:
 	uint GetRotatedIndex(float angle)
 	{
 		//Avoid all the calculations if it only has one frame
-		if (max_dirs == 1)
+		if (frames->max_dirs == 1)
 		{
 			return 0;
 		}
 
 		//Account for the spritesheet not starting at the 0 degree rotation
-		angle -= first_dir_angle;
+		angle -= frames->first_dir_angle;
 
 		angle = ClampRotation(angle);
-		float ind = round((angle * max_dirs) / 360.f);
+		float ind = round((angle * frames->max_dirs) / 360.f);
+
+		if (frames->rotation == ROTATION_DIR::CLOCKWISE) {
+			ind = frames->max_dirs - ind;
+		}
 
 		//If it's the last frame, start over again
-		if (ind == max_dirs)
+		if (ind == frames->max_dirs)
 		{
 			ind = 0.f;
 		}
 		return (uint)ind;
 	}
-
-	float ClampRotation(float angle)
-	{
-		if (angle > 360)
-		{
-			angle = fmod(angle, 360);
-		}
-		else if (angle < -360)
-		{
-			angle = fmod(angle, -360);
-		}
-		if (angle < 0)
-		{
-			angle += 360;
-		}
-		return angle;
-	}
-
 };
 
 #endif // __ANIMATION_H__

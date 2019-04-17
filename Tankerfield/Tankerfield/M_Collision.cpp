@@ -86,12 +86,10 @@ bool M_Collision::Update(float dt)
 		{
 			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
 			{
-				//TODO This produce the BUG ------------------------------------------------------------------------------------------------------
 				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
 
 				if (to_destroy != (*itr)->collisions_list.end())
 				{
-					LOG("DESTROYED");
 					(*itr)->collisions_list.erase(to_destroy);
 				}
 			}
@@ -254,33 +252,36 @@ bool M_Collision::PostUpdate(float dt)
 	{
 		return true;
 	}
-	
-	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
-		if ((*item)->to_destroy == true)
+		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 		{
-			continue;
-		}
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			if ((*item)->to_destroy == true)
+			{
+				continue;
+			}
 
-		switch ((*item)->body_type)
-		{
-		case Collider::BODY_TYPE::SENSOR:
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 0, 255, 0 , 255 });
-			break;
-		case Collider::BODY_TYPE::DYNAMIC:
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 0 , 255 });
-			break;
-		case Collider::BODY_TYPE::STATIC:
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 });
-			break;
-		}
+			switch ((*item)->body_type)
+			{
+			case Collider::BODY_TYPE::SENSOR:
+				app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 0, 255, 0 , 255 }, (*item_cam));
+				break;
+			case Collider::BODY_TYPE::DYNAMIC:
+				app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 0 , 255 }, (*item_cam));
+				break;
+			case Collider::BODY_TYPE::STATIC:
+				app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 }, (*item_cam));
+				break;
+			}
 
-		if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
-		{
-			app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255});
+			//if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
+			//{
+			//	app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255 }, (*item_cam));
+			//}
+			SDL_RenderSetClipRect(app->render->renderer, nullptr);
 		}
 	}
-
 	return true;
 }
 

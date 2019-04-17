@@ -49,44 +49,32 @@ struct Controller
 private:
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
-	KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
+	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
+	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
 
 public:
+	Controller();
 
-	KeyState GetButtonState(SDL_GameControllerButton button)
-	{
-		return key_state[button];
-	}
-
-	bool attached = false;
-
-public:
+	KeyState GetButtonState(SDL_GameControllerButton button);
 	
-	iPoint GetJoystick(Joystick joystick)
-	{
-		if (this == nullptr)
-			return iPoint(0, 0);
-		switch (joystick)
-		{
-		case Joystick::LEFT:
-			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
-		case Joystick::RIGHT:
-			return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTY));
-		}
-	}
+	iPoint GetJoystick(Joystick joystick);
+
+	//Treat triggers like buttons or keys to more easily manage them
+	KeyState GetTriggerState(SDL_GameControllerAxis axis);
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
 	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEAD_ZONE);
 	
-
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
 	int PlayRumble(float strengh, Uint32 length);
 	int StopRumble();
-  
+private:
+	bool attached = false;
+
 	friend class M_Input;
 };
 
