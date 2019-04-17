@@ -65,6 +65,7 @@ struct UI_ElementDef
 	float      section_width = 0.f;
 	float      section_height= 0.f;
 	SDL_Rect   sprite_section = { 0, 0, 0, 0};
+	bool       is_in_game = false;
 };
 
 class UI_Element
@@ -115,6 +116,7 @@ public:
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	bool			      is_draggable = false;
 	bool				  is_interactive = false;
+	bool                  is_in_game = false;
 	float                 offset = 0.f;
 
 protected:

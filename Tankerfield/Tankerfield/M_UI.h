@@ -32,6 +32,7 @@ class UI_TextPanel;
 class UI_InGameElement;
 class UI_IG_Weapon;
 class UI_IG_Item;
+class UI_IG_Helper;
 
 struct UI_ElementDef;
 struct UI_ButtonDef;
@@ -111,7 +112,7 @@ public:
 
 	// Creation functions ---------------------------------------------------------
 
-	UI_Element	 * CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
+	UI_Element	 * CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
 
 	UI_Label	 * CreateLabel(const fPoint position, const  UI_LabelDef definition, UI_Listener* listener = nullptr);
 
@@ -133,7 +134,7 @@ public:
 
 	UI_IG_Item*   CreateInGameItem(const fPoint position, const UI_InGameElementDef definition);
 
-	UI_Image*     CreateInGameImage(const fPoint position, const UI_ImageDef definition);
+	UI_IG_Helper*  CreateInGameHelper(const fPoint position, const UI_InGameElementDef definition);
 
 	// Object functions ----------------------------------------------------------
 

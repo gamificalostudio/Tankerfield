@@ -157,8 +157,8 @@ void Player_GUI::SetHelper()
 
 		}
 
-		x_offset += aux->sprite_section.w + (*iter)->x_margin;
-		aux->offset = (*iter)->x_margin;
+		x_offset += aux->sprite_section.w + (*iter)->offset.x;
+		aux->offset = (*iter)->offset.x;
 		aux->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 		helper_elements.push_back(aux);
 	}
