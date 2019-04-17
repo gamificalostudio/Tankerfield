@@ -27,7 +27,7 @@ public:
 	void CreatePickUp(fPoint pos_map);
 
 	//Calculate if a pickUp has to be created after enemy die
-	bool PickUpFromEnemy(fPoint pos_map);
+	void PickUpFromEnemy(fPoint pos_map);
 
 
 

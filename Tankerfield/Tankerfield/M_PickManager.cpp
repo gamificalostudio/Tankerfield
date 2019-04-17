@@ -37,18 +37,15 @@ bool M_PickManager::Start()
 }
 
 
-bool M_PickManager::PickUpFromEnemy(fPoint pos_map)
+void M_PickManager::PickUpFromEnemy(fPoint pos_map)
 {
-	bool ret = false;
 	uint probability = rand() % 100;
 
 	if (probability < percentage_to_spawn)
 	{
 		CreatePickUp(pos_map);
-		ret = true;
 	}
 
-	return ret;
 }
 
 void M_PickManager::CreatePickUp(fPoint pos_map)

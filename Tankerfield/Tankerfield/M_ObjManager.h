@@ -15,6 +15,7 @@ enum class ObjectType
 {
 	//ITEMS need to be first because of the random selection from Obj_PickUp .
 	HEALTH_BAG = 0,
+	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
 
 	//OTHER
 	TANK,

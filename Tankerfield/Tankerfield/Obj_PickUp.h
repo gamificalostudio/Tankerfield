@@ -7,7 +7,8 @@
 enum class PICKUP_TYPE {
 	NO_TYPE = -1,
 	ITEM,
-	WEAPON
+	WEAPON,
+	MAX_TYPES //must be in the last position of the types of pickUps.Needed from the creation of pickUps
 };
 
 

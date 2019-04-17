@@ -47,17 +47,17 @@ bool Obj_PickUp::Draw(float dt, Camera* camera)
 
 PICKUP_TYPE Obj_PickUp::RandomPickUp() 
 {
-	return (PICKUP_TYPE)(rand() % 2);
+	return (PICKUP_TYPE)(rand() % (uint)PICKUP_TYPE::MAX_TYPES);
 }
 
 WEAPON Obj_PickUp::RandomWeapon() const
 {
-	return (WEAPON)(rand() % 1/*number of weapons*/);
+	return (WEAPON)(rand() % (uint)WEAPON::MAX_WEAPONS);
 }
 
 ObjectType Obj_PickUp::RandomItem() const
 {
-	return (ObjectType)(rand() % 1 /*number of items*/);
+	return (ObjectType)(rand() % (uint)ObjectType::MAX_ITEMS);
 }
 
 void Obj_PickUp::DeletePickUp()
