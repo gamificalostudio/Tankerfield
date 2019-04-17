@@ -197,9 +197,10 @@ public:
 	// Assets --------------------------------------------
 	SDL_Rect button_sprite[(int)GAMEPAD_BUTTON::MAX];
 
-	Animation* 	arrow_anim = nullptr;
-
 	_TTF_Font*  font_open_sants_bold_12 = nullptr;
+
+	Animation	arrow_anim;
+
 };
 
 

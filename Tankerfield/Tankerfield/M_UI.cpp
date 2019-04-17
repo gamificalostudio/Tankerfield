@@ -11,6 +11,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "M_Fonts.h"
+#include "M_AnimationBank.h"
 
 #include "Player_GUI.h"
 #include "Obj_Tank.h"
@@ -46,7 +47,7 @@ bool M_UI::Awake(pugi::xml_node& config)
 	LOG("Loading Module UI");
 	bool ret = true;
 
-	arrow_anim = new Animation(config.child("animations").child("arrow"));
+	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
 
 	return ret;
 }
