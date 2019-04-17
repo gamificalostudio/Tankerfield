@@ -41,7 +41,7 @@ bool Obj_RewardBox::Draw(float dt, Camera* camera)
 
 void Obj_RewardBox::GetDamage(float damage)
 {
-	if (life - damage < 0)
+	if (life - damage <= 0 && life != 0)
 	{
 		life = 0;
 		Dead();
@@ -54,7 +54,30 @@ void Obj_RewardBox::GetDamage(float damage)
 
 void Obj_RewardBox::Dead()
 {
-	app->pick_manager->CreatePickUp(pos_map);
+	uint probability = rand() % 100;
+
+	if (probability < 25)
+	{
+		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
+	}
+
+	else if (probability < 50)
+	{
+		fPoint offset{ 0.5f,0 };
+		app->pick_manager->CreatePickUp(pos_map - offset, PICKUP_TYPE::ITEM);
+		app->pick_manager->CreatePickUp(pos_map + offset, PICKUP_TYPE::ITEM);
+	}
+
+	else if (probability < 80)
+	{
+		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
+	}
+
+	else if (probability < 100)
+	{
+		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
+	}
+
 	to_remove = true;
 }
 

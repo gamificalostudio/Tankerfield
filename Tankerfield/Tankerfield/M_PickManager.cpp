@@ -52,10 +52,16 @@ void M_PickManager::PickUpFromEnemy(fPoint pos_map)
 
 }
 
-void M_PickManager::CreatePickUp(fPoint pos_map)
+void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, uint levels_to_add)
 {
-	app->objectmanager->CreateObject(ObjectType::PICK_UP, pos_map);
-}
+	Obj_PickUp* ret = (Obj_PickUp*)app->objectmanager->CreateObject(ObjectType::PICK_UP, pos_map);
+	if (type_of_pick_up != PICKUP_TYPE::NO_TYPE)
+	{
+		ret->type_of_pick_up = type_of_pick_up;
+	}
+
+	ret->level_of_weapon += levels_to_add;
+	}
 
 void M_PickManager::CreateRewardBox(fPoint pos_map)
 {

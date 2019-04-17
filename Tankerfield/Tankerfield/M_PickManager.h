@@ -4,9 +4,7 @@
 #include "Module.h"
 #include <list>
 #include "Point.h"
-
-
-class Obj_PickUp;
+#include "Obj_PickUp.h"
 
 
 class M_PickManager : public Module
@@ -24,7 +22,7 @@ public:
 	bool Start();
 
 	//Create a Pick up 
-	void CreatePickUp(fPoint pos_map);
+	void CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, uint levels_to_add = NULL);
 
 	//Create a reward box
 	void CreateRewardBox(fPoint pos_map);

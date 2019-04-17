@@ -34,7 +34,7 @@ public:
 
 	~Obj_PickUp();
 
-	bool Awake(pugi::xml_node&) { return true; };
+	bool Start();
 
 	bool Update(float dt) override;
 

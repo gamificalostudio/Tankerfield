@@ -404,6 +404,19 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
 		}
 	}
+
+	if (object_group->name == "SpawnPoints")
+	{
+		for (i = 0; i < object_group->size; ++i)
+		{
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y / data.tile_height) };
+			fPoint* ret = new fPoint;
+			*ret = pos;
+
+			data.spawners_position.push_back(ret);
+		}
+	}
 	
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
 

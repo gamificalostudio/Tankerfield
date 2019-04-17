@@ -20,7 +20,15 @@ Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 	coll = app->collision->AddCollider(pos, 1, 1, Collider::TAG::PICK_UP, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 	type_of_pick_up = RandomPickUp();
+	
+}
 
+Obj_PickUp::~Obj_PickUp()
+{
+}
+
+bool Obj_PickUp::Start()
+{
 
 	UI_InGameElementDef element_def;
 	element_def.pointed_obj = this;
@@ -36,11 +44,7 @@ Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 		type_of_weapon = RandomWeapon();
 		break;
 	}
-	
-}
-
-Obj_PickUp::~Obj_PickUp()
-{
+	return true;
 }
 
 bool Obj_PickUp::Update(float dt)

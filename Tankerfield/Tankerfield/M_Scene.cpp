@@ -76,6 +76,7 @@ bool M_Scene::Start()
 	/* Generate first wave units */
 	srand(time(NULL));
 	CreateEnemyWave();
+	number_current_wave = 1;
 
 	return true;
 }
