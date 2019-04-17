@@ -181,7 +181,7 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	img_def.is_in_game = true;
 	// Add frame ====================================================
 
-	img_def.sprite_section = { 385, 160, 70, 80 };
+	img_def.sprite_section = { 390, 160, 55, 70 };
 	item_frame = app->ui->CreateImage({ 0.f, 0.f }, img_def);
 	item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	item_frame->SetParent(this);
@@ -192,15 +192,15 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	switch (pointed_obj->type)
 	{
 	case ObjectType::HEALTH_BAG:
-		img_def.sprite_section = { 490,110,45,45 };
+		img_def.sprite_section = { 500,55,40,40 };
 		break;
 	default:
-		img_def.sprite_section = { 490,110,45,45 };
+		img_def.sprite_section = { 500,55,40,40 };
 		break;
 	}
 
-	item_icon = app->ui->CreateImage({ 0.f, - 26.f }, img_def);
-	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	item_icon = app->ui->CreateImage({ 0.f, - 42.f }, img_def);
+	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	item_icon->SetParent(item_frame);
 	
 }
@@ -216,7 +216,7 @@ void UI_IG_Item::Destroy()
 	to_destroy = true;
 
 	if (arrow_image != nullptr)
-	{
+	{                         
 		arrow_image->Destroy();
 	}
 	if (item_frame != nullptr)

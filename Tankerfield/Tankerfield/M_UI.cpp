@@ -84,7 +84,6 @@ bool M_UI::Start()
 	UI_IG_Helper* helper = CreateInGameHelper({ 1.f, 1.f }, def);
 
 	helper->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::A, { 0.F, 20.F}));
-	helper->Destroy();
 
 	player_1_gui->AddTextHelper(Text_Helper("Press"));
 	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::B));
@@ -95,21 +94,13 @@ bool M_UI::Start()
 	fRect full_screen = app->win->GetWindowRect();
 
 	// General 4 HUD players =========================================================
-	image_def.sprite_section = { 170, 10, 50, 50 };
-	UI_Image* lt_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	lt_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+	image_def.sprite_section = { 170 , 10, 105, 105 };
+	UI_Image* round_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	round_element    ->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
-	image_def.sprite_section = { 220, 10, 50, 50 };
-	UI_Image* rt_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	rt_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
-
-	image_def.sprite_section = { 170, 60, 50, 50 };
-	UI_Image* lb_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	lb_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
-
-	image_def.sprite_section = { 220, 60, 50, 50 };
-	UI_Image* rb_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	rb_round->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
+	image_def.sprite_section = { 120, 515, 179, 179 };
+	UI_Image* round_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
 	UI_Image* left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
