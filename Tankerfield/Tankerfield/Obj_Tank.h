@@ -11,6 +11,7 @@ struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
 
+
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
@@ -47,6 +48,7 @@ public:
 	int GetLife();
 	int GetMaxLife();
 
+public:
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 
@@ -70,6 +72,7 @@ private:
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
+	void ShootHealingShot();
 
 	//- TankDeath
 	void ReviveTank();
@@ -84,6 +87,7 @@ private:
 	int max_life							= 0;
 	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
+
 	static int number_of_tanks;
 
 	//- Movement
@@ -127,8 +131,8 @@ private:
 	SDL_Scancode kb_right					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
-	Joystick gamepad_move					= Joystick::INVALID;
-	Joystick gamepad_aim					= Joystick::INVALID;
+	Joystick gamepad_move							= Joystick::INVALID;
+	Joystick gamepad_aim							= Joystick::INVALID;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;

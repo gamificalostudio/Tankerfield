@@ -15,4 +15,5 @@ void WeaponInfo::LoadProperties(const pugi::xml_node & node)
 	bullet_speed = node.child("bullet_speed").attribute("value").as_float();
 	bullet_life_ms = node.child("bullet_life_ms").attribute("value").as_float();
 	time_between_bullets = node.child("time_between_bullets").attribute("value").as_float();
+	bullet_healing = node.child("bullet_healing").attribute("value").as_int();
 }
