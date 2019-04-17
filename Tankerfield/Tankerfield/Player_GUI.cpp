@@ -16,10 +16,10 @@
 #include "UI_Label.h"
 #include "UI_Bar.h"
 
-Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object): type(type), player(player_object)
+Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : type(type), player(player_object)
 {
-	viewport.create( player_object->camera_player->viewport.x, player_object->camera_player->viewport.y , player_object->camera_player->viewport.w, player_object->camera_player->viewport.h);
-	viewport_with_margin = { (int) (viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.w - margin.x) ,(int)(viewport.h - margin.y) };
+	viewport.create(player_object->camera_player->viewport.x, player_object->camera_player->viewport.y, player_object->camera_player->viewport.w, player_object->camera_player->viewport.h);
+	viewport_with_margin = { (int)(viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.w - margin.x) ,(int)(viewport.h - margin.y) };
 	margin = { 30.f, 30.f };
 
 	UI_ImageDef image_def;
@@ -39,80 +39,81 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object): t
 		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
 
-if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
-{
-	image_def.sprite_section = { 10, 70, 50, 20 };
-	ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetTop() + 50.f + margin.y }, image_def);
-	ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
-}
-else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
-{
-	image_def.sprite_section = { 10, 100, 50, 20 };
-	ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetBottom() - 50.f - margin.y }, image_def);
-	ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
-}
+	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	{
+		image_def.sprite_section = { 10, 70, 50, 20 };
+		ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetTop() + 50.f + margin.y }, image_def);
+		ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+	}
+	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	{
+		image_def.sprite_section = { 10, 100, 50, 20 };
+		ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetBottom() - 50.f - margin.y }, image_def);
+		ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+	}
 
-image_def.sprite_section = { 10, 10, 50, 50 };
+	image_def.sprite_section = { 10, 10, 50, 50 };
 
-if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
-{
-	weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetTop() + margin.y }, image_def);
-	weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
-}
-else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
-{
-	weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetBottom() - margin.y }, image_def);
-	weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
-}
+	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	{
+		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetTop() + margin.y }, image_def);
+		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+	}
+	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	{
+		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x ,viewport.GetBottom() - margin.y }, image_def);
+		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+	}
 
-UI_BarDef ammo_bar_def(UI_Bar::DIR::DOWN, 0.8f, { 180, 160, 0, 255 }, { 80, 80, 80, 255 });
-ammo_bar_def.section_width = 12.f;
-ammo_bar_def.section_height = 128.f;
-ammo_bar_def.section_offset = { 6.f ,6.f };
-ammo_bar_def.sprite_section = { 70, 10, 24, 140 };
+	UI_BarDef ammo_bar_def(UI_Bar::DIR::DOWN, 0.8f, { 180, 160, 0, 255 }, { 80, 80, 80, 255 });
+	ammo_bar_def.section_width = 12.f;
+	ammo_bar_def.section_height = 128.f;
+	ammo_bar_def.section_offset = { 6.f ,6.f };
+	ammo_bar_def.sprite_section = { 70, 10, 24, 140 };
 
-if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
-{
-	ammo_bar_def.direction = UI_Bar::DIR::DOWN;
-	ammo_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x , viewport.GetTop() + margin.y }, ammo_bar_def);
-	ammo_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
-}
-else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
-{
-	ammo_bar_def.direction = UI_Bar::DIR::UP;
-	ammo_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x , viewport.GetBottom() - margin.y }, ammo_bar_def);
-	ammo_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
-}
+	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	{
+		ammo_bar_def.direction = UI_Bar::DIR::DOWN;
+		ammo_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x , viewport.GetTop() + margin.y }, ammo_bar_def);
+		ammo_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+	}
+	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	{
+		ammo_bar_def.direction = UI_Bar::DIR::UP;
+		ammo_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x , viewport.GetBottom() - margin.y }, ammo_bar_def);
+		ammo_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+	}
 
-UI_BarDef life_bar_def(UI_Bar::DIR::UP, 0.8f, { 0, 160, 0, 255 }, { 80, 80, 80, 255 });
-life_bar_def.section_width = 20.f;
-life_bar_def.section_height = 234.f;
+	UI_BarDef life_bar_def(UI_Bar::DIR::UP, 0.8f, { 0, 160, 0, 255 }, { 80, 80, 80, 255 });
+	life_bar_def.section_width = 20.f;
+	life_bar_def.section_height = 234.f;
 
-switch (type)
-{
-case Player_GUI::TYPE::PLAYER_1:
-	life_bar_def.direction = UI_Bar::DIR::UP;
-	life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
-	life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
-	break;
-case Player_GUI::TYPE::PLAYER_2:
-	life_bar_def.direction = UI_Bar::DIR::UP;
-	life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
-	life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
-	break;
-case Player_GUI::TYPE::PLAYER_3:
-	life_bar_def.direction = UI_Bar::DIR::DOWN;
-	life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetTop() + 21.f }, life_bar_def);
-	life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
-	break;
-case Player_GUI::TYPE::PLAYER_4:
-	life_bar_def.direction = UI_Bar::DIR::DOWN;
-	life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetTop() + 21.f }, life_bar_def);
-	life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
-	break;
-default:
-	break;
-}
+	switch (type)
+	{
+	case Player_GUI::TYPE::PLAYER_1:
+		life_bar_def.direction = UI_Bar::DIR::UP;
+		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
+		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
+		break;
+	case Player_GUI::TYPE::PLAYER_2:
+		life_bar_def.direction = UI_Bar::DIR::UP;
+		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
+		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+		break;
+	case Player_GUI::TYPE::PLAYER_3:
+		life_bar_def.direction = UI_Bar::DIR::DOWN;
+		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetTop() + 21.f }, life_bar_def);
+		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
+		break;
+	case Player_GUI::TYPE::PLAYER_4:
+		life_bar_def.direction = UI_Bar::DIR::DOWN;
+		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetTop() + 21.f }, life_bar_def);
+		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+		break;
+	default:
+		break;
+
+	}
 }
 
 void Player_GUI::ClearHelpers()
