@@ -14,6 +14,7 @@
 #include "Obj_HealingAnimation.h"
 #include "Animation.h"
 #include "M_AnimationBank.h"
+#include "Obj_Tank.h"
 
 Obj_Healing_Animation::Obj_Healing_Animation(fPoint pos):Object(pos)
 {
