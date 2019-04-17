@@ -30,6 +30,11 @@ Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 Obj_Tank::~Obj_Tank()
 {
 	number_of_tanks--;
+	if (camera_player != nullptr)
+	{
+		camera_player->assigned = false;
+		camera_player->number_player = 0;
+	}
 }
 
 bool Obj_Tank::Start()

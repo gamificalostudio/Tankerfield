@@ -92,7 +92,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 				move_vect.Normalize();
 
 				//Change sprite direction
-				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG + ISO_COMPENSATION;
+				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
 				state = TROOPER_STATE::MOVE;
 			}
 			else
