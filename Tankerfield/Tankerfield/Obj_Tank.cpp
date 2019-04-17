@@ -374,6 +374,7 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoin
 	iPoint mouse_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 
+	this;
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
 	mouse_pos.x += camera_player->rect.x;
 	mouse_pos.y += camera_player->rect.y;

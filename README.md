@@ -47,11 +47,15 @@ https://github.com/AitorVelez
 - X button : Interact
 
 # Debug functionality:
+- F9: show colliders
+- F1: show map grid
+- F5: Reset level
 
 ## Keyboard controls:
 - Move mouse: Aim
 - Mouse left button: Shot
 - Hold mouse left button: Charged shot
+
 Tank 1:
 - W: Move up
 - A: Move left
@@ -59,6 +63,7 @@ Tank 1:
 - D: Move right
 - Q: Use item
 - E: Interact
+
 Tank 2:
 - T: Move up
 - F: Move left
@@ -66,6 +71,7 @@ Tank 2:
 - H: Move right
 - R: Use item
 - Y: Interact
+
 Tank 3:
 - I: Move up
 - J: Move left
@@ -73,6 +79,7 @@ Tank 3:
 - L: Move right
 - U: Use item
 - O: Interact
+
 Tank 4:
 - KP_8: Move up
 - KP_4: Move left

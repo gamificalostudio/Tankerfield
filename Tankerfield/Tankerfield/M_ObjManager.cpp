@@ -93,7 +93,8 @@ bool M_ObjManager::Update(float dt)
 				//So we don't need increment the iterator to go to the next one
 				if ((*iterator)->type == ObjectType::TANK)
 				{
-					obj_tanks.erase(iterator);
+					Obj_Tank* aux = (Obj_Tank*)(*iterator);
+					obj_tanks.remove((*iterator));
 				}
 
 				if ((*iterator)->coll != nullptr)
@@ -183,17 +184,8 @@ bool M_ObjManager::PostUpdate(float dt)
 // Called before quitting
 bool M_ObjManager::CleanUp()
 {
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
-	{
-		if ((*iterator) != nullptr) 
-		{
-			(*iterator)->CleanUp();
-			delete (*iterator);
-			(*iterator) = nullptr;
-		}
-	}
-	
-	objects.clear();
+	DeleteObjects();
+
 	return true;
 }
 
@@ -254,8 +246,16 @@ void M_ObjManager::DeleteObjects()
 {
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 	{
-		(*iterator)->to_remove = true;
+		if ((*iterator) != nullptr)
+		{
+			(*iterator)->CleanUp();
+			delete (*iterator);
+			(*iterator) = nullptr;
+		}
 	}
+
+	objects.clear();
+	obj_tanks.clear();
 }
 
 Object * M_ObjManager::GetNearestTank(fPoint pos)
