@@ -312,7 +312,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			SetPickUp(pick_up);
 		}
-  }
+	}
 	else if (c1->GetTag() == Collider::TAG::WALL)
 	{
 		app->scene->tank_1->life - 1;
@@ -331,9 +331,10 @@ void Obj_Tank::SetItem(ObjectType type)
 	item = type;
 }
 
-void Obj_Tank::SetWeapon(WEAPON type)
+void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
 	shot_type = (uint)type;
+	level_weapon = level;
 }
 
 int Obj_Tank::GetLife()
@@ -692,7 +693,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	}
 	else
 	{
-		SetWeapon(pick_up->type_of_weapon);
+		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 	}
 
 	pick_up->DeletePickUp();

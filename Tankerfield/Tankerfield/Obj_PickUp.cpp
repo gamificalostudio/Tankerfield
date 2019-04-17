@@ -9,6 +9,7 @@
 #include "M_Map.h"
 #include "M_Collision.h"
 #include "Obj_Tank.h"
+#include "M_Scene.h"
 
 
 Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
@@ -45,13 +46,14 @@ bool Obj_PickUp::Draw(float dt, Camera* camera)
 	return true;
 }
 
-PICKUP_TYPE Obj_PickUp::RandomPickUp() 
+PICKUP_TYPE Obj_PickUp::RandomPickUp() const
 {
 	return (PICKUP_TYPE)(rand() % (uint)PICKUP_TYPE::MAX_TYPES);
 }
 
-WEAPON Obj_PickUp::RandomWeapon() const
+WEAPON Obj_PickUp::RandomWeapon() 
 {
+	level_of_weapon = app->scene->number_current_wave;
 	return (WEAPON)(rand() % (uint)WEAPON::MAX_WEAPONS);
 }
 

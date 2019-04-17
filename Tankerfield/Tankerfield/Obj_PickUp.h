@@ -19,6 +19,8 @@ public:
 	WEAPON type_of_weapon						= WEAPON::BASIC;
 	ObjectType type_of_item						= ObjectType::NO_TYPE;
 
+	uint level_of_weapon						= NULL;
+
 
 
 public:
@@ -33,11 +35,11 @@ public:
 
 	bool Draw(float dt, Camera* camera);
 
-	WEAPON RandomWeapon() const;
+	WEAPON RandomWeapon() ;
 
 	ObjectType RandomItem() const;
 
-	PICKUP_TYPE RandomPickUp();
+	PICKUP_TYPE RandomPickUp() const;
 
 	void DeletePickUp();
 

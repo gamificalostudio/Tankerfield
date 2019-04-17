@@ -50,7 +50,7 @@ public:
 	//- Logic
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
-	void SetWeapon(WEAPON type);
+	void SetWeapon(WEAPON type, uint level);
 	int GetLife();
 	int GetMaxLife();
 
@@ -109,6 +109,7 @@ private:
 
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::BASIC;
+	uint level_weapon						= 0u;
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
 	PerfTimer shot_timer;
 	PerfTimer charged_timer;

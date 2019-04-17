@@ -23,6 +23,8 @@ public:
 	Obj_Tank * tank_2 = nullptr;
 	Obj_Tank * tank_3 = nullptr;
 	Obj_Tank * tank_4 = nullptr;
+
+	uint number_current_wave = 0;
 public:
 
 	M_Scene();

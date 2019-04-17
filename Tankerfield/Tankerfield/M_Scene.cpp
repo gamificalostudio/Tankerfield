@@ -149,6 +149,7 @@ bool M_Scene::Update(float dt)
 			/* Generate new wave and increase units number */
 			initial_generated_units += enemies_to_increase;
 			CreateEnemyWave();
+			++number_current_wave;
 		}
 
 		accumulated_time = 0.0f;
@@ -295,4 +296,5 @@ void M_Scene::CreateEnemyWave()
 					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
 		}
 	}
+
 }
