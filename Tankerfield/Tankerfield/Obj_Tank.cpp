@@ -113,22 +113,12 @@ bool Obj_Tank::Start()
 
 	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
-	basic_shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
-
-	if (weapons_info == nullptr)
-	{
-		pugi::xml_node weapons_node = app->config.child("weapons");
-		weapons_info = new WeaponInfo[(uint)WEAPON::MAX];
-		weapons_info[(uint)WEAPON::BASIC].LoadProperties(weapons_node.child("basic"));
-		weapons_info[(uint)WEAPON::FLAMETHROWER].LoadProperties(weapons_node.child("flamethrower"));
-		weapons_info[(uint)WEAPON::DOUBLE_MISSILE].LoadProperties(weapons_node.child("double_missile"));
-		weapons_info[(uint)WEAPON::HEALING_SHOT].LoadProperties(weapons_node.child("healing_shot"));
-	}
+	basic_shot_function[(uint)WEAPON::HEALING_SHOT]		= &Obj_Tank::ShootHealingShot;
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
-	charged_shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
-	charged_shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
+	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -343,17 +333,12 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
-		receiver = this;
 		Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
-		new_particle->tank = receiver;
-		if (receiver->GetMaxLife() > receiver->GetLife())
+		new_particle->tank = this;
+		if (GetLife()<GetMaxLife())
 		{
-			receiver->SetLife(GetLife() + 5);
-			if (receiver->GetMaxLife() < receiver->GetLife()) {
-				receiver->SetLife(receiver->GetMaxLife());
-			}
+			SetLife(GetLife() + weapon_info.bullet_healing);
 		}
-		
 	}
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
@@ -369,6 +354,10 @@ void Obj_Tank::OnTrigger(Collider * c1)
 void Obj_Tank::SetLife(int life)
 {
 	//TODO: Update UI bars
+	if (this->life > GetMaxLife())
+	{
+		this->life = GetMaxLife();
+	}
 	this->life = life;
 }
 

@@ -1200,6 +1200,7 @@
       <bullet_speed value ="10"/>
       <bullet_life_ms value ="2000"/>
       <time_between_bullets value ="500"/>
+      <bullet_healing value="5"/>
     </healing_shot>
   </weapons>
 
