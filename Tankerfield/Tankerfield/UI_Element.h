@@ -57,12 +57,14 @@ enum class ELEMENT_STATE
 
 struct UI_ElementDef
 {
+	UI_ElementDef(){}
+	UI_ElementDef(const SDL_Rect sprite_section): sprite_section(sprite_section){}
+
 	Pivot      pivot;
 	fPoint     section_offset = { 0.f, 0.f };
 	float      section_width = 0.f;
 	float      section_height= 0.f;
 	SDL_Rect   sprite_section = { 0, 0, 0, 0};
-
 };
 
 class UI_Element
@@ -77,6 +79,8 @@ public:
 	virtual bool PreUpdate() { return true; }
 
 	virtual bool Update(float dt) { return true; }
+
+	virtual bool PostUpdate() { return true; }
 
 	virtual bool Draw();
 
@@ -111,6 +115,7 @@ public:
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	bool			      is_draggable = false;
 	bool				  is_interactive = false;
+	float                 offset = 0.f;
 
 protected:
 

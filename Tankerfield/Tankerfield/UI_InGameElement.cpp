@@ -24,7 +24,7 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 	}
 }
 
-bool UI_InGameElement::Update(float dt)
+bool UI_InGameElement::PostUpdate()
 {
 	UpdateArrow();
 	return true;
@@ -68,7 +68,7 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 
 	// Add frame ====================================================
 
-	img_def.sprite_section = { 330, 160, 50, 65 };
+	img_def.sprite_section = { 330, 160, 50, 70 };
 	
 	weapon_frame = app->ui->CreateInGameImage({ 0.f ,0.f }, img_def);
 	weapon_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
@@ -94,51 +94,51 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 		img_def.sprite_section = { 500, 10, 34, 34 };
 		break;
 	}
+
 	img_def.sprite_section = { 620, 10, 34, 34 };
-	weapon_icon = app->ui->CreateInGameImage(weapon_frame->position - fPoint(0.f, 24.f), img_def);
+	weapon_icon = app->ui->CreateInGameImage(weapon_frame->position - fPoint(0.f, 29.f), img_def);
 	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	weapon_icon->SetParent(weapon_frame);
+
+	level_indicator = app->ui->CreateInGameImage(weapon_frame->position - fPoint( 32.f, 64.f), img_def);
+	level_indicator->SetParent(weapon_frame);
 	 
 }
 
 void UI_IG_Weapon::UpdateLevel()
 {
-	int diference = weapon_level - current_player_level;
+	int diference = pick_up_weapon_level - player_weapon_level;
 
-	if (last_player_level != current_player_level && diference <= 4 && diference >= - 4)
+	level_indicator->state == ELEMENT_STATE::VISIBLE;
+
+	if (diference > 4)
 	{
-		UI_ImageDef img_def;
-
-		if (diference > 0)
-		{
-			img_def.sprite_section = { 460, 160, 15, 9 };
-		}
-		else
-		{
-			img_def.sprite_section = { 460, 170, 15, 9 };
-		}
-
-
-		for (std::list <UI_Image*>::iterator iter = level_indicators.begin(); iter != level_indicators.end(); ++iter)
-		{
-			(*iter)->Destroy();
-		}
-
-		level_indicators.clear();
-
-		for (int i = 0; i < abs( diference) ; ++i)
-		{
-			UI_Image* aux = app->ui->CreateInGameImage(weapon_frame->position - fPoint(34.f , 59.f -9.f * i), img_def);
-			aux->SetParent(weapon_frame);
-			level_indicators.push_back(aux);
-		}
-
-		last_player_level = current_player_level;
+		diference = 4;
 	}
-	
+	else if (diference < -4)
+	{
+		diference = -4;
+	}
+	else if (diference == 0)
+	{
+		level_indicator->state == ELEMENT_STATE::HIDDEN;
+		return;
+	}
+
+	if (diference > 0)
+	{
+		level_indicator->sprite_section = { 460, 160, 15, 10 * abs(diference)};
+	}
+	else
+	{
+		level_indicator->sprite_section = { 460, 205, 15, 10 * abs(diference) };
+	}
+
+
+
 }
 
-bool UI_IG_Weapon::Update(float dt)
+bool UI_IG_Weapon::PostUpdate()
 {
 	weapon_frame->SetPos(app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_gui->player->camera_player));
 	UpdateLevel();
@@ -164,10 +164,11 @@ void UI_IG_Weapon::Destroy()
 		weapon_icon->Destroy();
 	}
 
-	for (std::list <UI_Image*>::iterator iter = level_indicators.begin(); iter != level_indicators.end(); ++iter)
+	if (level_indicator != nullptr)
 	{
-		(*iter)->Destroy();
+		level_indicator->Destroy();
 	}
+
 }
 
 UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definition) : UI_InGameElement(position, definition)
@@ -199,7 +200,7 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	item_icon->SetParent(item_frame);
 	
 }
-bool UI_IG_Item::Update(float dt)
+bool UI_IG_Item::PostUpdate()
 {
 	item_frame->SetPos(app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_gui->player->camera_player));
 	UpdateArrow();

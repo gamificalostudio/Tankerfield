@@ -11,21 +11,22 @@ class UI_Button;
 
 struct UI_LabelDef : public UI_ElementDef
 {
-	UI_LabelDef(_TTF_Font* font, SDL_Color color = { 255,255,255,255 }): font(font) ,color(color) {}
+	UI_LabelDef(const String text,  _TTF_Font* font, const SDL_Color color = { 255,255,255,255 }): text(text),font(font) ,color(color) {}
 
-	_TTF_Font* font = nullptr;
-	SDL_Color  color = { 255,255,255,255 };
+	_TTF_Font*   font = nullptr;
+	SDL_Color    color = { 255,255,255,255 };
+	String       text;
 };
 
 class UI_Label : public UI_Element
 {
 public:
 
-	UI_Label(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener);
+	UI_Label(const fPoint position, const UI_LabelDef definition, UI_Listener* listener);
 
-	~UI_Label();
+	void Destroy();
 
-	void SetText(String text);
+	void SetText(const String text);
 
 	bool Draw();
 

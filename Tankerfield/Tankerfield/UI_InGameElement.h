@@ -22,9 +22,7 @@ public:
 
 	UI_InGameElement(const fPoint position, const UI_InGameElementDef definition);
 
-	virtual bool Update(float dt);
-
-	virtual bool Draw() { return true; };
+	virtual bool PostUpdate();
 
 	virtual void Destroy();
 
@@ -48,7 +46,7 @@ public:
 
 	UI_IG_Weapon(const fPoint position, const UI_InGameElementDef definition);
 
-	bool Update(float dt);
+	bool PostUpdate();
 
 	void Destroy();
 
@@ -56,13 +54,12 @@ public:
 
 public: 
 
-	int last_player_level = 0u;
-	int current_player_level = 0u;
-	int weapon_level = 0u;
+	int pick_up_weapon_level = 4;
+	int player_weapon_level = 1;
 
 	UI_Image*             weapon_icon = nullptr;
 	UI_Image*             weapon_frame = nullptr;
-	std::list<UI_Image*>  level_indicators;
+	UI_Image*             level_indicator = nullptr;
 };
 
 class UI_IG_Item : public UI_InGameElement
@@ -71,7 +68,7 @@ public:
 
 	UI_IG_Item(const fPoint position, const UI_InGameElementDef definition);
 
-	bool Update(float dt);
+	bool PostUpdate();
 
 	void Destroy();
 

@@ -110,10 +110,10 @@ bool M_Textures::UnLoad(SDL_Texture* texture)
 		{
 			SDL_DestroyTexture((iter->second));
 			textures.erase(iter);
-			return true;;
+			return true;
 		}
 	}
-	return false;
+	return true;
 }
 
 // Translate a surface into a texture

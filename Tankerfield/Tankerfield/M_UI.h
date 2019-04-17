@@ -75,6 +75,20 @@ class M_UI : public Module
 {
 public:
 
+	enum class GAMEPAD_BUTTON: int
+	{
+		NONE = -1,
+		A,
+		B,
+		Y,
+		X,
+		LT,
+		LB,
+		RT,
+		RB,
+		MAX
+	};
+
 	M_UI();
 
 	virtual ~M_UI();
@@ -99,7 +113,7 @@ public:
 
 	UI_Element	 * CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
 
-	UI_Label	 * CreateLabel(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener = nullptr);
+	UI_Label	 * CreateLabel(const fPoint position, const  UI_LabelDef definition, UI_Listener* listener = nullptr);
 
 	UI_Image	 * CreateImage(const fPoint position, const UI_ImageDef definition, UI_Listener* listener = nullptr);
 
@@ -163,6 +177,7 @@ private:
 
 public:
 	// Mouse ----------------------------------------------
+
 	Player_GUI* current_gui = nullptr;
 
 	Player_GUI  *player_1_gui = nullptr;
@@ -179,8 +194,13 @@ public:
 
 	fPoint		mouse_offset;
 
+	// Assets --------------------------------------------
+	SDL_Rect button_sprite[(int)GAMEPAD_BUTTON::MAX];
+
 	Animation* 	arrow_anim = nullptr;
 
+	_TTF_Font*  font_open_sants_bold_12 = nullptr;
 };
+
 
 #endif // __MODULE_UI_H__

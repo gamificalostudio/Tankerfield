@@ -10,6 +10,7 @@
 #include "M_Input.h"
 #include "M_Audio.h"
 #include "M_Scene.h"
+#include "M_Fonts.h"
 
 #include "Player_GUI.h"
 #include "Obj_Tank.h"
@@ -24,6 +25,8 @@
 #include "UI_TextPanel.h"
 #include "UI_InGameElement.h"
 #include "UI_Bar.h"
+
+#include <vector>
 
 
 M_UI::M_UI() : Module()
@@ -51,10 +54,19 @@ bool M_UI::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_UI::Start()
 {
-	atlas = app->tex->Load("textures/ui/atlas.png");
+	// Assets ========================================
 
-	// Position ======================================
-	fRect full_screen =  app->win->GetWindowRect();
+	atlas = app->tex->Load("textures/ui/atlas.png");
+	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
+
+	button_sprite[(int)GAMEPAD_BUTTON::A]  = { 440,10 ,50 ,50 };
+	button_sprite[(int)GAMEPAD_BUTTON::B]  = { 390,60 ,50 ,50 };
+	button_sprite[(int)GAMEPAD_BUTTON::Y]  = { 440,60 ,50 ,50 };
+	button_sprite[(int)GAMEPAD_BUTTON::X]  = { 390,10 ,50 ,50 };
+	button_sprite[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
+	button_sprite[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
+	button_sprite[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
+	button_sprite[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
 
 	// HUD ===========================================
 	player_1_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
@@ -66,9 +78,17 @@ bool M_UI::Start()
 	player_4_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
 	players_guis.push_back(player_4_gui);
 
-	UI_ImageDef image_def;
+	
 
-	// General 4 players =========================================================
+	player_1_gui->AddTextHelper(Text_Helper("Press", 0.f));
+	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::B, 0.f));
+	player_1_gui->AddTextHelper(Text_Helper("to pay respects", 0.f));
+	player_1_gui->SetHelper();
+
+	UI_ImageDef image_def;
+	fRect full_screen = app->win->GetWindowRect();
+
+	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170, 10, 50, 50 };
 	UI_Image* lt_round = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	lt_round->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
@@ -354,11 +374,14 @@ bool M_UI::PostUpdate(float dt)
 
 		for (list<UI_Element*>::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
 		{
-			(*element)->Update(dt);
+			(*element)->PostUpdate();
 		}
 
 		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
+
 		DrawUI(main_in_game_element);
+
+		app->render->DrawQuad(current_gui->viewport_with_margin, 255, 255, 255, 255, false, false);
 	}
 
 	current_camera = nullptr;
@@ -401,9 +424,9 @@ bool M_UI::PostUpdate(float dt)
 	 return object;
  }
 
- UI_Label* M_UI::CreateLabel(const fPoint position, const String text,  UI_LabelDef definition, UI_Listener* listener)
+ UI_Label* M_UI::CreateLabel(const fPoint position,  UI_LabelDef definition, UI_Listener* listener)
 {
-	UI_Label* object = new UI_Label(position, text, definition, listener);
+	UI_Label* object = new UI_Label(position, definition, listener);
 	object->SetParent(main_ui_element);
 	elements_list.push_back(object);
 	return object;
