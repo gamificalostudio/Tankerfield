@@ -11,22 +11,32 @@
 #include "Obj_Tank.h"
 #include "M_Scene.h"
 
+#include "M_UI.h"
+#include "UI_InGameElement.h"
+
 
 Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 {
 	coll = app->collision->AddCollider(pos, 1, 1, Collider::TAG::PICK_UP, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-	
 	type_of_pick_up = RandomPickUp();
 
-	if (type_of_pick_up == PICKUP_TYPE::ITEM)
+
+	UI_InGameElementDef element_def;
+	element_def.pointed_obj = this;
+
+	switch (type_of_pick_up)
 	{
+	case PICKUP_TYPE::ITEM:
 		type_of_item = RandomItem();
-	}
-	else if (type_of_pick_up == PICKUP_TYPE::WEAPON)
-	{
+		in_game_element = app->ui->CreateInGameItem({ 0.f,0.f }, element_def);
+		break;
+	case PICKUP_TYPE::WEAPON:
+		in_game_element = app->ui->CreateInGameWeapon({ 0.f,0.f }, element_def);
 		type_of_weapon = RandomWeapon();
+		break;
 	}
+	
 }
 
 Obj_PickUp::~Obj_PickUp()
@@ -54,7 +64,7 @@ PICKUP_TYPE Obj_PickUp::RandomPickUp() const
 WEAPON Obj_PickUp::RandomWeapon() 
 {
 	level_of_weapon = app->scene->number_current_wave;
-	return (WEAPON)(rand() % (uint)WEAPON::MAX_WEAPONS);
+	return (WEAPON)(rand() % ((uint)WEAPON::MAX_WEAPONS - 1)+1 /*The plus 1 is because the basic shoot is the number 0, and it can't be created, and the -1 is because the max weapon include the basic bullet*/);
 }
 
 ObjectType Obj_PickUp::RandomItem() const
@@ -64,5 +74,6 @@ ObjectType Obj_PickUp::RandomItem() const
 
 void Obj_PickUp::DeletePickUp()
 {
+	in_game_element->Destroy();
 	to_remove = true;
 }

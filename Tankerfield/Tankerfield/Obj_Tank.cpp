@@ -23,7 +23,14 @@
 int Obj_Tank::number_of_tanks = 0;
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
-{}
+{
+	tank_num = number_of_tanks++;
+}
+
+Obj_Tank::~Obj_Tank()
+{
+	//number_of_tanks--;
+}
 
 bool Obj_Tank::Start()
 {
@@ -44,21 +51,43 @@ bool Obj_Tank::Start()
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
-	tank_num = number_of_tanks++;
-
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
 	switch (tank_num) {
 	case 0:
+		kb_up		= SDL_SCANCODE_W;
+		kb_left		= SDL_SCANCODE_A;
+		kb_down		= SDL_SCANCODE_S;
+		kb_right	= SDL_SCANCODE_D;
+		kb_item		= SDL_SCANCODE_Q;
+		kb_interact	= SDL_SCANCODE_E;
 		curr_tex = base_tex_red;
 		break;
 	case 1:
+		kb_up		= SDL_SCANCODE_T;
+		kb_left		= SDL_SCANCODE_F;
+		kb_down		= SDL_SCANCODE_G;
+		kb_right	= SDL_SCANCODE_H;
+		kb_item		= SDL_SCANCODE_R;
+		kb_interact = SDL_SCANCODE_Y;
 		curr_tex = base_tex_light_blue;
 		break;
 	case 2:
+		kb_up		= SDL_SCANCODE_I;
+		kb_left		= SDL_SCANCODE_J;
+		kb_down		= SDL_SCANCODE_K;
+		kb_right	= SDL_SCANCODE_L;
+		kb_item		= SDL_SCANCODE_U;
+		kb_interact = SDL_SCANCODE_O;
 		curr_tex = base_tex_pink;
 		break;
 	case 3:
+		kb_up		= SDL_SCANCODE_KP_8;
+		kb_left		= SDL_SCANCODE_KP_4;
+		kb_down		= SDL_SCANCODE_KP_5;
+		kb_right	= SDL_SCANCODE_KP_6;
+		kb_item		= SDL_SCANCODE_KP_7;
+		kb_interact	= SDL_SCANCODE_KP_9;
 		curr_tex = base_tex_yellow;
 		break;
 	default:
@@ -66,6 +95,7 @@ bool Obj_Tank::Start()
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
+	kb_shoot = SDL_BUTTON_LEFT;
 
 	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
 	curr_anim = &rotate_base;
@@ -79,8 +109,12 @@ bool Obj_Tank::Start()
 
 	weapon_info.LoadProperties(app->config.child("weapons").child("basic"));
 
-	shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
+	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
+
+	charge_time = 3000.f; // Same for all bullets (player gets used to it)
+	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
+	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -89,18 +123,9 @@ bool Obj_Tank::Start()
 	cannon_height = 11.f;
 	cannon_length = 1.f;
 
-	//TODO: Load them from the XML
-	kb_up				= SDL_SCANCODE_W;
-	kb_left				= SDL_SCANCODE_A;
-	kb_down				= SDL_SCANCODE_S;
-	kb_right			= SDL_SCANCODE_D;
-	kb_shoot			= SDL_BUTTON_LEFT;
-	kb_item				= SDL_SCANCODE_F;
-	kb_interact			= SDL_SCANCODE_SPACE;
-  
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
-	gamepad_shoot_basic	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
 	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
@@ -128,8 +153,6 @@ bool Obj_Tank::Start()
 			break;
 		}
 	}
-
-	charge_time = 1000.f;
 
 	return true;
 }
@@ -333,8 +356,10 @@ void Obj_Tank::SetItem(ObjectType type)
 
 void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
-	shot_type = (uint)type;
-	level_weapon = level;
+
+	weapon_info.level_weapon = level;
+	weapon_info.type = type;
+
 }
 
 int Obj_Tank::GetLife()
@@ -413,15 +438,17 @@ void Obj_Tank::Shoot()
 		if (charged_timer.ReadMs() < charge_time) 
 		{
 			LOG("basic shot");
-			(this->*shot_function[(uint)shot_type])();
+			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			shot_timer.Start();
 		}
 		//- Charged shot
 		else
 		{
 			LOG("charged shot");
+			(this->*charged_shot_function[(uint)weapon_info.type])();
+			app->audio->PlayFx(shot_sound);
 		}
+		shot_timer.Start();
 	}
 }
 
@@ -433,7 +460,7 @@ bool Obj_Tank::PressShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_basic) > 0;
+		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_DOWN;
 	}
 }
 
@@ -445,7 +472,7 @@ bool Obj_Tank::ReleaseShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_basic) < 0;
+		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_UP;
 	}
 }
 
@@ -479,7 +506,7 @@ void Obj_Tank::SelectInputMethod()
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot_basic) > 0)))
+		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
@@ -604,14 +631,14 @@ void Obj_Tank::ReviveTank()
 void Obj_Tank::StopTank()
 {
 
-	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
-		app->scene->tank_1->life = 0;
-	
-	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
-		app->scene->tank_2->life = 0;
+	//if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
+	//	app->scene->tank_1->life = 0;
+	//
+	//if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
+	//	app->scene->tank_2->life = 0;
 
-	if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
-		app->scene->tank_3->life = 0;
+	//if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
+	//	app->scene->tank_3->life = 0;
 	
 	switch (tank_num) {
 	case 0:

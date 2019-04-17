@@ -7,38 +7,20 @@
 
 #include "M_Window.h"
 #include "M_UI.h"
+#include "M_Render.h"
 
 #include "Object.h"
 #include "Obj_Tank.h"
 
 #include "UI_Image.h"
+#include "UI_Label.h"
 #include "UI_Bar.h"
 
-Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(type), target(player_object)
+Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : type(type), player(player_object)
 {
-	// Position ======================================
-
-	fRect screen = app->win->GetWindowRect();
-	fPoint margin = { 30.f, 30.f };
-
-	switch (type)
-	{
-	case TYPE::SINGLE_PLAYER:
-		viewport.create(0.f, 0.f, screen.w, screen.h);
-		break;
-	case TYPE::PLAYER_1:
-		viewport.create(0.f, 0.f, screen.w * .5f, screen.h * .5f);
-		break;
-	case TYPE::PLAYER_2:
-		viewport.create(screen.w * .5f, 0.f, screen.w * .5f, screen.h * .5f);
-		break;
-	case TYPE::PLAYER_3:
-		viewport.create(0.f, screen.h * .5f, screen.w * .5f, screen.h * .5f);
-		break;
-	case TYPE::PLAYER_4:
-		viewport.create(screen.w * .5f, screen.h * .5f, screen.w * .5f, screen.h * .5f);
-		break;
-	}
+	viewport.create(player_object->camera_player->viewport.x, player_object->camera_player->viewport.y, player_object->camera_player->viewport.w, player_object->camera_player->viewport.h);
+	viewport_with_margin = { (int)(viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.w - margin.x) ,(int)(viewport.h - margin.y) };
+	margin = { 30.f, 30.f };
 
 	UI_ImageDef image_def;
 
@@ -130,21 +112,102 @@ Player_GUI::Player_GUI(Player_GUI::TYPE type, Obj_Tank * player_object): type(ty
 		break;
 	default:
 		break;
+
 	}
+}
+
+void Player_GUI::ClearHelpers()
+{
+	for (std::vector<UI_Element*>::iterator iter = helper_elements.begin(); iter != helper_elements.end(); ++iter)
+	{
+		(*iter)->Destroy();
+	}
+
+	helper_elements.clear();
+	
+	for (std::vector<Helper*>::iterator iter = helpers_vector.begin(); iter != helpers_vector.end(); ++iter)
+	{
+		RELEASE(*iter);
+	}
+
+	helpers_vector.clear();
+
+}
+
+void Player_GUI::SetHelper()
+{
+	fPoint    helper_pos = { viewport.GetLeft() + viewport.w * 0.5f, viewport.GetBottom() - 50.f };
+
+	float x_offset = 0.f;
+
+	UI_Element* aux = nullptr;
+
+	for (std::vector<Helper*>::iterator iter = helpers_vector.begin(); iter != helpers_vector.end(); ++iter)
+	{
+		if ((*iter)->type == Helper::HELPER_TYPE::TEXT)
+		{
+			Text_Helper* helper =(Text_Helper*) (*iter);
+			aux = app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(helper->text, app->ui->font_open_sants_bold_12));
+
+		}
+		else if ((*iter)->type == Helper::HELPER_TYPE::BUTTON)
+		{
+			Button_Helper* helper = (Button_Helper*) (*iter);
+			aux = app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprite[(int)helper->button_type]));
+
+		}
+
+		x_offset += aux->sprite_section.w + (*iter)->x_margin;
+		aux->offset = (*iter)->x_margin;
+		aux->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
+		helper_elements.push_back(aux);
+	}
+
+	x_offset *= 0.5f;
+
+	float cumulated_x = 0.f;
+
+	for (std::vector<UI_Element*>::iterator iter = helper_elements.begin(); iter != helper_elements.end(); ++iter)
+	{
+		(*iter)->SetPos(fPoint(helper_pos.x - x_offset + cumulated_x, helper_pos.y));
+		cumulated_x += ( (*iter)->sprite_section.w + (*iter)->offset );
+	}
+}
+
+void Player_GUI::AddButtonHelper(const Button_Helper helper)
+{
+	Button_Helper* new_helper = new Button_Helper(helper);
+	helpers_vector.push_back(new_helper);
+}
+
+void Player_GUI::AddTextHelper(const Text_Helper helper)
+{
+	Text_Helper* new_helper = new Text_Helper(helper);
+	helpers_vector.push_back(new_helper);
+}
+
+
+void Player_GUI::SetLife(float life)
+{
+
 }
 
 
 Player_GUI::~Player_GUI()
 {
-	app->ui->DeleteObject(weapon_frame);
-	app->ui->DeleteObject(item_frame);
-	app->ui->DeleteObject(ammo_image);
-	app->ui->DeleteObject(ammo_bar);
-	app->ui->DeleteObject(life_bar);
+	if (app->on_clean_up == false)
+	{
+		weapon_frame->Destroy();
+		item_frame->Destroy();
+		ammo_image->Destroy();
+		ammo_bar->Destroy();
+		life_bar->Destroy();
 
-	weapon_frame	= nullptr;
-	item_frame		= nullptr;
-	ammo_image		= nullptr;
-	ammo_bar		= nullptr;
-	life_bar		= nullptr;
+		weapon_frame = nullptr;
+		item_frame = nullptr;
+		ammo_image = nullptr;
+		ammo_bar = nullptr;
+		life_bar = nullptr;
+	}
+
 }

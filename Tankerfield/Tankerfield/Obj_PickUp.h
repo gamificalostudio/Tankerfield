@@ -4,6 +4,8 @@
 #include "Object.h"
 #include "Obj_Tank.h"
 
+class UI_InGameElement;
+
 enum class PICKUP_TYPE {
 	NO_TYPE = -1,
 	ITEM,
@@ -14,14 +16,17 @@ enum class PICKUP_TYPE {
 
 class Obj_PickUp : public Object
 {
+private:
+
+	UI_InGameElement* in_game_element = nullptr;
+
 public:
+
 	PICKUP_TYPE type_of_pick_up					= PICKUP_TYPE::NO_TYPE;
 	WEAPON type_of_weapon						= WEAPON::BASIC;
 	ObjectType type_of_item						= ObjectType::NO_TYPE;
 
 	uint level_of_weapon						= NULL;
-
-
 
 public:
 
@@ -42,7 +47,6 @@ public:
 	PICKUP_TYPE RandomPickUp() const;
 
 	void DeletePickUp();
-
 };
 
 #endif // !__PICKUP_H__

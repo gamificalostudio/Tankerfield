@@ -11,14 +11,6 @@ struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
 
-enum class WEAPON {
-	BASIC = -1,
-	DOUBLE_MISSILE,
-	MAX_WEAPONS,// must be in the last position of the weapons that work. Needed from the creation of pickUps
-	FLAMETHROWER
-};
-
-
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
@@ -29,6 +21,7 @@ class Obj_Tank : public Object
 {
 public:
 	Obj_Tank(fPoint pos);
+	~Obj_Tank();
 
 public:
 
@@ -107,15 +100,21 @@ private:
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
 
-	//-- Basic shoot
-	uint shot_type							= (uint)WEAPON::BASIC;
-	uint level_weapon						= 0u;
+
+
+
+
+	//-- Shoot
+
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
 	PerfTimer shot_timer;
 	PerfTimer charged_timer;
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
-	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX_WEAPONS])();
+
+	void(Obj_Tank::*basic_shot_function[(int)WEAPON::MAX_WEAPONS])();
+	void(Obj_Tank::*charged_shot_function[(int)WEAPON::MAX_WEAPONS])();
+
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
@@ -139,7 +138,8 @@ private:
 	Joystick gamepad_aim					= Joystick::INVALID;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
-	SDL_GameControllerAxis gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_INVALID;
+	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;
+	short int gamepad_shoot_last_frame				= 0;
 
 	//- Drawing
 
