@@ -149,7 +149,7 @@ private:
 
 	list<UI_Element*> elements_list;
 
-	list<UI_Element*> in_game_elements;
+	list<UI_Element*> ig_elements_list;
 
 	list<Player_GUI*> players_guis;
 

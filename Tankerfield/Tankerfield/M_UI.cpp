@@ -104,15 +104,20 @@ bool M_UI::CleanUp()
 	app->tex->UnLoad(atlas);
 	atlas = nullptr;
 
-	list<UI_Element*>::iterator object;
-	object = elements_list.begin();
-
-	while (object != elements_list.end())
+	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
 	{
-		(*object)->object_sons.clear();
-		RELEASE((*object));
-		++object;
+		(*element)->element_sons.clear();
+		RELEASE((*element));
 	}
+
+	ig_elements_list.clear();
+
+	for (list < UI_Element*> ::iterator element = elements_list.begin(); element != elements_list.end(); ++element)
+	{
+		(*element)->element_sons.clear();
+		RELEASE((*element));
+	}
+
 	elements_list.clear();
 
 	return true;
@@ -200,31 +205,29 @@ bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UIUpdate", Profiler::Color::Brown);
 
-	for (list < UI_Element*> ::iterator element = in_game_elements.begin(); element != in_game_elements.end(); )
+	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
 	{
 		if ((*element)->to_destroy == true)
 		{
-			// Delete ui element on parent sons list =========================
+			UI_Element* parent = (*element)->parent_element;
+			std::list<UI_Element*> * sons_list = (*element)->GetSons();
 
-			if ((*element)->parent_object != nullptr)
+			// Merge its sons to its parent
+
+			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
 			{
-				list<UI_Element*> *sons_list = (*element)->parent_object->GetSons();
-				list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), (*element));
-
-				if (son_to_delete == sons_list->end())
-				{
-					LOG("Object not deleted: Not found");
-					return false;
-				}
-
-				sons_list->erase(son_to_delete);
+			    (*son)->parent_element = parent;
+				parent->element_sons.push_back((*son));
 			}
 
-			// Delete ui element ============================================
+			// Delete it self from its parent
 
-			LOG("UI Object deleted");
+			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
+
+			// Delete from UI list
+
 			RELEASE((*element));
-			element = in_game_elements.erase(element);
+			element = ig_elements_list.erase(element);
 		}
 		else
 		{
@@ -276,9 +279,9 @@ bool M_UI::Update(float dt)
 		{
 			// Delete ui element on parent sons list =========================
 
-			if ((*item)->parent_object != nullptr)
+			if ((*item)->parent_element != nullptr)
 			{
-				list<UI_Element*> *sons_list = (*item)->parent_object->GetSons();
+				list<UI_Element*> *sons_list = (*item)->parent_element->GetSons();
 				list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), (*item));
 
 				if (son_to_delete == sons_list->end())
@@ -349,12 +352,12 @@ bool M_UI::PostUpdate(float dt)
 		current_gui = (*gui);
 		current_camera = current_gui->player->camera_player;
 
-		for (list<UI_Element*>::iterator element = in_game_elements.begin(); element != in_game_elements.end(); ++element)
+		for (list<UI_Element*>::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
 		{
 			(*element)->Update(dt);
 		}
-		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
 
+		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
 		DrawUI(main_in_game_element);
 	}
 
@@ -459,21 +462,21 @@ UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InG
 {
 	UI_InGameElement* object = new UI_InGameElement(position, definition);
 	object->SetParent(main_in_game_element);
-	in_game_elements.push_back(object);
+	ig_elements_list.push_back(object);
 	return object;
 }
 UI_IG_Weapon * M_UI::CreateInGameWeapon(const fPoint position, const UI_InGameElementDef definition)
 {
 	UI_IG_Weapon* object = new UI_IG_Weapon(position, definition);
 	object->SetParent(main_in_game_element);
-	in_game_elements.push_back(object);
+	ig_elements_list.push_back(object);
 	return object;
 }
 UI_IG_Item * M_UI::CreateInGameItem(const fPoint position, const UI_InGameElementDef definition)
 {
 	UI_IG_Item* object = new UI_IG_Item(position, definition);
 	object->SetParent(main_in_game_element);
-	in_game_elements.push_back(object);
+	ig_elements_list.push_back(object);
 	return object;
 }
 
@@ -481,7 +484,7 @@ UI_Image* M_UI::CreateInGameImage(const fPoint position, const UI_ImageDef defin
 {
 	UI_Image* object = new UI_Image(position, definition, nullptr);
 	object->SetParent(main_in_game_element);
-	in_game_elements.push_back(object);
+	ig_elements_list.push_back(object);
 	return object;
 }
 // ====================================================================================
@@ -505,7 +508,7 @@ void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
 
 	branch_root->state = state;
 
-	for (list<UI_Element*>::iterator item = branch_root->object_sons.begin(); item != branch_root->object_sons.end(); ++item)
+	for (list<UI_Element*>::iterator item = branch_root->element_sons.begin(); item != branch_root->element_sons.end(); ++item)
 	{
 		SetStateToBranch(state, (*item));
 	}
@@ -533,7 +536,7 @@ bool M_UI::SelectClickedObject()
 		for ( list<UI_Element*>::iterator item = clicked_objects.begin(); item != clicked_objects.end() ; ++item)
 		{
 			int count = 0;
-			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->parent_object)
+			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->parent_element)
 			{
 				++count;
 			}
@@ -581,7 +584,7 @@ void M_UI::DrawUI(UI_Element * object)
 		}
 	}
 
-	for (list<UI_Element*>::iterator item = object->object_sons.begin();  item != object->object_sons.end(); ++item)
+	for (list<UI_Element*>::iterator item = object->element_sons.begin();  item != object->element_sons.end(); ++item)
 	{
 		DrawUI((*item));
 	}
@@ -597,7 +600,7 @@ void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 	cumulated_position += object->relative_position;
 	object->position = cumulated_position;
 
-	for (list<UI_Element*>::iterator item = object->object_sons.begin() ; item != object->object_sons.end(); ++item)
+	for (list<UI_Element*>::iterator item = object->element_sons.begin() ; item != object->element_sons.end(); ++item)
 	{
 		UpdateGuiPositions((*item), cumulated_position);
 	}

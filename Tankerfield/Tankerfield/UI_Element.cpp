@@ -13,12 +13,12 @@ UI_Element::~UI_Element()
 
 bool UI_Element::UpdateRelativePosition()
 {
-	if (parent_object == nullptr)
+	if (parent_element == nullptr)
 	{
 		return false;
 	}
 
-	relative_position = position - parent_object->position;
+	relative_position = position - parent_element->position;
 
 	return true;
 }
@@ -43,23 +43,23 @@ void UI_Element::SetPos(const fPoint pos)
 	UpdateRelativePosition();
 }
 
-bool UI_Element::SetParent(UI_Element * parent)
+bool UI_Element::SetParent(UI_Element * new_parent)
 {
-	if (parent == nullptr)
+	if (new_parent == nullptr)
 	{
 		LOG("Failed SetParent, parent was nullptr");
 		return false;
 	}
 	// Delete previous parent =====================
-	if (parent_object)
+	if (parent_element != nullptr)
 	{
-		list<UI_Element*> *sons = parent_object->GetSons();
+		list<UI_Element*> *sons = parent_element->GetSons();
 		list<UI_Element*>::iterator find_object = find(sons->begin(), sons->end(), this);
 		
 		if (find_object != sons->end())
 		{
 			sons->erase(find_object);
-			parent_object = nullptr;
+			parent_element = nullptr;
 		}
 		else
 		{
@@ -69,11 +69,11 @@ bool UI_Element::SetParent(UI_Element * parent)
 	}
 
 	// Set Parent =================================
-	parent_object = parent;
-	relative_position = position - parent_object->position;
+	parent_element = new_parent;
+	relative_position = position - parent_element->position;
 
 	// Add to parent sons =========================
-	parent_object->GetSons()->push_back(this);
+	parent_element->GetSons()->push_back(this);
 
 	return true;
 }
@@ -190,10 +190,10 @@ SDL_Rect UI_Element::GetDrawRect()
 
 list<UI_Element*>* UI_Element::GetSons() 
 {
-	return &object_sons;
+	return &element_sons;
 }
 
 UI_Element * UI_Element::GetParent()
 {
-	return parent_object;
+	return parent_element;
 }

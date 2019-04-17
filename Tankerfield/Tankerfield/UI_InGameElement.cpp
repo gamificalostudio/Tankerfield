@@ -20,10 +20,9 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 		image_def.image_animation = app->ui->arrow_anim;
 		arrow_image = app->ui->CreateInGameImage({ 0.f, 0.f }, image_def);
 		arrow_image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		arrow_image->SetParent(this);
 	}
 }
-
-
 
 bool UI_InGameElement::Update(float dt)
 {
@@ -33,6 +32,8 @@ bool UI_InGameElement::Update(float dt)
 
 void UI_InGameElement::Destroy()
 {
+	to_destroy = true;
+
 	if (arrow_image != nullptr)
 	{
 		arrow_image->Destroy();
@@ -71,6 +72,7 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	
 	weapon_frame = app->ui->CreateInGameImage({ 0.f ,0.f }, img_def);
 	weapon_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	weapon_frame->SetParent(this);
 	main_element = weapon_frame;
 
 	// Add icon ====================================================
@@ -147,6 +149,8 @@ bool UI_IG_Weapon::Update(float dt)
 
 void UI_IG_Weapon::Destroy()
 {
+	to_destroy = true;
+
 	if (arrow_image != nullptr)
 	{
 		arrow_image->Destroy();
@@ -175,6 +179,7 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	img_def.sprite_section = { 385, 160, 70, 80 };
 	item_frame = app->ui->CreateInGameImage({ 0.f, 0.f }, img_def);
 	item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	item_frame->SetParent(this);
 	main_element = item_frame;
 
 	// Add icon ====================================================
@@ -203,6 +208,8 @@ bool UI_IG_Item::Update(float dt)
 
 void UI_IG_Item::Destroy()
 {
+	to_destroy = true;
+
 	if (arrow_image != nullptr)
 	{
 		arrow_image->Destroy();

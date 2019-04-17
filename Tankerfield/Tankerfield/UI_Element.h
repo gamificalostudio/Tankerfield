@@ -126,8 +126,8 @@ protected:
 
 	// Hierarchy =========================================
 
-	UI_Element           * parent_object = nullptr;
-	list<UI_Element*>      object_sons;
+	UI_Element           * parent_element = nullptr;
+	list<UI_Element*>      element_sons;
 
 	friend class M_UI;
 };
