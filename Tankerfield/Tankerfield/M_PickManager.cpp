@@ -30,12 +30,13 @@ bool M_PickManager::Awake(pugi::xml_node& config)
 bool M_PickManager::Start()
 {
 	bool ret = true;
-	for (std::vector<fPoint*>::iterator iterator = app->map->data.spawners_position.begin(); iterator != app->map->data.spawners_position.end(); ++iterator)
+	for (std::vector<SpawnPoint*>::iterator iterator = app->map->data.spawners_position.begin(); iterator != app->map->data.spawners_position.end(); ++iterator)
 	{
-		CreateRewardBox(*(*iterator));
+		if ((*iterator)->type == SpawnType::ENEMY)
+		{
+			CreateRewardBox((*iterator)->pos);
+		}
 	}
-
-	//CreateRewardBox(app->scene->tank_1->pos_map + fPoint(3.f, 3.f));
 
 	return ret;
 }

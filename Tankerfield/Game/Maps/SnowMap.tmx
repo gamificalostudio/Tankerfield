@@ -45031,13 +45031,13 @@
   </data>
  </layer>
  <objectgroup id="8" name="SpawnPoints">
-  <object id="1" x="175.333" y="158">
+  <object id="1" type="1" x="175.333" y="158">
    <point/>
   </object>
-  <object id="2" x="262.667" y="156">
+  <object id="2" type="2" x="262.667" y="156">
    <point/>
   </object>
-  <object id="3" x="413.333" y="165.333">
+  <object id="3" type="3" x="413.333" y="165.333">
    <point/>
   </object>
   <object id="4" x="534.667" y="188">

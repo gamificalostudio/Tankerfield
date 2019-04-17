@@ -238,7 +238,7 @@ bool M_Map::Unload()
 	}
 	data.map_layers.clear();
 
-	for (std::vector<fPoint*>::iterator iter = data.spawners_position.begin(); iter != data.spawners_position.end(); ++iter)
+	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position.begin(); iter != data.spawners_position.end(); ++iter)
 	{
 		if ((*iter != nullptr))
 		{
@@ -339,16 +339,6 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 					qtile.layer = layernum;
 					qtile.sorting_value = i * layernum;
 					data.qt->InsertTile(qtile);
-
-					//Hardcoded take the spawn positions (spawn tile gid == 199)
-					if (qtile.id == 199)
-					{
-						fPoint map_pos = ScreenToMapF(qtile.rect.x + /*offset*/ 30, qtile.rect.y);
-						fPoint* ret = new fPoint;
-						*ret = map_pos;
-
-						data.spawners_position.push_back(ret);
-					}
 				}
 				if (layer->name == "Buildings")
 				{
@@ -390,7 +380,21 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			obj_node.attribute("y").as_int(0),
 			obj_node.attribute("width").as_int(0),
 			obj_node.attribute("height").as_int(0));
+
 		
+		
+		if (object_group->name == "SpawnPoints")
+		{
+			
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y / data.tile_height) };
+			SpawnPoint* ret = new SpawnPoint;
+			ret->pos = pos;
+			ret->type = (SpawnType)obj_node.attribute("type").as_int(0);
+
+			data.spawners_position.push_back(ret);
+			
+		}
 		++i;
 	}
 	
@@ -405,18 +409,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		}
 	}
 
-	if (object_group->name == "SpawnPoints")
-	{
-		for (i = 0; i < object_group->size; ++i)
-		{
-			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y / data.tile_height) };
-			fPoint* ret = new fPoint;
-			*ret = pos;
-
-			data.spawners_position.push_back(ret);
-		}
-	}
+	
 	
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
 
