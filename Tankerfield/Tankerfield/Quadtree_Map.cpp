@@ -4,6 +4,20 @@ Quadtree_Map::Quadtree_Map(SDL_Rect area, uint level, uint max_levels, uint maxE
 	Quadtree(area, level, max_levels, maxElements)
 {
 
+}
+Quadtree_Map::~Quadtree_Map()
+{
+	for (uint i = 0; i < 4; ++i)
+	{
+		if (nodes[i] != nullptr)
+		{
+			delete nodes[i];
+		}
+	}
+
+	elements.clear();
+
+
 };
 
 int Quadtree_Map::ReturnNumbreOfLevels(int area_with, int camera_with, uint & levels)

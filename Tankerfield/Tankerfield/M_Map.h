@@ -63,6 +63,7 @@ struct ObjectGroup
 			delete[] objects;
 			objects = nullptr;
 		}
+		properties.UnloadProperties();
 	}
 };
 // ----------------------------------------------------
@@ -109,8 +110,8 @@ struct MapLayer
 
 	~MapLayer()
 	{
+		layer_properties.UnloadProperties();
 		RELEASE(data);
-
 	}
 
 	inline uint Get(int x, int y) const
@@ -157,11 +158,17 @@ struct MapData
 
 	~MapData()
 	{
+		if (qt != nullptr)
+			delete qt;
+
 		if (screen_tile_rect != nullptr)
 		{
 			delete[] screen_tile_rect;
 			screen_tile_rect = nullptr;
 		}
+		map_properties.UnloadProperties();
+
+
 	}
 	
 };

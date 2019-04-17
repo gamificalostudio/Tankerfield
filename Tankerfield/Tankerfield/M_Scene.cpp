@@ -176,6 +176,9 @@ bool M_Scene::CleanUp()
 	if (path_tex != nullptr)
 		app->tex->UnLoad(path_tex);
 
+	app->pathfinding->CleanUp();
+
+
 	return true;
 }
 

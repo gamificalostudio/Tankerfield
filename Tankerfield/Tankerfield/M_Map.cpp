@@ -130,7 +130,13 @@ bool M_Map::CleanUp()
 {
 	Unload();
 
-	return true;
+	for (std::list<Levels*>::iterator level_item = levels.begin(); level_item != levels.end(); ++level_item)
+	{
+		delete (*level_item);
+	}
+	levels.clear();
+
+		return true;
 }
 
 bool M_Map::Load(const std::string& file_name)
@@ -238,6 +244,14 @@ bool M_Map::Unload()
 	}
 	data.map_layers.clear();
 
+	for (std::list<ObjectGroup*>::iterator iter = data.object_layers.begin(); iter != data.object_layers.end(); ++iter)
+	{
+		if ((*iter) != nullptr)
+		{
+			delete (*iter);
+		}
+	}
+	data.object_layers.clear();
 
 	if (app->on_clean_up == false)
 	{
@@ -252,7 +266,15 @@ bool M_Map::Unload()
 
 	data.colliders_list.clear();
 
+	if (data.qt != nullptr)
+		delete data.qt;
+	if (data.screen_tile_rect != nullptr)
+	{
+		delete[] data.screen_tile_rect;
+		data.screen_tile_rect = nullptr;
+	}
 	data.map_properties.UnloadProperties();
+
 
 	return true;
 }
