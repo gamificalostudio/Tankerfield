@@ -10,7 +10,7 @@ class RewardZone
 {
 public:
 	RewardZone();
-	RewardZone();
+	~RewardZone();
 
 private:
 
