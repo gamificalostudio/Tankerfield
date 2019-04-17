@@ -116,7 +116,7 @@ private:
 	float revive_range						= 0.f;
 	float revive_range_squared				= 0.f;
 	int	  revive_life						= 0;
-	
+	//Timer ReviveTimer;
 
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::BASIC;
