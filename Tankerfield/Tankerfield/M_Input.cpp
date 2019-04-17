@@ -298,17 +298,17 @@ void M_Input::UpdateControllers()
 			int trigger_pos_on_array = trigger - SDL_CONTROLLER_AXIS_TRIGGERLEFT;
 			if ((*iter)->GetAxis((SDL_GameControllerAxis)trigger) > 0)
 			{
-				if ((*iter)->axis_state[trigger_pos_on_array] == KEY_IDLE)
-					(*iter)->axis_state[trigger_pos_on_array] = KEY_DOWN;
+				if ((*iter)->trigger_state[trigger_pos_on_array] == KEY_IDLE)
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_DOWN;
 				else
-					(*iter)->axis_state[trigger_pos_on_array] = KEY_REPEAT;
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_REPEAT;
 			}
 			else
 			{
-				if ((*iter)->axis_state[trigger_pos_on_array] == KEY_REPEAT || (*iter)->axis_state[trigger_pos_on_array] == KEY_DOWN)
-					(*iter)->axis_state[trigger_pos_on_array] = KEY_UP;
+				if ((*iter)->trigger_state[trigger_pos_on_array] == KEY_REPEAT || (*iter)->trigger_state[trigger_pos_on_array] == KEY_DOWN)
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_UP;
 				else
-					(*iter)->axis_state[trigger_pos_on_array] = KEY_IDLE;
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_IDLE;
 			}
 		}
 	}
@@ -328,6 +328,12 @@ Controller** M_Input::GetAbleController()
 	return ret;
 }
 
+Controller::Controller()
+{
+	memset(button_state, KEY_IDLE, sizeof(KeyState) * SDL_CONTROLLER_BUTTON_MAX);
+	memset(trigger_state, KEY_IDLE, sizeof(KeyState) * (SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT));
+}
+
 KeyState Controller::GetButtonState(SDL_GameControllerButton button)
 {
 	if (this != nullptr)
@@ -339,7 +345,7 @@ KeyState Controller::GetButtonState(SDL_GameControllerButton button)
 KeyState Controller::GetTriggerState(SDL_GameControllerAxis axis)
 {
 	if (this != nullptr)
-		return axis_state[axis - SDL_CONTROLLER_AXIS_TRIGGERLEFT];
+		return trigger_state[axis - SDL_CONTROLLER_AXIS_TRIGGERLEFT];
 	else
 		return KeyState::KEY_IDLE;
 }

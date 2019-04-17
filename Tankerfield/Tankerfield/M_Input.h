@@ -50,11 +50,12 @@ private:
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
-	KeyState axis_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis
+	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
 
 public:
+	Controller();
 
 	KeyState GetButtonState(SDL_GameControllerButton button);
 	
