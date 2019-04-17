@@ -113,7 +113,7 @@ bool M_Textures::UnLoad(SDL_Texture* texture)
 			return true;
 		}
 	}
-	return false;
+	return true;
 }
 
 // Translate a surface into a texture

@@ -6,13 +6,15 @@
 #include "M_Textures.h"
 #include "App.h"
 
-UI_Label::UI_Label(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener): UI_Element(position, definition, listener), font(definition.font), color(definition.color)
+UI_Label::UI_Label(const fPoint position, const UI_LabelDef definition, UI_Listener* listener): UI_Element(position, definition, listener), text(definition.text), font(definition.font), color(definition.color)
 {
 	SetText(text);
 }
 
-UI_Label::~UI_Label()
+void UI_Label::Destroy()
 {
+	to_destroy = true;
+
 	if (label_texture != nullptr)
 	{
 		app->tex->UnLoad(label_texture);
@@ -33,7 +35,9 @@ void UI_Label::SetText(String text)
 
 bool UI_Label::Draw()
 {
-	app->render->BlitUI(label_texture, position.x, position.y , &sprite_section);
+	SDL_Rect draw_rect = GetDrawRect();
+
+	app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y , &sprite_section);
 
 	return false;
 }

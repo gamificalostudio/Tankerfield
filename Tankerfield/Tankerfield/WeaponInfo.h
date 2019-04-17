@@ -20,11 +20,12 @@ public:
 	void LoadProperties(const pugi::xml_node & node);
 
 public:
+
 	WEAPON type					= WEAPON::BASIC;
-	int bullet_damage			= 0;
-	float bullet_speed			= 0.f;
-	float bullet_life_ms		= 0.f;
-	float time_between_bullets	= 0.f;
+	int    bullet_damage        = 0;
+	float  bullet_speed			= 0.f;
+	float  bullet_life_ms		= 0.f;
+	float  time_between_bullets	= 0.f;
 };
 
 #endif

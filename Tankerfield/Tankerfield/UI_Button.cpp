@@ -18,7 +18,7 @@ UI_Button::~UI_Button()
 {
 	if (label != nullptr)
 	{
-		app->ui->DeleteObject(label);
+		label->to_destroy = true;
 		label = nullptr;
 	}
 }
@@ -44,15 +44,15 @@ bool UI_Button::Draw()
 	return true;
 }
 
-bool UI_Button::SetLabel(const fPoint position, const String text , const UI_LabelDef definition)
+bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 {
 	if (label != nullptr)
 	{
-		app->ui->DeleteObject(label);
+		label->to_destroy = true;
 		label = nullptr;
 	}
 
-	label = app->ui->CreateLabel(position + this->position, text, definition, this);
+	label = app->ui->CreateLabel(position + this->position, definition, this);
 	label->SetParent(this);
 
 	return true;

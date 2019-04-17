@@ -643,6 +643,15 @@ fPoint M_Map::MapToScreenF(const fPoint & map_pos)
 	return screen_pos;
 }
 
+fPoint M_Map::MapToCamera(const fPoint map_pos, const Camera* camera)
+{
+	fPoint camera_pos(0.0F, 0.0F);
+	
+	camera_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f)  - camera->rect.x + camera->viewport.x ;
+	camera_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f) - camera->rect.y + camera->viewport.y;
+
+	return camera_pos;
+}
 
 iPoint M_Map::ScreenToMapI(int x, int y) const
 {
