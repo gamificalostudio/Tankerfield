@@ -113,6 +113,7 @@ bool Obj_Tank::Start()
 
 	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
+	basic_shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 
 	if (weapons_info == nullptr)
 	{
@@ -125,10 +126,9 @@ bool Obj_Tank::Start()
 	}
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
-
-	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
-	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
-	shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
+	charged_shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	charged_shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
