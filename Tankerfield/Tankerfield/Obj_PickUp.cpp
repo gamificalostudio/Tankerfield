@@ -27,13 +27,19 @@ Obj_PickUp::~Obj_PickUp()
 {
 }
 
-bool Obj_PickUp::Start()
+void Obj_PickUp::GenerationOfPickUp(PICKUP_TYPE type_of_pick_up, uint levels_to_add)
 {
 
 	UI_InGameElementDef element_def;
 	element_def.pointed_obj = this;
 
-	switch (type_of_pick_up)
+
+	if (type_of_pick_up != PICKUP_TYPE::NO_TYPE)
+	{
+		this->type_of_pick_up = type_of_pick_up;
+	}
+
+	switch (this->type_of_pick_up)
 	{
 	case PICKUP_TYPE::ITEM:
 		type_of_item = RandomItem();
@@ -42,9 +48,9 @@ bool Obj_PickUp::Start()
 	case PICKUP_TYPE::WEAPON:
 		in_game_element = app->ui->CreateInGameWeapon({ 0.f,0.f }, element_def);
 		type_of_weapon = RandomWeapon();
+		level_of_weapon += levels_to_add;
 		break;
 	}
-	return true;
 }
 
 bool Obj_PickUp::Update(float dt)

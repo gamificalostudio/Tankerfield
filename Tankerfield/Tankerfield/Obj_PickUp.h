@@ -34,7 +34,7 @@ public:
 
 	~Obj_PickUp();
 
-	bool Start();
+	void GenerationOfPickUp(PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, uint levels_to_add = 0);
 
 	bool Update(float dt) override;
 
