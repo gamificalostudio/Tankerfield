@@ -31,6 +31,8 @@ public:
 
 	Player_GUI(const Player_GUI::TYPE type, Obj_Tank* target);
 
+	void ClearHelpers();
+
 	void SetHelper();
 
 	void AddButtonHelper(const Button_Helper helper);

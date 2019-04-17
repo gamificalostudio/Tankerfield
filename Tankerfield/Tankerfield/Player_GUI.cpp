@@ -115,6 +115,24 @@ default:
 }
 }
 
+void Player_GUI::ClearHelpers()
+{
+	for (std::vector<UI_Element*>::iterator iter = helper_elements.begin(); iter != helper_elements.end(); ++iter)
+	{
+		(*iter)->Destroy();
+	}
+
+	helper_elements.clear();
+	
+	for (std::vector<Helper*>::iterator iter = helpers_vector.begin(); iter != helpers_vector.end(); ++iter)
+	{
+		RELEASE(*iter);
+	}
+
+	helpers_vector.clear();
+
+}
+
 void Player_GUI::SetHelper()
 {
 	fPoint    helper_pos = { viewport.GetLeft() + viewport.w * 0.5f, viewport.GetBottom() - 50.f };
