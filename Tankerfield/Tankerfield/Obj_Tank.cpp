@@ -371,6 +371,11 @@ void Obj_Tank::SetWeapon(WEAPON type)
 	weapon_info.type = type;
 }
 
+void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
+{
+	weapon_info.time_between_bullets = time_between_bullets;
+}
+
 int Obj_Tank::GetLife()
 {
 	return life;
@@ -379,6 +384,11 @@ int Obj_Tank::GetLife()
 int Obj_Tank::GetMaxLife()
 {
 	return max_life;
+}
+
+int Obj_Tank::GetTimeBetweenBullets()
+{
+	return weapon_info.time_between_bullets;
 }
 
 void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
