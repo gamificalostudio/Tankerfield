@@ -190,7 +190,7 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 		img_def.sprite_section = { 490,110,45,45 };
 		break;
 	case ObjectType::HAPPY_HOUR_ITEM:
-		img_def.sprite_section = { 490,0,45,45 };
+		img_def.sprite_section = { 490,110,23,45 };
 		break;
 	default:
 		img_def.sprite_section = { 490,110,45,45 };

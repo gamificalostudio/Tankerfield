@@ -35,7 +35,7 @@ bool Item_HappyHour::Use()
 	if (caster != nullptr)
 	{
 		original_time_between_bullets=caster->GetTimeBetweenBullets();
-		happy_time_between_bullets=caster->GetTimeBetweenBullets() / 2;
+		happy_time_between_bullets=caster->GetTimeBetweenBullets() / 4;
 		caster->SetTimeBetweenBullets(happy_time_between_bullets);
 	}
 
