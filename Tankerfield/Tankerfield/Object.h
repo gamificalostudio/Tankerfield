@@ -77,7 +77,7 @@ public:
 
 	virtual void OnTriggerExit(Collider * collider) {}
 
-	void DrawDebug();
+	virtual void DrawDebug(const Camera* camera) {};
 
 	int GetHitPoints() const;
 

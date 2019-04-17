@@ -53,7 +53,8 @@ bool M_Textures::CleanUp()
 
 	for(std::map<std::string, SDL_Texture*>::iterator iter = textures.begin(); iter != textures.end();)
 	{
-		SDL_DestroyTexture((*iter).second);
+		SDL_DestroyTexture(iter->second);
+		iter->second = nullptr;
 		iter = textures.erase(iter);
 	}
 	textures.clear();
@@ -61,6 +62,7 @@ bool M_Textures::CleanUp()
 	for (std::list<SDL_Texture*>::iterator iter = text_textures.begin(); iter != text_textures.end();)
 	{
 		SDL_DestroyTexture((*iter));
+		(*iter) = nullptr;
 		iter = text_textures.erase(iter);
 	}
 	text_textures.clear();
@@ -70,9 +72,6 @@ bool M_Textures::CleanUp()
 }
 
 // Load new texture from file path
-// Checks if the texture with the specified path has alredy been loaded
-//	 - If it has, it returns a pointer to that texture
-//	 - If it hasn't, it loads it and returns it
 SDL_Texture* const M_Textures::Load(const char* path)
 {
 	SDL_Texture* texture = NULL;
@@ -109,11 +108,12 @@ bool M_Textures::UnLoad(SDL_Texture* texture)
 		if ((iter->second) == texture)
 		{
 			SDL_DestroyTexture((iter->second));
+			iter->second = nullptr;
 			textures.erase(iter);
-			return true;;
+			return true;
 		}
 	}
-	return false;
+	return true;
 }
 
 // Translate a surface into a texture

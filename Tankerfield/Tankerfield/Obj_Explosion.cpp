@@ -14,25 +14,16 @@
 #include "M_Map.h"
 #include "Obj_Explosion.h"
 #include "Animation.h"
-
-Animation*  Obj_Explosion::anim = nullptr;
-SDL_Texture * Obj_Explosion::tex = nullptr;
-
+#include "M_AnimationBank.h"
 Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
 	pugi::xml_node explosion_node = app->config.child("object").child("explosion");
 
-	if (tex == nullptr)
-	{
-		tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
-	}
-	if (anim == nullptr)
-	{
-		anim = new Animation(explosion_node.child("animations").child("explosion"));
-	}
+	explosion_anim.frames = app->anim_bank->LoadFrames(explosion_node.child("animations").child("explosion"));
+	curr_anim = &explosion_anim;
 
-	curr_tex = tex;
-	curr_anim = anim;
+	explosion_tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
+	curr_tex = explosion_tex;
 
 	draw_offset.x = 99;
 	draw_offset.y = 10;

@@ -20,79 +20,76 @@
 #include "Healing_Bullet.h"
 #include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
+#include "M_AnimationBank.h"
 
-SDL_Texture * Obj_Tank::base_tex_yellow		= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_orange		= nullptr;
-SDL_Texture * Obj_Tank::base_tex_red		= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_light_green= nullptr;
-SDL_Texture * Obj_Tank::base_tex_pink		= nullptr;
-SDL_Texture * Obj_Tank::base_tex_light_blue	= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_dark_blue	= nullptr;
-//SDL_Texture * Obj_Tank::base_tex_purple		= nullptr;
-SDL_Texture * Obj_Tank::turr_tex			= nullptr;
-SDL_Texture * Obj_Tank::base_shadow_tex		= nullptr;
-SDL_Texture * Obj_Tank::turr_shadow_tex		= nullptr;
-Animation   * Obj_Tank::rotate_base			= nullptr;
-Animation   * Obj_Tank::rotate_turr			= nullptr;
-WeaponInfo  * Obj_Tank::weapons_info		= nullptr;
-int			  Obj_Tank::number_of_tanks		= 0;
-//void       (* Obj_Tank::shot_function)()	= nullptr;//TODO: Test if function pointers can be static or they are executing the function on other tanks
+int Obj_Tank::number_of_tanks = 0;
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
-{}
+{
+	tank_num = number_of_tanks++;
+}
+
+Obj_Tank::~Obj_Tank()
+{
+	//number_of_tanks--;
+}
 
 bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	if (base_tex_yellow == nullptr)
-	{
-		Obj_Tank::base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
-	}
-	//if (base_tex_orange == nullptr)
-	//{
-	//	Obj_Tank::base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
-	//}
-	if (base_tex_red == nullptr)
-	{
-		Obj_Tank::base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
-	}
-	//if (base_tex_light_green == nullptr)
-	//{
-	//	Obj_Tank::base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
-	//}
-	if (base_tex_pink == nullptr)
-	{
-		Obj_Tank::base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
-	}
-	if (base_tex_light_blue == nullptr)
-	{
-		Obj_Tank::base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
-	}
-	//if (base_tex_dark_blue == nullptr)
-	//{
-	//	Obj_Tank::base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
-	//}
-	//if (base_tex_purple == nullptr)
-	//{
-	//	Obj_Tank::base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
-	//}
+	base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
+	//base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
+	base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
+	//base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
+	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
+	base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
+	//base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
+	//base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
+	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	tank_num = number_of_tanks++;
+	turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
+	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
-	basic_shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
+	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
 	switch (tank_num) {
 	case 0:
+		kb_up		= SDL_SCANCODE_W;
+		kb_left		= SDL_SCANCODE_A;
+		kb_down		= SDL_SCANCODE_S;
+		kb_right	= SDL_SCANCODE_D;
+		kb_item		= SDL_SCANCODE_Q;
+		kb_interact	= SDL_SCANCODE_E;
 		curr_tex = base_tex_red;
 		break;
 	case 1:
+		kb_up		= SDL_SCANCODE_T;
+		kb_left		= SDL_SCANCODE_F;
+		kb_down		= SDL_SCANCODE_G;
+		kb_right	= SDL_SCANCODE_H;
+		kb_item		= SDL_SCANCODE_R;
+		kb_interact = SDL_SCANCODE_Y;
 		curr_tex = base_tex_light_blue;
 		break;
 	case 2:
+		kb_up		= SDL_SCANCODE_I;
+		kb_left		= SDL_SCANCODE_J;
+		kb_down		= SDL_SCANCODE_K;
+		kb_right	= SDL_SCANCODE_L;
+		kb_item		= SDL_SCANCODE_U;
+		kb_interact = SDL_SCANCODE_O;
 		curr_tex = base_tex_pink;
 		break;
 	case 3:
+		kb_up		= SDL_SCANCODE_KP_8;
+		kb_left		= SDL_SCANCODE_KP_4;
+		kb_down		= SDL_SCANCODE_KP_5;
+		kb_right	= SDL_SCANCODE_KP_6;
+		kb_item		= SDL_SCANCODE_KP_7;
+		kb_interact	= SDL_SCANCODE_KP_9;
 		curr_tex = base_tex_yellow;
 		break;
 	default:
@@ -100,41 +97,22 @@ bool Obj_Tank::Start()
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
+	kb_shoot = SDL_BUTTON_LEFT;
 
-	if (base_shadow_tex == nullptr)
-	{
-		Obj_Tank::base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-		SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
-	}
-	if (turr_tex == nullptr)
-	{
-		Obj_Tank::turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
-	}
-	if (turr_shadow_tex == nullptr)
-	{
-		Obj_Tank::turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-		SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
-	}
+	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
+	curr_anim = &rotate_base;
 
-	if (rotate_base == nullptr)
-	{
-		rotate_base = new Animation (tank_node.child("animations").child("rotate_base"));
-	}
-	curr_anim = rotate_base;
-	if (rotate_turr == nullptr)
-	{
-		rotate_turr = new Animation (tank_node.child("animations").child("rotate_turr"));
-	}
+	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
 	speed = 4.f;//TODO: Load from xml
 
-	
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	// Tanks life hardcoded 
+	weapon_info.LoadProperties(app->config.child("weapons").child("basic"));
 
-	
+	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
+	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
 
 	if (weapons_info == nullptr)
 	{
@@ -145,6 +123,8 @@ bool Obj_Tank::Start()
 		weapons_info[(uint)WEAPON::DOUBLE_MISSILE].LoadProperties(weapons_node.child("double_missile"));
 		weapons_info[(uint)WEAPON::HEALING_SHOT].LoadProperties(weapons_node.child("healing_shot"));
 	}
+
+	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 
 	shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
@@ -157,22 +137,11 @@ bool Obj_Tank::Start()
 	cannon_height = 11.f;
 	cannon_length = 1.f;
 
-	//TODO: Load them from the XML
-	kb_up				= SDL_SCANCODE_W;
-	kb_left				= SDL_SCANCODE_A;
-	kb_down				= SDL_SCANCODE_S;
-	kb_right			= SDL_SCANCODE_D;
-	kb_shoot_basic		= SDL_BUTTON_RIGHT;
-	kb_shoot_special	= SDL_BUTTON_LEFT;
-	kb_item				= SDL_SCANCODE_F;
-	kb_interact			= SDL_SCANCODE_SPACE;
-  
-	gamepad_move	= Joystick::LEFT;
-	gamepad_aim		= Joystick::RIGHT;
-	gamepad_shoot_basic		= SDL_CONTROLLER_AXIS_TRIGGERLEFT;
-	gamepad_shoot_special	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+
+	gamepad_move		= Joystick::LEFT;
+	gamepad_aim			= Joystick::RIGHT;
+	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	gamepad_revive_tank = SDL_CONTROLLER_BUTTON_RIGHTSHOULDER;
 	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
 	draw_offset.x = 46;
@@ -180,12 +149,12 @@ bool Obj_Tank::Start()
 
 	base_angle_lerp_factor = 11.25f;
 
-	basic_shot_timer.Start();
+	shot_timer.Start();
 
 	life = 90;
 	max_life = 100;
 
-
+	//Life inicialistation
 	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
@@ -320,7 +289,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
 		camera,
-		&rotate_turr->GetFrame(turr_angle));
+		&rotate_turr.GetFrame(turr_angle));
 
 	//DEBUG
 	//	iPoint debug_mouse_pos = { 0, 0 };
@@ -359,7 +328,7 @@ bool Obj_Tank::DrawShadow(Camera * camera)
 		pos_screen.x - draw_offset.x,
 		pos_screen.y - draw_offset.y,
 		camera,
-		&rotate_turr->GetFrame(turr_angle));
+		&rotate_turr.GetFrame(turr_angle));
 
 	return true;
 }
@@ -410,7 +379,7 @@ void Obj_Tank::SetItem(ObjectType type)
 
 void Obj_Tank::SetWeapon(WEAPON type)
 {
-	special_shoot = (uint)type;
+	weapon_info.type = type;
 }
 
 int Obj_Tank::GetLife()
@@ -478,43 +447,52 @@ void Obj_Tank::Shoot()
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
-	//- Special shoot (prioritize first the special shot)
-	if (IsShootingSpecial() && special_shot_timer.ReadMs() >= weapons_info[(uint)special_shoot].time_between_bullets)
+	if (PressShot())
 	{
-		(this->*shot_function[(uint)special_shoot])();
-		app->audio->PlayFx(basic_shot_sound);
-		special_shot_timer.Start();
+		charged_timer.Start();
 	}
-	//- Basic shoot
-	else if (!IsShootingSpecial() && IsShootingBasic() && basic_shot_timer.ReadMs() >= weapons_info[(uint)basic_shot].time_between_bullets)
+
+	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
-		(this->*shot_function[(uint)basic_shot])();
-		app->audio->PlayFx(basic_shot_sound);
-		basic_shot_timer.Start();
+		//- Basic shot
+		if (charged_timer.ReadMs() < charge_time) 
+		{
+			LOG("basic shot");
+			(this->*basic_shot_function[(uint)weapon_info.type])();
+			app->audio->PlayFx(shot_sound);
+		}
+		//- Charged shot
+		else
+		{
+			LOG("charged shot");
+			(this->*charged_shot_function[(uint)weapon_info.type])();
+			app->audio->PlayFx(shot_sound);
+		}
+		shot_timer.Start();
 	}
 }
 
-bool Obj_Tank::IsShootingSpecial()
+bool Obj_Tank::PressShot()
 {
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		return app->input->GetMouseButton(kb_shoot_special) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_special) == KEY_REPEAT;
+		return app->input->GetMouseButton(kb_shoot) == KEY_DOWN;
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_special) > 0;
+		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_DOWN;
 	}
 }
 
-bool Obj_Tank::IsShootingBasic()
+bool Obj_Tank::ReleaseShot()
 {
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		return app->input->GetMouseButton(kb_shoot_basic) == KEY_DOWN || app->input->GetMouseButton(kb_shoot_basic) == KEY_REPEAT;
+		return app->input->GetMouseButton(kb_shoot) == KEY_UP;
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_basic) > 0;
+		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_UP;
 	}
 }
 
@@ -540,7 +518,7 @@ void Obj_Tank::SelectInputMethod()
 
 	//Shot input
 	if (shot_input != INPUT_METHOD::KEYBOARD_MOUSE
-		&& app->input->GetMouseButton(kb_shoot_basic) != KEY_IDLE)
+		&& app->input->GetMouseButton(kb_shoot) != KEY_IDLE)
 	{
 		shot_input = INPUT_METHOD::KEYBOARD_MOUSE;
 		SDL_ShowCursor(SDL_ENABLE);
@@ -548,7 +526,7 @@ void Obj_Tank::SelectInputMethod()
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot_basic) > 0)))
+		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
@@ -559,9 +537,9 @@ void Obj_Tank::ShootBasic()
 {
 	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
 	bullet->SetBulletProperties(
-		weapons_info[(uint)basic_shot].bullet_speed,
-		weapons_info[(uint)basic_shot].bullet_life_ms,
-		weapons_info[(uint)basic_shot].bullet_damage,
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
 		shot_dir,
 		turr_angle);
 }
@@ -575,21 +553,21 @@ void Obj_Tank::ReviveTank()
 {
 	switch (tank_num) {
 	case 0:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -599,21 +577,21 @@ void Obj_Tank::ReviveTank()
 
 		break;
 	case 1:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -622,21 +600,21 @@ void Obj_Tank::ReviveTank()
 		}
 		break;
 	case 2:	
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)				
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_4->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
 		{
 			{
 				app->scene->tank_4->speed = 4.f;
@@ -645,47 +623,42 @@ void Obj_Tank::ReviveTank()
 		}
 		break;
 	case 3:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_1->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
 		{
 			{
 				app->scene->tank_1->speed = 4.f;
 				app->scene->tank_1->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_2->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)
 		{
 			{
 				app->scene->tank_2->speed = 4.f;
 				app->scene->tank_2->life = 100;
 			}
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_revive_tank) == KEY_DOWN && app->scene->tank_3->life == 0)
+		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
 		{
 			{
 				app->scene->tank_3->speed = 4.f;
 				app->scene->tank_3->life = 100;
 			}
 		}
-		
 		break;
 	}
-
-
-
-
 }
 
 void Obj_Tank::StopTank()
 {
 
-	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
-		app->scene->tank_1->life = 0;
-	
-	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
-		app->scene->tank_2->life = 0;
+	//if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
+	//	app->scene->tank_1->life = 0;
+	//
+	//if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
+	//	app->scene->tank_2->life = 0;
 
-	if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
-		app->scene->tank_3->life = 0;
+	//if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
+	//	app->scene->tank_3->life = 0;
 	
 	switch (tank_num) {
 	case 0:
@@ -730,16 +703,16 @@ void Obj_Tank::ShootDoubleMissile()
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
 
 	left_missile->SetBulletProperties(
-		weapons_info[(uint)special_shoot].bullet_speed,
-		weapons_info[(uint)special_shoot].bullet_life_ms,
-		weapons_info[(uint)special_shoot].bullet_damage,
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
 		shot_dir,
 		turr_angle);
 
 	right_missile->SetBulletProperties(
-		weapons_info[(uint)special_shoot].bullet_speed,
-		weapons_info[(uint)special_shoot].bullet_life_ms,
-		weapons_info[(uint)special_shoot].bullet_damage,
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
 		shot_dir,
 		turr_angle);
 }
@@ -749,9 +722,9 @@ void Obj_Tank::ShootHealingShot()
 	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
 
 	heal_bullet->SetBulletProperties(
-		weapons_info[(uint)special_shoot].bullet_speed,
-		weapons_info[(uint)special_shoot].bullet_life_ms,
-		weapons_info[(uint)special_shoot].bullet_damage,
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
 		shot_dir,
 		turr_angle);
 }

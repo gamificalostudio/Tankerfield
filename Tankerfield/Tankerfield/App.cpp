@@ -23,6 +23,7 @@
 #include "M_ObjManager.h"
 #include "M_Collision.h"
 #include "M_PickManager.h"
+#include "M_AnimationBank.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -43,6 +44,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	pick_manager = new M_PickManager();
 	scmanager = new M_SceneManager();
 	collision = new M_Collision();
+	anim_bank = new M_AnimationBank();
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -242,7 +244,7 @@ void App::FinishUpdate()
 	uint32 frames_on_last_update = prev_last_sec_frame_count;
 
 	static char title[256];
-	sprintf_s(title, 256, "Tankerfield | Av.FPS: %.2f", avg_fps);
+	sprintf_s(title, 256, "Tankerfield | FPS: %u", frames_on_last_update);
 	app->win->SetTitle(title);
 
 	//if (capped_ms > 0 && last_frame_ms < capped_ms)

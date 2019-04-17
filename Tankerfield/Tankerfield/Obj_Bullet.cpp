@@ -3,8 +3,7 @@
 #include "App.h"
 #include "M_Map.h"
 #include "M_Collision.h"
-
-Animation * Obj_Bullet::anim = nullptr;
+#include "M_AnimationBank.h"
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
@@ -19,14 +18,11 @@ bool Obj_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
 
-	if (anim == nullptr)
-	{
-		anim = new Animation;
-		anim->LoadAnimation(bullet_node.child("animations").child("rotate"));
-	}
-	curr_anim = anim;
+	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
+	curr_anim = &anim;
 
-	curr_tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	curr_tex = tex;
 
 	if (draw_offset.IsZero())
 	{

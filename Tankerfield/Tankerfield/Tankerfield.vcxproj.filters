@@ -139,6 +139,9 @@
     <ClCompile Include="Obj_PickUp.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="M_AnimationBank.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -300,6 +303,9 @@
     <ClInclude Include="Obj_PickUp.h">
       <Filter>Objects</Filter>
     </ClInclude>
+    <ClInclude Include="M_AnimationBank.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -336,7 +342,7 @@
       <UniqueIdentifier>{39b4a6ff-f872-44ca-a2da-c501ec67afb8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Objects\Items">
-      <UniqueIdentifier>{439374bb-27fb-42a3-abee-92256ab13b9a}</UniqueIdentifier>
+      <UniqueIdentifier>{aba53b5b-7250-4552-868c-ec6f3b202d24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

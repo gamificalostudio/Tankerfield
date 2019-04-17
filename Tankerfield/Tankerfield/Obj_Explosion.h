@@ -33,8 +33,8 @@ private:
 	Circle range_pos;
 	
 	// ---
-	static Animation* anim;
-	static SDL_Texture * tex;
+	Animation explosion_anim;
+	SDL_Texture * explosion_tex = nullptr;
 };
 
 #endif

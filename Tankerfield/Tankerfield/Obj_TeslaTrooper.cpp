@@ -23,25 +23,18 @@
 #include "M_Collision.h"
 #include "WeaponInfo.h"
 #include "M_PickManager.h"
-
-//Static variables inicialization
-SDL_Texture * Obj_TeslaTrooper::tex = nullptr;
-Animation * Obj_TeslaTrooper::walk = nullptr;
+#include "M_AnimationBank.h"
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
-	if (tex == nullptr)
-	{
-		tex = app->tex->Load("textures/Objects/shk-sheet.png");
-	}
+	tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	curr_tex = tex;
-	if (walk == nullptr)
-	{
-		walk = new Animation(tesla_trooper_node.child("animations").child("walk"));
-	}
-	curr_anim = walk;
+
+	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
+	curr_anim = &walk;
+
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
@@ -60,12 +53,15 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 
 bool Obj_TeslaTrooper::Update(float dt)
 {
+	if (timer.ReadSec() >= check_path_time)
+		state = TROOPER_STATE::GET_PATH;
+
 	switch (state)
 	{
 	case TROOPER_STATE::GET_PATH:
 		path.clear();
+		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map);
-		if (target != nullptr && pos_map.DistanceManhattan(target->pos_map) <= follow_range)
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
 				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
@@ -89,10 +85,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 		break;
 	case TROOPER_STATE::RECHEAD_POINT:
 		{
-			if (timer.ReadSec() >= check_path_time)
-				state = TROOPER_STATE::GET_PATH;
-
-			else if (path.size() > 0)
+			if (path.size() > 0)
 			{
 				next_pos = (fPoint)(*path.begin());
 				move_vect = (fPoint)(next_pos)-pos_map;
@@ -154,6 +147,19 @@ bool Obj_TeslaTrooper::Update(float dt)
 	return true;
 }
 
+void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
+{
+	if (path.size() >= 2)
+	{
+		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		{
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
+		}
+	}
+
+}
 
 bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 {
