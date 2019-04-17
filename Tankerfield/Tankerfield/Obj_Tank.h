@@ -11,17 +11,6 @@ struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
 
-enum class WEAPON {
-	BASIC = -1,
-	DOUBLE_MISSILE, 
-	FLAMETHROWER,
-	
-	
-	MAX
-
-};
-
-
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
@@ -111,14 +100,14 @@ private:
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
 
-	//-- Basic shoot
-	uint shot_type							= (uint)WEAPON::BASIC;
+	//-- Shoot
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
 	PerfTimer shot_timer;
 	PerfTimer charged_timer;
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
-	void(Obj_Tank::*shot_function[(uint)WEAPON::MAX])();
+	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX])();
+	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX])();
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;

@@ -109,8 +109,12 @@ bool Obj_Tank::Start()
 
 	weapon_info.LoadProperties(app->config.child("weapons").child("basic"));
 
-	shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
+	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
+
+	charge_time = 3000.f; // Same for all bullets (player gets used to it)
+	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
+	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -149,8 +153,6 @@ bool Obj_Tank::Start()
 			break;
 		}
 	}
-
-	charge_time = 5000.f;
 
 	return true;
 }
@@ -354,7 +356,7 @@ void Obj_Tank::SetItem(ObjectType type)
 
 void Obj_Tank::SetWeapon(WEAPON type)
 {
-	shot_type = (uint)type;
+	weapon_info.type = type;
 }
 
 int Obj_Tank::GetLife()
@@ -432,13 +434,16 @@ void Obj_Tank::Shoot()
 		//- Basic shot
 		if (charged_timer.ReadMs() < charge_time) 
 		{
-			(this->*shot_function[(uint)shot_type])();
+			LOG("basic shot");
+			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
 		}
 		//- Charged shot
 		else
 		{
-
+			LOG("charged shot");
+			(this->*charged_shot_function[(uint)weapon_info.type])();
+			app->audio->PlayFx(shot_sound);
 		}
 		shot_timer.Start();
 	}
