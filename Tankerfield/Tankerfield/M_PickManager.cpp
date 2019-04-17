@@ -5,7 +5,8 @@
 #include "M_PickManager.h"
 #include "M_ObjManager.h"
 #include "M_Map.h"
-
+#include "M_Scene.h"
+#include "Obj_Tank.h"
 
 M_PickManager::M_PickManager() : Module()
 {
@@ -31,8 +32,11 @@ bool M_PickManager::Start()
 	bool ret = true;
 	for (std::vector<fPoint*>::iterator iterator = app->map->data.spawners_position.begin(); iterator != app->map->data.spawners_position.end(); ++iterator)
 	{
-		CreatePickUp(*(*iterator));
+		CreateRewardBox(*(*iterator));
 	}
+
+	//CreateRewardBox(app->scene->tank_1->pos_map + fPoint(3.f, 3.f));
+
 	return ret;
 }
 
@@ -51,5 +55,10 @@ void M_PickManager::PickUpFromEnemy(fPoint pos_map)
 void M_PickManager::CreatePickUp(fPoint pos_map)
 {
 	app->objectmanager->CreateObject(ObjectType::PICK_UP, pos_map);
+}
+
+void M_PickManager::CreateRewardBox(fPoint pos_map)
+{
+	app->objectmanager->CreateObject(ObjectType::REWARD_BOX, pos_map);
 }
 

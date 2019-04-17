@@ -21,6 +21,7 @@ enum class ObjectType
 	TANK,
 	STATIC,
 	REWARD_ZONE,
+	REWARD_BOX,
 	PICK_UP,
 
 	//ENEMIES

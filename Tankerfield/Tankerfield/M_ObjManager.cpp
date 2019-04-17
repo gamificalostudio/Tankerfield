@@ -30,6 +30,7 @@
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
 #include "Obj_PickUp.h"
+#include "Obj_RewardBox.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -238,7 +239,13 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::PICK_UP:
 		ret = new Obj_PickUp(pos);
 		ret->type = ObjectType::PICK_UP;
+		break;
+	case ObjectType::REWARD_BOX:
+		ret = new Obj_RewardBox(pos);
+		ret->type = ObjectType::REWARD_BOX;
+		break;
 	}
+	
   
 	if (ret != nullptr)
 	{

@@ -122,6 +122,9 @@
     <ClCompile Include="M_AnimationBank.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_RewardBox.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -263,6 +266,9 @@
     <ClInclude Include="UI_InGameElement.h" />
     <ClInclude Include="M_AnimationBank.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_RewardBox.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

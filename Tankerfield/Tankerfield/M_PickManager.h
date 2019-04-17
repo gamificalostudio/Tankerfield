@@ -23,8 +23,11 @@ public:
 
 	bool Start();
 
-	//Create a Pick up random
+	//Create a Pick up 
 	void CreatePickUp(fPoint pos_map);
+
+	//Create a reward box
+	void CreateRewardBox(fPoint pos_map);
 
 	//Calculate if a pickUp has to be created after enemy die
 	void PickUpFromEnemy(fPoint pos_map);
