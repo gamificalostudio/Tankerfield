@@ -10,8 +10,6 @@
 #include "PerfTimer.h"
 #include "Timer.h"
 
-
-
 class M_Window;
 class M_Input;
 class M_Render;
@@ -27,6 +25,7 @@ class M_Scene;
 class M_Collision;
 class M_PickManager;
 class M_AnimationBank;
+class M_RewardZoneManager;
 
 class App
 {
@@ -88,21 +87,22 @@ private:
 public:
 	bool				on_clean_up = false;
 	// Modules
-	M_Window*			win = nullptr;
-	M_Input*			input = nullptr;
-	M_Render*			render = nullptr;
-	M_Textures*			tex = nullptr;
-	M_Audio*			audio = nullptr;
-	M_Pathfinding*		pathfinding = nullptr;
-	M_Map*				map = nullptr;
-	M_Fonts*            font = nullptr;
-	M_UI*               ui = nullptr;
-	M_ObjManager*		objectmanager = nullptr;
-	M_PickManager*		pick_manager = nullptr;
-	M_SceneManager*		scmanager = nullptr;
-	M_Scene*			scene = nullptr;
-	M_Collision*        collision = nullptr;
-	M_AnimationBank*	anim_bank = nullptr;
+	M_Window*				win = nullptr;
+	M_Input*				input = nullptr;
+	M_Render*				render = nullptr;
+	M_Textures*				tex = nullptr;
+	M_Audio*				audio = nullptr;
+	M_Pathfinding*			pathfinding = nullptr;
+	M_Map*				 	map = nullptr;
+	M_Fonts*			    font = nullptr;
+	M_UI*				    ui = nullptr;
+	M_ObjManager*			objectmanager = nullptr;
+	M_PickManager*			pick_manager = nullptr;
+	M_SceneManager*			scmanager = nullptr;
+	M_Scene*				scene = nullptr;
+	M_Collision*			collision = nullptr;
+	M_AnimationBank*		anim_bank = nullptr;
+	M_RewardZoneManager*    reward_zone_manager = nullptr;
   
 	//XML document
 	pugi::xml_node		config;

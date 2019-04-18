@@ -1,4 +1,7 @@
+#include "App.h"
 #include "M_RewardZoneManager.h"
+#include "M_ObjManager.h"
+#include "Obj_TeslaTrooper.h"
 
 /* Reward Zone */
 
@@ -22,7 +25,7 @@ uint RewardZone::GetSize() const
 	return this->size;
 }
 
-void RewardZone::SetPos(const fPoint& pos)
+void RewardZone::SetPos(fPoint pos)
 {
 	this->position = pos;
 }
@@ -79,14 +82,24 @@ bool M_RewardZoneManager::CleanUp()
 
 }
 
-RewardZone* M_RewardZoneManager::CreateRewardZone(iPoint map_center_pos, uint size)
+RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint size)
 {
-	RewardZone* temp_rz = nullptr;
-	temp_rz 
+	RewardZone* temp_rz = new RewardZone();
+	temp_rz->SetPos(map_center_pos);
+	temp_rz->SetSize(size);
 
+	/*for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			fPoint map_pos = map_center_pos;
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, map_pos);
+		}
+	}*/
+	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, map_center_pos);
 	reward_zones.push_back(temp_rz);
 
-	return test;
+	return temp_rz;
 }
 
 void M_RewardZoneManager::DeleteRewardZones()

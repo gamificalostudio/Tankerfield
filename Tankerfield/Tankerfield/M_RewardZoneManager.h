@@ -16,12 +16,12 @@ public:
 	fPoint GetPos() const;
 	uint GetSize() const;
 
-	void SetPos(const fPoint& pos);
+	void SetPos(fPoint pos);
 	void SetSize(const uint& size);
 
 private:
 	// Position in tile units
-	fPoint position = { 0, 0 };
+	fPoint position = { 0.0f, 0.0f };
 	uint size = 0u;
 };
 
@@ -43,7 +43,7 @@ public:
 
 	bool CleanUp() override;
 
-	RewardZone* CreateRewardZone(iPoint map_center_pos, uint size);
+	RewardZone* CreateRewardZone(fPoint map_center_pos, uint size);
 
 	void DeleteRewardZones();
 

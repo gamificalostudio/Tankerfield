@@ -19,6 +19,7 @@
 #include "Brofiler/Brofiler.h"
 #include "Rect.h"
 #include "Object.h"
+#include "M_RewardZoneManager.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -76,6 +77,10 @@ bool M_Scene::Start()
 	/* Generate first wave units */
 	srand(time(NULL));
 	CreateEnemyWave();
+
+	/* Generate Reward Zones */
+	fPoint test(2.0f, 2.0f);
+	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(test, 3);
 
 	return true;
 }
