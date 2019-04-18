@@ -24,6 +24,7 @@
 #include "M_Collision.h"
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
+#include "M_RewardZoneManager.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -45,6 +46,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scmanager = new M_SceneManager();
 	collision = new M_Collision();
 	anim_bank = new M_AnimationBank();
+	reward_zone_manager = new M_RewardZoneManager();
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -59,6 +61,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 	AddModule(objectmanager);
 	AddModule(pick_manager);
+	AddModule(reward_zone_manager);
 	AddModule(collision);
 	AddModule(ui);
 	// render last to swap buffer
