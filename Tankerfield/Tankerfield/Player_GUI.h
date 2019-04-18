@@ -31,6 +31,8 @@ public:
 
 	Player_GUI(const Player_GUI::TYPE type, Obj_Tank* target);
 
+	void Update(float dt);
+
 	void ClearHelpers();
 
 	void SetHelper();
@@ -53,11 +55,13 @@ public:
 
 	UI_Image* weapon_frame = nullptr;
 
+	UI_Image* weapon_icon = nullptr;
+
 	UI_Image* item_frame = nullptr;
 
-	UI_Image* ammo_image = nullptr;
+	UI_Image* item_icon = nullptr;
 
-	UI_Bar* ammo_bar = nullptr;
+	UI_Bar* charged_shot_bar = nullptr;
 
 	UI_Bar* life_bar = nullptr;
 

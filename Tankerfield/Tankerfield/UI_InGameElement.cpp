@@ -188,8 +188,9 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	main_element = item_frame;
 
 	// Add icon ====================================================
+	Obj_PickUp* pick_up_obj = (Obj_PickUp*)pointed_obj;
 
-	switch (pointed_obj->type)
+	switch (pick_up_obj->type_of_item)
 	{
 	case ObjectType::HEALTH_BAG:
 		img_def.sprite_section = { 500,55,40,40 };
@@ -264,7 +265,7 @@ bool UI_IG_Helper::PostUpdate()
 
 void UI_IG_Helper::AddButtonHelper(Button_Helper helper)
 {
-	UI_ImageDef def(app->ui->button_sprite[(int)helper.button_type]);
+	UI_ImageDef def(app->ui->button_sprites[(int)helper.button_type]);
 	def.is_in_game = true;
 
 	UI_Image*  ui_helpear = app->ui->CreateImage(main_element->position + helper.offset, def);

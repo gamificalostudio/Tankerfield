@@ -60,14 +60,32 @@ bool M_UI::Start()
 	atlas = app->tex->Load("textures/ui/atlas.png");
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
 
-	button_sprite[(int)GAMEPAD_BUTTON::A]  = { 440,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::B]  = { 390,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::Y]  = { 440,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::X]  = { 390,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::A]  = { 440,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::B]  = { 390,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::Y]  = { 440,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::X]  = { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
+
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE]  = { 500,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER]    = { 540,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT]    = { 390,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER]           = { 390,500 ,34 ,34 };
+
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE]    = { 500,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER]      = { 550,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT]      = { 390,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER]             = { 390,595,44 ,44 };
+
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG]        = { 500,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR]		= { 545,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP]		= { 390,545 ,40 ,40 };
+
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG]			= { 500,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR]			= { 550,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP]		= { 390,650 ,47 ,47 };
 
 	// HUD ===========================================
 	player_1_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
@@ -223,16 +241,30 @@ bool M_UI::Update(float dt)
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
 
 
+	//ax += dt * ratetime;
+	//
+	//if (round_fx->alpha == target_value)
+	//{
+	//	swap(init_value, target_value);
+	//	ax = 0.f;
+	//}
+
+	//round_fx->alpha = lerp(init_value, target_value, ax);
+
 	ax += dt * ratetime;
-	
-	if (round_fx->alpha == target_value)
+
+	if (app->scene->tank_1->GetLife() == target_value)
 	{
 		swap(init_value, target_value);
 		ax = 0.f;
 	}
 
-	round_fx->alpha = lerp(init_value, target_value, ax);
+	app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
 
+	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
+	{
+		(*gui)->Update(dt);
+	}
 
 	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
 	{
