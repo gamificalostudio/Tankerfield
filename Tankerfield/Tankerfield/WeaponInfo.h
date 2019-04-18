@@ -23,7 +23,7 @@ public:
 
 public:
 
-	WEAPON type					= WEAPON::HEALING_SHOT;
+	WEAPON type					= WEAPON::BASIC;
 	int    bullet_damage        = 0;
 	float  bullet_speed			= 0.f;
 	float  bullet_life_ms		= 0.f;
