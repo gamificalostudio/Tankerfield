@@ -59,14 +59,19 @@ bool M_UI::Awake(pugi::xml_node& config)
 	LOG("Loading Module UI");
 	bool ret = true;
 
-	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
+	green_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("green_arrow"));
+	pink_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("pink_arrow"));
+	blue_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("blue_arrow"));
+	orange_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("orange_arrow"));
 
-	button_sprites[(int)GAMEPAD_BUTTON::A] = { 440,10 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::B] = { 390,60 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::Y] = { 440,60 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::X] = { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::A] =  { 440,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::B] =  { 390,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::Y] =  { 440,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::X] =  { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::L] =  { 495,10 ,52 ,52 };
 	button_sprites[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
 	button_sprites[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::R] =  { 495,65 ,52 ,52 };
 	button_sprites[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
 	button_sprites[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
 
@@ -118,6 +123,10 @@ bool M_UI::Start()
 	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
 	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
+
+	player_4_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::L));
+	player_4_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::R));
+	player_4_gui->SetHelper();
 
 	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170 , 10, 105, 105 };

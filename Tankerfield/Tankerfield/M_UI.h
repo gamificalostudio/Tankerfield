@@ -83,8 +83,10 @@ public:
 		B,
 		Y,
 		X,
+		L,
 		LT,
 		LB,
+		R,
 		RT,
 		RB,
 		MAX
@@ -240,8 +242,13 @@ public:
 
 	_TTF_Font*  font_open_sants_bold_12 = nullptr;
 
-	Animation	arrow_anim;
+	Animation	green_arrow_anim;
 
+	Animation   pink_arrow_anim;
+
+	Animation   blue_arrow_anim;
+
+	Animation   orange_arrow_anim;
 };
 
 

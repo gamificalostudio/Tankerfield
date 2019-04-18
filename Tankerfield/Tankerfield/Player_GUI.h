@@ -60,6 +60,14 @@ public:
 
 	Obj_Tank* player = nullptr;
 
+	fRect viewport;
+
+	fPoint margin = { 80.f, 80.f };
+
+	SDL_Rect viewport_with_margin = { 0,0,0,0 };
+
+private:
+
 	// HUD Elements =========================
 
 	UI_Image* weapon_frame = nullptr;
@@ -74,17 +82,13 @@ public:
 
 	UI_Bar* life_bar = nullptr;
 
-	fRect viewport;
-
-	fPoint margin = { 80.f, 80.f };
-
-	SDL_Rect viewport_with_margin = { 0,0,0,0 };
-
-private:
-
 	std::vector<Helper*> helpers_vector;
 
 	std::vector<UI_Element*> helper_elements;
+
+	// In Game Elements ======================
+
+	UI_InGameElement* player_arrow = nullptr;
 
 	friend M_UI;
 };

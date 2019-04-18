@@ -34,6 +34,8 @@ Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 		in_game_element = app->ui->CreateInGameWeapon({ 0.f,0.f }, element_def);
 		break;
 	}
+
+	
 }
 
 Obj_PickUp::~Obj_PickUp()

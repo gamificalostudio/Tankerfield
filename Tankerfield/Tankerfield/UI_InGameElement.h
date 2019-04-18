@@ -11,11 +11,21 @@ class UI_Image;
 class Button_Helper;
 class Text_Helper;
 
+enum class ARROW_COLOR
+{
+	NONE,
+	ORANGE,
+	GREEN,
+	BLUE,
+	PINK
+};
+
 struct UI_InGameElementDef : public UI_ElementDef
 {
 	fPoint        map_pos = { 0.f, 0.f };
 	Object*       pointed_obj = nullptr;
-	bool          add_arrow = true;
+	bool          add_arrow = false;
+	ARROW_COLOR   arrow_color = ARROW_COLOR::NONE;
 };
 
 class UI_InGameElement: public UI_Element

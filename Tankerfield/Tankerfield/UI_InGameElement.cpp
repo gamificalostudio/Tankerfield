@@ -18,7 +18,23 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 	if (definition.add_arrow == true)
 	{
 		UI_ImageDef image_def;
-		image_def.image_animation = &app->ui->arrow_anim;
+
+		switch (definition.arrow_color)
+		{
+		case ARROW_COLOR::GREEN:
+			image_def.image_animation = &app->ui->green_arrow_anim;
+			break;
+		case ARROW_COLOR::BLUE:
+			image_def.image_animation = &app->ui->blue_arrow_anim;
+			break;
+		case ARROW_COLOR::PINK:
+			image_def.image_animation = &app->ui->pink_arrow_anim;
+			break;
+		case ARROW_COLOR::ORANGE:
+			image_def.image_animation = &app->ui->orange_arrow_anim;
+			break;
+		}
+
 		image_def.is_in_game = true;
 		arrow_image = app->ui->CreateImage({ 0.f, 0.f }, image_def);
 		arrow_image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);

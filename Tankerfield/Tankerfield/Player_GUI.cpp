@@ -15,6 +15,7 @@
 #include "WeaponInfo.h"
 
 #include "UI_Image.h"
+#include "UI_InGameElement.h"
 #include "UI_Label.h"
 #include "UI_Bar.h"
 
@@ -24,9 +25,19 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 	viewport_with_margin = { (int)(viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.w - margin.x) ,(int)(viewport.h - margin.y) };
 	margin = { 30.f, 30.f };
 
-	UI_ImageDef image_def;
 
-	// Individual player ========================================================
+	// In Game Elements =====================================================
+
+	////UI_InGameElementDef arrow_def;
+	////arrow_def.add_arrow = true;
+	////arrow_def.arrow_color;
+	////arrow_def.pointed_obj = player_object;
+
+	////player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
+
+	// HUD  Elements ========================================================
+
+	UI_ImageDef image_def;
 
 	image_def.sprite_section = { 80, 10, 65, 65 };
 
