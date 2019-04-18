@@ -284,7 +284,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		//DEBUG
 		float line_length = 5.f;
 		//1-- Set a position in the isometric space
-		fPoint input_iso_pos(turr_pos.x + shot_iso_dir.x * line_length, turr_pos.y + shot_iso_dir.y * line_length);
+		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
 		//2-- Transform that poin to screen coordinates
 		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
 		app->render->DrawLineSplitScreen(
@@ -408,19 +408,21 @@ void Obj_Tank::Shoot(float dt)
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
 	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
+	fPoint iso_dir (0.f, 0.f);
+	fPoint input_dir (0.f, 0.f);
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputShotMouse(turr_pos, shot_input_dir, shot_iso_dir);
+		InputShotMouse(turr_pos, input_dir, iso_dir);
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		InputShotController(turr_pos, shot_input_dir, shot_iso_dir);
+		InputShotController(turr_pos, input_dir, iso_dir);
 	}
 
-	if (!shot_input_dir.IsZero())
+	if (!input_dir.IsZero())
 	{
 		//Angle
-		fPoint shot_screen_pos = app->map->MapToScreenF(shot_iso_dir);
+		fPoint shot_screen_pos = app->map->MapToScreenF(iso_dir);
 		float target_angle = atan2(-shot_screen_pos.y, shot_screen_pos.x) * RADTODEG;
 		//- Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(turr_angle / 360.f);
@@ -433,7 +435,7 @@ void Obj_Tank::Shoot(float dt)
 		turr_angle = lerp(turr_angle, target_angle, base_angle_lerp_factor * dt);
 
 		//Direction
-		shot_dir = shot_iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
+		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 
 		//TODO:Extract from angle or it could be potentially different where you are aiming and where you're shooting
 		//Or have it always shoot from turr_dir, and turr_angle only be for the turret sprite (you generate a new angle for the bullets when you shoot)
