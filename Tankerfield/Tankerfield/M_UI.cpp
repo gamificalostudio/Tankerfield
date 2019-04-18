@@ -124,9 +124,9 @@ bool M_UI::Start()
 	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
 
-	player_4_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::L));
-	player_4_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::R));
-	player_4_gui->SetHelper();
+	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::L));
+	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::R));
+	player_1_gui->SetHelper();
 
 	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170 , 10, 105, 105 };
