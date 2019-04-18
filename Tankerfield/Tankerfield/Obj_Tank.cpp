@@ -17,6 +17,7 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
@@ -71,6 +72,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_D;
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
+		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_red;
 		break;
 	case 1:
@@ -80,6 +82,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_H;
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
+		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_light_blue;
 		break;
 	case 2:
@@ -89,6 +92,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_L;
 		kb_item		= SDL_SCANCODE_U;
 		kb_interact = SDL_SCANCODE_O;
+		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
 		break;
 	case 3:
@@ -98,6 +102,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_KP_6;
 		kb_item		= SDL_SCANCODE_KP_7;
 		kb_interact	= SDL_SCANCODE_KP_9;
+		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_yellow;
 		break;
 	default:
@@ -117,11 +122,18 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	weapon_info.LoadProperties(app->config.child("weapons").child("basic"));
+	//Basic weapon starting properties
+	weapon_info.bullet_damage = 50;
+	weapon_info.bullet_healing = 0;
+	weapon_info.bullet_life_ms = 2000;
+	weapon_info.bullet_speed = 10;
+	weapon_info.time_between_bullets = 500;
 
 	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
 	basic_shot_function[(uint)WEAPON::HEALING_SHOT]		= &Obj_Tank::ShootHealingShot;
+	basic_shot_function[(uint)WEAPON::LASER_SHOT]		= &Obj_Tank::ShootLaserShot;
+
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
@@ -220,6 +232,7 @@ bool Obj_Tank::Update(float dt)
 	StopTank();
 	ReviveTank();
 	CameraMovement(dt);
+	InputReadyKeyboard();
 
 	return true;
 }
@@ -444,10 +457,52 @@ void Obj_Tank::SetItem(ObjectType type)
 	gui->SetItemIcon(type);
 }
 
-void Obj_Tank::SetWeapon(WEAPON type)
+void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
+	weapon_info.level_weapon = level;
 	weapon_info.type = type;
+
 	gui->SetWeaponIcon(type);
+
+	switch (type)
+	{
+	case WEAPON::BASIC:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::FLAMETHROWER:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::DOUBLE_MISSILE:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::HEALING_SHOT:
+		weapon_info.bullet_damage = 0;
+		weapon_info.bullet_healing = 25 + 1 * level;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::LASER_SHOT:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	}
+
 }
 
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
@@ -748,6 +803,20 @@ void Obj_Tank::ShootHealingShot()
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
+void Obj_Tank::ShootLaserShot()
+{
+	Laser_Bullet *	 laser_bullet= (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir * cannon_length);
+
+	laser_bullet->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+}
+
+
+
 void Obj_Tank::Item()
 {
 	if(item != ObjectType::NO_TYPE
@@ -771,7 +840,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	}
 	else
 	{
-		SetWeapon(pick_up->type_of_weapon);
+		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 	}
 
 	pick_up->DeletePickUp();
@@ -781,3 +850,21 @@ void Obj_Tank::SetGui(Player_GUI * gui)
 {
 	this->gui = gui;
 }
+
+bool Obj_Tank::IsReady() const
+{
+	return ready;
+}
+
+void Obj_Tank::InputReadyKeyboard()
+{
+	if (app->scene->stat_of_wave == WaveStat::OUT_WAVE && app->input->GetKey(kb_ready) == KEY_DOWN)
+	{
+		ready = !ready;
+	}
+	else if (app->scene->stat_of_wave != WaveStat::OUT_WAVE)
+	{
+		ready = false;
+	}
+}
+

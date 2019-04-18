@@ -46,13 +46,17 @@ public:
 	//- Logic
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
-	void SetWeapon(WEAPON type);
+
+	void SetWeapon(WEAPON type, uint level);
 	void SetTimeBetweenBullets(int time_between_bullets);
 	int GetLife();
 	int GetMaxLife();
 	int GetTimeBetweenBullets();
 
+	bool IsReady() const;
+
 public:
+
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
@@ -74,11 +78,14 @@ private:
 	//- Input
 	void SelectInputMethod();
 
+	void InputReadyKeyboard();
+
 	//- Weapons methods
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
 	void ShootHealingShot();
+	void ShootLaserShot();
 
 	//- TankDeath
 	void ReviveTank();
@@ -95,6 +102,8 @@ private:
 	int tank_num							= 0;//The number of tank. 0 is the first one.
 
 	static int number_of_tanks;
+
+	bool ready								= false;
 
 	//- Movement
 	float curr_speed						= 0.f;
@@ -123,6 +132,10 @@ private:
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::BASIC;
 
+
+
+
+
 	//-- Shoot
 
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
@@ -130,9 +143,12 @@ private:
 	PerfTimer charged_timer;
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
-	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX])();
-	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX])();
+
+
+	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX_WEAPONS])();
 	bool show_crosshairs					= false;
+
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
@@ -153,6 +169,7 @@ private:
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_right					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
 	Joystick gamepad_move							= Joystick::INVALID;
@@ -188,6 +205,7 @@ private:
 	bool tutorial_move_pressed			= false;
 	//-- Revive
 	UI_IG_Helper * tutorial_revive		= nullptr;
+
 
 public:
 	Camera* camera_player				= nullptr;

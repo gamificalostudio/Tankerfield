@@ -13,14 +13,16 @@
 
 enum class ObjectType
 {
-	//ITEMS need to be first because the random selection from Obj_PickUp .
+	//ITEMS need to be first because of the random selection from Obj_PickUp .
 	HEALTH_BAG = 0,
 	HAPPY_HOUR_ITEM,
+	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
 
 	//OTHER
 	TANK,
 	STATIC,
 	REWARD_ZONE,
+	REWARD_BOX,
 	PICK_UP,
 
 	//ENEMIES
@@ -31,6 +33,7 @@ enum class ObjectType
 	BASIC_BULLET,
 	BULLET_MISSILE,
 	HEALING_BULLET,
+	BULLET_LASER,
 	EXPLOSION,
 
 	//PARTICLES

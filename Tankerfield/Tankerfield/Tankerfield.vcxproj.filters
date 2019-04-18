@@ -118,12 +118,6 @@
     <ClCompile Include="Obj_HealingAnimation.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Player_GUI.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Brute.cpp">
-      <Filter>Objects</Filter>
-     </ClCompile>
     <ClCompile Include="Item_HealthBag.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
@@ -148,10 +142,21 @@
     <ClCompile Include="M_AnimationBank.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet_Laser.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="M_RewardZoneManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_RewardBox.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Brute.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
-    <ClCompile Include="M_RewardZoneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -307,9 +312,6 @@
     <ClInclude Include="UI_InGameElement.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Brute.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="WeaponInfo.h">
       <Filter>Weapons</Filter>
     </ClInclude>
@@ -319,10 +321,21 @@
     <ClInclude Include="M_AnimationBank.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet_Laser.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="M_RewardZoneManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_RewardBox.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Brute.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
     <ClInclude Include="Item_HappyHour.h">
       <Filter>Objects\Items</Filter>
     </ClInclude>
-    <ClInclude Include="M_RewardZoneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">

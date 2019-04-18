@@ -52,18 +52,24 @@ M_Collision::M_Collision()
 
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::WALL] = true;
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::ENEMY] = true;
+	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::REWARD_BOX] = true;
+
 
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET] = true;
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::FRIENDLY_BULLET] = true;
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
 
+	matrix[(int)Collider::TAG::REWARD_BOX][(int)Collider::TAG::BULLET] = true;
+	matrix[(int)Collider::TAG::REWARD_BOX][(int)Collider::TAG::FRIENDLY_BULLET] = true;
 
 	matrix[(int)Collider::TAG::FRIENDLY_BULLET][(int)Collider::TAG::WALL] = true;
 	matrix[(int)Collider::TAG::FRIENDLY_BULLET][(int)Collider::TAG::ENEMY] = true; 
 	matrix[(int)Collider::TAG::FRIENDLY_BULLET][(int)Collider::TAG::PLAYER] = true;
+	matrix[(int)Collider::TAG::FRIENDLY_BULLET][(int)Collider::TAG::REWARD_BOX] = true;
 
 	matrix[(int)Collider::TAG::PICK_UP][(int)Collider::TAG::PLAYER] = true;
+
 }
 
 M_Collision::~M_Collision()

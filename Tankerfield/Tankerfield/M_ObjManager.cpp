@@ -25,6 +25,7 @@
 #include "Obj_Static.h"
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
+#include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_Explosion.h"
 #include "Obj_HealingAnimation.h"
@@ -34,6 +35,7 @@
 #include "Item_HealthBag.h"
 #include "Item_HappyHour.h"
 #include "Obj_PickUp.h"
+#include "Obj_RewardBox.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -216,7 +218,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Bullet_Missile(pos);
 		ret->type = ObjectType::BULLET_MISSILE;
 		break;
-
+	case ObjectType::BULLET_LASER:
+		ret = new Laser_Bullet(pos);
+		ret->type = ObjectType::BULLET_LASER;
+		break;
 	case ObjectType::HEALING_BULLET:
 		ret = new Healing_Bullet(pos);
 		ret->type = ObjectType::HEALING_BULLET;
@@ -253,7 +258,13 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::PICK_UP:
 		ret = DBG_NEW Obj_PickUp(pos);
 		ret->type = ObjectType::PICK_UP;
+		break;
+	case ObjectType::REWARD_BOX:
+		ret = new Obj_RewardBox(pos);
+		ret->type = ObjectType::REWARD_BOX;
+		break;
 	}
+	
   
 	if (ret != nullptr)
 	{

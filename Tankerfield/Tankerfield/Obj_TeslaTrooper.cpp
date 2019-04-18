@@ -24,6 +24,7 @@
 #include "WeaponInfo.h"
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
+#include "M_Scene.h"
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
