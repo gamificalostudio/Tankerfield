@@ -41,10 +41,57 @@ https://github.com/AitorVelez
 # Controls
 - Left joystick : Move
 - Right joystick : Aim
-- Left trigger : Special shoot
-- Right trigger : Basic shoot
+- Right trigger : Shot
+- Hold Right trigger: Charged shot
 - Right shoulder: Use item
 - X button : Interact
+
+# Debug functionality:
+- F1: Show / hide grid
+- F2: Activate / deactivate splitscreen
+- F3: Show / hide sprite sorting rects and pivots
+- F4: Show / hide tank crosshairs
+- F9: show colliders
+- F1: show map grid
+- F5: Reset level
+
+## Keyboard controls:
+- Move mouse: Aim
+- Mouse left button: Shot
+- Hold mouse left button: Charged shot
+
+Tank 1:
+- W: Move up
+- A: Move left
+- S: Move down
+- D: Move right
+- Q: Use item
+- E: Interact
+
+Tank 2:
+- T: Move up
+- F: Move left
+- G: Move down
+- H: Move right
+- R: Use item
+- Y: Interact
+
+Tank 3:
+- I: Move up
+- J: Move left
+- K: Move down
+- L: Move right
+- U: Use item
+- O: Interact
+
+Tank 4:
+- KP_8: Move up
+- KP_4: Move left
+- KP_5: Move down
+- KP_6: Move right
+- KP_7: Use item
+- KP_9: Interact
+
 
 # License
 

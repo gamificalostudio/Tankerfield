@@ -53,7 +53,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 	{
 
 		Camera* camera_aux = nullptr;
-		camera_aux = new Camera();
+		camera_aux = DBG_NEW Camera();
 		camera_aux->rect.w = app->win->screen_surface->w * .5f;
 		camera_aux->rect.h = app->win->screen_surface->h * .5f;
 		fPoint tank_1_pos_screen = app->map->MapToScreenF(app->scene->tank_1->pos_map);
@@ -67,7 +67,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 		};
 
 		Camera* camera_aux2 = nullptr;
-		camera_aux2 = new Camera();
+		camera_aux2 = DBG_NEW Camera();
 		camera_aux2->rect.w = app->win->screen_surface->w * .5f;
 		camera_aux2->rect.h = app->win->screen_surface->h * .5f;
 		fPoint tank_2_pos_screen = app->map->MapToScreenF(app->scene->tank_2->pos_map);
@@ -81,7 +81,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 		};
 
 		Camera* camera_aux3 = nullptr;
-		camera_aux3 = new Camera();
+		camera_aux3 = DBG_NEW Camera();
 		camera_aux3->rect.w = app->win->screen_surface->w * .5f;
 		camera_aux3->rect.h = app->win->screen_surface->h * .5f;
 		fPoint tank_3_pos_screen = app->map->MapToScreenF(app->scene->tank_3->pos_map);
@@ -96,7 +96,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 
 
 		Camera* camera_aux4 = nullptr;
-		camera_aux4 = new Camera();
+		camera_aux4 = DBG_NEW Camera();
 		camera_aux4->rect.w = app->win->screen_surface->w * .5f;
 		camera_aux4->rect.h = app->win->screen_surface->h * .5f;
 		fPoint tank_4_pos_screen = app->map->MapToScreenF(app->scene->tank_4->pos_map);
@@ -110,10 +110,10 @@ bool M_Render::Awake(pugi::xml_node& config)
 		};
 
 
-		camera.push_back(camera_aux);
-		camera.push_back(camera_aux2);
-		camera.push_back(camera_aux3);
-		camera.push_back(camera_aux4);
+		cameras.push_back(camera_aux);
+		cameras.push_back(camera_aux2);
+		cameras.push_back(camera_aux3);
+		cameras.push_back(camera_aux4);
 
 	
 	}
@@ -150,37 +150,37 @@ bool M_Render::PostUpdate(float dt)
 		debug = !debug;
 		if (!debug)
 		{
-			camera_saves.push_back(camera.back());
-			camera.pop_back();
+			camera_saves.push_back(cameras.back());
+			cameras.pop_back();
 
-			camera_saves.push_back(camera.back());
-			camera.pop_back();
+			camera_saves.push_back(cameras.back());
+			cameras.pop_back();
 
-			camera_saves.push_back(camera.back());
-			camera.pop_back();
+			camera_saves.push_back(cameras.back());
+			cameras.pop_back();
 
-			camera.front()->rect.w = app->win->screen_surface->w;
-			camera.front()->rect.h = app->win->screen_surface->h;
+			cameras.front()->rect.w = app->win->screen_surface->w;
+			cameras.front()->rect.h = app->win->screen_surface->h;
 
-			camera.front()->viewport.w = app->win->screen_surface->w;
-			camera.front()->viewport.h = app->win->screen_surface->h;
+			cameras.front()->viewport.w = app->win->screen_surface->w;
+			cameras.front()->viewport.h = app->win->screen_surface->h;
 		}
 		else
 		{
-			camera.push_back(camera_saves.back());
+			cameras.push_back(camera_saves.back());
 			camera_saves.pop_back();
 
-			camera.push_back(camera_saves.back());
+			cameras.push_back(camera_saves.back());
 			camera_saves.pop_back();
 
-			camera.push_back(camera_saves.back());
+			cameras.push_back(camera_saves.back());
 			camera_saves.pop_back();
 
-			camera.front()->rect.w *= 0.5f;
-			camera.front()->rect.h *= 0.5f;
+			cameras.front()->rect.w *= 0.5f;
+			cameras.front()->rect.h *= 0.5f;
 
-			camera.front()->viewport.w *= 0.5f;
-			camera.front()->viewport.h *= 0.5f;
+			cameras.front()->viewport.w *= 0.5f;
+			cameras.front()->viewport.h *= 0.5f;
 		}
 	}
 
@@ -192,6 +192,16 @@ bool M_Render::CleanUp()
 {
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
+
+	for (std::vector<Camera*>::iterator item_cam = cameras.begin(); item_cam != cameras.end(); ++item_cam)
+	{
+		if ((*item_cam) != nullptr)
+		{
+			delete (*item_cam);
+			(*item_cam) = nullptr;
+		}
+	}
+	cameras.clear();
 	return true;
 }
 
@@ -230,19 +240,19 @@ void M_Render::ResetViewPort()
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
-iPoint M_Render::ScreenToWorld(int x, int y) const
+iPoint M_Render::ScreenToWorld(int x, int y, const Camera* camera) const
 {
 	iPoint ret;
 	int scale = app->win->GetScale();
 	
-	ret.x = (x + app->scene->tank_1->camera_player->rect.x / scale);
-	ret.y = (y + app->scene->tank_1->camera_player->rect.y / scale);
+	ret.x = (x + camera->rect.x / scale);
+	ret.y = (y + camera->rect.y / scale);
 
 	return ret;
 }
 
 
-bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const Camera* current_camera, const SDL_Rect* section) const
+void M_Render::Blit( SDL_Texture* texture,  const int screen_x, const int screen_y, Camera* current_camera, const SDL_Rect* section) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -276,16 +286,18 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const Came
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
-	return ret;
 }
 
-void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section) const
+void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section,  Camera* camera, const int alpha) const
 {
-	uint scale = app->win->GetScale();
-
 	SDL_Rect rect;
-	rect.x = screen_x * scale;
-	rect.y = screen_y * scale;
+	rect.x = screen_x ;
+	rect.y = screen_y ;
+
+	if (camera != nullptr)
+	{
+		SDL_RenderSetClipRect(renderer, &camera->viewport);
+	}
 
 	if (section != NULL)
 	{
@@ -297,13 +309,23 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w *= scale;
-	rect.h *= scale;
+	if (alpha != -1)
+	{
+		SDL_SetTextureAlphaMod(texture, alpha);
+	}
 
 	if (SDL_RenderCopy(renderer, texture, section, &rect) != 0)
 	{
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 	}
+
+	SDL_RenderSetClipRect(renderer, nullptr);
+
+	if (alpha != -1)
+	{
+		SDL_SetTextureAlphaMod(texture, 255);
+	}
+
 }
 
 bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
@@ -317,7 +339,7 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 	SDL_Rect rec(rect);
 
 std::vector<Camera*>::iterator item_cam;
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 		if (use_camera)
@@ -430,6 +452,20 @@ bool M_Render::DrawCircle(int x, int y, int radius, Camera* camera, Uint8 r, Uin
 	SDL_Point points[360];
 
 	float factor = (float)M_PI / 180.0f;
+
+	std::vector<Camera*>::iterator item_cam;
+	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
+	{
+		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+		if (use_camera)
+		{
+			for (uint i = 0; i < 360; ++i)
+			{
+				points[i].x = (int)(-(*item_cam)->rect.x + x + radius * cos(i * factor));
+				points[i].y = (int)(-(*item_cam)->rect.y + y + radius * sin(i * factor));
+			}
+		}
+
 
 	int x_in_viewport = x;
 	int y_in_viewport = y;

@@ -80,8 +80,8 @@ bool M_SceneManager::FadeToBlack(Module* module_off, Module* module_on, float ti
 	BROFILER_CATEGORY("M_SceneManagerFadeToBlack", Profiler::Color::Purple)
 	bool ret = false;
 
-	module_off = module_off;
-	module_on = module_on;
+	this->module_off = module_off;
+	this->module_on = module_on;
 
 	if (current_step == fade_step::none)
 	{

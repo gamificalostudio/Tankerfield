@@ -34,7 +34,7 @@ public:
 
 	bool Draw();
 
-	bool SetLabel(const fPoint position, const String text, const UI_LabelDef definition);
+	bool SetLabel(const fPoint position, const UI_LabelDef definition);
 
 	void SetDefinition(UI_ButtonDef definition);
 

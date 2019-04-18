@@ -18,6 +18,7 @@
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
+class Camera;
 
 enum EventWindow
 {
@@ -49,32 +50,32 @@ struct Controller
 private:
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
-	KeyState key_state[SDL_CONTROLLER_BUTTON_MAX];
+	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
+	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
 
 public:
+	Controller();
 
 	KeyState GetButtonState(SDL_GameControllerButton button);
 	
-
-	bool attached = false;
-
-public:
-	
 	iPoint GetJoystick(Joystick joystick);
 
+	//Treat triggers like buttons or keys to more easily manage them
+	KeyState GetTriggerState(SDL_GameControllerAxis axis);
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
 	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEAD_ZONE);
 	
-
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
 	int PlayRumble(float strengh, Uint32 length);
 	int StopRumble();
-  
+private:
+	bool attached = false;
+
 	friend class M_Input;
 };
 
@@ -86,7 +87,7 @@ public:
 	M_Input();
 
 	// Destructor
-	virtual ~M_Input();
+	~M_Input();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&) override;
@@ -127,7 +128,7 @@ public:
 	void GetMouseMotion(int& x, int& y);
 
 private:
-	iPoint GetMousePos_Tiles();
+	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
 	void UpdateKeyboardState();
 	void UpdateMouseState();
 	void UpdateControllers();

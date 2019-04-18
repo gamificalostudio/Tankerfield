@@ -18,7 +18,7 @@ M_Input::M_Input() : Module()
 {
 	name = "input";
 
-	keyboard = new KeyState[MAX_KEYS];
+	keyboard = DBG_NEW KeyState[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KeyState) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KeyState) * NUM_MOUSE_BUTTONS);
 }
@@ -26,7 +26,19 @@ M_Input::M_Input() : Module()
 // Destructor
 M_Input::~M_Input()
 {
-	
+	if (keyboard != nullptr)
+	{
+		delete[] keyboard;
+		keyboard = nullptr;
+	}
+	for (std::vector<Controller*>::iterator controll = controllers.begin(); controll != controllers.end(); ++controll)
+	{
+		if ((*controll) != nullptr)
+		{
+			delete (*controll);
+			(*controll) = nullptr;
+		}
+	}
 }
 
 // Called before render is available
@@ -142,7 +154,7 @@ bool M_Input::PreUpdate()
 						}
 						if (!is_joystick)
 						{
-							Controller* controller = new Controller();
+							Controller* controller = DBG_NEW Controller();
 							controller->ctr_pointer = SDL_GameControllerOpen(i);
 							SDL_Joystick* j = SDL_GameControllerGetJoystick(controller->ctr_pointer);
 							controller->joyId = SDL_JoystickInstanceID(j);
@@ -226,10 +238,15 @@ void M_Input::GetMouseMotion(int& x, int& y)
 }
 
 
-iPoint M_Input::GetMousePos_Tiles()
+
+iPoint M_Input::GetMousePos_Tiles(const Camera * camera)
 {
 	iPoint ret;
-	ret = app->render->ScreenToWorld(mouse_x, mouse_y);
+	if (camera != nullptr)
+		ret = app->render->ScreenToWorld(mouse_x, mouse_y, camera);
+	else
+		ret = app->render->ScreenToWorld(mouse_x, mouse_y, (*app->render->cameras.begin()));
+
 	ret = app->map->ScreenToMapI(ret.x, ret.y);
 
 	return ret;
@@ -279,20 +296,38 @@ void M_Input::UpdateControllers()
 			if (SDL_GameControllerGetButton((*iter)->ctr_pointer, (SDL_GameControllerButton)button))
 			{
 				
-				if ((*iter)->key_state[button] == KEY_IDLE)
-					(*iter)->key_state[button] = KEY_DOWN;
+				if ((*iter)->button_state[button] == KEY_IDLE)
+					(*iter)->button_state[button] = KEY_DOWN;
 				else
-					(*iter)->key_state[button] = KEY_REPEAT;
+					(*iter)->button_state[button] = KEY_REPEAT;
 			}
 			else
 			{
-				if ((*iter)->key_state[button] == KEY_REPEAT || (*iter)->key_state[button] == KEY_DOWN)
-					(*iter)->key_state[button] = KEY_UP;
+				if ((*iter)->button_state[button] == KEY_REPEAT || (*iter)->button_state[button] == KEY_DOWN)
+					(*iter)->button_state[button] = KEY_UP;
 				else
-					(*iter)->key_state[button] = KEY_IDLE;
+					(*iter)->button_state[button] = KEY_IDLE;
 			}
 		}
-		
+
+		for (int trigger = SDL_CONTROLLER_AXIS_TRIGGERLEFT; trigger < SDL_CONTROLLER_AXIS_MAX; ++trigger)
+		{
+			int trigger_pos_on_array = trigger - SDL_CONTROLLER_AXIS_TRIGGERLEFT;
+			if ((*iter)->GetAxis((SDL_GameControllerAxis)trigger) > 0)
+			{
+				if ((*iter)->trigger_state[trigger_pos_on_array] == KEY_IDLE)
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_DOWN;
+				else
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_REPEAT;
+			}
+			else
+			{
+				if ((*iter)->trigger_state[trigger_pos_on_array] == KEY_REPEAT || (*iter)->trigger_state[trigger_pos_on_array] == KEY_DOWN)
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_UP;
+				else
+					(*iter)->trigger_state[trigger_pos_on_array] = KEY_IDLE;
+			}
+		}
 	}
 }
 
@@ -310,10 +345,24 @@ Controller** M_Input::GetAbleController()
 	return ret;
 }
 
+Controller::Controller()
+{
+	memset(button_state, KEY_IDLE, sizeof(KeyState) * SDL_CONTROLLER_BUTTON_MAX);
+	memset(trigger_state, KEY_IDLE, sizeof(KeyState) * (SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT));
+}
+
 KeyState Controller::GetButtonState(SDL_GameControllerButton button)
 {
 	if (this != nullptr)
-		return key_state[button];
+		return button_state[button];
+	else
+		return KeyState::KEY_IDLE;
+}
+
+KeyState Controller::GetTriggerState(SDL_GameControllerAxis axis)
+{
+	if (this != nullptr)
+		return trigger_state[axis - SDL_CONTROLLER_AXIS_TRIGGERLEFT];
 	else
 		return KeyState::KEY_IDLE;
 }
@@ -333,20 +382,18 @@ iPoint Controller::GetJoystick(Joystick joystick)
 
 Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
 {
+	if (this == nullptr || ctr_pointer == nullptr)
+		return 0;
 
-		if (this == nullptr || ctr_pointer == nullptr)
-			return 0;
-
-		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
-		if (abs(value) > dead_zone)
-		{
-			return value;
-		}
-		else
-		{
-			return 0;
-		}
-	
+	Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+	if (abs(value) > dead_zone)
+	{
+		return value;
+	}
+	else
+	{
+		return 0;
+	}
 }
 
 //This funtion returns axis and triggers state value

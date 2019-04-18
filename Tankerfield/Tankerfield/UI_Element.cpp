@@ -5,7 +5,7 @@
 #include "Log.h"
 
 UI_Element::UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener) 
-	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section){}
+	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section), is_in_game(definition.is_in_game){}
 
 UI_Element::~UI_Element()
 {
@@ -13,12 +13,12 @@ UI_Element::~UI_Element()
 
 bool UI_Element::UpdateRelativePosition()
 {
-	if (parent_object == nullptr)
+	if (parent_element == nullptr)
 	{
 		return false;
 	}
 
-	relative_position = position - parent_object->position;
+	relative_position = position - parent_element->position;
 
 	return true;
 }
@@ -26,28 +26,51 @@ bool UI_Element::UpdateRelativePosition()
 bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section);
+	if (app->ui->current_camera != nullptr)
+	{
+		if (alpha != 255)
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+		}
+		else
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
+		}
+	}
+
+
 
 	return true;
 }
 
-bool UI_Element::SetParent(UI_Element * parent)
+void UI_Element::Destroy()
 {
-	if (parent == nullptr)
+	to_destroy = true;
+}
+
+void UI_Element::SetPos(const fPoint pos)
+{
+	position = pos;
+	UpdateRelativePosition();
+}
+
+bool UI_Element::SetParent(UI_Element * new_parent)
+{
+	if (new_parent == nullptr)
 	{
 		LOG("Failed SetParent, parent was nullptr");
 		return false;
 	}
 	// Delete previous parent =====================
-	if (parent_object)
+	if (parent_element != nullptr)
 	{
-		list<UI_Element*> *sons = parent_object->GetSons();
+		list<UI_Element*> *sons = parent_element->GetSons();
 		list<UI_Element*>::iterator find_object = find(sons->begin(), sons->end(), this);
 		
 		if (find_object != sons->end())
 		{
 			sons->erase(find_object);
-			parent_object = nullptr;
+			parent_element = nullptr;
 		}
 		else
 		{
@@ -57,11 +80,11 @@ bool UI_Element::SetParent(UI_Element * parent)
 	}
 
 	// Set Parent =================================
-	parent_object = parent;
-	relative_position = position - parent_object->position;
+	parent_element = new_parent;
+	relative_position = position - parent_element->position;
 
 	// Add to parent sons =========================
-	parent_object->GetSons()->push_back(this);
+	parent_element->GetSons()->push_back(this);
 
 	return true;
 }
@@ -178,10 +201,10 @@ SDL_Rect UI_Element::GetDrawRect()
 
 list<UI_Element*>* UI_Element::GetSons() 
 {
-	return &object_sons;
+	return &element_sons;
 }
 
 UI_Element * UI_Element::GetParent()
 {
-	return parent_object;
+	return parent_element;
 }

@@ -23,16 +23,16 @@ UI_Slider::UI_Slider(const fPoint position, const UI_SliderDef definition, UI_Li
 
 UI_Slider::~UI_Slider()
 {
-	if (thumb != nullptr)
+	if (app->on_clean_up == false && thumb != nullptr)
 	{
-		app->ui->DeleteObject(thumb);
+		thumb->Destroy();
 		thumb = nullptr;
 	}
 }
 
 bool UI_Slider::Draw()
 {
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); item_cam++)
+	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); item_cam++)
 	{
 		app->render->Blit(app->ui->GetAtlas(), position.x - definition.rail_draw_rect.w * 0.5f, position.y - definition.rail_draw_rect.h * 0.5f, (*item_cam), &definition.rail_draw_rect);
 	}

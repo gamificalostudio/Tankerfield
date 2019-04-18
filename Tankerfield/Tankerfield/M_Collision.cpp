@@ -47,17 +47,23 @@ M_Collision::M_Collision()
 
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::WALL] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::ENEMY] = true;
+	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::FRIENDLY_BULLET] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::PICK_UP] = true;
 
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::WALL] = true;
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::ENEMY] = true;
 
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET] = true;
+	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::FRIENDLY_BULLET] = true;
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
 
-	matrix[(int)Collider::TAG::PICK_UP][(int)Collider::TAG::PLAYER] = true;
 
+	matrix[(int)Collider::TAG::FRIENDLY_BULLET][(int)Collider::TAG::WALL] = true;
+	matrix[(int)Collider::TAG::FRIENDLY_BULLET][(int)Collider::TAG::ENEMY] = true; 
+	matrix[(int)Collider::TAG::FRIENDLY_BULLET][(int)Collider::TAG::PLAYER] = true;
+
+	matrix[(int)Collider::TAG::PICK_UP][(int)Collider::TAG::PLAYER] = true;
 }
 
 M_Collision::~M_Collision()
@@ -86,12 +92,10 @@ bool M_Collision::Update(float dt)
 		{
 			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
 			{
-				//TODO This produce the BUG ------------------------------------------------------------------------------------------------------
 				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
 
 				if (to_destroy != (*itr)->collisions_list.end())
 				{
-					LOG("DESTROYED");
 					(*itr)->collisions_list.erase(to_destroy);
 				}
 			}
@@ -250,11 +254,11 @@ bool M_Collision::PostUpdate(float dt)
 		debug = !debug;
 	}
 
-	if (debug == true)
+	if (debug == false)
 	{
 		return true;
 	}
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 		{
@@ -308,7 +312,7 @@ bool M_Collision::CleanUp()
 
 Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage, Object* object)
 {
-	Collider* collider = new Collider(pos, width, height, damage, type, object);
+	Collider* collider = DBG_NEW Collider(pos, width, height, damage, type, object);
 	colliders.push_back(collider);
 	return  collider;
 }
@@ -316,7 +320,7 @@ Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Colli
 Collider * M_Collision::AddCollider(float x, float y, float width, float height, Collider::TAG type, float damage, Object * object)
 {
 	fPoint pos(x, y);
-	Collider* collider = new Collider(pos, width, height, damage, type, object);
+	Collider* collider = DBG_NEW Collider(pos, width, height, damage, type, object);
 	colliders.push_back(collider);
 	return  collider;
 }

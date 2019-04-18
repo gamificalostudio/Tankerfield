@@ -17,13 +17,27 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Healing_Bullet.h"
+#include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
-{}
+{
+	tank_num = number_of_tanks++;
+}
+
+Obj_Tank::~Obj_Tank()
+{
+	number_of_tanks--;
+	if (camera_player != nullptr)
+	{
+		camera_player->assigned = false;
+		camera_player->number_player = 0;
+	}
+}
 
 bool Obj_Tank::Start()
 {
@@ -44,21 +58,43 @@ bool Obj_Tank::Start()
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
-	tank_num = number_of_tanks++;
-
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
 	switch (tank_num) {
 	case 0:
+		kb_up		= SDL_SCANCODE_W;
+		kb_left		= SDL_SCANCODE_A;
+		kb_down		= SDL_SCANCODE_S;
+		kb_right	= SDL_SCANCODE_D;
+		kb_item		= SDL_SCANCODE_Q;
+		kb_interact	= SDL_SCANCODE_E;
 		curr_tex = base_tex_red;
 		break;
 	case 1:
+		kb_up		= SDL_SCANCODE_T;
+		kb_left		= SDL_SCANCODE_F;
+		kb_down		= SDL_SCANCODE_G;
+		kb_right	= SDL_SCANCODE_H;
+		kb_item		= SDL_SCANCODE_R;
+		kb_interact = SDL_SCANCODE_Y;
 		curr_tex = base_tex_light_blue;
 		break;
 	case 2:
+		kb_up		= SDL_SCANCODE_I;
+		kb_left		= SDL_SCANCODE_J;
+		kb_down		= SDL_SCANCODE_K;
+		kb_right	= SDL_SCANCODE_L;
+		kb_item		= SDL_SCANCODE_U;
+		kb_interact = SDL_SCANCODE_O;
 		curr_tex = base_tex_pink;
 		break;
 	case 3:
+		kb_up		= SDL_SCANCODE_KP_8;
+		kb_left		= SDL_SCANCODE_KP_4;
+		kb_down		= SDL_SCANCODE_KP_5;
+		kb_right	= SDL_SCANCODE_KP_6;
+		kb_item		= SDL_SCANCODE_KP_7;
+		kb_interact	= SDL_SCANCODE_KP_9;
 		curr_tex = base_tex_yellow;
 		break;
 	default:
@@ -66,6 +102,7 @@ bool Obj_Tank::Start()
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
+	kb_shoot = SDL_BUTTON_LEFT;
 
 	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
 	curr_anim = &rotate_base;
@@ -79,28 +116,25 @@ bool Obj_Tank::Start()
 
 	weapon_info.LoadProperties(app->config.child("weapons").child("basic"));
 
-	shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
+	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
+	basic_shot_function[(uint)WEAPON::HEALING_SHOT]		= &Obj_Tank::ShootHealingShot;
+
+	charge_time = 3000.f; // Same for all bullets (player gets used to it)
+	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
+	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ -.4f, -.4f });
+	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
-	cannon_length = 1.f;
+	cannon_length = 0.75f;
 
-	//TODO: Load them from the XML
-	kb_up				= SDL_SCANCODE_W;
-	kb_left				= SDL_SCANCODE_A;
-	kb_down				= SDL_SCANCODE_S;
-	kb_right			= SDL_SCANCODE_D;
-	kb_shoot			= SDL_BUTTON_LEFT;
-	kb_item				= SDL_SCANCODE_F;
-	kb_interact			= SDL_SCANCODE_SPACE;
-  
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
-	gamepad_shoot_basic	= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
+	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
 	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
 
@@ -108,11 +142,14 @@ bool Obj_Tank::Start()
 	draw_offset.y = 46;
 
 	base_angle_lerp_factor = 11.25f;
+	shot_angle_lerp_factor = 11.25f;
 
 	shot_timer.Start();
 
-	life =  200;
-	max_life = 200;
+
+	life = 90;
+	max_life = 100;
+
 
 	revive_range = 1.5f;
 	revive_range_squared = revive_range * revive_range;
@@ -122,11 +159,10 @@ bool Obj_Tank::Start()
 
 
 	//Life inicialistation
-
 	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		if (!(*item_cam)->assigned)
 		{
@@ -135,8 +171,6 @@ bool Obj_Tank::Start()
 			break;
 		}
 	}
-
-	charge_time = 1000.f;
 
 	return true;
 }
@@ -148,12 +182,18 @@ bool Obj_Tank::PreUpdate()
 		controller = app->input->GetAbleController();
 	}
 	SelectInputMethod();
+
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		show_crosshairs = !show_crosshairs;
+	}
+
 	return true;
 }
 
 bool Obj_Tank::Update(float dt)
 {
-	Shoot();
+	Shoot(dt);
 	Item();
 	Movement(dt);
 	StopTank();
@@ -165,6 +205,9 @@ bool Obj_Tank::Update(float dt)
 
 void Obj_Tank::CameraMovement(float dt)
 {
+	if (camera_player == nullptr)
+		return;
+
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	fPoint target_pos =
 	{
@@ -181,7 +224,7 @@ void Obj_Tank::Movement(float dt)
 	fPoint input_dir(0.f, 0.f);
 	if (move_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputMovementKeyboard(input_dir,dt);
+		InputMovementKeyboard(input_dir);
 	}
 	else if (move_input == INPUT_METHOD::CONTROLLER)
 	{
@@ -205,14 +248,16 @@ void Obj_Tank::Movement(float dt)
 			target_angle += 360.f;
 		}
 		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
+
 	}
 
 	velocity = iso_dir * curr_speed * dt;                                                               
 	pos_map += velocity;
 
+	}
 }
 
-void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
+void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
@@ -253,6 +298,18 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&curr_anim->GetFrame(angle));
 
+	if (show_crosshairs && camera == camera_player)
+	{
+		float line_length = 5.f;
+		//1-- Set a position in the isometric space
+		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
+		//2-- Transform that poin to screen coordinates
+		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+		app->render->DrawLineSplitScreen(
+			pos_screen.x, pos_screen.y - cannon_height,
+			input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
+	}
+
 	// Turret =======================================
 	app->render->Blit(
 		turr_tex,
@@ -261,14 +318,12 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
 
-
 	if (life == 0)
 	{
 		fPoint circlePos = pos_map;
 
 		circlePos = app->map->MapToScreenF(circlePos);
-		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);		//if has to follow the player
-																										//only appears when hes dead and disappear when he has been revived
+		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);		//32? it has to be the tile measure																									//only appears when hes dead and disappear when he has been revived
 	}
 
 																							//only appears when hes dead and disappear when he has been revived
@@ -287,6 +342,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 //	{
 	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
 //	}
+
 
 	return true;
 }
@@ -322,6 +378,15 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
+	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
+	{
+		Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+		new_particle->tank = this;
+		if (GetLife()<GetMaxLife())
+		{
+			SetLife(GetLife() + weapon_info.bullet_healing);
+		}
+	}
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
@@ -330,17 +395,16 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			SetPickUp(pick_up);
 		}
-  }
-	else if (c1->GetTag() == Collider::TAG::WALL)
-	{
-		app->scene->tank_1->life - 1;
-
 	}
 }
 
 void Obj_Tank::SetLife(int life)
 {
 	//TODO: Update UI bars
+	if (this->life > GetMaxLife())
+	{
+		this->life = GetMaxLife();
+	}
 	this->life = life;
 }
 
@@ -351,7 +415,7 @@ void Obj_Tank::SetItem(ObjectType type)
 
 void Obj_Tank::SetWeapon(WEAPON type)
 {
-	shot_type = (uint)type;
+	weapon_info.type = type;
 }
 
 int Obj_Tank::GetLife()
@@ -364,24 +428,22 @@ int Obj_Tank::GetMaxLife()
 	return max_life;
 }
 
-void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
+void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, fPoint & iso_dir)
 {
-	iPoint mouse_pos = { 0, 0 };
-	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	iPoint mouse_screen_pos = { 0, 0 };
+	app->input->GetMousePosition(mouse_screen_pos.x, mouse_screen_pos.y);
 
+	
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_pos.x += camera_player->rect.x;
-	mouse_pos.y += camera_player->rect.y;
 
-	int tile_width = 100, tile_height = 50;
-  
-	fPoint screen_pos = app->map->MapToScreenF(turr_pos);
-	input_dir = (fPoint)mouse_pos - screen_pos;
+	if (camera_player != nullptr)
+		mouse_screen_pos += {camera_player->rect.x, camera_player->rect.y};
+
+
+	input_dir = (fPoint)mouse_screen_pos - app->map->MapToScreenF(turr_map_pos);
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x,mouse_pos.y);
-
-	iso_dir = map_mouse_pos - turr_pos;
+	iso_dir = app->map->ScreenToMapF(mouse_screen_pos.x, mouse_screen_pos.y) - turr_map_pos;
 	iso_dir.Normalize();
 }
 
@@ -396,14 +458,13 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 	}
 }
 
-void Obj_Tank::Shoot()
+void Obj_Tank::Shoot(float dt)
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
 	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
-
-	fPoint input_dir(0.f, 0.f);
-	fPoint iso_dir;
+	fPoint iso_dir (0.f, 0.f);
+	fPoint input_dir (0.f, 0.f);
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputShotMouse(turr_pos, input_dir, iso_dir);
@@ -415,9 +476,21 @@ void Obj_Tank::Shoot()
 
 	if (!input_dir.IsZero())
 	{
-		turr_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
+		//Angle
+		turr_target_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
+		//- Calculate how many turns has the base angle and apply them to the target angle
+		float turns = floor(turr_angle / 360.f);
+		turr_target_angle += 360.f * turns;
+		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
+		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
+		{
+			turr_target_angle += 360.f;
+		}
+
+		//Direction
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
+	turr_angle = lerp(turr_angle, turr_target_angle, shot_angle_lerp_factor * dt);
 
 	if (PressShot())
 	{
@@ -429,16 +502,16 @@ void Obj_Tank::Shoot()
 		//- Basic shot
 		if (charged_timer.ReadMs() < charge_time) 
 		{
-			LOG("basic shot");
-			(this->*shot_function[(uint)shot_type])();
+			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			shot_timer.Start();
 		}
 		//- Charged shot
 		else
 		{
-			LOG("charged shot");
+			(this->*charged_shot_function[(uint)weapon_info.type])();
+			app->audio->PlayFx(shot_sound);
 		}
+		shot_timer.Start();
 	}
 }
 
@@ -450,7 +523,7 @@ bool Obj_Tank::PressShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_basic) > 0;
+		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_DOWN;
 	}
 }
 
@@ -462,7 +535,7 @@ bool Obj_Tank::ReleaseShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetAxis(gamepad_shoot_basic) < 0;
+		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_UP;
 	}
 }
 
@@ -496,7 +569,7 @@ void Obj_Tank::SelectInputMethod()
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
 		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot_basic) > 0)))
+		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
@@ -511,7 +584,7 @@ void Obj_Tank::ShootBasic()
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
 void Obj_Tank::ShootFlameThrower()
@@ -553,7 +626,6 @@ void Obj_Tank::ReviveTank()
 
 void Obj_Tank::StopTank()
 {
-
 	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
 		app->scene->tank_1->life = 0;
 
@@ -568,7 +640,6 @@ void Obj_Tank::StopTank()
 		curr_speed = 0;
 		angle = 0;
 		shot_dir = {0.f,0.f};
-	}
 }
 
 
@@ -582,19 +653,33 @@ void Obj_Tank::ShootDoubleMissile()
 	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length + double_missiles_offset * missiles_offset);
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
 
+	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
+
 	left_missile->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		bullet_angle);
 
 	right_missile->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		bullet_angle);
+}
+
+void Obj_Tank::ShootHealingShot()
+{
+	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
+
+	heal_bullet->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
 void Obj_Tank::Item()
@@ -625,4 +710,3 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 
 	pick_up->DeletePickUp();
 }
-

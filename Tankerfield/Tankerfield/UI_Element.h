@@ -15,6 +15,7 @@ typedef string String;
 
 struct SDL_Texture;
 class UI_Listener;
+class Camera;
 
 class Pivot
 {
@@ -56,12 +57,15 @@ enum class ELEMENT_STATE
 
 struct UI_ElementDef
 {
+	UI_ElementDef(){}
+	UI_ElementDef(const SDL_Rect sprite_section): sprite_section(sprite_section){}
+
 	Pivot      pivot;
 	fPoint     section_offset = { 0.f, 0.f };
 	float      section_width = 0.f;
 	float      section_height= 0.f;
 	SDL_Rect   sprite_section = { 0, 0, 0, 0};
-
+	bool       is_in_game = false;
 };
 
 class UI_Element
@@ -77,9 +81,14 @@ public:
 
 	virtual bool Update(float dt) { return true; }
 
+	virtual bool PostUpdate() { return true; }
+
 	virtual bool Draw();
 
+	virtual void Destroy();
+
 	// Common methods =================================
+	void  SetPos( const fPoint pos);
 
 	bool SetParent(UI_Element* parent);
 
@@ -107,11 +116,14 @@ public:
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	bool			      is_draggable = false;
 	bool				  is_interactive = false;
+	bool                  is_in_game = false;
+	float                 offset = 0.f;
+	float                 alpha = 255.f;
 
 protected:
 
 	// Vars ==============================================
-	
+	bool                  to_destroy = false;
 	fPoint                relative_position = { 0.f, 0.f };
 	Pivot                 pivot;
 	UI_Listener         * listener = nullptr;
@@ -122,8 +134,8 @@ protected:
 
 	// Hierarchy =========================================
 
-	UI_Element           * parent_object = nullptr;
-	list<UI_Element*>      object_sons;
+	UI_Element           * parent_element = nullptr;
+	list<UI_Element*>      element_sons;
 
 	friend class M_UI;
 };

@@ -11,7 +11,7 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="1"/>
+    <resolution width="1920" height="1080" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="true"/>
@@ -21,7 +21,7 @@
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
-      <arrow speed="0" rotation="clockwise" first_dir_angle ="22.5">
+      <arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
         <dir>
           <frame x= "120" y= "160" w="25" h="25" />
         </dir>
@@ -45,9 +45,6 @@
         </dir>
         <dir>
           <frame x= "295 " y= "160" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "120" y= "160" w="25" h="25" />
         </dir>
       </arrow>
     </animations>
@@ -78,7 +75,7 @@
   <object>
     <tesla_trooper>
       <animations>
-        <walk speed="1" rotation="counter-clockwise" first_dir_angle ="-90">
+        <walk speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <!--starts in frame number 8-->
             <frame x= "528" y= "0" w="66" h="76" />
@@ -1198,6 +1195,13 @@
       <time_between_bullets value="1000"/>
       <number_of_bullets value="2"/>
     </double_missile>
+    <healing_shot>
+      <bullet_damage value ="25"/>
+      <bullet_speed value ="10"/>
+      <bullet_life_ms value ="2000"/>
+      <time_between_bullets value ="500"/>
+      <bullet_healing value="5"/>
+    </healing_shot>
   </weapons>
 
   <items>

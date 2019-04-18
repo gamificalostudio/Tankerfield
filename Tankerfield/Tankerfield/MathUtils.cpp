@@ -5,7 +5,12 @@
 //Returns the interpolated value from the current value to the target value with the given a factor
 float lerp(float curr_value, float trg_value, float factor) {
 
-	return (1.f - factor)*curr_value + factor * trg_value;
+	if (factor > 1.f)
+	{
+		factor = 1.f;
+	}
+
+	return 	(1.f - factor)*curr_value + factor * trg_value;
 }
 
 //Clamps the rotation between 0 and 360 degrees
@@ -25,3 +30,9 @@ float ClampRotation(float angle)
 	}
 	return angle;
 }
+//
+//template <typename T>
+//
+//inline T lerp(T v0, T v1, T t) {
+//	return fma(t, v1, fma(-t, v0, v0));
+//}

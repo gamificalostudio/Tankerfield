@@ -3,6 +3,7 @@
 
 #include "M_UI.h"
 #include <list>
+#include <vector>
 #include "Rect.h"
 
 class Obj_Tank;
@@ -10,8 +11,10 @@ class UI_Image;
 class UI_Label;
 class UI_Bar;
 class Object;
-
-class UI_InGameElement;
+class Helper;
+class Text_Helper;
+class Button_Helper;
+class UI_PickUpElement;
 
 class Player_GUI: public UI_Listener
 {
@@ -26,9 +29,17 @@ public:
 		PLAYER_4
 	};
 
-	Player_GUI( Player_GUI::TYPE type, Obj_Tank* target);
+	Player_GUI(const Player_GUI::TYPE type, Obj_Tank* target);
 
-	UI_InGameElement* AddInGameElement(Object* object, Player_GUI* gui);
+	void ClearHelpers();
+
+	void SetHelper();
+
+	void AddButtonHelper(const Button_Helper helper);
+
+	void AddTextHelper(const Text_Helper helper);
+
+	void SetLife( float life);
 
 	~Player_GUI();
 
@@ -36,7 +47,7 @@ public:
 	
 	TYPE type = TYPE::SINGLE_PLAYER;
 
-	Obj_Tank* target = nullptr;
+	Obj_Tank* player = nullptr;
 
 	// HUD Elements =========================
 
@@ -52,7 +63,61 @@ public:
 
 	fRect viewport;
 
-	std::list<UI_InGameElement*> in_game_elements;
+	fPoint margin = { 80.f, 80.f };
+
+	SDL_Rect viewport_with_margin = { 0,0,0,0 };
+
+private:
+
+	std::vector<Helper*> helpers_vector;
+
+	std::vector<UI_Element*> helper_elements;
+
+	friend M_UI;
+};
+
+class Helper
+{
+public:
+
+	enum class HELPER_TYPE
+	{
+		BUTTON,
+		TEXT,
+		NONE
+	};
+
+	Helper(fPoint offset = { 0.f,0.f }) : offset(offset) {}
+
+	fPoint offset = {0,0};
+
+	HELPER_TYPE type = HELPER_TYPE::NONE;
+
+};
+
+class Button_Helper: public Helper
+{
+public:
+
+	Button_Helper(const M_UI::GAMEPAD_BUTTON button_type ,const fPoint offset = { 0.f,0.f }): Helper(offset) , button_type(button_type)
+	{
+		type = HELPER_TYPE::BUTTON;
+	}
+
+	M_UI::GAMEPAD_BUTTON button_type = M_UI::GAMEPAD_BUTTON::NONE;
+};
+
+class Text_Helper : public Helper
+{
+public:
+
+	Text_Helper( const String text, const fPoint offset = { 0.f,0.f }) : Helper(offset)
+	{
+		this->text.assign(text);
+		type = HELPER_TYPE::TEXT;
+	}
+
+	String text;
 };
 
 #endif // __PLAYER_GUI_H_
