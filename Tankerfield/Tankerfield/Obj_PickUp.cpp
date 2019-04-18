@@ -20,6 +20,9 @@ Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 	coll = app->collision->AddCollider(pos, 1, 1, Collider::TAG::PICK_UP, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 	type_of_pick_up = RandomPickUp();
+
+	frame.w = 1;
+	frame.h = 1;
 	
 }
 
@@ -61,7 +64,7 @@ bool Obj_PickUp::Update(float dt)
 
 bool Obj_PickUp::Draw(float dt, Camera* camera)
 {
-	app->render->DrawIsometricQuad(pos_map.x, pos_map.y, 1,1);
+	app->render->DrawIsometricQuad(pos_map.x, pos_map.y, 1, 1, {255,255,255,255}, camera);
 
 	return true;
 }

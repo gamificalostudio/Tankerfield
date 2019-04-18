@@ -82,7 +82,7 @@ bool M_Scene::Start()
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
 
-	/* Generate first wave units */
+
 
 	number_current_wave = 1;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;

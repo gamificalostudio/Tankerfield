@@ -139,6 +139,24 @@
     <ClCompile Include="Obj_RewardBox.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="M_RewardZoneManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Healing_Bullet.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Item_HappyHour.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Brute.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_HealingAnimation.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon_Flamethrower .cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -298,6 +316,21 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Obj_RewardBox.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="M_RewardZoneManager.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Healing_Bullet.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_HappyHour.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Brute.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_HealingAnimation.h">
       <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>

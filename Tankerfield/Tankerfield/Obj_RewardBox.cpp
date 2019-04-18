@@ -17,6 +17,8 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 {
 	coll = app->collision->AddCollider(pos, 2, 2, Collider::TAG::REWARD_BOX, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
+	frame.w = 2;
+	frame.h = 2;
 
 	life = 100;
 }
@@ -37,19 +39,20 @@ bool Obj_RewardBox::Start()
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET)
+	if (collider->GetTag() == Collider::TAG::BULLET || collider->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
 		GetDamage(collider->damage);
 	}
 
 }
 
-bool Obj_RewardBox::Draw(float dt, Camera* camera)
+bool Obj_RewardBox::Draw(float dt, Camera * camera)
 {
-	app->render->DrawIsometricQuad(pos_map.x, pos_map.y, 2, 2);
+	app->render->DrawIsometricQuad(pos_map.x, pos_map.y, 2, 2, { 255,255,255,255 }, camera);
 
 	return true;
 }
+
 
 void Obj_RewardBox::GetDamage(float damage)
 {

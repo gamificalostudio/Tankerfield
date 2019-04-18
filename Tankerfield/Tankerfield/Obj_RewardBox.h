@@ -26,7 +26,7 @@ public:
 
 	bool Start();
 
-	bool Draw(float dt, Camera* camera);
+	bool Draw(float dt, Camera* camera) override;
 
 	void OnTrigger(Collider * collider);
 
