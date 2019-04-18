@@ -132,11 +132,8 @@ bool M_Scene::Update(float dt)
 	{
 		if (enemies_dead == initial_generated_units)
 		{
-			/* Generate new wave and increase units number */
-			initial_generated_units += enemies_to_increase;
-			CreateEnemyWave();
-			++number_current_wave;
-			enemies_dead = 0u;
+			/* Generate new wave, restart the vars and increase units number */
+			NewWave()
 		}
 
 		accumulated_time = 0.0f;
@@ -292,4 +289,15 @@ void M_Scene::CreateEnemyWave()
 		
 	}
 
+}
+
+void M_Scene::NewWave()
+{
+	initial_generated_units += enemies_to_increase;
+
+	CreateEnemyWave();
+	app->pick_manager->CreateRewardBoxWave();
+
+	++number_current_wave;
+	enemies_dead = 0u;
 }

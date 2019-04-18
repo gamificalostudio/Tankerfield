@@ -59,6 +59,8 @@ public:
 private:
 	void CreateEnemyWave();
 
+	void NewWave();
+
 public:
 	SDL_Texture* path_tex = nullptr;
 
