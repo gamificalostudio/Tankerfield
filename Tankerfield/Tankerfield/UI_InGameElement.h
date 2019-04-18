@@ -10,6 +10,7 @@ class UI_Elment;
 class UI_Image;
 class Button_Helper;
 class Text_Helper;
+class Camera;
 
 enum class ARROW_COLOR
 {
@@ -26,6 +27,7 @@ struct UI_InGameElementDef : public UI_ElementDef
 	Object*       pointed_obj = nullptr;
 	bool          add_arrow = false;
 	ARROW_COLOR   arrow_color = ARROW_COLOR::NONE;
+	Camera*       single_camera = nullptr;
 };
 
 class UI_InGameElement: public UI_Element
@@ -45,6 +47,7 @@ public:
 	fPoint         map_pos = { 0.f, 0.f };  // If object is null, use only a point to set its position
 	fPoint         object_offset = { 0.f, 0.f };
 	Object*        pointed_obj = nullptr;   // Object used to set position of main element
+	Camera*        single_camera = nullptr;
 
 protected:
 	

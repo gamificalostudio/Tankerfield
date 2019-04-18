@@ -445,11 +445,8 @@ bool M_UI::PostUpdate(float dt)
 			(*element)->PostUpdate();
 		}
 
-		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
-
+		UpdateGuiPositions(main_in_game_element, fPoint(0.f, 0.f));
 		DrawUI(main_in_game_element);
-
-		/*app->render->DrawQuad(current_gui->viewport_with_margin, 255, 255, 255, 255, false, false);*/
 	}
 
 	current_camera = nullptr;
@@ -733,7 +730,15 @@ void M_UI::DrawUI(UI_Element * object)
 
 	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
-		object->Draw();
+		if (object->single_camera == nullptr && object->not_in_camera == nullptr)
+		{
+			object->Draw();
+		}
+		else if ( object->single_camera == current_camera)
+		{
+			object->Draw();
+		}
+		
 	}
 	
 	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)

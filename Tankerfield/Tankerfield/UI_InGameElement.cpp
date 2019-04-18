@@ -11,7 +11,7 @@
 #include "UI_Image.h"
 #include "UI_Label.h"
 
-UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElementDef definition): UI_Element(position, definition, nullptr),  map_pos(definition.map_pos), pointed_obj(definition.pointed_obj)
+UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElementDef definition) : UI_Element(position, definition, nullptr), map_pos(definition.map_pos), pointed_obj(definition.pointed_obj)
 {
 	// Set Arrow =================================================
 
@@ -62,7 +62,7 @@ void UI_InGameElement::Destroy()
 
 void UI_InGameElement::UpdateArrow()
 {
-	if (arrow_image == nullptr)
+	if (arrow_image == nullptr || main_element == nullptr)
 	{
 		return;
 	}
@@ -252,26 +252,15 @@ void UI_IG_Item::Destroy()
 
 UI_IG_Helper::UI_IG_Helper(const fPoint position, const UI_InGameElementDef definition): UI_InGameElement(position, definition)
 {
-	UI_ElementDef def;
+	UI_InGameElementDef def;
 	def.is_in_game = true;
-	map_pos = position;
-
-	if (pointed_obj != nullptr)
-	{
-		main_element = app->ui->CreateElement(pointed_obj->pos_map, def, nullptr);
-	}
-	else
-	{
-		main_element = app->ui->CreateElement(map_pos, def, nullptr);
-	}
-
-	main_element->SetParent(this);
-
+	def.map_pos = position;
+	main_element = app->ui->CreateInGameElement({ 0.f,0.f }, def);
 }
 
 bool UI_IG_Helper::PostUpdate()
 {
-	if (pointed_obj != nullptr)
+	if (pointed_obj != nullptr) 
 	{
 		main_element->SetPos(app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_gui->player->camera_player));
 	}
@@ -279,7 +268,6 @@ bool UI_IG_Helper::PostUpdate()
 	{
 		main_element->SetPos(app->map->MapToCamera(map_pos, app->ui->current_gui->player->camera_player));
 	}
-	
 	return true;
 }
 
@@ -288,9 +276,12 @@ void UI_IG_Helper::AddButtonHelper(Button_Helper helper)
 	UI_ImageDef def(app->ui->button_sprites[(int)helper.button_type]);
 	def.is_in_game = true;
 
-	UI_Image*  ui_helpear = app->ui->CreateImage(main_element->position + helper.offset, def);
+	UI_Image*  ui_helpear = app->ui->CreateImage(main_element->position +helper.offset, def);
+	ui_helpear->offset = helper.offset;
+	ui_helpear->single_camera = this->single_camera;
 	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 	ui_helpear->SetParent(main_element);
+
 	helper_elements.push_back(ui_helpear);
 }
 
@@ -300,8 +291,11 @@ void UI_IG_Helper::AddTextHelper(Text_Helper helper)
 	def.is_in_game = true;
 
 	UI_Label* ui_helpear = app->ui->CreateLabel(main_element->position + helper.offset, def);
+	ui_helpear->offset = helper.offset;
+	ui_helpear->single_camera = this->single_camera;
 	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 	ui_helpear->SetParent(main_element);
+
 	helper_elements.push_back(ui_helpear);
 }
 

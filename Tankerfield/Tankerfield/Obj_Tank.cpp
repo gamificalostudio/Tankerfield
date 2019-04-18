@@ -178,7 +178,9 @@ bool Obj_Tank::Start()
 	UI_InGameElementDef clue_def;
 	clue_def.pointed_obj = this;
 	UI_IG_Helper * move_clue = app->ui->CreateInGameHelper(pos_map, clue_def);
+	move_clue->single_camera = camera_player;
 	move_clue->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
+	move_clue->AddTextHelper(Text_Helper("booooi", { 0.f, 100.f }));
 
 	return true;
 }

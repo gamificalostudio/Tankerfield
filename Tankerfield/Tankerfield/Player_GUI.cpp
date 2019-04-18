@@ -28,18 +28,18 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 	// In Game Elements =====================================================
 
-	////UI_InGameElementDef arrow_def;
-	////arrow_def.add_arrow = true;
-	////arrow_def.arrow_color;
-	////arrow_def.pointed_obj = player_object;
+	UI_InGameElementDef arrow_def;
+	arrow_def.add_arrow = true;
+	arrow_def.arrow_color;
+	arrow_def.pointed_obj = player_object;
 
-	////player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
+	player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
 
 	// HUD  Elements ========================================================
 
 	UI_ImageDef image_def;
 
-	image_def.sprite_section = { 80, 10, 65, 65 };
+	image_def.sprite_section = { 80, 10, 65, 65 };        
 
 	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
 	{
@@ -241,7 +241,7 @@ void Player_GUI::SetHelper()
 		}
 
 		x_offset += aux->sprite_section.w + (*iter)->offset.x;
-		aux->offset = (*iter)->offset.x;
+		aux->offset.x = (*iter)->offset.x;
 		aux->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 		helper_elements.push_back(aux);
 	}
@@ -253,7 +253,7 @@ void Player_GUI::SetHelper()
 	for (std::vector<UI_Element*>::iterator iter = helper_elements.begin(); iter != helper_elements.end(); ++iter)
 	{
 		(*iter)->SetPos(fPoint(helper_pos.x - x_offset + cumulated_x, helper_pos.y));
-		cumulated_x += ( (*iter)->sprite_section.w + (*iter)->offset );
+		cumulated_x += ( (*iter)->sprite_section.w + (*iter)->offset.x );
 	}
 }
 
