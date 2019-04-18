@@ -87,16 +87,13 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	switch (pick_up_obj->type_of_weapon)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		img_def.sprite_section = { 620, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
 		break;
 	case WEAPON::FLAMETHROWER:
-		img_def.sprite_section = { 580, 10, 34, 34 };
-		break;
-	case WEAPON::BASIC:
-		img_def.sprite_section = { 330, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	default:
-		img_def.sprite_section = { 500, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	}
 
@@ -193,13 +190,13 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	switch (pick_up_obj->type_of_item)
 	{
 	case ObjectType::HEALTH_BAG:
-		img_def.sprite_section = { 500,55,40,40 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
 	case ObjectType::HAPPY_HOUR_ITEM:
-		img_def.sprite_section = { 490,110,23,45 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
 	default:
-		img_def.sprite_section = { 500,55,40,40 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
 	}
 
