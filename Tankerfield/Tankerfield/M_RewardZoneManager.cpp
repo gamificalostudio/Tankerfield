@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "App.h"
 #include "M_RewardZoneManager.h"
 #include "M_ObjManager.h"
@@ -25,6 +27,11 @@ uint RewardZone::GetSize() const
 	return this->size;
 }
 
+uint RewardZone::GetNumberOfUnits() const
+{
+	return this->number_of_units;
+}
+
 void RewardZone::SetPos(fPoint pos)
 {
 	this->position = pos;
@@ -33,6 +40,11 @@ void RewardZone::SetPos(fPoint pos)
 void RewardZone::SetSize(const uint& size)
 {
 	this->size = size;
+}
+
+void RewardZone::SetNumberOfUnits(const uint& nou)
+{
+	this->number_of_units = nou;
 }
 
 
@@ -103,6 +115,8 @@ RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint si
 	RewardZone* temp_rz = new RewardZone();
 	temp_rz->SetPos(map_center_pos);
 	temp_rz->SetSize(size);
+	// The parameter is the tesla troopers plus the additional reward zone unit
+	temp_rz->SetNumberOfUnits(pow(size, 2) + 1);
 
 	/* Generate reward zone */
 	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(map_center_pos));

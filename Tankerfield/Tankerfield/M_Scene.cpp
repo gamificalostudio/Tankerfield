@@ -70,13 +70,12 @@ bool M_Scene::Start()
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
 
-
 	/* Generate first wave units */
 	CreateEnemyWave();
 
 	/* Generate Reward Zones */
 	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
-	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 7);
+	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
 }

@@ -15,14 +15,17 @@ public:
 public:
 	fPoint GetPos() const;
 	uint GetSize() const;
+	uint GetNumberOfUnits() const;
 
 	void SetPos(fPoint pos);
 	void SetSize(const uint& size);
+	void SetNumberOfUnits(const uint& nou);
 
 private:
 	// Position in tile units
 	fPoint position = { 0.0f, 0.0f };
 	uint size = 0u;
+	uint number_of_units = 0u;
 };
 
 class M_RewardZoneManager : public Module
