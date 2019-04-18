@@ -254,7 +254,7 @@ void Obj_Tank::Movement(float dt)
 	velocity = iso_dir * curr_speed * dt;                                                               
 	pos_map += velocity;
 
-	}
+	
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -639,7 +639,8 @@ void Obj_Tank::StopTank()
 	{
 		curr_speed = 0;
 		angle = 0;
-		shot_dir = {0.f,0.f};
+		shot_dir = { 0.f,0.f };
+	}
 }
 
 

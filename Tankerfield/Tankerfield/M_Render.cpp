@@ -467,40 +467,41 @@ bool M_Render::DrawCircle(int x, int y, int radius, Camera* camera, Uint8 r, Uin
 		}
 
 
-	int x_in_viewport = x;
-	int y_in_viewport = y;
+		int x_in_viewport = x;
+		int y_in_viewport = y;
 
-	x_in_viewport += camera->viewport.x;
-	y_in_viewport += camera->viewport.y;
+		x_in_viewport += camera->viewport.x;
+		y_in_viewport += camera->viewport.y;
 
 
-	if (use_camera)
-	{
-		for (uint i = 0; i < 360; ++i)
+		if (use_camera)
 		{
-			points[i].x = (int)(-camera->rect.x + x_in_viewport + radius * cos(i * factor));
-			points[i].y = (int)(-camera->rect.y + y_in_viewport + radius * sin(i * factor));
+			for (uint i = 0; i < 360; ++i)
+			{
+				points[i].x = (int)(-camera->rect.x + x_in_viewport + radius * cos(i * factor));
+				points[i].y = (int)(-camera->rect.y + y_in_viewport + radius * sin(i * factor));
+			}
 		}
-	}
 
-	else
-	{
-		for (uint i = 0; i < 360; ++i)
+		else
 		{
-			points[i].x = (int)(x_in_viewport + radius * cos(i * factor));
-			points[i].y = (int)(y_in_viewport + radius * sin(i * factor));
+			for (uint i = 0; i < 360; ++i)
+			{
+				points[i].x = (int)(x_in_viewport + radius * cos(i * factor));
+				points[i].y = (int)(y_in_viewport + radius * sin(i * factor));
+			}
 		}
-	}
 
-	result = SDL_RenderDrawPoints(renderer, points, 360);
+		result = SDL_RenderDrawPoints(renderer, points, 360);
 
-	if (result != 0)
-	{
-		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
-		ret = false;
+		if (result != 0)
+		{
+			LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
+			ret = false;
+		}
+
+		return ret;
 	}
-	
-	return ret;
 }
 
 
