@@ -73,7 +73,7 @@ bool M_RewardZoneManager::Update(float dt)
 bool M_RewardZoneManager::PostUpdate(float dt)
 {
 	return true;
-
+	
 }
 
 bool M_RewardZoneManager::CleanUp()
@@ -93,15 +93,16 @@ RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint si
 	temp_rz->SetPos(map_center_pos);
 	temp_rz->SetSize(size);
 
-	/*for (int i = 0; i < size; i++)
+	/* Generate enemies */
+	for (int i = map_center_pos.x - size / 2; i <= map_center_pos.x + size / 2; i++)
 	{
-		for (int j = 0; j < size; j++)
+		for (int j = map_center_pos.y - size / 2; j <= map_center_pos.y + size / 2; j++)
 		{
-			fPoint map_pos = map_center_pos;
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, map_pos);
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(i, j));
 		}
-	}*/
-	app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, map_center_pos);
+	}
+
+	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, map_center_pos);
 	reward_zones.push_back(temp_rz);
 
 	return temp_rz;
