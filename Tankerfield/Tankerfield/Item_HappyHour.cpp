@@ -29,7 +29,7 @@ bool Item_HappyHour::Update(float dt)
 
 bool Item_HappyHour::Use()
 {
-	pugi::xml_node health_bag_node = app->config.child("items").child("health_bag");
+	pugi::xml_node happy_hour_node = app->config.child("items").child("happy_hour");
 
 	time.Start();
 	if (caster != nullptr)
@@ -39,10 +39,10 @@ bool Item_HappyHour::Use()
 		caster->SetTimeBetweenBullets(happy_time_between_bullets);
 	}
 
-	anim.frames = app->anim_bank->LoadFrames(health_bag_node.child("animations").child("rotate"));
+	anim.frames = app->anim_bank->LoadFrames(happy_hour_node.child("animations").child("rotate"));
 	curr_anim = &anim;
 
-	tex = app->tex->Load(health_bag_node.child("texture").attribute("path").as_string());
+	tex = app->tex->Load(happy_hour_node.child("texture").attribute("path").as_string());
 	curr_tex = tex;
 
 	draw_offset = { 17, 65 };
