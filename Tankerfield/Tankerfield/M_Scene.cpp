@@ -79,8 +79,7 @@ bool M_Scene::Start()
 	CreateEnemyWave();
 
 	/* Generate Reward Zones */
-	fPoint test(2.0f, 2.0f);
-	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(test, 3);
+	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
 
 	return true;
 }

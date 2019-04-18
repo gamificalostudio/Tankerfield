@@ -78,8 +78,13 @@ bool M_RewardZoneManager::PostUpdate(float dt)
 
 bool M_RewardZoneManager::CleanUp()
 {
-	return true;
+	for (std::list<RewardZone*>::const_reverse_iterator item = this->reward_zones.rbegin();
+		item != reward_zones.rend(); item++)
+	{
+		delete *item;
+	}
 
+	return true;
 }
 
 RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint size)
