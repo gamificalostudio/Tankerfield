@@ -72,8 +72,19 @@ bool M_RewardZoneManager::Update(float dt)
 
 bool M_RewardZoneManager::PostUpdate(float dt)
 {
+	accumulated_time += dt;
+	if (accumulated_time >= 2.0f)
+	{
+		do_check = true;
+		accumulated_time = 0.0f;
+	}
+
+	if (do_check)
+	{
+		
+	}
+
 	return true;
-	
 }
 
 bool M_RewardZoneManager::CleanUp()
@@ -92,6 +103,9 @@ RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint si
 	RewardZone* temp_rz = new RewardZone();
 	temp_rz->SetPos(map_center_pos);
 	temp_rz->SetSize(size);
+
+	/* Generate reward zone */
+	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(map_center_pos));
 
 	/* Generate enemies */
 	for (int i = map_center_pos.x - size / 2; i <= map_center_pos.x + size / 2; i++)

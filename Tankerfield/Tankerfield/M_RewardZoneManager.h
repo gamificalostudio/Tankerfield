@@ -51,6 +51,9 @@ public:
 
 private:
 	std::list<RewardZone*> reward_zones;
+
+	float accumulated_time = 0.0f;
+	bool do_check = false;
 };
 
 #endif /* __M_RewardZoneManager_H__ */
