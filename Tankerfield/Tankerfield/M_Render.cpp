@@ -440,7 +440,7 @@ bool M_Render::DrawLineSplitScreen( int x1, int y1, int x2, int y2, Uint8 r, Uin
 	return ret;
 }
 
-bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+bool M_Render::DrawCircle(int x, int y, int radius, Camera* camera, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -452,6 +452,7 @@ bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 	SDL_Point points[360];
 
 	float factor = (float)M_PI / 180.0f;
+
 	std::vector<Camera*>::iterator item_cam;
 	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
@@ -465,12 +466,29 @@ bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 			}
 		}
 
+
+		int x_in_viewport = x;
+		int y_in_viewport = y;
+
+		x_in_viewport += camera->viewport.x;
+		y_in_viewport += camera->viewport.y;
+
+
+		if (use_camera)
+		{
+			for (uint i = 0; i < 360; ++i)
+			{
+				points[i].x = (int)(-camera->rect.x + x_in_viewport + radius * cos(i * factor));
+				points[i].y = (int)(-camera->rect.y + y_in_viewport + radius * sin(i * factor));
+			}
+		}
+
 		else
 		{
 			for (uint i = 0; i < 360; ++i)
 			{
-				points[i].x = (int)(x + radius * cos(i * factor));
-				points[i].y = (int)(y + radius * sin(i * factor));
+				points[i].x = (int)(x_in_viewport + radius * cos(i * factor));
+				points[i].y = (int)(y_in_viewport + radius * sin(i * factor));
 			}
 		}
 
@@ -481,11 +499,9 @@ bool M_Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 			LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
 			ret = false;
 		}
+
+		return ret;
 	}
-	SDL_RenderSetClipRect(app->render->renderer, nullptr);
-
-
-	return ret;
 }
 
 

@@ -93,6 +93,7 @@ private:
 	static int number_of_tanks;
 
 	//- Movement
+	float curr_speed						= 0.f;
 	float speed								= 0.f;
 	fPoint velocity							= { 0.f, 0.f };
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
@@ -108,7 +109,18 @@ private:
 	float shot_angle_lerp_factor			= 0.f;
 	float turr_target_angle					= 0.f;
 
+	//Revive
+
+	float revive_range						= 0.f;
+	float revive_range_squared				= 0.f;
+	int	  revive_life						= 0;
+	//Timer ReviveTimer;
+
+	//-- Basic shoot
+	uint shot_type							= (uint)WEAPON::BASIC;
+
 	//-- Shoot
+
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
 	PerfTimer shot_timer;
 	PerfTimer charged_timer;

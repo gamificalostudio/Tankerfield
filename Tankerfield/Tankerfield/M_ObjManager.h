@@ -39,6 +39,7 @@ enum class ObjectType
 };
 
 class Object;
+class Camera;
 
 class M_ObjManager : public Module
 {
@@ -73,7 +74,7 @@ public:
 	
 	std::list<Object*> GetObjects() const;
 
-	inline void DrawDebug(const Object* obj);
+	inline void DrawDebug(const Object* obj, Camera* camera);
 
 private:
 
