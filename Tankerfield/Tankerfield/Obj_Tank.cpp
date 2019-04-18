@@ -172,7 +172,7 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
-	Shoot();
+	Shoot(dt);
 	Item();
 	Movement(dt);
 	StopTank();
@@ -224,11 +224,10 @@ void Obj_Tank::Movement(float dt)
 			target_angle += 360.f;
 		}
 		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
+
+		velocity = iso_dir * speed * dt;
+		pos_map += velocity;
 	}
-
-	velocity = iso_dir * speed * dt;                                                               
-	pos_map += velocity;
-
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -404,7 +403,7 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 	}
 }
 
-void Obj_Tank::Shoot()
+void Obj_Tank::Shoot(float dt)
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
@@ -420,9 +419,24 @@ void Obj_Tank::Shoot()
 
 	if (!shot_input_dir.IsZero())
 	{
+		//Angle
 		fPoint shot_screen_pos = app->map->MapToScreenF(shot_iso_dir);
-		turr_angle = atan2(-shot_screen_pos.y, shot_screen_pos.x) * RADTODEG;
+		float target_angle = atan2(-shot_screen_pos.y, shot_screen_pos.x) * RADTODEG;
+		//- Calculate how many turns has the base angle and apply them to the target angle
+		float turns = floor(turr_angle / 360.f);
+		target_angle += 360.f * turns;
+		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
+		if (abs((target_angle + 360.f) - turr_angle) < abs(target_angle - turr_angle))
+		{
+			target_angle += 360.f;
+		}
+		turr_angle = lerp(turr_angle, target_angle, base_angle_lerp_factor * dt);
+
+		//Direction
 		shot_dir = shot_iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
+
+		//TODO:Extract from angle or it could be potentially different where you are aiming and where you're shooting
+		//Or have it always shoot from turr_dir, and turr_angle only be for the turret sprite (you generate a new angle for the bullets when you shoot)
 	}
 
 	if (PressShot())

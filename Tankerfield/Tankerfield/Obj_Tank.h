@@ -59,7 +59,7 @@ private:
 	void InputMovementController(fPoint & input);
 
 	//- Shooting
-	void Shoot();
+	void Shoot(float dt);
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
