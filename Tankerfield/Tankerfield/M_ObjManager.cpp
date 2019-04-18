@@ -31,6 +31,7 @@
 #include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
+#include "Item_HappyHour.h"
 #include "Obj_PickUp.h"
 
 M_ObjManager::M_ObjManager()
@@ -239,6 +240,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::HEALTH_BAG:
 		ret = DBG_NEW Item_HealthBag(pos);
 		ret->type = ObjectType::HEALTH_BAG;
+		break;
+	case ObjectType::HAPPY_HOUR_ITEM:
+		ret = new Item_HappyHour(pos);
+		ret->type = ObjectType::HAPPY_HOUR_ITEM;
 		break;
 	case ObjectType::PICK_UP:
 		ret = DBG_NEW Obj_PickUp(pos);

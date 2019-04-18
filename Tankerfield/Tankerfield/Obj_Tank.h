@@ -45,8 +45,10 @@ public:
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
 	void SetWeapon(WEAPON type);
+	void SetTimeBetweenBullets(int time_between_bullets);
 	int GetLife();
 	int GetMaxLife();
+	int GetTimeBetweenBullets();
 
 public:
 	//- Pick ups
