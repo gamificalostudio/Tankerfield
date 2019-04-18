@@ -22,25 +22,18 @@
 #include "M_Map.h"
 #include "M_Collision.h"
 #include "WeaponInfo.h"
-
-//Static variables inicialization
-Animation * Obj_Brute::walk = nullptr;
+#include "M_AnimationBank.h"
 
 Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
-	if (tex == nullptr)
-	{
-		tex = app->tex->Load("textures/Objects/brute-sheet.png");
-	}
+	tex = app->tex->Load("textures/Objects/brute-sheet.png");
 	curr_tex = tex;
-	if (walk == nullptr)
-	{
-		walk = new Animation;
-		walk->LoadAnimation(brute_node.child("animations").child("walk"));
-	}
-	curr_anim = walk;
+
+	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
+	curr_anim = &walk;
+
 	speed = 1.F;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
