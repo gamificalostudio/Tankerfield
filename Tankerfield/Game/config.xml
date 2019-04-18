@@ -1202,6 +1202,12 @@
       <time_between_bullets value ="500"/>
       <bullet_healing value="5"/>
     </healing_shot>
+    <laser_shoot>
+      <bullet_damage value ="50"/>
+      <bullet_speed value ="10"/>
+      <bullet_life_ms value ="2000"/>
+      <time_between_bullets value ="500"/>
+    </laser_shoot>
   </weapons>
 
   <items>

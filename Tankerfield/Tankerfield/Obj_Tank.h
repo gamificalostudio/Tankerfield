@@ -73,6 +73,7 @@ private:
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
 	void ShootHealingShot();
+	void ShootLaserShot();
 
 	//- TankDeath
 	void ReviveTank();

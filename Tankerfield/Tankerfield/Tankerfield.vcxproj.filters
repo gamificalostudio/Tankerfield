@@ -142,6 +142,9 @@
     <ClCompile Include="M_AnimationBank.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet_Laser.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -305,6 +308,9 @@
     </ClInclude>
     <ClInclude Include="M_AnimationBank.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Laser.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
