@@ -6,26 +6,40 @@
 
 #include "SDL/include/SDL_rect.h"
 
+
 #include "Module.h"
 
 struct SDL_Texture;
 struct Controller;
 class Obj_Tank;
 
+enum class WaveStat
+{
+	NO_TYPE,
+	ENTER_IN_WAVE,
+	IN_WAVE,
+	EXIT_OF_WAVE,
+	OUT_WAVE
+};
+class PerfTimer;
 class M_Scene : public Module
 {
 private:
-	Controller** control1 = nullptr;
+	Controller** control1			= nullptr;
 
 public:
-	int current_level = 0;
-	Obj_Tank * tank_1 = nullptr;
-	Obj_Tank * tank_2 = nullptr;
-	Obj_Tank * tank_3 = nullptr;
-	Obj_Tank * tank_4 = nullptr;
+	int current_level				= 0;
+	Obj_Tank * tank_1				= nullptr;
+	Obj_Tank * tank_2				= nullptr;
+	Obj_Tank * tank_3				= nullptr;
+	Obj_Tank * tank_4				= nullptr;
 
-	uint number_current_wave = 0;
-	uint enemies_dead = 0u;
+	uint number_current_wave		= 0;
+	uint enemies_dead				= 0u;
+	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
+
+	PerfTimer timer_between_waves;
+
 public:
 
 	M_Scene();
@@ -60,6 +74,8 @@ private:
 	void CreateEnemyWave();
 
 	void NewWave();
+
+	bool AllPlayersReady() const;
 
 public:
 	SDL_Texture* path_tex = nullptr;

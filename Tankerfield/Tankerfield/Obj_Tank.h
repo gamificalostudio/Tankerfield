@@ -47,6 +47,8 @@ public:
 	int GetLife();
 	int GetMaxLife();
 
+	bool IsReady() const;
+
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 
@@ -65,6 +67,8 @@ private:
 
 	//- Input
 	void SelectInputMethod();
+
+	void InputReadyKeyboard();
 
 	//- Weapons methods
 	void ShootBasic();
@@ -85,6 +89,8 @@ private:
 	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
 	static int number_of_tanks;
+
+	bool ready								= false;
 
 	//- Movement
 	float speed								= 0.f;
@@ -132,6 +138,7 @@ private:
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_right					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
 	Joystick gamepad_move					= Joystick::INVALID;

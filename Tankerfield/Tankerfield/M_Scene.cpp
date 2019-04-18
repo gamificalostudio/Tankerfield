@@ -20,6 +20,8 @@
 #include "Rect.h"
 #include "Object.h"
 #include "M_PickManager.h"
+#include "PerfTimer.h"
+#include "Obj_Tank.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -76,8 +78,9 @@ bool M_Scene::Start()
 
 	/* Generate first wave units */
 	srand(time(NULL));
-	CreateEnemyWave();
+	//CreateEnemyWave();
 	number_current_wave = 1;
+	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 
 	return true;
 }
@@ -122,23 +125,53 @@ bool M_Scene::Update(float dt)
 	}*/
 
 	/* Check if a round is over. It is only checked after x time. */
-	accumulated_time += dt * 1000.0f;
-	if (accumulated_time >= (float)check_complete_round)
-	{
-		perform_objects_check = true;
-	}
+	//accumulated_time += dt * 1000.0f;
+	//if (accumulated_time >= (float)check_complete_round)
+	//{
+	//	perform_objects_check = true;
+	//}
 
-	if (perform_objects_check)
+	//if (perform_objects_check)
+	//{
+	//	
+
+	//	accumulated_time = 0.0f;
+	//	perform_objects_check = false;
+	//}
+
+	switch (stat_of_wave)
+	{
+	case WaveStat::ENTER_IN_WAVE:
+	{
+		/* Generate new wave, restart the vars and increase units number */
+		NewWave();
+		stat_of_wave = WaveStat::IN_WAVE;
+		break;
+	}
+	case WaveStat::IN_WAVE:
 	{
 		if (enemies_dead == initial_generated_units)
 		{
-			/* Generate new wave, restart the vars and increase units number */
-			NewWave()
+			stat_of_wave = WaveStat::EXIT_OF_WAVE;
+		}
+		break;
+	}
+	case WaveStat::EXIT_OF_WAVE:
+	{
+		//feedback here I guess(animation and souds)
+		timer_between_waves.Start();
+		stat_of_wave = WaveStat::OUT_WAVE;
+
+		break;
+	}
+	case WaveStat::OUT_WAVE:
+		if (timer_between_waves.ReadMs() >= time_between_rounds || AllPlayersReady())
+		{
+			stat_of_wave = WaveStat::ENTER_IN_WAVE;
 		}
 
-		accumulated_time = 0.0f;
-		perform_objects_check = false;
 	}
+
 
 	return true;
 }
@@ -300,4 +333,12 @@ void M_Scene::NewWave()
 
 	++number_current_wave;
 	enemies_dead = 0u;
+}
+
+bool M_Scene::AllPlayersReady() const
+{
+	return (tank_1->IsReady()
+		&& tank_2->IsReady()
+		&& tank_3->IsReady()
+		&& tank_4->IsReady());
 }
