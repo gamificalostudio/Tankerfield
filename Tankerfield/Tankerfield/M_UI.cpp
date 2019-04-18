@@ -260,15 +260,15 @@ bool M_UI::Update(float dt)
 
 	//round_fx->alpha = lerp(init_value, target_value, ax);
 
-	ax += dt * ratetime;
+	//ax += dt * ratetime;
 
-	if (app->scene->tank_1->GetLife() == target_value)
-	{
-		swap(init_value, target_value);
-		ax = 0.f;
-	}
+	////if (app->scene->tank_1->GetLife() == target_value)
+	////{
+	////	swap(init_value, target_value);
+	////	ax = 0.f;
+	////}
 
-	app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
+	//app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
 
 	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
 	{
