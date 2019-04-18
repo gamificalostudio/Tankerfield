@@ -51,14 +51,6 @@ M_UI::~M_UI()
 		delete main_in_game_element;
 		main_in_game_element = nullptr;
 	}
-	for (uint i = 0; i < 4; ++i)
-	{
-		if (hud_player[i] != nullptr)
-		{
-			delete hud_player[i];
-			hud_player[i] = nullptr;
-		}
-	}
 }
 
 // Called before render is available
@@ -90,21 +82,14 @@ bool M_UI::Start()
 	button_sprite[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
 
 	// HUD ===========================================
-
-	hud_player[0] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
-	players_guis.push_back(hud_player[0]);
-	hud_player[1] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
-	players_guis.push_back(hud_player[1]);
-	hud_player[2] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
-	players_guis.push_back(hud_player[2]);
-	hud_player[3] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
-	players_guis.push_back(hud_player[3]);
-
-
-	UI_InGameElementDef test_def;
-	test_def.pointed_obj = (Object*)app->scene->tank_2;
-
-	app->ui->CreateInGameElement({0.f, 0.f}, test_def);
+	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	players_guis.push_back(player_1_gui);
+	player_2_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	players_guis.push_back(player_2_gui);
+	player_3_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	players_guis.push_back(player_3_gui);
+	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	players_guis.push_back(player_4_gui);
 
 	//UI_InGameElementDef def;
 	//def.pointed_obj = app->scene->tank_1;
@@ -116,7 +101,6 @@ bool M_UI::Start()
 	//player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::B));
 	//player_1_gui->AddTextHelper(Text_Helper("to pay respects"));
 	//player_1_gui->SetHelper();
-
 
 	UI_ImageDef image_def;
 	fRect full_screen = app->win->GetWindowRect();
@@ -165,6 +149,12 @@ bool M_UI::CleanUp()
 	}
 
 	elements_list.clear();
+
+	for (list < Player_GUI*> ::iterator element = players_guis.begin(); element != players_guis.end(); ++element)
+	{
+		RELEASE((*element));
+	}
+	players_guis.clear();
 
 	return true;
 }
@@ -457,8 +447,7 @@ bool M_UI::PostUpdate(float dt)
 
  UI_Element * M_UI::CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
  {
-
-	 UI_Element* object = new UI_Element(position, definition, listener);
+	 UI_Element* object = DBG_NEW UI_Element(position, definition, listener);
 
 	 if (definition.is_in_game == true)
 	 {
@@ -470,7 +459,6 @@ bool M_UI::PostUpdate(float dt)
 		 object->SetParent(main_ui_element);
 		 elements_list.push_back(object);
 	 }
-
 	 return object;
  }
 
@@ -496,8 +484,7 @@ bool M_UI::PostUpdate(float dt)
 
 UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition , UI_Listener* listener)
 {
-
-	UI_Image* object = new UI_Image(position, definition, listener);
+	UI_Image* object = DBG_NEW UI_Image(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -515,8 +502,7 @@ UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition 
 
 UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener)
 {
-
-	UI_Button* object = new UI_Button(position, definition, listener);
+	UI_Button* object = DBG_NEW UI_Button(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -528,14 +514,13 @@ UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definiti
 		object->SetParent(main_ui_element);
 		elements_list.push_back(object);
 	}
+
 	return object;
 }
 
 UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definition, UI_Listener * listener)
 {
-
-
-	UI_Slider* object = new UI_Slider(position, definition, listener);
+	UI_Slider* object = DBG_NEW UI_Slider(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -547,15 +532,13 @@ UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definit
 		object->SetParent(main_ui_element);
 		elements_list.push_back(object);
 	}
-
 
 	return object;
 }
 
 UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener * listener)
 {
-
-	UI_Checkbox* object = new UI_Checkbox(position, definition, listener);
+	UI_Checkbox* object = DBG_NEW UI_Checkbox(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -567,15 +550,13 @@ UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef d
 		object->SetParent(main_ui_element);
 		elements_list.push_back(object);
 	}
-
 
 	return object;
 }
 
 UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener * listener)
 {
-
-	UI_TextPanel* object = new UI_TextPanel(position, definition, listener);
+	UI_TextPanel* object = DBG_NEW UI_TextPanel(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -587,14 +568,12 @@ UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDe
 		object->SetParent(main_ui_element);
 		elements_list.push_back(object);
 	}
-
 
 	return object;
 }
 UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener * listener)
 {
-
-	UI_Bar* object = new UI_Bar(position, definition, listener);
+	UI_Bar* object = DBG_NEW UI_Bar(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -606,7 +585,6 @@ UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_L
 		object->SetParent(main_ui_element);
 		elements_list.push_back(object);
 	}
-
 
 	return object;
 }
@@ -638,7 +616,6 @@ UI_IG_Helper * M_UI::CreateInGameHelper(const fPoint position, const UI_InGameEl
 	UI_IG_Helper* object = DBG_NEW UI_IG_Helper(position, definition);
 	object->SetParent(main_in_game_element);
 	ig_elements_list.push_back(object);
-
 	return object;
 }
 // ====================================================================================

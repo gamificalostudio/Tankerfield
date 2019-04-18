@@ -144,13 +144,13 @@ void Player_GUI::SetHelper()
 
 void Player_GUI::AddButtonHelper(const Button_Helper helper)
 {
-	Button_Helper* new_helper = new Button_Helper(helper);
+	Button_Helper* new_helper = DBG_NEW Button_Helper(helper);
 	helpers_vector.push_back(new_helper);
 }
 
 void Player_GUI::AddTextHelper(const Text_Helper helper)
 {
-	Text_Helper* new_helper = new Text_Helper(helper);
+	Text_Helper* new_helper = DBG_NEW Text_Helper(helper);
 	helpers_vector.push_back(new_helper);
 }
 
