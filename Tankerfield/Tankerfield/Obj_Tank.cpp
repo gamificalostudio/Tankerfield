@@ -17,6 +17,7 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
@@ -123,6 +124,8 @@ bool Obj_Tank::Start()
 	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
 	basic_shot_function[(uint)WEAPON::HEALING_SHOT]		= &Obj_Tank::ShootHealingShot;
+	basic_shot_function[(uint)WEAPON::LASER_SHOT]		= &Obj_Tank::ShootLaserShot;
+
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
@@ -700,6 +703,20 @@ void Obj_Tank::ShootHealingShot()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
+
+void Obj_Tank::ShootLaserShot()
+{
+	Laser_Bullet *	 laser_bullet= (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir * cannon_length);
+
+	laser_bullet->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+}
+
+
 
 void Obj_Tank::Item()
 {

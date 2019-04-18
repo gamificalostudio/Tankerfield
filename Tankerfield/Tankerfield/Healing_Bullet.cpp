@@ -31,4 +31,3 @@ bool Healing_Bullet::Start()
 
 		return true;
 }
-

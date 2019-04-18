@@ -13,6 +13,10 @@ enum class WEAPON {
 	HEALING_SHOT,
 	MAX_WEAPONS,// must be in the last position of the weapons that work. Needed from the creation of pickUps
 	FLAMETHROWER,
+	LASER_SHOT,
+	MAX,
+
+
 };
 
 class WeaponInfo
@@ -22,10 +26,8 @@ public:
 
 public:
 
-
 	WEAPON type					= WEAPON::BASIC;
 	int level_weapon			= 0;
-
 	int    bullet_damage        = 0;
 	float  bullet_speed			= 0.f;
 	float  bullet_life_ms		= 0.f;
