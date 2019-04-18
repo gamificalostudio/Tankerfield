@@ -12,7 +12,7 @@ struct SDL_Texture;
 struct Controller;
 class Obj_Tank;
 class RewardZone;
-class Obj_TeslaTrooper;
+class Object;
 
 enum class WaveStat
 {
@@ -35,8 +35,8 @@ public:
 	Obj_Tank * tank_3				= nullptr;
 	Obj_Tank * tank_4				= nullptr;
 
-	uint number_current_wave		= 0;
-	std::list<Obj_TeslaTrooper*> enemies_in_wave;
+	uint round		= 0;
+	std::list<Object*> enemies_in_wave;
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
 	PerfTimer timer_between_waves;
@@ -89,17 +89,14 @@ private:
 	iPoint path_tex_offset = { -30, 0 };
 	uint initial_num_enemies = 0;
 private:
+
 	/* Wave System */
-	// In milliseconds
-
-	float accumulated_time			= 0.0f;
-	bool perform_objects_check		= false;
-
 	int time_between_rounds			= 0;
-	int initial_generated_units		= 0;
-	int generated_units				= 0;
-	int enemies_to_increase			= 0;
+	int Tesla_trooper_units			= 0;
+	int Brute_units					= 0;
 
+
+	// Fx and Music
 	const char* finish_wave_sound_string;
 	uint finish_wave_sound_uint = 0u; 
 	int finish_wave_sound_channel = -1;

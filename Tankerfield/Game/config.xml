@@ -60,9 +60,6 @@
 
   <scene>
     <time_between_rounds value="5000"/>
-    <initial_generated_units value="10"/>
-    <check_complete_round value="2000"/>
-    <enemies_to_increase value="3"/>
 
     <music>
       <main_music music ="audio/Music/indeep.ogg"/>
@@ -75,7 +72,7 @@
   </scene>
 
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="100"/>
+    <percentage_spawn_item_from_enemy value="1"/>
     <percentage_spawn_reward_box value="50"/>
     
   </pick_manager>
