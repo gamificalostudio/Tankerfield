@@ -112,6 +112,8 @@ private:
 	uint shot_sound							= 0u;
 	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX])();
 	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX])();
+	fPoint shot_input_dir					= { 0.f, 0.f };
+	fPoint shot_iso_dir						= { 0.f, 0.f };
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;

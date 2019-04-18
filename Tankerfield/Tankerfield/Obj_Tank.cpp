@@ -122,7 +122,7 @@ bool Obj_Tank::Start()
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ -.4f, -.4f });
+	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
 	cannon_length = 1.f;
@@ -282,21 +282,18 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		&rotate_turr.GetFrame(turr_angle));
 
 	//DEBUG
-	//	iPoint debug_mouse_pos = { 0, 0 };
-//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
+	float line_length = 5.f;
 
-//	debug_mouse_pos.x += camera_player->rect.x;
-//	debug_mouse_pos.y += camera_player->rect.y;
+	//Green: The direction used for drawing the turret angle
+	iPoint final_input_pos (pos_screen.x + shot_input_dir.x * line_length, pos_screen.y + shot_input_dir.y * line_length);
+	app->render->DrawLineSplitScreen(pos_screen.x, pos_screen.y - cannon_height, final_input_pos.x, final_input_pos.y, 0, 255, 0, 255, camera);
 
-//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-
-	//  std::vector<Camera*>::iterator item_cam;
-//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-//	{
-	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
-//	}
-
+	//Blue: The direction used for spawning and setting the bullet direction
+	//1-- Set a position in the isometric space
+	fPoint final_iso_pos(pos_map.x + shot_iso_dir.x * line_length, pos_map.y + shot_iso_dir.y * line_length);
+	//2-- Transform that poin to screen coordinates
+	iPoint final_screen_pos = (iPoint)app->map->MapToScreenF(final_iso_pos);
+	app->render->DrawLineSplitScreen(pos_screen.x, pos_screen.y - cannon_height, final_screen_pos.x, final_screen_pos.y, 0, 0, 255, 255, camera);
 	return true;
 }
 
@@ -418,22 +415,19 @@ void Obj_Tank::Shoot()
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
 	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
-
-	fPoint input_dir(0.f, 0.f);
-	fPoint iso_dir;
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputShotMouse(turr_pos, input_dir, iso_dir);
+		InputShotMouse(turr_pos, shot_input_dir, shot_iso_dir);
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		InputShotController(turr_pos, input_dir, iso_dir);
+		InputShotController(turr_pos, shot_input_dir, shot_iso_dir);
 	}
 
-	if (!input_dir.IsZero())
+	if (!shot_input_dir.IsZero())
 	{
-		turr_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
-		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
+		turr_angle = atan2(-shot_input_dir.y, shot_input_dir.x) * RADTODEG;
+		shot_dir = shot_iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
 	if (PressShot())
