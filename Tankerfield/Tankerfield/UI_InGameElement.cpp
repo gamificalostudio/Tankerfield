@@ -289,7 +289,7 @@ void UI_IG_Helper::AddButtonHelper(Button_Helper helper)
 	def.is_in_game = true;
 
 	UI_Image*  ui_helpear = app->ui->CreateImage(main_element->position + helper.offset, def);
-	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
+	ui_helpear->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	ui_helpear->SetParent(main_element);
 	helper_elements.push_back(ui_helpear);
 }
@@ -300,7 +300,7 @@ void UI_IG_Helper::AddTextHelper(Text_Helper helper)
 	def.is_in_game = true;
 
 	UI_Label* ui_helpear = app->ui->CreateLabel(main_element->position + helper.offset, def);
-	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
+	ui_helpear->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	ui_helpear->SetParent(main_element);
 	helper_elements.push_back(ui_helpear);
 }

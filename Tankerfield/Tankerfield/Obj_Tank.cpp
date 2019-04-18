@@ -175,10 +175,15 @@ bool Obj_Tank::Start()
 		}
 	}
 
+
+	//- Tutorial
+	//-- Move
 	UI_InGameElementDef clue_def;
 	clue_def.pointed_obj = this;
-	UI_IG_Helper * move_clue = app->ui->CreateInGameHelper(pos_map, clue_def);
-	move_clue->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
+	tutorial_move = app->ui->CreateInGameHelper(pos_map, clue_def);
+	tutorial_move->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
+	tutorial_move->AddTextHelper(Text_Helper("MOVE", {0.f, 70.f}));
+	tutorial_move_time = 4000;
 
 	return true;
 }
@@ -246,6 +251,9 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
+		tutorial_move_timer.Start();
+		tutorial_move_pressed = true;
+
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
@@ -262,7 +270,11 @@ void Obj_Tank::Movement(float dt)
 	velocity = iso_dir * curr_speed * dt;                                                               
 	pos_map += velocity;
 
-	
+	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
+	{
+		tutorial_move->Destroy();
+		tutorial_move = nullptr;
+	}
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
