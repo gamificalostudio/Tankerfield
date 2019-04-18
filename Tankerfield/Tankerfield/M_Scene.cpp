@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <ctime>
+#include <string>
 
 #include "Defs.h"
 #include "Log.h"
@@ -40,11 +41,17 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
-	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
+	initial_generated_units = 1;//config.child("initial_generated_units").attribute("value").as_int();
 	distance_range = config.child("distance_range").attribute("value").as_int();
 	min_distance_from_center = config.child("min_distance_from_center").attribute("value").as_int();
 	check_complete_round = config.child("check_complete_round").attribute("value").as_int();
-	enemies_to_increase = config.child("enemies_to_increase").attribute("value").as_int();
+	enemies_to_increase = 0;//config.child("enemies_to_increase").attribute("value").as_int();
+
+	main_music = config.child("music").child("main_music").attribute("music").as_string();
+
+	finish_wave_sound_string = config.child("sounds").child("finish_wave_shot").attribute("sound").as_string();
+	wind_sound_string = config.child("sounds").child("wind_sound").attribute("sound").as_string();
+
 
 	return ret;
 }
@@ -59,9 +66,12 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
-	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
+	// Load Fxs
+	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
+	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
+	
 
-
+	//Create all tanks
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(70.f, 60.f));
 	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
@@ -146,6 +156,10 @@ bool M_Scene::Update(float dt)
 		/* Generate new wave, restart the vars and increase units number */
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
+		app->audio->PlayMusic(main_music, 2.0f);
+
+		app->audio->PauseFx(finish_wave_sound_channel, 2000);
+		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;
 	}
 	case WaveStat::IN_WAVE:
@@ -160,6 +174,10 @@ bool M_Scene::Update(float dt)
 	{
 		//feedback here I guess(animation and souds)
 		timer_between_waves.Start();
+		app->audio->PauseMusic(3000);
+		finish_wave_sound_channel = app->audio->PlayFx(finish_wave_sound_uint);
+		wind_sound_channel = app->audio->PlayFx(wind_sound_uint);
+		
 		stat_of_wave = WaveStat::OUT_WAVE;
 
 		break;

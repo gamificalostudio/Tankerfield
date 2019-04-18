@@ -32,7 +32,11 @@ public:
 	unsigned int LoadFx(const char* path);
 
 	// Play a previously loaded WAV
-	bool PlayFx(unsigned int fx, int repeat = 0);
+	int PlayFx(unsigned int fx, int repeat = 0);
+
+	void PauseMusic(int fade_out);
+
+	void PauseFx(unsigned int id, int fade_out);
 
 private:
 	_Mix_Music* music = nullptr;

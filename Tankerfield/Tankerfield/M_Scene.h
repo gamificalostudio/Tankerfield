@@ -101,6 +101,15 @@ private:
 	int object_counter				= 0;
 	int enemies_to_increase			= 0;
 
+	const char* finish_wave_sound_string;
+	uint finish_wave_sound_uint = 0u; 
+	int finish_wave_sound_channel = -1;
+	
+	const char* wind_sound_string;
+	uint wind_sound_uint = 0u;
+	int wind_sound_channel = -1;
+
+	const char* main_music;
 };
 
 #endif // __j1SCENE_H__

@@ -65,6 +65,15 @@
     <min_distance_from_center value="2"/>
     <check_complete_round value="2000"/>
     <enemies_to_increase value="3"/>
+
+    <music>
+      <main_music music ="audio/Music/indeep.ogg"/>
+    </music>
+    
+    <sounds>
+      <finish_wave_shot sound ="audio/Fx/Scene/finish_wave_sound.wav"/>wind_sound.wav
+      <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
+    </sounds>
   </scene>
 
   <pick_manager>
