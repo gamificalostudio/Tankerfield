@@ -39,10 +39,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	range_pos.radius = 0.5f;
 	follow_range = 10.0f;
 	check_path_time = 1.f;
-	coll = app->collision->AddCollider(pos, 1.f, 1.f, Collider::TAG::ENEMY, 0.f, this);
+	coll = app->collision->AddCollider(pos, 0.7f, 0.7f, Collider::TAG::ENEMY, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	draw_offset = { 32, 38 };
-	coll->SetObjOffset({ -.25f, -.25f });
+	draw_offset = { 70, 35 };
 	timer.Start();
 }
 
