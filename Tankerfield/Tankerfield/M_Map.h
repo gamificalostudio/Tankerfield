@@ -88,7 +88,7 @@ struct TileSet
 		}
 	}
 
-	SDL_Rect GetTileRect(int id) const;
+	inline SDL_Rect GetTileRect(int id) const;
 
 	std::string			name;
 	int					firstgid = NULL;
@@ -216,6 +216,8 @@ public:
 	iPoint MapToScreenI(int column, int row) const;
 
 	fPoint MapToScreenF(const fPoint & map_pos);
+
+	fPoint MapToCamera(const fPoint map_pos, const Camera* camera);
 
 	iPoint ScreenToMapI(int x, int y) const;
 

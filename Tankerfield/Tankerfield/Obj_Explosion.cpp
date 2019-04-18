@@ -15,7 +15,6 @@
 #include "Obj_Explosion.h"
 #include "Animation.h"
 #include "M_AnimationBank.h"
-
 Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
 	pugi::xml_node explosion_node = app->config.child("object").child("explosion");

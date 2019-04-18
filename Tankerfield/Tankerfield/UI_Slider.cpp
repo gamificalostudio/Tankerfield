@@ -23,9 +23,9 @@ UI_Slider::UI_Slider(const fPoint position, const UI_SliderDef definition, UI_Li
 
 UI_Slider::~UI_Slider()
 {
-	if (thumb != nullptr)
+	if (app->on_clean_up == false && thumb != nullptr)
 	{
-		app->ui->DeleteObject(thumb);
+		thumb->Destroy();
 		thumb = nullptr;
 	}
 }

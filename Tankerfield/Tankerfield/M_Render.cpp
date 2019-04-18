@@ -252,7 +252,7 @@ iPoint M_Render::ScreenToWorld(int x, int y, const Camera* camera) const
 }
 
 
-bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const Camera* current_camera, const SDL_Rect* section) const
+void M_Render::Blit( SDL_Texture* texture,  const int screen_x, const int screen_y, Camera* current_camera, const SDL_Rect* section) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -286,16 +286,18 @@ bool M_Render::Blit(SDL_Texture* texture, int screen_x, int screen_y, const Came
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
-	return ret;
 }
 
-void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section) const
+void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section,  Camera* camera, const int alpha) const
 {
-	uint scale = app->win->GetScale();
-
 	SDL_Rect rect;
-	rect.x = screen_x * scale;
-	rect.y = screen_y * scale;
+	rect.x = screen_x ;
+	rect.y = screen_y ;
+
+	if (camera != nullptr)
+	{
+		SDL_RenderSetClipRect(renderer, &camera->viewport);
+	}
 
 	if (section != NULL)
 	{
@@ -307,13 +309,23 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w *= scale;
-	rect.h *= scale;
+	if (alpha != -1)
+	{
+		SDL_SetTextureAlphaMod(texture, alpha);
+	}
 
 	if (SDL_RenderCopy(renderer, texture, section, &rect) != 0)
 	{
 		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 	}
+
+	SDL_RenderSetClipRect(renderer, nullptr);
+
+	if (alpha != -1)
+	{
+		SDL_SetTextureAlphaMod(texture, 255);
+	}
+
 }
 
 bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const

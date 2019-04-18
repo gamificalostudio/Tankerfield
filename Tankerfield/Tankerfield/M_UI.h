@@ -19,26 +19,30 @@ typedef string String;
 enum class ELEMENT_STATE;
 class UI_Element;
 class Player_GUI;
+class Camera;
 
 class UI_Listener;
 class UI_Image;
+class UI_Bar;
 class UI_Button;
 class UI_Slider;
 class UI_Label;
 class UI_Checkbox;
 class UI_TextPanel;
 class UI_InGameElement;
-class UI_Bar;
+class UI_IG_Weapon;
+class UI_IG_Item;
+class UI_IG_Helper;
 
 struct UI_ElementDef;
 struct UI_ButtonDef;
+struct UI_BarDef;
 struct UI_LabelDef;
 struct UI_ImageDef;
 struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
 struct UI_InGameElementDef;
-struct UI_BarDef;
 
 enum class ClickState
 {
@@ -72,6 +76,20 @@ class M_UI : public Module
 {
 public:
 
+	enum class GAMEPAD_BUTTON: int
+	{
+		NONE = -1,
+		A,
+		B,
+		Y,
+		X,
+		LT,
+		LB,
+		RT,
+		RB,
+		MAX
+	};
+
 	M_UI();
 
 	virtual ~M_UI();
@@ -94,9 +112,9 @@ public:
 
 	// Creation functions ---------------------------------------------------------
 
-	UI_Element	 * CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
+	UI_Element	 * CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
 
-	UI_Label	 * CreateLabel(const fPoint position, const String text, UI_LabelDef definition, UI_Listener* listener = nullptr);
+	UI_Label	 * CreateLabel(const fPoint position, const  UI_LabelDef definition, UI_Listener* listener = nullptr);
 
 	UI_Image	 * CreateImage(const fPoint position, const UI_ImageDef definition, UI_Listener* listener = nullptr);
 
@@ -110,15 +128,19 @@ public:
 
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
 
-	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener = nullptr);
+	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition);
+
+	UI_IG_Weapon*   CreateInGameWeapon(const fPoint position, const UI_InGameElementDef definition);
+
+	UI_IG_Item*   CreateInGameItem(const fPoint position, const UI_InGameElementDef definition);
+
+	UI_IG_Helper*  CreateInGameHelper(const fPoint position, const UI_InGameElementDef definition);
 
 	// Object functions ----------------------------------------------------------
 
 	UI_Element*  GetClickedObject();
 
 	UI_Element* GetScreen();
-
-	bool DeleteObject(UI_Element* object);
 
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
@@ -138,25 +160,61 @@ private:
 
 	SDL_Texture* atlas = nullptr;
 
-	// Objects ---------------------------------------------
+	// Elements ---------------------------------------------
 
-	list<UI_Element*> objects_list;
+	list<UI_Element*> elements_list;
 
-	UI_Element* main_object = nullptr;
+	list<UI_Element*> ig_elements_list;
 
-	UI_Element* selected_object = nullptr;
+	list<Player_GUI*> players_guis;
+
+	UI_Element* main_ui_element = nullptr;
+
+	UI_Element* main_in_game_element = nullptr;
+
+	UI_Element* selected_element = nullptr;
 
 	ClickState click_state = ClickState::NONE;
 
+	// HUD General -------------------------------------------
+
+	UI_Image* round_element = nullptr;
+
+	UI_Image* round_fx = nullptr;
+
+	UI_Image* left_tank_life = nullptr;
+
+	UI_Image* right_tank_life = nullptr;
+
+	float ax = 0.0f;
+	float ratetime = 1.f / 2.f;
+	float target_value = 255.f;
+	float init_value = 0.f;
+
 public:
 	// Mouse ----------------------------------------------
+
 	Player_GUI* hud_player[4] = { nullptr, nullptr, nullptr, nullptr};
+
+
+	Player_GUI* current_gui = nullptr;
+
+
+	Camera*     current_camera = nullptr;
+
 
 	fPoint		mouse_position;
 
 	fPoint		mouse_offset;
 
+	// Assets --------------------------------------------
+	SDL_Rect button_sprite[(int)GAMEPAD_BUTTON::MAX];
+
+	_TTF_Font*  font_open_sants_bold_12 = nullptr;
+
 	Animation	arrow_anim;
+
 };
+
 
 #endif // __MODULE_UI_H__

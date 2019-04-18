@@ -17,6 +17,8 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Healing_Bullet.h"
+#include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
 
@@ -116,10 +118,12 @@ bool Obj_Tank::Start()
 
 	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
+	basic_shot_function[(uint)WEAPON::HEALING_SHOT]		= &Obj_Tank::ShootHealingShot;
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
+	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -127,6 +131,7 @@ bool Obj_Tank::Start()
 
 	cannon_height = 11.f;
 	cannon_length = 1.f;
+
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -141,11 +146,10 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	life =  100;
-	max_life = 200;
+	life = 90;
+	max_life = 100;
 
 	//Life inicialistation
-
 	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
@@ -335,6 +339,15 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
+	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
+	{
+		Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+		new_particle->tank = this;
+		if (GetLife()<GetMaxLife())
+		{
+			SetLife(GetLife() + weapon_info.bullet_healing);
+		}
+	}
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
@@ -343,17 +356,16 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			SetPickUp(pick_up);
 		}
-  }
-	else if (c1->GetTag() == Collider::TAG::WALL)
-	{
-		app->scene->tank_1->life - 1;
-
 	}
 }
 
 void Obj_Tank::SetLife(int life)
 {
 	//TODO: Update UI bars
+	if (this->life > GetMaxLife())
+	{
+		this->life = GetMaxLife();
+	}
 	this->life = life;
 }
 
@@ -696,6 +708,18 @@ void Obj_Tank::ShootDoubleMissile()
 		turr_angle);
 
 	right_missile->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		turr_angle);
+}
+
+void Obj_Tank::ShootHealingShot()
+{
+	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
+
+	heal_bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,

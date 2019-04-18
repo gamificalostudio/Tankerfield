@@ -7,6 +7,8 @@
 
 struct UI_ImageDef : public UI_ElementDef
 {
+	UI_ImageDef( ){}
+	UI_ImageDef(const SDL_Rect sprite_section): UI_ElementDef(sprite_section){}
 	bool is_animated = false;
 	Animation* image_animation = nullptr;
 };
