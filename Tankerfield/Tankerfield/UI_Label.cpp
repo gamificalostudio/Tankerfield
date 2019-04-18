@@ -37,11 +37,16 @@ bool UI_Label::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
 
-	app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y , &sprite_section);
-
-	return false;
+	if (alpha != 255)
+	{
+		app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+	}
+	else
+	{
+		app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
+	}
+	return true;
 }
-
 
 
 
