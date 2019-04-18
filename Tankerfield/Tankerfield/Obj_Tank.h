@@ -11,6 +11,7 @@ struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
 
+
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
@@ -47,17 +48,18 @@ public:
 	int GetLife();
 	int GetMaxLife();
 
+public:
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 
 private:
 	//- Movement
 	void Movement(float dt);
-	void InputMovementKeyboard(fPoint & input,float dt);
+	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
 
 	//- Shooting
-	void Shoot();
+	void Shoot(float dt);
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
@@ -70,6 +72,7 @@ private:
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
+	void ShootHealingShot();
 
 	//- TankDeath
 	void ReviveTank();
@@ -84,6 +87,7 @@ private:
 	int max_life							= 0;
 	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
+
 	static int number_of_tanks;
 
 	//- Movement
@@ -99,6 +103,7 @@ private:
 	fPoint shot_dir							= { 0.f, 0.f };
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
+	float shot_angle_lerp_factor = 0.f;
 
 	//-- Shoot
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
@@ -127,8 +132,8 @@ private:
 	SDL_Scancode kb_right					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
-	Joystick gamepad_move					= Joystick::INVALID;
-	Joystick gamepad_aim					= Joystick::INVALID;
+	Joystick gamepad_move							= Joystick::INVALID;
+	Joystick gamepad_aim							= Joystick::INVALID;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;

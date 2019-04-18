@@ -74,7 +74,7 @@ struct TileSet
 			app->tex->UnLoad(texture);
 	}
 
-	SDL_Rect GetTileRect(int id) const;
+	inline SDL_Rect GetTileRect(int id) const;
 
 	std::string			name;
 	int					firstgid = NULL;
