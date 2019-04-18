@@ -12,6 +12,26 @@ RewardZone::~RewardZone()
 
 }
 
+fPoint RewardZone::GetPos() const
+{
+	return this->position;
+}
+
+uint RewardZone::GetSize() const
+{
+	return this->size;
+}
+
+void RewardZone::SetPos(const fPoint& pos)
+{
+	this->position = pos;
+}
+
+void RewardZone::SetSize(const uint& size)
+{
+	this->size = size;
+}
+
 
 /* Module RewardZoneManager */
 
@@ -33,7 +53,6 @@ bool M_RewardZoneManager::Awake(pugi::xml_node& config)
 bool M_RewardZoneManager::Start()
 {
 	return true;
-
 }
 
 bool M_RewardZoneManager::PreUpdate()
@@ -62,7 +81,11 @@ bool M_RewardZoneManager::CleanUp()
 
 RewardZone* M_RewardZoneManager::CreateRewardZone(iPoint map_center_pos, uint size)
 {
-	RewardZone* test = nullptr;
+	RewardZone* temp_rz = nullptr;
+	temp_rz 
+
+	reward_zones.push_back(temp_rz);
+
 	return test;
 }
 

@@ -12,8 +12,17 @@ public:
 	RewardZone();
 	~RewardZone();
 
-private:
+public:
+	fPoint GetPos() const;
+	uint GetSize() const;
 
+	void SetPos(const fPoint& pos);
+	void SetSize(const uint& size);
+
+private:
+	// Position in tile units
+	fPoint position = { 0, 0 };
+	uint size = 0u;
 };
 
 class M_RewardZoneManager : public Module
