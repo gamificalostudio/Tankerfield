@@ -118,6 +118,7 @@ public:
 	bool				  is_interactive = false;
 	bool                  is_in_game = false;
 	float                 offset = 0.f;
+	float                 alpha = 255.f;
 
 protected:
 

@@ -176,6 +176,21 @@ private:
 
 	ClickState click_state = ClickState::NONE;
 
+	// HUD General -------------------------------------------
+
+	UI_Image* round_element = nullptr;
+
+	UI_Image* round_fx = nullptr;
+
+	UI_Image* left_tank_life = nullptr;
+
+	UI_Image* right_tank_life = nullptr;
+
+	float ax = 0.0f;
+	float ratetime = 1.f / 2.f;
+	float target_value = 255.f;
+	float init_value = 0.f;
+
 public:
 	// Mouse ----------------------------------------------
 

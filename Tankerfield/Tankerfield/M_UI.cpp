@@ -79,35 +79,36 @@ bool M_UI::Start()
 	player_4_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
 	players_guis.push_back(player_4_gui);
 
-	UI_InGameElementDef def;
-	def.pointed_obj = app->scene->tank_1;
-	UI_IG_Helper* helper = CreateInGameHelper({ 1.f, 1.f }, def);
+	//UI_InGameElementDef def;
+	//def.pointed_obj = app->scene->tank_1;
+	//UI_IG_Helper* helper = CreateInGameHelper({ 1.f, 1.f }, def);
 
-	helper->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::A, { 0.F, 20.F}));
+	//helper->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::A, { 0.F, 20.F}));
 
-	player_1_gui->AddTextHelper(Text_Helper("Press"));
-	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::B));
-	player_1_gui->AddTextHelper(Text_Helper("to pay respects"));
-	player_1_gui->SetHelper();
+	//player_1_gui->AddTextHelper(Text_Helper("Press"));
+	//player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::B));
+	//player_1_gui->AddTextHelper(Text_Helper("to pay respects"));
+	//player_1_gui->SetHelper();
 
 	UI_ImageDef image_def;
 	fRect full_screen = app->win->GetWindowRect();
 
 	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170 , 10, 105, 105 };
-	UI_Image* round_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	round_element    ->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	round_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
 	image_def.sprite_section = { 120, 515, 179, 179 };
-	UI_Image* round_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	round_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	round_fx->alpha = 0;
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
-	UI_Image* left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
+	left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
 	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 
 	image_def.sprite_section = { 60, 160, 50, 530 };
-	UI_Image* right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
+	right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
 	
 	return true;
@@ -144,7 +145,7 @@ bool M_UI::CleanUp()
 // Update all guis
 bool M_UI::PreUpdate()
 {
-	BROFILER_CATEGORY("M_UIPreupdate", Profiler::Color::Brown)
+	BROFILER_CATEGORY("M_UI_Preupdate", Profiler::Color::Brown);
 
 	int x_mouse = 0, y_mouse = 0;
 	app->input->GetMousePosition(x_mouse, y_mouse);
@@ -210,7 +211,6 @@ bool M_UI::PreUpdate()
 
 	{
 		click_state = ClickState::NONE;
-
 		selected_element = nullptr;
 	}
 
@@ -220,7 +220,19 @@ bool M_UI::PreUpdate()
 
 bool M_UI::Update(float dt)
 {
-	BROFILER_CATEGORY("M_UIUpdate", Profiler::Color::Brown);
+	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
+
+
+	ax += dt * ratetime;
+	
+	if (round_fx->alpha == target_value)
+	{
+		swap(init_value, target_value);
+		ax = 0.f;
+	}
+
+	round_fx->alpha = lerp(init_value, target_value, ax);
+
 
 	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
 	{
@@ -355,6 +367,8 @@ bool M_UI::Update(float dt)
 // Called after all Updates
 bool M_UI::PostUpdate(float dt)
 {
+	BROFILER_CATEGORY("M_UI_PostUpdate", Profiler::Color::Brown);
+
 	fRect full_screen = app->win->GetWindowRect();
 
 	//Split Lines ==========================================================================================================
@@ -378,7 +392,7 @@ bool M_UI::PostUpdate(float dt)
 
 		DrawUI(main_in_game_element);
 
-		app->render->DrawQuad(current_gui->viewport_with_margin, 255, 255, 255, 255, false, false);
+		/*app->render->DrawQuad(current_gui->viewport_with_margin, 255, 255, 255, 255, false, false);*/
 	}
 
 	current_camera = nullptr;
