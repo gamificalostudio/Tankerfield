@@ -142,6 +142,9 @@
     <ClCompile Include="M_AnimationBank.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Item_HappyHour.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -305,6 +308,9 @@
     </ClInclude>
     <ClInclude Include="M_AnimationBank.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_HappyHour.h">
+      <Filter>Objects\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -86,7 +86,7 @@ WEAPON Obj_PickUp::RandomWeapon() const
 ObjectType Obj_PickUp::RandomItem() const
 {
 	ObjectType type;
-	return type = (ObjectType)(rand() % 1 /*number of items*/);
+	return type = (ObjectType)(rand() % 2 /*number of items*/);
 }
 
 void Obj_PickUp::DeletePickUp()
