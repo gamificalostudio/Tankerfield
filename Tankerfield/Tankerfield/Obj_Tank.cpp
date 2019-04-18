@@ -22,6 +22,8 @@
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
 #include "Player_GUI.h"
+#include "UI_InGameElement.h"
+#include "M_UI.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -172,6 +174,11 @@ bool Obj_Tank::Start()
 			break;
 		}
 	}
+
+	UI_InGameElementDef clue_def;
+	clue_def.pointed_obj = this;
+	UI_IG_Helper * move_clue = app->ui->CreateInGameHelper(pos_map, clue_def);
+	move_clue->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
 
 	return true;
 }
