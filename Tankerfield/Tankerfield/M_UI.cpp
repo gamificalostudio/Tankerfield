@@ -40,6 +40,15 @@ M_UI::~M_UI()
 		delete main_object;
 		main_object = nullptr;
 	}
+
+	for (uint i = 0; i < 4; ++i)
+	{
+		if (hud_player[i] != nullptr)
+		{
+			delete hud_player[i];
+			hud_player[i] = nullptr;
+		}
+	}
 }
 
 // Called before render is available
@@ -63,14 +72,14 @@ bool M_UI::Start()
 
 
 	// HUD ===========================================
-	hud_player_1 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
-	hud_player_2 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
-	hud_player_3 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
-	hud_player_4 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	hud_player[0] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	hud_player[1] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	hud_player[2] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	hud_player[3] = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
 
 	UI_InGameElementDef test_def;
 	test_def.object = (Object*)app->scene->tank_2;
-	test_def.player_gui = hud_player_1;
+	test_def.player_gui = hud_player[0];
 
 	app->ui->CreateInGameElement({0.f, 0.f}, test_def);
 

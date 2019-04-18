@@ -229,7 +229,7 @@ bool M_Map::Unload()
 		if ((*iter != nullptr))
 		{
 			delete (*iter);
-
+			(*iter) = nullptr;
 		}
 	}
 	data.tilesets.clear();
@@ -239,7 +239,7 @@ bool M_Map::Unload()
 		if ((*iter != nullptr))
 		{
 			delete (*iter);
-
+			(*iter) = nullptr;
 		}
 	}
 	data.map_layers.clear();
@@ -249,6 +249,7 @@ bool M_Map::Unload()
 		if ((*iter) != nullptr)
 		{
 			delete (*iter);
+			(*iter) = nullptr;
 		}
 	}
 	data.object_layers.clear();
@@ -260,6 +261,7 @@ bool M_Map::Unload()
 			if ((*iter != nullptr))
 			{
 				(*iter)->Destroy();
+				(*iter) = nullptr;
 			}
 		}
 	}
@@ -804,13 +806,14 @@ void Properties::LoadProperties(pugi::xml_node propertie_node)
 
 void Properties::UnloadProperties()
 {
-	std::list<Property*>::iterator item = list.begin();
-
-	while (item != list.end())
+	for (std::list<Property*>::iterator item = list.begin(); item != list.end(); ++item)
 	{
-		RELEASE(*item);
-		(*item) = nullptr;
-		++item;
+		if ((*item) != nullptr)
+		{
+			delete(*item);
+			(*item) = nullptr;
+		}
+		
 	}
 
 	list.clear();

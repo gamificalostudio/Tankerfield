@@ -65,7 +65,7 @@ private:
 	bool test_path = true;
 
 	iPoint path_tex_offset = { -30, 0 };
-
+	uint initial_num_enemies = 0;
 private:
 	/* Wave System */
 	// In milliseconds
@@ -73,7 +73,7 @@ private:
 	bool perform_objects_check = false;
 
 	int time_between_rounds = 0;
-	int initial_generated_units = 0;
+	int generated_units = 0;
 	int distance_range = 0;
 	int min_distance_from_center = 0;
 	int check_complete_round = 0;

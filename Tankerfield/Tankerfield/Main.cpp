@@ -115,7 +115,7 @@ int main(int argc, char* args[])
 		}
 	}
 
-	LOG("Exit: Application");
+	LOG("Exit: Application \n");
 	_CrtDumpMemoryLeaks();
 	return result;
 }

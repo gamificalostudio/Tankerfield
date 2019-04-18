@@ -150,13 +150,7 @@ private:
 
 public:
 	// Mouse ----------------------------------------------
-	Player_GUI  *hud_player_1 = nullptr;
-
-	Player_GUI  *hud_player_2 = nullptr;
-
-	Player_GUI  *hud_player_3 = nullptr;
-
-	Player_GUI  *hud_player_4 = nullptr;
+	Player_GUI* hud_player[4] = { nullptr, nullptr, nullptr, nullptr};
 
 	fPoint		mouse_position;
 

@@ -37,18 +37,20 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
-	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
+	initial_num_enemies = config.child("initial_generated_units").attribute("value").as_int();
 	distance_range = config.child("distance_range").attribute("value").as_int();
 	min_distance_from_center = config.child("min_distance_from_center").attribute("value").as_int();
 	check_complete_round = config.child("check_complete_round").attribute("value").as_int();
 	enemies_to_increase = config.child("enemies_to_increase").attribute("value").as_int();
 
+	srand(time(NULL));
 	return ret;
 }
 
 // Called before the first frame
 bool M_Scene::Start()
 {
+	generated_units = initial_num_enemies;
 	path_tex = app->tex->Load("maps/path.png");
 
 	// Load the first level of the list on first game start -------------------------
@@ -68,7 +70,6 @@ bool M_Scene::Start()
 
 
 	/* Generate first wave units */
-	srand(time(NULL));
 	CreateEnemyWave();
 
 	return true;
@@ -141,7 +142,7 @@ bool M_Scene::Update(float dt)
 		if (app->objectmanager->GetObjects().size() == 5) // TOFIX: Here we are checking objects of type static I think too...
 		{
 			/* Generate new wave and increase units number */
-			initial_generated_units += enemies_to_increase;
+			generated_units += enemies_to_increase;
 			CreateEnemyWave();
 		}
 
@@ -172,12 +173,7 @@ bool M_Scene::CleanUp()
 	app->map->Unload();
 	app->collision->CleanUp();
 	app->objectmanager->DeleteObjects();
-
-	if (path_tex != nullptr)
-		app->tex->UnLoad(path_tex);
-
 	app->pathfinding->CleanUp();
-
 
 	return true;
 }
@@ -259,7 +255,7 @@ void M_Scene::DebugPathfinding()
 
 void M_Scene::CreateEnemyWave()
 {
-	for (int i = 0; i < initial_generated_units; i++)
+	for (int i = 0; i < generated_units; i++)
 	{
 		//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
 		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,

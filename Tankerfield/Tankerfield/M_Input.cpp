@@ -31,6 +31,14 @@ M_Input::~M_Input()
 		delete[] keyboard;
 		keyboard = nullptr;
 	}
+	for (std::vector<Controller*>::iterator controll = controllers.begin(); controll != controllers.end(); ++controll)
+	{
+		if ((*controll) != nullptr)
+		{
+			delete (*controll);
+			(*controll) = nullptr;
+		}
+	}
 }
 
 // Called before render is available

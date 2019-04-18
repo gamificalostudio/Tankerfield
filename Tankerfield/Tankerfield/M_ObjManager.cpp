@@ -198,6 +198,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Obj_TeslaTrooper(pos);
 		ret->type = ObjectType::TESLA_TROOPER;
 		break;
+
 	case ObjectType::TANK:
 		ret = DBG_NEW Obj_Tank(pos);
 		ret->type = ObjectType::TANK;
@@ -211,10 +212,12 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Bullet_Missile(pos);
 		ret->type = ObjectType::BULLET_MISSILE;
 		break;
+
 	case ObjectType::STATIC:
 		ret = DBG_NEW Obj_Static(pos);
 		ret->type = ObjectType::STATIC;
 		break;
+
 	case ObjectType::REWARD_ZONE:
 		ret = DBG_NEW Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;

@@ -87,7 +87,7 @@ public:
 	M_Input();
 
 	// Destructor
-	virtual ~M_Input();
+	~M_Input();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&) override;
