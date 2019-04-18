@@ -31,7 +31,12 @@ Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 
 Obj_Tank::~Obj_Tank()
 {
-	//number_of_tanks--;
+	number_of_tanks--;
+	if (camera_player != nullptr)
+	{
+		camera_player->assigned = false;
+		camera_player->number_player = 0;
+	}
 }
 
 bool Obj_Tank::Start()
@@ -122,11 +127,10 @@ bool Obj_Tank::Start()
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ -.4f, -.4f });
+	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
-	cannon_length = 1.f;
-
+	cannon_length = 0.75f;
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -138,6 +142,7 @@ bool Obj_Tank::Start()
 	draw_offset.y = 46;
 
 	base_angle_lerp_factor = 11.25f;
+	shot_angle_lerp_factor = 11.25f;
 
 	shot_timer.Start();
 
@@ -148,7 +153,7 @@ bool Obj_Tank::Start()
 	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		if (!(*item_cam)->assigned)
 		{
@@ -168,12 +173,18 @@ bool Obj_Tank::PreUpdate()
 		controller = app->input->GetAbleController();
 	}
 	SelectInputMethod();
+
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		show_crosshairs = !show_crosshairs;
+	}
+
 	return true;
 }
 
 bool Obj_Tank::Update(float dt)
 {
-	Shoot();
+	Shoot(dt);
 	Item();
 	Movement(dt);
 	StopTank();
@@ -185,6 +196,9 @@ bool Obj_Tank::Update(float dt)
 
 void Obj_Tank::CameraMovement(float dt)
 {
+	if (camera_player == nullptr)
+		return;
+
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	fPoint target_pos =
 	{
@@ -201,7 +215,7 @@ void Obj_Tank::Movement(float dt)
 	fPoint input_dir(0.f, 0.f);
 	if (move_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputMovementKeyboard(input_dir,dt);
+		InputMovementKeyboard(input_dir);
 	}
 	else if (move_input == INPUT_METHOD::CONTROLLER)
 	{
@@ -225,14 +239,13 @@ void Obj_Tank::Movement(float dt)
 			target_angle += 360.f;
 		}
 		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
+
+		velocity = iso_dir * speed * dt;
+		pos_map += velocity;
 	}
-
-	velocity = iso_dir * speed * dt;                                                               
-	pos_map += velocity;
-
 }
 
-void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
+void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
@@ -273,6 +286,18 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&curr_anim->GetFrame(angle));
 
+	if (show_crosshairs && camera == camera_player)
+	{
+		float line_length = 5.f;
+		//1-- Set a position in the isometric space
+		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
+		//2-- Transform that poin to screen coordinates
+		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+		app->render->DrawLineSplitScreen(
+			pos_screen.x, pos_screen.y - cannon_height,
+			input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
+	}
+
 	// Turret =======================================
 	app->render->Blit(
 		turr_tex,
@@ -281,21 +306,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
 
-	//DEBUG
-	//	iPoint debug_mouse_pos = { 0, 0 };
-//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
-
-//	debug_mouse_pos.x += camera_player->rect.x;
-//	debug_mouse_pos.y += camera_player->rect.y;
-
-//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-
-	//  std::vector<Camera*>::iterator item_cam;
-//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-//	{
-	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
-//	}
 
 	return true;
 }
@@ -391,24 +401,22 @@ int Obj_Tank::GetTimeBetweenBullets()
 	return weapon_info.time_between_bullets;
 }
 
-void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
+void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, fPoint & iso_dir)
 {
-	iPoint mouse_pos = { 0, 0 };
-	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	iPoint mouse_screen_pos = { 0, 0 };
+	app->input->GetMousePosition(mouse_screen_pos.x, mouse_screen_pos.y);
 
+	
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_pos.x += camera_player->rect.x;
-	mouse_pos.y += camera_player->rect.y;
 
-	int tile_width = 100, tile_height = 50;
-  
-	fPoint screen_pos = app->map->MapToScreenF(turr_pos);
-	input_dir = (fPoint)mouse_pos - screen_pos;
+	if (camera_player != nullptr)
+		mouse_screen_pos += {camera_player->rect.x, camera_player->rect.y};
+
+
+	input_dir = (fPoint)mouse_screen_pos - app->map->MapToScreenF(turr_map_pos);
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x,mouse_pos.y);
-
-	iso_dir = map_mouse_pos - turr_pos;
+	iso_dir = app->map->ScreenToMapF(mouse_screen_pos.x, mouse_screen_pos.y) - turr_map_pos;
 	iso_dir.Normalize();
 }
 
@@ -423,14 +431,13 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 	}
 }
 
-void Obj_Tank::Shoot()
+void Obj_Tank::Shoot(float dt)
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
 	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
-
-	fPoint input_dir(0.f, 0.f);
-	fPoint iso_dir;
+	fPoint iso_dir (0.f, 0.f);
+	fPoint input_dir (0.f, 0.f);
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputShotMouse(turr_pos, input_dir, iso_dir);
@@ -442,9 +449,21 @@ void Obj_Tank::Shoot()
 
 	if (!input_dir.IsZero())
 	{
-		turr_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
+		//Angle
+		turr_target_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
+		//- Calculate how many turns has the base angle and apply them to the target angle
+		float turns = floor(turr_angle / 360.f);
+		turr_target_angle += 360.f * turns;
+		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
+		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
+		{
+			turr_target_angle += 360.f;
+		}
+
+		//Direction
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
+	turr_angle = lerp(turr_angle, turr_target_angle, shot_angle_lerp_factor * dt);
 
 	if (PressShot())
 	{
@@ -456,14 +475,12 @@ void Obj_Tank::Shoot()
 		//- Basic shot
 		if (charged_timer.ReadMs() < charge_time) 
 		{
-			LOG("basic shot");
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
 		}
 		//- Charged shot
 		else
 		{
-			LOG("charged shot");
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
 		}
@@ -540,7 +557,7 @@ void Obj_Tank::ShootBasic()
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
 void Obj_Tank::ShootFlameThrower()
@@ -701,19 +718,21 @@ void Obj_Tank::ShootDoubleMissile()
 	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length + double_missiles_offset * missiles_offset);
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
 
+	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
+
 	left_missile->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		bullet_angle);
 
 	right_missile->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		bullet_angle);
 }
 
 void Obj_Tank::ShootHealingShot()
@@ -725,7 +744,7 @@ void Obj_Tank::ShootHealingShot()
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
 void Obj_Tank::Item()

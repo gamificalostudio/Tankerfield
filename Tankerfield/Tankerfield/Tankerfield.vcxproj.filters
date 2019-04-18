@@ -145,6 +145,7 @@
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
+    <ClCompile Include="M_RewardZoneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -312,6 +313,7 @@
     <ClInclude Include="Item_HappyHour.h">
       <Filter>Objects\Items</Filter>
     </ClInclude>
+    <ClInclude Include="M_RewardZoneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
