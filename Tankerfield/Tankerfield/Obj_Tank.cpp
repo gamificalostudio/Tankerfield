@@ -168,6 +168,12 @@ bool Obj_Tank::PreUpdate()
 		controller = app->input->GetAbleController();
 	}
 	SelectInputMethod();
+
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		show_crosshairs = !show_crosshairs;
+	}
+
 	return true;
 }
 
@@ -272,18 +278,17 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&curr_anim->GetFrame(angle));
 
-	//CROSSHAIRS
-	//if (camera == camera_player)
-	//{
-	//	float line_length = 5.f;
-	//	//1-- Set a position in the isometric space
-	//	fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
-	//	//2-- Transform that poin to screen coordinates
-	//	iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
-	//	app->render->DrawLineSplitScreen(
-	//		pos_screen.x, pos_screen.y - cannon_height,
-	//		input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
-	//}
+	if (show_crosshairs && camera == camera_player)
+	{
+		float line_length = 5.f;
+		//1-- Set a position in the isometric space
+		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
+		//2-- Transform that poin to screen coordinates
+		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+		app->render->DrawLineSplitScreen(
+			pos_screen.x, pos_screen.y - cannon_height,
+			input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
+	}
 
 	// Turret =======================================
 	app->render->Blit(
@@ -423,20 +428,20 @@ void Obj_Tank::Shoot(float dt)
 	if (!input_dir.IsZero())
 	{
 		//Angle
-		float target_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
+		turr_target_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
 		//- Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(turr_angle / 360.f);
-		target_angle += 360.f * turns;
+		turr_target_angle += 360.f * turns;
 		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - turr_angle) < abs(target_angle - turr_angle))
+		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
 		{
-			target_angle += 360.f;
+			turr_target_angle += 360.f;
 		}
-		turr_angle = lerp(turr_angle, target_angle, shot_angle_lerp_factor * dt);
 
 		//Direction
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
+	turr_angle = lerp(turr_angle, turr_target_angle, shot_angle_lerp_factor * dt);
 
 	if (PressShot())
 	{

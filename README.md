@@ -47,6 +47,13 @@ https://github.com/AitorVelez
 - X button : Interact
 
 # Debug functionality:
+- F1: Show / hide grid
+- F2: Activate / deactivate splitscreen
+- F3: Show / hide sprite sorting rects and pivots
+- F4: Show / hide tank crosshairs
+- F8: 
+- F9: 
+
 
 ## Keyboard controls:
 - Move mouse: Aim
