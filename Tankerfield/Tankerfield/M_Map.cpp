@@ -245,6 +245,34 @@ bool M_Map::Unload()
 	}
 	data.map_layers.clear();
 
+	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_box.begin(); iter != data.spawners_position_reward_box.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+		}
+	}
+	data.spawners_position_reward_box.clear();
+
+	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_zone.begin(); iter != data.spawners_position_reward_zone.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+		}
+	}
+	data.spawners_position_reward_zone.clear();
+
+	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_enemy.begin(); iter != data.spawners_position_enemy.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+		}
+	}
+	data.spawners_position_enemy.clear();
+
+
 	for (std::list<ObjectGroup*>::iterator iter = data.object_layers.begin(); iter != data.object_layers.end(); ++iter)
 	{
 		if ((*iter) != nullptr)
@@ -254,6 +282,7 @@ bool M_Map::Unload()
 		}
 	}
 	data.object_layers.clear();
+
 
 	if (app->on_clean_up == false)
 	{
@@ -398,7 +427,30 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			obj_node.attribute("y").as_int(0),
 			obj_node.attribute("width").as_int(0),
 			obj_node.attribute("height").as_int(0));
+
 		
+		
+		if (object_group->name == "SpawnPoints")
+		{
+			
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y / data.tile_height) };
+			SpawnPoint* ret = new SpawnPoint;
+			ret->pos = pos;
+			std::string type = obj_node.attribute("type").as_string("");
+			if (type == "REWARD_BOX")
+			{
+				data.spawners_position_reward_box.push_back(ret);
+			}
+			else if (type == "REWARD_ZONE")
+			{
+				data.spawners_position_reward_zone.push_back(ret);
+			}
+			else if (type == "ENEMY")
+			{
+				data.spawners_position_enemy.push_back(ret);
+			}
+		}
 		++i;
 	}
 	
@@ -412,6 +464,8 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
 		}
 	}
+
+	
 	
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
 

@@ -17,6 +17,13 @@ struct Levels
 	std::string name;
 };
 
+
+struct SpawnPoint
+{
+	fPoint pos;
+	bool occupied = false;
+};
+
 struct Properties
 {
 
@@ -166,7 +173,9 @@ struct MapData
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
 	std::list<ObjectGroup*> object_layers;
-	
+	std::vector<SpawnPoint*>	spawners_position_reward_box;
+	std::vector<SpawnPoint*>	spawners_position_reward_zone;
+	std::vector<SpawnPoint*>	spawners_position_enemy;
 	Properties				map_properties;
 
 	Quadtree_Map*				qt = nullptr;

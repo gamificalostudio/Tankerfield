@@ -68,6 +68,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_D;
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
+		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_red;
 		break;
 	case 1:
@@ -77,6 +78,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_H;
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
+		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_light_blue;
 		break;
 	case 2:
@@ -86,6 +88,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_L;
 		kb_item		= SDL_SCANCODE_U;
 		kb_interact = SDL_SCANCODE_O;
+		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
 		break;
 	case 3:
@@ -95,6 +98,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_KP_6;
 		kb_item		= SDL_SCANCODE_KP_7;
 		kb_interact	= SDL_SCANCODE_KP_9;
+		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_yellow;
 		break;
 	default:
@@ -199,6 +203,7 @@ bool Obj_Tank::Update(float dt)
 	StopTank();
 	ReviveTank();
 	CameraMovement(dt);
+	InputReadyKeyboard();
 
 	return true;
 }
@@ -413,9 +418,12 @@ void Obj_Tank::SetItem(ObjectType type)
 	item = type;
 }
 
-void Obj_Tank::SetWeapon(WEAPON type)
+void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
+
+	weapon_info.level_weapon = level;
 	weapon_info.type = type;
+
 }
 
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
@@ -716,8 +724,26 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	}
 	else
 	{
-		SetWeapon(pick_up->type_of_weapon);
+		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 	}
 
 	pick_up->DeletePickUp();
 }
+
+bool Obj_Tank::IsReady() const
+{
+	return ready;
+}
+
+void Obj_Tank::InputReadyKeyboard()
+{
+	if (app->scene->stat_of_wave == WaveStat::OUT_WAVE && app->input->GetKey(kb_ready) == KEY_DOWN)
+	{
+		ready = !ready;
+	}
+	else if (app->scene->stat_of_wave != WaveStat::OUT_WAVE)
+	{
+		ready = false;
+	}
+}
+
