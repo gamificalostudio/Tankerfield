@@ -12,6 +12,7 @@ struct SDL_Texture;
 struct Controller;
 class Obj_Tank;
 class RewardZone;
+class Obj_TeslaTrooper;
 
 enum class WaveStat
 {
@@ -35,7 +36,7 @@ public:
 	Obj_Tank * tank_4				= nullptr;
 
 	uint number_current_wave		= 0;
-	uint enemies_dead				= 0u;
+	std::list<Obj_TeslaTrooper*> enemies_in_wave;
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
 	PerfTimer timer_between_waves;

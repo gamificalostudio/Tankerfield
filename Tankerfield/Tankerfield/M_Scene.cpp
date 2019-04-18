@@ -25,6 +25,7 @@
 #include "Obj_Tank.h"
 #include "M_RewardZoneManager.h"
 #include "M_UI.h"
+#include "Obj_TeslaTrooper.h"
 
 
 M_Scene::M_Scene() : Module()
@@ -169,7 +170,23 @@ bool M_Scene::Update(float dt)
 	}
 	case WaveStat::IN_WAVE:
 	{
-		if (enemies_dead == initial_generated_units)
+		/*for (std::list<Obj_TeslaTrooper*>::iterator iterator = enemies_in_wave.begin(); iterator != enemies_in_wave.end();)
+		{
+			
+			if ((*iterator)->to_remove)
+			{
+				enemies_in_wave.erase(iterator);
+			}
+				
+			else
+			{
+				++iterator;
+			}
+			
+			
+		}*/
+		int ret = enemies_in_wave.size();
+		if (ret == 0)
 		{
 			stat_of_wave = WaveStat::EXIT_OF_WAVE;
 		}
@@ -307,9 +324,9 @@ void M_Scene::CreateEnemyWave()
 	{
 		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-			pos);
-		
+		Obj_TeslaTrooper* ret = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+
+		enemies_in_wave.push_back(ret);
 	}
 
 }
@@ -322,7 +339,6 @@ void M_Scene::NewWave()
 	app->pick_manager->CreateRewardBoxWave();
 
 	++number_current_wave;
-	enemies_dead = 0u;
 }
 
 bool M_Scene::AllPlayersReady() const
