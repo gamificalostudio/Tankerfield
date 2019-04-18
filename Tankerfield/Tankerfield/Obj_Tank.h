@@ -55,11 +55,11 @@ public:
 private:
 	//- Movement
 	void Movement(float dt);
-	void InputMovementKeyboard(fPoint & input,float dt);
+	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
 
 	//- Shooting
-	void Shoot();
+	void Shoot(float dt);
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
@@ -103,6 +103,7 @@ private:
 	fPoint shot_dir							= { 0.f, 0.f };
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
+	float shot_angle_lerp_factor = 0.f;
 
 	//-- Shoot
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
