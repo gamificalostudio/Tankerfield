@@ -30,6 +30,7 @@ public:
 		GOD,
 		REWARD_ZONE,
 		PICK_UP,
+		REWARD_BOX,
 		MAX
 	};
 

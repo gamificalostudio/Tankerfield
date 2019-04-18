@@ -54,6 +54,8 @@ bool M_Audio::Start()
 		ret = true;
 	}
 
+	explosion_fx = LoadFx("audio/Fx/explosion.wav");
+
 	return ret;
 }
 
@@ -138,6 +140,7 @@ bool M_Audio::PlayMusic(const char* path, float fade_time)
 	return ret;
 }
 
+
 // Load WAV
 unsigned int M_Audio::LoadFx(const char* path)
 {
@@ -162,9 +165,9 @@ unsigned int M_Audio::LoadFx(const char* path)
 }
 
 // Play WAV
-bool M_Audio::PlayFx(unsigned int id, int repeat)
+int M_Audio::PlayFx(unsigned int id, int repeat)
 {
-	bool ret = false;
+	int ret = -1;
 
 	if (!active)
 		return false;
@@ -172,8 +175,24 @@ bool M_Audio::PlayFx(unsigned int id, int repeat)
 	if (id > 0 && id <= fx.size())
 	{
 		std::list<Mix_Chunk*>::const_iterator item = std::next(fx.begin(), id - 1);
-		Mix_PlayChannel(-1, *item, repeat);
+		ret = Mix_PlayChannel(-1, *item, repeat);
 	}
 
 	return ret;
 }
+
+void M_Audio::PauseMusic(int fade_out)
+{
+	Mix_FadeOutMusic(fade_out);
+}
+
+void M_Audio::PauseFx(unsigned int channel, int fade_out)
+{
+	Mix_FadeOutChannel(channel, fade_out);	
+}
+
+unsigned int M_Audio::GetExplosionFx()
+{
+	return explosion_fx;
+}
+

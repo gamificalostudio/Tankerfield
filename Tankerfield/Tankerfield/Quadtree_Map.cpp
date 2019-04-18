@@ -4,6 +4,22 @@ Quadtree_Map::Quadtree_Map(SDL_Rect area, uint level, uint max_levels, uint maxE
 	Quadtree(area, level, max_levels, maxElements)
 {
 
+}
+Quadtree_Map::~Quadtree_Map()
+{
+	this;
+	for (uint i = 0; i < 4; ++i)
+	{
+		if (nodes[i] != nullptr)
+		{
+			delete nodes[i];
+			nodes[i] = nullptr;
+		}
+	}
+
+	elements.clear();
+
+
 };
 
 int Quadtree_Map::ReturnNumbreOfLevels(int area_with, int camera_with, uint & levels)
@@ -21,13 +37,13 @@ void Quadtree_Map::Subdivide()
 
 	int half_width = area.w*0.5f, half_height = area.h*0.5f;
 
-	nodes[(int)QUADRANT::NORTH_EAST] = new Quadtree_Map({ area.x + half_width , area.y ,half_width,half_height }, level+1, max_levels);
+	nodes[(int)QUADRANT::NORTH_EAST] = DBG_NEW Quadtree_Map({ area.x + half_width , area.y ,half_width,half_height }, level+1, max_levels);
 
-	nodes[(int)QUADRANT::NORTH_WEST] = new Quadtree_Map({ area.x, area.y, half_width, half_height }, level + 1, max_levels);
+	nodes[(int)QUADRANT::NORTH_WEST] = DBG_NEW Quadtree_Map({ area.x, area.y, half_width, half_height }, level + 1, max_levels);
 
-	nodes[(int)QUADRANT::SOUTH_EAST] = new Quadtree_Map({ area.x + half_width, area.y + half_height, half_width, half_height },	level + 1, max_levels);
+	nodes[(int)QUADRANT::SOUTH_EAST] = DBG_NEW Quadtree_Map({ area.x + half_width, area.y + half_height, half_width, half_height },	level + 1, max_levels);
 
-	nodes[(int)QUADRANT::SOUTH_WEST] = new Quadtree_Map({ area.x, area.y + half_height, half_width, half_height }, level + 1, max_levels);
+	nodes[(int)QUADRANT::SOUTH_WEST] = DBG_NEW Quadtree_Map({ area.x, area.y + half_height, half_width, half_height }, level + 1, max_levels);
 }
 void Quadtree_Map::Draw() const
 {

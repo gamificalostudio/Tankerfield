@@ -14,7 +14,7 @@
     <resolution width="1920" height="1080" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
-    <resizable value="false"/>
+    <resizable value="true"/>
     <fullscreen_window value="false"/>
   </window>
 
@@ -61,21 +61,32 @@
   <scene>
     <time_between_rounds value="5000"/>
     <initial_generated_units value="10"/>
-    <distance_range value="5"/>
-    <min_distance_from_center value="2"/>
     <check_complete_round value="2000"/>
     <enemies_to_increase value="3"/>
+
+    <music>
+      <main_music music ="audio/Music/indeep.ogg"/>
+    </music>
+    
+    <sounds>
+      <finish_wave_shot sound ="audio/Fx/Scene/finish_wave_sound.wav"/>
+      <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
+    </sounds>
   </scene>
 
   <pick_manager>
-    <percentage_to_spawn value="100"/>
+    <percentage_spawn_item_from_enemy value="100"/>
+    <percentage_spawn_reward_box value="50"/>
     
   </pick_manager>
   
   <object>
+    <reward_box>
+      <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
+    </reward_box>
     <tesla_trooper>
       <animations>
-        <walk speed="1" rotation="counter-clockwise" first_dir_angle ="-90">
+        <walk speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <!--starts in frame number 8-->
             <frame x= "528" y= "0" w="66" h="76" />
@@ -147,6 +158,80 @@
         </walk>
       </animations>
     </tesla_trooper>
+    <brute>
+      <animations>
+        <walk speed="1" rotation="counter-clockwise" first_dir_angle ="90">
+          <dir>
+            <!--starts in frame number 8-->
+            <frame num="8" x="0" y="96" w="134" h="96" />
+            <frame num="9" x="134" y="96" w="134" h="96" />
+            <frame num="10" x="268" y="96" w="134" h="96" />
+            <frame num="11" x="402" y="96" w="134" h="96" />
+            <frame num="12" x="536" y="96" w="134" h="96" />
+            <frame num="13" x="670" y="96" w="134" h="96" />
+          </dir>
+          <dir>
+            <!--starts in frame number 14-->
+            <frame num="14" x="804" y="96" w="134" h="96" />
+            <frame num="15" x="938" y="96" w="134" h="96" />
+            <frame num="16" x="0" y="192" w="134" h="96" />
+            <frame num="17" x="134" y="192" w="134" h="96" />
+            <frame num="18" x="268" y="192" w="134" h="96" />
+            <frame num="19" x="402" y="192" w="134" h="96" />
+          </dir>
+          <dir>
+            <!--starts in frame number 20-->
+            <frame num="20" x="536" y="192" w="134" h="96" />
+            <frame num="21" x="670" y="192" w="134" h="96" />
+            <frame num="22" x="804" y="192" w="134" h="96" />
+            <frame num="23" x="938" y="192" w="134" h="96" />
+            <frame num="24" x="0" y="288" w="134" h="96" />
+            <frame num="25" x="134" y="288" w="134" h="96" />
+          </dir>
+          <dir>
+            <!--starts in frame number 26-->
+            <frame num="26" x="268" y="288" w="134" h="96" />
+            <frame num="27" x="402" y="288" w="134" h="96" />
+            <frame num="28" x="536" y="288" w="134" h="96" />
+            <frame num="29" x="670" y="288" w="134" h="96" />
+            <frame num="30" x="804" y="288" w="134" h="96" />
+            <frame num="31" x="938" y="288" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame num="32" x="0" y="384" w="134" h="96" />
+            <frame num="33" x="134" y="384" w="134" h="96" />
+            <frame num="34" x="268" y="384" w="134" h="96" />
+            <frame num="35" x="402" y="384" w="134" h="96" />
+            <frame num="36" x="536" y="384" w="134" h="96" />
+            <frame num="37" x="670" y="384" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame num="38" x="804" y="384" w="134" h="96" />
+            <frame num="39" x="938" y="384" w="134" h="96" />
+            <frame num="40" x="0" y="480" w="134" h="96" />
+            <frame num="41" x="134" y="480" w="134" h="96" />
+            <frame num="42" x="268" y="480" w="134" h="96" />
+            <frame num="43" x="402" y="480" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame num="44" x="536" y="480" w="134" h="96" />
+            <frame num="45" x="670" y="480" w="134" h="96" />
+            <frame num="46" x="804" y="480" w="134" h="96" />
+            <frame num="47" x="938" y="480" w="134" h="96" />
+            <frame num="48" x="0" y="576" w="134" h="96" />
+            <frame num="49" x="134" y="576" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame num="50" x="268" y="576" w="134" h="96" />
+            <frame num="51" x="402" y="576" w="134" h="96" />
+            <frame num="52" x="536" y="576" w="134" h="96" />
+            <frame num="53" x="670" y="576" w="134" h="96" />
+            <frame num="54" x="804" y="576" w="134" h="96" />
+            <frame num="55" x="938" y="576" w="134" h="96" />
+          </dir>
+        </walk>
+      </animations>
+    </brute>
     <tank>
       <speed value ="1"/>
       <time_between_bullets value ="100"/>
@@ -1445,6 +1530,28 @@
         </rotate>
       </animations>
     </health_bag>
+    <happy_hour>
+      <texture path ="textures/objects/item/happyhour_particle.png"/>
+      <animations>
+        <rotate speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame num ="0"  x="0"   y="0" w="48" h="92"/>
+            <frame num ="1"  x="48"  y="0" w="48" h="92"/>
+            <frame num ="2"  x="96"  y="0" w="48" h="92"/>
+            <frame num ="3"  x="144" y="0" w="48" h="92"/>
+            <frame num ="4"  x="192" y="0" w="48" h="92"/>
+            <frame num ="5"  x="240" y="0" w="48" h="92"/>
+            <frame num ="6"  x="288" y="0" w="48" h="92"/>
+            <frame num ="7"  x="336" y="0" w="48" h="92"/>
+            <frame num ="8"  x="384" y="0" w="48" h="92"/>
+            <frame num ="9"  x="432" y="0" w="48" h="92"/>
+            <frame num ="10" x="480" y="0" w="48" h="92"/>
+            <frame num ="11" x="528" y="0" w="48" h="92"/>
+            <frame num ="12" x="576" y="0" w="48" h="92"/>
+          </dir>
+        </rotate>
+      </animations>
+    </happy_hour>
   </items>
 
 </config>

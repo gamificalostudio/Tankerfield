@@ -44,11 +44,17 @@ public:
 	//- Logic
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
-	void SetWeapon(WEAPON type);
+
+	void SetWeapon(WEAPON type, uint level);
+	void SetTimeBetweenBullets(int time_between_bullets);
 	int GetLife();
 	int GetMaxLife();
+	int GetTimeBetweenBullets();
+
+	bool IsReady() const;
 
 public:
+
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 
@@ -67,6 +73,8 @@ private:
 
 	//- Input
 	void SelectInputMethod();
+
+	void InputReadyKeyboard();
 
 	//- Weapons methods
 	void ShootBasic();
@@ -91,7 +99,10 @@ private:
 
 	static int number_of_tanks;
 
+	bool ready								= false;
+
 	//- Movement
+	float curr_speed						= 0.f;
 	float speed								= 0.f;
 	fPoint velocity							= { 0.f, 0.f };
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
@@ -104,16 +115,36 @@ private:
 	fPoint shot_dir							= { 0.f, 0.f };
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
-	float shot_angle_lerp_factor = 0.f;
+	float shot_angle_lerp_factor			= 0.f;
+	float turr_target_angle					= 0.f;
+
+	//Revive
+
+	float revive_range						= 0.f;
+	float revive_range_squared				= 0.f;
+	int	  revive_life						= 0;
+	//Timer ReviveTimer;
+
+	//-- Basic shoot
+	uint shot_type							= (uint)WEAPON::BASIC;
+
+
+
+
 
 	//-- Shoot
+
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
 	PerfTimer shot_timer;
 	PerfTimer charged_timer;
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
-	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX])();
-	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX])();
+
+
+	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	bool show_crosshairs					= false;
+
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
@@ -131,6 +162,7 @@ private:
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_right					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
 	Joystick gamepad_move							= Joystick::INVALID;

@@ -17,13 +17,28 @@ struct Levels
 	std::string name;
 };
 
+
+struct SpawnPoint
+{
+	fPoint pos;
+	bool occupied = false;
+};
+
 struct Properties
 {
 
 	struct Property
 	{
 		std::string name;
-		void* value;
+		void* value = nullptr;
+		~Property()
+		{
+			if (value != nullptr)
+			{
+				delete value;
+				value = nullptr;
+			}
+		}
 	};
 
 	~Properties()
@@ -56,13 +71,16 @@ struct ObjectGroup
 	Properties	properties;
 	uint size			= 0;
 	Rect<float, float>* objects	= nullptr;
+
 	~ObjectGroup()
 	{
 		if (objects != nullptr)
 		{
 			delete[] objects;
 			objects = nullptr;
+			size = 0;
 		}
+		properties.UnloadProperties();
 	}
 };
 // ----------------------------------------------------
@@ -70,8 +88,11 @@ struct TileSet
 {
 	~TileSet()
 	{
-		if(texture != nullptr)
+		if (texture != nullptr)
+		{
 			app->tex->UnLoad(texture);
+			texture = nullptr;
+		}
 	}
 
 	inline SDL_Rect GetTileRect(int id) const;
@@ -109,8 +130,13 @@ struct MapLayer
 
 	~MapLayer()
 	{
-		RELEASE(data);
-
+		layer_properties.UnloadProperties();
+		if (data != nullptr)
+		{
+			delete[] data;
+			data = nullptr;
+		}
+		
 	}
 
 	inline uint Get(int x, int y) const
@@ -147,7 +173,9 @@ struct MapData
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
 	std::list<ObjectGroup*> object_layers;
-	
+	std::vector<SpawnPoint*>	spawners_position_reward_box;
+	std::vector<SpawnPoint*>	spawners_position_reward_zone;
+	std::vector<SpawnPoint*>	spawners_position_enemy;
 	Properties				map_properties;
 
 	Quadtree_Map*				qt = nullptr;
@@ -157,11 +185,20 @@ struct MapData
 
 	~MapData()
 	{
+		if (qt != nullptr)
+		{
+			delete qt;
+			qt = nullptr;
+		}
+
 		if (screen_tile_rect != nullptr)
 		{
 			delete[] screen_tile_rect;
 			screen_tile_rect = nullptr;
 		}
+		map_properties.UnloadProperties();
+
+
 	}
 	
 };

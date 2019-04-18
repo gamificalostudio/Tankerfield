@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <ctime>
+#include <string>
 
 #include "Defs.h"
 #include "Log.h"
@@ -19,6 +20,13 @@
 #include "Brofiler/Brofiler.h"
 #include "Rect.h"
 #include "Object.h"
+#include "M_PickManager.h"
+#include "PerfTimer.h"
+#include "Obj_Tank.h"
+#include "M_RewardZoneManager.h"
+#include "M_UI.h"
+#include "Obj_TeslaTrooper.h"
+
 
 M_Scene::M_Scene() : Module()
 {
@@ -37,11 +45,16 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
-	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
-	distance_range = config.child("distance_range").attribute("value").as_int();
-	min_distance_from_center = config.child("min_distance_from_center").attribute("value").as_int();
-	check_complete_round = config.child("check_complete_round").attribute("value").as_int();
+	initial_num_enemies = config.child("initial_generated_units").attribute("value").as_int();
 	enemies_to_increase = config.child("enemies_to_increase").attribute("value").as_int();
+	generated_units = config.child("initial_generated_units").attribute("value").as_int();
+
+	main_music = config.child("music").child("main_music").attribute("music").as_string();
+
+	finish_wave_sound_string = config.child("sounds").child("finish_wave_shot").attribute("sound").as_string();
+	wind_sound_string = config.child("sounds").child("wind_sound").attribute("sound").as_string();
+
+	srand(time(NULL));
 
 	return ret;
 }
@@ -49,6 +62,7 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
+	generated_units = initial_num_enemies;
 	path_tex = app->tex->Load("maps/path.png");
 
 	// Load the first level of the list on first game start -------------------------
@@ -56,26 +70,27 @@ bool M_Scene::Start()
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
 
-	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
+	// Load Fxs
+	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
+	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
+	
 
-
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 13.5f));
+	//Create all tanks
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(70.f, 60.f));
 	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
-	//app->objectmanager->CreateObject(ObjectType::PICK_UP, fPoint(12.5f, 14.5f));
 
-	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
-	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
 
-	//app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
 
-	/* Generate first wave units */
-	srand(time(NULL));
-	CreateEnemyWave();
+	number_current_wave = 1;
+	stat_of_wave = WaveStat::EXIT_OF_WAVE;
+
+	/* Generate Reward Zones */
+	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
+	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
 }
@@ -90,11 +105,15 @@ bool M_Scene::PreUpdate()
 
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
 	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
 	}
 
 	return true;
@@ -104,27 +123,14 @@ bool M_Scene::PreUpdate()
 bool M_Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
-	/*if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	{
-		app->render->camera.y -= floor(200.0f * dt);
-	}
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		app->render->camera.y += floor(200.0f * dt);
-	}
-	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		app->render->camera.x -= floor(200.0f * dt);
-	}
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		app->render->camera.x += floor(200.0f * dt);
-	}*/
+	
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
+
 	{
 		++current_level;
 
@@ -135,25 +141,77 @@ bool M_Scene::Update(float dt)
 	}
 
 	/* Check if a round is over. It is only checked after x time. */
-	accumulated_time += dt * 1000.0f;
-	if (accumulated_time >= (float)check_complete_round)
-	{
-		perform_objects_check = true;
-	}
+	//accumulated_time += dt * 1000.0f;
+	//if (accumulated_time >= (float)check_complete_round)
+	//{
+	//	perform_objects_check = true;
+	//}
 
-	if (perform_objects_check)
+	//if (perform_objects_check)
+	//{
+	//	
+
+	//	accumulated_time = 0.0f;
+	//	perform_objects_check = false;
+	//}
+
+	switch (stat_of_wave)
 	{
-		// == 3 because of the objects that are not enemies. Possible solution 2: check the type of objects with counters and check
-		if (app->objectmanager->GetObjects().size() == 5) // TOFIX: Here we are checking objects of type static I think too...
+	case WaveStat::ENTER_IN_WAVE:
+	{
+		/* Generate new wave, restart the vars and increase units number */
+		NewWave();
+		stat_of_wave = WaveStat::IN_WAVE;
+		app->audio->PlayMusic(main_music, 2.0f);
+
+		app->audio->PauseFx(finish_wave_sound_channel, 2000);
+		app->audio->PauseFx(wind_sound_channel, 2000);
+		break;
+	}
+	case WaveStat::IN_WAVE:
+	{
+		/*for (std::list<Obj_TeslaTrooper*>::iterator iterator = enemies_in_wave.begin(); iterator != enemies_in_wave.end();)
 		{
-			/* Generate new wave and increase units number */
-			initial_generated_units += enemies_to_increase;
-			CreateEnemyWave();
+			
+			if ((*iterator)->to_remove)
+			{
+				enemies_in_wave.erase(iterator);
+			}
+				
+			else
+			{
+				++iterator;
+			}
+			
+			
+		}*/
+		int ret = enemies_in_wave.size();
+		if (ret == 0)
+		{
+			stat_of_wave = WaveStat::EXIT_OF_WAVE;
+		}
+		break;
+	}
+	case WaveStat::EXIT_OF_WAVE:
+	{
+		//feedback here I guess(animation and souds)
+		timer_between_waves.Start();
+		app->audio->PauseMusic(3000);
+		finish_wave_sound_channel = app->audio->PlayFx(finish_wave_sound_uint);
+		wind_sound_channel = app->audio->PlayFx(wind_sound_uint);
+		
+		stat_of_wave = WaveStat::OUT_WAVE;
+
+		break;
+	}
+	case WaveStat::OUT_WAVE:
+		if (timer_between_waves.ReadMs() >= time_between_rounds || AllPlayersReady())
+		{
+			stat_of_wave = WaveStat::ENTER_IN_WAVE;
 		}
 
-		accumulated_time = 0.0f;
-		perform_objects_check = false;
 	}
+
 
 	return true;
 }
@@ -176,10 +234,11 @@ bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
 	app->map->Unload();
+	app->collision->CleanUp();
 	app->objectmanager->DeleteObjects();
+	app->pathfinding->CleanUp();
+	app->ui->CleanUp();
 
-	if (path_tex != nullptr)
-		app->tex->UnLoad(path_tex);
 
 	return true;
 }
@@ -195,7 +254,7 @@ void M_Scene::DebugPathfinding()
 
 		iPoint mousePos;
 		app->input->GetMousePosition(mousePos.x, mousePos.y);
-		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, (*app->render->cameras.begin()));
 		p = app->map->ScreenToMapI(p.x, p.y);
 
 		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
@@ -238,7 +297,7 @@ void M_Scene::DebugPathfinding()
 				{
 					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
 					
-					for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
 						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
@@ -251,7 +310,7 @@ void M_Scene::DebugPathfinding()
 
 		p = app->map->MapToScreenI(p.x, p.y);
 
-		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
@@ -261,38 +320,31 @@ void M_Scene::DebugPathfinding()
 
 void M_Scene::CreateEnemyWave()
 {
-	for (int i = 0; i < initial_generated_units; i++)
+	for (int i = 0; i < generated_units; i++)
 	{
-		//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
-		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
-			rand() % (distance_range * 2 + 1) - distance_range };
+		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+		Obj_TeslaTrooper* ret = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
 
-		// TODO: At this point, we know the map columns / rows -> 40. We must get these values without magic numbers.
-		int map_rows = 40, map_columns = 40;
-
-		if (random_tile_position.x >= 0 && random_tile_position.y >= 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x < 0 && random_tile_position.y < 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-		}
+		enemies_in_wave.push_back(ret);
 	}
+
+}
+
+void M_Scene::NewWave()
+{
+	initial_generated_units += enemies_to_increase;
+
+	CreateEnemyWave();
+	app->pick_manager->CreateRewardBoxWave();
+
+	++number_current_wave;
+}
+
+bool M_Scene::AllPlayersReady() const
+{
+	return (tank_1->IsReady()
+		&& tank_2->IsReady()
+		&& tank_3->IsReady()
+		&& tank_4->IsReady());
 }

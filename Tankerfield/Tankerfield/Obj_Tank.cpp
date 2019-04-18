@@ -32,7 +32,12 @@ Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 
 Obj_Tank::~Obj_Tank()
 {
-	//number_of_tanks--;
+	number_of_tanks--;
+	if (camera_player != nullptr)
+	{
+		camera_player->assigned = false;
+		camera_player->number_player = 0;
+	}
 }
 
 bool Obj_Tank::Start()
@@ -64,6 +69,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_D;
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
+		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_red;
 		break;
 	case 1:
@@ -73,6 +79,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_H;
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
+		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_light_blue;
 		break;
 	case 2:
@@ -82,6 +89,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_L;
 		kb_item		= SDL_SCANCODE_U;
 		kb_interact = SDL_SCANCODE_O;
+		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
 		break;
 	case 3:
@@ -91,6 +99,7 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_KP_6;
 		kb_item		= SDL_SCANCODE_KP_7;
 		kb_interact	= SDL_SCANCODE_KP_9;
+		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_yellow;
 		break;
 	default:
@@ -105,7 +114,7 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	speed = 4.f;//TODO: Load from xml
+	curr_speed = speed = 4.f;//TODO: Load from xml
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -144,14 +153,23 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
+
 	life = 90;
 	max_life = 100;
+
+
+	revive_range = 1.5f;
+	revive_range_squared = revive_range * revive_range;
+	revive_life = 100;
+
+
+
 
 	//Life inicialistation
 	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		if (!(*item_cam)->assigned)
 		{
@@ -171,6 +189,12 @@ bool Obj_Tank::PreUpdate()
 		controller = app->input->GetAbleController();
 	}
 	SelectInputMethod();
+
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		show_crosshairs = !show_crosshairs;
+	}
+
 	return true;
 }
 
@@ -182,12 +206,16 @@ bool Obj_Tank::Update(float dt)
 	StopTank();
 	ReviveTank();
 	CameraMovement(dt);
+	InputReadyKeyboard();
 
 	return true;
 }
 
 void Obj_Tank::CameraMovement(float dt)
 {
+	if (camera_player == nullptr)
+		return;
+
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	fPoint target_pos =
 	{
@@ -229,9 +257,12 @@ void Obj_Tank::Movement(float dt)
 		}
 		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
 
-		velocity = iso_dir * speed * dt;
-		pos_map += velocity;
 	}
+
+	velocity = iso_dir * curr_speed * dt;                                                               
+	pos_map += velocity;
+
+	
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -275,17 +306,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&curr_anim->GetFrame(angle));
 
-	// Turret =======================================
-	app->render->Blit(
-		turr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&rotate_turr.GetFrame(turr_angle));
-
-	if (camera == camera_player)
+	if (show_crosshairs && camera == camera_player)
 	{
-		//DEBUG
 		float line_length = 5.f;
 		//1-- Set a position in the isometric space
 		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
@@ -295,6 +317,40 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 			pos_screen.x, pos_screen.y - cannon_height,
 			input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
 	}
+
+	// Turret =======================================
+	app->render->Blit(
+		turr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&rotate_turr.GetFrame(turr_angle));
+
+	if (life == 0)
+	{
+		fPoint circlePos = pos_map;
+
+		circlePos = app->map->MapToScreenF(circlePos);
+		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);		//32? it has to be the tile measure																									//only appears when hes dead and disappear when he has been revived
+	}
+
+																							//only appears when hes dead and disappear when he has been revived
+	//DEBUG
+	//	iPoint debug_mouse_pos = { 0, 0 };
+//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
+
+//	debug_mouse_pos.x += camera_player->rect.x;
+//	debug_mouse_pos.y += camera_player->rect.y;
+
+//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
+//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
+
+	//  std::vector<Camera*>::iterator item_cam;
+//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+//	{
+	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
+//	}
+
 
 	return true;
 }
@@ -365,9 +421,17 @@ void Obj_Tank::SetItem(ObjectType type)
 	item = type;
 }
 
-void Obj_Tank::SetWeapon(WEAPON type)
+void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
+
+	weapon_info.level_weapon = level;
 	weapon_info.type = type;
+
+}
+
+void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
+{
+	weapon_info.time_between_bullets = time_between_bullets;
 }
 
 int Obj_Tank::GetLife()
@@ -380,14 +444,22 @@ int Obj_Tank::GetMaxLife()
 	return max_life;
 }
 
+int Obj_Tank::GetTimeBetweenBullets()
+{
+	return weapon_info.time_between_bullets;
+}
+
 void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, fPoint & iso_dir)
 {
 	iPoint mouse_screen_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_screen_pos.x, mouse_screen_pos.y);
 
+	
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_screen_pos.x += camera_player->rect.x;
-	mouse_screen_pos.y += camera_player->rect.y;
+
+	if (camera_player != nullptr)
+		mouse_screen_pos += {camera_player->rect.x, camera_player->rect.y};
+
 
 	input_dir = (fPoint)mouse_screen_pos - app->map->MapToScreenF(turr_map_pos);
 
@@ -426,21 +498,20 @@ void Obj_Tank::Shoot(float dt)
 	if (!input_dir.IsZero())
 	{
 		//Angle
-		fPoint shot_screen_pos = app->map->MapToScreenF(iso_dir);
-		float target_angle = atan2(-shot_screen_pos.y, shot_screen_pos.x) * RADTODEG;
+		turr_target_angle = atan2(-input_dir.y, input_dir.x) * RADTODEG;
 		//- Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(turr_angle / 360.f);
-		target_angle += 360.f * turns;
+		turr_target_angle += 360.f * turns;
 		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - turr_angle) < abs(target_angle - turr_angle))
+		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
 		{
-			target_angle += 360.f;
+			turr_target_angle += 360.f;
 		}
-		turr_angle = lerp(turr_angle, target_angle, shot_angle_lerp_factor * dt);
 
 		//Direction
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
+	turr_angle = lerp(turr_angle, turr_target_angle, shot_angle_lerp_factor * dt);
 
 	if (PressShot())
 	{
@@ -544,146 +615,55 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ReviveTank()
 {
-	switch (tank_num) {
-	case 0:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)		//TODO condicion collider
-		{
-			{
-				app->scene->tank_2->speed = 4.f;
-				app->scene->tank_2->life = 100;
-			}
-		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
-		{
-			{
-				app->scene->tank_3->speed = 4.f;
-				app->scene->tank_3->life = 100;
-			}
-		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
-		{
-			{
-				app->scene->tank_4->speed = 4.f;
-				app->scene->tank_4->life = 100;
-			}
-		}
 
-		break;
-	case 1:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
+
+	Obj_Tank* tank_arr[4];
+
+	tank_arr[0] = app->scene->tank_1;
+	tank_arr[1] = app->scene->tank_2;
+	tank_arr[2] = app->scene->tank_3;
+	tank_arr[3] = app->scene->tank_4;
+
+	//fPoint circlePos = { 3.f,3.f };
+	//circlePos = app->map->MapToScreenF(circlePos);
+	//app->render->DrawCircle(circlePos.x, circlePos.y, revive_range, 0, 255, 0, 100);
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (this != tank_arr[i]
+			&& controller != nullptr
+			&& ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN
+			|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT)
+			&& tank_arr[i]->life == 0
+			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map) <= revive_range_squared
+			&& this->life != 0)
 		{
-			{
-				app->scene->tank_1->speed = 4.f;
-				app->scene->tank_1->life = 100;
-			}
+			tank_arr[i]->curr_speed = speed;
+			tank_arr[i]->life = revive_life;
+
 		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
-		{
-			{
-				app->scene->tank_3->speed = 4.f;
-				app->scene->tank_3->life = 100;
-			}
-		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
-		{
-			{
-				app->scene->tank_4->speed = 4.f;
-				app->scene->tank_4->life = 100;
-			}
-		}
-		break;
-	case 2:	
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
-		{
-			{
-				app->scene->tank_1->speed = 4.f;
-				app->scene->tank_1->life = 100;
-			}
-		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)
-		{
-			{
-				app->scene->tank_2->speed = 4.f;
-				app->scene->tank_2->life = 100;
-			}
-		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_4->life == 0)
-		{
-			{
-				app->scene->tank_4->speed = 4.f;
-				app->scene->tank_4->life = 100;
-			}
-		}
-		break;
-	case 3:
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_1->life == 0)
-		{
-			{
-				app->scene->tank_1->speed = 4.f;
-				app->scene->tank_1->life = 100;
-			}
-		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_2->life == 0)
-		{
-			{
-				app->scene->tank_2->speed = 4.f;
-				app->scene->tank_2->life = 100;
-			}
-		}
-		if (controller != nullptr && (*controller)->GetButtonState(gamepad_interact) == KEY_DOWN && app->scene->tank_3->life == 0)
-		{
-			{
-				app->scene->tank_3->speed = 4.f;
-				app->scene->tank_3->life = 100;
-			}
-		}
-		break;
 	}
 }
 
 void Obj_Tank::StopTank()
 {
+	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
+		app->scene->tank_1->life = 0;
 
-	//if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
-	//	app->scene->tank_1->life = 0;
-	//
-	//if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
-	//	app->scene->tank_2->life = 0;
+	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
+		app->scene->tank_2->life = 0;
 
-	//if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
-	//	app->scene->tank_3->life = 0;
-	
-	switch (tank_num) {
-	case 0:
-		if (life == 0)
-		{
-			app->scene->tank_1->speed = 0;
-			app->scene->tank_1->angle = 0;
-		}
-		break;
-	case 1:
-		if (life == 0)
-		{
-			app->scene->tank_2->speed = 0;
-			app->scene->tank_2->angle = 0;
-		}
-		break;
-	case 2:
-		if (life == 0)
-		{
-			app->scene->tank_3->speed = 0;
-			app->scene->tank_3->angle = 0;
-		}
-		break;
-	case 3:
-		if (life == 0)
-		{
-			app->scene->tank_4->speed = 0;
-			app->scene->tank_4->angle = 0;
-		}
-		break;
+	if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
+		app->scene->tank_3->life = 0;
+
+	if (life == 0)
+	{
+		curr_speed = 0;
+		angle = 0;
+		shot_dir = { 0.f,0.f };
 	}
 }
+
 
 
 void Obj_Tank::ShootDoubleMissile()
@@ -761,9 +741,26 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	}
 	else
 	{
-		SetWeapon(pick_up->type_of_weapon);
+		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 	}
 
 	pick_up->DeletePickUp();
+}
+
+bool Obj_Tank::IsReady() const
+{
+	return ready;
+}
+
+void Obj_Tank::InputReadyKeyboard()
+{
+	if (app->scene->stat_of_wave == WaveStat::OUT_WAVE && app->input->GetKey(kb_ready) == KEY_DOWN)
+	{
+		ready = !ready;
+	}
+	else if (app->scene->stat_of_wave != WaveStat::OUT_WAVE)
+	{
+		ready = false;
+	}
 }
 

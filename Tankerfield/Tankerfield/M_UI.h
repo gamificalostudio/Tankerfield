@@ -90,6 +90,27 @@ public:
 		MAX
 	};
 
+	enum class ICON_SIZE : int
+	{
+		NONE = -1,
+		SMALL,
+		BIG,
+		MAX
+	};
+
+	enum class ICON_TYPE : int
+	{
+		NONE = -1,
+		WEAPON_DOUBLE_MISSILE,
+		WEAPON_HEALING_SHOT,
+		WEAPON_LASER,
+		WEAPON_FLAMETHROWER,
+		ITEM_HEALTH_BAG,
+		ITEM_HAPPY_HOUR,
+		ITEM_INSTANT_HELP,
+		MAX
+	};
+
 	M_UI();
 
 	virtual ~M_UI();
@@ -188,7 +209,7 @@ private:
 
 	float ax = 0.0f;
 	float ratetime = 1.f / 2.f;
-	float target_value = 255.f;
+	float target_value = 100.f;
 	float init_value = 0.f;
 
 public:
@@ -211,7 +232,10 @@ public:
 	fPoint		mouse_offset;
 
 	// Assets --------------------------------------------
-	SDL_Rect button_sprite[(int)GAMEPAD_BUTTON::MAX];
+
+	SDL_Rect button_sprites[(int)GAMEPAD_BUTTON::MAX];
+
+	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
 
 	_TTF_Font*  font_open_sants_bold_12 = nullptr;
 

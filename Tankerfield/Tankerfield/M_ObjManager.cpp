@@ -16,6 +16,7 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "Obj_TeslaTrooper.h"
+#include "Obj_Brute.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
@@ -32,7 +33,9 @@
 #include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
+#include "Item_HappyHour.h"
 #include "Obj_PickUp.h"
+#include "Obj_RewardBox.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -96,7 +99,8 @@ bool M_ObjManager::Update(float dt)
 				//So we don't need increment the iterator to go to the next one
 				if ((*iterator)->type == ObjectType::TANK)
 				{
-					obj_tanks.erase(iterator);
+					Obj_Tank* aux = (Obj_Tank*)(*iterator);
+					obj_tanks.remove((*iterator));
 				}
 
 				if ((*iterator)->coll != nullptr)
@@ -140,7 +144,7 @@ bool M_ObjManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
 	std::vector<Object*> draw_objects;
 
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
@@ -171,7 +175,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 		  if (app->scene->draw_debug) {
 			  (*item)->DrawDebug((*item_cam));
-			  DrawDebug((*item));
+			  DrawDebug((*item), (*item_cam));
 		  }
 		}
 
@@ -186,17 +190,8 @@ bool M_ObjManager::PostUpdate(float dt)
 // Called before quitting
 bool M_ObjManager::CleanUp()
 {
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
-	{
-		if ((*iterator) != nullptr) 
-		{
-			(*iterator)->CleanUp();
-			delete (*iterator);
-			(*iterator) = nullptr;
-		}
-	}
-	
-	objects.clear();
+	DeleteObjects();
+
 	return true;
 }
 
@@ -206,20 +201,21 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	switch (type)
 	{
 	case ObjectType::TESLA_TROOPER:
-		ret = new Obj_TeslaTrooper(pos);
+		ret = DBG_NEW Obj_TeslaTrooper(pos);
 		ret->type = ObjectType::TESLA_TROOPER;
 		break;
+
 	case ObjectType::TANK:
-		ret = new Obj_Tank(pos);
+		ret = DBG_NEW Obj_Tank(pos);
 		ret->type = ObjectType::TANK;
 		obj_tanks.push_back(ret);
 		break;
 	case ObjectType::BASIC_BULLET:
-		ret = new Bullet_Basic(pos);
+		ret = DBG_NEW Bullet_Basic(pos);
 		ret->type = ObjectType::BASIC_BULLET;
 		break;
 	case ObjectType::BULLET_MISSILE:
-		ret = new Bullet_Missile(pos);
+		ret = DBG_NEW Bullet_Missile(pos);
 		ret->type = ObjectType::BULLET_MISSILE;
 		break;
 	case ObjectType::BULLET_LASER:
@@ -231,15 +227,20 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::HEALING_BULLET;
 		break;
 	case ObjectType::STATIC:
-		ret = new Obj_Static(pos);
+		ret = DBG_NEW Obj_Static(pos);
 		ret->type = ObjectType::STATIC;
 		break;
+
 	case ObjectType::REWARD_ZONE:
-		ret = new Reward_Zone(pos);
+		ret = DBG_NEW Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+	case ObjectType::BRUTE:
+		ret = new Obj_Brute(pos);
+		ret->type = ObjectType::BRUTE;
+		break;
 		break;
 	case ObjectType::EXPLOSION:
-		ret = new Obj_Explosion(pos);
+		ret = DBG_NEW Obj_Explosion(pos);
 		ret->type = ObjectType::EXPLOSION;
 		break;
 	case ObjectType::HEALING_ANIMATION:
@@ -247,13 +248,23 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::HEALING_ANIMATION;
 		break;
 	case ObjectType::HEALTH_BAG:
-		ret = new Item_HealthBag(pos);
+		ret = DBG_NEW Item_HealthBag(pos);
 		ret->type = ObjectType::HEALTH_BAG;
 		break;
+	case ObjectType::HAPPY_HOUR_ITEM:
+		ret = new Item_HappyHour(pos);
+		ret->type = ObjectType::HAPPY_HOUR_ITEM;
+		break;
 	case ObjectType::PICK_UP:
-		ret = new Obj_PickUp(pos);
+		ret = DBG_NEW Obj_PickUp(pos);
 		ret->type = ObjectType::PICK_UP;
+		break;
+	case ObjectType::REWARD_BOX:
+		ret = new Obj_RewardBox(pos);
+		ret->type = ObjectType::REWARD_BOX;
+		break;
 	}
+	
   
 	if (ret != nullptr)
 	{
@@ -269,8 +280,16 @@ void M_ObjManager::DeleteObjects()
 {
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 	{
-		(*iterator)->to_remove = true;
+		if ((*iterator) != nullptr)
+		{
+			(*iterator)->CleanUp();
+			delete (*iterator);
+			(*iterator) = nullptr;
+		}
 	}
+
+	objects.clear();
+	obj_tanks.clear();
 }
 
 Object * M_ObjManager::GetNearestTank(fPoint pos)
@@ -298,7 +317,7 @@ std::list<Object*> M_ObjManager::GetObjects() const
 	return this->objects;
 }
 
-void M_ObjManager::DrawDebug(const Object* obj)
+void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
 {
 	SDL_Rect section = { obj->pos_screen.x - obj->draw_offset.x, obj->pos_screen.y - obj->draw_offset.y, obj->frame.w, obj->frame.h };
 
@@ -320,7 +339,7 @@ void M_ObjManager::DrawDebug(const Object* obj)
 		break;
 	}
 
-	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, 0, 255, 0);
+	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)

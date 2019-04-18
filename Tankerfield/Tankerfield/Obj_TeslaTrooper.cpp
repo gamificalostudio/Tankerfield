@@ -24,6 +24,7 @@
 #include "WeaponInfo.h"
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
+#include "M_Scene.h"
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
@@ -92,7 +93,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 				move_vect.Normalize();
 
 				//Change sprite direction
-				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG + ISO_COMPENSATION;
+				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
 				state = TROOPER_STATE::MOVE;
 			}
 			else

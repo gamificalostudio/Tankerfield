@@ -27,15 +27,14 @@ bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
 
-	if (alpha != 255)
-	{
-		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
-	}
-	else
-	{
-		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
-	}
-
+		if (alpha != 255)
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+		}
+		else
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
+		}
 	return true;
 }
 
