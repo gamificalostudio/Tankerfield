@@ -19,6 +19,7 @@
 #include "Brofiler/Brofiler.h"
 #include "Rect.h"
 #include "Object.h"
+#include "M_PickManager.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -105,22 +106,7 @@ bool M_Scene::PreUpdate()
 bool M_Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
-	/*if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-	{
-		app->render->camera.y -= floor(200.0f * dt);
-	}
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		app->render->camera.y += floor(200.0f * dt);
-	}
-	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
-		app->render->camera.x -= floor(200.0f * dt);
-	}
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		app->render->camera.x += floor(200.0f * dt);
-	}*/
+	
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;

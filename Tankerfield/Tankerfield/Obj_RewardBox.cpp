@@ -8,6 +8,7 @@
 #include "M_Render.h"
 #include "M_Collision.h"
 #include "M_PickManager.h"
+#include "M_Map.h"
 
 
 
@@ -78,6 +79,7 @@ void Obj_RewardBox::Dead()
 		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
 	}
 
+	my_spawn_point->occupied = false;
 	to_remove = true;
 }
 

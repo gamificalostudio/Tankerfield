@@ -45034,25 +45034,25 @@
   <object id="1" type="1" x="175.333" y="158">
    <point/>
   </object>
-  <object id="2" type="2" x="262.667" y="156">
+  <object id="2" type="1" x="262.667" y="156">
    <point/>
   </object>
-  <object id="3" type="3" x="413.333" y="165.333">
+  <object id="3" type="1" x="413.333" y="165.333">
    <point/>
   </object>
-  <object id="4" x="534.667" y="188">
+  <object id="4" type="1" x="534.667" y="188">
    <point/>
   </object>
-  <object id="5" x="429.333" y="418.667">
+  <object id="5" type="1" x="429.333" y="418.667">
    <point/>
   </object>
-  <object id="6" x="278" y="500.667">
+  <object id="6" type="1" x="278" y="500.667">
    <point/>
   </object>
-  <object id="7" x="500.667" y="662">
+  <object id="7" type="1" x="500.667" y="662">
    <point/>
   </object>
-  <object id="8" x="714" y="646">
+  <object id="8" type="1" x="714" y="646">
    <point/>
   </object>
  </objectgroup>

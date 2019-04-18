@@ -6,6 +6,7 @@
 #include "Point.h"
 #include "Obj_PickUp.h"
 
+class Obj_RewardBox;
 
 class M_PickManager : public Module
 {
@@ -25,15 +26,18 @@ public:
 	void CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, uint levels_to_add = NULL);
 
 	//Create a reward box
-	void CreateRewardBox(fPoint pos_map);
+	Obj_RewardBox* CreateRewardBox(fPoint pos_map);
 
 	//Calculate if a pickUp has to be created after enemy die
 	void PickUpFromEnemy(fPoint pos_map);
 
+	void CreateRewardBoxWave();
+
 
 
 private:
-	uint percentage_to_spawn = NULL;
+	uint percentage_spawn_item_from_enemy = NULL;
+	uint percentage_spawn_reward_box = NULL;
 };
 
 

@@ -4,13 +4,16 @@
 #include "Object.h"
 #include "Obj_Tank.h"
 
-
+class SpawnPoint;
 class Obj_RewardBox : public Object
 {
 private:
-	uint life = 0;
-	uint max_life = 0;
-	bool alive = true;
+	uint life							= 0u;
+	uint max_life						= 0u;
+	bool alive							= true;
+
+public:
+	SpawnPoint* my_spawn_point			= nullptr;
 
 public:
 
