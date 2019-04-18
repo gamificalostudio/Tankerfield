@@ -436,9 +436,6 @@ void Obj_Tank::Shoot(float dt)
 
 		//Direction
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
-
-		//TODO:Extract from angle or it could be potentially different where you are aiming and where you're shooting
-		//Or have it always shoot from turr_dir, and turr_angle only be for the turret sprite (you generate a new angle for the bullets when you shoot)
 	}
 
 	if (PressShot())
