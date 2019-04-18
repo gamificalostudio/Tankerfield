@@ -64,9 +64,9 @@ Obj_RewardBox* M_PickManager::CreateRewardBox(fPoint pos_map)
 
 void M_PickManager::CreateRewardBoxWave()
 {
-	for (std::vector<SpawnPoint*>::iterator iterator = app->map->data.spawners_position.begin(); iterator != app->map->data.spawners_position.end(); ++iterator)
+	for (std::vector<SpawnPoint*>::iterator iterator = app->map->data.spawners_position_reward_box.begin(); iterator != app->map->data.spawners_position_reward_box.end(); ++iterator)
 	{
-		if ((*iterator)->type == SpawnType::REWARD_BOX && !(*iterator)->occupied)
+		if (!(*iterator)->occupied)
 		{
 			uint probability = rand() % 100;
 			if (probability < percentage_spawn_reward_box)

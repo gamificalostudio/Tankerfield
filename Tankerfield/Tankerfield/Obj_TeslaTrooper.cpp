@@ -24,6 +24,7 @@
 #include "WeaponInfo.h"
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
+#include "M_Scene.h"
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
@@ -175,6 +176,7 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		{
 			app->pick_manager->PickUpFromEnemy(pos_map);
 			to_remove = true;
+			++app->scene->enemies_dead;
 		}
 	}
 }

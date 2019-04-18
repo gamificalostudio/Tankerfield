@@ -60,7 +60,7 @@ bool M_Scene::Start()
 	app->audio->PlayMusic("audio/Music/indeep.ogg", 0.0f);
 
 
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 13.5f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(70.f, 60.f));
 	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
@@ -111,7 +111,7 @@ bool M_Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+	/*if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
 	{
 		++current_level;
 
@@ -119,7 +119,7 @@ bool M_Scene::Update(float dt)
 			current_level = 0;
 
 		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
-	}
+	}*/
 
 	/* Check if a round is over. It is only checked after x time. */
 	accumulated_time += dt * 1000.0f;
@@ -130,13 +130,13 @@ bool M_Scene::Update(float dt)
 
 	if (perform_objects_check)
 	{
-		// == 3 because of the objects that are not enemies. Possible solution 2: check the type of objects with counters and check
-		if (app->objectmanager->GetObjects().size() == 5) // TOFIX: Here we are checking objects of type static I think too...
+		if (enemies_dead == initial_generated_units)
 		{
 			/* Generate new wave and increase units number */
 			initial_generated_units += enemies_to_increase;
 			CreateEnemyWave();
 			++number_current_wave;
+			enemies_dead = 0u;
 		}
 
 		accumulated_time = 0.0f;
@@ -249,7 +249,7 @@ void M_Scene::DebugPathfinding()
 
 void M_Scene::CreateEnemyWave()
 {
-	for (int i = 0; i < initial_generated_units; i++)
+	/*for (int i = 0; i < initial_generated_units; i++)
 	{
 		//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
 		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
@@ -282,6 +282,14 @@ void M_Scene::CreateEnemyWave()
 				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
 					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
 		}
+	}*/
+	for (int i = 0; i < initial_generated_units; i++)
+	{
+		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
+			pos);
+		
 	}
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="left-up" width="150" height="150" tilewidth="60" tileheight="30" infinite="0" nextlayerid="9" nextobjectid="9">
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="left-up" width="150" height="150" tilewidth="60" tileheight="30" infinite="0" nextlayerid="9" nextobjectid="47">
  <properties>
   <property name="offset_x" type="int" value="-30"/>
   <property name="offset_y" type="int" value="0"/>
@@ -45031,28 +45031,109 @@
   </data>
  </layer>
  <objectgroup id="8" name="SpawnPoints">
-  <object id="1" type="1" x="175.333" y="158">
+  <object id="1" type="REWARD_BOX" x="674" y="203.333">
    <point/>
   </object>
-  <object id="2" type="1" x="262.667" y="156">
+  <object id="2" type="REWARD_BOX" x="262.667" y="156">
    <point/>
   </object>
-  <object id="3" type="1" x="413.333" y="165.333">
+  <object id="3" type="REWARD_BOX" x="413.333" y="165.333">
    <point/>
   </object>
-  <object id="4" type="1" x="534.667" y="188">
+  <object id="4" type="REWARD_BOX" x="534.667" y="188">
    <point/>
   </object>
-  <object id="5" type="1" x="429.333" y="418.667">
+  <object id="5" type="REWARD_BOX" x="440.666" y="519.334">
    <point/>
   </object>
-  <object id="6" type="1" x="278" y="500.667">
+  <object id="6" type="REWARD_BOX" x="278" y="500.667">
    <point/>
   </object>
-  <object id="7" type="1" x="500.667" y="662">
+  <object id="7" type="REWARD_BOX" x="580.667" y="523.333">
    <point/>
   </object>
-  <object id="8" type="1" x="714" y="646">
+  <object id="8" type="REWARD_BOX" x="759.333" y="542">
+   <point/>
+  </object>
+  <object id="9" type="ENEMY" x="1830" y="1298">
+   <point/>
+  </object>
+  <object id="10" type="ENEMY" x="1866" y="1280.67">
+   <point/>
+  </object>
+  <object id="11" type="ENEMY" x="1911.33" y="1315.33">
+   <point/>
+  </object>
+  <object id="12" type="ENEMY" x="1960.67" y="1378">
+   <point/>
+  </object>
+  <object id="13" type="ENEMY" x="1822.67" y="1348">
+   <point/>
+  </object>
+  <object id="14" type="ENEMY" x="1806" y="1380.67">
+   <point/>
+  </object>
+  <object id="15" type="ENEMY" x="1845.33" y="1437.33">
+   <point/>
+  </object>
+  <object id="16" type="ENEMY" x="1905.33" y="1452">
+   <point/>
+  </object>
+  <object id="17" type="ENEMY" x="1958.67" y="1430.67">
+   <point/>
+  </object>
+  <object id="18" type="ENEMY" x="1637.33" y="1837.33">
+   <point/>
+  </object>
+  <object id="19" type="ENEMY" x="1668" y="1833.33">
+   <point/>
+  </object>
+  <object id="20" type="ENEMY" x="1708" y="1836">
+   <point/>
+  </object>
+  <object id="21" type="ENEMY" x="1780" y="1937.33">
+   <point/>
+  </object>
+  <object id="22" type="ENEMY" x="1610" y="1854">
+   <point/>
+  </object>
+  <object id="23" type="ENEMY" x="1614" y="1892.67">
+   <point/>
+  </object>
+  <object id="24" type="ENEMY" x="1676.67" y="1976.67">
+   <point/>
+  </object>
+  <object id="25" type="ENEMY" x="1712.67" y="1972.67">
+   <point/>
+  </object>
+  <object id="26" type="ENEMY" x="1764" y="1996">
+   <point/>
+  </object>
+  <object id="38" type="ENEMY" x="2398" y="1746">
+   <point/>
+  </object>
+  <object id="39" type="ENEMY" x="2355.33" y="1738">
+   <point/>
+  </object>
+  <object id="40" type="ENEMY" x="2321.33" y="1750.67">
+   <point/>
+  </object>
+  <object id="41" type="ENEMY" x="2318" y="1786">
+   <point/>
+  </object>
+  <object id="42" type="ENEMY" x="2470" y="1847.33">
+   <point/>
+  </object>
+  <object id="43" type="ENEMY" x="2469.33" y="1805.33">
+   <point/>
+  </object>
+  <object id="44" type="ENEMY" x="2454.67" y="1878.67">
+   <point/>
+  </object>
+  <object id="45" type="ENEMY" x="2418" y="1912.67">
+   <point/>
+  </object>
+  <object id="46" type="ENEMY" x="2320.67" y="1836.67">
    <point/>
   </object>
  </objectgroup>

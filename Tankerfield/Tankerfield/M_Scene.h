@@ -25,6 +25,7 @@ public:
 	Obj_Tank * tank_4 = nullptr;
 
 	uint number_current_wave = 0;
+	uint enemies_dead = 0u;
 public:
 
 	M_Scene();
@@ -71,16 +72,17 @@ private:
 private:
 	/* Wave System */
 	// In milliseconds
-	float accumulated_time = 0.0f;
-	bool perform_objects_check = false;
+	float accumulated_time			= 0.0f;
+	bool perform_objects_check		= false;
 
-	int time_between_rounds = 0;
-	int initial_generated_units = 0;
-	int distance_range = 0;
-	int min_distance_from_center = 0;
-	int check_complete_round = 0;
-	int object_counter = 0;
-	int enemies_to_increase = 0;
+	int time_between_rounds			= 0;
+	int initial_generated_units		= 0;
+	int distance_range				= 0;
+	int min_distance_from_center	= 0;
+	int check_complete_round		= 0;
+	int object_counter				= 0;
+	int enemies_to_increase			= 0;
+
 };
 
 #endif // __j1SCENE_H__

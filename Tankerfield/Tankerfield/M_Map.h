@@ -17,20 +17,11 @@ struct Levels
 	std::string name;
 };
 
-enum class SpawnType
-{
-	NO_TYPE,
-	REWARD_BOX,
-	REWARD_ZONE,
-	ENEMY
-};
 
 struct SpawnPoint
 {
 	fPoint pos;
 	bool occupied = false;
-	SpawnType type = SpawnType::NO_TYPE;
-
 };
 
 struct Properties
@@ -72,18 +63,12 @@ struct ObjectGroup
 	Properties	properties;
 	uint size			= 0;
 	Rect<float, float>* objects	= nullptr;
-	int* type = nullptr;
 	~ObjectGroup()
 	{
 		if (objects != nullptr)
 		{
 			delete[] objects;
 			objects = nullptr;
-		}
-		if (type != nullptr)
-		{
-			delete[] type;
-			type = nullptr;
 		}
 	}
 };
@@ -169,7 +154,9 @@ struct MapData
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
 	std::list<ObjectGroup*> object_layers;
-	std::vector<SpawnPoint*>	spawners_position;
+	std::vector<SpawnPoint*>	spawners_position_reward_box;
+	std::vector<SpawnPoint*>	spawners_position_reward_zone;
+	std::vector<SpawnPoint*>	spawners_position_enemy;
 	Properties				map_properties;
 
 	Quadtree_Map*				qt = nullptr;
