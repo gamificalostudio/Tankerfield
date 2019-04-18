@@ -423,13 +423,19 @@ void Obj_Tank::Shoot()
 
 	if (!shot_input_dir.IsZero())
 	{
-		turr_angle = atan2(-shot_iso_dir.y, shot_iso_dir.x) * RADTODEG - 45;
+		//Angle
+		//- Transform iso-dir to screen space
+		fPoint shot_screen_pos = app->map->MapToScreenF(shot_iso_dir);
+		turr_angle = atan2(-shot_screen_pos.y, shot_screen_pos.x) * RADTODEG;
+		//turr_angle = atan2(-shot_iso_dir.y, shot_iso_dir.x) * RADTODEG - 45;
 		shot_dir = shot_iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
 	if(tank_num == 0)
 	{
-		LOG("shot iso dir x: %f y: %f", shot_dir.x, shot_dir.y);
+		fPoint shot_input_debug = shot_input_dir;
+		shot_input_debug.Normalize();
+		LOG("shot input dir x: %f, %f", shot_input_debug.x, shot_input_debug.y);
 	}
 
 	if (PressShot())
