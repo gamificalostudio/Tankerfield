@@ -31,7 +31,12 @@ Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 
 Obj_Tank::~Obj_Tank()
 {
-	//number_of_tanks--;
+	number_of_tanks--;
+	if (camera_player != nullptr)
+	{
+		camera_player->assigned = false;
+		camera_player->number_player = 0;
+	}
 }
 
 bool Obj_Tank::Start()
@@ -148,7 +153,7 @@ bool Obj_Tank::Start()
 	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
-	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		if (!(*item_cam)->assigned)
 		{
@@ -185,6 +190,9 @@ bool Obj_Tank::Update(float dt)
 
 void Obj_Tank::CameraMovement(float dt)
 {
+	if (camera_player == nullptr)
+		return;
+
 	fPoint screen_pos = app->map->MapToScreenF(pos_map);
 	fPoint target_pos =
 	{
@@ -293,6 +301,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
 
+
 	return true;
 }
 
@@ -382,9 +391,12 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, f
 	iPoint mouse_screen_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_screen_pos.x, mouse_screen_pos.y);
 
+	
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_screen_pos.x += camera_player->rect.x;
-	mouse_screen_pos.y += camera_player->rect.y;
+
+	if (camera_player != nullptr)
+		mouse_screen_pos += {camera_player->rect.x, camera_player->rect.y};
+
 
 	input_dir = (fPoint)mouse_screen_pos - app->map->MapToScreenF(turr_map_pos);
 

@@ -144,13 +144,13 @@ void Player_GUI::SetHelper()
 
 void Player_GUI::AddButtonHelper(const Button_Helper helper)
 {
-	Button_Helper* new_helper = new Button_Helper(helper);
+	Button_Helper* new_helper = DBG_NEW Button_Helper(helper);
 	helpers_vector.push_back(new_helper);
 }
 
 void Player_GUI::AddTextHelper(const Text_Helper helper)
 {
-	Text_Helper* new_helper = new Text_Helper(helper);
+	Text_Helper* new_helper = DBG_NEW Text_Helper(helper);
 	helpers_vector.push_back(new_helper);
 }
 
@@ -165,17 +165,32 @@ Player_GUI::~Player_GUI()
 {
 	if (app->on_clean_up == false)
 	{
-		weapon_frame->Destroy();
-		item_frame->Destroy();
-		ammo_image->Destroy();
-		ammo_bar->Destroy();
-		life_bar->Destroy();
+		if (weapon_frame != nullptr)
+		{
+			weapon_frame->Destroy();
+			weapon_frame = nullptr;
 
-		weapon_frame = nullptr;
-		item_frame = nullptr;
-		ammo_image = nullptr;
-		ammo_bar = nullptr;
-		life_bar = nullptr;
+		}
+
+		if (item_frame != nullptr)
+		{
+			item_frame->Destroy();
+			item_frame = nullptr;
+		}
+
+		if (ammo_image != nullptr)
+		{
+			ammo_image->Destroy();
+			ammo_image = nullptr;
+		}
+		
+		if (life_bar != nullptr)
+		{
+			life_bar->Destroy();
+			life_bar = nullptr;
+		}
+	
+		
 	}
 
 }

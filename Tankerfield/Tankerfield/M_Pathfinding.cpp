@@ -53,8 +53,7 @@ void M_Pathfinding::SetMap(uint width, uint height, uchar* data)
 	this->height = height;
 
 	RELEASE_ARRAY(map);
-	map = new uchar[width*height];
-	memcpy(map, data, width*height);
+	map = data;
 }
 
 // Utility: return true if pos is inside the map boundaries

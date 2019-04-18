@@ -41,7 +41,7 @@ public:
 	// Utils
 	void SetViewPort(const SDL_Rect& rect);
 	void ResetViewPort();
-	iPoint ScreenToWorld(int x, int y) const;
+	iPoint ScreenToWorld(int x, int y, const Camera* camera) const;
 
 	// Draw & Blit
 	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section = nullptr, Camera* current_camera = nullptr, const int alpha =  -1) const;
@@ -67,7 +67,7 @@ public:
 public:
 
 	SDL_Renderer*					renderer = nullptr;
-	std::vector<Camera*>			camera;
+	std::vector<Camera*>			cameras;
 	std::vector<Camera*>			camera_saves;
 	SDL_Rect						viewport;
 	SDL_Color						background;
