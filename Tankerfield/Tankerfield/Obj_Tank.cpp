@@ -200,7 +200,7 @@ void Obj_Tank::Movement(float dt)
 	fPoint input_dir(0.f, 0.f);
 	if (move_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
-		InputMovementKeyboard(input_dir,dt);
+		InputMovementKeyboard(input_dir);
 	}
 	else if (move_input == INPUT_METHOD::CONTROLLER)
 	{
@@ -231,7 +231,7 @@ void Obj_Tank::Movement(float dt)
 
 }
 
-void Obj_Tank::InputMovementKeyboard(fPoint & input,float dt)
+void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
@@ -285,12 +285,12 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		//DEBUG
 		float line_length = 5.f;
 		//1-- Set a position in the isometric space
-		fPoint final_iso_pos(turr_pos.x + shot_iso_dir.x * line_length, turr_pos.y + shot_iso_dir.y * line_length);
+		fPoint input_iso_pos(turr_pos.x + shot_iso_dir.x * line_length, turr_pos.y + shot_iso_dir.y * line_length);
 		//2-- Transform that poin to screen coordinates
-		iPoint final_screen_pos = (iPoint)app->map->MapToScreenF(final_iso_pos);
+		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
 		app->render->DrawLineSplitScreen(
 			pos_screen.x, pos_screen.y - cannon_height,
-			final_screen_pos.x, final_screen_pos.y, 255, 255, 255, 123, camera);
+			input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
 	}
 
 	return true;
@@ -377,24 +377,19 @@ int Obj_Tank::GetMaxLife()
 	return max_life;
 }
 
-void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
+void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, fPoint & iso_dir)
 {
-	iPoint mouse_pos = { 0, 0 };
-	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	iPoint mouse_screen_pos = { 0, 0 };
+	app->input->GetMousePosition(mouse_screen_pos.x, mouse_screen_pos.y);
 
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
-	mouse_pos.x += camera_player->rect.x;
-	mouse_pos.y += camera_player->rect.y;
+	mouse_screen_pos.x += camera_player->rect.x;
+	mouse_screen_pos.y += camera_player->rect.y;
 
-	int tile_width = 100, tile_height = 50;
-  
-	fPoint screen_pos = app->map->MapToScreenF(turr_pos);
-	input_dir = (fPoint)mouse_pos - screen_pos;
+	input_dir = (fPoint)mouse_screen_pos - app->map->MapToScreenF(turr_map_pos);
 
 	//Transform to map to work all variables in map(blit do MapToWorld automatically)
-	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x,mouse_pos.y);
-
-	iso_dir = map_mouse_pos - turr_pos;
+	iso_dir = app->map->ScreenToMapF(mouse_screen_pos.x, mouse_screen_pos.y) - turr_map_pos;
 	iso_dir.Normalize();
 }
 
@@ -425,19 +420,9 @@ void Obj_Tank::Shoot()
 
 	if (!shot_input_dir.IsZero())
 	{
-		//Angle
-		//- Transform iso-dir to screen space
 		fPoint shot_screen_pos = app->map->MapToScreenF(shot_iso_dir);
 		turr_angle = atan2(-shot_screen_pos.y, shot_screen_pos.x) * RADTODEG;
-		//turr_angle = atan2(-shot_iso_dir.y, shot_iso_dir.x) * RADTODEG - 45;
 		shot_dir = shot_iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
-	}
-
-	if(tank_num == 0)
-	{
-		fPoint shot_input_debug = shot_input_dir;
-		shot_input_debug.Normalize();
-		LOG("shot input dir x: %f, %f", shot_input_debug.x, shot_input_debug.y);
 	}
 
 	if (PressShot())
@@ -450,14 +435,12 @@ void Obj_Tank::Shoot()
 		//- Basic shot
 		if (charged_timer.ReadMs() < charge_time) 
 		{
-			LOG("basic shot");
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
 		}
 		//- Charged shot
 		else
 		{
-			LOG("charged shot");
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
 		}
