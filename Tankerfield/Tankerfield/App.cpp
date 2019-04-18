@@ -217,6 +217,12 @@ void App::PrepareUpdate()
 	else
 	{
 		dt = frame_time.ReadSec();
+
+		if (dt > 0.32f)
+		{
+			dt = 0.32f;
+		}
+
 		frame_time.Start();
 	}
 }

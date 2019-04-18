@@ -5,7 +5,7 @@
 #include "Log.h"
 
 UI_Element::UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener) 
-	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section){}
+	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section), is_in_game(definition.is_in_game){}
 
 UI_Element::~UI_Element()
 {
@@ -27,7 +27,14 @@ bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
 
-	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
+	if (alpha != 255)
+	{
+		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+	}
+	else
+	{
+		app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
+	}
 
 	return true;
 }
