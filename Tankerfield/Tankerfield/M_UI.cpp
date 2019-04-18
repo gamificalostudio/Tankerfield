@@ -33,13 +33,25 @@
 M_UI::M_UI() : Module()
 {
 	name.assign("ui");
-	main_ui_element = new UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
-	main_in_game_element = new UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
+	main_ui_element = DBG_NEW UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
+	main_in_game_element = DBG_NEW UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
 }
 
 // Destructor
 M_UI::~M_UI()
-{}
+{
+	if (main_ui_element != nullptr)
+	{
+		delete main_ui_element;
+		main_ui_element = nullptr;
+	}
+
+	if (main_in_game_element != nullptr)
+	{
+		delete main_in_game_element;
+		main_in_game_element = nullptr;
+	}
+}
 
 // Called before render is available
 bool M_UI::Awake(pugi::xml_node& config)
@@ -48,6 +60,33 @@ bool M_UI::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
+
+	button_sprites[(int)GAMEPAD_BUTTON::A] = { 440,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::B] = { 390,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::Y] = { 440,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::X] = { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
+
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE] = { 500,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER] = { 540,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT] = { 390,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER] = { 390,500 ,34 ,34 };
+
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE] = { 500,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER] = { 550,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT] = { 390,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER] = { 390,595,44 ,44 };
+
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 545,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,545 ,40 ,40 };
+
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 550,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,650 ,47 ,47 };
 
 	return ret;
 }
@@ -60,38 +99,18 @@ bool M_UI::Start()
 	atlas = app->tex->Load("textures/ui/atlas.png");
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
 
-	button_sprite[(int)GAMEPAD_BUTTON::A]  = { 440,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::B]  = { 390,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::Y]  = { 440,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::X]  = { 390,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
-
-	// HUD ===========================================
-	player_1_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
-	players_guis.push_back(player_1_gui);
-	player_2_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
-	players_guis.push_back(player_2_gui);
-	player_3_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
-	players_guis.push_back(player_3_gui);
-	player_4_gui = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
-	players_guis.push_back(player_4_gui);
-
-	//UI_InGameElementDef def;
-	//def.pointed_obj = app->scene->tank_1;
-	//UI_IG_Helper* helper = CreateInGameHelper({ 1.f, 1.f }, def);
-
-	//helper->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::A, { 0.F, 20.F}));
-
-	//player_1_gui->AddTextHelper(Text_Helper("Press"));
-	//player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::B));
-	//player_1_gui->AddTextHelper(Text_Helper("to pay respects"));
-	//player_1_gui->SetHelper();
-
 	UI_ImageDef image_def;
 	fRect full_screen = app->win->GetWindowRect();
+
+	// HUD ===========================================
+	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	players_guis.push_back(player_1_gui);
+	player_2_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	players_guis.push_back(player_2_gui);
+	player_3_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	players_guis.push_back(player_3_gui);
+	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	players_guis.push_back(player_4_gui);
 
 	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170 , 10, 105, 105 };
@@ -120,11 +139,20 @@ bool M_UI::CleanUp()
 	LOG("Freeing all UI objects");
 
 	app->tex->UnLoad(atlas);
+	app->font->Unload(font_open_sants_bold_12);
+
+	font_open_sants_bold_12 = nullptr;
 	atlas = nullptr;
+
+	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
+	{
+		RELEASE((*gui));
+	}
+
+	players_guis.clear();
 
 	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
 	{
-		(*element)->element_sons.clear();
 		RELEASE((*element));
 	}
 
@@ -132,7 +160,6 @@ bool M_UI::CleanUp()
 
 	for (list < UI_Element*> ::iterator element = elements_list.begin(); element != elements_list.end(); ++element)
 	{
-		(*element)->element_sons.clear();
 		RELEASE((*element));
 	}
 
@@ -223,16 +250,30 @@ bool M_UI::Update(float dt)
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
 
 
+	//ax += dt * ratetime;
+	//
+	//if (round_fx->alpha == target_value)
+	//{
+	//	swap(init_value, target_value);
+	//	ax = 0.f;
+	//}
+
+	//round_fx->alpha = lerp(init_value, target_value, ax);
+
 	ax += dt * ratetime;
-	
-	if (round_fx->alpha == target_value)
+
+	if (app->scene->tank_1->GetLife() == target_value)
 	{
 		swap(init_value, target_value);
 		ax = 0.f;
 	}
 
-	round_fx->alpha = lerp(init_value, target_value, ax);
+	app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
 
+	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
+	{
+		(*gui)->Update(dt);
+	}
 
 	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
 	{
@@ -429,7 +470,7 @@ bool M_UI::PostUpdate(float dt)
 
  UI_Element * M_UI::CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
  {
-	 UI_Element* object = new UI_Element(position, definition, listener);
+	 UI_Element* object = DBG_NEW UI_Element(position, definition, listener);
 
 	 if (definition.is_in_game == true)
 	 {
@@ -447,7 +488,7 @@ bool M_UI::PostUpdate(float dt)
  UI_Label* M_UI::CreateLabel(const fPoint position,  UI_LabelDef definition, UI_Listener* listener)
 {
 
-	UI_Label* object = new UI_Label(position, definition, listener);
+	UI_Label* object = DBG_NEW UI_Label(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -466,7 +507,7 @@ bool M_UI::PostUpdate(float dt)
 
 UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition , UI_Listener* listener)
 {
-	UI_Image* object = new UI_Image(position, definition, listener);
+	UI_Image* object = DBG_NEW UI_Image(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -484,7 +525,7 @@ UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition 
 
 UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener)
 {
-	UI_Button* object = new UI_Button(position, definition, listener);
+	UI_Button* object = DBG_NEW UI_Button(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -502,7 +543,7 @@ UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definiti
 
 UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definition, UI_Listener * listener)
 {
-	UI_Slider* object = new UI_Slider(position, definition, listener);
+	UI_Slider* object = DBG_NEW UI_Slider(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -520,7 +561,7 @@ UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definit
 
 UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener * listener)
 {
-	UI_Checkbox* object = new UI_Checkbox(position, definition, listener);
+	UI_Checkbox* object = DBG_NEW UI_Checkbox(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -538,7 +579,7 @@ UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef d
 
 UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener * listener)
 {
-	UI_TextPanel* object = new UI_TextPanel(position, definition, listener);
+	UI_TextPanel* object = DBG_NEW UI_TextPanel(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -555,7 +596,7 @@ UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDe
 }
 UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener * listener)
 {
-	UI_Bar* object = new UI_Bar(position, definition, listener);
+	UI_Bar* object = DBG_NEW UI_Bar(position, definition, listener);
 
 	if (definition.is_in_game == true)
 	{
@@ -574,28 +615,28 @@ UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_L
 
 UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InGameElementDef definition)
 {
-	UI_InGameElement* object = new UI_InGameElement(position, definition);
+	UI_InGameElement* object = DBG_NEW UI_InGameElement(position, definition);
 	object->SetParent(main_in_game_element);
 	ig_elements_list.push_back(object);
 	return object;
 }
 UI_IG_Weapon * M_UI::CreateInGameWeapon(const fPoint position, const UI_InGameElementDef definition)
 {
-	UI_IG_Weapon* object = new UI_IG_Weapon(position, definition);
+	UI_IG_Weapon* object = DBG_NEW UI_IG_Weapon(position, definition);
 	object->SetParent(main_in_game_element);
 	ig_elements_list.push_back(object);
 	return object;
 }
 UI_IG_Item * M_UI::CreateInGameItem(const fPoint position, const UI_InGameElementDef definition)
 {
-	UI_IG_Item* object = new UI_IG_Item(position, definition);
+	UI_IG_Item* object = DBG_NEW UI_IG_Item(position, definition);
 	object->SetParent(main_in_game_element);
 	ig_elements_list.push_back(object);
 	return object;
 }
 UI_IG_Helper * M_UI::CreateInGameHelper(const fPoint position, const UI_InGameElementDef definition)
 {
-	UI_IG_Helper* object = new UI_IG_Helper(position, definition);
+	UI_IG_Helper* object = DBG_NEW UI_IG_Helper(position, definition);
 	object->SetParent(main_in_game_element);
 	ig_elements_list.push_back(object);
 	return object;

@@ -22,8 +22,8 @@ private:
 public:
 
 	PICKUP_TYPE type_of_pick_up					= PICKUP_TYPE::NO_TYPE;
-	WEAPON type_of_weapon						= WEAPON::BASIC;
-	ObjectType type_of_item						= ObjectType::NO_TYPE;
+	WEAPON      type_of_weapon					= WEAPON::BASIC;
+	ObjectType  type_of_item					= ObjectType::NO_TYPE;
 
 public:
 

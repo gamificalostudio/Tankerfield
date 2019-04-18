@@ -54,6 +54,8 @@ bool M_Audio::Start()
 		ret = true;
 	}
 
+	explosion_fx = LoadFx("audio/Fx/explosion.wav");
+
 	return ret;
 }
 
@@ -138,6 +140,7 @@ bool M_Audio::PlayMusic(const char* path, float fade_time)
 	return ret;
 }
 
+
 // Load WAV
 unsigned int M_Audio::LoadFx(const char* path)
 {
@@ -176,4 +179,9 @@ bool M_Audio::PlayFx(unsigned int id, int repeat)
 	}
 
 	return ret;
+}
+
+unsigned int M_Audio::GetExplosionFx()
+{
+	return explosion_fx;
 }

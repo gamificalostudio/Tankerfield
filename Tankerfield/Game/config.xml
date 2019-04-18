@@ -14,7 +14,7 @@
     <resolution width="1920" height="1080" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
-    <resizable value="false"/>
+    <resizable value="true"/>
     <fullscreen_window value="false"/>
   </window>
 
@@ -75,7 +75,7 @@
   <object>
     <tesla_trooper>
       <animations>
-        <walk speed="1" rotation="counter-clockwise" first_dir_angle ="-90">
+        <walk speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <!--starts in frame number 8-->
             <frame x= "528" y= "0" w="66" h="76" />

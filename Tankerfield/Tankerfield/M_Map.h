@@ -23,7 +23,15 @@ struct Properties
 	struct Property
 	{
 		std::string name;
-		void* value;
+		void* value = nullptr;
+		~Property()
+		{
+			if (value != nullptr)
+			{
+				delete value;
+				value = nullptr;
+			}
+		}
 	};
 
 	~Properties()
@@ -56,13 +64,16 @@ struct ObjectGroup
 	Properties	properties;
 	uint size			= 0;
 	Rect<float, float>* objects	= nullptr;
+
 	~ObjectGroup()
 	{
 		if (objects != nullptr)
 		{
 			delete[] objects;
 			objects = nullptr;
+			size = 0;
 		}
+		properties.UnloadProperties();
 	}
 };
 // ----------------------------------------------------
@@ -70,8 +81,11 @@ struct TileSet
 {
 	~TileSet()
 	{
-		if(texture != nullptr)
+		if (texture != nullptr)
+		{
 			app->tex->UnLoad(texture);
+			texture = nullptr;
+		}
 	}
 
 	inline SDL_Rect GetTileRect(int id) const;
@@ -109,8 +123,13 @@ struct MapLayer
 
 	~MapLayer()
 	{
-		RELEASE(data);
-
+		layer_properties.UnloadProperties();
+		if (data != nullptr)
+		{
+			delete[] data;
+			data = nullptr;
+		}
+		
 	}
 
 	inline uint Get(int x, int y) const
@@ -157,11 +176,20 @@ struct MapData
 
 	~MapData()
 	{
+		if (qt != nullptr)
+		{
+			delete qt;
+			qt = nullptr;
+		}
+
 		if (screen_tile_rect != nullptr)
 		{
 			delete[] screen_tile_rect;
 			screen_tile_rect = nullptr;
 		}
+		map_properties.UnloadProperties();
+
+
 	}
 	
 };

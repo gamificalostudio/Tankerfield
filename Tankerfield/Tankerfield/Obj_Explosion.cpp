@@ -15,6 +15,9 @@
 #include "Obj_Explosion.h"
 #include "Animation.h"
 #include "M_AnimationBank.h"
+#include "M_Audio.h"
+#include "Obj_Tank.h"
+
 Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
 	pugi::xml_node explosion_node = app->config.child("object").child("explosion");
@@ -30,6 +33,9 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 
 	coll = app->collision->AddCollider(pos_map, 3.f, 3.f, Collider::TAG::BULLET, 200.f, nullptr);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+
+	explosion_fx=app->audio->GetExplosionFx();
+	app->audio->PlayFx(explosion_fx);
 }
 
 Obj_Explosion::~Obj_Explosion()

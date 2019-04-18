@@ -87,16 +87,13 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	switch (pick_up_obj->type_of_weapon)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		img_def.sprite_section = { 620, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
 		break;
 	case WEAPON::FLAMETHROWER:
-		img_def.sprite_section = { 580, 10, 34, 34 };
-		break;
-	case WEAPON::BASIC:
-		img_def.sprite_section = { 330, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	default:
-		img_def.sprite_section = { 500, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	}
 
@@ -159,18 +156,22 @@ void UI_IG_Weapon::Destroy()
 	if (arrow_image != nullptr)
 	{
 		arrow_image->Destroy();
+		arrow_image = nullptr;
 	}
 	if (weapon_frame != nullptr)
 	{
 		weapon_frame->Destroy();
+		weapon_frame = nullptr;
 	}
 	if (weapon_icon != nullptr)
 	{
 		weapon_icon->Destroy();
+		weapon_icon = nullptr;
 	}
 	if (level_indicator != nullptr)
 	{
 		level_indicator->Destroy();
+		level_indicator = nullptr;
 	}
 
 }
@@ -188,14 +189,18 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	main_element = item_frame;
 
 	// Add icon ====================================================
+	Obj_PickUp* pick_up_obj = (Obj_PickUp*)pointed_obj;
 
-	switch (pointed_obj->type)
+	switch (pick_up_obj->type_of_item)
 	{
 	case ObjectType::HEALTH_BAG:
-		img_def.sprite_section = { 500,55,40,40 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
+		break;
+	case ObjectType::HAPPY_HOUR_ITEM:
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
 	default:
-		img_def.sprite_section = { 500,55,40,40 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
 	}
 
@@ -264,7 +269,7 @@ bool UI_IG_Helper::PostUpdate()
 
 void UI_IG_Helper::AddButtonHelper(Button_Helper helper)
 {
-	UI_ImageDef def(app->ui->button_sprite[(int)helper.button_type]);
+	UI_ImageDef def(app->ui->button_sprites[(int)helper.button_type]);
 	def.is_in_game = true;
 
 	UI_Image*  ui_helpear = app->ui->CreateImage(main_element->position + helper.offset, def);
