@@ -125,8 +125,7 @@ bool Obj_Tank::Start()
 	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
-	cannon_length = 1.f;
-
+	cannon_length = 0.75f;
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -284,29 +283,13 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	//DEBUG
 	float line_length = 5.f;
 
-	//Green: The direction used for drawing the turret angle
-	iPoint final_input_pos (pos_screen.x + shot_input_dir.x * line_length, pos_screen.y - cannon_height + shot_input_dir.y * line_length);
-	app->render->DrawLineSplitScreen(
-		pos_screen.x, pos_screen.y - cannon_height,
-		final_input_pos.x, final_input_pos.y, 0, 255, 0, 255, camera);
-
-	//Blue: The direction used for spawning and setting the bullet direction
 	//1-- Set a position in the isometric space
 	fPoint final_iso_pos(turr_pos.x + shot_iso_dir.x * line_length, turr_pos.y + shot_iso_dir.y * line_length);
 	//2-- Transform that poin to screen coordinates
 	iPoint final_screen_pos = (iPoint)app->map->MapToScreenF(final_iso_pos);
 	app->render->DrawLineSplitScreen(
 		pos_screen.x, pos_screen.y - cannon_height,
-		final_screen_pos.x, final_screen_pos.y, 0, 0, 255, 255, camera);
-
-	//fPoint debug_iso_point_1(0.f,0.f);
-	//iPoint debug1 = app->map->MapToScreenI(debug_iso_point_1.x, debug_iso_point_1.y);
-	//fPoint debug_iso_point_2(0.f, -5.f);
-	////rotate the point by 45 º (test if the assumption that rotating 45 degrees equals isometric direction is true)
-	//debug_iso_point_2.RotateDegree(-45);//comment - vertical line
-	////debug_iso_point_2.RotateDegree(45);//comment - horizontal line
-	//iPoint debug2 = app->map->MapToScreenI(debug_iso_point_2.x, debug_iso_point_2.y);
-	//app->render->DrawLineSplitScreen(debug1.x, debug1.y, debug2.x, debug2.y, 255, 0, 0, 255, camera);
+		final_screen_pos.x, final_screen_pos.y, 0, 255, 0, 255, camera);
 
 	return true;
 }
