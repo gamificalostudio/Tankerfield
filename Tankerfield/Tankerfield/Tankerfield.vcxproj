@@ -127,10 +127,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet_Laser.cpp" />
+    <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
     <ClCompile Include="Healing_Bullet.cpp" />
+    <ClCompile Include="M_RewardZoneManager.cpp" />
+    <ClCompile Include="Obj_Brute.cpp" />
+    <ClCompile Include="Obj_RewardBox.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
@@ -178,11 +182,15 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Laser.h" />
+    <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="M_AnimationBank.h" />
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Healing_Bullet.h" />
+    <ClInclude Include="M_RewardZoneManager.h" />
+    <ClInclude Include="Obj_Brute.h" />
+    <ClInclude Include="Obj_RewardBox.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
