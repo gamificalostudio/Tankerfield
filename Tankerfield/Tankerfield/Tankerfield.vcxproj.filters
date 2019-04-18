@@ -118,6 +118,12 @@
     <ClCompile Include="Obj_HealingAnimation.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Player_GUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Brute.cpp">
+      <Filter>Objects</Filter>
+     </ClCompile>
     <ClCompile Include="Item_HealthBag.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
@@ -300,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="UI_InGameElement.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Brute.h">
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="WeaponInfo.h">
       <Filter>Weapons</Filter>

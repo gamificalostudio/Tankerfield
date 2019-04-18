@@ -136,6 +136,7 @@
     <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="M_Collision.cpp" />
+    <ClCompile Include="Obj_Brute.cpp" />
     <ClCompile Include="M_PickManager.cpp" />
     <ClCompile Include="Obj_Bullet.cpp" />
     <ClCompile Include="Obj_Explosion.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="M_Collision.h" />
+    <ClInclude Include="Obj_Brute.h" />
     <ClInclude Include="M_PickManager.h" />
     <ClInclude Include="Obj_Bullet.h" />
     <ClInclude Include="Obj_Explosion.h" />

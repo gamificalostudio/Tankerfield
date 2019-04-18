@@ -25,6 +25,7 @@ enum class ObjectType
 
 	//ENEMIES
 	TESLA_TROOPER,
+	BRUTE,
 
 	//BULLETS
 	BASIC_BULLET,
