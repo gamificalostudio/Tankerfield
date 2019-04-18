@@ -53,7 +53,7 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
-	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	BROFILER_CATEGORY("MAP Update", Profiler::Color::DeepPink);
 	bool ret = true;
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
@@ -67,19 +67,18 @@ bool M_Map::Update(float dt)
 
 bool M_Map::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	BROFILER_CATEGORY("MAP PostUpdate", Profiler::Color::DeepPink);
 	bool ret = true;
 
 	if (map_loaded == false)
 		return ret;
-
-	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
 		
 	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
 		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
+
 		std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
 		{
 			return a.sorting_value < b.sorting_value;
@@ -94,9 +93,11 @@ bool M_Map::PostUpdate(float dt)
 				(*sorted_tiles).rect.y,
 				(*item_cam),
 				&tileset->GetTileRect((*sorted_tiles).id));
+				
 		}
-		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
+
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 
 	//// Draw Grid ==============================================
 	if(show_grid)
@@ -522,7 +523,7 @@ bool M_Map::LoadMap()
 	return ret;
 }
 
-SDL_Rect TileSet::GetTileRect(int id) const
+inline SDL_Rect TileSet::GetTileRect(int id) const
 {
 	int relative_id = id - firstgid;
 	SDL_Rect rect = { 
