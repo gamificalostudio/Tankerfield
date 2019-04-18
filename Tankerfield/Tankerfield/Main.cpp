@@ -1,3 +1,7 @@
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include <stdlib.h>
 
 #include "Defs.h"
@@ -10,6 +14,8 @@
 
 #include"Brofiler/Brofiler.h"
 #pragma comment (lib,"Brofiler/ProfilerCore32.lib")
+
+
 
 enum MAIN_STATE
 {
@@ -40,7 +46,7 @@ int main(int argc, char* args[])
 		case CREATE:
 			LOG("CREATION PHASE ===============================");
 
-			app = new App(argc, args);
+			app = DBG_NEW App(argc, args);
 
 			if (app != NULL)
 				state = AWAKE;
@@ -110,6 +116,6 @@ int main(int argc, char* args[])
 	}
 
 	LOG("Exit: Application");
-
+	_CrtDumpMemoryLeaks();
 	return result;
 }

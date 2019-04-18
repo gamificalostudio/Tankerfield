@@ -30,21 +30,21 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	PERF_START(ptimer);
 
-	input = new M_Input();
-	win = new M_Window();
-	render = new M_Render();
-	tex = new M_Textures();
-	audio = new M_Audio();
-	pathfinding = new M_Pathfinding();
-	map = new M_Map();
-	scene = new M_Scene();
-	font = new M_Fonts();
-	ui = new M_UI();
-	objectmanager = new M_ObjManager();
-	pick_manager = new M_PickManager();
-	scmanager = new M_SceneManager();
-	collision = new M_Collision();
-	anim_bank = new M_AnimationBank();
+	input = DBG_NEW M_Input();
+	win = DBG_NEW M_Window();
+	render = DBG_NEW M_Render();
+	tex = DBG_NEW M_Textures();
+	audio = DBG_NEW M_Audio();
+	pathfinding = DBG_NEW M_Pathfinding();
+	map = DBG_NEW M_Map();
+	scene = DBG_NEW M_Scene();
+	font = DBG_NEW M_Fonts();
+	ui = DBG_NEW M_UI();
+	objectmanager = DBG_NEW M_ObjManager();
+	pick_manager = DBG_NEW M_PickManager();
+	scmanager = DBG_NEW M_SceneManager();
+	collision = DBG_NEW M_Collision();
+	anim_bank = DBG_NEW M_AnimationBank();
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -61,6 +61,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pick_manager);
 	AddModule(collision);
 	AddModule(ui);
+	AddModule(anim_bank);
 	// render last to swap buffer
 	AddModule(render);
 	

@@ -84,7 +84,7 @@ bool M_Scene::PreUpdate()
 
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->camera.begin()));
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
 	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -193,7 +193,7 @@ void M_Scene::DebugPathfinding()
 
 		iPoint mousePos;
 		app->input->GetMousePosition(mousePos.x, mousePos.y);
-		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, (*app->render->camera.begin()));
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, (*app->render->cameras.begin()));
 		p = app->map->ScreenToMapI(p.x, p.y);
 
 		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
@@ -236,7 +236,7 @@ void M_Scene::DebugPathfinding()
 				{
 					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
 					
-					for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
 						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
@@ -249,7 +249,7 @@ void M_Scene::DebugPathfinding()
 
 		p = app->map->MapToScreenI(p.x, p.y);
 
-		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));

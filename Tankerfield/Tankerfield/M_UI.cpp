@@ -29,12 +29,18 @@
 M_UI::M_UI() : Module()
 {
 	name.assign("ui");
-	main_object = new UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
+	main_object = DBG_NEW UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
 }
 
 // Destructor
 M_UI::~M_UI()
-{}
+{
+	if (main_object != nullptr)
+	{
+		delete main_object;
+		main_object = nullptr;
+	}
+}
 
 // Called before render is available
 bool M_UI::Awake(pugi::xml_node& config)
@@ -57,10 +63,10 @@ bool M_UI::Start()
 
 
 	// HUD ===========================================
-	hud_player_1 = new Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
-	hud_player_2 = new Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
-	hud_player_3 = new Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
-	hud_player_4 = new Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	hud_player_1 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	hud_player_2 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	hud_player_3 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	hud_player_4 = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
 
 	UI_InGameElementDef test_def;
 	test_def.object = (Object*)app->scene->tank_2;
@@ -313,7 +319,7 @@ bool M_UI::PostUpdate(float dt)
 
  UI_Element * M_UI::CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
  {
-	 UI_Element* object = new UI_Element(position, definition, listener);
+	 UI_Element* object = DBG_NEW UI_Element(position, definition, listener);
 	 object->SetParent(main_object);
 	 objects_list.push_back(object);
 	 return object;
@@ -321,7 +327,7 @@ bool M_UI::PostUpdate(float dt)
 
  UI_Label* M_UI::CreateLabel(const fPoint position, const String text,  UI_LabelDef definition, UI_Listener* listener)
 {
-	UI_Label* object = new UI_Label(position, text, definition, listener);
+	UI_Label* object = DBG_NEW UI_Label(position, text, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
@@ -330,7 +336,7 @@ bool M_UI::PostUpdate(float dt)
 
 UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition , UI_Listener* listener)
 {
-	UI_Image* object = new UI_Image(position, definition, listener);
+	UI_Image* object = DBG_NEW UI_Image(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
@@ -338,7 +344,7 @@ UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition 
 
 UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener)
 {
-	UI_Button* object = new UI_Button(position, definition, listener);
+	UI_Button* object = DBG_NEW UI_Button(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
@@ -346,7 +352,7 @@ UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definiti
 
 UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definition, UI_Listener * listener)
 {
-	UI_Slider* object = new UI_Slider(position, definition, listener);
+	UI_Slider* object = DBG_NEW UI_Slider(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
@@ -354,7 +360,7 @@ UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definit
 
 UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener * listener)
 {
-	UI_Checkbox* object = new UI_Checkbox(position, definition, listener);
+	UI_Checkbox* object = DBG_NEW UI_Checkbox(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
@@ -362,14 +368,14 @@ UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef d
 
 UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener * listener)
 {
-	UI_TextPanel* object = new UI_TextPanel(position, definition, listener);
+	UI_TextPanel* object = DBG_NEW UI_TextPanel(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
 }
 UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener * listener)
 {
-	UI_Bar* object = new UI_Bar(position, definition, listener);
+	UI_Bar* object = DBG_NEW UI_Bar(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;
@@ -378,7 +384,7 @@ UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_L
 UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InGameElementDef definition, UI_Listener * listener)
 {
 
-	UI_InGameElement* object = new UI_InGameElement(position, definition, listener);
+	UI_InGameElement* object = DBG_NEW UI_InGameElement(position, definition, listener);
 	object->SetParent(main_object);
 	objects_list.push_back(object);
 	return object;

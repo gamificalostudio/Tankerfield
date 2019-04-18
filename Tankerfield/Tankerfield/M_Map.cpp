@@ -42,7 +42,7 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 		for (pugi::xml_node level = levelsNode.child("level"); level; level = level.next_sibling("level"))
 		{
-			Levels* newLevel = new Levels();
+			Levels* newLevel = DBG_NEW Levels();
 			newLevel->name = level.attribute("name").as_string();
 			numLevels++;
 			levels.push_back(newLevel);
@@ -75,7 +75,7 @@ bool M_Map::PostUpdate(float dt)
 
 	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
 		
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
@@ -103,7 +103,7 @@ bool M_Map::PostUpdate(float dt)
 	{
 		iPoint point_1, point_2;
 		
-		for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 			for (int i = 0; i <= data.columns; ++i)
@@ -162,7 +162,7 @@ bool M_Map::Load(const std::string& file_name)
 	pugi::xml_node tileset;
 	for (tileset = map_file.child("map").child("tileset"); tileset && ret; tileset = tileset.next_sibling("tileset"))
 	{
-		TileSet* set = new TileSet();
+		TileSet* set = DBG_NEW TileSet();
 
 		if (ret == true)
 		{
@@ -181,7 +181,7 @@ bool M_Map::Load(const std::string& file_name)
 	
 	for (pugi::xml_node layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
-		MapLayer* lay = new MapLayer();
+		MapLayer* lay = DBG_NEW MapLayer();
 
 		ret = LoadLayer(layer, lay);
 
@@ -192,7 +192,7 @@ bool M_Map::Load(const std::string& file_name)
 
 	for (pugi::xml_node obj_layer = map_file.child("map").child("objectgroup"); obj_layer && ret; obj_layer = obj_layer.next_sibling("objectgroup"))
 	{
-		ObjectGroup* obj_lay = new ObjectGroup();
+		ObjectGroup* obj_lay = DBG_NEW ObjectGroup();
 
 		ret = LoadObjectGroup(obj_layer, obj_lay);
 
@@ -334,7 +334,7 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	{
 		
 
-		layer->data = new uint[layer->columns*layer->rows];
+		layer->data = DBG_NEW uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
 		if (layer->visible)
@@ -385,7 +385,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	{
 		++object_group->size;
 	}
-	object_group->objects = new Rect<float, float>[object_group->size];
+	object_group->objects = DBG_NEW Rect<float, float>[object_group->size];
 	
 	uint i = 0;
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
@@ -523,7 +523,7 @@ bool M_Map::LoadMap()
 			data.type = MAPTYPE_UNKNOWN;
 		}
 
-		data.screen_tile_rect = new iRect[data.columns*data.rows];
+		data.screen_tile_rect = DBG_NEW iRect[data.columns*data.rows];
 		for (int y = 0; y < data.rows; ++y)
 		{
 			for (int x = 0; x < data.columns; ++x)
@@ -539,8 +539,8 @@ bool M_Map::LoadMap()
 		;
 
 		uint level = 1;
-		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->camera.begin())->viewport.w*0.25, level);
-		data.qt = new Quadtree_Map(area, 0, level);
+		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->cameras.begin())->viewport.w*0.25, level);
+		data.qt = DBG_NEW Quadtree_Map(area, 0, level);
 
 	}
 
@@ -596,7 +596,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 		if (layer->layer_properties.GetAsFloat("Navigation", 0) == 0)
 			continue;
 
-		uchar* map = new uchar[layer->columns * layer->rows];
+		uchar* map = DBG_NEW uchar[layer->columns * layer->rows];
 		memset(map, 1, layer->columns*layer->rows);
 
 		for (int y = 0; y < data.rows; ++y)
@@ -778,24 +778,24 @@ void Properties::LoadProperties(pugi::xml_node propertie_node)
 {
 	for (pugi::xml_node iter = propertie_node.child("property"); iter; iter = iter.next_sibling("property"))
 	{
-		Property* p = new Property();
+		Property* p = DBG_NEW Property();
 		p->name = iter.attribute("name").as_string();
 		std::string type = iter.attribute("type").as_string();
 		if (type == "int")
 		{
-			p->value = new int(iter.attribute("value").as_int());
+			p->value = DBG_NEW int(iter.attribute("value").as_int());
 		}
 		else if (type == "float")
 		{
-			p->value = new float(iter.attribute("value").as_float());
+			p->value = DBG_NEW float(iter.attribute("value").as_float());
 		}
 		else if (type == "bool")
 		{
-			p->value = new bool(iter.attribute("value").as_bool());
+			p->value = DBG_NEW bool(iter.attribute("value").as_bool());
 		}
 		else
 		{
-			p->value = new std::string(iter.attribute("value").as_string());
+			p->value = DBG_NEW std::string(iter.attribute("value").as_string());
 		}
 		list.push_back(p);
 
@@ -809,6 +809,7 @@ void Properties::UnloadProperties()
 	while (item != list.end())
 	{
 		RELEASE(*item);
+		(*item) = nullptr;
 		++item;
 	}
 

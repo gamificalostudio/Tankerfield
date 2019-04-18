@@ -53,7 +53,7 @@ void M_Pathfinding::SetMap(uint width, uint height, uchar* data)
 	this->height = height;
 
 	RELEASE_ARRAY(map);
-	map = new uchar[width*height];
+	map = DBG_NEW uchar[width*height];
 	memcpy(map, data, width*height);
 }
 

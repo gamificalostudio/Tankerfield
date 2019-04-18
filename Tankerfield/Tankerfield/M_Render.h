@@ -66,7 +66,7 @@ public:
 public:
 
 	SDL_Renderer*					renderer = nullptr;
-	std::vector<Camera*>			camera;
+	std::vector<Camera*>			cameras;
 	std::vector<Camera*>			camera_saves;
 	SDL_Rect						viewport;
 	SDL_Color						background;

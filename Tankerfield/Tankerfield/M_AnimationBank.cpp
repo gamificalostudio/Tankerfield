@@ -13,7 +13,7 @@ Frames * M_AnimationBank::LoadFrames(pugi::xml_node node)
 	}
 	else
 	{
-		frames = frames_map[final_name] = new Frames(node);
+		frames = frames_map[final_name] = DBG_NEW Frames(node);
 	}
 
 	return frames;

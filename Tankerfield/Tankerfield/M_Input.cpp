@@ -18,7 +18,7 @@ M_Input::M_Input() : Module()
 {
 	name = "input";
 
-	keyboard = new KeyState[MAX_KEYS];
+	keyboard = DBG_NEW KeyState[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KeyState) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KeyState) * NUM_MOUSE_BUTTONS);
 }
@@ -26,7 +26,11 @@ M_Input::M_Input() : Module()
 // Destructor
 M_Input::~M_Input()
 {
-	
+	if (keyboard != nullptr)
+	{
+		delete[] keyboard;
+		keyboard = nullptr;
+	}
 }
 
 // Called before render is available
@@ -142,7 +146,7 @@ bool M_Input::PreUpdate()
 						}
 						if (!is_joystick)
 						{
-							Controller* controller = new Controller();
+							Controller* controller = DBG_NEW Controller();
 							controller->ctr_pointer = SDL_GameControllerOpen(i);
 							SDL_Joystick* j = SDL_GameControllerGetJoystick(controller->ctr_pointer);
 							controller->joyId = SDL_JoystickInstanceID(j);
@@ -233,7 +237,7 @@ iPoint M_Input::GetMousePos_Tiles(const Camera * camera)
 	if (camera != nullptr)
 		ret = app->render->ScreenToWorld(mouse_x, mouse_y, camera);
 	else
-		ret = app->render->ScreenToWorld(mouse_x, mouse_y, (*app->render->camera.begin()));
+		ret = app->render->ScreenToWorld(mouse_x, mouse_y, (*app->render->cameras.begin()));
 
 	ret = app->map->ScreenToMapI(ret.x, ret.y);
 
