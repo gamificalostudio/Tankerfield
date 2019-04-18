@@ -41,11 +41,9 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
-	initial_generated_units = 1;//config.child("initial_generated_units").attribute("value").as_int();
+	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
 	distance_range = config.child("distance_range").attribute("value").as_int();
-	min_distance_from_center = config.child("min_distance_from_center").attribute("value").as_int();
-	check_complete_round = config.child("check_complete_round").attribute("value").as_int();
-	enemies_to_increase = 0;//config.child("enemies_to_increase").attribute("value").as_int();
+	enemies_to_increase = config.child("enemies_to_increase").attribute("value").as_int();
 
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
 
@@ -297,40 +295,6 @@ void M_Scene::DebugPathfinding()
 
 void M_Scene::CreateEnemyWave()
 {
-	/*for (int i = 0; i < initial_generated_units; i++)
-	{
-		//iPoint random_tile_position = { -10 + rand() % 21, -10 + rand() % 21 };
-		iPoint random_tile_position = { rand() % (distance_range * 2 + 1) - distance_range,
-			rand() % (distance_range * 2 + 1) - distance_range };
-
-		// TODO: At this point, we know the map columns / rows -> 40. We must get these values without magic numbers.
-		int map_rows = 40, map_columns = 40;
-
-		if (random_tile_position.x >= 0 && random_tile_position.y >= 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x < 0 && random_tile_position.y < 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x >= 0 && random_tile_position.y < 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x + (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y - (float)min_distance_from_center));
-		}
-		else if (random_tile_position.x < 0 && random_tile_position.y >= 0)
-		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER,
-				fPoint(map_rows / 2 + (float)random_tile_position.x - (float)min_distance_from_center,
-					map_columns / 2 + (float)random_tile_position.y + (float)min_distance_from_center));
-		}
-	}*/
 	for (int i = 0; i < initial_generated_units; i++)
 	{
 		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
