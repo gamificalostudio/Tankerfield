@@ -181,10 +181,13 @@ private:
 	SDL_Texture * turr_shadow_tex		= nullptr;
 
 	//- Tutorial
+	//-- Move
 	Timer tutorial_move_timer;
-	UI_IG_Helper * tutorial_move;
+	UI_IG_Helper * tutorial_move		= nullptr;
 	int tutorial_move_time				= 0;//The time the tutorial move image will appear on screen (ms)
 	bool tutorial_move_pressed			= false;
+	//-- Revive
+	UI_IG_Helper * tutorial_revive		= nullptr;
 
 public:
 	Camera* camera_player				= nullptr;

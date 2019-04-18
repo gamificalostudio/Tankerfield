@@ -184,6 +184,11 @@ bool Obj_Tank::Start()
 	tutorial_move->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
 	tutorial_move->AddTextHelper(Text_Helper("MOVE", {0.f, 70.f}));
 	tutorial_move_time = 4000;
+	//- Revive
+	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
+	tutorial_revive->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f }));
+	tutorial_revive->AddTextHelper(Text_Helper("REVIVE", { 0.f, 70.f }));
+	tutorial_revive->state = ELEMENT_STATE::HIDDEN;
 
 	return true;
 }
@@ -665,16 +670,18 @@ void Obj_Tank::ReviveTank()
 	for (int i = 0; i < 4; i++)
 	{
 		if (this != tank_arr[i]
-			&& controller != nullptr
-			&& ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN
-			|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT)
-			&& tank_arr[i]->life == 0
 			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map) <= revive_range_squared
+			&& tank_arr[i]->life == 0
 			&& this->life != 0)
 		{
-			tank_arr[i]->curr_speed = speed;
-			tank_arr[i]->life = revive_life;
+			tutorial_revive->state = ELEMENT_STATE::VISIBLE;
 
+			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
+				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
+			{
+				tank_arr[i]->curr_speed = speed;
+				tank_arr[i]->life = revive_life;
+			}
 		}
 	}
 }
