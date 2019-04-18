@@ -423,7 +423,7 @@ void Obj_Tank::Shoot()
 
 	if (!shot_input_dir.IsZero())
 	{
-		turr_angle = atan2(-shot_input_dir.y, shot_input_dir.x) * RADTODEG;
+		turr_angle = atan2(-shot_iso_dir.y, shot_iso_dir.x) * RADTODEG - 45;
 		shot_dir = shot_iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 
