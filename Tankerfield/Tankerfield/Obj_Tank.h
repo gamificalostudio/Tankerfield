@@ -191,6 +191,8 @@ private:
 	SDL_Texture * turr_tex				= nullptr;
 	SDL_Texture * turr_shadow_tex		= nullptr;
 
+	// Weapon info
+
 public:
 	Camera* camera_player				= nullptr;
 

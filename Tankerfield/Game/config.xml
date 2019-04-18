@@ -1462,41 +1462,6 @@
     </laser_bullet>
   </object>
 
-  <weapons>
-    <basic>
-      <bullet_damage value ="50"/>
-      <bullet_speed value ="10"/>
-      <bullet_life_ms value ="2000"/>
-      <time_between_bullets value ="500"/>
-    </basic>
-    <flamethrower>
-      <bullet_damage value ="50"/>
-      <bullet_speed value ="10"/>
-      <bullet_life_ms value ="2000"/>
-      <time_between_bullets value ="500"/>
-    </flamethrower>
-    <double_missile>
-      <bullet_damage value ="0"/>
-      <bullet_speed value="10"/>
-      <bullet_life_ms value="5000"/>
-      <time_between_bullets value="1000"/>
-      <number_of_bullets value="2"/>
-    </double_missile>
-    <healing_shot>
-      <bullet_damage value ="25"/>
-      <bullet_speed value ="10"/>
-      <bullet_life_ms value ="2000"/>
-      <time_between_bullets value ="500"/>
-      <bullet_healing value="5"/>
-    </healing_shot>
-    <laser_shoot>
-      <bullet_damage value ="50"/>
-      <bullet_speed value ="10"/>
-      <bullet_life_ms value ="2000"/>
-      <time_between_bullets value ="500"/>
-    </laser_shoot>
-  </weapons>
-
   <items>
     <health_bag>
       <texture path ="textures/objects/item/health_bag.png"/>

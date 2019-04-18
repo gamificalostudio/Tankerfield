@@ -119,7 +119,12 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	weapon_info.LoadProperties(app->config.child("weapons").child("basic"));
+	//Basic weapon starting properties
+	weapon_info.bullet_damage = 50;
+	weapon_info.bullet_healing = 0;
+	weapon_info.bullet_life_ms = 2000;
+	weapon_info.bullet_speed = 10;
+	weapon_info.time_between_bullets = 500;
 
 	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
@@ -423,10 +428,47 @@ void Obj_Tank::SetItem(ObjectType type)
 
 void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
-
 	weapon_info.level_weapon = level;
 	weapon_info.type = type;
 
+	switch (type)
+	{
+	case WEAPON::BASIC:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::FLAMETHROWER:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::DOUBLE_MISSILE:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::HEALING_SHOT:
+		weapon_info.bullet_damage = 0;
+		weapon_info.bullet_healing = 25 + 1 * level;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	case WEAPON::LASER_SHOT:
+		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		break;
+	}
 }
 
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)

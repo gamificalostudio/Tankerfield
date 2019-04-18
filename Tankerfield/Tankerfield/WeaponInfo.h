@@ -22,9 +22,6 @@ enum class WEAPON {
 class WeaponInfo
 {
 public:
-	void LoadProperties(const pugi::xml_node & node);
-
-public:
 
 	WEAPON type					= WEAPON::BASIC;
 	int level_weapon			= 0;
