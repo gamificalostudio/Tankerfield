@@ -19,7 +19,7 @@ class Quadtree_Map : public Quadtree
 
 public:
 	Quadtree_Map(SDL_Rect area, uint level = 0, uint max_levels = 1, uint maxElements = 4);
-
+	~Quadtree_Map();
 	void Draw() const override;
 
 	//Return 0 if not added

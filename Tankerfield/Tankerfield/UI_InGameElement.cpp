@@ -9,6 +9,7 @@
 #include "Object.h"
 
 #include "UI_Image.h"
+#include "UI_Label.h"
 
 UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElementDef definition): UI_Element(position, definition, nullptr),  map_pos(definition.map_pos), pointed_obj(definition.pointed_obj)
 {
@@ -18,10 +19,13 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 	{
 		UI_ImageDef image_def;
 		image_def.image_animation = &app->ui->arrow_anim;
-		arrow_image = app->ui->CreateInGameImage({ 0.f, 0.f }, image_def);
+		image_def.is_in_game = true;
+		arrow_image = app->ui->CreateImage({ 0.f, 0.f }, image_def);
 		arrow_image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 		arrow_image->SetParent(this);
 	}
+
+	
 }
 
 bool UI_InGameElement::PostUpdate()
@@ -69,8 +73,9 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	// Add frame ====================================================
 
 	img_def.sprite_section = { 330, 160, 50, 70 };
-	
-	weapon_frame = app->ui->CreateInGameImage({ 0.f ,0.f }, img_def);
+	img_def.is_in_game = true;
+
+	weapon_frame = app->ui->CreateImage({ 0.f ,0.f }, img_def);
 	weapon_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	weapon_frame->SetParent(this);
 	main_element = weapon_frame;
@@ -82,25 +87,22 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	switch (pick_up_obj->type_of_weapon)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		img_def.sprite_section = { 620, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
 		break;
 	case WEAPON::FLAMETHROWER:
-		img_def.sprite_section = { 580, 10, 34, 34 };
-		break;
-	case WEAPON::BASIC:
-		img_def.sprite_section = { 330, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	default:
-		img_def.sprite_section = { 500, 10, 34, 34 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	}
 
 	img_def.sprite_section = { 620, 10, 34, 34 };
-	weapon_icon = app->ui->CreateInGameImage(weapon_frame->position - fPoint(0.f, 29.f), img_def);
+	weapon_icon = app->ui->CreateImage(weapon_frame->position - fPoint(0.f, 29.f), img_def);
 	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	weapon_icon->SetParent(weapon_frame);
 
-	level_indicator = app->ui->CreateInGameImage(weapon_frame->position - fPoint( 32.f, 64.f), img_def);
+	level_indicator = app->ui->CreateImage(weapon_frame->position - fPoint( 32.f, 64.f), img_def);
 	level_indicator->SetParent(weapon_frame);
 	 
 }
@@ -154,18 +156,22 @@ void UI_IG_Weapon::Destroy()
 	if (arrow_image != nullptr)
 	{
 		arrow_image->Destroy();
+		arrow_image = nullptr;
 	}
 	if (weapon_frame != nullptr)
 	{
 		weapon_frame->Destroy();
+		weapon_frame = nullptr;
 	}
 	if (weapon_icon != nullptr)
 	{
 		weapon_icon->Destroy();
+		weapon_icon = nullptr;
 	}
 	if (level_indicator != nullptr)
 	{
 		level_indicator->Destroy();
+		level_indicator = nullptr;
 	}
 
 }
@@ -173,29 +179,33 @@ void UI_IG_Weapon::Destroy()
 UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definition) : UI_InGameElement(position, definition)
 {
 	UI_ImageDef img_def;
-
+	img_def.is_in_game = true;
 	// Add frame ====================================================
 
-	img_def.sprite_section = { 385, 160, 70, 80 };
-	item_frame = app->ui->CreateInGameImage({ 0.f, 0.f }, img_def);
+	img_def.sprite_section = { 390, 160, 55, 70 };
+	item_frame = app->ui->CreateImage({ 0.f, 0.f }, img_def);
 	item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	item_frame->SetParent(this);
 	main_element = item_frame;
 
 	// Add icon ====================================================
+	Obj_PickUp* pick_up_obj = (Obj_PickUp*)pointed_obj;
 
-	switch (pointed_obj->type)
+	switch (pick_up_obj->type_of_item)
 	{
 	case ObjectType::HEALTH_BAG:
-		img_def.sprite_section = { 490,110,45,45 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
+		break;
+	case ObjectType::HAPPY_HOUR_ITEM:
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
 	default:
-		img_def.sprite_section = { 490,110,45,45 };
+		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
 	}
 
-	item_icon = app->ui->CreateInGameImage({ 0.f, - 26.f }, img_def);
-	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	item_icon = app->ui->CreateImage({ 0.f, - 42.f }, img_def);
+	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	item_icon->SetParent(item_frame);
 	
 }
@@ -211,7 +221,7 @@ void UI_IG_Item::Destroy()
 	to_destroy = true;
 
 	if (arrow_image != nullptr)
-	{
+	{                         
 		arrow_image->Destroy();
 	}
 	if (item_frame != nullptr)
@@ -224,3 +234,69 @@ void UI_IG_Item::Destroy()
 	}
 }
 
+UI_IG_Helper::UI_IG_Helper(const fPoint position, const UI_InGameElementDef definition): UI_InGameElement(position, definition)
+{
+	UI_ElementDef def;
+	def.is_in_game = true;
+	map_pos = position;
+
+	if (pointed_obj != nullptr)
+	{
+		main_element = app->ui->CreateElement(pointed_obj->pos_map, def, nullptr);
+	}
+	else
+	{
+		main_element = app->ui->CreateElement(map_pos, def, nullptr);
+	}
+
+	main_element->SetParent(this);
+
+}
+
+bool UI_IG_Helper::PostUpdate()
+{
+	if (pointed_obj != nullptr)
+	{
+		main_element->SetPos(app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_gui->player->camera_player));
+	}
+	else
+	{
+		main_element->SetPos(app->map->MapToCamera(map_pos, app->ui->current_gui->player->camera_player));
+	}
+	
+	return true;
+}
+
+void UI_IG_Helper::AddButtonHelper(Button_Helper helper)
+{
+	UI_ImageDef def(app->ui->button_sprites[(int)helper.button_type]);
+	def.is_in_game = true;
+
+	UI_Image*  ui_helpear = app->ui->CreateImage(main_element->position + helper.offset, def);
+	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
+	ui_helpear->SetParent(main_element);
+	helper_elements.push_back(ui_helpear);
+}
+
+void UI_IG_Helper::AddTextHelper(Text_Helper helper)
+{
+	UI_LabelDef def(helper.text, app->ui->font_open_sants_bold_12);
+	def.is_in_game = true;
+
+	UI_Label* ui_helpear = app->ui->CreateLabel(main_element->position + helper.offset, def);
+	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
+	ui_helpear->SetParent(main_element);
+	helper_elements.push_back(ui_helpear);
+}
+
+void UI_IG_Helper::Destroy()
+{
+	to_destroy = true;
+
+	main_element->Destroy();
+
+	for (std::vector < UI_Element*>::iterator iter = helper_elements.begin() ;  iter !=helper_elements.end(); ++iter)
+	{
+		(*iter)->Destroy();
+	}
+}

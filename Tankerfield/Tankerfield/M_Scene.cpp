@@ -23,6 +23,9 @@
 #include "M_PickManager.h"
 #include "PerfTimer.h"
 #include "Obj_Tank.h"
+#include "M_RewardZoneManager.h"
+#include "M_UI.h"
+
 
 M_Scene::M_Scene() : Module()
 {
@@ -41,15 +44,16 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
-	initial_generated_units = config.child("initial_generated_units").attribute("value").as_int();
-	distance_range = config.child("distance_range").attribute("value").as_int();
+	initial_num_enemies = config.child("initial_generated_units").attribute("value").as_int();
 	enemies_to_increase = config.child("enemies_to_increase").attribute("value").as_int();
+	generated_units = config.child("initial_generated_units").attribute("value").as_int();
 
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
 
 	finish_wave_sound_string = config.child("sounds").child("finish_wave_shot").attribute("sound").as_string();
 	wind_sound_string = config.child("sounds").child("wind_sound").attribute("sound").as_string();
 
+	srand(time(NULL));
 
 	return ret;
 }
@@ -57,6 +61,7 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
+	generated_units = initial_num_enemies;
 	path_tex = app->tex->Load("maps/path.png");
 
 	// Load the first level of the list on first game start -------------------------
@@ -76,19 +81,15 @@ bool M_Scene::Start()
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
-	//app->objectmanager->CreateObject(ObjectType::PICK_UP, fPoint(12.5f, 14.5f));
-
-	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-	//tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(1.f, 1.f));
-	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(1.f, 1.f));
-
-	//app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(7.55f, 4.f));
 
 	/* Generate first wave units */
-	srand(time(NULL));
-	//CreateEnemyWave();
+
 	number_current_wave = 1;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
+
+	/* Generate Reward Zones */
+	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
+	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
 }
@@ -103,11 +104,15 @@ bool M_Scene::PreUpdate()
 
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
 	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
 	}
 
 	return true;
@@ -122,7 +127,9 @@ bool M_Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-	/*if (app->input->GetKey(SDL_SCANCODE_RETURN) == KeyState::KEY_DOWN)
+
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
+
 	{
 		++current_level;
 
@@ -130,7 +137,7 @@ bool M_Scene::Update(float dt)
 			current_level = 0;
 
 		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
-	}*/
+	}
 
 	/* Check if a round is over. It is only checked after x time. */
 	//accumulated_time += dt * 1000.0f;
@@ -210,10 +217,11 @@ bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
 	app->map->Unload();
+	app->collision->CleanUp();
 	app->objectmanager->DeleteObjects();
+	app->pathfinding->CleanUp();
+	app->ui->CleanUp();
 
-	if (path_tex != nullptr)
-		app->tex->UnLoad(path_tex);
 
 	return true;
 }
@@ -229,7 +237,7 @@ void M_Scene::DebugPathfinding()
 
 		iPoint mousePos;
 		app->input->GetMousePosition(mousePos.x, mousePos.y);
-		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, (*app->render->cameras.begin()));
 		p = app->map->ScreenToMapI(p.x, p.y);
 
 		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
@@ -272,7 +280,7 @@ void M_Scene::DebugPathfinding()
 				{
 					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
 					
-					for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
 						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
@@ -285,7 +293,7 @@ void M_Scene::DebugPathfinding()
 
 		p = app->map->MapToScreenI(p.x, p.y);
 
-		for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
@@ -295,7 +303,7 @@ void M_Scene::DebugPathfinding()
 
 void M_Scene::CreateEnemyWave()
 {
-	for (int i = 0; i < initial_generated_units; i++)
+	for (int i = 0; i < generated_units; i++)
 	{
 		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;

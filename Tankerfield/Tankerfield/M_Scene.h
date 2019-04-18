@@ -3,7 +3,6 @@
 
 #include <vector>
 
-
 #include "SDL/include/SDL_rect.h"
 
 
@@ -12,6 +11,7 @@
 struct SDL_Texture;
 struct Controller;
 class Obj_Tank;
+class RewardZone;
 
 enum class WaveStat
 {
@@ -86,19 +86,17 @@ private:
 	bool test_path = true;
 
 	iPoint path_tex_offset = { -30, 0 };
-
+	uint initial_num_enemies = 0;
 private:
 	/* Wave System */
 	// In milliseconds
+
 	float accumulated_time			= 0.0f;
 	bool perform_objects_check		= false;
 
 	int time_between_rounds			= 0;
 	int initial_generated_units		= 0;
-	int distance_range				= 0;
-	int min_distance_from_center	= 0;
-	int check_complete_round		= 0;
-	int object_counter				= 0;
+	int generated_units				= 0;
 	int enemies_to_increase			= 0;
 
 	const char* finish_wave_sound_string;
@@ -110,6 +108,13 @@ private:
 	int wind_sound_channel = -1;
 
 	const char* main_music;
+
+
+private:
+	/* Reward Zones */
+	RewardZone* reward_zone_01 = nullptr;
+	RewardZone* reward_zone_02 = nullptr;
+
 };
 
 #endif // __j1SCENE_H__

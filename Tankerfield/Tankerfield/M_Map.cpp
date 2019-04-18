@@ -42,7 +42,7 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 		for (pugi::xml_node level = levelsNode.child("level"); level; level = level.next_sibling("level"))
 		{
-			Levels* newLevel = new Levels();
+			Levels* newLevel = DBG_NEW Levels();
 			newLevel->name = level.attribute("name").as_string();
 			numLevels++;
 			levels.push_back(newLevel);
@@ -53,7 +53,7 @@ bool M_Map::Awake(pugi::xml_node& config)
 
 bool M_Map::Update(float dt)
 {
-	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	BROFILER_CATEGORY("MAP Update", Profiler::Color::DeepPink);
 	bool ret = true;
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KeyState::KEY_DOWN)
@@ -67,19 +67,18 @@ bool M_Map::Update(float dt)
 
 bool M_Map::PostUpdate(float dt)
 {
-	BROFILER_CATEGORY("MAP DRAW", Profiler::Color::DeepPink);
+	BROFILER_CATEGORY("MAP PostUpdate", Profiler::Color::DeepPink);
 	bool ret = true;
 
 	if (map_loaded == false)
 		return ret;
-
-	BROFILER_CATEGORY("MAP DRAW init", Profiler::Color::DeepPink);
 		
-	for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
 		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
+
 		std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
 		{
 			return a.sorting_value < b.sorting_value;
@@ -94,16 +93,18 @@ bool M_Map::PostUpdate(float dt)
 				(*sorted_tiles).rect.y,
 				(*item_cam),
 				&tileset->GetTileRect((*sorted_tiles).id));
+				
 		}
-		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
+
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 
 	//// Draw Grid ==============================================
 	if(show_grid)
 	{
 		iPoint point_1, point_2;
 		
-		for (std::vector<Camera*>::iterator item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
+		for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 			for (int i = 0; i <= data.columns; ++i)
@@ -130,7 +131,13 @@ bool M_Map::CleanUp()
 {
 	Unload();
 
-	return true;
+	for (std::list<Levels*>::iterator level_item = levels.begin(); level_item != levels.end(); ++level_item)
+	{
+		delete (*level_item);
+	}
+	levels.clear();
+
+		return true;
 }
 
 bool M_Map::Load(const std::string& file_name)
@@ -156,7 +163,7 @@ bool M_Map::Load(const std::string& file_name)
 	pugi::xml_node tileset;
 	for (tileset = map_file.child("map").child("tileset"); tileset && ret; tileset = tileset.next_sibling("tileset"))
 	{
-		TileSet* set = new TileSet();
+		TileSet* set = DBG_NEW TileSet();
 
 		if (ret == true)
 		{
@@ -175,7 +182,7 @@ bool M_Map::Load(const std::string& file_name)
 	
 	for (pugi::xml_node layer = map_file.child("map").child("layer"); layer && ret; layer = layer.next_sibling("layer"))
 	{
-		MapLayer* lay = new MapLayer();
+		MapLayer* lay = DBG_NEW MapLayer();
 
 		ret = LoadLayer(layer, lay);
 
@@ -186,7 +193,7 @@ bool M_Map::Load(const std::string& file_name)
 
 	for (pugi::xml_node obj_layer = map_file.child("map").child("objectgroup"); obj_layer && ret; obj_layer = obj_layer.next_sibling("objectgroup"))
 	{
-		ObjectGroup* obj_lay = new ObjectGroup();
+		ObjectGroup* obj_lay = DBG_NEW ObjectGroup();
 
 		ret = LoadObjectGroup(obj_layer, obj_lay);
 
@@ -223,7 +230,7 @@ bool M_Map::Unload()
 		if ((*iter != nullptr))
 		{
 			delete (*iter);
-
+			(*iter) = nullptr;
 		}
 	}
 	data.tilesets.clear();
@@ -233,7 +240,7 @@ bool M_Map::Unload()
 		if ((*iter != nullptr))
 		{
 			delete (*iter);
-
+			(*iter) = nullptr;
 		}
 	}
 	data.map_layers.clear();
@@ -266,6 +273,17 @@ bool M_Map::Unload()
 	data.spawners_position_enemy.clear();
 
 
+	for (std::list<ObjectGroup*>::iterator iter = data.object_layers.begin(); iter != data.object_layers.end(); ++iter)
+	{
+		if ((*iter) != nullptr)
+		{
+			delete (*iter);
+			(*iter) = nullptr;
+		}
+	}
+	data.object_layers.clear();
+
+
 	if (app->on_clean_up == false)
 	{
 		for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
@@ -273,13 +291,25 @@ bool M_Map::Unload()
 			if ((*iter != nullptr))
 			{
 				(*iter)->Destroy();
+				(*iter) = nullptr;
 			}
 		}
 	}
 
 	data.colliders_list.clear();
 
+	if (data.qt != nullptr)
+	{
+		delete data.qt;
+		data.qt = nullptr;
+	}
+	if (data.screen_tile_rect != nullptr)
+	{
+		delete[] data.screen_tile_rect;
+		data.screen_tile_rect = nullptr;
+	}
 	data.map_properties.UnloadProperties();
+
 
 	return true;
 }
@@ -336,7 +366,7 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	{
 		
 
-		layer->data = new uint[layer->columns*layer->rows];
+		layer->data = DBG_NEW uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
 		if (layer->visible)
@@ -387,7 +417,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	{
 		++object_group->size;
 	}
-	object_group->objects = new Rect<float, float>[object_group->size];
+	object_group->objects = DBG_NEW Rect<float, float>[object_group->size];
 	
 	uint i = 0;
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
@@ -550,7 +580,7 @@ bool M_Map::LoadMap()
 			data.type = MAPTYPE_UNKNOWN;
 		}
 
-		data.screen_tile_rect = new iRect[data.columns*data.rows];
+		data.screen_tile_rect = DBG_NEW iRect[data.columns*data.rows];
 		for (int y = 0; y < data.rows; ++y)
 		{
 			for (int x = 0; x < data.columns; ++x)
@@ -566,15 +596,15 @@ bool M_Map::LoadMap()
 		;
 
 		uint level = 1;
-		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->camera.begin())->viewport.w*0.25, level);
-		data.qt = new Quadtree_Map(area, 0, level);
+		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->cameras.begin())->viewport.w*0.25, level);
+		data.qt = DBG_NEW Quadtree_Map(area, 0, level);
 
 	}
 
 	return ret;
 }
 
-SDL_Rect TileSet::GetTileRect(int id) const
+inline SDL_Rect TileSet::GetTileRect(int id) const
 {
 	int relative_id = id - firstgid;
 	SDL_Rect rect = { 
@@ -623,7 +653,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 		if (layer->layer_properties.GetAsFloat("Navigation", 0) == 0)
 			continue;
 
-		uchar* map = new uchar[layer->columns * layer->rows];
+		uchar* map = DBG_NEW uchar[layer->columns * layer->rows];
 		memset(map, 1, layer->columns*layer->rows);
 
 		for (int y = 0; y < data.rows; ++y)
@@ -814,24 +844,24 @@ void Properties::LoadProperties(pugi::xml_node propertie_node)
 {
 	for (pugi::xml_node iter = propertie_node.child("property"); iter; iter = iter.next_sibling("property"))
 	{
-		Property* p = new Property();
+		Property* p = DBG_NEW Property();
 		p->name = iter.attribute("name").as_string();
 		std::string type = iter.attribute("type").as_string();
 		if (type == "int")
 		{
-			p->value = new int(iter.attribute("value").as_int());
+			p->value = DBG_NEW int(iter.attribute("value").as_int());
 		}
 		else if (type == "float")
 		{
-			p->value = new float(iter.attribute("value").as_float());
+			p->value = DBG_NEW float(iter.attribute("value").as_float());
 		}
 		else if (type == "bool")
 		{
-			p->value = new bool(iter.attribute("value").as_bool());
+			p->value = DBG_NEW bool(iter.attribute("value").as_bool());
 		}
 		else
 		{
-			p->value = new std::string(iter.attribute("value").as_string());
+			p->value = DBG_NEW std::string(iter.attribute("value").as_string());
 		}
 		list.push_back(p);
 
@@ -840,12 +870,14 @@ void Properties::LoadProperties(pugi::xml_node propertie_node)
 
 void Properties::UnloadProperties()
 {
-	std::list<Property*>::iterator item = list.begin();
-
-	while (item != list.end())
+	for (std::list<Property*>::iterator item = list.begin(); item != list.end(); ++item)
 	{
-		RELEASE(*item);
-		++item;
+		if ((*item) != nullptr)
+		{
+			delete(*item);
+			(*item) = nullptr;
+		}
+		
 	}
 
 	list.clear();

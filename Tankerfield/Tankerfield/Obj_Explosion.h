@@ -30,6 +30,8 @@ private:
 	float speed = 0.f;
 	float time = 0.f;
 
+	unsigned int explosion_fx;
+
 	Circle range_pos;
 	
 	// ---

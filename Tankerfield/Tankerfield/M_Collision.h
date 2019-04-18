@@ -24,6 +24,7 @@ public:
 		NONE = -1,
 		WALL,
 		BULLET,
+		FRIENDLY_BULLET,
 		PLAYER,
 		ENEMY,
 		GOD,

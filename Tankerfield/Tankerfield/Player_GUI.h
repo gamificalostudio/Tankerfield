@@ -31,6 +31,8 @@ public:
 
 	Player_GUI(const Player_GUI::TYPE type, Obj_Tank* target);
 
+	void Update(float dt);
+
 	void ClearHelpers();
 
 	void SetHelper();
@@ -53,11 +55,13 @@ public:
 
 	UI_Image* weapon_frame = nullptr;
 
+	UI_Image* weapon_icon = nullptr;
+
 	UI_Image* item_frame = nullptr;
 
-	UI_Image* ammo_image = nullptr;
+	UI_Image* item_icon = nullptr;
 
-	UI_Bar* ammo_bar = nullptr;
+	UI_Bar* charged_shot_bar = nullptr;
 
 	UI_Bar* life_bar = nullptr;
 
@@ -87,9 +91,9 @@ public:
 		NONE
 	};
 
-	Helper(const float x_margin): x_margin(x_margin){}
+	Helper(fPoint offset = { 0.f,0.f }) : offset(offset) {}
 
-	float x_margin = 0;
+	fPoint offset = {0,0};
 
 	HELPER_TYPE type = HELPER_TYPE::NONE;
 
@@ -99,7 +103,7 @@ class Button_Helper: public Helper
 {
 public:
 
-	Button_Helper(const M_UI::GAMEPAD_BUTTON button_type ,const float x_margin): Helper(x_margin) , button_type(button_type)
+	Button_Helper(const M_UI::GAMEPAD_BUTTON button_type ,const fPoint offset = { 0.f,0.f }): Helper(offset) , button_type(button_type)
 	{
 		type = HELPER_TYPE::BUTTON;
 	}
@@ -111,7 +115,7 @@ class Text_Helper : public Helper
 {
 public:
 
-	Text_Helper( const String text, const float x_margin) : Helper(x_margin)	
+	Text_Helper( const String text, const fPoint offset = { 0.f,0.f }) : Helper(offset)
 	{
 		this->text.assign(text);
 		type = HELPER_TYPE::TEXT;

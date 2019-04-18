@@ -32,6 +32,7 @@ class UI_TextPanel;
 class UI_InGameElement;
 class UI_IG_Weapon;
 class UI_IG_Item;
+class UI_IG_Helper;
 
 struct UI_ElementDef;
 struct UI_ButtonDef;
@@ -89,6 +90,27 @@ public:
 		MAX
 	};
 
+	enum class ICON_SIZE : int
+	{
+		NONE = -1,
+		SMALL,
+		BIG,
+		MAX
+	};
+
+	enum class ICON_TYPE : int
+	{
+		NONE = -1,
+		WEAPON_DOUBLE_MISSILE,
+		WEAPON_HEALING_SHOT,
+		WEAPON_LASER,
+		WEAPON_FLAMETHROWER,
+		ITEM_HEALTH_BAG,
+		ITEM_HAPPY_HOUR,
+		ITEM_INSTANT_HELP,
+		MAX
+	};
+
 	M_UI();
 
 	virtual ~M_UI();
@@ -111,7 +133,7 @@ public:
 
 	// Creation functions ---------------------------------------------------------
 
-	UI_Element	 * CreateObject(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
+	UI_Element	 * CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
 
 	UI_Label	 * CreateLabel(const fPoint position, const  UI_LabelDef definition, UI_Listener* listener = nullptr);
 
@@ -133,7 +155,7 @@ public:
 
 	UI_IG_Item*   CreateInGameItem(const fPoint position, const UI_InGameElementDef definition);
 
-	UI_Image*     CreateInGameImage(const fPoint position, const UI_ImageDef definition);
+	UI_IG_Helper*  CreateInGameHelper(const fPoint position, const UI_InGameElementDef definition);
 
 	// Object functions ----------------------------------------------------------
 
@@ -175,6 +197,21 @@ private:
 
 	ClickState click_state = ClickState::NONE;
 
+	// HUD General -------------------------------------------
+
+	UI_Image* round_element = nullptr;
+
+	UI_Image* round_fx = nullptr;
+
+	UI_Image* left_tank_life = nullptr;
+
+	UI_Image* right_tank_life = nullptr;
+
+	float ax = 0.0f;
+	float ratetime = 1.f / 2.f;
+	float target_value = 100.f;
+	float init_value = 0.f;
+
 public:
 	// Mouse ----------------------------------------------
 
@@ -195,7 +232,10 @@ public:
 	fPoint		mouse_offset;
 
 	// Assets --------------------------------------------
-	SDL_Rect button_sprite[(int)GAMEPAD_BUTTON::MAX];
+
+	SDL_Rect button_sprites[(int)GAMEPAD_BUTTON::MAX];
+
+	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
 
 	_TTF_Font*  font_open_sants_bold_12 = nullptr;
 

@@ -11,6 +11,7 @@ struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
 
+
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
@@ -43,11 +44,16 @@ public:
 	//- Logic
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
+
 	void SetWeapon(WEAPON type, uint level);
+	void SetTimeBetweenBullets(int time_between_bullets);
 	int GetLife();
 	int GetMaxLife();
+	int GetTimeBetweenBullets();
 
 	bool IsReady() const;
+
+public:
 
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
@@ -55,11 +61,11 @@ public:
 private:
 	//- Movement
 	void Movement(float dt);
-	void InputMovementKeyboard(fPoint & input,float dt);
+	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
 
 	//- Shooting
-	void Shoot();
+	void Shoot(float dt);
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
@@ -74,6 +80,7 @@ private:
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
+	void ShootHealingShot();
 
 	//- TankDeath
 	void ReviveTank();
@@ -88,11 +95,13 @@ private:
 	int max_life							= 0;
 	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
+
 	static int number_of_tanks;
 
 	bool ready								= false;
 
 	//- Movement
+	float curr_speed						= 0.f;
 	float speed								= 0.f;
 	fPoint velocity							= { 0.f, 0.f };
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
@@ -105,6 +114,18 @@ private:
 	fPoint shot_dir							= { 0.f, 0.f };
 	float cannon_height						= 0.f;//Used to calculate the shot position
 	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
+	float shot_angle_lerp_factor			= 0.f;
+	float turr_target_angle					= 0.f;
+
+	//Revive
+
+	float revive_range						= 0.f;
+	float revive_range_squared				= 0.f;
+	int	  revive_life						= 0;
+	//Timer ReviveTimer;
+
+	//-- Basic shoot
+	uint shot_type							= (uint)WEAPON::BASIC;
 
 
 
@@ -118,8 +139,10 @@ private:
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
 
-	void(Obj_Tank::*basic_shot_function[(int)WEAPON::MAX_WEAPONS])();
-	void(Obj_Tank::*charged_shot_function[(int)WEAPON::MAX_WEAPONS])();
+
+	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	bool show_crosshairs					= false;
 
 
 	//- Items
@@ -141,8 +164,8 @@ private:
 	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
-	Joystick gamepad_move					= Joystick::INVALID;
-	Joystick gamepad_aim					= Joystick::INVALID;
+	Joystick gamepad_move							= Joystick::INVALID;
+	Joystick gamepad_aim							= Joystick::INVALID;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;

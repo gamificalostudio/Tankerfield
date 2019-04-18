@@ -55,6 +55,7 @@ void Obj_Bullet::OnTrigger(Collider * collider_1)
 
 void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle)
 {
+
 	this->speed = speed;
 	this->direction = direction;
 	this->bullet_life_ms = bullet_life_ms;
