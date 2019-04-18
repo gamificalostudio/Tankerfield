@@ -17,6 +17,7 @@
 #include "MathUtils.h"
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
+#include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
@@ -725,9 +726,9 @@ void Obj_Tank::ShootHealingShot()
 
 void Obj_Tank::ShootLaserShot()
 {
-	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
+	Laser_Bullet *	 laser_bullet= (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir * cannon_length);
 
-	heal_bullet->SetBulletProperties(
+	laser_bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,

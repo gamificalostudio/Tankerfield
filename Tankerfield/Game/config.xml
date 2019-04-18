@@ -165,6 +165,7 @@
       </spritesheets>
       <sounds>
         <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+        <laser_shot sound ="audio/Fx/tank_basic_shot.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
@@ -975,7 +976,7 @@
     <basic_bullet>
       <speed value ="0.5"/>
       <life value ="1000"/>
-      <tex path="textures/objects/laser-sheet.png"/>
+      <tex path="textures/objects/bullet.png"/>
       <animations>
         <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>
@@ -1176,7 +1177,7 @@
     <laser_bullet>
       <speed value ="0.5"/>
       <life value ="1000"/>
-      <tex path="textures/objects/laser-shoot.png"/>
+      <tex path="textures/objects/laser-sheet.png"/>
       <animations>
         <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>

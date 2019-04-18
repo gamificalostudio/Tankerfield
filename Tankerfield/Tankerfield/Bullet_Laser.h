@@ -7,19 +7,19 @@
 
 struct SDL_Texture;
 
-class Bullet_Laser : public Obj_Bullet
+class Laser_Bullet : public Obj_Bullet
 {
 public:
 
-	Bullet_Laser(fPoint pos);
-	~Bullet_Laser();
+	Laser_Bullet(fPoint pos);
+	~Laser_Bullet();
 
 public:
 	//Add functions that are overriden
-	void OnTrigger(Collider* collider_1);
+	//void OnTrigger(Collider* collider_1);
 
 public:
-
+	bool Start();
 	Collider* explosion = nullptr;
 
 private:
