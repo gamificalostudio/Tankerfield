@@ -137,6 +137,7 @@ bool Obj_Tank::Start()
 	draw_offset.y = 46;
 
 	base_angle_lerp_factor = 11.25f;
+	shot_angle_lerp_factor = 11.25f;
 
 	shot_timer.Start();
 
@@ -432,7 +433,7 @@ void Obj_Tank::Shoot(float dt)
 		{
 			target_angle += 360.f;
 		}
-		turr_angle = lerp(turr_angle, target_angle, base_angle_lerp_factor * dt);
+		turr_angle = lerp(turr_angle, target_angle, shot_angle_lerp_factor * dt);
 
 		//Direction
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
