@@ -409,22 +409,25 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_pos, fPoint & input_dir, fPoin
 	iso_dir.Normalize();
 }
 
-void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir)
+void Obj_Tank::InputShotController(const fPoint & turr_pos, fPoint & input_dir, fPoint & iso_dir)
 {
-	if (controller != nullptr)
-	{
-		input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim);
-		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
-		iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
-		iso_dir.Normalize();
-	}
+	input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim);
+	//1- Get the turret pos in screen space
+	//fPoint turr_pos_screen = app->map->MapToScreenF(turr_pos);
+	//fPoint shot_dir_screen = turr_pos_screen + input_dir;
+	//fPoint point_map = app->map->ScreenToMapF(shot_dir_screen.x, shot_dir_screen.y);//Transforms the point in the screen to map coordinates
+	iso_dir = app->map->ScreenToMapF(input_dir.x, input_dir.y);
+	iso_dir.Normalize();
+	//Green: The direction used for drawing the turret angle
+	//iPoint final_input_pos(pos_screen.x + shot_input_dir.x * line_length, pos_screen.y + shot_input_dir.y * line_length);
+	//app->render->DrawLineSplitScreen(pos_screen.x, pos_screen.y - cannon_height, final_input_pos.x, final_input_pos.y, 0, 255, 0, 255, camera);
 }
 
 void Obj_Tank::Shoot()
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
-	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
+	turr_pos = pos_map - app->map->ScreenToMapF(0, cannon_height);
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputShotMouse(turr_pos, shot_input_dir, shot_iso_dir);
@@ -438,11 +441,6 @@ void Obj_Tank::Shoot()
 	{
 		turr_angle = atan2(-shot_input_dir.y, shot_input_dir.x) * RADTODEG;
 		shot_dir = shot_iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
-	}
-
-	if(tank_num == 0)
-	{
-		LOG("shot iso dir x: %f y: %f", shot_dir.x, shot_dir.y);
 	}
 
 	if (PressShot())
