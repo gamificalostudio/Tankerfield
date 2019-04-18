@@ -9,6 +9,7 @@
 #include "M_Collision.h"
 #include "M_PickManager.h"
 #include "M_Map.h"
+#include "M_Audio.h"
 
 
 
@@ -22,6 +23,16 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 
 Obj_RewardBox::~Obj_RewardBox()
 {
+}
+
+bool Obj_RewardBox::Start()
+{
+	pugi::xml_node reward_box_node = app->config.child("object").child("reward_box");
+
+	reward_box_dead_sound_string = reward_box_node.child("sound").attribute("value").as_string();
+	reward_box_dead_sound_int = app->audio->LoadFx(reward_box_dead_sound_string);
+
+	return true;
 }
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
@@ -81,5 +92,7 @@ void Obj_RewardBox::Dead()
 
 	my_spawn_point->occupied = false;
 	to_remove = true;
+
+	app->audio->PlayFx(reward_box_dead_sound_int);
 }
 

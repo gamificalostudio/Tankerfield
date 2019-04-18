@@ -12,6 +12,9 @@ private:
 	uint max_life						= 0u;
 	bool alive							= true;
 
+	const char* reward_box_dead_sound_string;
+	uint reward_box_dead_sound_int	= 0u;
+
 public:
 	SpawnPoint* my_spawn_point			= nullptr;
 
@@ -21,7 +24,7 @@ public:
 
 	~Obj_RewardBox();
 
-	bool Awake(pugi::xml_node&) { return true; };
+	bool Start();
 
 	bool Draw(float dt, Camera* camera);
 

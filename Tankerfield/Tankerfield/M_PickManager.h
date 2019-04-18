@@ -20,7 +20,7 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&) override;
 
-	bool Start();
+	bool	Start();
 
 	//Create a Pick up 
 	void CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, uint levels_to_add = NULL);
