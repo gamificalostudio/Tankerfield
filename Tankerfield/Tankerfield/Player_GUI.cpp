@@ -30,11 +30,27 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 	UI_InGameElementDef arrow_def;
 	arrow_def.add_arrow = true;
-	arrow_def.arrow_color;
 	arrow_def.pointed_obj = player_object;
 
-	player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
+	switch (type)
+	{
+	case TYPE::PLAYER_1:
+		arrow_def.arrow_color = ARROW_COLOR::GREEN;
+		break;
+	case TYPE::PLAYER_2:
+		arrow_def.arrow_color = ARROW_COLOR::BLUE;
+		break;
+	case TYPE::PLAYER_3:
+		arrow_def.arrow_color = ARROW_COLOR::PINK;
+		break;
+	case TYPE::PLAYER_4:
+		arrow_def.arrow_color = ARROW_COLOR::ORANGE;
+		break;
+	}
 
+
+	player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
+	//player_arrow->not_in_camera = player->camera_player;
 	// HUD  Elements ========================================================
 
 	UI_ImageDef image_def;

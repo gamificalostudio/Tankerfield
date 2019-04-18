@@ -19,26 +19,25 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 	{
 		UI_ImageDef image_def;
 
-		switch (definition.arrow_color)
-		{
-		case ARROW_COLOR::GREEN:
-			image_def.image_animation = &app->ui->green_arrow_anim;
-			break;
-		case ARROW_COLOR::BLUE:
-			image_def.image_animation = &app->ui->blue_arrow_anim;
-			break;
-		case ARROW_COLOR::PINK:
-			image_def.image_animation = &app->ui->pink_arrow_anim;
-			break;
-		case ARROW_COLOR::ORANGE:
-			image_def.image_animation = &app->ui->orange_arrow_anim;
-			break;
-		}
-
 		image_def.is_in_game = true;
 		arrow_image = app->ui->CreateImage({ 0.f, 0.f }, image_def);
 		arrow_image->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-		arrow_image->SetParent(this);
+
+		switch (definition.arrow_color)
+		{
+		case ARROW_COLOR::GREEN:
+			arrow_image->image_animation = &app->ui->green_arrow_anim;
+			break;
+		case ARROW_COLOR::BLUE:
+			arrow_image->image_animation = &app->ui->blue_arrow_anim;
+			break;
+		case ARROW_COLOR::PINK:
+			arrow_image->image_animation = &app->ui->pink_arrow_anim;
+			break;
+		case ARROW_COLOR::ORANGE:
+			arrow_image->image_animation = &app->ui->orange_arrow_anim;
+			break;
+		}
 	}
 
 	
@@ -62,12 +61,17 @@ void UI_InGameElement::Destroy()
 
 void UI_InGameElement::UpdateArrow()
 {
-	if (arrow_image == nullptr || main_element == nullptr)
+	if (arrow_image == nullptr || pointed_obj == nullptr)
 	{
 		return;
 	}
-	
-	if (SDL_HasIntersection(&app->ui->current_gui->viewport_with_margin, &main_element->GetDrawRect()))
+
+	fPoint cam = app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_camera);
+	SDL_Point cam_point;
+	cam_point.x = (int)cam.x;
+	cam_point.y = (int)cam.y;
+
+	if (SDL_PointInRect( &cam_point, &app->ui->current_gui->viewport_with_margin))
 	{
 		arrow_image->state = ELEMENT_STATE::HIDDEN;
 	}
@@ -78,7 +82,7 @@ void UI_InGameElement::UpdateArrow()
 		fPoint vector = app->ui->current_gui->player->pos_map - pointed_obj->pos_map;
 		arrow_image->sprite_section = arrow_image->image_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
 		vector.Normalize();
-		arrow_image->SetPos(app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 1.5f, app->ui->current_gui->player->camera_player));
+		arrow_image->SetPos(app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 2.f, app->ui->current_camera));
 	}
 }
 
@@ -276,13 +280,13 @@ void UI_IG_Helper::AddButtonHelper(Button_Helper helper)
 	UI_ImageDef def(app->ui->button_sprites[(int)helper.button_type]);
 	def.is_in_game = true;
 
-	UI_Image*  ui_helpear = app->ui->CreateImage(main_element->position +helper.offset, def);
-	ui_helpear->offset = helper.offset;
-	ui_helpear->single_camera = this->single_camera;
-	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
-	ui_helpear->SetParent(main_element);
+	UI_Image*  ui_helper = app->ui->CreateImage(main_element->position +helper.offset, def);
+	ui_helper->offset = helper.offset;
+	ui_helper->single_camera = this->single_camera;
+	ui_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	ui_helper->SetParent(main_element);
 
-	helper_elements.push_back(ui_helpear);
+	helper_elements.push_back(ui_helper);
 }
 
 void UI_IG_Helper::AddTextHelper(Text_Helper helper)
@@ -290,13 +294,13 @@ void UI_IG_Helper::AddTextHelper(Text_Helper helper)
 	UI_LabelDef def(helper.text, app->ui->font_open_sants_bold_12);
 	def.is_in_game = true;
 
-	UI_Label* ui_helpear = app->ui->CreateLabel(main_element->position + helper.offset, def);
-	ui_helpear->offset = helper.offset;
-	ui_helpear->single_camera = this->single_camera;
-	ui_helpear->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
-	ui_helpear->SetParent(main_element);
+	UI_Label* ui_helper = app->ui->CreateLabel(main_element->position + helper.offset, def);
+	ui_helper->offset = helper.offset;
+	ui_helper->single_camera = this->single_camera;
+	ui_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	ui_helper->SetParent(main_element);
 
-	helper_elements.push_back(ui_helpear);
+	helper_elements.push_back(ui_helper);
 }
 
 void UI_IG_Helper::Destroy()

@@ -175,12 +175,23 @@ bool Obj_Tank::Start()
 		}
 	}
 
+
+	//- Tutorial
+	//-- Move
 	UI_InGameElementDef clue_def;
 	clue_def.pointed_obj = this;
-	UI_IG_Helper * move_clue = app->ui->CreateInGameHelper(pos_map, clue_def);
-	move_clue->single_camera = camera_player;
-	move_clue->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
-	move_clue->AddTextHelper(Text_Helper("booooi", { 0.f, 100.f }));
+
+	tutorial_move = app->ui->CreateInGameHelper(pos_map, clue_def);
+	tutorial_move->single_camera = camera_player;
+	tutorial_move->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
+	tutorial_move->AddTextHelper(Text_Helper("MOVE", {0.f, 70.f}));
+	tutorial_move_time = 4000;
+	//- Revive
+	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
+	tutorial_revive->single_camera = camera_player;
+	tutorial_revive->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f }));
+	tutorial_revive->AddTextHelper(Text_Helper("REVIVE", { 0.f, 70.f }));
+	tutorial_revive->state = ELEMENT_STATE::HIDDEN;
 
 	return true;
 }
@@ -248,6 +259,9 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
+		tutorial_move_timer.Start();
+		tutorial_move_pressed = true;
+
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
@@ -264,7 +278,11 @@ void Obj_Tank::Movement(float dt)
 	velocity = iso_dir * curr_speed * dt;                                                               
 	pos_map += velocity;
 
-	
+	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
+	{
+		tutorial_move->Destroy();
+		tutorial_move = nullptr;
+	}
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -655,16 +673,18 @@ void Obj_Tank::ReviveTank()
 	for (int i = 0; i < 4; i++)
 	{
 		if (this != tank_arr[i]
-			&& controller != nullptr
-			&& ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN
-			|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT)
-			&& tank_arr[i]->life == 0
 			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map) <= revive_range_squared
+			&& tank_arr[i]->life == 0
 			&& this->life != 0)
 		{
-			tank_arr[i]->curr_speed = speed;
-			tank_arr[i]->life = revive_life;
+			tutorial_revive->state = ELEMENT_STATE::VISIBLE;
 
+			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
+				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
+			{
+				tank_arr[i]->curr_speed = speed;
+				tank_arr[i]->life = revive_life;
+			}
 		}
 	}
 }

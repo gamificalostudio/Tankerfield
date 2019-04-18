@@ -5,12 +5,14 @@
 #include "WeaponInfo.h"
 #include "M_Input.h"
 #include "Obj_Item.h"
+#include "Timer.h"
 
 struct Controller;
 struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
 class Player_GUI;
+class UI_IG_Helper;
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -161,7 +163,6 @@ private:
 	short int gamepad_shoot_last_frame				= 0;
 
 	//- Drawing
-
 	//-- Base
 	Animation rotate_base;
 	SDL_Texture * base_tex_yellow		= nullptr;
@@ -178,6 +179,15 @@ private:
 	Animation rotate_turr;
 	SDL_Texture * turr_tex				= nullptr;
 	SDL_Texture * turr_shadow_tex		= nullptr;
+
+	//- Tutorial
+	//-- Move
+	Timer tutorial_move_timer;
+	UI_IG_Helper * tutorial_move		= nullptr;
+	int tutorial_move_time				= 0;//The time the tutorial move image will appear on screen (ms)
+	bool tutorial_move_pressed			= false;
+	//-- Revive
+	UI_IG_Helper * tutorial_revive		= nullptr;
 
 public:
 	Camera* camera_player				= nullptr;

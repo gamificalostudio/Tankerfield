@@ -734,6 +734,10 @@ void M_UI::DrawUI(UI_Element * object)
 		{
 			object->Draw();
 		}
+		else if (object->not_in_camera == current_camera)
+		{
+
+		}
 		else if ( object->single_camera == current_camera)
 		{
 			object->Draw();
