@@ -59,14 +59,19 @@ bool M_UI::Awake(pugi::xml_node& config)
 	LOG("Loading Module UI");
 	bool ret = true;
 
-	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
+	green_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("green_arrow"));
+	pink_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("pink_arrow"));
+	blue_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("blue_arrow"));
+	orange_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("orange_arrow"));
 
-	button_sprites[(int)GAMEPAD_BUTTON::A] = { 440,10 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::B] = { 390,60 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::Y] = { 440,60 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::X] = { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::A] =  { 440,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::B] =  { 390,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::Y] =  { 440,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::X] =  { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::L] =  { 495,10 ,52 ,52 };
 	button_sprites[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
 	button_sprites[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::R] =  { 495,65 ,52 ,52 };
 	button_sprites[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
 	button_sprites[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
 
@@ -104,13 +109,24 @@ bool M_UI::Start()
 
 	// HUD ===========================================
 	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	app->scene->tank_1->SetGui(player_1_gui);
 	players_guis.push_back(player_1_gui);
+
 	player_2_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	app->scene->tank_2->SetGui(player_2_gui);
 	players_guis.push_back(player_2_gui);
+
 	player_3_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	app->scene->tank_3->SetGui(player_3_gui);
 	players_guis.push_back(player_3_gui);
+
 	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
+
+	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::L));
+	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::R));
+	player_1_gui->SetHelper();
 
 	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170 , 10, 105, 105 };
@@ -429,11 +445,8 @@ bool M_UI::PostUpdate(float dt)
 			(*element)->PostUpdate();
 		}
 
-		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
-
+		UpdateGuiPositions(main_in_game_element, fPoint(0.f, 0.f));
 		DrawUI(main_in_game_element);
-
-		/*app->render->DrawQuad(current_gui->viewport_with_margin, 255, 255, 255, 255, false, false);*/
 	}
 
 	current_camera = nullptr;
@@ -717,7 +730,19 @@ void M_UI::DrawUI(UI_Element * object)
 
 	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
-		object->Draw();
+		if (object->single_camera == nullptr && object->not_in_camera == nullptr)
+		{
+			object->Draw();
+		}
+		else if (object->not_in_camera == current_camera)
+		{
+
+		}
+		else if ( object->single_camera == current_camera)
+		{
+			object->Draw();
+		}
+		
 	}
 	
 	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)

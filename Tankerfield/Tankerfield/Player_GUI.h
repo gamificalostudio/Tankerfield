@@ -16,6 +16,9 @@ class Text_Helper;
 class Button_Helper;
 class UI_PickUpElement;
 
+enum class WEAPON;
+enum class ObjectType;
+
 class Player_GUI: public UI_Listener
 {
 public:
@@ -41,7 +44,13 @@ public:
 
 	void AddTextHelper(const Text_Helper helper);
 
-	void SetLife( float life);
+	void SetLifeBar( float life);
+
+	void SetChargedShotBar(float percent);
+
+	void SetWeaponIcon(WEAPON weapon_type);
+
+	void SetItemIcon(ObjectType type);
 
 	~Player_GUI();
 
@@ -50,6 +59,14 @@ public:
 	TYPE type = TYPE::SINGLE_PLAYER;
 
 	Obj_Tank* player = nullptr;
+
+	fRect viewport;
+
+	fPoint margin = { 80.f, 80.f };
+
+	SDL_Rect viewport_with_margin = { 0,0,0,0 };
+
+private:
 
 	// HUD Elements =========================
 
@@ -65,17 +82,13 @@ public:
 
 	UI_Bar* life_bar = nullptr;
 
-	fRect viewport;
-
-	fPoint margin = { 80.f, 80.f };
-
-	SDL_Rect viewport_with_margin = { 0,0,0,0 };
-
-private:
-
 	std::vector<Helper*> helpers_vector;
 
 	std::vector<UI_Element*> helper_elements;
+
+	// In Game Elements ======================
+
+	UI_InGameElement* player_arrow = nullptr;
 
 	friend M_UI;
 };

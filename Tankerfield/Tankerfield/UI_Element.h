@@ -117,8 +117,10 @@ public:
 	bool			      is_draggable = false;
 	bool				  is_interactive = false;
 	bool                  is_in_game = false;
-	float                 offset = 0.f;
+	fPoint                offset = {0.f,0.f};
 	float                 alpha = 255.f;
+	Camera*               single_camera = nullptr;
+	Camera*               not_in_camera = nullptr;
 
 protected:
 

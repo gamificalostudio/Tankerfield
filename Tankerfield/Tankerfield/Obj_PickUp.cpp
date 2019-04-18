@@ -54,6 +54,8 @@ void Obj_PickUp::GenerationOfPickUp(PICKUP_TYPE type_of_pick_up, uint levels_to_
 		level_of_weapon += levels_to_add;
 		break;
 	}
+
+	
 }
 
 bool Obj_PickUp::Update(float dt)

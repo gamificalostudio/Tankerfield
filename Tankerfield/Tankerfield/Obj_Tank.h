@@ -5,12 +5,14 @@
 #include "WeaponInfo.h"
 #include "M_Input.h"
 #include "Obj_Item.h"
+#include "Timer.h"
 
 struct Controller;
 struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
-
+class Player_GUI;
+class UI_IG_Helper;
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -57,6 +59,7 @@ public:
 
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
+	void SetGui(Player_GUI* gui);
 
 private:
 	//- Movement
@@ -69,6 +72,7 @@ private:
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
+	bool HoldShot();
 	bool ReleaseShot();
 
 	//- Input
@@ -149,6 +153,9 @@ private:
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
 
+	//- GUI
+	Player_GUI*  gui                        = nullptr;
+
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
 	INPUT_METHOD shot_input					= INPUT_METHOD::KEYBOARD_MOUSE;
@@ -173,7 +180,6 @@ private:
 	short int gamepad_shoot_last_frame				= 0;
 
 	//- Drawing
-
 	//-- Base
 	Animation rotate_base;
 	SDL_Texture * base_tex_yellow		= nullptr;
@@ -191,7 +197,15 @@ private:
 	SDL_Texture * turr_tex				= nullptr;
 	SDL_Texture * turr_shadow_tex		= nullptr;
 
-	// Weapon info
+	//- Tutorial
+	//-- Move
+	Timer tutorial_move_timer;
+	UI_IG_Helper * tutorial_move		= nullptr;
+	int tutorial_move_time				= 0;//The time the tutorial move image will appear on screen (ms)
+	bool tutorial_move_pressed			= false;
+	//-- Revive
+	UI_IG_Helper * tutorial_revive		= nullptr;
+
 
 public:
 	Camera* camera_player				= nullptr;
