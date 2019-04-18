@@ -533,7 +533,7 @@ void Obj_Tank::ShootBasic()
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
 void Obj_Tank::ShootFlameThrower()
@@ -694,19 +694,21 @@ void Obj_Tank::ShootDoubleMissile()
 	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length + double_missiles_offset * missiles_offset);
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
 
+	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
+
 	left_missile->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		bullet_angle);
 
 	right_missile->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		bullet_angle);
 }
 
 void Obj_Tank::ShootHealingShot()
@@ -718,7 +720,7 @@ void Obj_Tank::ShootHealingShot()
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		turr_angle);
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
 void Obj_Tank::Item()
