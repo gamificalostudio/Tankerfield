@@ -267,7 +267,10 @@ bool M_Map::Unload()
 	data.colliders_list.clear();
 
 	if (data.qt != nullptr)
+	{
 		delete data.qt;
+		data.qt = nullptr;
+	}
 	if (data.screen_tile_rect != nullptr)
 	{
 		delete[] data.screen_tile_rect;

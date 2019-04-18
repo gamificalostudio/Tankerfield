@@ -159,7 +159,10 @@ struct MapData
 	~MapData()
 	{
 		if (qt != nullptr)
+		{
 			delete qt;
+			qt = nullptr;
+		}
 
 		if (screen_tile_rect != nullptr)
 		{

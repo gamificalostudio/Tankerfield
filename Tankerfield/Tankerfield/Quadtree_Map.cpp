@@ -7,11 +7,13 @@ Quadtree_Map::Quadtree_Map(SDL_Rect area, uint level, uint max_levels, uint maxE
 }
 Quadtree_Map::~Quadtree_Map()
 {
+	this;
 	for (uint i = 0; i < 4; ++i)
 	{
 		if (nodes[i] != nullptr)
 		{
 			delete nodes[i];
+			nodes[i] = nullptr;
 		}
 	}
 
