@@ -165,17 +165,32 @@ Player_GUI::~Player_GUI()
 {
 	if (app->on_clean_up == false)
 	{
-		weapon_frame->Destroy();
-		item_frame->Destroy();
-		ammo_image->Destroy();
-		ammo_bar->Destroy();
-		life_bar->Destroy();
+		if (weapon_frame != nullptr)
+		{
+			weapon_frame->Destroy();
+			weapon_frame = nullptr;
 
-		weapon_frame = nullptr;
-		item_frame = nullptr;
-		ammo_image = nullptr;
-		ammo_bar = nullptr;
-		life_bar = nullptr;
+		}
+
+		if (item_frame != nullptr)
+		{
+			item_frame->Destroy();
+			item_frame = nullptr;
+		}
+
+		if (ammo_image != nullptr)
+		{
+			ammo_image->Destroy();
+			ammo_image = nullptr;
+		}
+		
+		if (life_bar != nullptr)
+		{
+			life_bar->Destroy();
+			life_bar = nullptr;
+		}
+	
+		
 	}
 
 }

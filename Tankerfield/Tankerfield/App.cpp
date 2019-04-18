@@ -24,11 +24,13 @@
 #include "M_Collision.h"
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
+#include "M_RewardZoneManager.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	PERF_START(ptimer);
+
 
 	input = DBG_NEW M_Input();
 	win = DBG_NEW M_Window();
@@ -45,6 +47,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scmanager = DBG_NEW M_SceneManager();
 	collision = DBG_NEW M_Collision();
 	anim_bank = DBG_NEW M_AnimationBank();
+	reward_zone_manager = DBG_NEW M_RewardZoneManager();
+
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -59,6 +63,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 	AddModule(objectmanager);
 	AddModule(pick_manager);
+	AddModule(reward_zone_manager);
 	AddModule(collision);
 	AddModule(ui);
 	AddModule(anim_bank);

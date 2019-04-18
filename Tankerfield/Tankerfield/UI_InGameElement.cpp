@@ -159,18 +159,22 @@ void UI_IG_Weapon::Destroy()
 	if (arrow_image != nullptr)
 	{
 		arrow_image->Destroy();
+		arrow_image = nullptr;
 	}
 	if (weapon_frame != nullptr)
 	{
 		weapon_frame->Destroy();
+		weapon_frame = nullptr;
 	}
 	if (weapon_icon != nullptr)
 	{
 		weapon_icon->Destroy();
+		weapon_icon = nullptr;
 	}
 	if (level_indicator != nullptr)
 	{
 		level_indicator->Destroy();
+		level_indicator = nullptr;
 	}
 
 }

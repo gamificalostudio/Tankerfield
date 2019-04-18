@@ -19,6 +19,8 @@
 #include "Brofiler/Brofiler.h"
 #include "Rect.h"
 #include "Object.h"
+#include "M_RewardZoneManager.h"
+#include "M_UI.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -71,6 +73,9 @@ bool M_Scene::Start()
 
 	/* Generate first wave units */
 	CreateEnemyWave();
+
+	/* Generate Reward Zones */
+	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
 
 	return true;
 }
@@ -174,6 +179,8 @@ bool M_Scene::CleanUp()
 	app->collision->CleanUp();
 	app->objectmanager->DeleteObjects();
 	app->pathfinding->CleanUp();
+	app->ui->CleanUp();
+
 
 	return true;
 }

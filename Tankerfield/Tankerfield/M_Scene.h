@@ -3,7 +3,6 @@
 
 #include <vector>
 
-
 #include "SDL/include/SDL_rect.h"
 
 #include "Module.h"
@@ -11,6 +10,7 @@
 struct SDL_Texture;
 struct Controller;
 class Obj_Tank;
+class RewardZone;
 
 class M_Scene : public Module
 {
@@ -79,6 +79,10 @@ private:
 	int check_complete_round = 0;
 	int object_counter = 0;
 	int enemies_to_increase = 0;
+
+private:
+	/* Reward Zones */
+	RewardZone* reward_zone_01 = nullptr;
 };
 
 #endif // __j1SCENE_H__
