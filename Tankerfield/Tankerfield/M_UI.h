@@ -101,6 +101,7 @@ public:
 	enum class ICON_TYPE : int
 	{
 		NONE = -1,
+		WEAPON_BASIC,
 		WEAPON_DOUBLE_MISSILE,
 		WEAPON_HEALING_SHOT,
 		WEAPON_LASER,

@@ -10,7 +10,7 @@ struct Controller;
 struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
-
+class Player_GUI;
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -53,6 +53,7 @@ public:
 public:
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
+	void SetGui(Player_GUI* gui);
 
 private:
 	//- Movement
@@ -65,6 +66,7 @@ private:
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
+	bool HoldShot();
 	bool ReleaseShot();
 
 	//- Input
@@ -132,6 +134,9 @@ private:
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
+
+	//- GUI
+	Player_GUI*  gui                        = nullptr;
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input

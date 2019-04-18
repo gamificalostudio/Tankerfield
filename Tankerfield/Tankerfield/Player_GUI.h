@@ -16,6 +16,9 @@ class Text_Helper;
 class Button_Helper;
 class UI_PickUpElement;
 
+enum class WEAPON;
+enum class ObjectType;
+
 class Player_GUI: public UI_Listener
 {
 public:
@@ -41,7 +44,13 @@ public:
 
 	void AddTextHelper(const Text_Helper helper);
 
-	void SetLife( float life);
+	void SetLifeBar( float life);
+
+	void SetChargedShotBar(float percent);
+
+	void SetWeaponIcon(WEAPON weapon_type);
+
+	void SetItemIcon(ObjectType type);
 
 	~Player_GUI();
 

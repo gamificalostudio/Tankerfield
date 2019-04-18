@@ -21,6 +21,7 @@
 #include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
+#include "Player_GUI.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -400,22 +401,26 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 void Obj_Tank::SetLife(int life)
 {
-	//TODO: Update UI bars
 	if (this->life > GetMaxLife())
 	{
 		this->life = GetMaxLife();
 	}
 	this->life = life;
+
+	gui->SetLifeBar(this->life);
+
 }
 
 void Obj_Tank::SetItem(ObjectType type) 
 {
 	item = type;
+	gui->SetItemIcon(type);
 }
 
 void Obj_Tank::SetWeapon(WEAPON type)
 {
 	weapon_info.type = type;
+	gui->SetWeaponIcon(type);
 }
 
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
@@ -507,6 +512,14 @@ void Obj_Tank::Shoot(float dt)
 		charged_timer.Start();
 	}
 
+	if (HoldShot())
+	{
+		if (charged_timer.ReadMs() / charge_time > 0.1f)
+		{
+			gui->SetChargedShotBar(charged_timer.ReadMs() / charge_time);
+		}
+	}
+
 	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
 		//- Basic shot
@@ -522,6 +535,7 @@ void Obj_Tank::Shoot(float dt)
 			app->audio->PlayFx(shot_sound);
 		}
 		shot_timer.Start();
+		gui->SetChargedShotBar(0.f);
 	}
 }
 
@@ -534,6 +548,18 @@ bool Obj_Tank::PressShot()
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
 		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_DOWN;
+	}
+}
+
+bool Obj_Tank::HoldShot()
+{
+	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
+	{
+		return app->input->GetMouseButton(kb_shoot) == KEY_REPEAT;
+	}
+	else if (shot_input == INPUT_METHOD::CONTROLLER)
+	{
+		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_REPEAT;
 	}
 }
 
@@ -720,4 +746,9 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	}
 
 	pick_up->DeletePickUp();
+}
+
+void Obj_Tank::SetGui(Player_GUI * gui)
+{
+	this->gui = gui;
 }

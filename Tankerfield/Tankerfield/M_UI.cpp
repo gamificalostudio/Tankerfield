@@ -104,12 +104,19 @@ bool M_UI::Start()
 
 	// HUD ===========================================
 	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	app->scene->tank_1->SetGui(player_1_gui);
 	players_guis.push_back(player_1_gui);
+
 	player_2_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	app->scene->tank_2->SetGui(player_2_gui);
 	players_guis.push_back(player_2_gui);
+
 	player_3_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	app->scene->tank_3->SetGui(player_3_gui);
 	players_guis.push_back(player_3_gui);
+
 	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
 
 	// General 4 HUD players =========================================================
