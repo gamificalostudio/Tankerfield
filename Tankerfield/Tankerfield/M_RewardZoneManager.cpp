@@ -130,7 +130,6 @@ RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint si
 		}
 	}
 
-	//app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, map_center_pos);
 	reward_zones.push_back(temp_rz);
 
 	return temp_rz;
@@ -138,7 +137,11 @@ RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint si
 
 void M_RewardZoneManager::DeleteRewardZones()
 {
-
+	for (std::list<RewardZone*>::const_reverse_iterator item = this->reward_zones.rbegin();
+		item != reward_zones.rend(); item++)
+	{
+		delete *item;
+	}
 }
 
 std::list<RewardZone*> M_RewardZoneManager::GetRewardZones() const
