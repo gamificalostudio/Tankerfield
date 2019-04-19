@@ -26,7 +26,7 @@
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
 #include "Bullet_Laser.h"
-#include "Healing_Bullet.h"
+#include "Bullet_Healing.h"
 #include "Obj_Explosion.h"
 #include "Obj_HealingAnimation.h"
 #include "M_Map.h"

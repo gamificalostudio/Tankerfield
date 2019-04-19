@@ -29,6 +29,7 @@ public:
 public:
 
 	bool Start() override;
+	void StartWeapons();
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 

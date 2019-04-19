@@ -18,7 +18,7 @@
 #include "Obj_Bullet.h"
 #include "Bullet_Missile.h"
 #include "Bullet_Laser.h"
-#include "Healing_Bullet.h"
+#include "Bullet_Healing.h"
 #include "Obj_HealingAnimation.h"
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
@@ -122,23 +122,7 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	//Basic weapon starting properties
-	weapon_info.bullet_damage = 50;
-	weapon_info.bullet_healing = 0;
-	weapon_info.bullet_life_ms = 2000;
-	weapon_info.bullet_speed = 10;
-	weapon_info.time_between_bullets = 500;
-
-	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
-	basic_shot_function[(uint)WEAPON::HEALING_SHOT]		= &Obj_Tank::ShootHealingShot;
-	basic_shot_function[(uint)WEAPON::LASER_SHOT]		= &Obj_Tank::ShootLaserShot;
-
-
-	charge_time = 3000.f; // Same for all bullets (player gets used to it)
-	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
-	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
+	StartWeapons();
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -169,9 +153,6 @@ bool Obj_Tank::Start()
 	revive_range = 1.5f;
 	revive_range_squared = revive_range * revive_range;
 	revive_life = 100;
-
-
-
 
 	//Life inicialistation
 	//item = ObjectType::HEALTH_BAG;
@@ -364,26 +345,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		fPoint circlePos = pos_map;
 
 		circlePos = app->map->MapToScreenF(circlePos);
-		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);		//32? it has to be the tile measure																									//only appears when hes dead and disappear when he has been revived
+		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);//32? it has to be the tile measure																									//only appears when hes dead and disappear when he has been revived
 	}
-
-																							//only appears when hes dead and disappear when he has been revived
-	//DEBUG
-	//	iPoint debug_mouse_pos = { 0, 0 };
-//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
-
-//	debug_mouse_pos.x += camera_player->rect.x;
-//	debug_mouse_pos.y += camera_player->rect.y;
-
-//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-
-	//  std::vector<Camera*>::iterator item_cam;
-//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-//	{
-	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
-//	}
-
 
 	return true;
 }
@@ -457,54 +420,6 @@ void Obj_Tank::SetItem(ObjectType type)
 	gui->SetItemIcon(type);
 }
 
-void Obj_Tank::SetWeapon(WEAPON type, uint level)
-{
-	weapon_info.level_weapon = level;
-	weapon_info.type = type;
-
-	gui->SetWeaponIcon(type);
-
-	switch (type)
-	{
-	case WEAPON::BASIC:
-		weapon_info.bullet_damage = 50 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::FLAMETHROWER:
-		weapon_info.bullet_damage = 50 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::DOUBLE_MISSILE:
-		weapon_info.bullet_damage = 50 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::HEALING_SHOT:
-		weapon_info.bullet_damage = 0;
-		weapon_info.bullet_healing = 25 + 1 * level;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::LASER_SHOT:
-		weapon_info.bullet_damage = 50 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	}
-
-}
-
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 {
 	weapon_info.time_between_bullets = time_between_bullets;
@@ -529,13 +444,13 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, f
 {
 	iPoint mouse_screen_pos = { 0, 0 };
 	app->input->GetMousePosition(mouse_screen_pos.x, mouse_screen_pos.y);
-
 	
 	//Add the position of the mouse plus the position of the camera to have the pixel that selects the mouse in the world and then pass it to the map.
 
 	if (camera_player != nullptr)
+	{
 		mouse_screen_pos += {camera_player->rect.x, camera_player->rect.y};
-
+	}
 
 	input_dir = (fPoint)mouse_screen_pos - app->map->MapToScreenF(turr_map_pos);
 
@@ -694,26 +609,8 @@ void Obj_Tank::SelectInputMethod()
 	}
 }
 
-void Obj_Tank::ShootBasic()
-{
-	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
-	bullet->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-}
-
-void Obj_Tank::ShootFlameThrower()
-{
-}
-
-
 void Obj_Tank::ReviveTank()
 {
-
-
 	Obj_Tank* tank_arr[4];
 
 	tank_arr[0] = app->scene->tank_1;
@@ -746,76 +643,11 @@ void Obj_Tank::ReviveTank()
 
 void Obj_Tank::StopTank()
 {
-	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
-		app->scene->tank_1->life = 0;
-
-	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
-		app->scene->tank_2->life = 0;
-
-	if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
-		app->scene->tank_3->life = 0;
-
 	if (life == 0)
 	{
 		curr_speed = 0;
-		angle = 0;
-		shot_dir = { 0.f,0.f };
 	}
 }
-
-
-
-void Obj_Tank::ShootDoubleMissile()
-{
-	fPoint double_missiles_offset = shot_dir;
-	double_missiles_offset.RotateDegree(90);
-	float missiles_offset = 0.2f;
-
-	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length + double_missiles_offset * missiles_offset);
-	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
-
-	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
-
-	left_missile->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		bullet_angle);
-
-	right_missile->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		bullet_angle);
-}
-
-void Obj_Tank::ShootHealingShot()
-{
-	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
-
-	heal_bullet->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-}
-
-void Obj_Tank::ShootLaserShot()
-{
-	Laser_Bullet *	 laser_bullet= (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir * cannon_length);
-
-	laser_bullet->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-}
-
-
 
 void Obj_Tank::Item()
 {

@@ -112,9 +112,6 @@
     <ClCompile Include="UI_Bar.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Healing_Bullet.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_HealingAnimation.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -132,9 +129,6 @@
     </ClCompile>
     <ClCompile Include="UI_InGameElement.cpp">
       <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="WeaponInfo.cpp">
-      <Filter>Weapons</Filter>
     </ClCompile>
     <ClCompile Include="Obj_PickUp.cpp">
       <Filter>Objects</Filter>
@@ -156,6 +150,12 @@
     </ClCompile>
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Tank_Weapons.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet_Healing.cpp">
+      <Filter>Objects\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -288,9 +288,6 @@
     <ClInclude Include="UI_Bar.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Healing_Bullet.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_HealingAnimation.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -312,9 +309,6 @@
     <ClInclude Include="UI_InGameElement.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="WeaponInfo.h">
-      <Filter>Weapons</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_PickUp.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -335,6 +329,12 @@
     </ClInclude>
     <ClInclude Include="Item_HappyHour.h">
       <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponInfo.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Healing.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
