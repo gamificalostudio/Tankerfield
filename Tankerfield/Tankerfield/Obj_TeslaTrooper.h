@@ -18,15 +18,6 @@ enum class TROOPER_STATE
 	RECHEAD_POINT
 };
 
-/* Enemy state */
-enum class CURRENT_POS_STATE
-{
-	STATE_UNKNOWN = -1,
-
-	STATE_WAITING,
-	STATE_GOING_TO_WAIT,
-};
-
 class Obj_TeslaTrooper : public Object 
 {
 public:
@@ -67,11 +58,6 @@ private:
 	Circle range_pos;
 
 	// ----------
-
-	int enemy_width = 66;
-	int enemy_height = 76;
-
-	CURRENT_POS_STATE current_state = CURRENT_POS_STATE::STATE_WAITING;
 
 	/* Attack properties */
 	float attack_frequency = 3000.0f;

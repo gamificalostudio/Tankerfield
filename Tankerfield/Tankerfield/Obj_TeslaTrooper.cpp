@@ -66,16 +66,12 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 void Obj_TeslaTrooper::Attack()
 {
-	if (target != nullptr)
+	if (target != nullptr
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range * attack_range
+		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{
-		if (pos_map.DistanceNoSqrt(target->pos_map) < attack_range * attack_range)
-		{
-			if (perf_timer.ReadMs() > (double)attack_frequency)
-			{ 
-				target->SetLife(target->GetLife() - attack_damage);
-				perf_timer.Start();
-			}
-		}
+		target->SetLife(target->GetLife() - attack_damage);
+		perf_timer.Start();
 	}
 }
 
