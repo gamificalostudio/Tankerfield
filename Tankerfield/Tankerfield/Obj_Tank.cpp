@@ -56,11 +56,11 @@ bool Obj_Tank::Start()
 	//base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
 	//base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
+	//SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
 	turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
+	//SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
@@ -145,7 +145,7 @@ bool Obj_Tank::Start()
 	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
-	cannon_length = 0.75f;
+	cannon_length = 0.f;
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -396,23 +396,21 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 bool Obj_Tank::DrawShadow(Camera * camera)
 {
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
+	//// Base =========================================
+	//app->render->Blit(
+	//	base_shadow_tex,
+	//	pos_screen.x - draw_offset.x,
+	//	pos_screen.y - draw_offset.y,
+	//	camera,
+	//	&curr_anim->GetFrame(angle));
 
-	// Base =========================================
-	app->render->Blit(
-		base_shadow_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&curr_anim->GetFrame(angle));
-
-	// Turret =======================================
-	app->render->Blit(
-		turr_shadow_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&rotate_turr.GetFrame(turr_angle));
+	//// Turret =======================================
+	//app->render->Blit(
+	//	turr_shadow_tex,
+	//	pos_screen.x - draw_offset.x,
+	//	pos_screen.y - draw_offset.y,
+	//	camera,
+	//	&rotate_turr.GetFrame(turr_angle));
 
 	return true;
 }
