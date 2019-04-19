@@ -62,7 +62,10 @@ bool Obj_TeslaTrooper::Update(float dt)
 	case TROOPER_STATE::GET_PATH:
 		path.clear();
 		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map);
+		target = app->objectmanager->GetNearestTank(pos_map, 5);
+
+		if (target != nullptr)
+		{
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
 				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
@@ -72,6 +75,8 @@ bool Obj_TeslaTrooper::Update(float dt)
 				}
 				state = TROOPER_STATE::RECHEAD_POINT;
 			}
+		}
+
 		timer.Start();
 		break;
 	case TROOPER_STATE::MOVE:

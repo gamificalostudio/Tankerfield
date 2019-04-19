@@ -12,6 +12,7 @@ class Timer;
 
 enum class TROOPER_STATE
 {
+	IDLE,
 	GET_PATH,
 	MOVE,
 	RECHEAD_POINT
