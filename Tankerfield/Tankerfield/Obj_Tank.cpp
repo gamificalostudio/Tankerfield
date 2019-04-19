@@ -370,7 +370,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		fPoint circlePos = pos_map;
 
 		circlePos = app->map->MapToScreenF(circlePos);
-		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);		//32? it has to be the tile measure																									//only appears when hes dead and disappear when he has been revived
+		app->render->DrawIsoCircle(circlePos.x, circlePos.y, revive_range * 30, camera, 255, 0, 0, 100);// 30 = tile mesure
 	}
 
 																							//only appears when hes dead and disappear when he has been revived
@@ -741,6 +741,9 @@ void Obj_Tank::ReviveTank()
 			&& tank_arr[i]->life == 0
 			&& this->life != 0)
 		{
+			if (tank_num == 0) {
+				LOG("can revive!");
+			}
 			tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
