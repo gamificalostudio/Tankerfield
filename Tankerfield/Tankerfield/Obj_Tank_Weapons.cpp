@@ -58,8 +58,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		break;
 	case WEAPON::HEALING_SHOT:
-		weapon_info.bullet_damage = 0;
-		weapon_info.bullet_healing = 25 + 1 * level;
+		weapon_info.bullet_damage = 25;
+		weapon_info.bullet_healing = 5 + 1 * level;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
 		weapon_info.time_between_bullets = 500;
