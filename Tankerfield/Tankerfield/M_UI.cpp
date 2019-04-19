@@ -124,10 +124,6 @@ bool M_UI::Start()
 	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
 
-	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::L));
-	player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::R));
-	player_1_gui->SetHelper();
-
 	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170 , 10, 105, 105 };
 	round_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
@@ -204,7 +200,7 @@ bool M_UI::PreUpdate()
 
 	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 	{
-		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->to_destroy == true)
+		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->is_interactive == false)
 		{
 			continue;
 		}
@@ -261,65 +257,30 @@ bool M_UI::PreUpdate()
 	return true;
 }
 
+
+//ax += dt * ratetime;
+//
+//if (round_fx->alpha == target_value)
+//{
+//	swap(init_value, target_value);
+//	ax = 0.f;
+//}
+
+//round_fx->alpha = lerp(init_value, target_value, ax);
+
+//ax += dt * ratetime;
+
+////if (app->scene->tank_1->GetLife() == target_value)
+////{
+////	swap(init_value, target_value);
+////	ax = 0.f;
+////}
+
+//app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
+
 bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
-
-
-	//ax += dt * ratetime;
-	//
-	//if (round_fx->alpha == target_value)
-	//{
-	//	swap(init_value, target_value);
-	//	ax = 0.f;
-	//}
-
-	//round_fx->alpha = lerp(init_value, target_value, ax);
-
-	//ax += dt * ratetime;
-
-	////if (app->scene->tank_1->GetLife() == target_value)
-	////{
-	////	swap(init_value, target_value);
-	////	ax = 0.f;
-	////}
-
-	//app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
-
-	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
-	{
-		(*gui)->Update(dt);
-	}
-
-	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
-	{
-		if ((*element)->to_destroy == true)
-		{
-			UI_Element* parent = (*element)->parent_element;
-			std::list<UI_Element*> * sons_list = (*element)->GetSons();
-
-			// Merge its sons to its parent
-
-			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
-			{
-			    (*son)->parent_element = parent;
-				parent->element_sons.push_back((*son));
-			}
-
-			// Delete it self from its parent
-
-			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
-
-			// Delete from UI list
-
-			RELEASE((*element));
-			element = ig_elements_list.erase(element);
-		}
-		else
-		{
-			++element;
-		}
-	}
 
 	// Draggable ================================================
 	if (selected_element && selected_element->is_draggable)
@@ -359,36 +320,36 @@ bool M_UI::Update(float dt)
 		}
 	}
 
-	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end();)
+	// UI Elements Update =====================================================
+
+	for (list<UI_Element*>::iterator element = elements_list.begin(); element != elements_list.end();)
 	{
-		if ((*item)->to_destroy == true)
+		if ((*element)->to_destroy == true)
 		{
-			// Delete ui element on parent sons list =========================
+			UI_Element* parent = (*element)->parent_element;
+			std::list<UI_Element*> * sons_list = (*element)->GetSons();
 
-			if ((*item)->parent_element != nullptr)
+			// Merge its sons to its parent
+
+			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
 			{
-				list<UI_Element*> *sons_list = (*item)->parent_element->GetSons();
-				list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), (*item));
-
-				if (son_to_delete == sons_list->end())
-				{
-					LOG("Object not deleted: Not found");
-					return false;
-				}
-
-				sons_list->erase(son_to_delete);
+				(*son)->parent_element = parent;
+				parent->element_sons.push_back((*son));
 			}
 
-			// Delete ui element ============================================
+			// Delete it self from its parent
 
-			LOG("UI Object deleted");
-			RELEASE((*item));
-			item = elements_list.erase(item);
+			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
+
+			// Delete from UI list
+
+			RELEASE((*element));
+			element = elements_list.erase(element);
 		}
 		else
 		{
-			(*item)->Update(dt);
-			++item;
+			(*element)->Update(dt);
+			++element;
 		}
 	}
 
@@ -418,6 +379,41 @@ bool M_UI::Update(float dt)
 
 	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
+	// In Game Elements Update ============================================
+
+	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
+	{
+		if ((*element)->to_destroy == true)
+		{
+			UI_Element* parent = (*element)->parent_element;
+			std::list<UI_Element*> * sons_list = (*element)->GetSons();
+
+			// Merge its sons to its parent
+
+			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
+			{
+				(*son)->parent_element = parent;
+				parent->element_sons.push_back((*son));
+			}
+
+			// Delete it self from its parent
+
+			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
+
+			// Delete from UI list
+
+			RELEASE((*element));
+			element = ig_elements_list.erase(element);
+		}
+		else
+		{
+			(*element)->Update(dt);
+			++element;
+		}
+
+		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
+
+	}
 	return true;
 }
 
@@ -439,22 +435,17 @@ bool M_UI::PostUpdate(float dt)
 	{
 		current_gui = (*gui);
 		current_camera = current_gui->player->camera_player;
-
-		for (list<UI_Element*>::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
-		{
-			(*element)->PostUpdate();
-		}
-
-		UpdateGuiPositions(main_in_game_element, fPoint(0.f, 0.f));
 		DrawUI(main_in_game_element);
 	}
 
 	current_camera = nullptr;
 
 	// Draw all UI elements ====================================
+
 	DrawUI(main_ui_element);
 
 	// Debug Positions  =======================================
+
 	if (debug)
 	{
 		for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)

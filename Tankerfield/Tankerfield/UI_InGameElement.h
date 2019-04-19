@@ -2,14 +2,13 @@
 #define  __UI_IN_GAME_ELEMENT_H_
 
 #include "UI_Element.h"
+#include "M_UI.h"
 
 class Object;
 class Obj_PickUp;
 class Player_GUI;
 class UI_Elment;
 class UI_Image;
-class Button_Helper;
-class Text_Helper;
 class Camera;
 
 enum class ARROW_COLOR
@@ -23,36 +22,30 @@ enum class ARROW_COLOR
 
 struct UI_InGameElementDef : public UI_ElementDef
 {
-	fPoint        map_pos = { 0.f, 0.f };
-	Object*       pointed_obj = nullptr;
-	bool          add_arrow = false;
-	ARROW_COLOR   arrow_color = ARROW_COLOR::NONE;
-	Camera*       single_camera = nullptr;
+	Object*         pointed_obj = nullptr;
+	bool            is_arrow_actived = false;
+	ARROW_COLOR     arrow_color = ARROW_COLOR::NONE;
 };
 
 class UI_InGameElement: public UI_Element
 {
 public:
 
-	UI_InGameElement(const fPoint position, const UI_InGameElementDef definition);
+	UI_InGameElement(const fPoint map_pos, const UI_InGameElementDef definition);
 
-	virtual bool PostUpdate();
+	bool Update(float dt);
 
-	virtual void Destroy();
-
-	void UpdateArrow();
+	virtual bool Draw();
 	
 public:
 
-	fPoint         map_pos = { 0.f, 0.f };  // If object is null, use only a point to set its position
-	fPoint         object_offset = { 0.f, 0.f };
 	Object*        pointed_obj = nullptr;   // Object used to set position of main element
-	Camera*        single_camera = nullptr;
 
 protected:
-	
-	UI_Element*    main_element = nullptr;  // Element used to check if element is inside viewport margins in order to hide arrow
-	UI_Image*      arrow_image = nullptr;   // Arrow element 
+
+	bool           is_arrow_actived = false;
+	Animation*     arrow_animation = nullptr;
+
 };
 
 
@@ -60,9 +53,7 @@ class UI_IG_Weapon: public UI_InGameElement
 {
 public:
 
-	UI_IG_Weapon(const fPoint position, const UI_InGameElementDef definition);
-
-	bool PostUpdate();
+	UI_IG_Weapon(const fPoint map_pos, const UI_InGameElementDef definition);
 
 	void Destroy();
 
@@ -82,9 +73,7 @@ class UI_IG_Item : public UI_InGameElement
 {
 public:
 
-	UI_IG_Item(const fPoint position, const UI_InGameElementDef definition);
-
-	bool PostUpdate();
+	UI_IG_Item(const fPoint map_pos, const UI_InGameElementDef definition);
 
 	void Destroy();
 
@@ -99,19 +88,18 @@ class UI_IG_Helper : public UI_InGameElement
 {
 public:
 
-	UI_IG_Helper(const fPoint position, const UI_InGameElementDef definition);
+	UI_IG_Helper(const fPoint map_pos, const UI_InGameElementDef definition);
 
-	bool PostUpdate();
+	void AddButtonHelper(const M_UI::GAMEPAD_BUTTON button_type, const fPoint offset);
 
-	void AddButtonHelper( Button_Helper helper);
-
-	void AddTextHelper(Text_Helper helper);
+	void AddTextHelper(const String text, const  fPoint offset);
 
 	void Destroy();
 
 public:
 
 	std::vector<UI_Element*> helper_elements;
+
 };
 
 

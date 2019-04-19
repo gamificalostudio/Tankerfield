@@ -11,9 +11,6 @@ class UI_Image;
 class UI_Label;
 class UI_Bar;
 class Object;
-class Helper;
-class Text_Helper;
-class Button_Helper;
 class UI_PickUpElement;
 
 enum class WEAPON;
@@ -40,9 +37,9 @@ public:
 
 	void SetHelper();
 
-	void AddButtonHelper(const Button_Helper helper);
+	void AddButtonHelper(const M_UI::GAMEPAD_BUTTON button_type);
 
-	void AddTextHelper(const Text_Helper helper);
+	void AddTextHelper(const String text);
 
 	void SetLifeBar( float life);
 
@@ -82,8 +79,6 @@ private:
 
 	UI_Bar* life_bar = nullptr;
 
-	std::vector<Helper*> helpers_vector;
-
 	std::vector<UI_Element*> helper_elements;
 
 	// In Game Elements ======================
@@ -91,50 +86,6 @@ private:
 	UI_InGameElement* player_arrow = nullptr;
 
 	friend M_UI;
-};
-
-class Helper
-{
-public:
-
-	enum class HELPER_TYPE
-	{
-		BUTTON,
-		TEXT,
-		NONE
-	};
-
-	Helper(fPoint offset = { 0.f,0.f }) : offset(offset) {}
-
-	fPoint offset = {0,0};
-
-	HELPER_TYPE type = HELPER_TYPE::NONE;
-
-};
-
-class Button_Helper: public Helper
-{
-public:
-
-	Button_Helper(const M_UI::GAMEPAD_BUTTON button_type ,const fPoint offset = { 0.f,0.f }): Helper(offset) , button_type(button_type)
-	{
-		type = HELPER_TYPE::BUTTON;
-	}
-
-	M_UI::GAMEPAD_BUTTON button_type = M_UI::GAMEPAD_BUTTON::NONE;
-};
-
-class Text_Helper : public Helper
-{
-public:
-
-	Text_Helper( const String text, const fPoint offset = { 0.f,0.f }) : Helper(offset)
-	{
-		this->text.assign(text);
-		type = HELPER_TYPE::TEXT;
-	}
-
-	String text;
 };
 
 #endif // __PLAYER_GUI_H_

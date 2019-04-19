@@ -3,10 +3,13 @@
 #include "M_Render.h"
 #include "App.h"
 #include "Log.h"
+#include "M_Map.h"
 
 UI_Element::UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener) 
-	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section), is_in_game(definition.is_in_game){}
-
+	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height),
+	pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section), is_in_game(definition.is_in_game),
+	screen_offset(definition.screen_offset), single_camera(definition.single_camera), not_in_camera(definition.not_in_camera){}
+	
 UI_Element::~UI_Element()
 {
 }
@@ -25,16 +28,35 @@ bool UI_Element::UpdateRelativePosition()
 
 bool UI_Element::Draw()
 {
-	SDL_Rect draw_rect = GetDrawRect();
+	SDL_Rect draw_rect;
+
+	if (is_in_game == true)
+	{
+		draw_rect = GetDrawRect(app->map->MapToCamera(position, app->ui->current_camera));
 
 		if (alpha != 255)
 		{
-			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
 		}
 		else
 		{
-			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
+			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera);
 		}
+	}
+	else
+	{
+		draw_rect = GetDrawRect(position);
+
+		if (alpha != 255)
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+		}
+		else
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera);
+		}
+	}
+
 	return true;
 }
 
@@ -49,12 +71,12 @@ void UI_Element::SetPos(const fPoint pos)
 	UpdateRelativePosition();
 }
 
-bool UI_Element::SetParent(UI_Element * new_parent)
+void UI_Element::SetParent(UI_Element * new_parent)
 {
 	if (new_parent == nullptr)
 	{
 		LOG("Failed SetParent, parent was nullptr");
-		return false;
+		return;
 	}
 	// Delete previous parent =====================
 	if (parent_element != nullptr)
@@ -70,7 +92,7 @@ bool UI_Element::SetParent(UI_Element * new_parent)
 		else
 		{
 			LOG("Failed SetParent, object as son not found");
-			return false;
+			return;
 		}
 	}
 
@@ -80,8 +102,16 @@ bool UI_Element::SetParent(UI_Element * new_parent)
 
 	// Add to parent sons =========================
 	parent_element->GetSons()->push_back(this);
+}
 
-	return true;
+void UI_Element::SetState(ELEMENT_STATE new_state)
+{
+	state = new_state;
+}
+
+void UI_Element::SetStateToBranch(ELEMENT_STATE new_state)
+{
+	app->ui->SetStateToBranch(new_state, this);
 }
 
 void UI_Element::SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y)
@@ -158,7 +188,7 @@ fRect UI_Element::GetSection()
 	return ret;
 }
 
-SDL_Rect UI_Element::GetDrawRect()
+SDL_Rect UI_Element::GetDrawRect(const fPoint position)
 {
 	fPoint pos;
 	SDL_Rect  ret;
