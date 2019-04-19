@@ -29,7 +29,7 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 	// In Game Elements =====================================================
 
 	UI_InGameElementDef arrow_def;
-	arrow_def.add_arrow = true;
+	arrow_def.is_arrow_actived = true;
 	arrow_def.pointed_obj = player_object;
 
 	switch (type)
@@ -223,66 +223,22 @@ void Player_GUI::ClearHelpers()
 	}
 
 	helper_elements.clear();
-	
-	for (std::vector<Helper*>::iterator iter = helpers_vector.begin(); iter != helpers_vector.end(); ++iter)
-	{
-		RELEASE(*iter);
-	}
-
-	helpers_vector.clear();
-
 }
 
 void Player_GUI::SetHelper()
 {
-	fPoint    helper_pos = { viewport.GetLeft() + viewport.w * 0.5f, viewport.GetBottom() - 50.f };
 
-	float x_offset = 0.f;
-
-	UI_Element* aux = nullptr;
-
-	for (std::vector<Helper*>::iterator iter = helpers_vector.begin(); iter != helpers_vector.end(); ++iter)
-	{
-		if ((*iter)->type == Helper::HELPER_TYPE::TEXT)
-		{
-			Text_Helper* helper =(Text_Helper*) (*iter);
-			aux = app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(helper->text, app->ui->font_open_sants_bold_12));
-
-		}
-		else if ((*iter)->type == Helper::HELPER_TYPE::BUTTON)
-		{
-			Button_Helper* helper = (Button_Helper*) (*iter);
-			aux = app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)helper->button_type]));
-
-		}
-
-		x_offset += aux->sprite_section.w + (*iter)->offset.x;
-		aux->offset.x = (*iter)->offset.x;
-		aux->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
-		helper_elements.push_back(aux);
-	}
-
-	x_offset *= 0.5f;
-
-	float cumulated_x = 0.f;
-
-	for (std::vector<UI_Element*>::iterator iter = helper_elements.begin(); iter != helper_elements.end(); ++iter)
-	{
-		(*iter)->SetPos(fPoint(helper_pos.x - x_offset + cumulated_x, helper_pos.y));
-		cumulated_x += ( (*iter)->sprite_section.w + (*iter)->offset.x );
-	}
 }
 
-void Player_GUI::AddButtonHelper(const Button_Helper helper)
+void Player_GUI::AddButtonHelper( const M_UI::GAMEPAD_BUTTON button_type)
 {
-	Button_Helper* new_helper = DBG_NEW Button_Helper(helper);
-	helpers_vector.push_back(new_helper);
+	app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)button_type]));
+
 }
 
-void Player_GUI::AddTextHelper(const Text_Helper helper)
+void Player_GUI::AddTextHelper(const String text)
 {
-	Text_Helper* new_helper = DBG_NEW Text_Helper(helper);
-	helpers_vector.push_back(new_helper);
+	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->ui->font_open_sants_bold_12));
 }
 
 Player_GUI::~Player_GUI()

@@ -195,15 +195,15 @@ bool Obj_Tank::Start()
 
 	tutorial_move = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_move->single_camera = camera_player;
-	tutorial_move->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f}));
-	tutorial_move->AddTextHelper(Text_Helper("MOVE", {0.f, 70.f}));
+	tutorial_move->AddButtonHelper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f});
+	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
 	tutorial_move_time = 4000;
-	//- Revive
+	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
-	tutorial_revive->AddButtonHelper(Button_Helper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f }));
-	tutorial_revive->AddTextHelper(Text_Helper("REVIVE", { 0.f, 70.f }));
-	tutorial_revive->state = ELEMENT_STATE::HIDDEN;
+	tutorial_revive->AddButtonHelper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f });
+	tutorial_revive->AddTextHelper("REVIVE", { 0.f, 70.f });
+	tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 	return true;
 }
@@ -249,13 +249,17 @@ void Obj_Tank::CameraMovement(float dt)
 		(float)camera_player->rect.y
 	};
 
-	camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.6f/*37.5f * dt*/);
-	camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.6f/*37.5f * dt*/);
+	//camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.1f /*37.5f*/ * dt);
+	//camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.1f /*37.5f*/ * dt);
+
+	camera_player->rect.x = screen_pos.x - (float) camera_player->rect.w * 0.5f;
+	camera_player->rect.y = screen_pos.y - (float) camera_player->rect.h * 0.5f;
 }
 
 void Obj_Tank::Movement(float dt)
 {
 	fPoint input_dir(0.f, 0.f);
+
 	if (move_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputMovementKeyboard(input_dir);
@@ -264,7 +268,9 @@ void Obj_Tank::Movement(float dt)
 	{
 		InputMovementController(input_dir);
 	}
+
 	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
+
 	fPoint iso_dir(0.f, 0.f);
 	iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
 	iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
@@ -732,7 +738,7 @@ void Obj_Tank::ReviveTank()
 			&& tank_arr[i]->life == 0
 			&& this->life != 0)
 		{
-			tutorial_revive->state = ELEMENT_STATE::VISIBLE;
+			tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
 				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
