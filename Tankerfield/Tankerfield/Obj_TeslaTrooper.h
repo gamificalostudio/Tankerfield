@@ -24,9 +24,7 @@ enum class CURRENT_POS_STATE
 	STATE_UNKNOWN = -1,
 
 	STATE_WAITING,
-	STATE_GOING_TO_ATTACK,
 	STATE_GOING_TO_WAIT,
-	STATE_ATTACKING
 };
 
 class Obj_TeslaTrooper : public Object 
@@ -36,6 +34,10 @@ public:
 	~Obj_TeslaTrooper();
 
 	bool Update(float dt) override;
+
+	void Attack();
+
+	void Movement(float &dt);
 
 	void DrawDebug(const Camera* camera) override;
 
@@ -71,12 +73,10 @@ private:
 
 	CURRENT_POS_STATE current_state = CURRENT_POS_STATE::STATE_WAITING;
 
-	bool TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const;
-
 	/* Attack properties */
 	float attack_frequency = 3000.0f;
-	iPoint attack_range = { 60, 30 };
-	bool attack_available = false;
+	float attack_range = 0.f;//Tile distance in which the enemy can attack
+	int attack_damage = 0;
 	PerfTimer perf_timer;
 
 	Animation walk;
