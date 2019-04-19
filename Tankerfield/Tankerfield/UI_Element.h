@@ -101,6 +101,8 @@ public:
 
 	void SetStateToBranch(ELEMENT_STATE new_state);
 
+	//ELEMENT_STATE GetState();
+
 	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
 
 	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float init_value, float target_value);

@@ -458,55 +458,87 @@ bool M_Render::DrawCircle(int x, int y, int radius, Camera* camera, Uint8 r, Uin
 
 	float factor = (float)M_PI / 180.0f;
 
-	std::vector<Camera*>::iterator item_cam;
-	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
+	int x_in_viewport = x;
+	int y_in_viewport = y;
+
+	x_in_viewport += camera->viewport.x;
+	y_in_viewport += camera->viewport.y;
+
+
+	if (use_camera)
 	{
-		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
-		if (use_camera)
+		for (uint i = 0; i < 360; ++i)
 		{
-			for (uint i = 0; i < 360; ++i)
-			{
-				points[i].x = (int)(-(*item_cam)->rect.x + x + radius * cos(i * factor));
-				points[i].y = (int)(-(*item_cam)->rect.y + y + radius * sin(i * factor));
-			}
+			points[i].x = (int)(-camera->rect.x + x_in_viewport + radius * cos(i * factor));
+			points[i].y = (int)(-camera->rect.y + y_in_viewport + radius * sin(i * factor));
 		}
-
-
-		int x_in_viewport = x;
-		int y_in_viewport = y;
-
-		x_in_viewport += camera->viewport.x;
-		y_in_viewport += camera->viewport.y;
-
-
-		if (use_camera)
-		{
-			for (uint i = 0; i < 360; ++i)
-			{
-				points[i].x = (int)(-camera->rect.x + x_in_viewport + radius * cos(i * factor));
-				points[i].y = (int)(-camera->rect.y + y_in_viewport + radius * sin(i * factor));
-			}
-		}
-
-		else
-		{
-			for (uint i = 0; i < 360; ++i)
-			{
-				points[i].x = (int)(x_in_viewport + radius * cos(i * factor));
-				points[i].y = (int)(y_in_viewport + radius * sin(i * factor));
-			}
-		}
-
-		result = SDL_RenderDrawPoints(renderer, points, 360);
-
-		if (result != 0)
-		{
-			LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
-			ret = false;
-		}
-
-		return ret;
 	}
+
+	else
+	{
+		for (uint i = 0; i < 360; ++i)
+		{
+			points[i].x = (int)(x_in_viewport + radius * cos(i * factor));
+			points[i].y = (int)(y_in_viewport + radius * sin(i * factor));
+		}
+	}
+
+	result = SDL_RenderDrawPoints(renderer, points, 360);
+
+	if (result != 0)
+	{
+		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+	
+}
+
+bool M_Render::DrawIsoCircle(int x, int y, int radius, Camera* camera, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
+{
+	bool ret = true;
+	uint scale = app->win->GetScale();
+
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+
+	int result = -1;
+	SDL_Point points[360];
+
+	float factor = (float)M_PI / 180.0f;
+
+	int x_in_viewport = x + camera->viewport.x;
+	int y_in_viewport = y + camera->viewport.y;
+
+	if (use_camera)
+	{
+		for (uint i = 0; i < 360; ++i)
+		{
+			points[i].x = (int)(-camera->rect.x + x_in_viewport + radius * cos(i * factor));
+			points[i].y = (int)(-camera->rect.y + y_in_viewport + radius * 0.5f * sin(i * factor));
+		}
+	}
+
+	else
+	{
+		for (uint i = 0; i < 360; ++i)
+		{
+			points[i].x = (int)(x_in_viewport + radius * cos(i * factor));
+			points[i].y = (int)(y_in_viewport + radius * 0.5f * sin(i * factor));
+		}
+	}
+
+	result = SDL_RenderDrawPoints(renderer, points, 360);
+
+	if (result != 0)
+	{
+		LOG("Cannot draw quad to main_object. SDL_RenderFillRect error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+
 }
 
 
@@ -515,8 +547,6 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 	int scale = app->win->GetScale();
 
 	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
-
-	camera->number_player = camera->number_player;
 
 	return SDL_HasIntersection(&r, &camera->rect);
 }

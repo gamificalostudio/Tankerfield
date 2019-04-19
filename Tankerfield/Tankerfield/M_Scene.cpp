@@ -27,6 +27,8 @@
 #include "M_UI.h"
 #include "General_HUD.h"
 #include "Obj_TeslaTrooper.h"
+#include "Obj_Brute.h"
+#include "Object.h"
 
 #include "UI_Image.h"
 
@@ -47,10 +49,7 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
-	initial_num_enemies = config.child("initial_generated_units").attribute("value").as_int();
-	enemies_to_increase = config.child("enemies_to_increase").attribute("value").as_int();
-	generated_units = config.child("initial_generated_units").attribute("value").as_int();
-
+	
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
 
 	finish_wave_sound_string = config.child("sounds").child("finish_wave_shot").attribute("sound").as_string();
@@ -64,7 +63,6 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
-	generated_units = initial_num_enemies;
 	path_tex = app->tex->Load("maps/path.png");
 
 	// Load the first level of the list on first game start -------------------------
@@ -85,13 +83,13 @@ bool M_Scene::Start()
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
+	round = 1;
+	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 
-	number_current_wave = 1;
-	stat_of_wave = WaveStat::ENTER_IN_WAVE;
 
 	/* Generate Reward Zones */
-	//reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
-	//reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
+	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
+	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
 }
@@ -131,7 +129,6 @@ bool M_Scene::Update(float dt)
 
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
-
 	{
 		++current_level;
 
@@ -164,28 +161,25 @@ bool M_Scene::Update(float dt)
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
-		app->ui->general_hud->SetWaveNumber(number_current_wave);
+		app->ui->general_hud->SetRoundNumber(round);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;
 	}
 	case WaveStat::IN_WAVE:
 	{
-		/*for (std::list<Obj_TeslaTrooper*>::iterator iterator = enemies_in_wave.begin(); iterator != enemies_in_wave.end();)
+		for (std::list<Object*>::iterator iterator = enemies_in_wave.begin(); iterator != enemies_in_wave.end();)
 		{
-			
 			if ((*iterator)->to_remove)
 			{
-				enemies_in_wave.erase(iterator);
+				iterator = enemies_in_wave.erase(iterator);
 			}
 				
 			else
 			{
 				++iterator;
 			}
-			
-			
-		}*/
+		}
 		int ret = enemies_in_wave.size();
 		if (ret == 0)
 		{
@@ -321,7 +315,7 @@ void M_Scene::DebugPathfinding()
 
 void M_Scene::CreateEnemyWave()
 {
-	for (int i = 0; i < generated_units; i++)
+	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
@@ -329,17 +323,36 @@ void M_Scene::CreateEnemyWave()
 
 		enemies_in_wave.push_back(ret);
 	}
+	if (Brute_units > 0)
+	{
+		for (int i = 0; i < Brute_units; i++)
+		{
+			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+			Obj_Brute* ret = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+
+			enemies_in_wave.push_back(ret);
+		}
+	}
 
 }
 
 void M_Scene::NewWave()
 {
-	initial_generated_units += enemies_to_increase;
-
+	if (round <= 5)
+	{
+		Tesla_trooper_units = 10 + (round - 1) * 3 * 4;/*the * 4 is because is coop */
+		Brute_units = (round - 2) * 2;
+	}
+	else 
+	{
+		Tesla_trooper_units = (round * 5 + round * 2) * 4;
+		Brute_units = round * 2;
+	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
 
-	++number_current_wave;
+	++round;
 }
 
 bool M_Scene::AllPlayersReady() const

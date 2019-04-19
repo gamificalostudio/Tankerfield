@@ -17,8 +17,8 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 {
 	coll = app->collision->AddCollider(pos, 2, 2, Collider::TAG::REWARD_BOX, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
-	frame.w = 2;
-	frame.h = 2;
+	frame.w = 200;
+	frame.h = 200;
 
 	life = 100;
 }
