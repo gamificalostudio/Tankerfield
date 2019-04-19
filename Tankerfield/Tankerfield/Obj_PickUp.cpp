@@ -54,7 +54,6 @@ void Obj_PickUp::GenerationOfPickUp(PICKUP_TYPE type_of_pick_up, uint levels_to_
 		in_game_element = app->ui->CreateInGameWeapon(pos_map, element_def);
 		break;
 	}
-
 	
 }
 

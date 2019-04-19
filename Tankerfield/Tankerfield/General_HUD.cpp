@@ -28,7 +28,7 @@ General_HUD::General_HUD()
 	image_def.sprite_section = { 120, 515, 179, 179 };
 	round_fx = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	round_fx->alpha = 0;
+	round_fx->SetState(ELEMENT_STATE::HIDDEN);
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
 	left_tank_life = app->ui->CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
@@ -37,6 +37,8 @@ General_HUD::General_HUD()
 	image_def.sprite_section = { 60, 160, 50, 530 };
 	right_tank_life = app->ui->CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
+
+	FadeGeneralHUD(true);
 }
 
 void General_HUD::FadeGeneralHUD(bool fade_on)
@@ -54,10 +56,10 @@ void General_HUD::FadeGeneralHUD(bool fade_on)
 		target_value = 0.f;
 	}
 
-	round_number_label->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	round_element->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	left_tank_life->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	right_tank_life->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	round_number_label	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	round_element		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	left_tank_life		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	right_tank_life		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
 }
 
 void General_HUD::SetRoundNumber(int round)
