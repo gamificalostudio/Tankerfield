@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include "Rect.h"
+#include "M_UI.h"
 
 using namespace std;
 typedef string String;
@@ -102,6 +103,8 @@ public:
 
 	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
 
+	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float init_value, float target_value);
+
 	fRect GetSection();
 
 	SDL_Rect GetDrawRect();
@@ -125,10 +128,11 @@ public:
 	Camera*               single_camera = nullptr;
 	Camera*               not_in_camera = nullptr;
 	float                 alpha = 255.f;
+	bool                  active_fx = false;
 
 protected:
 
-	// Vars ==============================================
+	// Vars =============================================
 
 	fPoint                relative_position = { 0.f, 0.f };
 	Pivot                 pivot;

@@ -27,6 +27,7 @@
 #include "M_UI.h"
 #include "Obj_TeslaTrooper.h"
 
+#include "UI_Image.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -74,6 +75,7 @@ bool M_Scene::Start()
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
 	
+	// UI Elements
 
 	//Create all tanks
 	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(70.f, 60.f));

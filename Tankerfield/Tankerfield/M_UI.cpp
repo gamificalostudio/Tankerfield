@@ -127,6 +127,11 @@ bool M_UI::Start()
 
 	// General 4 HUD players =========================================================
 
+	game_word = app->ui->CreateImage(fPoint(750.f, 335.f), UI_ImageDef({ 555,10 ,424,188 }));
+	over_word = app->ui->CreateImage(fPoint(770.f, 521.f), UI_ImageDef({ 555 ,200,383 ,188 }));
+	game_word->SetState(ELEMENT_STATE::HIDDEN);
+	over_word->SetState(ELEMENT_STATE::HIDDEN);
+
 	image_def.sprite_section = { 170 , 10, 105, 105 };
 	wave_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	wave_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
@@ -148,7 +153,15 @@ bool M_UI::Start()
 	image_def.sprite_section = { 60, 160, 50, 530 };
 	right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
-	
+
+	FadeGeneralHUD(true);
+
+	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
+	{
+		(*gui)->Fade_GUI(true);
+	}
+
+
 	return true;
 }
 
@@ -199,7 +212,18 @@ bool M_UI::PreUpdate()
 	
 	// Debug ===================================================
 	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
 		debug = !debug;
+	}
+	
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+		game_word->SetState(ELEMENT_STATE::VISIBLE);
+		over_word->SetState(ELEMENT_STATE::VISIBLE);
+		game_word->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0, 255);
+	    over_word->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0, 255);
+	}
+
 
 	// Hover States ============================================
 
@@ -265,23 +289,6 @@ bool M_UI::PreUpdate()
 }
 
 
-//ax += dt * ratetime;
-//
-//if (round_fx->alpha == target_value)
-//{
-//	swap(init_value, target_value);
-//	ax = 0.f;
-//}
-
-//round_fx->alpha = lerp(init_value, target_value, ax);
-
-//ax += dt * ratetime;
-
-////if (app->scene->tank_1->GetLife() == target_value)
-////{
-////	swap(init_value, target_value);
-////	ax = 0.f;
-////}
 
 //app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
 
@@ -326,6 +333,27 @@ bool M_UI::Update(float dt)
 			break;
 		}
 	}
+	// Update FX ===================================================
+
+	int count = 0;
+
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
+	{
+		if ((*iter)->element->to_destroy == true || (*iter)->finished == true || (*iter)->element->active_fx == false )
+		{
+			(*iter)->element->active_fx = false;
+			RELEASE(*iter);
+			iter = active_fxs.erase(iter);
+		}
+		else
+		{
+			++count;
+			(*iter)->Update(dt);
+			++iter;
+		}
+	}
+
+	//LOG("Active FX ====> %i", count);
 
 	// UI Elements Update =====================================================
 
@@ -480,6 +508,29 @@ bool M_UI::PostUpdate(float dt)
  void M_UI::SetWaveNumber(int round)
  {
 	 wave_number_label->SetText(std::to_string(1).c_str());
+ }
+
+ void M_UI::FadeGeneralHUD(bool fade_on)
+ {
+	 float init_value = 0.f, target_value = 0.f;
+
+	 if (fade_on)
+	 {
+		 init_value = 0.f;
+		 target_value = 255.f;
+	 }
+	 else
+	 {
+		 init_value = 255.f;
+		 target_value = 0.f;
+	 }
+
+	 wave_number_label	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	 wave_element		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	/* wave_fx			->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);*/
+	 left_tank_life		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	 right_tank_life	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	
  }
 
 // Creation methods =================================================================
@@ -786,4 +837,55 @@ void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 	{
 		UpdateGuiPositions((*item), cumulated_position);
 	}
+}
+
+void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value)
+{
+	UI_Fade_FX* new_fx = DBG_NEW  UI_Fade_FX(type, seconds, element, init_value, target_value);
+	active_fxs.push_back(new_fx);
+}
+
+
+
+UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value): element(element), init_value(init_value), target_value(target_value), type(type)
+{
+	ratetime = 1.f / seconds;
+}
+
+bool UI_Fade_FX::Update(float dt)
+{
+	switch (type)
+	{
+	case UI_Fade_FX::FX_TYPE::FADE:
+
+		ax += dt * ratetime;
+		element->alpha = lerp(init_value, target_value, ax);
+
+		if (element->alpha == target_value)
+		{
+			finished = true;
+		}
+
+		break;
+	case UI_Fade_FX::FX_TYPE::INTERMITTENT:
+
+		ax += dt * ratetime;
+		element->alpha = lerp(init_value, target_value, ax);
+
+		if (element->alpha == target_value)
+		{
+			swap(init_value, target_value);
+			ax = 0.f;
+		}
+
+		break;
+	default:
+		break;
+	}
+
+	return true;
+}
+
+void UI_Fade_FX::Destroy()
+{
 }

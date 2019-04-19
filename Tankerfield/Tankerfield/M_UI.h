@@ -20,6 +20,7 @@ enum class ELEMENT_STATE;
 class UI_Element;
 class Player_GUI;
 class Camera;
+class M_UI;
 
 class UI_Listener;
 class UI_Image;
@@ -71,6 +72,32 @@ public:
 	virtual bool OutClick(UI_Element* object) { return true; }
 };
 
+class UI_Fade_FX
+{
+public:
+	enum class FX_TYPE
+	{
+		NO_TYPE,
+		INTERMITTENT,
+		FADE,
+	};
+
+	UI_Fade_FX(const FX_TYPE type, float seconds, UI_Element* element, float init_value, float target_value);
+	bool Update(float dt);
+	void Destroy();
+
+private:
+
+	UI_Element*		element = nullptr;
+	FX_TYPE         type = FX_TYPE::NO_TYPE;
+	float			ax = 0.0f;
+	float			ratetime = 0.f;
+	float			target_value = 255;
+	float			init_value = 0;
+	bool			finished = false;
+
+	friend M_UI;
+};
 
 class M_UI : public Module
 {
@@ -136,6 +163,8 @@ public:
 
 	void SetWaveNumber( int round);
 
+	void FadeGeneralHUD(bool fade_on);
+
 	// Creation functions ---------------------------------------------------------
 
 	UI_Element	 * CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
@@ -178,6 +207,8 @@ private:
 
 	void UpdateGuiPositions(UI_Element* object, fPoint cumulated_position);
 
+	void AddFX( UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value);
+
 private:
 
 	bool debug = false;
@@ -193,6 +224,8 @@ private:
 	list<UI_Element*> ig_elements_list;
 
 	list<Player_GUI*> players_guis;
+
+	list<UI_Fade_FX*> active_fxs;
 
 	UI_Element* main_ui_element = nullptr;
 
@@ -214,11 +247,9 @@ private:
 
 	UI_Image* right_tank_life = nullptr;
 
+	UI_Image* game_word = nullptr;
 
-	float ax = 0.0f;
-	float ratetime = 1.f / 2.f;
-	float target_value = 100.f;
-	float init_value = 0.f;
+	UI_Image* over_word = nullptr;
 
 public:
 	// Mouse ----------------------------------------------
@@ -256,7 +287,10 @@ public:
 	Animation   blue_arrow_anim;
 
 	Animation   orange_arrow_anim;
+
+	friend UI_Element;
 };
+
 
 
 #endif // __MODULE_UI_H__

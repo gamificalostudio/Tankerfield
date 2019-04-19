@@ -13,6 +13,7 @@ struct Controller;
 class Obj_Tank;
 class RewardZone;
 class Obj_TeslaTrooper;
+class UI_Image;
 
 enum class WaveStat
 {
