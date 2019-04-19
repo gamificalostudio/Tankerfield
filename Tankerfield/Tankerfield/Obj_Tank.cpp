@@ -166,7 +166,7 @@ bool Obj_Tank::Start()
 	max_life = 100;
 
 
-	revive_range = 1.5f;
+	revive_range = 2.5f;
 	revive_range_squared = revive_range * revive_range;
 	revive_life = 100;
 
@@ -337,6 +337,15 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
+
+	if (life == 0)
+	{
+		fPoint circlePos = pos_map;
+
+		circlePos = app->map->MapToScreenF(circlePos);
+		app->render->DrawIsoCircle(circlePos.x, circlePos.y, revive_range * 30, camera, 255, 0, 0, 100);// 30 = tile mesure
+	}
+
 	// Base =========================================
 	app->render->Blit(
 		curr_tex,
@@ -365,13 +374,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
 
-	if (life == 0)
-	{
-		fPoint circlePos = pos_map;
-
-		circlePos = app->map->MapToScreenF(circlePos);
-		app->render->DrawIsoCircle(circlePos.x, circlePos.y, revive_range * 30, camera, 255, 0, 0, 100);// 30 = tile mesure
-	}
+	
 
 																							//only appears when hes dead and disappear when he has been revived
 	//DEBUG
