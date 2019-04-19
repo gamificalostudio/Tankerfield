@@ -31,8 +31,6 @@ bool M_PickManager::Awake(pugi::xml_node& config)
 bool M_PickManager::Start()
 {
 	bool ret = true;
-	
-	CreateRewardBoxWave();
 
 	return ret;
 }
