@@ -741,9 +741,6 @@ void Obj_Tank::ReviveTank()
 			&& tank_arr[i]->life == 0
 			&& this->life != 0)
 		{
-			if (tank_num == 0) {
-				LOG("can revive!");
-			}
 			tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
