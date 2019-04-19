@@ -25,6 +25,7 @@
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
 #include "M_Scene.h"
+#include "Obj_Tank.h"
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
@@ -130,7 +131,8 @@ bool Obj_TeslaTrooper::Update(float dt)
 		{
 			if (perf_timer.ReadMs() > (double)attack_frequency)
 			{
-				target->ReduceHitPoints(25);
+				uint target_life = target->GetLife();
+				target->SetLife(target_life - 25/*tesla trooper damage*/);
 				attack_available = false;
 			}
 		}

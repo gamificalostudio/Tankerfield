@@ -447,14 +447,19 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 void Obj_Tank::SetLife(int life)
 {
+	this->life = life;
+
 	if (this->life > GetMaxLife())
 	{
 		this->life = GetMaxLife();
 	}
-	this->life = life;
+
+	else if (this->life < 0)
+	{
+		this->life = 0;
+	}
 
 	gui->SetLifeBar(this->life);
-
 }
 
 void Obj_Tank::SetItem(ObjectType type) 

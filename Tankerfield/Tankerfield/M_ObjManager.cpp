@@ -292,19 +292,19 @@ void M_ObjManager::DeleteObjects()
 	obj_tanks.clear();
 }
 
-Object * M_ObjManager::GetNearestTank(fPoint pos)
+Obj_Tank * M_ObjManager::GetNearestTank(fPoint pos)
 {
-	Object* ret = (*obj_tanks.begin());
+	Obj_Tank* ret = (Obj_Tank*)(*obj_tanks.begin());
 	if (ret != nullptr)
 	{
 		float distance = pos.DistanceTo(ret->pos_map);
 		for (std::list<Object*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
 		{
 			float new_distance = pos.DistanceTo((*iter)->pos_map);
-			if (new_distance  < distance)
+			if (new_distance < distance)
 			{
 				distance = new_distance;
-				ret = *iter;
+				ret = (Obj_Tank*)*iter;
 			}
 		}
 	}

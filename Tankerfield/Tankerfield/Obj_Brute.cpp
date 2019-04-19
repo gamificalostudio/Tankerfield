@@ -23,6 +23,7 @@
 #include "M_Collision.h"
 #include "WeaponInfo.h"
 #include "M_AnimationBank.h"
+#include "Obj_Tank.h"
 
 Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
@@ -55,7 +56,7 @@ bool Obj_Brute::Update(float dt)
 	{
 	case BRUTE_STATE::GET_PATH:
 		path.clear();
-		target = app->objectmanager->GetNearestTank(pos_map);
+		target = (Obj_Tank*)app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr && pos_map.DistanceManhattan(target->pos_map) <= follow_range)
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
@@ -127,7 +128,8 @@ bool Obj_Brute::Update(float dt)
 		{
 			if (perf_timer.ReadMs() > (double)attack_frequency)
 			{
-				target->ReduceHitPoints(25);
+				uint target_life = target->GetLife();
+				target->SetLife(target_life - 25/*brute damage*/);
 				attack_available = false;
 			}
 		}
