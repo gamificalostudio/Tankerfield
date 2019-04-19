@@ -33,7 +33,9 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	curr_tex = tex;
 
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
 	curr_anim = &walk;
+
 
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
@@ -116,6 +118,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 			{
 				current_state = CURRENT_POS_STATE::STATE_ATTACKING;
 				attack_available = true;
+				curr_anim = &attack;
 				perf_timer.Start();
 			}
 			else
@@ -142,6 +145,11 @@ bool Obj_TeslaTrooper::Update(float dt)
 			int i = 0;
 			int j = 0;
 		}
+	}
+
+	if (curr_anim == &attack&&curr_anim->Finished())
+	{
+		curr_anim = &walk;
 	}
 
 	return true;
