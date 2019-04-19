@@ -134,6 +134,8 @@ public:
 
 	ClickState GetClickState() const;
 
+	void SetWaveNumber( int round);
+
 	// Creation functions ---------------------------------------------------------
 
 	UI_Element	 * CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
@@ -202,13 +204,16 @@ private:
 
 	// HUD General -------------------------------------------
 
-	UI_Image* round_element = nullptr;
+	UI_Label* wave_number_label = nullptr;
 
-	UI_Image* round_fx = nullptr;
+	UI_Image* wave_element = nullptr;
+
+	UI_Image* wave_fx = nullptr;
 
 	UI_Image* left_tank_life = nullptr;
 
 	UI_Image* right_tank_life = nullptr;
+
 
 	float ax = 0.0f;
 	float ratetime = 1.f / 2.f;
@@ -241,6 +246,8 @@ public:
 	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
 
 	_TTF_Font*  font_open_sants_bold_12 = nullptr;
+
+	_TTF_Font*  rounds_font = nullptr;
 
 	Animation	green_arrow_anim;
 

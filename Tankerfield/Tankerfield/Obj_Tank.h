@@ -48,6 +48,7 @@ public:
 	void SetItem(ObjectType Type);
 
 	void SetWeapon(WEAPON type, uint level);
+	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
 	int GetLife();
 	int GetMaxLife();

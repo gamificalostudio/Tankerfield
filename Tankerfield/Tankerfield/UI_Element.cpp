@@ -28,34 +28,9 @@ bool UI_Element::UpdateRelativePosition()
 
 bool UI_Element::Draw()
 {
-	SDL_Rect draw_rect;
+	SDL_Rect draw_rect = GetDrawRect();
 
-	if (is_in_game == true)
-	{
-		draw_rect = GetDrawRect(app->map->MapToCamera(position, app->ui->current_camera));
-
-		if (alpha != 255)
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
-		}
-		else
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera);
-		}
-	}
-	else
-	{
-		draw_rect = GetDrawRect(position);
-
-		if (alpha != 255)
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
-		}
-		else
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera);
-		}
-	}
+	app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
 
 	return true;
 }
@@ -188,38 +163,48 @@ fRect UI_Element::GetSection()
 	return ret;
 }
 
-SDL_Rect UI_Element::GetDrawRect(const fPoint position)
+SDL_Rect UI_Element::GetDrawRect()
 {
-	fPoint pos;
+	fPoint mod_pos = { 0.f,0.f };
+	fPoint rect_pos;
 	SDL_Rect  ret;
+
+	if (is_in_game == true)
+	{
+		mod_pos = app->map->MapToCamera(position, app->ui->current_camera);
+	}
+	else
+	{
+		mod_pos = position;
+	}
 
 	switch (pivot.pos_x)
 	{
 	case Pivot::POS_X::CENTER:
-		pos.x = position.x - (float)sprite_section.w * .5f;
+		rect_pos.x = mod_pos.x - (float)sprite_section.w * .5f;
 		break;
 	case Pivot::POS_X::LEFT:
-		pos.x = position.x;
+		rect_pos.x = mod_pos.x;
 		break;
 	case Pivot::POS_X::RIGHT:
-		pos.x = position.x - (float)sprite_section.w;
+		rect_pos.x = mod_pos.x - (float)sprite_section.w;
 		break;
 	}
 
 	switch (pivot.pos_y)
 	{
 	case Pivot::POS_Y::CENTER:
-		pos.y = position.y - (float)sprite_section.h * .5f;
+		rect_pos.y = mod_pos.y - (float)sprite_section.h * .5f;
 		break;
 	case Pivot::POS_Y::TOP:
-		pos.y = position.y;
+		rect_pos.y = mod_pos.y;
 		break;
 	case Pivot::POS_Y::BOTTOM:
-		pos.y = position.y - (float)sprite_section.h;
+		rect_pos.y = mod_pos.y - (float)sprite_section.h;
 		break;
 	}
 
-	ret = { (int)pos.x, (int) pos.y, sprite_section.w, sprite_section.h };
+	ret = { (int)rect_pos.x, (int) rect_pos.y, sprite_section.w, sprite_section.h };
 
 	return ret;
 }

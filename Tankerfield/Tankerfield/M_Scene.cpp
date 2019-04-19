@@ -83,14 +83,12 @@ bool M_Scene::Start()
 
 	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
 
-
-
 	number_current_wave = 1;
-	stat_of_wave = WaveStat::EXIT_OF_WAVE;
+	stat_of_wave = WaveStat::ENTER_IN_WAVE;
 
 	/* Generate Reward Zones */
-	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
-	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
+	//reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
+	//reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
 }
@@ -163,7 +161,7 @@ bool M_Scene::Update(float dt)
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
-
+		app->ui->SetWaveNumber(number_current_wave);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;
@@ -223,8 +221,8 @@ bool M_Scene::PostUpdate(float dt)
 
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-	
-	DebugPathfinding();
+	//
+	//DebugPathfinding();
 
 	return ret;
 }

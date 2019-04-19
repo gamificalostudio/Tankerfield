@@ -104,7 +104,7 @@ public:
 
 	fRect GetSection();
 
-	SDL_Rect GetDrawRect(fPoint position = { 0.f, 0.f});
+	SDL_Rect GetDrawRect();
 
 	list<UI_Element*>* GetSons(); 
 

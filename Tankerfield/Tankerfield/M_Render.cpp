@@ -309,7 +309,7 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	if (alpha != -1)
+	if (alpha != 255)
 	{
 		SDL_SetTextureAlphaMod(texture, alpha);
 	}
@@ -321,7 +321,7 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 
 	SDL_RenderSetClipRect(renderer, nullptr);
 
-	if (alpha != -1)
+	if (alpha != 255)
 	{
 		SDL_SetTextureAlphaMod(texture, 255);
 	}

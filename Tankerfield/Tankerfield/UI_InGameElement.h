@@ -55,6 +55,8 @@ public:
 
 	UI_IG_Weapon(const fPoint map_pos, const UI_InGameElementDef definition);
 
+	bool Draw();
+
 	void Destroy();
 
 	void UpdateLevel();

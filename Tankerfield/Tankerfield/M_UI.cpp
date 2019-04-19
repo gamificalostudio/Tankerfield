@@ -103,6 +103,7 @@ bool M_UI::Start()
 
 	atlas = app->tex->Load("textures/ui/atlas.png");
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
+	rounds_font = app->font->Load("fonts/round_font.ttf", 35);
 
 	UI_ImageDef image_def;
 	fRect full_screen = app->win->GetWindowRect();
@@ -125,14 +126,20 @@ bool M_UI::Start()
 	players_guis.push_back(player_4_gui);
 
 	// General 4 HUD players =========================================================
+
 	image_def.sprite_section = { 170 , 10, 105, 105 };
-	round_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	wave_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	wave_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+
+	UI_LabelDef label_def("1", rounds_font);
+	wave_number_label = CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
+	wave_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	wave_number_label->SetParent(wave_element);
 
 	image_def.sprite_section = { 120, 515, 179, 179 };
-	round_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	round_fx->alpha = 0;
+	wave_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	wave_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	wave_fx->alpha = 0;
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
 	left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
@@ -468,6 +475,11 @@ bool M_UI::PostUpdate(float dt)
  ClickState M_UI::GetClickState() const
  {
 	 return click_state;
+ }
+
+ void M_UI::SetWaveNumber(int round)
+ {
+	 wave_number_label->SetText(std::to_string(1).c_str());
  }
 
 // Creation methods =================================================================
