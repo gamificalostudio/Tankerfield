@@ -737,6 +737,8 @@ void Obj_Tank::ReviveTank()
 	//circlePos = app->map->MapToScreenF(circlePos);
 	//app->render->DrawCircle(circlePos.x, circlePos.y, revive_range, 0, 255, 0, 100);
 
+	bool show_tutorial = false;
+
 	for (int i = 0; i < 4; i++)
 	{
 		if (this != tank_arr[i]
@@ -744,7 +746,10 @@ void Obj_Tank::ReviveTank()
 			&& tank_arr[i]->life == 0
 			&& this->life != 0)
 		{
-			tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+			if (!show_tutorial)
+			{
+				show_tutorial = true;
+			}
 
 			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
 				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
@@ -753,6 +758,14 @@ void Obj_Tank::ReviveTank()
 				tank_arr[i]->life = revive_life;
 			}
 		}
+	}
+
+	if (show_tutorial /*&& tutorial_revive.GetState() != ELEMENT_STATE::VISIBLE*/)
+	{
+		tutorial_revive->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+	}
+	else /*if (&tutorial_revive.GetState() != ELEMENT_STATE::HIDDEN)*/ {
+		tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
 }
 
