@@ -65,13 +65,6 @@ bool Object::Draw(float dt, Camera * camera)
 //		app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y);
 //}
 
-
-int Object::GetHitPoints() const
-{
-	return this->hit_points;
-}
-
-
 void Object::SetDamage(float damage)
 {
 	if (coll != nullptr)
@@ -82,11 +75,6 @@ void Object::SetDamage(float damage)
 	{
 		LOG("Collider is nullptr");
 	}
-}
-
-void Object::ReduceHitPoints(const int & hit_points)
-{
-	this->hit_points -= hit_points;
 }
 
 void Object::CalculateDrawVariables()

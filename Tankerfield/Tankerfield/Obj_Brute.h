@@ -9,6 +9,7 @@
 
 struct SDL_Texture;
 class Timer;
+class Obj_Tank;
 
 enum class BRUTE_STATE
 {
@@ -54,7 +55,7 @@ private:
 	float speed = 0.f;
 	Timer timer;
 
-	Object* target = nullptr;
+	Obj_Tank* target = nullptr;
 	std::vector<fPoint> path;
 
 	fPoint next_pos;

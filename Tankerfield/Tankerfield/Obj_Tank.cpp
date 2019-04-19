@@ -145,7 +145,7 @@ bool Obj_Tank::Start()
 	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
-	cannon_length = 0.75f;
+	cannon_length = 0.f;
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -166,7 +166,7 @@ bool Obj_Tank::Start()
 	max_life = 100;
 
 
-	revive_range = 1.5f;
+	revive_range = 2.5f;
 	revive_range_squared = revive_range * revive_range;
 	revive_life = 100;
 
@@ -337,6 +337,15 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
+
+	if (life == 0)
+	{
+		fPoint circlePos = pos_map;
+
+		circlePos = app->map->MapToScreenF(circlePos);
+		app->render->DrawIsoCircle(circlePos.x, circlePos.y, revive_range * 30, camera, 255, 0, 0, 100);// 30 = tile mesure
+	}
+
 	// Base =========================================
 	app->render->Blit(
 		curr_tex,
@@ -365,13 +374,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
 
-	if (life == 0)
-	{
-		fPoint circlePos = pos_map;
-
-		circlePos = app->map->MapToScreenF(circlePos);
-		app->render->DrawCircle(circlePos.x, circlePos.y, revive_range_squared * 32, camera, 0, 255, 0, 100);		//32? it has to be the tile measure																									//only appears when hes dead and disappear when he has been revived
-	}
+	
 
 																							//only appears when hes dead and disappear when he has been revived
 	//DEBUG
@@ -396,8 +399,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 bool Obj_Tank::DrawShadow(Camera * camera)
 {
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-
 	// Base =========================================
 	app->render->Blit(
 		base_shadow_tex,
@@ -447,14 +448,19 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 void Obj_Tank::SetLife(int life)
 {
+	this->life = life;
+
 	if (this->life > GetMaxLife())
 	{
 		this->life = GetMaxLife();
 	}
-	this->life = life;
+
+	else if (this->life < 0)
+	{
+		this->life = 0;
+	}
 
 	gui->SetLifeBar(this->life);
-
 }
 
 void Obj_Tank::SetItem(ObjectType type) 
@@ -752,20 +758,9 @@ void Obj_Tank::ReviveTank()
 
 void Obj_Tank::StopTank()
 {
-	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
-		app->scene->tank_1->life = 0;
-
-	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
-		app->scene->tank_2->life = 0;
-
-	if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
-		app->scene->tank_3->life = 0;
-
 	if (life == 0)
 	{
 		curr_speed = 0;
-		angle = 0;
-		shot_dir = { 0.f,0.f };
 	}
 }
 

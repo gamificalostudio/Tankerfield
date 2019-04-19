@@ -10,7 +10,6 @@ class Obj_RewardBox : public Object
 private:
 	uint life							= 0u;
 	uint max_life						= 0u;
-	bool alive							= true;
 
 	const char* reward_box_dead_sound_string;
 	uint reward_box_dead_sound_int	= 0u;

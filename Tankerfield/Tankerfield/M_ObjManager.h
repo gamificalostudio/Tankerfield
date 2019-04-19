@@ -44,6 +44,7 @@ enum class ObjectType
 
 class Object;
 class Camera;
+class Obj_Tank;
 
 class M_ObjManager : public Module
 {
@@ -74,7 +75,7 @@ public:
 
 	void DeleteObjects();
 
-	Object* GetNearestTank(fPoint pos);
+	Obj_Tank* GetNearestTank(fPoint pos);
 	
 	std::list<Object*> GetObjects() const;
 
