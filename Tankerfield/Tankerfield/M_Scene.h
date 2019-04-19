@@ -5,24 +5,42 @@
 
 #include "SDL/include/SDL_rect.h"
 
+
 #include "Module.h"
 
 struct SDL_Texture;
 struct Controller;
 class Obj_Tank;
 class RewardZone;
+class Object;
 
+enum class WaveStat
+{
+	NO_TYPE,
+	ENTER_IN_WAVE,
+	IN_WAVE,
+	EXIT_OF_WAVE,
+	OUT_WAVE
+};
+class PerfTimer;
 class M_Scene : public Module
 {
 private:
-	Controller** control1 = nullptr;
+	Controller** control1			= nullptr;
 
 public:
-	int current_level = 0;
-	Obj_Tank * tank_1 = nullptr;
-	Obj_Tank * tank_2 = nullptr;
-	Obj_Tank * tank_3 = nullptr;
-	Obj_Tank * tank_4 = nullptr;
+	int current_level				= 0;
+	Obj_Tank * tank_1				= nullptr;
+	Obj_Tank * tank_2				= nullptr;
+	Obj_Tank * tank_3				= nullptr;
+	Obj_Tank * tank_4				= nullptr;
+
+	uint round		= 0;
+	std::list<Object*> enemies_in_wave;
+	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
+
+	PerfTimer timer_between_waves;
+
 public:
 
 	M_Scene();
@@ -56,6 +74,10 @@ public:
 private:
 	void CreateEnemyWave();
 
+	void NewWave();
+
+	bool AllPlayersReady() const;
+
 public:
 	SDL_Texture* path_tex = nullptr;
 
@@ -67,22 +89,30 @@ private:
 	iPoint path_tex_offset = { -30, 0 };
 	uint initial_num_enemies = 0;
 private:
-	/* Wave System */
-	// In milliseconds
-	float accumulated_time = 0.0f;
-	bool perform_objects_check = false;
 
-	int time_between_rounds = 0;
-	int generated_units = 0;
-	int distance_range = 0;
-	int min_distance_from_center = 0;
-	int check_complete_round = 0;
-	int object_counter = 0;
-	int enemies_to_increase = 0;
+	/* Wave System */
+	int time_between_rounds			= 0;
+	int Tesla_trooper_units			= 0;
+	int Brute_units					= 0;
+
+
+	// Fx and Music
+	const char* finish_wave_sound_string;
+	uint finish_wave_sound_uint = 0u; 
+	int finish_wave_sound_channel = -1;
+	
+	const char* wind_sound_string;
+	uint wind_sound_uint = 0u;
+	int wind_sound_channel = -1;
+
+	const char* main_music;
+
 
 private:
 	/* Reward Zones */
 	RewardZone* reward_zone_01 = nullptr;
+	RewardZone* reward_zone_02 = nullptr;
+
 };
 
 #endif // __j1SCENE_H__

@@ -24,6 +24,8 @@
 #include "WeaponInfo.h"
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
+#include "M_Scene.h"
+#include "Obj_Tank.h"
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
@@ -47,6 +49,9 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	draw_offset = { 32, 38 };
 	coll->SetObjOffset({ -.25f, -.25f });
 	timer.Start();
+	attack_damage = 10;
+
+	attack_range = 1;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -55,104 +60,84 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 
 bool Obj_TeslaTrooper::Update(float dt)
 {
+	Movement(dt);
+	Attack();
+	
+	return true;
+}
+
+void Obj_TeslaTrooper::Attack()
+{
+	if (target != nullptr
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range * attack_range
+		&& perf_timer.ReadMs() > (double)attack_frequency)
+	{
+		curr_anim = &attack;
+		target->SetLife(target->GetLife() - attack_damage);
+		perf_timer.Start();
+	}
+
+	//if (curr_anim == &attack&&curr_anim->Finished())
+	//{
+	//	curr_anim = &walk;
+	//}
+
+}
+
+void Obj_TeslaTrooper::Movement(float &dt)
+{
 	if (timer.ReadSec() >= check_path_time)
 		state = TROOPER_STATE::GET_PATH;
 
 	switch (state)
 	{
 	case TROOPER_STATE::GET_PATH:
+	{
 		path.clear();
 		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map);
-			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
-			{
-				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
-				for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
-				{
-					path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
-				}
-				state = TROOPER_STATE::RECHEAD_POINT;
-			}
-		timer.Start();
-		break;
-	case TROOPER_STATE::MOVE:
-
-			if (IsOnGoal(next_pos))
-			{
-				path.erase(path.begin());
-				state = TROOPER_STATE::RECHEAD_POINT;
-			}
-			pos_map += move_vect * speed * dt;
-			range_pos.center = pos_map;
-		break;
-	case TROOPER_STATE::RECHEAD_POINT:
+		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 		{
-			if (path.size() > 0)
+			std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
+			for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
 			{
-				next_pos = (fPoint)(*path.begin());
-				move_vect = (fPoint)(next_pos)-pos_map;
-				move_vect.Normalize();
-
-				//Change sprite direction
-				angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
-				state = TROOPER_STATE::MOVE;
+				path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
 			}
-			else
-				state = TROOPER_STATE::GET_PATH;
-
+			state = TROOPER_STATE::RECHEAD_POINT;
 		}
-		break;
+		timer.Start();
+	}
+	break;
+	case TROOPER_STATE::MOVE:
+	{
+		if (IsOnGoal(next_pos))
+		{
+			path.erase(path.begin());
+			state = TROOPER_STATE::RECHEAD_POINT;
+		}
+		pos_map += move_vect * speed * dt;
+		range_pos.center = pos_map;
+	}
+	break;
+	case TROOPER_STATE::RECHEAD_POINT:
+	{
+		if (path.size() > 0)
+		{
+			next_pos = (fPoint)(*path.begin());
+			move_vect = (fPoint)(next_pos)-pos_map;
+			move_vect.Normalize();
+			//Change sprite direction
+			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
+			state = TROOPER_STATE::MOVE;
+		}
+		else
+			state = TROOPER_STATE::GET_PATH;
+	}
+	break;
 	default:
 		assert(true && "A tesla trooper have no state");
 		break;
 	}
-
-	if (target != nullptr)
-	{
-		fPoint enemy_screen_pos = app->map->MapToScreenF(fPoint(this->pos_map.x, this->pos_map.y));
-		fPoint target_screen_pos = app->map->MapToScreenF(fPoint(target->pos_map.x, target->pos_map.y));
-		
-		if (!attack_available)
-		{
-			if (TeslaTrooperCanAttack(enemy_screen_pos, target_screen_pos))
-			{
-				current_state = CURRENT_POS_STATE::STATE_ATTACKING;
-				attack_available = true;
-				curr_anim = &attack;
-				perf_timer.Start();
-			}
-			else
-			{
-				current_state = CURRENT_POS_STATE::STATE_WAITING;
-				attack_available = false;
-			}
-		}
-
-		if (current_state == CURRENT_POS_STATE::STATE_ATTACKING)
-		{
-			if (perf_timer.ReadMs() > (double)attack_frequency)
-			{
-				target->ReduceHitPoints(25);
-				attack_available = false;
-			}
-		}
-
-		if (target->GetHitPoints() < 0)
-		{
-			// target->to_remove = true;   // CRASH !
-			
-			/* Used for debugging :) TOBEDELETED*/
-			int i = 0;
-			int j = 0;
-		}
-	}
-
-	if (curr_anim == &attack&&curr_anim->Finished())
-	{
-		curr_anim = &walk;
-	}
-
-	return true;
 }
 
 void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
@@ -185,12 +170,4 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 			to_remove = true;
 		}
 	}
-}
-
-bool Obj_TeslaTrooper::TeslaTrooperCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const
-{
-	return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + (float)attack_range.x)
-		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - (float)attack_range.x)
-		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + (float)attack_range.y)
-		|| (enemy_screen_pos.y < target_screen_pos.y && enemy_screen_pos.y > target_screen_pos.y - (float)attack_range.y));
 }

@@ -11,18 +11,18 @@ enum class WEAPON {
 	BASIC,
 	DOUBLE_MISSILE,
 	HEALING_SHOT,
+	LASER_SHOT,
+	MAX_WEAPONS,// must be in the last position of the weapons that work. Needed from the creation of pickUps
 	FLAMETHROWER,
-	MAX
+
 };
 
 class WeaponInfo
 {
 public:
-	void LoadProperties(const pugi::xml_node & node);
 
-public:
-
-	WEAPON type					= WEAPON::HEALING_SHOT;
+	WEAPON type					= WEAPON::BASIC;
+	int level_weapon			= 0;
 	int    bullet_damage        = 0;
 	float  bullet_speed			= 0.f;
 	float  bullet_life_ms		= 0.f;

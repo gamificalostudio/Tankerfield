@@ -4,7 +4,10 @@
 #include "App.h"
 #include "M_PickManager.h"
 #include "M_ObjManager.h"
-
+#include "M_Map.h"
+#include "M_Scene.h"
+#include "Obj_Tank.h"
+#include "Obj_RewardBox.h"
 
 M_PickManager::M_PickManager() : Module()
 {
@@ -20,28 +23,57 @@ bool M_PickManager::Awake(pugi::xml_node& config)
 {
 	bool ret = true;
 
-	percentage_to_spawn = config.child("percentage_to_spawn").attribute("value").as_int();
+	percentage_spawn_item_from_enemy = config.child("percentage_spawn_item_from_enemy").attribute("value").as_int(0);
+	percentage_spawn_reward_box = config.child("percentage_spawn_reward_box").attribute("value").as_int(0);
+	return ret;
+}
+
+bool M_PickManager::Start()
+{
+	bool ret = true;
 
 	return ret;
 }
 
 
-bool M_PickManager::PickUpFromEnemy(fPoint pos_map)
+void M_PickManager::PickUpFromEnemy(fPoint pos_map)
 {
-	bool ret = false;
 	uint probability = rand() % 100;
 
-	if (probability < percentage_to_spawn)
+	if (probability < percentage_spawn_item_from_enemy)
 	{
-		CreatePickUp(pos_map);
-		ret = true;
+		CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
 	}
 
-	return ret;
 }
 
-void M_PickManager::CreatePickUp(fPoint pos_map)
+void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, uint levels_to_add)
 {
-	app->objectmanager->CreateObject(ObjectType::PICK_UP, pos_map);
+	Obj_PickUp* ret = (Obj_PickUp*)app->objectmanager->CreateObject(ObjectType::PICK_UP, pos_map);
+
+	ret->GenerationOfPickUp(type_of_pick_up, levels_to_add);
+
+	}
+
+Obj_RewardBox* M_PickManager::CreateRewardBox(fPoint pos_map)
+{
+	return (Obj_RewardBox*)app->objectmanager->CreateObject(ObjectType::REWARD_BOX, pos_map);
+}
+
+void M_PickManager::CreateRewardBoxWave()
+{
+	for (std::vector<SpawnPoint*>::iterator iterator = app->map->data.spawners_position_reward_box.begin(); iterator != app->map->data.spawners_position_reward_box.end(); ++iterator)
+	{
+		if (!(*iterator)->occupied)
+		{
+			uint probability = rand() % 100;
+			if (probability < percentage_spawn_reward_box)
+			{
+				Obj_RewardBox* ret = CreateRewardBox((*iterator)->pos);
+				ret->my_spawn_point = (*iterator);
+				(*iterator)->occupied = true;
+			}
+		}			
+	}
 }
 

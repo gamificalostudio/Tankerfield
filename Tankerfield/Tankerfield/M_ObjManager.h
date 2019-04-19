@@ -13,22 +13,27 @@
 
 enum class ObjectType
 {
-	//ITEMS need to be first because the random selection from Obj_PickUp .
+	//ITEMS need to be first because of the random selection from Obj_PickUp .
 	HEALTH_BAG = 0,
+	HAPPY_HOUR_ITEM,
+	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
 
 	//OTHER
 	TANK,
 	STATIC,
 	REWARD_ZONE,
+	REWARD_BOX,
 	PICK_UP,
 
 	//ENEMIES
 	TESLA_TROOPER,
+	BRUTE,
 
 	//BULLETS
 	BASIC_BULLET,
 	BULLET_MISSILE,
 	HEALING_BULLET,
+	BULLET_LASER,
 	EXPLOSION,
 
 	//PARTICLES
@@ -38,6 +43,8 @@ enum class ObjectType
 };
 
 class Object;
+class Camera;
+class Obj_Tank;
 
 class M_ObjManager : public Module
 {
@@ -68,11 +75,11 @@ public:
 
 	void DeleteObjects();
 
-	Object* GetNearestTank(fPoint pos);
+	Obj_Tank* GetNearestTank(fPoint pos);
 	
 	std::list<Object*> GetObjects() const;
 
-	inline void DrawDebug(const Object* obj);
+	inline void DrawDebug(const Object* obj, Camera* camera);
 
 private:
 

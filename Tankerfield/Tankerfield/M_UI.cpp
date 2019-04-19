@@ -59,7 +59,39 @@ bool M_UI::Awake(pugi::xml_node& config)
 	LOG("Loading Module UI");
 	bool ret = true;
 
-	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
+	green_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("green_arrow"));
+	pink_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("pink_arrow"));
+	blue_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("blue_arrow"));
+	orange_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("orange_arrow"));
+
+	button_sprites[(int)GAMEPAD_BUTTON::A] =  { 440,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::B] =  { 390,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::Y] =  { 440,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::X] =  { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::L] =  { 495,10 ,52 ,52 };
+	button_sprites[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::R] =  { 495,65 ,52 ,52 };
+	button_sprites[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
+
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE] = { 500,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER] = { 540,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT] = { 390,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER] = { 390,500 ,34 ,34 };
+
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE] = { 500,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER] = { 550,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT] = { 390,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER] = { 390,595,44 ,44 };
+
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 545,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,545 ,40 ,40 };
+
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 550,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,650 ,47 ,47 };
 
 	return ret;
 }
@@ -72,38 +104,25 @@ bool M_UI::Start()
 	atlas = app->tex->Load("textures/ui/atlas.png");
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
 
-	button_sprite[(int)GAMEPAD_BUTTON::A]  = { 440,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::B]  = { 390,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::Y]  = { 440,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::X]  = { 390,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
-	button_sprite[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
+	UI_ImageDef image_def;
+	fRect full_screen = app->win->GetWindowRect();
 
 	// HUD ===========================================
 	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	app->scene->tank_1->SetGui(player_1_gui);
 	players_guis.push_back(player_1_gui);
+
 	player_2_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	app->scene->tank_2->SetGui(player_2_gui);
 	players_guis.push_back(player_2_gui);
+
 	player_3_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	app->scene->tank_3->SetGui(player_3_gui);
 	players_guis.push_back(player_3_gui);
+
 	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
-
-	//UI_InGameElementDef def;
-	//def.pointed_obj = app->scene->tank_1;
-	//UI_IG_Helper* helper = CreateInGameHelper({ 1.f, 1.f }, def);
-
-	//helper->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::A, { 0.F, 20.F}));
-
-	//player_1_gui->AddTextHelper(Text_Helper("Press"));
-	//player_1_gui->AddButtonHelper(Button_Helper(GAMEPAD_BUTTON::B));
-	//player_1_gui->AddTextHelper(Text_Helper("to pay respects"));
-	//player_1_gui->SetHelper();
-
-	UI_ImageDef image_def;
-	fRect full_screen = app->win->GetWindowRect();
 
 	// General 4 HUD players =========================================================
 	image_def.sprite_section = { 170 , 10, 105, 105 };
@@ -132,11 +151,20 @@ bool M_UI::CleanUp()
 	LOG("Freeing all UI objects");
 
 	app->tex->UnLoad(atlas);
+	app->font->Unload(font_open_sants_bold_12);
+
+	font_open_sants_bold_12 = nullptr;
 	atlas = nullptr;
+
+	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
+	{
+		RELEASE((*gui));
+	}
+
+	players_guis.clear();
 
 	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
 	{
-		(*element)->element_sons.clear();
 		RELEASE((*element));
 	}
 
@@ -144,17 +172,10 @@ bool M_UI::CleanUp()
 
 	for (list < UI_Element*> ::iterator element = elements_list.begin(); element != elements_list.end(); ++element)
 	{
-		(*element)->element_sons.clear();
 		RELEASE((*element));
 	}
 
 	elements_list.clear();
-
-	for (list < Player_GUI*> ::iterator element = players_guis.begin(); element != players_guis.end(); ++element)
-	{
-		RELEASE((*element));
-	}
-	players_guis.clear();
 
 	return true;
 }
@@ -179,7 +200,7 @@ bool M_UI::PreUpdate()
 
 	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 	{
-		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->to_destroy == true)
+		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->is_interactive == false)
 		{
 			continue;
 		}
@@ -236,51 +257,30 @@ bool M_UI::PreUpdate()
 	return true;
 }
 
+
+//ax += dt * ratetime;
+//
+//if (round_fx->alpha == target_value)
+//{
+//	swap(init_value, target_value);
+//	ax = 0.f;
+//}
+
+//round_fx->alpha = lerp(init_value, target_value, ax);
+
+//ax += dt * ratetime;
+
+////if (app->scene->tank_1->GetLife() == target_value)
+////{
+////	swap(init_value, target_value);
+////	ax = 0.f;
+////}
+
+//app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
+
 bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
-
-
-	ax += dt * ratetime;
-	
-	if (round_fx->alpha == target_value)
-	{
-		swap(init_value, target_value);
-		ax = 0.f;
-	}
-
-	round_fx->alpha = lerp(init_value, target_value, ax);
-
-
-	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
-	{
-		if ((*element)->to_destroy == true)
-		{
-			UI_Element* parent = (*element)->parent_element;
-			std::list<UI_Element*> * sons_list = (*element)->GetSons();
-
-			// Merge its sons to its parent
-
-			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
-			{
-			    (*son)->parent_element = parent;
-				parent->element_sons.push_back((*son));
-			}
-
-			// Delete it self from its parent
-
-			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
-
-			// Delete from UI list
-
-			RELEASE((*element));
-			element = ig_elements_list.erase(element);
-		}
-		else
-		{
-			++element;
-		}
-	}
 
 	// Draggable ================================================
 	if (selected_element && selected_element->is_draggable)
@@ -320,36 +320,36 @@ bool M_UI::Update(float dt)
 		}
 	}
 
-	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end();)
+	// UI Elements Update =====================================================
+
+	for (list<UI_Element*>::iterator element = elements_list.begin(); element != elements_list.end();)
 	{
-		if ((*item)->to_destroy == true)
+		if ((*element)->to_destroy == true)
 		{
-			// Delete ui element on parent sons list =========================
+			UI_Element* parent = (*element)->parent_element;
+			std::list<UI_Element*> * sons_list = (*element)->GetSons();
 
-			if ((*item)->parent_element != nullptr)
+			// Merge its sons to its parent
+
+			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
 			{
-				list<UI_Element*> *sons_list = (*item)->parent_element->GetSons();
-				list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), (*item));
-
-				if (son_to_delete == sons_list->end())
-				{
-					LOG("Object not deleted: Not found");
-					return false;
-				}
-
-				sons_list->erase(son_to_delete);
+				(*son)->parent_element = parent;
+				parent->element_sons.push_back((*son));
 			}
 
-			// Delete ui element ============================================
+			// Delete it self from its parent
 
-			LOG("UI Object deleted");
-			RELEASE((*item));
-			item = elements_list.erase(item);
+			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
+
+			// Delete from UI list
+
+			RELEASE((*element));
+			element = elements_list.erase(element);
 		}
 		else
 		{
-			(*item)->Update(dt);
-			++item;
+			(*element)->Update(dt);
+			++element;
 		}
 	}
 
@@ -379,6 +379,41 @@ bool M_UI::Update(float dt)
 
 	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
+	// In Game Elements Update ============================================
+
+	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
+	{
+		if ((*element)->to_destroy == true)
+		{
+			UI_Element* parent = (*element)->parent_element;
+			std::list<UI_Element*> * sons_list = (*element)->GetSons();
+
+			// Merge its sons to its parent
+
+			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
+			{
+				(*son)->parent_element = parent;
+				parent->element_sons.push_back((*son));
+			}
+
+			// Delete it self from its parent
+
+			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
+
+			// Delete from UI list
+
+			RELEASE((*element));
+			element = ig_elements_list.erase(element);
+		}
+		else
+		{
+			(*element)->Update(dt);
+			++element;
+		}
+
+		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
+
+	}
 	return true;
 }
 
@@ -400,25 +435,17 @@ bool M_UI::PostUpdate(float dt)
 	{
 		current_gui = (*gui);
 		current_camera = current_gui->player->camera_player;
-
-		for (list<UI_Element*>::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
-		{
-			(*element)->PostUpdate();
-		}
-
-		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
-
 		DrawUI(main_in_game_element);
-
-		/*app->render->DrawQuad(current_gui->viewport_with_margin, 255, 255, 255, 255, false, false);*/
 	}
 
 	current_camera = nullptr;
 
 	// Draw all UI elements ====================================
+
 	DrawUI(main_ui_element);
 
 	// Debug Positions  =======================================
+
 	if (debug)
 	{
 		for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
@@ -694,7 +721,19 @@ void M_UI::DrawUI(UI_Element * object)
 
 	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
-		object->Draw();
+		if (object->single_camera == nullptr && object->not_in_camera == nullptr)
+		{
+			object->Draw();
+		}
+		else if (object->not_in_camera == current_camera)
+		{
+
+		}
+		else if ( object->single_camera == current_camera)
+		{
+			object->Draw();
+		}
+		
 	}
 	
 	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
