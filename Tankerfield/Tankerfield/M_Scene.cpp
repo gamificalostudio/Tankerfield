@@ -128,7 +128,6 @@ bool M_Scene::Update(float dt)
 
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
-
 	{
 		++current_level;
 

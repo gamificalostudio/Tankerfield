@@ -79,10 +79,7 @@ public:
 
 	virtual void DrawDebug(const Camera* camera) {};
 
-	int GetHitPoints() const;
-
 	void SetDamage(float damage);
-	void ReduceHitPoints(const int& hit_points);
 
 	void CalculateDrawVariables();//Avoids calculating variables multiple times during a single update. Only called on M_ObjManager::PostUpdate().
 
@@ -98,10 +95,6 @@ public:
 	Collider* coll = nullptr;
 
 public:
-
-	// Different than life in Obj_Tank.h. This is used when an object is attacked and no colliders are necessary.
-	int hit_points = 100;
-
 	float angle				= 0.f;              //Direction that the object is facing
 	SDL_Texture * curr_tex	= nullptr;			//Points the current texture. Shouldn't allocate memory. Just assign the pointer to other textures already created. Used in Object::PostUpdate(float dt)
 	Animation * curr_anim	= nullptr;			//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created. Used in Object::PostUpdate(float dt) and for sprite sorting

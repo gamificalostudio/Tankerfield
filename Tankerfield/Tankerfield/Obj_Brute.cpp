@@ -133,15 +133,6 @@ bool Obj_Brute::Update(float dt)
 				attack_available = false;
 			}
 		}
-
-		if (target->GetHitPoints() < 0)
-		{
-			// target->to_remove = true;   // CRASH !
-
-			/* Used for debugging :) TOBEDELETED*/
-			int i = 0;
-			int j = 0;
-		}
 	}
 
 	return true;

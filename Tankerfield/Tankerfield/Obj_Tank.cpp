@@ -755,20 +755,9 @@ void Obj_Tank::ReviveTank()
 
 void Obj_Tank::StopTank()
 {
-	if (app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_J) == KeyState::KEY_REPEAT)  //testing life=0
-		app->scene->tank_1->life = 0;
-
-	if (app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_K) == KeyState::KEY_REPEAT)
-		app->scene->tank_2->life = 0;
-
-	if (app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_DOWN || app->input->GetKey(SDL_SCANCODE_L) == KeyState::KEY_REPEAT)
-		app->scene->tank_3->life = 0;
-
 	if (life == 0)
 	{
 		curr_speed = 0;
-		angle = 0;
-		shot_dir = { 0.f,0.f };
 	}
 }
 

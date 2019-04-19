@@ -98,7 +98,6 @@ private:
 	//- Logic
 	int life								= 0;
 	int max_life							= 0;
-	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
 
 	static int number_of_tanks;
