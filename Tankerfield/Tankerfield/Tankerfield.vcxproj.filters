@@ -157,6 +157,9 @@
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
+    <ClCompile Include="General_HUD.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -334,6 +337,9 @@
       <Filter>Objects\Items</Filter>
     </ClInclude>
     <ClInclude Include="UI_InGameElement.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="General_HUD.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>

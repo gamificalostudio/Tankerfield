@@ -14,6 +14,7 @@
 #include "M_AnimationBank.h"
 
 #include "Player_GUI.h"
+#include "General_HUD.h"
 #include "Obj_Tank.h"
 
 // UI includes --------------------------
@@ -105,9 +106,6 @@ bool M_UI::Start()
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
 	rounds_font = app->font->Load("fonts/round_font.ttf", 35);
 
-	UI_ImageDef image_def;
-	fRect full_screen = app->win->GetWindowRect();
-
 	// HUD ===========================================
 	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
 	app->scene->tank_1->SetGui(player_1_gui);
@@ -125,42 +123,7 @@ bool M_UI::Start()
 	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
 
-	// General 4 HUD players =========================================================
-
-	game_word = app->ui->CreateImage(fPoint(750.f, 335.f), UI_ImageDef({ 555,10 ,424,188 }));
-	over_word = app->ui->CreateImage(fPoint(770.f, 521.f), UI_ImageDef({ 555 ,200,383 ,188 }));
-	game_word->SetState(ELEMENT_STATE::HIDDEN);
-	over_word->SetState(ELEMENT_STATE::HIDDEN);
-
-	image_def.sprite_section = { 170 , 10, 105, 105 };
-	wave_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	wave_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-
-	UI_LabelDef label_def("1", rounds_font);
-	wave_number_label = CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
-	wave_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	wave_number_label->SetParent(wave_element);
-
-	image_def.sprite_section = { 120, 515, 179, 179 };
-	wave_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	wave_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	wave_fx->alpha = 0;
-
-	image_def.sprite_section = { 10, 160, 50, 530 };
-	left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
-	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
-
-	image_def.sprite_section = { 60, 160, 50, 530 };
-	right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
-	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
-
-	FadeGeneralHUD(true);
-
-	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
-	{
-		(*gui)->Fade_GUI(true);
-	}
-
+	general_hud = DBG_NEW General_HUD();
 
 	return true;
 }
@@ -195,7 +158,20 @@ bool M_UI::CleanUp()
 		RELEASE((*element));
 	}
 
-	elements_list.clear();
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
+	{
+		RELEASE((*iter));
+	}
+
+	active_fxs.clear();
+
+	RELEASE(general_hud);
+
+	general_hud = nullptr;
+	player_1_gui = nullptr;
+	player_2_gui = nullptr;
+	player_3_gui = nullptr;
+	player_4_gui = nullptr;
 
 	return true;
 }
@@ -218,10 +194,7 @@ bool M_UI::PreUpdate()
 	
 	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 	{
-		game_word->SetState(ELEMENT_STATE::VISIBLE);
-		over_word->SetState(ELEMENT_STATE::VISIBLE);
-		game_word->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0, 255);
-	    over_word->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0, 255);
+
 	}
 
 
@@ -505,34 +478,6 @@ bool M_UI::PostUpdate(float dt)
 	 return click_state;
  }
 
- void M_UI::SetWaveNumber(int round)
- {
-	 wave_number_label->SetText(std::to_string(1).c_str());
- }
-
- void M_UI::FadeGeneralHUD(bool fade_on)
- {
-	 float init_value = 0.f, target_value = 0.f;
-
-	 if (fade_on)
-	 {
-		 init_value = 0.f;
-		 target_value = 255.f;
-	 }
-	 else
-	 {
-		 init_value = 255.f;
-		 target_value = 0.f;
-	 }
-
-	 wave_number_label	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	 wave_element		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	/* wave_fx			->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);*/
-	 left_tank_life		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	 right_tank_life	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	
- }
-
 // Creation methods =================================================================
 
  UI_Element * M_UI::CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
@@ -784,7 +729,11 @@ void M_UI::DrawUI(UI_Element * object)
 
 	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
-		if (object->single_camera == nullptr && object->not_in_camera == nullptr)
+		if (object->alpha == 0.f)
+		{
+			
+		}
+	    else if (object->single_camera == nullptr && object->not_in_camera == nullptr)
 		{
 			object->Draw();
 		}
@@ -796,7 +745,6 @@ void M_UI::DrawUI(UI_Element * object)
 		{
 			object->Draw();
 		}
-		
 	}
 	
 	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)

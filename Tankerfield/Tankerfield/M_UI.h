@@ -19,6 +19,7 @@ typedef string String;
 enum class ELEMENT_STATE;
 class UI_Element;
 class Player_GUI;
+class General_HUD;
 class Camera;
 class M_UI;
 
@@ -161,10 +162,6 @@ public:
 
 	ClickState GetClickState() const;
 
-	void SetWaveNumber( int round);
-
-	void FadeGeneralHUD(bool fade_on);
-
 	// Creation functions ---------------------------------------------------------
 
 	UI_Element	 * CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
@@ -235,24 +232,10 @@ private:
 
 	ClickState click_state = ClickState::NONE;
 
-	// HUD General -------------------------------------------
-
-	UI_Label* wave_number_label = nullptr;
-
-	UI_Image* wave_element = nullptr;
-
-	UI_Image* wave_fx = nullptr;
-
-	UI_Image* left_tank_life = nullptr;
-
-	UI_Image* right_tank_life = nullptr;
-
-	UI_Image* game_word = nullptr;
-
-	UI_Image* over_word = nullptr;
 
 public:
 	// Mouse ----------------------------------------------
+	General_HUD* general_hud = nullptr;
 
 	Player_GUI* current_gui = nullptr;
 

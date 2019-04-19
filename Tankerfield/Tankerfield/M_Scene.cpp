@@ -25,6 +25,7 @@
 #include "Obj_Tank.h"
 #include "M_RewardZoneManager.h"
 #include "M_UI.h"
+#include "General_HUD.h"
 #include "Obj_TeslaTrooper.h"
 
 #include "UI_Image.h"
@@ -163,7 +164,7 @@ bool M_Scene::Update(float dt)
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
-		app->ui->SetWaveNumber(number_current_wave);
+		app->ui->general_hud->SetWaveNumber(number_current_wave);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;
