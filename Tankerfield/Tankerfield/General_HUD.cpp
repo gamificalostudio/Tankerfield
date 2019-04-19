@@ -17,18 +17,18 @@ General_HUD::General_HUD()
 	over_word->SetState(ELEMENT_STATE::HIDDEN);
 
 	image_def.sprite_section = { 170 , 10, 105, 105 };
-	wave_element = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	wave_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	round_element = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
 	UI_LabelDef label_def("1", app->ui->rounds_font);
-	wave_number_label = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
-	wave_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	wave_number_label->SetParent(wave_element);
+	round_number_label = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
+	round_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	round_number_label->SetParent(round_element);
 
 	image_def.sprite_section = { 120, 515, 179, 179 };
-	wave_fx = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	wave_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	wave_fx->alpha = 0;
+	round_fx = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
+	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	round_fx->alpha = 0;
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
 	left_tank_life = app->ui->CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
@@ -54,15 +54,15 @@ void General_HUD::FadeGeneralHUD(bool fade_on)
 		target_value = 0.f;
 	}
 
-	wave_number_label->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	wave_element->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	round_number_label->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	round_element->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
 	left_tank_life->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
 	right_tank_life->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
 }
 
-void General_HUD::SetWaveNumber(int round)
+void General_HUD::SetRoundNumber(int round)
 {
-	wave_number_label->SetText(std::to_string(1).c_str());
+	round_number_label->SetText(std::to_string(1).c_str());
 }
 
 void General_HUD::FadeGameOver(bool fade_on)

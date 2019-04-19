@@ -15,7 +15,7 @@ public:
 
 	void FadeGeneralHUD(bool fade_on);
 
-	void SetWaveNumber(int round);
+	void SetRoundNumber(int round);
 
 	void FadeGameOver(bool fade_on);
 
@@ -24,11 +24,11 @@ private:
 
 	// HUD General -------------------------------------------
 
-	UI_Label* wave_number_label = nullptr;
+	UI_Label* round_number_label = nullptr;
 
-	UI_Image* wave_element = nullptr;
+	UI_Image* round_element = nullptr;
 
-	UI_Image* wave_fx = nullptr;
+	UI_Image* round_fx = nullptr;
 
 	UI_Image* left_tank_life = nullptr;
 
