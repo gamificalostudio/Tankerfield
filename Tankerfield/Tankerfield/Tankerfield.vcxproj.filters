@@ -157,6 +157,9 @@
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
+    <ClCompile Include="General_HUD.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -309,9 +312,6 @@
     <ClInclude Include="Rect.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="UI_InGameElement.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="WeaponInfo.h">
       <Filter>Weapons</Filter>
     </ClInclude>
@@ -335,6 +335,12 @@
     </ClInclude>
     <ClInclude Include="Item_HappyHour.h">
       <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_InGameElement.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="General_HUD.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -517,6 +517,11 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 
 }
 
+WeaponInfo Obj_Tank::GetWeaponInfo() const 
+{
+	return weapon_info;
+}
+
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 {
 	weapon_info.time_between_bullets = time_between_bullets;

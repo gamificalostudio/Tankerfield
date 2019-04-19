@@ -14,6 +14,7 @@
 #include "M_AnimationBank.h"
 
 #include "Player_GUI.h"
+#include "General_HUD.h"
 #include "Obj_Tank.h"
 
 // UI includes --------------------------
@@ -103,9 +104,7 @@ bool M_UI::Start()
 
 	atlas = app->tex->Load("textures/ui/atlas.png");
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
-
-	UI_ImageDef image_def;
-	fRect full_screen = app->win->GetWindowRect();
+	rounds_font = app->font->Load("fonts/round_font.ttf", 35);
 
 	// HUD ===========================================
 	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
@@ -124,24 +123,8 @@ bool M_UI::Start()
 	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
 
-	// General 4 HUD players =========================================================
-	image_def.sprite_section = { 170 , 10, 105, 105 };
-	round_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	general_hud = DBG_NEW General_HUD();
 
-	image_def.sprite_section = { 120, 515, 179, 179 };
-	round_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	round_fx->alpha = 0;
-
-	image_def.sprite_section = { 10, 160, 50, 530 };
-	left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
-	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
-
-	image_def.sprite_section = { 60, 160, 50, 530 };
-	right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
-	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
-	
 	return true;
 }
 
@@ -175,7 +158,20 @@ bool M_UI::CleanUp()
 		RELEASE((*element));
 	}
 
-	elements_list.clear();
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
+	{
+		RELEASE((*iter));
+	}
+
+	active_fxs.clear();
+
+	RELEASE(general_hud);
+
+	general_hud = nullptr;
+	player_1_gui = nullptr;
+	player_2_gui = nullptr;
+	player_3_gui = nullptr;
+	player_4_gui = nullptr;
 
 	return true;
 }
@@ -192,7 +188,15 @@ bool M_UI::PreUpdate()
 	
 	// Debug ===================================================
 	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
 		debug = !debug;
+	}
+	
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+
+	}
+
 
 	// Hover States ============================================
 
@@ -258,23 +262,6 @@ bool M_UI::PreUpdate()
 }
 
 
-//ax += dt * ratetime;
-//
-//if (round_fx->alpha == target_value)
-//{
-//	swap(init_value, target_value);
-//	ax = 0.f;
-//}
-
-//round_fx->alpha = lerp(init_value, target_value, ax);
-
-//ax += dt * ratetime;
-
-////if (app->scene->tank_1->GetLife() == target_value)
-////{
-////	swap(init_value, target_value);
-////	ax = 0.f;
-////}
 
 //app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
 
@@ -319,6 +306,27 @@ bool M_UI::Update(float dt)
 			break;
 		}
 	}
+	// Update FX ===================================================
+
+	int count = 0;
+
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
+	{
+		if ((*iter)->element->to_destroy == true || (*iter)->finished == true || (*iter)->element->active_fx == false )
+		{
+			(*iter)->element->active_fx = false;
+			RELEASE(*iter);
+			iter = active_fxs.erase(iter);
+		}
+		else
+		{
+			++count;
+			(*iter)->Update(dt);
+			++iter;
+		}
+	}
+
+	//LOG("Active FX ====> %i", count);
 
 	// UI Elements Update =====================================================
 
@@ -721,7 +729,11 @@ void M_UI::DrawUI(UI_Element * object)
 
 	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
-		if (object->single_camera == nullptr && object->not_in_camera == nullptr)
+		if (object->alpha == 0.f)
+		{
+			
+		}
+	    else if (object->single_camera == nullptr && object->not_in_camera == nullptr)
 		{
 			object->Draw();
 		}
@@ -733,7 +745,6 @@ void M_UI::DrawUI(UI_Element * object)
 		{
 			object->Draw();
 		}
-		
 	}
 	
 	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
@@ -774,4 +785,55 @@ void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 	{
 		UpdateGuiPositions((*item), cumulated_position);
 	}
+}
+
+void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value)
+{
+	UI_Fade_FX* new_fx = DBG_NEW  UI_Fade_FX(type, seconds, element, init_value, target_value);
+	active_fxs.push_back(new_fx);
+}
+
+
+
+UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value): element(element), init_value(init_value), target_value(target_value), type(type)
+{
+	ratetime = 1.f / seconds;
+}
+
+bool UI_Fade_FX::Update(float dt)
+{
+	switch (type)
+	{
+	case UI_Fade_FX::FX_TYPE::FADE:
+
+		ax += dt * ratetime;
+		element->alpha = lerp(init_value, target_value, ax);
+
+		if (element->alpha == target_value)
+		{
+			finished = true;
+		}
+
+		break;
+	case UI_Fade_FX::FX_TYPE::INTERMITTENT:
+
+		ax += dt * ratetime;
+		element->alpha = lerp(init_value, target_value, ax);
+
+		if (element->alpha == target_value)
+		{
+			swap(init_value, target_value);
+			ax = 0.f;
+		}
+
+		break;
+	default:
+		break;
+	}
+
+	return true;
+}
+
+void UI_Fade_FX::Destroy()
+{
 }
