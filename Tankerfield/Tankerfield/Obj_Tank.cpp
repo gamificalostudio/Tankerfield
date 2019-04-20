@@ -162,17 +162,13 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-
 	life = 90;
 	max_life = 100;
-
 
 	revive_range = 2.5f;
 	revive_range_squared = revive_range * revive_range;
 	revive_life = 100;
-
-
-
+	revive_time = 3000.f;
 
 	//Life inicialistation
 	//item = ObjectType::HEALTH_BAG;
@@ -198,7 +194,7 @@ bool Obj_Tank::Start()
 	tutorial_move->single_camera = camera_player;
 	tutorial_move->AddButtonHelper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
-	tutorial_move_time = 4000;
+	tutorial_move_time = 2500;
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
@@ -734,7 +730,7 @@ void Obj_Tank::ReviveTank()
 	//circlePos = app->map->MapToScreenF(circlePos);
 	//app->render->DrawCircle(circlePos.x, circlePos.y, revive_range, 0, 255, 0, 100);
 
-	bool show_tutorial = false;
+	bool can_revive = false;
 
 	for (std::list<Obj_Tank*>::iterator iter = app->objectmanager->obj_tanks.begin();
 		iter != app->objectmanager->obj_tanks.end();
@@ -742,30 +738,58 @@ void Obj_Tank::ReviveTank()
 	{
 		if (this != (*iter)
 			&& pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
-			&& (*iter)->life == 0
-			&& this->life != 0)
+			&& !(*iter)->Alive()
+			&& Alive())
 		{
-			if (!show_tutorial)
+			if (!can_revive)
 			{
-				show_tutorial = true;
+				can_revive = true;
 			}
 
-			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
-				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
+			if (!(*iter)->being_revived && PressInteract() || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT)
 			{
+				LOG("Starting to revive");
+				(*iter)->being_revived = true;
+				(*iter)->revive_timer.Start();
+			}
+			else if (ReleaseInteract())
+			{
+				LOG("Stopping revive");
+				(*iter)->being_revived = false;
+			}
+
+			if ((*iter)->being_revived && (*iter)->revive_timer.Read() > revive_time)
+			{
+				LOG("Revived!");
+				//Revive the tank
 				(*iter)->curr_speed = speed;
 				(*iter)->SetLife(revive_life);
+				(*iter)->being_revived = false;
 			}
+		}
+		else
+		{
+			(*iter)->being_revived = false;
 		}
 	}
 
-	if (show_tutorial /*&& tutorial_revive.GetState() != ELEMENT_STATE::VISIBLE*/)
+	if (can_revive /*&& tutorial_revive->GetState() != ELEMENT_STATE::VISIBLE*/)
 	{
 		tutorial_revive->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 	}
-	else /*if (&tutorial_revive.GetState() != ELEMENT_STATE::HIDDEN)*/ {
+	else /*if (&tutorial_revive->GetState() != ELEMENT_STATE::HIDDEN)*/ {
 		tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
+}
+
+bool Obj_Tank::PressInteract()
+{
+	return (controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
+}
+
+bool Obj_Tank::ReleaseInteract()
+{
+	return (controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
 void Obj_Tank::StopTank()
@@ -774,6 +798,11 @@ void Obj_Tank::StopTank()
 	{
 		curr_speed = 0;
 	}
+}
+
+bool Obj_Tank::Alive()
+{
+	return life > 0;
 }
 
 
