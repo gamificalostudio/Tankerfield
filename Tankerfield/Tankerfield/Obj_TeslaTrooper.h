@@ -67,6 +67,7 @@ private:
 	PerfTimer perf_timer;
 
 	Animation walk;
+	Animation attack;
 	SDL_Texture * tex = nullptr;
 
 };

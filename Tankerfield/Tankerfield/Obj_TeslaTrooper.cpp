@@ -35,7 +35,9 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	curr_tex = tex;
 
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
 	curr_anim = &walk;
+
 
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
@@ -60,7 +62,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-
+	
 	return true;
 }
 
@@ -70,9 +72,17 @@ void Obj_TeslaTrooper::Attack()
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range * attack_range
 		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{
+		curr_anim = &attack;
 		target->SetLife(target->GetLife() - attack_damage);
 		perf_timer.Start();
 	}
+
+	if (curr_anim == &attack&&curr_anim->Finished())
+	{
+		curr_anim = &walk;
+		attack.Reset();
+	}
+
 }
 
 void Obj_TeslaTrooper::Movement(float &dt)
@@ -125,14 +135,12 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			next_pos = (fPoint)(*path.begin());
 			move_vect = (fPoint)(next_pos)-pos_map;
 			move_vect.Normalize();
-
 			//Change sprite direction
 			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
 			state = TROOPER_STATE::MOVE;
 		}
 		else
 			state = TROOPER_STATE::GET_PATH;
-
 	}
 	break;
 	default:
