@@ -305,74 +305,74 @@
     </tesla_trooper>
     <brute>
       <animations>
-        <walk speed="1" rotation="counter-clockwise" first_dir_angle ="90">
+        <walk speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <!--starts in frame number 8-->
-            <frame num="8" x="0" y="96" w="134" h="96" />
-            <frame num="9" x="134" y="96" w="134" h="96" />
-            <frame num="10" x="268" y="96" w="134" h="96" />
-            <frame num="11" x="402" y="96" w="134" h="96" />
-            <frame num="12" x="536" y="96" w="134" h="96" />
-            <frame num="13" x="670" y="96" w="134" h="96" />
+            <frame num="8" x="1072" y="0" w="134" h="96" />
+            <frame num="9" x="1206" y="0" w="134" h="96" />
+            <frame num="10" x="1340" y="0" w="134" h="96" />
+            <frame num="11" x="1474" y="0" w="134" h="96" />
+            <frame num="12" x="1608" y="0" w="134" h="96" />
+            <frame num="13" x="1742" y="0" w="134" h="96" />
           </dir>
           <dir>
             <!--starts in frame number 14-->
-            <frame num="14" x="804" y="96" w="134" h="96" />
-            <frame num="15" x="938" y="96" w="134" h="96" />
-            <frame num="16" x="0" y="192" w="134" h="96" />
-            <frame num="17" x="134" y="192" w="134" h="96" />
-            <frame num="18" x="268" y="192" w="134" h="96" />
-            <frame num="19" x="402" y="192" w="134" h="96" />
+            <frame num="14" x="1876" y="0" w="134" h="96" />
+            <frame num="15" x="2010" y="0" w="134" h="96" />
+            <frame num="16" x="2144" y="0" w="134" h="96" />
+            <frame num="17" x="2278" y="0" w="134" h="96" />
+            <frame num="18" x="2412" y="0" w="134" h="96" />
+            <frame num="19" x="2546" y="0" w="134" h="96" />
           </dir>
           <dir>
             <!--starts in frame number 20-->
-            <frame num="20" x="536" y="192" w="134" h="96" />
-            <frame num="21" x="670" y="192" w="134" h="96" />
-            <frame num="22" x="804" y="192" w="134" h="96" />
-            <frame num="23" x="938" y="192" w="134" h="96" />
-            <frame num="24" x="0" y="288" w="134" h="96" />
-            <frame num="25" x="134" y="288" w="134" h="96" />
+            <frame num="20" x="2680" y="0" w="134" h="96" />
+            <frame num="21" x="2814" y="0" w="134" h="96" />
+            <frame num="22" x="2948" y="0" w="134" h="96" />
+            <frame num="23" x="3082" y="0" w="134" h="96" />
+            <frame num="24" x="3216" y="0" w="134" h="96" />
+            <frame num="25" x="3350" y="0" w="134" h="96" />
           </dir>
           <dir>
             <!--starts in frame number 26-->
-            <frame num="26" x="268" y="288" w="134" h="96" />
-            <frame num="27" x="402" y="288" w="134" h="96" />
-            <frame num="28" x="536" y="288" w="134" h="96" />
-            <frame num="29" x="670" y="288" w="134" h="96" />
-            <frame num="30" x="804" y="288" w="134" h="96" />
-            <frame num="31" x="938" y="288" w="134" h="96" />
+            <frame num="26" x="3484" y="0" w="134" h="96" />
+            <frame num="27" x="3618" y="0" w="134" h="96" />
+            <frame num="28" x="3752" y="0" w="134" h="96" />
+            <frame num="29" x="3886" y="0" w="134" h="96" />
+            <frame num="30" x="0" y="96" w="134" h="96" />
+            <frame num="31" x="134" y="96" w="134" h="96" />
           </dir>
           <dir>
-            <frame num="32" x="0" y="384" w="134" h="96" />
-            <frame num="33" x="134" y="384" w="134" h="96" />
-            <frame num="34" x="268" y="384" w="134" h="96" />
-            <frame num="35" x="402" y="384" w="134" h="96" />
-            <frame num="36" x="536" y="384" w="134" h="96" />
-            <frame num="37" x="670" y="384" w="134" h="96" />
+            <frame num="32" x="268" y="96" w="134" h="96" />
+            <frame num="33" x="402" y="96" w="134" h="96" />
+            <frame num="34" x="536" y="96" w="134" h="96" />
+            <frame num="35" x="670" y="96" w="134" h="96" />
+            <frame num="36" x="804" y="96" w="134" h="96" />
+            <frame num="37" x="938" y="96" w="134" h="96" />
           </dir>
           <dir>
-            <frame num="38" x="804" y="384" w="134" h="96" />
-            <frame num="39" x="938" y="384" w="134" h="96" />
-            <frame num="40" x="0" y="480" w="134" h="96" />
-            <frame num="41" x="134" y="480" w="134" h="96" />
-            <frame num="42" x="268" y="480" w="134" h="96" />
-            <frame num="43" x="402" y="480" w="134" h="96" />
+            <frame num="38" x="1072" y="96" w="134" h="96" />
+            <frame num="39" x="1206" y="96" w="134" h="96" />
+            <frame num="40" x="1340" y="96" w="134" h="96" />
+            <frame num="41" x="1474" y="96" w="134" h="96" />
+            <frame num="42" x="1608" y="96" w="134" h="96" />
+            <frame num="43" x="1742" y="96" w="134" h="96" />
           </dir>
           <dir>
-            <frame num="44" x="536" y="480" w="134" h="96" />
-            <frame num="45" x="670" y="480" w="134" h="96" />
-            <frame num="46" x="804" y="480" w="134" h="96" />
-            <frame num="47" x="938" y="480" w="134" h="96" />
-            <frame num="48" x="0" y="576" w="134" h="96" />
-            <frame num="49" x="134" y="576" w="134" h="96" />
+            <frame num="44" x="1876" y="96" w="134" h="96" />
+            <frame num="45" x="2010" y="96" w="134" h="96" />
+            <frame num="46" x="2144" y="96" w="134" h="96" />
+            <frame num="47" x="2278" y="96" w="134" h="96" />
+            <frame num="48" x="2412" y="96" w="134" h="96" />
+            <frame num="49" x="2546" y="96" w="134" h="96" />
           </dir>
           <dir>
-            <frame num="50" x="268" y="576" w="134" h="96" />
-            <frame num="51" x="402" y="576" w="134" h="96" />
-            <frame num="52" x="536" y="576" w="134" h="96" />
-            <frame num="53" x="670" y="576" w="134" h="96" />
-            <frame num="54" x="804" y="576" w="134" h="96" />
-            <frame num="55" x="938" y="576" w="134" h="96" />
+            <frame num="50" x="2680" y="96" w="134" h="96" />
+            <frame num="51" x="2814" y="96" w="134" h="96" />
+            <frame num="52" x="2948" y="96" w="134" h="96" />
+            <frame num="53" x="3082" y="96" w="134" h="96" />
+            <frame num="54" x="3216" y="96" w="134" h="96" />
+            <frame num="55" x="3350" y="96" w="134" h="96" />
           </dir>
         </walk>
       </animations>
