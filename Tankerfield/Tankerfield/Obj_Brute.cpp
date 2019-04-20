@@ -155,11 +155,3 @@ void Obj_Brute::OnTrigger(Collider* collider)
 		}
 	}
 }
-
-bool Obj_Brute::BruteCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const
-{
-	return ((enemy_screen_pos.x > target_screen_pos.x && enemy_screen_pos.x < target_screen_pos.x + (float)attack_range.x)
-		|| (enemy_screen_pos.x < target_screen_pos.x && enemy_screen_pos.x > target_screen_pos.x - (float)attack_range.x)
-		|| (enemy_screen_pos.y > target_screen_pos.y && enemy_screen_pos.y < target_screen_pos.y + (float)attack_range.y)
-		|| (enemy_screen_pos.y < target_screen_pos.y && enemy_screen_pos.y > target_screen_pos.y - (float)attack_range.y));
-}
