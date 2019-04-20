@@ -20,11 +20,13 @@
 #include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_HealingAnimation.h"
+#include "Obj_Fire.h"
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
 #include "Player_GUI.h"
 #include "UI_InGameElement.h"
 #include "M_UI.h"
+#include "M_ObjManager.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -151,7 +153,7 @@ bool Obj_Tank::Start()
 	gamepad_aim			= Joystick::RIGHT;
 	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
+	gamepad_interact	= SDL_CONTROLLER_BUTTON_X;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -161,17 +163,13 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-
 	life = 90;
 	max_life = 100;
-
 
 	revive_range = 2.5f;
 	revive_range_squared = revive_range * revive_range;
 	revive_life = 100;
-
-
-
+	revive_time = 3000.f;
 
 	//Life inicialistation
 	//item = ObjectType::HEALTH_BAG;
@@ -197,7 +195,7 @@ bool Obj_Tank::Start()
 	tutorial_move->single_camera = camera_player;
 	tutorial_move->AddButtonHelper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
-	tutorial_move_time = 4000;
+	tutorial_move_time = 2500;
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
@@ -729,49 +727,69 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ReviveTank()
 {
-
-
-	Obj_Tank* tank_arr[4];
-
-	tank_arr[0] = app->scene->tank_1;
-	tank_arr[1] = app->scene->tank_2;
-	tank_arr[2] = app->scene->tank_3;
-	tank_arr[3] = app->scene->tank_4;
-
 	//fPoint circlePos = { 3.f,3.f };
 	//circlePos = app->map->MapToScreenF(circlePos);
 	//app->render->DrawCircle(circlePos.x, circlePos.y, revive_range, 0, 255, 0, 100);
 
-	bool show_tutorial = false;
+	bool can_revive = false;
 
-	for (int i = 0; i < 4; i++)
+	for (std::list<Obj_Tank*>::iterator iter = app->objectmanager->obj_tanks.begin();
+		iter != app->objectmanager->obj_tanks.end();
+		++iter)
 	{
-		if (this != tank_arr[i]
-			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map) <= revive_range_squared
-			&& tank_arr[i]->life == 0
-			&& this->life != 0)
+		if (this != (*iter)
+			&& pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
+			&& !(*iter)->Alive()
+			&& Alive())
 		{
-			if (!show_tutorial)
+			if (!can_revive)
 			{
-				show_tutorial = true;
+				can_revive = true;
 			}
 
-			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
-				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
+			if (!reviving_tank[(*iter)->tank_num] && PressInteract() || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT)
 			{
-				tank_arr[i]->curr_speed = speed;
-				tank_arr[i]->SetLife(revive_life);
+				reviving_tank[(*iter)->tank_num] = true;
+				revive_timer[(*iter)->tank_num].Start();
+				
 			}
+			else if (ReleaseInteract())
+			{
+				reviving_tank[(*iter)->tank_num] = false;
+			}
+
+			if (reviving_tank[(*iter)->tank_num] && revive_timer[(*iter)->tank_num].Read() > revive_time)
+			{
+				//Revive the tank
+				(*iter)->curr_speed = speed;
+				(*iter)->SetLife(revive_life);
+				reviving_tank[(*iter)->tank_num] = false;
+				(*iter)->fire_dead = false;
+			}
+		}
+		else
+		{
+			reviving_tank[(*iter)->tank_num] = false;
 		}
 	}
 
-	if (show_tutorial /*&& tutorial_revive.GetState() != ELEMENT_STATE::VISIBLE*/)
+	if (can_revive /*&& tutorial_revive->GetState() != ELEMENT_STATE::VISIBLE*/)
 	{
 		tutorial_revive->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 	}
-	else /*if (&tutorial_revive.GetState() != ELEMENT_STATE::HIDDEN)*/ {
+	else /*if (&tutorial_revive->GetState() != ELEMENT_STATE::HIDDEN)*/ {
 		tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
+}
+
+bool Obj_Tank::PressInteract()
+{
+	return (controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
+}
+
+bool Obj_Tank::ReleaseInteract()
+{
+	return (controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
 void Obj_Tank::StopTank()
@@ -779,7 +797,18 @@ void Obj_Tank::StopTank()
 	if (life == 0)
 	{
 		curr_speed = 0;
+		if (!(this->fire_dead))
+		{
+			this->fire_dead = true;
+			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+			dead_fire->tank = this;
+		}
 	}
+}
+
+bool Obj_Tank::Alive()
+{
+	return life > 0;
 }
 
 

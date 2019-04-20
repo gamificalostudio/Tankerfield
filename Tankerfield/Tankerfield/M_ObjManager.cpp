@@ -29,6 +29,7 @@
 #include "Healing_Bullet.h"
 #include "Obj_Explosion.h"
 #include "Obj_HealingAnimation.h"
+#include "Obj_Fire.h"
 #include "M_Map.h"
 #include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
@@ -247,6 +248,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_Healing_Animation(pos);
 		ret->type = ObjectType::HEALING_ANIMATION;
 		break;
+	case ObjectType::FIRE_DEAD:
+		ret = new Obj_Fire(pos);
+		ret->type = ObjectType::FIRE_DEAD;
+		break;
 	case ObjectType::HEALTH_BAG:
 		ret = DBG_NEW Item_HealthBag(pos);
 		ret->type = ObjectType::HEALTH_BAG;
@@ -310,7 +315,7 @@ Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 	for (std::list<Obj_Tank*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
 	{
 		float distance = pos.DistanceNoSqrt((*iter)->pos_map);
-		if ((*iter)->GetLife() > 0
+		if ((*iter)->Alive()
 			&& distance < max_dist_squared
 			&& distance < lowest_distance)
 		{
