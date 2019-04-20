@@ -760,6 +760,7 @@ void Obj_Tank::ReviveTank()
 			{
 				tank_arr[i]->curr_speed = speed;
 				tank_arr[i]->SetLife(revive_life);
+				tank_arr[i]->fire_dead = false;
 			}
 		}
 	}
@@ -778,8 +779,12 @@ void Obj_Tank::StopTank()
 	if (life == 0)
 	{
 		curr_speed = 0;
-		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
-		dead_fire->tank = this;
+		if (!(this->fire_dead))
+		{
+			this->fire_dead = true;
+			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+			dead_fire->tank = this;
+		}
 	}
 }
 
