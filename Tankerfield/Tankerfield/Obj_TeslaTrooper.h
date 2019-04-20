@@ -13,6 +13,7 @@ class Obj_Tank;
 
 enum class TROOPER_STATE
 {
+	IDLE,
 	GET_PATH,
 	MOVE,
 	RECHEAD_POINT

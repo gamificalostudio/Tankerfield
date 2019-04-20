@@ -127,6 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet_Laser.cpp" />
+    <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
     <ClCompile Include="Bullet_Basic.cpp" />
@@ -145,7 +146,7 @@
     <ClCompile Include="Obj_HealingAnimation.cpp" />
     <ClCompile Include="Obj_Item.cpp" />
     <ClCompile Include="Obj_PickUp.cpp" />
-    <ClCompile Include="Obj_Static.cpp" />
+    <ClCompile Include="Obj_Building.cpp" />
     <ClCompile Include="Quadtree_Map.cpp" />
     <ClCompile Include="UI_Bar.cpp" />
     <ClCompile Include="UI_Button.cpp" />
@@ -182,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Laser.h" />
+    <ClInclude Include="General_HUD.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="M_AnimationBank.h" />
     <ClInclude Include="Bullet_Basic.h" />
@@ -201,7 +203,7 @@
     <ClInclude Include="Obj_HealingAnimation.h" />
     <ClInclude Include="Obj_Item.h" />
     <ClInclude Include="Obj_PickUp.h" />
-    <ClInclude Include="Obj_Static.h" />
+    <ClInclude Include="Obj_Building.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Quadtree_Map.h" />
     <ClInclude Include="Rect.h" />

@@ -75,7 +75,8 @@ public:
 
 	void DeleteObjects();
 
-	Obj_Tank* GetNearestTank(fPoint pos);
+	Obj_Tank* GetNearestTank(fPoint pos, float max_distanace = 0);
+
 	
 	std::list<Object*> GetObjects() const;
 

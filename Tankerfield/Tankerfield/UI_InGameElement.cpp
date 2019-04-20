@@ -67,7 +67,7 @@ bool UI_InGameElement::Draw()
 		sprite_section = arrow_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
 		vector.Normalize();
 		screen_pos = app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 2.f, app->ui->current_camera);
-		app->render->BlitUI( app->ui->GetAtlas(), screen_pos.x - sprite_section.w * 0.5f, screen_pos.y - sprite_section.h * 0.5f, &sprite_section ,app->ui->current_camera);
+		app->render->BlitUI( app->ui->GetAtlas(), screen_pos.x - (float)sprite_section.w * 0.5f, screen_pos.y - (float)sprite_section.h * 0.5f, &sprite_section ,app->ui->current_camera);
 	}
 }
 
@@ -80,7 +80,7 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	img_def.sprite_section = { 330, 160, 50, 70 };
 	img_def.is_in_game = true;
 
-	weapon_frame = app->ui->CreateImage( position, img_def);
+	weapon_frame = app->ui->CreateImage(position, img_def);
 	weapon_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	weapon_frame->SetParent(this);
 
@@ -101,19 +101,30 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 		break;
 	}
 
-	img_def.sprite_section = { 620, 10, 34, 34 };
 	weapon_icon = app->ui->CreateImage(position + app->map->ScreenToMapF(0.f, -29.f), img_def);
 	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
 	weapon_icon->SetParent(weapon_frame);
 
-	level_indicator = app->ui->CreateImage(position + app->map->ScreenToMapF(32.f, 64.f), img_def);
+	level_indicator = app->ui->CreateImage(position + app->map->ScreenToMapF(-32.f,- 64.f), img_def);
 	level_indicator->SetParent(weapon_frame);
-	 
+	UpdateLevel();
+
+
+	weapon_frame	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+	weapon_icon		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+	level_indicator	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+}
+
+bool UI_IG_Weapon::Draw()
+{
+	UpdateLevel();
+	return true;
 }
 
 void UI_IG_Weapon::UpdateLevel()
 {
-	int diference = pick_up_weapon_level - player_weapon_level;
+	Obj_PickUp* pick_up = (Obj_PickUp*) pointed_obj;
+	int diference = pick_up->level_of_weapon - app->ui->current_gui->player->GetWeaponInfo().level_weapon;
 
 	level_indicator->SetState(ELEMENT_STATE::VISIBLE);
 
@@ -196,6 +207,8 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	item_icon->SetParent(item_frame);
 	
+	item_icon->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+	item_frame->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
 }
 
 void UI_IG_Item::Destroy()

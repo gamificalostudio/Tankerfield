@@ -135,7 +135,7 @@
   <map>
    <folder>Maps/</folder>
       <levels>
-        <level name="SnowMap.tmx"/>
+        <level name="Level1.tmx"/>
       </levels>
   
   </map>

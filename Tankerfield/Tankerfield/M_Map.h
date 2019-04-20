@@ -11,7 +11,7 @@
 #include "M_Render.h"
 #include "M_Textures.h"
 
-
+class Obj_Building;
 struct Levels
 {
 	std::string name;
@@ -71,6 +71,10 @@ struct ObjectGroup
 	Properties	properties;
 	uint size			= 0;
 	Rect<float, float>* objects	= nullptr;
+	const char* path;
+	int offset_x;
+	int offset_y;
+
 
 	~ObjectGroup()
 	{

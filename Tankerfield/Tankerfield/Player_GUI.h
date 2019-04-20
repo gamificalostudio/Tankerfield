@@ -49,6 +49,8 @@ public:
 
 	void SetItemIcon(ObjectType type);
 
+	void Fade_GUI(bool fade_on);
+
 	~Player_GUI();
 
 public:
@@ -75,9 +77,9 @@ private:
 
 	UI_Image* item_icon = nullptr;
 
-	UI_Bar* charged_shot_bar = nullptr;
+	UI_Bar*   charged_shot_bar = nullptr;
 
-	UI_Bar* life_bar = nullptr;
+	UI_Bar*   life_bar = nullptr;
 
 	std::vector<UI_Element*> helper_elements;
 

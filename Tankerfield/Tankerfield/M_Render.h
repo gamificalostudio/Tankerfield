@@ -44,7 +44,7 @@ public:
 	iPoint ScreenToWorld(int x, int y, const Camera* camera) const;
 
 	// Draw & Blit
-	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section = nullptr, Camera* current_camera = nullptr, const int alpha =  -1) const;
+	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section = nullptr, Camera* current_camera = nullptr, const int alpha =  255) const;
 	
 	void Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* camera, const SDL_Rect* section = NULL) const;
 
