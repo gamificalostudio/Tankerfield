@@ -1,5 +1,5 @@
-#ifndef __OBJ_EXPLOSION_H__
-#define __OBJ_EXPLOSION_H__
+#ifndef __OBJ_FIRE_H__
+#define __OBJ_FIRE_H__
 
 #include "Circle.h"
 #include "Point.h"
@@ -10,16 +10,17 @@
 struct SDL_Texture;
 class Timer;
 
-class Obj_Explosion : public Object
+class Obj_Fire : public Object
 {
 public:
 
-	Obj_Explosion(fPoint pos);
-	~Obj_Explosion();
+	Obj_Fire(fPoint pos);
+	~Obj_Fire();
 
 	bool Update(float dt) override;
 
-	bool Awake(pugi::xml_node&) { return true; };
+public:
+	Obj_Tank * tank = nullptr;
 
 private:
 
@@ -30,10 +31,8 @@ private:
 	float speed = 0.f;
 	float time = 0.f;
 
-	unsigned int explosion_fx;
-
 	Circle range_pos;
-	
+
 	// ---
 	Animation anim;
 	SDL_Texture * tex = nullptr;

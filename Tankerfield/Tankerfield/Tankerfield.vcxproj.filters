@@ -160,6 +160,9 @@
     <ClCompile Include="Obj_Building.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Fire.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -340,6 +343,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Building.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Fire.h">
       <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>

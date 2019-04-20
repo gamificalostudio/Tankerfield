@@ -20,6 +20,7 @@
 #include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_HealingAnimation.h"
+#include "Obj_Fire.h"
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
 #include "Player_GUI.h"
@@ -779,6 +780,8 @@ void Obj_Tank::StopTank()
 	if (life == 0)
 	{
 		curr_speed = 0;
+		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+		dead_fire->tank = this;
 	}
 }
 

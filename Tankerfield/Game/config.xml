@@ -1203,6 +1203,32 @@
         </explosion>
       </animations>
     </explosion>
+    <fire_dead_tank>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/fire_dead_tank.png"/>
+      <animations>
+        <fire speed="80">
+          <dir>
+            <frame x="0" y="0" w="74" h="112"/>
+            <frame x="74" y="0" w="74" h="112"/>
+            <frame x="148" y="0" w="74" h="112"/>
+            <frame x="222" y="0" w="74" h="112"/>
+            <frame x="296" y="0" w="74" h="112"/>
+            <frame x="370" y="0" w="74" h="112"/>
+            <frame x="444" y="0" w="74" h="112"/>
+            <frame x="518" y="0" w="74" h="112"/>
+            <frame x="592" y="0" w="74" h="112"/>
+            <frame x="666" y="0" w="74" h="112"/>
+            <frame x="740" y="0" w="74" h="112"/>
+            <frame x="814" y="0" w="74" h="112"/>
+            <frame x="888" y="0" w="74" h="112"/>
+            <frame x="0" y="112" w="74" h="112"/>
+            <frame x="74" y="112" w="74" h="112"/>
+          </dir>
+        </fire>
+      </animations>
+    </fire_dead_tank>
     <basic_bullet>
       <speed value ="0.5"/>
       <life value ="1000"/>
