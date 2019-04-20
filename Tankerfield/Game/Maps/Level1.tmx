@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="left-down" width="39" height="40" tilewidth="60" tileheight="30" infinite="0" nextlayerid="6" nextobjectid="71">
+<map version="1.2" tiledversion="1.2.3" orientation="isometric" renderorder="left-down" width="39" height="40" tilewidth="60" tileheight="30" infinite="0" nextlayerid="12" nextobjectid="68">
  <properties>
-  <property name="offset_x" type="int" value="-30"/>
+  <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
  </properties>
  <tileset firstgid="1" name="Meta" tilewidth="60" tileheight="30" tilecount="4" columns="2">
@@ -10,7 +10,14 @@
  <tileset firstgid="5" name="FlatTiles_field" tilewidth="60" tileheight="30" tilecount="176" columns="8">
   <image source="FlatTiles_field.png" width="480" height="660"/>
  </tileset>
- <layer id="1" name="Capa de Patrones 1" width="39" height="40">
+ <tileset firstgid="181" name="fences" tilewidth="60" tileheight="30" tilecount="0" columns="16">
+  <image source="fences.png" width="980" height="600"/>
+ </tileset>
+ <tileset firstgid="181" name="shore01" tilewidth="120" tileheight="60" tilecount="1" columns="1">
+  <tileoffset x="-30" y="0"/>
+  <image source="../../../../../../Desktop/tile120-60/shore01.png" width="120" height="60"/>
+ </tileset>
+ <layer id="8" name="Capa de Patrones 1" width="39" height="40">
   <properties>
    <property name="Nodraw" type="int" value="0"/>
   </properties>
@@ -1577,7 +1584,7 @@
    <tile gid="38"/>
   </data>
  </layer>
- <layer id="2" name="Colliders" width="39" height="40">
+ <layer id="9" name="Colliders" width="39" height="40">
   <properties>
    <property name="Navigation" type="float" value="1"/>
    <property name="Nodraw" type="int" value="0"/>
@@ -1981,6 +1988,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1992,6 +2002,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2014,14 +2027,23 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2044,17 +2066,23 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2118,15 +2146,19 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2153,13 +2185,19 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2185,17 +2223,21 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2220,16 +2262,21 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2254,16 +2301,21 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2288,16 +2340,21 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2322,17 +2379,21 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2358,13 +2419,19 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2391,15 +2458,19 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2463,17 +2534,23 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2496,14 +2573,23 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2526,6 +2612,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -2537,91 +2626,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="2"/>
+   <tile gid="2"/>
+   <tile gid="2"/>
    <tile/>
    <tile/>
    <tile/>
@@ -3145,7 +3152,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="3" name="Colliders">
+ <objectgroup id="3" name="Colliders" visible="0">
   <properties>
    <property name="dsda" type="float" value="0"/>
    <property name="holio" type="float" value="0"/>
@@ -3203,8 +3210,13 @@
   <object id="57" x="307.5" y="802.5"/>
   <object id="58" x="300" y="780" width="30" height="30"/>
  </objectgroup>
- <layer id="4" name="Capa de patrones 3" width="39" height="40">
+ <layer id="11" name="Capa de patrones 4" width="39" height="40">
   <data>
+   <tile gid="181"/>
+   <tile gid="181"/>
+   <tile gid="181"/>
+   <tile gid="181"/>
+   <tile gid="181"/>
    <tile/>
    <tile/>
    <tile/>
@@ -3362,12 +3374,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="181"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4767,20 +4774,4 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="5" name="Buildings">
-  <object id="69" name="Garage" x="632.5" y="2.5" width="180" height="182">
-   <properties>
-    <property name="offset_x" value="105"/>
-    <property name="offset_y" value="60"/>
-    <property name="path" value="Maps/Garage.png"/>
-   </properties>
-  </object>
-  <object id="70" name="Garage" x="309.5" y="3.5" width="180" height="182">
-   <properties>
-    <property name="offset_x" value="50"/>
-    <property name="offset_y" value="130"/>
-    <property name="path" value="Maps/Building_in_ruin.png"/>
-   </properties>
-  </object>
- </objectgroup>
 </map>

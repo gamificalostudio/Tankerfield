@@ -86,16 +86,24 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map);
-		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+
+		target = app->objectmanager->GetNearestTank(pos_map, 5);
+		if (target != nullptr)
 		{
+			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+			{
+
 			std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
 			for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
 			{
 				path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
 			}
+		}
+
+
 			state = TROOPER_STATE::RECHEAD_POINT;
 		}
+
 		timer.Start();
 	}
 	break;

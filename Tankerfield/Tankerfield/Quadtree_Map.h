@@ -2,6 +2,7 @@
 #define _QUADTREE_MAP_H_
 
 #include "Quadtree.h"
+#include "M_Textures.h"
 struct Tile
 {
 	Tile() {};
@@ -9,9 +10,10 @@ struct Tile
 	{}
 		uint id;
 		SDL_Rect rect;
+		SDL_Rect section;
 		uint layer;
 		uint sorting_value;
-		
+		SDL_Texture* texture = nullptr;
 };
 
 class Quadtree_Map : public Quadtree
@@ -40,7 +42,7 @@ public:
 	int ReturnNumbreOfLevels(int area_with, int camera_with, uint& levels);
 
 private:
-	std::list<Tile> elements;
+	std::vector<Tile> elements;
 	Quadtree_Map* nodes[4] = { nullptr,nullptr,nullptr,nullptr };
 
 	void Subdivide() override;

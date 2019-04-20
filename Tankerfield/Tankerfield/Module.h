@@ -55,6 +55,11 @@ public:
 		return true;
 	}
 
+	virtual bool Draw()
+	{
+		return true;
+	}
+
 	// Called before quitting
 	virtual bool CleanUp()
 	{

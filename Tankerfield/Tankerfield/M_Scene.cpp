@@ -316,21 +316,28 @@ void M_Scene::CreateEnemyWave()
 {
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
-		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-		Obj_TeslaTrooper* ret = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+		if (app->map->data.spawners_position_enemy.size() != 0)
+		{
+			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+			Obj_TeslaTrooper* ret = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
 
-		enemies_in_wave.push_back(ret);
+			enemies_in_wave.push_back(ret);
+		}
+	
 	}
 	if (Brute_units > 0)
 	{
 		for (int i = 0; i < Brute_units; i++)
 		{
-			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_Brute* ret = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+			if (app->map->data.spawners_position_enemy.size() != 0)
+			{
+				uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+				fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+				Obj_Brute* ret = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
 
-			enemies_in_wave.push_back(ret);
+				enemies_in_wave.push_back(ret);
+			}
 		}
 	}
 

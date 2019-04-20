@@ -87,18 +87,20 @@ bool M_Map::PostUpdate(float dt)
 
 		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
 		{
-			TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
+			//TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
 
-			app->render->Blit(tileset->texture,
+			app->render->Blit(sorted_tiles->texture,
 				(*sorted_tiles).rect.x,
 				(*sorted_tiles).rect.y,
 				(*item_cam),
-				&tileset->GetTileRect((*sorted_tiles).id));
+				&sorted_tiles->section);
 				
 		}
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
+	
 	}
 
-	SDL_RenderSetClipRect(app->render->renderer, nullptr);
+
 
 	//// Draw Grid ==============================================
 	if(show_grid)
@@ -124,6 +126,12 @@ bool M_Map::PostUpdate(float dt)
 		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
 
+	/*for (uint i = 0; i < app->map->data.tile_height* data.tile_width; ++i)
+	{
+		SDL_Rect rect = { data.screen_tile_rect[i].pos.x ,data.screen_tile_rect[i].pos.y ,2.f ,2.f };
+		app->render->DrawQuad(rect, 255, 255, 255, 255);
+	}*/
+	
 	return ret = true;
 }
 
@@ -372,27 +380,29 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 
 		if (layer->visible)
 		{
-
-
 			uint i = 0, layernum = data.map_layers.size() + 1;
 			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 			{
 				Tile qtile;
-
 				layer->data[i] = tile.attribute("gid").as_int(0);
 				qtile.id = layer->data[i];
+
 				if (qtile.id != 0)
 				{
-					qtile.rect = { data.screen_tile_rect[i].pos.x, data.screen_tile_rect[i].pos.y, data.tile_width, data.tile_height };
+					TileSet* this_Tile = app->map->GetTilesetFromTileId(qtile.id);
+
+					if (this_Tile == nullptr)
+						continue;
+
+					if (this_Tile->texture != nullptr)
+						qtile.texture = this_Tile->texture;
+
+					qtile.section = this_Tile->GetTileRect(qtile.id);
+					qtile.rect = { (int)(data.screen_tile_rect[i].pos.x + this_Tile->offset_x - app->map->data.tile_width*0.5f),(int) (data.screen_tile_rect[i].pos.y + app->map->data.tile_height - qtile.section.h) + this_Tile->offset_y, qtile.section.w, qtile.section.h };
 					qtile.layer = layernum;
-					qtile.sorting_value = i * layernum;
+					qtile.sorting_value = (i+1) * layernum;
 					data.qt->InsertTile(qtile);
 				}
-				if (layer->name == "Buildings")
-				{
-					layer->visible = node.child("properties").child("property").attribute("value").as_bool(true);
-				}
-
 				++i;
 			}
 		}
@@ -652,22 +662,17 @@ inline SDL_Rect TileSet::GetTileRect(int id) const
 
 inline TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
-	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
-	TileSet* set = *item;
 	
-	while (item != data.tilesets.end())
+	std::list<TileSet*>::const_reverse_iterator item = data.tilesets.rbegin();
+	for ( ;item != data.tilesets.rend() && id < (*item)->firstgid; ++item)
+	{}
+
+	if (item == data.tilesets.rend())
 	{
-		if (id < (*item)->firstgid)
-		{
-			set = *prev(item);
-			break;
-		}
-
-		set = *item;
-		++item;
+		return nullptr;
 	}
+	return (*item);
 
-	return set;
 }
 
 uint M_Map::GetMaxLevels()
