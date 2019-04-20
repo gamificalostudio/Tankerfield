@@ -152,6 +152,31 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 		charged_shot_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 	}
 
+	Fade_GUI(true);
+}
+
+void Player_GUI::Fade_GUI(bool fade_on)
+{
+	float init_value = 0.f, target_value = 0.f;
+
+	if (fade_on)
+	{
+		init_value = 0.f;
+		target_value = 255.f;
+	}
+	else
+	{
+		init_value = 255.f;
+		target_value = 0.f;
+	}
+
+	weapon_frame			->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	weapon_icon				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	item_frame				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	item_icon				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	charged_shot_bar		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	life_bar				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+
 }
 
 

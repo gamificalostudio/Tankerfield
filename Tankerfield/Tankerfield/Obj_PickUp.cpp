@@ -46,15 +46,14 @@ void Obj_PickUp::GenerationOfPickUp(PICKUP_TYPE type_of_pick_up, uint levels_to_
 	{
 	case PICKUP_TYPE::ITEM:
 		type_of_item = RandomItem();
-		in_game_element = app->ui->CreateInGameItem({ 0.f,0.f }, element_def);
+		in_game_element = app->ui->CreateInGameItem(pos_map, element_def);
 		break;
 	case PICKUP_TYPE::WEAPON:
-		in_game_element = app->ui->CreateInGameWeapon({ 0.f,0.f }, element_def);
 		type_of_weapon = RandomWeapon();
 		level_of_weapon += levels_to_add;
+		in_game_element = app->ui->CreateInGameWeapon(pos_map, element_def);
 		break;
 	}
-
 	
 }
 

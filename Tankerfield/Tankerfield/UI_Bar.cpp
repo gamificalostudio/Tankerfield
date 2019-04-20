@@ -21,7 +21,7 @@ bool UI_Bar::Draw()
 	SDL_Rect     percent_rect;
 
 	// Draw back rect
-	app->render->DrawQuad((SDL_Rect)back_rect, color_2.r, color_2.g, color_2.b, color_2.a, true, false);
+	app->render->DrawQuad((SDL_Rect)back_rect, color_2.r, color_2.g, color_2.b, color_2.a *  (alpha/ 255.F), true, false);
 
 	if (value > 1.f)
 	{
@@ -50,11 +50,11 @@ bool UI_Bar::Draw()
 	}
 
 	// Draw percent rect
-	app->render->DrawQuad(percent_rect, color_1.r, color_1.g, color_1.b, color_1.a, true, false);
+	app->render->DrawQuad(percent_rect, color_1.r, color_1.g, color_1.b, color_1.a * (alpha / 255.F), true, false);
 
 	// Draw sprite 
 	SDL_Rect draw_pos = GetDrawRect();
-	app->render->BlitUI(app->ui->GetAtlas(), draw_pos.x, draw_pos.y, &sprite_section);
+	app->render->BlitUI(app->ui->GetAtlas(), draw_pos.x, draw_pos.y, &sprite_section, app->ui->current_camera, alpha);
 
 	return true;
 }

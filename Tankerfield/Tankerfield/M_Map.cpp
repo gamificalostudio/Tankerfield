@@ -12,6 +12,7 @@
 #include "M_Input.h"
 #include "M_Pathfinding.h"
 #include "M_Scene.h"
+#include "Obj_Building.h"
 
 
 M_Map::M_Map()
@@ -433,20 +434,17 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
 	{
 		object_group->objects[i].create(
-			obj_node.attribute("x").as_int(0),
-			obj_node.attribute("y").as_int(0),
-			obj_node.attribute("width").as_int(0),
-			obj_node.attribute("height").as_int(0));
+			obj_node.attribute("x").as_int(0) / data.tile_height,
+			obj_node.attribute("y").as_int(0) / data.tile_height,
+			obj_node.attribute("width").as_int(0) / data.tile_height,
+			obj_node.attribute("height").as_int(0) / data.tile_height);
 
-		
-		
+		//	SpawnPoints
 		if (object_group->name == "SpawnPoints")
 		{
-			
-			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y / data.tile_height) };
 			SpawnPoint* ret = new SpawnPoint;
-			ret->pos = pos;
+			ret->pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
+
 			std::string type = obj_node.attribute("type").as_string("");
 			if (type == "REWARD_BOX")
 			{
@@ -461,6 +459,40 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 				data.spawners_position_enemy.push_back(ret);
 			}
 		}
+
+		//	Buildings
+		if (object_group->name == "Buildings")
+		{
+				
+			
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].pos.x ),  (float)(object_group->objects[i].pos.y ) };
+			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h};
+
+
+			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, pos);
+			for (pugi::xml_node property_node = obj_node.child("properties").child("property"); property_node; property_node = property_node.next_sibling("property"))
+			{
+				std::string name = (property_node.attribute("name").as_string());
+				if (name == "offset_x")
+				{
+					ret->draw_offset.x = property_node.attribute("value").as_int(0);
+				}
+				else if (name == "offset_y")
+				{
+					ret->draw_offset.y = property_node.attribute("value").as_int(0);
+				}
+								
+				else if (name == "path")
+				{
+					ret->path = property_node.attribute("value").as_string();
+				}	
+				
+			}
+			ret->SetTexture(ret->path);
+
+		}
+
 		++i;
 	}
 	
@@ -477,8 +509,9 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 
 	
 	
+	
+	
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
-
 	return ret;
 }
 
@@ -734,8 +767,8 @@ fPoint M_Map::MapToCamera(const fPoint map_pos, const Camera* camera)
 {
 	fPoint camera_pos(0.0F, 0.0F);
 	
-	camera_pos.x = (map_pos.x - map_pos.y) * ((float)data.tile_width * 0.5f)  - (float)camera->rect.x + (float)camera->viewport.x ;
-	camera_pos.y = (map_pos.x + map_pos.y) * ((float)data.tile_height * 0.5f) - (float)camera->rect.y + (float)camera->viewport.y;
+	camera_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f)  - (float)camera->rect.x + (float)camera->viewport.x ;
+	camera_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f) - (float)camera->rect.y + (float)camera->viewport.y;
 
 	return camera_pos;
 }

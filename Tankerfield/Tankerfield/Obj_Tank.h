@@ -48,6 +48,7 @@ public:
 	void SetItem(ObjectType Type);
 
 	void SetWeapon(WEAPON type, uint level);
+	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
 	int GetLife();
 	int GetMaxLife();
@@ -98,7 +99,6 @@ private:
 	//- Logic
 	int life								= 0;
 	int max_life							= 0;
-	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
 
 	static int number_of_tanks;

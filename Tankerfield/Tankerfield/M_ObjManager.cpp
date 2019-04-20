@@ -22,7 +22,7 @@
 #include <string>
 #include <algorithm>
 #include "Obj_Tank.h"
-#include "Obj_Static.h"
+#include "Obj_Building.h"
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
 #include "Bullet_Laser.h"
@@ -144,19 +144,23 @@ bool M_ObjManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
 	std::vector<Object*> draw_objects;
 
+	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
+	{
+		if (*item != nullptr)
+		{
+			(*item)->CalculateDrawVariables();
+		}
+	}
+
 	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
 		for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
-			if (*item != nullptr)
+			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
 			{
-				(*item)->CalculateDrawVariables();
-				if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
-				{
-					draw_objects.push_back(*item);
-				}
+				draw_objects.push_back(*item);
 			}
 		}
 
@@ -178,11 +182,9 @@ bool M_ObjManager::PostUpdate(float dt)
 			  DrawDebug((*item), (*item_cam));
 		  }
 		}
-
 		draw_objects.clear();
-
-		SDL_RenderSetClipRect(app->render->renderer, nullptr);
     }
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
    
 	return true;
 }
@@ -204,7 +206,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Obj_TeslaTrooper(pos);
 		ret->type = ObjectType::TESLA_TROOPER;
 		break;
-
 	case ObjectType::TANK:
 		ret = DBG_NEW Obj_Tank(pos);
 		ret->type = ObjectType::TANK;
@@ -227,17 +228,16 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::HEALING_BULLET;
 		break;
 	case ObjectType::STATIC:
-		ret = DBG_NEW Obj_Static(pos);
+		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
 		break;
-
 	case ObjectType::REWARD_ZONE:
 		ret = DBG_NEW Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+		break;
 	case ObjectType::BRUTE:
 		ret = new Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
-		break;
 		break;
 	case ObjectType::EXPLOSION:
 		ret = DBG_NEW Obj_Explosion(pos);
@@ -292,9 +292,10 @@ void M_ObjManager::DeleteObjects()
 	obj_tanks.clear();
 }
 
-Object * M_ObjManager::GetNearestTank(fPoint pos, float max_distanace)
+
+Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_distanace)
 {
-	Object* ret = (*obj_tanks.begin());
+	Obj_Tank* ret = (Obj_Tank*)(*obj_tanks.begin());
 	if (ret != nullptr)
 	{
 		float distance = pos.DistanceNoSqrt(ret->pos_map);
@@ -304,7 +305,7 @@ Object * M_ObjManager::GetNearestTank(fPoint pos, float max_distanace)
 			if (new_distance  < distance)
 			{
 				distance = new_distance;
-				ret = *iter;
+				ret = (Obj_Tank*)*iter;
 			}
 		}
 		if (max_distanace > 0 && pos.DistanceManhattan(ret->pos_map) <= max_distanace)
