@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Obj_Tank.h"
 
+class SDL_Texture;
 class SpawnPoint;
 class Obj_RewardBox : public Object
 {
@@ -14,6 +15,9 @@ private:
 	const char* reward_box_dead_sound_string;
 	uint reward_box_dead_sound_int	= 0u;
 
+	SDL_Texture* texture;
+	const char* path;
+
 public:
 	SpawnPoint* my_spawn_point			= nullptr;
 
@@ -23,9 +27,7 @@ public:
 
 	~Obj_RewardBox();
 
-	bool Start();
-
-	bool Draw(float dt, Camera* camera) override;
+	//bool Draw(float dt, Camera* camera) override;
 
 	void OnTrigger(Collider * collider);
 
