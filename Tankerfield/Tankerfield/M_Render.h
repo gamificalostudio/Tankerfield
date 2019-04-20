@@ -44,7 +44,7 @@ public:
 	iPoint ScreenToWorld(int x, int y, const Camera* camera) const;
 
 	// Draw & Blit
-	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section = nullptr, Camera* current_camera = nullptr, const int alpha =  -1) const;
+	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section = nullptr, Camera* current_camera = nullptr, const int alpha =  255) const;
 	
 	void Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* camera, const SDL_Rect* section = NULL) const;
 
@@ -58,6 +58,7 @@ public:
 	bool DrawLineSplitScreen( int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, const Camera* camera = nullptr) const;
 	
 	bool DrawCircle(int x1, int y1, int redius, Camera* camera, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
+	bool DrawIsoCircle(int x1, int y1, int redius, Camera* camera, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 
 	bool IsOnCamera(const int & x, const int & y, const int & w, const int & h, Camera* camera) const;
 

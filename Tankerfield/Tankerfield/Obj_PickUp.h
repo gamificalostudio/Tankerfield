@@ -9,7 +9,8 @@ class UI_InGameElement;
 enum class PICKUP_TYPE {
 	NO_TYPE = -1,
 	ITEM,
-	WEAPON
+	WEAPON,
+	MAX_TYPES //must be in the last position of the types of pickUps.Needed from the creation of pickUps
 };
 
 
@@ -25,31 +26,27 @@ public:
 	WEAPON      type_of_weapon					= WEAPON::BASIC;
 	ObjectType  type_of_item					= ObjectType::NO_TYPE;
 
+	uint level_of_weapon						= NULL;
+
 public:
 
 	Obj_PickUp(fPoint pos);
 
 	~Obj_PickUp();
 
-	bool Awake(pugi::xml_node&) { return true; };
+	void GenerationOfPickUp(PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, uint levels_to_add = 0);
 
 	bool Update(float dt) override;
 
-	void OnTrigger(Collider * collider);
-
 	bool Draw(float dt, Camera* camera);
 
-	WEAPON RandomWeapon() const;
+	WEAPON RandomWeapon() ;
 
 	ObjectType RandomItem() const;
 
-	PICKUP_TYPE RandomPickUp();
+	PICKUP_TYPE RandomPickUp() const;
 
 	void DeletePickUp();
-
-	void SetPickUp(Obj_Tank* player);
-
-
 };
 
 #endif // !__PICKUP_H__

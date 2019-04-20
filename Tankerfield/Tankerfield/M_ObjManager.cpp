@@ -22,9 +22,10 @@
 #include <string>
 #include <algorithm>
 #include "Obj_Tank.h"
-#include "Obj_Static.h"
+#include "Obj_Building.h"
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
+#include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_Explosion.h"
 #include "Obj_HealingAnimation.h"
@@ -34,6 +35,7 @@
 #include "Item_HealthBag.h"
 #include "Item_HappyHour.h"
 #include "Obj_PickUp.h"
+#include "Obj_RewardBox.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -98,7 +100,7 @@ bool M_ObjManager::Update(float dt)
 				if ((*iterator)->type == ObjectType::TANK)
 				{
 					Obj_Tank* aux = (Obj_Tank*)(*iterator);
-					obj_tanks.remove((*iterator));
+					obj_tanks.remove((Obj_Tank*)(*iterator));
 				}
 
 				if ((*iterator)->coll != nullptr)
@@ -142,19 +144,23 @@ bool M_ObjManager::PostUpdate(float dt)
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
 	std::vector<Object*> draw_objects;
 
+	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
+	{
+		if (*item != nullptr)
+		{
+			(*item)->CalculateDrawVariables();
+		}
+	}
+
 	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
 
 		for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
-			if (*item != nullptr)
+			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
 			{
-				(*item)->CalculateDrawVariables();
-				if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
-				{
-					draw_objects.push_back(*item);
-				}
+				draw_objects.push_back(*item);
 			}
 		}
 
@@ -176,11 +182,9 @@ bool M_ObjManager::PostUpdate(float dt)
 			  DrawDebug((*item), (*item_cam));
 		  }
 		}
-
 		draw_objects.clear();
-
-		SDL_RenderSetClipRect(app->render->renderer, nullptr);
     }
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
    
 	return true;
 }
@@ -202,11 +206,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Obj_TeslaTrooper(pos);
 		ret->type = ObjectType::TESLA_TROOPER;
 		break;
-
 	case ObjectType::TANK:
 		ret = DBG_NEW Obj_Tank(pos);
 		ret->type = ObjectType::TANK;
-		obj_tanks.push_back(ret);
+		obj_tanks.push_back((Obj_Tank*)ret);
 		break;
 	case ObjectType::BASIC_BULLET:
 		ret = DBG_NEW Bullet_Basic(pos);
@@ -216,23 +219,25 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Bullet_Missile(pos);
 		ret->type = ObjectType::BULLET_MISSILE;
 		break;
-
+	case ObjectType::BULLET_LASER:
+		ret = new Laser_Bullet(pos);
+		ret->type = ObjectType::BULLET_LASER;
+		break;
 	case ObjectType::HEALING_BULLET:
 		ret = new Healing_Bullet(pos);
 		ret->type = ObjectType::HEALING_BULLET;
 		break;
 	case ObjectType::STATIC:
-		ret = DBG_NEW Obj_Static(pos);
+		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
 		break;
-
 	case ObjectType::REWARD_ZONE:
 		ret = DBG_NEW Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+		break;
 	case ObjectType::BRUTE:
 		ret = new Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
-		break;
 		break;
 	case ObjectType::EXPLOSION:
 		ret = DBG_NEW Obj_Explosion(pos);
@@ -253,7 +258,13 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::PICK_UP:
 		ret = DBG_NEW Obj_PickUp(pos);
 		ret->type = ObjectType::PICK_UP;
+		break;
+	case ObjectType::REWARD_BOX:
+		ret = new Obj_RewardBox(pos);
+		ret->type = ObjectType::REWARD_BOX;
+		break;
 	}
+	
   
 	if (ret != nullptr)
 	{
@@ -281,24 +292,34 @@ void M_ObjManager::DeleteObjects()
 	obj_tanks.clear();
 }
 
-Object * M_ObjManager::GetNearestTank(fPoint pos)
+
+Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 {
-	Object* ret = (*obj_tanks.begin());
-	if (ret != nullptr)
+	Obj_Tank * closest_tank = nullptr;
+	float max_dist_squared;
+	if (max_dist == FLT_MAX)
 	{
-		float distance = pos.DistanceTo(ret->pos_map);
-		for (std::list<Object*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
+		max_dist_squared = FLT_MAX;//Can't get any higher value
+	}
+	else
+	{
+		max_dist_squared = max_dist * max_dist;
+	}
+	float lowest_distance = max_dist_squared;
+
+	for (std::list<Obj_Tank*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
+	{
+		float distance = pos.DistanceNoSqrt((*iter)->pos_map);
+		if ((*iter)->GetLife() > 0
+			&& distance < max_dist_squared
+			&& distance < lowest_distance)
 		{
-			float new_distance = pos.DistanceTo((*iter)->pos_map);
-			if (new_distance  < distance)
-			{
-				distance = new_distance;
-				ret = *iter;
-			}
+			closest_tank = (*iter);
+			lowest_distance = distance;
 		}
 	}
-	
-	return ret;
+
+	return closest_tank;
 }
 
 std::list<Object*> M_ObjManager::GetObjects() const

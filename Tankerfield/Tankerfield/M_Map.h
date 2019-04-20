@@ -11,10 +11,17 @@
 #include "M_Render.h"
 #include "M_Textures.h"
 
-
+class Obj_Building;
 struct Levels
 {
 	std::string name;
+};
+
+
+struct SpawnPoint
+{
+	fPoint pos;
+	bool occupied = false;
 };
 
 struct Properties
@@ -64,6 +71,10 @@ struct ObjectGroup
 	Properties	properties;
 	uint size			= 0;
 	Rect<float, float>* objects	= nullptr;
+	const char* path;
+	int offset_x;
+	int offset_y;
+
 
 	~ObjectGroup()
 	{
@@ -166,7 +177,9 @@ struct MapData
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
 	std::list<ObjectGroup*> object_layers;
-	
+	std::vector<SpawnPoint*>	spawners_position_reward_box;
+	std::vector<SpawnPoint*>	spawners_position_reward_zone;
+	std::vector<SpawnPoint*>	spawners_position_enemy;
 	Properties				map_properties;
 
 	Quadtree_Map*				qt = nullptr;

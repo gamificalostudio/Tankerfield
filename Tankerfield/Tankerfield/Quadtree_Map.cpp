@@ -106,7 +106,7 @@ std::vector<Tile> Quadtree_Map::GetTilesIntersection(const Camera &camera)
 		if (!isDivided)
 		{
 			
-			for (std::list<Tile>::iterator i = elements.begin(); i != elements.end(); ++i)
+			for (std::vector<Tile>::iterator i = elements.begin(); i != elements.end(); ++i)
 			{
 				if (SDL_HasIntersection(&cam,&(*i).rect))
 				{

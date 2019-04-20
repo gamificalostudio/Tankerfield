@@ -5,12 +5,14 @@
 #include "WeaponInfo.h"
 #include "M_Input.h"
 #include "Obj_Item.h"
+#include "Timer.h"
 
 struct Controller;
 struct SDL_Texture;
 class Camera;
 class Obj_PickUp;
-
+class Player_GUI;
+class UI_IG_Helper;
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -44,15 +46,21 @@ public:
 	//- Logic
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
-	void SetWeapon(WEAPON type);
+
+	void SetWeapon(WEAPON type, uint level);
+	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
 	int GetLife();
 	int GetMaxLife();
 	int GetTimeBetweenBullets();
 
+	bool IsReady() const;
+
 public:
+
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
+	void SetGui(Player_GUI* gui);
 
 private:
 	//- Movement
@@ -65,16 +73,20 @@ private:
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
+	bool HoldShot();
 	bool ReleaseShot();
 
 	//- Input
 	void SelectInputMethod();
+
+	void InputReadyKeyboard();
 
 	//- Weapons methods
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
 	void ShootHealingShot();
+	void ShootLaserShot();
 
 	//- TankDeath
 	void ReviveTank();
@@ -87,10 +99,11 @@ private:
 	//- Logic
 	int life								= 0;
 	int max_life							= 0;
-	bool alive								= true;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
 
 	static int number_of_tanks;
+
+	bool ready								= false;
 
 	//- Movement
 	float curr_speed						= 0.f;
@@ -119,6 +132,10 @@ private:
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::BASIC;
 
+
+
+
+
 	//-- Shoot
 
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
@@ -126,12 +143,18 @@ private:
 	PerfTimer charged_timer;
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
-	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX])();
-	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX])();
+
+
+	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX_WEAPONS])();
 	bool show_crosshairs					= false;
+
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
+
+	//- GUI
+	Player_GUI*  gui                        = nullptr;
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
@@ -146,6 +169,7 @@ private:
 	SDL_Scancode kb_left					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_down					= SDL_SCANCODE_UNKNOWN;
 	SDL_Scancode kb_right					= SDL_SCANCODE_UNKNOWN;
+	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
 	Joystick gamepad_move							= Joystick::INVALID;
@@ -156,7 +180,6 @@ private:
 	short int gamepad_shoot_last_frame				= 0;
 
 	//- Drawing
-
 	//-- Base
 	Animation rotate_base;
 	SDL_Texture * base_tex_yellow		= nullptr;
@@ -173,6 +196,16 @@ private:
 	Animation rotate_turr;
 	SDL_Texture * turr_tex				= nullptr;
 	SDL_Texture * turr_shadow_tex		= nullptr;
+
+	//- Tutorial
+	//-- Move
+	Timer tutorial_move_timer;
+	UI_IG_Helper * tutorial_move		= nullptr;
+	int tutorial_move_time				= 0;//The time the tutorial move image will appear on screen (ms)
+	bool tutorial_move_pressed			= false;
+	//-- Revive
+	UI_IG_Helper * tutorial_revive		= nullptr;
+
 
 public:
 	Camera* camera_player				= nullptr;

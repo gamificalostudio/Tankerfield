@@ -12,6 +12,7 @@
 #include "M_Input.h"
 #include "M_Pathfinding.h"
 #include "M_Scene.h"
+#include "Obj_Building.h"
 
 
 M_Map::M_Map()
@@ -86,18 +87,20 @@ bool M_Map::PostUpdate(float dt)
 
 		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
 		{
-			TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
+			//TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
 
-			app->render->Blit(tileset->texture,
+			app->render->Blit(sorted_tiles->texture,
 				(*sorted_tiles).rect.x,
 				(*sorted_tiles).rect.y,
 				(*item_cam),
-				&tileset->GetTileRect((*sorted_tiles).id));
+				&sorted_tiles->section);
 				
 		}
+		SDL_RenderSetClipRect(app->render->renderer, nullptr);
+	
 	}
 
-	SDL_RenderSetClipRect(app->render->renderer, nullptr);
+
 
 	//// Draw Grid ==============================================
 	if(show_grid)
@@ -123,6 +126,12 @@ bool M_Map::PostUpdate(float dt)
 		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
 
+	/*for (uint i = 0; i < app->map->data.tile_height* data.tile_width; ++i)
+	{
+		SDL_Rect rect = { data.screen_tile_rect[i].pos.x ,data.screen_tile_rect[i].pos.y ,2.f ,2.f };
+		app->render->DrawQuad(rect, 255, 255, 255, 255);
+	}*/
+	
 	return ret = true;
 }
 
@@ -245,6 +254,34 @@ bool M_Map::Unload()
 	}
 	data.map_layers.clear();
 
+	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_box.begin(); iter != data.spawners_position_reward_box.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+		}
+	}
+	data.spawners_position_reward_box.clear();
+
+	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_zone.begin(); iter != data.spawners_position_reward_zone.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+		}
+	}
+	data.spawners_position_reward_zone.clear();
+
+	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_enemy.begin(); iter != data.spawners_position_enemy.end(); ++iter)
+	{
+		if ((*iter != nullptr))
+		{
+			delete (*iter);
+		}
+	}
+	data.spawners_position_enemy.clear();
+
+
 	for (std::list<ObjectGroup*>::iterator iter = data.object_layers.begin(); iter != data.object_layers.end(); ++iter)
 	{
 		if ((*iter) != nullptr)
@@ -254,6 +291,7 @@ bool M_Map::Unload()
 		}
 	}
 	data.object_layers.clear();
+
 
 	if (app->on_clean_up == false)
 	{
@@ -342,27 +380,29 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 
 		if (layer->visible)
 		{
-
-
 			uint i = 0, layernum = data.map_layers.size() + 1;
 			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 			{
 				Tile qtile;
-
 				layer->data[i] = tile.attribute("gid").as_int(0);
 				qtile.id = layer->data[i];
+
 				if (qtile.id != 0)
 				{
-					qtile.rect = { data.screen_tile_rect[i].pos.x, data.screen_tile_rect[i].pos.y, data.tile_width, data.tile_height };
+					TileSet* this_Tile = app->map->GetTilesetFromTileId(qtile.id);
+
+					if (this_Tile == nullptr)
+						continue;
+
+					if (this_Tile->texture != nullptr)
+						qtile.texture = this_Tile->texture;
+
+					qtile.section = this_Tile->GetTileRect(qtile.id);
+					qtile.rect = { (int)(data.screen_tile_rect[i].pos.x + this_Tile->offset_x - app->map->data.tile_width*0.5f),(int) (data.screen_tile_rect[i].pos.y + app->map->data.tile_height - qtile.section.h) + this_Tile->offset_y, qtile.section.w, qtile.section.h };
 					qtile.layer = layernum;
-					qtile.sorting_value = i * layernum;
+					qtile.sorting_value = (i+1) * layernum;
 					data.qt->InsertTile(qtile);
 				}
-				if (layer->name == "Buildings")
-				{
-					layer->visible = node.child("properties").child("property").attribute("value").as_bool(true);
-				}
-
 				++i;
 			}
 		}
@@ -394,11 +434,65 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
 	{
 		object_group->objects[i].create(
-			obj_node.attribute("x").as_int(0),
-			obj_node.attribute("y").as_int(0),
-			obj_node.attribute("width").as_int(0),
-			obj_node.attribute("height").as_int(0));
-		
+			obj_node.attribute("x").as_int(0) / data.tile_height,
+			obj_node.attribute("y").as_int(0) / data.tile_height,
+			obj_node.attribute("width").as_int(0) / data.tile_height,
+			obj_node.attribute("height").as_int(0) / data.tile_height);
+
+		//	SpawnPoints
+		if (object_group->name == "SpawnPoints")
+		{
+			SpawnPoint* ret = new SpawnPoint;
+			ret->pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
+
+			std::string type = obj_node.attribute("type").as_string("");
+			if (type == "REWARD_BOX")
+			{
+				data.spawners_position_reward_box.push_back(ret);
+			}
+			else if (type == "REWARD_ZONE")
+			{
+				data.spawners_position_reward_zone.push_back(ret);
+			}
+			else if (type == "ENEMY")
+			{
+				data.spawners_position_enemy.push_back(ret);
+			}
+		}
+
+		//	Buildings
+		if (object_group->name == "Buildings")
+		{
+				
+			
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].pos.x ),  (float)(object_group->objects[i].pos.y ) };
+			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h};
+
+
+			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, pos);
+			for (pugi::xml_node property_node = obj_node.child("properties").child("property"); property_node; property_node = property_node.next_sibling("property"))
+			{
+				std::string name = (property_node.attribute("name").as_string());
+				if (name == "offset_x")
+				{
+					ret->draw_offset.x = property_node.attribute("value").as_int(0);
+				}
+				else if (name == "offset_y")
+				{
+					ret->draw_offset.y = property_node.attribute("value").as_int(0);
+				}
+								
+				else if (name == "path")
+				{
+					ret->path = property_node.attribute("value").as_string();
+				}	
+				
+			}
+			ret->SetTexture(ret->path);
+
+		}
+
 		++i;
 	}
 	
@@ -412,9 +506,12 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
 		}
 	}
+
+	
+	
+	
 	
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
-
 	return ret;
 }
 
@@ -565,22 +662,17 @@ inline SDL_Rect TileSet::GetTileRect(int id) const
 
 inline TileSet* M_Map::GetTilesetFromTileId(int id) const
 {
-	std::list<TileSet*>::const_iterator item = data.tilesets.begin();
-	TileSet* set = *item;
 	
-	while (item != data.tilesets.end())
+	std::list<TileSet*>::const_reverse_iterator item = data.tilesets.rbegin();
+	for ( ;item != data.tilesets.rend() && id < (*item)->firstgid; ++item)
+	{}
+
+	if (item == data.tilesets.rend())
 	{
-		if (id < (*item)->firstgid)
-		{
-			set = *prev(item);
-			break;
-		}
-
-		set = *item;
-		++item;
+		return nullptr;
 	}
+	return (*item);
 
-	return set;
 }
 
 uint M_Map::GetMaxLevels()
@@ -675,8 +767,8 @@ fPoint M_Map::MapToCamera(const fPoint map_pos, const Camera* camera)
 {
 	fPoint camera_pos(0.0F, 0.0F);
 	
-	camera_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f)  - camera->rect.x + camera->viewport.x ;
-	camera_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f) - camera->rect.y + camera->viewport.y;
+	camera_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f)  - (float)camera->rect.x + (float)camera->viewport.x ;
+	camera_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f) - (float)camera->rect.y + (float)camera->viewport.y;
 
 	return camera_pos;
 }

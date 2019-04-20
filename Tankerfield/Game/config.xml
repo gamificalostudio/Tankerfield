@@ -11,17 +11,17 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1080" scale="1"/>
+    <resolution width="1080" height="720" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
-    <resizable value="true"/>
+    <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
 
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
-      <arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
+      <green_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
         <dir>
           <frame x= "120" y= "160" w="25" h="25" />
         </dir>
@@ -46,33 +46,123 @@
         <dir>
           <frame x= "295 " y= "160" w="25" h="25" />
         </dir>
-      </arrow>
+      </green_arrow>
+
+      <blue_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
+        <dir>
+          <frame x= "120" y= "185" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "145" y= "185" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "170" y= "185" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "195" y= "185" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "220" y= "185" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "245" y= "185" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "270" y= "185" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "295" y= "185" w="25" h="25" />
+        </dir>
+      </blue_arrow>
+
+      <pink_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
+        <dir>
+          <frame x= "120" y= "210" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "145" y= "210" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "170" y= "210" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "195 " y= "210" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "220 " y= "210" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "245 " y= "210" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "270 " y= "210" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "295 " y= "210" w="25" h="25" />
+        </dir>
+      </pink_arrow>
+
+      <orange_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
+        <dir>
+          <frame x= "120" y= "235" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "145" y= "235" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "170" y= "235" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "195 " y= "235" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "220 " y= "235" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "245 " y= "235" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "270 " y= "235" w="25" h="25" />
+        </dir>
+        <dir>
+          <frame x= "295 " y= "235" w="25" h="25" />
+        </dir>
+      </orange_arrow>
+      
     </animations>
   </ui>
 
   <map>
    <folder>Maps/</folder>
       <levels>
-        <level name="SnowMap.tmx"/>
+        <level name="Level1.tmx"/>
       </levels>
   
   </map>
 
   <scene>
     <time_between_rounds value="5000"/>
-    <initial_generated_units value="10"/>
-    <distance_range value="5"/>
-    <min_distance_from_center value="2"/>
-    <check_complete_round value="2000"/>
-    <enemies_to_increase value="3"/>
+
+    <music>
+      <main_music music ="audio/Music/indeep.ogg"/>
+    </music>
+    
+    <sounds>
+      <finish_wave_shot sound ="audio/Fx/Scene/finish_wave_sound.wav"/>
+      <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
+    </sounds>
   </scene>
 
   <pick_manager>
-    <percentage_to_spawn value="100"/>
+    <percentage_spawn_item_from_enemy value="1"/>
+    <percentage_spawn_reward_box value="50"/>
     
   </pick_manager>
   
   <object>
+    <reward_box>
+      <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
+    </reward_box>
     <tesla_trooper>
       <animations>
         <walk speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
@@ -145,6 +235,72 @@
             <frame x="1518" y="76" w="66" h="76" />
           </dir>
         </walk>
+        <attack speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+          <dir>
+            <frame x= "594" y= "380" w="66" h="76" />
+            <frame x= "660" y= "380" w="66" h="76" />
+            <frame x= "726" y= "380" w="66" h="76" />
+            <frame x= "792" y= "380" w="66" h="76" />
+            <frame x= "858" y= "380" w="66" h="76" />
+            <frame x= "924" y= "380" w="66" h="76" />
+          </dir>
+          <dir>
+            <frame x= "990" y= "380" w="66" h="76" />
+            <frame x= "1056" y= "380" w="66" h="76" />
+            <frame x= "1122" y= "380" w="66" h="76" />
+            <frame x= "1188" y= "380" w="66" h="76" />
+            <frame x= "1254" y= "380" w="66" h="76" />
+            <frame x= "1320" y= "380" w="66" h="76" />
+          </dir>
+          <dir>
+            <frame x= "1386" y= "380" w="66" h="76" />
+            <frame x= "1452" y= "380" w="66" h="76" />
+            <frame x= "1518" y= "380" w="66" h="76" />
+            <frame x= "1584" y= "380" w="66" h="76" />
+            <frame x= "1650" y= "380" w="66" h="76" />
+            <frame x= "1716" y= "380" w="66" h="76" />
+          </dir>
+          <dir>
+            <frame x= "1782" y= "380" w="66" h="76" />
+            <frame x= "1848" y= "380" w="66" h="76" />
+            <frame x= "1914" y= "380" w="66" h="76" />
+            <frame x= "1980" y= "380" w="66" h="76" />
+            <frame x= "0" y= "456" w="66" h="76" />
+            <frame x= "1980" y= "380" w="66" h="76" />
+          </dir>
+          <dir>
+            <frame x= "66" y= "456" w="66" h="76" />
+            <frame x= "132" y= "456" w="66" h="76" />
+            <frame x= "198" y= "456" w="66" h="76" />
+            <frame x= "264" y= "456" w="66" h="76" />
+            <frame x= "330" y= "456" w="66" h="76" />
+            <frame x= "396" y= "456" w="66" h="76" />
+          </dir>
+          <dir>
+            <frame x= "462" y= "456" w="66" h="76" />
+            <frame x= "528" y= "456" w="66" h="76" />
+            <frame x= "594" y= "456" w="66" h="76" />
+            <frame x= "660" y= "456" w="66" h="76" />
+            <frame x= "726" y= "456" w="66" h="76" />
+            <frame x= "792" y= "456" w="66" h="76" />
+          </dir>
+          <dir>
+            <frame x= "858" y= "456" w="66" h="76" />
+            <frame x= "924" y= "456" w="66" h="76" />
+            <frame x= "990" y= "456" w="66" h="76" />
+            <frame x= "1056" y= "456" w="66" h="76" />
+            <frame x= "1122" y= "456" w="66" h="76" />
+            <frame x= "1188" y= "456" w="66" h="76" />
+          </dir>
+          <dir>
+            <frame x= "1254" y= "456" w="66" h="76" />
+            <frame x= "1320" y= "456" w="66" h="76" />
+            <frame x= "1386" y= "456" w="66" h="76" />
+            <frame x= "1452" y= "456" w="66" h="76" />
+            <frame x= "1518" y= "456" w="66" h="76" />
+            <frame x= "1584" y= "456" w="66" h="76" />
+          </dir>
+        </attack>
       </animations>
     </tesla_trooper>
     <brute>
@@ -239,6 +395,7 @@
       </spritesheets>
       <sounds>
         <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+        <laser_shot sound ="audio/Fx/tank_basic_shot.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
@@ -1247,36 +1404,208 @@
         </rotate>
       </animations>
     </basic_bullet>
+    <laser_bullet>
+      <speed value ="0.5"/>
+      <life value ="1000"/>
+      <tex path="textures/objects/laser-sheet.png"/>
+      <animations>
+        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
+          <dir>
+            <frame x="0"   y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="378" w="67" h="42"/>
+          </dir>
+        </rotate>
+      </animations>
+    </laser_bullet>
   </object>
-
-  <weapons>
-    <basic>
-      <bullet_damage value ="50"/>
-      <bullet_speed value ="10"/>
-      <bullet_life_ms value ="2000"/>
-      <time_between_bullets value ="500"/>
-    </basic>
-    <flamethrower>
-      <bullet_damage value ="50"/>
-      <bullet_speed value ="10"/>
-      <bullet_life_ms value ="2000"/>
-      <time_between_bullets value ="500"/>
-    </flamethrower>
-    <double_missile>
-      <bullet_damage value ="0"/>
-      <bullet_speed value="10"/>
-      <bullet_life_ms value="5000"/>
-      <time_between_bullets value="1000"/>
-      <number_of_bullets value="2"/>
-    </double_missile>
-    <healing_shot>
-      <bullet_damage value ="25"/>
-      <bullet_speed value ="10"/>
-      <bullet_life_ms value ="2000"/>
-      <time_between_bullets value ="500"/>
-      <bullet_healing value="5"/>
-    </healing_shot>
-  </weapons>
 
   <items>
     <health_bag>
@@ -1311,6 +1640,28 @@
         </rotate>
       </animations>
     </health_bag>
+    <happy_hour>
+      <texture path ="textures/objects/item/happyhour_particle.png"/>
+      <animations>
+        <rotate speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame num ="0"  x="0"   y="0" w="48" h="92"/>
+            <frame num ="1"  x="48"  y="0" w="48" h="92"/>
+            <frame num ="2"  x="96"  y="0" w="48" h="92"/>
+            <frame num ="3"  x="144" y="0" w="48" h="92"/>
+            <frame num ="4"  x="192" y="0" w="48" h="92"/>
+            <frame num ="5"  x="240" y="0" w="48" h="92"/>
+            <frame num ="6"  x="288" y="0" w="48" h="92"/>
+            <frame num ="7"  x="336" y="0" w="48" h="92"/>
+            <frame num ="8"  x="384" y="0" w="48" h="92"/>
+            <frame num ="9"  x="432" y="0" w="48" h="92"/>
+            <frame num ="10" x="480" y="0" w="48" h="92"/>
+            <frame num ="11" x="528" y="0" w="48" h="92"/>
+            <frame num ="12" x="576" y="0" w="48" h="92"/>
+          </dir>
+        </rotate>
+      </animations>
+    </happy_hour>
   </items>
 
 </config>

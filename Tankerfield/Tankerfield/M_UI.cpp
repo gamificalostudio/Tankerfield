@@ -14,6 +14,7 @@
 #include "M_AnimationBank.h"
 
 #include "Player_GUI.h"
+#include "General_HUD.h"
 #include "Obj_Tank.h"
 
 // UI includes --------------------------
@@ -59,14 +60,19 @@ bool M_UI::Awake(pugi::xml_node& config)
 	LOG("Loading Module UI");
 	bool ret = true;
 
-	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
+	green_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("green_arrow"));
+	pink_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("pink_arrow"));
+	blue_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("blue_arrow"));
+	orange_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("orange_arrow"));
 
-	button_sprites[(int)GAMEPAD_BUTTON::A] = { 440,10 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::B] = { 390,60 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::Y] = { 440,60 ,50 ,50 };
-	button_sprites[(int)GAMEPAD_BUTTON::X] = { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::A] =  { 440,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::B] =  { 390,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::Y] =  { 440,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::X] =  { 390,10 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::L] =  { 495,10 ,52 ,52 };
 	button_sprites[(int)GAMEPAD_BUTTON::LT] = { 280,10 ,50 ,50 };
 	button_sprites[(int)GAMEPAD_BUTTON::LB] = { 280,60 ,50 ,50 };
+	button_sprites[(int)GAMEPAD_BUTTON::R] =  { 495,65 ,52 ,52 };
 	button_sprites[(int)GAMEPAD_BUTTON::RT] = { 330,10 ,50 ,50 };
 	button_sprites[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
 
@@ -98,38 +104,27 @@ bool M_UI::Start()
 
 	atlas = app->tex->Load("textures/ui/atlas.png");
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
-
-	UI_ImageDef image_def;
-	fRect full_screen = app->win->GetWindowRect();
+	rounds_font = app->font->Load("fonts/round_font.ttf", 35);
 
 	// HUD ===========================================
 	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
+	app->scene->tank_1->SetGui(player_1_gui);
 	players_guis.push_back(player_1_gui);
+
 	player_2_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
+	app->scene->tank_2->SetGui(player_2_gui);
 	players_guis.push_back(player_2_gui);
+
 	player_3_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
+	app->scene->tank_3->SetGui(player_3_gui);
 	players_guis.push_back(player_3_gui);
+
 	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
+	app->scene->tank_4->SetGui(player_4_gui);
 	players_guis.push_back(player_4_gui);
 
-	// General 4 HUD players =========================================================
-	image_def.sprite_section = { 170 , 10, 105, 105 };
-	round_element = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	general_hud = DBG_NEW General_HUD();
 
-	image_def.sprite_section = { 120, 515, 179, 179 };
-	round_fx = CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
-	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	round_fx->alpha = 0;
-
-	image_def.sprite_section = { 10, 160, 50, 530 };
-	left_tank_life = CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
-	left_tank_life->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
-
-	image_def.sprite_section = { 60, 160, 50, 530 };
-	right_tank_life = CreateImage({ full_screen.w ,  full_screen.h * .5f }, image_def);
-	right_tank_life->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::CENTER);
-	
 	return true;
 }
 
@@ -163,7 +158,20 @@ bool M_UI::CleanUp()
 		RELEASE((*element));
 	}
 
-	elements_list.clear();
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
+	{
+		RELEASE((*iter));
+	}
+
+	active_fxs.clear();
+
+	RELEASE(general_hud);
+
+	general_hud = nullptr;
+	player_1_gui = nullptr;
+	player_2_gui = nullptr;
+	player_3_gui = nullptr;
+	player_4_gui = nullptr;
 
 	return true;
 }
@@ -180,7 +188,15 @@ bool M_UI::PreUpdate()
 	
 	// Debug ===================================================
 	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
 		debug = !debug;
+	}
+	
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+	{
+
+	}
+
 
 	// Hover States ============================================
 
@@ -188,7 +204,7 @@ bool M_UI::PreUpdate()
 
 	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 	{
-		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->to_destroy == true)
+		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->is_interactive == false)
 		{
 			continue;
 		}
@@ -245,65 +261,13 @@ bool M_UI::PreUpdate()
 	return true;
 }
 
+
+
+//app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
+
 bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
-
-
-	//ax += dt * ratetime;
-	//
-	//if (round_fx->alpha == target_value)
-	//{
-	//	swap(init_value, target_value);
-	//	ax = 0.f;
-	//}
-
-	//round_fx->alpha = lerp(init_value, target_value, ax);
-
-	ax += dt * ratetime;
-
-	if (app->scene->tank_1->GetLife() == target_value)
-	{
-		swap(init_value, target_value);
-		ax = 0.f;
-	}
-
-	app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
-
-	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
-	{
-		(*gui)->Update(dt);
-	}
-
-	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
-	{
-		if ((*element)->to_destroy == true)
-		{
-			UI_Element* parent = (*element)->parent_element;
-			std::list<UI_Element*> * sons_list = (*element)->GetSons();
-
-			// Merge its sons to its parent
-
-			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
-			{
-			    (*son)->parent_element = parent;
-				parent->element_sons.push_back((*son));
-			}
-
-			// Delete it self from its parent
-
-			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
-
-			// Delete from UI list
-
-			RELEASE((*element));
-			element = ig_elements_list.erase(element);
-		}
-		else
-		{
-			++element;
-		}
-	}
 
 	// Draggable ================================================
 	if (selected_element && selected_element->is_draggable)
@@ -342,37 +306,58 @@ bool M_UI::Update(float dt)
 			break;
 		}
 	}
+	// Update FX ===================================================
 
-	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end();)
+	int count = 0;
+
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
 	{
-		if ((*item)->to_destroy == true)
+		if ((*iter)->element->to_destroy == true || (*iter)->finished == true || (*iter)->element->active_fx == false )
 		{
-			// Delete ui element on parent sons list =========================
-
-			if ((*item)->parent_element != nullptr)
-			{
-				list<UI_Element*> *sons_list = (*item)->parent_element->GetSons();
-				list<UI_Element*>::iterator son_to_delete = find(sons_list->begin(), sons_list->end(), (*item));
-
-				if (son_to_delete == sons_list->end())
-				{
-					LOG("Object not deleted: Not found");
-					return false;
-				}
-
-				sons_list->erase(son_to_delete);
-			}
-
-			// Delete ui element ============================================
-
-			LOG("UI Object deleted");
-			RELEASE((*item));
-			item = elements_list.erase(item);
+			(*iter)->element->active_fx = false;
+			RELEASE(*iter);
+			iter = active_fxs.erase(iter);
 		}
 		else
 		{
-			(*item)->Update(dt);
-			++item;
+			++count;
+			(*iter)->Update(dt);
+			++iter;
+		}
+	}
+
+	//LOG("Active FX ====> %i", count);
+
+	// UI Elements Update =====================================================
+
+	for (list<UI_Element*>::iterator element = elements_list.begin(); element != elements_list.end();)
+	{
+		if ((*element)->to_destroy == true)
+		{
+			UI_Element* parent = (*element)->parent_element;
+			std::list<UI_Element*> * sons_list = (*element)->GetSons();
+
+			// Merge its sons to its parent
+
+			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
+			{
+				(*son)->parent_element = parent;
+				parent->element_sons.push_back((*son));
+			}
+
+			// Delete it self from its parent
+
+			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
+
+			// Delete from UI list
+
+			RELEASE((*element));
+			element = elements_list.erase(element);
+		}
+		else
+		{
+			(*element)->Update(dt);
+			++element;
 		}
 	}
 
@@ -402,6 +387,41 @@ bool M_UI::Update(float dt)
 
 	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
+	// In Game Elements Update ============================================
+
+	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); )
+	{
+		if ((*element)->to_destroy == true)
+		{
+			UI_Element* parent = (*element)->parent_element;
+			std::list<UI_Element*> * sons_list = (*element)->GetSons();
+
+			// Merge its sons to its parent
+
+			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
+			{
+				(*son)->parent_element = parent;
+				parent->element_sons.push_back((*son));
+			}
+
+			// Delete it self from its parent
+
+			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
+
+			// Delete from UI list
+
+			RELEASE((*element));
+			element = ig_elements_list.erase(element);
+		}
+		else
+		{
+			(*element)->Update(dt);
+			++element;
+		}
+
+		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
+
+	}
 	return true;
 }
 
@@ -423,25 +443,17 @@ bool M_UI::PostUpdate(float dt)
 	{
 		current_gui = (*gui);
 		current_camera = current_gui->player->camera_player;
-
-		for (list<UI_Element*>::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
-		{
-			(*element)->PostUpdate();
-		}
-
-		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
-
 		DrawUI(main_in_game_element);
-
-		/*app->render->DrawQuad(current_gui->viewport_with_margin, 255, 255, 255, 255, false, false);*/
 	}
 
 	current_camera = nullptr;
 
 	// Draw all UI elements ====================================
+
 	DrawUI(main_ui_element);
 
 	// Debug Positions  =======================================
+
 	if (debug)
 	{
 		for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
@@ -717,7 +729,22 @@ void M_UI::DrawUI(UI_Element * object)
 
 	if (object->state != ELEMENT_STATE::HIDDEN)
 	{
-		object->Draw();
+		if (object->alpha == 0.f)
+		{
+			
+		}
+	    else if (object->single_camera == nullptr && object->not_in_camera == nullptr)
+		{
+			object->Draw();
+		}
+		else if (object->not_in_camera == current_camera)
+		{
+
+		}
+		else if ( object->single_camera == current_camera)
+		{
+			object->Draw();
+		}
 	}
 	
 	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
@@ -758,4 +785,55 @@ void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 	{
 		UpdateGuiPositions((*item), cumulated_position);
 	}
+}
+
+void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value)
+{
+	UI_Fade_FX* new_fx = DBG_NEW  UI_Fade_FX(type, seconds, element, init_value, target_value);
+	active_fxs.push_back(new_fx);
+}
+
+
+
+UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value): element(element), init_value(init_value), target_value(target_value), type(type)
+{
+	ratetime = 1.f / seconds;
+}
+
+bool UI_Fade_FX::Update(float dt)
+{
+	switch (type)
+	{
+	case UI_Fade_FX::FX_TYPE::FADE:
+
+		ax += dt * ratetime;
+		element->alpha = lerp(init_value, target_value, ax);
+
+		if (element->alpha == target_value)
+		{
+			finished = true;
+		}
+
+		break;
+	case UI_Fade_FX::FX_TYPE::INTERMITTENT:
+
+		ax += dt * ratetime;
+		element->alpha = lerp(init_value, target_value, ax);
+
+		if (element->alpha == target_value)
+		{
+			swap(init_value, target_value);
+			ax = 0.f;
+		}
+
+		break;
+	default:
+		break;
+	}
+
+	return true;
+}
+
+void UI_Fade_FX::Destroy()
+{
 }

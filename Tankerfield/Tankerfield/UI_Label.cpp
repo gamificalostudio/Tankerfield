@@ -4,6 +4,7 @@
 #include "M_Render.h"
 #include "M_Fonts.h"
 #include "M_Textures.h"
+#include "M_Map.h"
 #include "App.h"
 
 UI_Label::UI_Label(const fPoint position, const UI_LabelDef definition, UI_Listener* listener): UI_Element(position, definition, listener), text(definition.text), font(definition.font), color(definition.color)
@@ -36,12 +37,10 @@ void UI_Label::SetText(String text)
 bool UI_Label::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-
-	app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y , &sprite_section);
-
-	return false;
+	app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+	
+	return true;
 }
-
 
 
 

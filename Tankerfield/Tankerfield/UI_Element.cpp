@@ -3,10 +3,13 @@
 #include "M_Render.h"
 #include "App.h"
 #include "Log.h"
+#include "M_Map.h"
 
 UI_Element::UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener) 
-	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height), pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section), is_in_game(definition.is_in_game){}
-
+	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height),
+	pivot(definition.pivot), section_offset(definition.section_offset), sprite_section(definition.sprite_section), is_in_game(definition.is_in_game),
+	screen_offset(definition.screen_offset), single_camera(definition.single_camera), not_in_camera(definition.not_in_camera){}
+	
 UI_Element::~UI_Element()
 {
 }
@@ -26,19 +29,8 @@ bool UI_Element::UpdateRelativePosition()
 bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	if (app->ui->current_camera != nullptr)
-	{
-		if (alpha != 255)
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
-		}
-		else
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera);
-		}
-	}
 
-
+	app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
 
 	return true;
 }
@@ -54,12 +46,12 @@ void UI_Element::SetPos(const fPoint pos)
 	UpdateRelativePosition();
 }
 
-bool UI_Element::SetParent(UI_Element * new_parent)
+void UI_Element::SetParent(UI_Element * new_parent)
 {
 	if (new_parent == nullptr)
 	{
 		LOG("Failed SetParent, parent was nullptr");
-		return false;
+		return;
 	}
 	// Delete previous parent =====================
 	if (parent_element != nullptr)
@@ -75,7 +67,7 @@ bool UI_Element::SetParent(UI_Element * new_parent)
 		else
 		{
 			LOG("Failed SetParent, object as son not found");
-			return false;
+			return;
 		}
 	}
 
@@ -85,15 +77,38 @@ bool UI_Element::SetParent(UI_Element * new_parent)
 
 	// Add to parent sons =========================
 	parent_element->GetSons()->push_back(this);
-
-	return true;
 }
+
+void UI_Element::SetState(ELEMENT_STATE new_state)
+{
+	state = new_state;
+}
+
+void UI_Element::SetStateToBranch(ELEMENT_STATE new_state)
+{
+	app->ui->SetStateToBranch(new_state, this);
+}
+
+//ELEMENT_STATE UI_Element::GetState()
+//{
+//	return ;
+//}
 
 void UI_Element::SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y)
 {
 	pivot.pos_x = x;
 	pivot.pos_y = y;
 	
+}
+
+void UI_Element::SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float init_value, float target_value)
+{
+	if (active_fx == false)
+	{
+		active_fx = true;
+		alpha = init_value;
+		app->ui->AddFX(type, seconds, this, init_value, target_value);
+	}
 }
 
 fRect UI_Element::GetSection()
@@ -165,36 +180,46 @@ fRect UI_Element::GetSection()
 
 SDL_Rect UI_Element::GetDrawRect()
 {
-	fPoint pos;
+	fPoint mod_pos = { 0.f,0.f };
+	fPoint rect_pos;
 	SDL_Rect  ret;
+
+	if (is_in_game == true)
+	{
+		mod_pos = app->map->MapToCamera(position, app->ui->current_camera);
+	}
+	else
+	{
+		mod_pos = position;
+	}
 
 	switch (pivot.pos_x)
 	{
 	case Pivot::POS_X::CENTER:
-		pos.x = position.x - (float)sprite_section.w * .5f;
+		rect_pos.x = mod_pos.x - (float)sprite_section.w * .5f;
 		break;
 	case Pivot::POS_X::LEFT:
-		pos.x = position.x;
+		rect_pos.x = mod_pos.x;
 		break;
 	case Pivot::POS_X::RIGHT:
-		pos.x = position.x - (float)sprite_section.w;
+		rect_pos.x = mod_pos.x - (float)sprite_section.w;
 		break;
 	}
 
 	switch (pivot.pos_y)
 	{
 	case Pivot::POS_Y::CENTER:
-		pos.y = position.y - (float)sprite_section.h * .5f;
+		rect_pos.y = mod_pos.y - (float)sprite_section.h * .5f;
 		break;
 	case Pivot::POS_Y::TOP:
-		pos.y = position.y;
+		rect_pos.y = mod_pos.y;
 		break;
 	case Pivot::POS_Y::BOTTOM:
-		pos.y = position.y - (float)sprite_section.h;
+		rect_pos.y = mod_pos.y - (float)sprite_section.h;
 		break;
 	}
 
-	ret = { (int)pos.x, (int) pos.y, sprite_section.w, sprite_section.h };
+	ret = { (int)rect_pos.x, (int) rect_pos.y, sprite_section.w, sprite_section.h };
 
 	return ret;
 }

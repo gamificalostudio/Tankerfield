@@ -19,7 +19,9 @@ typedef string String;
 enum class ELEMENT_STATE;
 class UI_Element;
 class Player_GUI;
+class General_HUD;
 class Camera;
+class M_UI;
 
 class UI_Listener;
 class UI_Image;
@@ -71,6 +73,32 @@ public:
 	virtual bool OutClick(UI_Element* object) { return true; }
 };
 
+class UI_Fade_FX
+{
+public:
+	enum class FX_TYPE
+	{
+		NO_TYPE,
+		INTERMITTENT,
+		FADE,
+	};
+
+	UI_Fade_FX(const FX_TYPE type, float seconds, UI_Element* element, float init_value, float target_value);
+	bool Update(float dt);
+	void Destroy();
+
+private:
+
+	UI_Element*		element = nullptr;
+	FX_TYPE         type = FX_TYPE::NO_TYPE;
+	float			ax = 0.0f;
+	float			ratetime = 0.f;
+	float			target_value = 255;
+	float			init_value = 0;
+	bool			finished = false;
+
+	friend M_UI;
+};
 
 class M_UI : public Module
 {
@@ -83,8 +111,10 @@ public:
 		B,
 		Y,
 		X,
+		L,
 		LT,
 		LB,
+		R,
 		RT,
 		RB,
 		MAX
@@ -101,6 +131,7 @@ public:
 	enum class ICON_TYPE : int
 	{
 		NONE = -1,
+		WEAPON_BASIC,
 		WEAPON_DOUBLE_MISSILE,
 		WEAPON_HEALING_SHOT,
 		WEAPON_LASER,
@@ -173,6 +204,8 @@ private:
 
 	void UpdateGuiPositions(UI_Element* object, fPoint cumulated_position);
 
+	void AddFX( UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value);
+
 private:
 
 	bool debug = false;
@@ -189,6 +222,8 @@ private:
 
 	list<Player_GUI*> players_guis;
 
+	list<UI_Fade_FX*> active_fxs;
+
 	UI_Element* main_ui_element = nullptr;
 
 	UI_Element* main_in_game_element = nullptr;
@@ -197,23 +232,10 @@ private:
 
 	ClickState click_state = ClickState::NONE;
 
-	// HUD General -------------------------------------------
-
-	UI_Image* round_element = nullptr;
-
-	UI_Image* round_fx = nullptr;
-
-	UI_Image* left_tank_life = nullptr;
-
-	UI_Image* right_tank_life = nullptr;
-
-	float ax = 0.0f;
-	float ratetime = 1.f / 2.f;
-	float target_value = 100.f;
-	float init_value = 0.f;
 
 public:
 	// Mouse ----------------------------------------------
+	General_HUD* general_hud = nullptr;
 
 	Player_GUI* current_gui = nullptr;
 
@@ -239,9 +261,19 @@ public:
 
 	_TTF_Font*  font_open_sants_bold_12 = nullptr;
 
-	Animation	arrow_anim;
+	_TTF_Font*  rounds_font = nullptr;
 
+	Animation	green_arrow_anim;
+
+	Animation   pink_arrow_anim;
+
+	Animation   blue_arrow_anim;
+
+	Animation   orange_arrow_anim;
+
+	friend UI_Element;
 };
+
 
 
 #endif // __MODULE_UI_H__

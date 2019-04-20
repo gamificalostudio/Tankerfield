@@ -7,6 +7,7 @@
 #include <list>
 #include <string>
 #include "Rect.h"
+#include "M_UI.h"
 
 using namespace std;
 typedef string String;
@@ -64,8 +65,11 @@ struct UI_ElementDef
 	fPoint     section_offset = { 0.f, 0.f };
 	float      section_width = 0.f;
 	float      section_height= 0.f;
+	fPoint     screen_offset = { 0.f, 0.f };
 	SDL_Rect   sprite_section = { 0, 0, 0, 0};
 	bool       is_in_game = false;
+	Camera*    single_camera = nullptr;
+	Camera*    not_in_camera = nullptr;
 };
 
 class UI_Element
@@ -88,11 +92,20 @@ public:
 	virtual void Destroy();
 
 	// Common methods =================================
+
 	void  SetPos( const fPoint pos);
 
-	bool SetParent(UI_Element* parent);
+	void SetParent(UI_Element* parent);
+
+	void SetState(ELEMENT_STATE new_state);
+
+	void SetStateToBranch(ELEMENT_STATE new_state);
+
+	//ELEMENT_STATE GetState();
 
 	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
+
+	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float init_value, float target_value);
 
 	fRect GetSection();
 
@@ -105,31 +118,32 @@ public:
 	bool UpdateRelativePosition();
 
 public:
-
-	String                name;
 	fPoint                position = { 0.f, 0.f };
 	SDL_Rect              sprite_section = { 0, 0, 0, 0};
 	float                 section_width = 0.f;
 	float                 section_height = 0.f;
-	float                 scale = 1.f;
 	fPoint                section_offset = { 0.f, 0.f };
-	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
+	fPoint                screen_offset = { 0.f, 0.f };
 	bool			      is_draggable = false;
 	bool				  is_interactive = false;
 	bool                  is_in_game = false;
-	float                 offset = 0.f;
+	Camera*               single_camera = nullptr;
+	Camera*               not_in_camera = nullptr;
 	float                 alpha = 255.f;
+	bool                  active_fx = false;
 
 protected:
 
-	// Vars ==============================================
-	bool                  to_destroy = false;
+	// Vars =============================================
+
 	fPoint                relative_position = { 0.f, 0.f };
 	Pivot                 pivot;
+	bool                  to_destroy = false;
 	UI_Listener         * listener = nullptr;
 
 	// Properties ========================================
 
+	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	HoverState			  hover_state = HoverState::NONE;
 
 	// Hierarchy =========================================
