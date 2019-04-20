@@ -77,10 +77,10 @@ void Obj_TeslaTrooper::Attack()
 		perf_timer.Start();
 	}
 
-	//if (curr_anim == &attack&&curr_anim->Finished())
-	//{
-	//	curr_anim = &walk;
-	//}
+	if (curr_anim == &attack&&curr_anim->Finished())
+	{
+		curr_anim = &walk;
+	}
 
 }
 
