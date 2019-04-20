@@ -146,7 +146,7 @@ bool Obj_Brute::IsOnGoal(fPoint goal)
 
 void Obj_Brute::OnTrigger(Collider* collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET)
+	if ((collider->GetTag() == Collider::TAG::BULLET)||(collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
 		if (life <= 0)
