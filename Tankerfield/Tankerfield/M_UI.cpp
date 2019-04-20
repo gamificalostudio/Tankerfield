@@ -158,7 +158,7 @@ bool M_UI::CleanUp()
 		RELEASE((*element));
 	}
 
-	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); ++iter)
 	{
 		RELEASE((*iter));
 	}
@@ -191,71 +191,65 @@ bool M_UI::PreUpdate()
 	{
 		debug = !debug;
 	}
-	
-	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-	{
-
-	}
-
 
 	// Hover States ============================================
 
-	fRect section;
+	//fRect section;
 
-	for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
-	{
-		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->is_interactive == false)
-		{
-			continue;
-		}
+	//for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
+	//{
+	//	if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->is_interactive == false)
+	//	{
+	//		continue;
+	//	}
 
-		section = (*item)->GetSection();
- 
-		if (mouse_position.x >= section.GetLeft() && mouse_position.x <= section.GetRight() && mouse_position.y >= section.GetTop() && mouse_position.y <= section.GetBottom())
-		{
-			if ((*item)->hover_state == HoverState::NONE)
-			{
-				(*item)->hover_state = HoverState::ENTER;
-			}
-			else
-			{
-				(*item)->hover_state = HoverState::REPEAT;
-			}
-		}
-		else
-		{
-			if ((*item)->hover_state == HoverState::ENTER || (*item)->hover_state == HoverState::REPEAT)
-			{
-				(*item)->hover_state = HoverState::EXIT;
-			}
-			else
-			{
-				(*item)->hover_state = HoverState::NONE;
-			}
-		}
+	//	section = (*item)->GetSection();
+ //
+	//	if (mouse_position.x >= section.GetLeft() && mouse_position.x <= section.GetRight() && mouse_position.y >= section.GetTop() && mouse_position.y <= section.GetBottom())
+	//	{
+	//		if ((*item)->hover_state == HoverState::NONE)
+	//		{
+	//			(*item)->hover_state = HoverState::ENTER;
+	//		}
+	//		else
+	//		{
+	//			(*item)->hover_state = HoverState::REPEAT;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if ((*item)->hover_state == HoverState::ENTER || (*item)->hover_state == HoverState::REPEAT)
+	//		{
+	//			(*item)->hover_state = HoverState::EXIT;
+	//		}
+	//		else
+	//		{
+	//			(*item)->hover_state = HoverState::NONE;
+	//		}
+	//	}
 
-		(*item)->PreUpdate();
-	}
+	//	(*item)->PreUpdate();
+	//}
 
 	// Click States ============================================
-	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		SelectClickedObject();
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_element)
-	{
-		click_state = ClickState::REPEAT;
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_element)
-	{
-		click_state = ClickState::EXIT;
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_element)
+	//if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	//{
+	//	SelectClickedObject();
+	//}
+	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_element)
+	//{
+	//	click_state = ClickState::REPEAT;
+	//}
+	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_element)
+	//{
+	//	click_state = ClickState::EXIT;
+	//}
+	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_element)
 
-	{
-		click_state = ClickState::NONE;
-		selected_element = nullptr;
-	}
+	//{
+	//	click_state = ClickState::NONE;
+	//	selected_element = nullptr;
+	//}
 
 
 	return true;
@@ -269,43 +263,43 @@ bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
 
-	// Draggable ================================================
-	if (selected_element && selected_element->is_draggable)
-	{
-		switch (click_state)
-		{
-		case ClickState::ENTER:
-			mouse_offset = mouse_position - selected_element->position;
-			break;
-		case ClickState::REPEAT:
-			selected_element->position  = mouse_position - mouse_offset;
-			selected_element->UpdateRelativePosition();
-			break;
-		case ClickState::EXIT:
-			mouse_offset = { 0,0 };
-			break;
-		}
-	}
-	// Click Callbacks =============================================
+	//// Draggable ================================================
+	//if (selected_element && selected_element->is_draggable)
+	//{
+	//	switch (click_state)
+	//	{
+	//	case ClickState::ENTER:
+	//		mouse_offset = mouse_position - selected_element->position;
+	//		break;
+	//	case ClickState::REPEAT:
+	//		selected_element->position  = mouse_position - mouse_offset;
+	//		selected_element->UpdateRelativePosition();
+	//		break;
+	//	case ClickState::EXIT:
+	//		mouse_offset = { 0,0 };
+	//		break;
+	//	}
+	//}
+	//// Click Callbacks =============================================
 
-	if (selected_element && selected_element->listener)
-	{
-		switch (click_state)
-		{
-		case ClickState::ENTER:
-			selected_element->listener->OnClick(selected_element);
-			break;
-		case ClickState::REPEAT:
-			selected_element->listener->RepeatClick(selected_element);
-			break;
-		case ClickState::EXIT:
-			if (selected_element->hover_state != HoverState::NONE)
-			{
-				selected_element->listener->OutClick(selected_element);
-			}
-			break;
-		}
-	}
+	//if (selected_element && selected_element->listener)
+	//{
+	//	switch (click_state)
+	//	{
+	//	case ClickState::ENTER:
+	//		selected_element->listener->OnClick(selected_element);
+	//		break;
+	//	case ClickState::REPEAT:
+	//		selected_element->listener->RepeatClick(selected_element);
+	//		break;
+	//	case ClickState::EXIT:
+	//		if (selected_element->hover_state != HoverState::NONE)
+	//		{
+	//			selected_element->listener->OutClick(selected_element);
+	//		}
+	//		break;
+	//	}
+	//}
 	// Update FX ===================================================
 
 	int count = 0;

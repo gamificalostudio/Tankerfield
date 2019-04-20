@@ -80,6 +80,8 @@ private:
 	void SelectInputMethod();
 
 	void InputReadyKeyboard();
+	bool PressInteract();
+	bool ReleaseInteract();
 
 	//- Weapons methods
 	void ShootBasic();
@@ -91,6 +93,7 @@ private:
 	//- TankDeath
 	void ReviveTank();
 	void StopTank();
+	bool Alive();
 
 	//- Item
 	void Item();
@@ -104,7 +107,7 @@ private:
 	static int number_of_tanks;
 
 	bool ready								= false;
-
+	bool fire_dead = false;	
 	//- Movement
 	float curr_speed						= 0.f;
 	float speed								= 0.f;
@@ -112,6 +115,12 @@ private:
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
 	float base_angle_lerp_factor			= 0.f;
+	//-- Move tutorial
+	Timer tutorial_move_timer;
+	UI_IG_Helper * tutorial_move			= nullptr;
+	int tutorial_move_time					= 0;//The time the tutorial move image will appear on screen (ms)
+	bool tutorial_move_pressed				= false;
+
 
 	//- Shooting
 	fPoint turr_pos							= { 0.f, 0.f };//The position of the turret in the map
@@ -122,33 +131,27 @@ private:
 	float shot_angle_lerp_factor			= 0.f;
 	float turr_target_angle					= 0.f;
 
-	//Revive
-
+	//- Revive
 	float revive_range						= 0.f;
 	float revive_range_squared				= 0.f;
 	int	  revive_life						= 0;
-	//Timer ReviveTimer;
+	float revive_time						= 0.f;
+	UI_IG_Helper * tutorial_revive			= nullptr;
+	bool reviving_tank[4]					= { false };//Is this tank reviving [?] tank?
+	Timer revive_timer[4];					//Time that you've been reviving other tanks
 
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::BASIC;
 
-
-
-
-
 	//-- Shoot
-
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
 	PerfTimer shot_timer;
 	PerfTimer charged_timer;
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
-
-
 	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX_WEAPONS])();
 	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX_WEAPONS])();
 	bool show_crosshairs					= false;
-
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
@@ -197,19 +200,8 @@ private:
 	SDL_Texture * turr_tex				= nullptr;
 	SDL_Texture * turr_shadow_tex		= nullptr;
 
-	//- Tutorial
-	//-- Move
-	Timer tutorial_move_timer;
-	UI_IG_Helper * tutorial_move		= nullptr;
-	int tutorial_move_time				= 0;//The time the tutorial move image will appear on screen (ms)
-	bool tutorial_move_pressed			= false;
-	//-- Revive
-	UI_IG_Helper * tutorial_revive		= nullptr;
-
-
 public:
 	Camera* camera_player				= nullptr;
-
 };
 
 #endif

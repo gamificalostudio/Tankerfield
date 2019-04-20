@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
     <RootNamespace>Tankerfield</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -135,6 +135,7 @@
     <ClCompile Include="Healing_Bullet.cpp" />
     <ClCompile Include="M_RewardZoneManager.cpp" />
     <ClCompile Include="Obj_Brute.cpp" />
+    <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Healing_Bullet.h" />
     <ClInclude Include="M_RewardZoneManager.h" />
     <ClInclude Include="Obj_Brute.h" />
+    <ClInclude Include="Obj_Fire.h" />
     <ClInclude Include="Obj_RewardBox.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
