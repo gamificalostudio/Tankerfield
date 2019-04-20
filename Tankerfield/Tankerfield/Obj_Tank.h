@@ -61,6 +61,7 @@ public:
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
+	bool Alive();
 
 private:
 	//- Movement
@@ -93,7 +94,6 @@ private:
 	//- TankDeath
 	void ReviveTank();
 	void StopTank();
-	bool Alive();
 
 	//- Item
 	void Item();

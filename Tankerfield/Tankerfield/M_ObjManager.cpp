@@ -310,7 +310,7 @@ Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 	for (std::list<Obj_Tank*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
 	{
 		float distance = pos.DistanceNoSqrt((*iter)->pos_map);
-		if ((*iter)->GetLife() > 0
+		if ((*iter)->Alive()
 			&& distance < max_dist_squared
 			&& distance < lowest_distance)
 		{
