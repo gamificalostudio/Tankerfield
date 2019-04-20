@@ -297,9 +297,9 @@ Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 {
 	Obj_Tank * closest_tank = nullptr;
 	float max_dist_squared;
-	if (max_dist == FLOAT_MAX)
+	if (max_dist == FLT_MAX)
 	{
-		max_dist_squared = FLOAT_MAX;//Can't get any higher value
+		max_dist_squared = FLT_MAX;//Can't get any higher value
 	}
 	else
 	{

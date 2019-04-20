@@ -39,19 +39,22 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	curr_anim = &walk;
 
 
+	//Things
+	state				= TROOPER_STATE::GET_PATH;
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
-	follow_range		= 10.0f;
+	detection_range		= 10.0f;
 	check_path_time		= 1.f;
 	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	draw_offset = { 32, 38 };
 	coll->SetObjOffset({ -.25f, -.25f });
+	draw_offset			= { 32, 38 };
 	timer.Start();
-	attack_damage = 10;
-
-	attack_range = 1;
+	attack_damage		= 10;
+	attack_range		= 1;
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = 3000.0f;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -69,7 +72,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 void Obj_TeslaTrooper::Attack()
 {
 	if (target != nullptr
-		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range * attack_range
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{
 		curr_anim = &attack;
@@ -97,7 +100,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		path.clear();
 		move_vect.SetToZero();
 
-		target = app->objectmanager->GetNearestTank(pos_map, 5);
+		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
