@@ -152,7 +152,7 @@ bool Obj_Tank::Start()
 	gamepad_aim			= Joystick::RIGHT;
 	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
+	gamepad_interact	= SDL_CONTROLLER_BUTTON_X;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -730,8 +730,6 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ReviveTank()
 {
-
-
 	Obj_Tank* tank_arr[4];
 
 	tank_arr[0] = app->scene->tank_1;

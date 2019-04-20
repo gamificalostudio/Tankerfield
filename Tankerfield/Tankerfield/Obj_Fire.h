@@ -24,15 +24,6 @@ public:
 
 private:
 
-	bool death = false;
-
-	int frame_explosion = 0;
-
-	float speed = 0.f;
-	float time = 0.f;
-
-	Circle range_pos;
-
 	// ---
 	Animation anim;
 	SDL_Texture * tex = nullptr;

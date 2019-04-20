@@ -1204,11 +1204,9 @@
       </animations>
     </explosion>
     <fire_dead_tank>
-      <speed value="0"/>
-      <life value="1000"/>
       <tex path="textures/objects/fire_dead_tank.png"/>
       <animations>
-        <fire speed="80">
+        <fire speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <frame x="0" y="0" w="74" h="112"/>
             <frame x="74" y="0" w="74" h="112"/>
