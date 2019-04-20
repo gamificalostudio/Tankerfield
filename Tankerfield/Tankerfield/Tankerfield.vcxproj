@@ -146,7 +146,7 @@
     <ClCompile Include="Obj_HealingAnimation.cpp" />
     <ClCompile Include="Obj_Item.cpp" />
     <ClCompile Include="Obj_PickUp.cpp" />
-    <ClCompile Include="Obj_Static.cpp" />
+    <ClCompile Include="Obj_Building.cpp" />
     <ClCompile Include="Quadtree_Map.cpp" />
     <ClCompile Include="UI_Bar.cpp" />
     <ClCompile Include="UI_Button.cpp" />
@@ -203,7 +203,7 @@
     <ClInclude Include="Obj_HealingAnimation.h" />
     <ClInclude Include="Obj_Item.h" />
     <ClInclude Include="Obj_PickUp.h" />
-    <ClInclude Include="Obj_Static.h" />
+    <ClInclude Include="Obj_Building.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Quadtree_Map.h" />
     <ClInclude Include="Rect.h" />

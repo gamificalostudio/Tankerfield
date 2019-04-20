@@ -22,7 +22,7 @@
 #include <string>
 #include <algorithm>
 #include "Obj_Tank.h"
-#include "Obj_Static.h"
+#include "Obj_Building.h"
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
 #include "Bullet_Laser.h"
@@ -228,7 +228,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::HEALING_BULLET;
 		break;
 	case ObjectType::STATIC:
-		ret = DBG_NEW Obj_Static(pos);
+		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
 		break;
 	case ObjectType::REWARD_ZONE:
