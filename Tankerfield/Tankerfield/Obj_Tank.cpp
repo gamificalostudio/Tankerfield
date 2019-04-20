@@ -141,7 +141,7 @@ bool Obj_Tank::Start()
 	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
 	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
