@@ -158,7 +158,7 @@ bool M_UI::CleanUp()
 		RELEASE((*element));
 	}
 
-	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); ++active_fxs)
+	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); ++iter)
 	{
 		RELEASE((*iter));
 	}
