@@ -35,21 +35,26 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	curr_tex = tex;
 
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
 	curr_anim = &walk;
 
+
+	//Things
+	state				= TROOPER_STATE::GET_PATH;
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
-	follow_range		= 10.0f;
+	detection_range		= 10.0f;
 	check_path_time		= 1.f;
 	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	draw_offset = { 32, 38 };
 	coll->SetObjOffset({ -.25f, -.25f });
+	draw_offset			= { 32, 38 };
 	timer.Start();
-	attack_damage = 10;
-
-	attack_range = 1;
+	attack_damage		= 10;
+	attack_range		= 1;
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = 3000.0f;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -60,19 +65,27 @@ bool Obj_TeslaTrooper::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-
+	
 	return true;
 }
 
 void Obj_TeslaTrooper::Attack()
 {
 	if (target != nullptr
-		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range * attack_range
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{
+		curr_anim = &attack;
 		target->SetLife(target->GetLife() - attack_damage);
 		perf_timer.Start();
 	}
+
+	if (curr_anim == &attack&&curr_anim->Finished())
+	{
+		curr_anim = &walk;
+		attack.Reset();
+	}
+
 }
 
 void Obj_TeslaTrooper::Movement(float &dt)
@@ -86,16 +99,24 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map);
-		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+
+		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+		if (target != nullptr)
 		{
+			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+			{
+
 			std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
 			for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
 			{
 				path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
 			}
+		}
+
+
 			state = TROOPER_STATE::RECHEAD_POINT;
 		}
+
 		timer.Start();
 	}
 	break;
@@ -117,14 +138,12 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			next_pos = (fPoint)(*path.begin());
 			move_vect = (fPoint)(next_pos)-pos_map;
 			move_vect.Normalize();
-
 			//Change sprite direction
 			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
 			state = TROOPER_STATE::MOVE;
 		}
 		else
 			state = TROOPER_STATE::GET_PATH;
-
 	}
 	break;
 	default:

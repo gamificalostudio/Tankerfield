@@ -94,9 +94,6 @@
     <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Static.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -159,6 +156,9 @@
     </ClCompile>
     <ClCompile Include="General_HUD.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Building.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -267,9 +267,6 @@
     <ClInclude Include="Obj_Bullet.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Static.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Circle.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -341,6 +338,9 @@
     </ClInclude>
     <ClInclude Include="General_HUD.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Building.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -760,7 +760,7 @@ void Obj_Tank::ReviveTank()
 				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
 			{
 				tank_arr[i]->curr_speed = speed;
-				tank_arr[i]->life = revive_life;
+				tank_arr[i]->SetLife(revive_life);
 			}
 		}
 	}

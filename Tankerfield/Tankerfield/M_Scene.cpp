@@ -82,7 +82,6 @@ bool M_Scene::Start()
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
-	app->objectmanager->CreateObject(ObjectType::STATIC, fPoint(6.f, 8.f));
 	round = 1;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 
@@ -158,7 +157,7 @@ bool M_Scene::Update(float dt)
 	case WaveStat::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
-		NewWave();
+		//NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->ui->general_hud->SetRoundNumber(round);
@@ -317,21 +316,28 @@ void M_Scene::CreateEnemyWave()
 {
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
-		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-		Obj_TeslaTrooper* ret = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+		if (app->map->data.spawners_position_enemy.size() != 0)
+		{
+			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+			Obj_TeslaTrooper* ret = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
 
-		enemies_in_wave.push_back(ret);
+			enemies_in_wave.push_back(ret);
+		}
+	
 	}
 	if (Brute_units > 0)
 	{
 		for (int i = 0; i < Brute_units; i++)
 		{
-			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_Brute* ret = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+			if (app->map->data.spawners_position_enemy.size() != 0)
+			{
+				uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+				fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+				Obj_Brute* ret = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
 
-			enemies_in_wave.push_back(ret);
+				enemies_in_wave.push_back(ret);
+			}
 		}
 	}
 

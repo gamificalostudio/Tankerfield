@@ -275,6 +275,8 @@ void M_Render::Blit( SDL_Texture* texture,  const int screen_x, const int screen
 	else
 	{
 		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
+		spritesheet_rect.w = rect_in_screen.w;
+		spritesheet_rect.h = rect_in_screen.h;
 	}
 	//Move the rect_in_screen to their correct screen =========================== 	
 	rect_in_screen.x += current_camera->viewport.x;

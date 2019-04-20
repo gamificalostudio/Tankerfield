@@ -13,6 +13,7 @@ class Obj_Tank;
 
 enum class TROOPER_STATE
 {
+	IDLE,
 	GET_PATH,
 	MOVE,
 	RECHEAD_POINT
@@ -39,34 +40,33 @@ public:
 private:
 	inline bool IsOnGoal(fPoint goal);
 
-	TROOPER_STATE state			= TROOPER_STATE::GET_PATH;
+	TROOPER_STATE state			= TROOPER_STATE::IDLE;
 	fPoint move_vect			= { 0.0f, 0.0f };
-	int life					= 100;
-	int damage					= 100;
-	bool death					= false;
-	float follow_range			= 0.0f;
-	float new_current_frame		= 0.0f;	
+	int life					= 0;
+	float detection_range		= 0.0f;
 	float check_path_time		= 0.f;
 	float speed					= 0.f;
 	Timer timer;
 
-	Obj_Tank* target = nullptr;
+	Obj_Tank* target			= nullptr;
 	std::vector<fPoint> path;
 
-	fPoint next_pos;
+	fPoint next_pos				= {0.f, 0.f};
 	
 	Circle range_pos;
 
 	// ----------
 
 	/* Attack properties */
-	float attack_frequency = 3000.0f;
-	float attack_range = 0.f;//Tile distance in which the enemy can attack
-	int attack_damage = 0;
+	float attack_frequency		= 0.f;
+	float attack_range			= 0.f;//Tile distance in which the enemy can attack
+	float attack_range_squared	= 0.f;
+	int attack_damage			= 0;
 	PerfTimer perf_timer;
 
 	Animation walk;
-	SDL_Texture * tex = nullptr;
+	Animation attack;
+	SDL_Texture * tex			= nullptr;
 
 };
 
