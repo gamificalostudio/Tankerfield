@@ -137,6 +137,8 @@ private:
 	int	  revive_life						= 0;
 	float revive_time						= 0.f;
 	UI_IG_Helper * tutorial_revive			= nullptr;
+	bool reviving_tank[4]					= { false };//Is this tank reviving [?] tank?
+	Timer revive_timer[4];					//Time that you've been reviving other tanks
 
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::BASIC;
@@ -200,10 +202,6 @@ private:
 
 public:
 	Camera* camera_player				= nullptr;
-
-	//- Revive
-	bool being_revived					= false;//Is someone reviving you?
-	Timer revive_timer;					//Time since you started being revived
 };
 
 #endif
