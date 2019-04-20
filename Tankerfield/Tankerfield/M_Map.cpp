@@ -429,17 +429,12 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			obj_node.attribute("width").as_int(0) / data.tile_height,
 			obj_node.attribute("height").as_int(0) / data.tile_height);
 
-
-
-		
-		
+		//	SpawnPoints
 		if (object_group->name == "SpawnPoints")
 		{
-			
-			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y / data.tile_height) };
 			SpawnPoint* ret = new SpawnPoint;
-			ret->pos = pos;
+			ret->pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
+
 			std::string type = obj_node.attribute("type").as_string("");
 			if (type == "REWARD_BOX")
 			{
@@ -455,6 +450,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			}
 		}
 
+		//	Buildings
 		if (object_group->name == "Buildings")
 		{
 				
