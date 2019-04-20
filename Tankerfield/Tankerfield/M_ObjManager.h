@@ -38,6 +38,7 @@ enum class ObjectType
 
 	//PARTICLES
 	HEALING_ANIMATION,
+	FIRE_DEAD,
 
 	NO_TYPE
 };

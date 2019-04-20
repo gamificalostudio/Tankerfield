@@ -4775,7 +4775,10 @@
   </data>
  </layer>
  <objectgroup name="Reward_zones">
-  <object id="69" x="510.045" y="480.318" width="30" height="30"/>
-  <object id="71" x="534.636" y="507.909"/>
+  <object id="69" x="510.045" y="480.318" width="30" height="30">
+   <properties>
+    <property name="size" type="int" value="3"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

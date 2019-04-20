@@ -22,11 +22,11 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
 	pugi::xml_node explosion_node = app->config.child("object").child("explosion");
 
-	explosion_anim.frames = app->anim_bank->LoadFrames(explosion_node.child("animations").child("explosion"));
-	curr_anim = &explosion_anim;
+	anim.frames = app->anim_bank->LoadFrames(explosion_node.child("animations").child("explosion"));
+	curr_anim = &anim;
 
-	explosion_tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
-	curr_tex = explosion_tex;
+	tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
+	curr_tex = tex;
 
 	draw_offset.x = 99;
 	draw_offset.y = 10;
