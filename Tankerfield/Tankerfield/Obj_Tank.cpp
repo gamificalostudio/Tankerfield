@@ -335,7 +335,6 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
-
 	if (life == 0)
 	{
 		fPoint circlePos = pos_map;
@@ -372,25 +371,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
 
-	
-
-																							//only appears when hes dead and disappear when he has been revived
-	//DEBUG
-	//	iPoint debug_mouse_pos = { 0, 0 };
-//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
-
-//	debug_mouse_pos.x += camera_player->rect.x;
-//	debug_mouse_pos.y += camera_player->rect.y;
-
-//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-
-	//  std::vector<Camera*>::iterator item_cam;
-//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-//	{
-	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
-//	}
-
+	app->render->DrawTestCircle(pos_screen.x, pos_screen.y, 20);
 
 	return true;
 }
