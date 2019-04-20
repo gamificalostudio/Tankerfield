@@ -60,8 +60,6 @@ public:
 	bool DrawCircle(int x1, int y1, int redius, Camera* camera, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 	bool DrawIsoCircle(int x1, int y1, int redius, Camera* camera, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool use_camera = true) const;
 
-	void DrawTestCircle(int32_t _x, int32_t _y, int32_t radius);
-
 	bool IsOnCamera(const int & x, const int & y, const int & w, const int & h, Camera* camera) const;
 
 	// Set background color
