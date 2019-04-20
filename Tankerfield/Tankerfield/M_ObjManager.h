@@ -83,10 +83,12 @@ public:
 
 	inline void DrawDebug(const Object* obj, Camera* camera);
 
-private:
-
-	std::list<Object*> objects;
+public:
 	std::list<Obj_Tank*> obj_tanks;
+
+private:
+	std::list<Object*> objects;
+
 };
 
 #endif
