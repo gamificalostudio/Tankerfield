@@ -107,7 +107,7 @@ private:
 	static int number_of_tanks;
 
 	bool ready								= false;
-
+	bool fire_dead = false;	
 	//- Movement
 	float curr_speed						= 0.f;
 	float speed								= 0.f;

@@ -20,6 +20,7 @@
 #include "Bullet_Laser.h"
 #include "Healing_Bullet.h"
 #include "Obj_HealingAnimation.h"
+#include "Obj_Fire.h"
 #include "Obj_PickUp.h"
 #include "M_AnimationBank.h"
 #include "Player_GUI.h"
@@ -152,7 +153,7 @@ bool Obj_Tank::Start()
 	gamepad_aim			= Joystick::RIGHT;
 	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
 	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	gamepad_interact	= SDL_CONTROLLER_BUTTON_A;
+	gamepad_interact	= SDL_CONTROLLER_BUTTON_X;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -750,6 +751,7 @@ void Obj_Tank::ReviveTank()
 			{
 				reviving_tank[(*iter)->tank_num] = true;
 				revive_timer[(*iter)->tank_num].Start();
+				
 			}
 			else if (ReleaseInteract())
 			{
@@ -762,6 +764,7 @@ void Obj_Tank::ReviveTank()
 				(*iter)->curr_speed = speed;
 				(*iter)->SetLife(revive_life);
 				reviving_tank[(*iter)->tank_num] = false;
+				(*iter)->fire_dead = false;
 			}
 		}
 		else
@@ -794,6 +797,12 @@ void Obj_Tank::StopTank()
 	if (life == 0)
 	{
 		curr_speed = 0;
+		if (!(this->fire_dead))
+		{
+			this->fire_dead = true;
+			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+			dead_fire->tank = this;
+		}
 	}
 }
 
