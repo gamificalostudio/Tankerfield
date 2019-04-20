@@ -91,7 +91,7 @@ bool Obj_Brute::Update(float dt)
 			move_vect.Normalize();
 
 			//Change sprite direction
-			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
+			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG + ISO_COMPENSATION;
 			state = BRUTE_STATE::MOVE;
 		}
 		else
