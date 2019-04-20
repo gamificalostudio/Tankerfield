@@ -80,6 +80,7 @@ void Obj_TeslaTrooper::Attack()
 	if (curr_anim == &attack&&curr_anim->Finished())
 	{
 		curr_anim = &walk;
+		attack.Reset();
 	}
 
 }
