@@ -748,19 +748,16 @@ void Obj_Tank::ReviveTank()
 
 			if (!reviving_tank[(*iter)->tank_num] && PressInteract() || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT)
 			{
-				LOG("Starting to revive");
 				reviving_tank[(*iter)->tank_num] = true;
 				revive_timer[(*iter)->tank_num].Start();
 			}
 			else if (ReleaseInteract())
 			{
-				LOG("Stopping revive");
 				reviving_tank[(*iter)->tank_num] = false;
 			}
 
 			if (reviving_tank[(*iter)->tank_num] && revive_timer[(*iter)->tank_num].Read() > revive_time)
 			{
-				LOG("Revived!");
 				//Revive the tank
 				(*iter)->curr_speed = speed;
 				(*iter)->SetLife(revive_life);
