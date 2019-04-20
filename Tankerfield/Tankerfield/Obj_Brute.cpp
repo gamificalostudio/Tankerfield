@@ -33,44 +33,91 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	curr_tex = tex;
 
 	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
 	curr_anim = &walk;
 
+	state = BRUTE_STATE::GET_PATH;
 	speed = 1.F;
+	detection_range = 10.0f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
-	follow_range = 10.0f;
 	check_path_time = 1.f;
 	coll = app->collision->AddCollider(pos, 0.7f, 0.7f, Collider::TAG::ENEMY, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	draw_offset = { 70, 35 };
 	timer.Start();
+	attack_damage = 10;
+	attack_range = 1;
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = 3000.0f;
 }
 
 Obj_Brute::~Obj_Brute()
 {
 }
 
+
 bool Obj_Brute::Update(float dt)
 {
+	Movement(dt);
+	Attack();
+
+	return true;
+}
+
+void Obj_Brute::Attack()
+{
+	if (target != nullptr
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+		&& perf_timer.ReadMs() > (double)attack_frequency)
+	{
+		curr_anim = &attack;
+		target->SetLife(target->GetLife() - attack_damage);
+		perf_timer.Start();
+	}
+
+	if (curr_anim == &attack&&curr_anim->Finished())
+	{
+		curr_anim = &walk;
+		attack.Reset();
+	}
+
+}
+
+void Obj_Brute::Movement(float &dt)
+{
+	if (timer.ReadSec() >= check_path_time)
+		state = BRUTE_STATE::GET_PATH;
+
 	switch (state)
 	{
 	case BRUTE_STATE::GET_PATH:
+	{
 		path.clear();
-		target = (Obj_Tank*)app->objectmanager->GetNearestTank(pos_map);
-		if (target != nullptr && pos_map.DistanceManhattan(target->pos_map) <= follow_range)
+		move_vect.SetToZero();
+
+		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+		if (target != nullptr)
+		{
 			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 			{
+
 				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
 				for (std::vector<iPoint>::iterator iter = aux.begin(); iter != aux.end(); ++iter)
 				{
 					path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
 				}
-				state = BRUTE_STATE::RECHEAD_POINT;
 			}
-		timer.Start();
-		break;
-	case BRUTE_STATE::MOVE:
 
+
+			state = BRUTE_STATE::RECHEAD_POINT;
+		}
+
+		timer.Start();
+	}
+	break;
+	case BRUTE_STATE::MOVE:
+	{
 		if (IsOnGoal(next_pos))
 		{
 			path.erase(path.begin());
@@ -78,66 +125,42 @@ bool Obj_Brute::Update(float dt)
 		}
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
-		break;
+	}
+	break;
 	case BRUTE_STATE::RECHEAD_POINT:
 	{
-		if (timer.ReadSec() >= check_path_time)
-			state = BRUTE_STATE::GET_PATH;
-
-		else if (path.size() > 0)
+		if (path.size() > 0)
 		{
 			next_pos = (fPoint)(*path.begin());
 			move_vect = (fPoint)(next_pos)-pos_map;
 			move_vect.Normalize();
-
 			//Change sprite direction
-			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG + ISO_COMPENSATION;
+			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
 			state = BRUTE_STATE::MOVE;
 		}
 		else
 			state = BRUTE_STATE::GET_PATH;
-
 	}
 	break;
 	default:
-		assert(true && "A brute have no state");
+		assert(true && "A tesla trooper have no state");
 		break;
 	}
+}
 
-	if (target != nullptr)
+void Obj_Brute::DrawDebug(const Camera* camera)
+{
+	if (path.size() >= 2)
 	{
-		fPoint enemy_screen_pos = app->map->MapToScreenF(fPoint(this->pos_map.x, this->pos_map.y));
-		fPoint target_screen_pos = app->map->MapToScreenF(fPoint(target->pos_map.x, target->pos_map.y));
-
-		if (!attack_available)
+		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
 		{
-			if (BruteCanAttack(enemy_screen_pos, target_screen_pos))
-			{
-				current_state = CURRENT_BRUTE_POS_STATE::STATE_ATTACKING;
-				attack_available = true;
-				perf_timer.Start();
-			}
-			else
-			{
-				current_state = CURRENT_BRUTE_POS_STATE::STATE_WAITING;
-				attack_available = false;
-			}
-		}
-
-		if (current_state == CURRENT_BRUTE_POS_STATE::STATE_ATTACKING)
-		{
-			if (perf_timer.ReadMs() > (double)attack_frequency)
-			{
-				uint target_life = target->GetLife();
-				target->SetLife(target_life - 25/*brute damage*/);
-				attack_available = false;
-			}
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
 		}
 	}
 
-	return true;
 }
-
 
 bool Obj_Brute::IsOnGoal(fPoint goal)
 {
@@ -146,7 +169,7 @@ bool Obj_Brute::IsOnGoal(fPoint goal)
 
 void Obj_Brute::OnTrigger(Collider* collider)
 {
-	if ((collider->GetTag() == Collider::TAG::BULLET)||(collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
+	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
 		if (life <= 0)
