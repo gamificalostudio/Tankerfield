@@ -110,9 +110,9 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	UpdateLevel();
 
 
-	weapon_frame	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
-	weapon_icon		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
-	level_indicator	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+	weapon_frame	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	weapon_icon		->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	level_indicator	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
 }
 
 bool UI_IG_Weapon::Draw()
@@ -207,8 +207,8 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	item_icon->SetParent(item_frame);
 	
-	item_icon->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
-	item_frame->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+	item_icon->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	item_frame->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
 }
 
 void UI_IG_Item::Destroy()

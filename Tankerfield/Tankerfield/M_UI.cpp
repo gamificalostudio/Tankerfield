@@ -781,7 +781,7 @@ void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 	}
 }
 
-void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value)
+void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds,  UI_Element * element, const float loops , const float init_value, const float target_value)
 {
 	UI_Fade_FX* new_fx = DBG_NEW  UI_Fade_FX(type, seconds, element, init_value, target_value);
 	active_fxs.push_back(new_fx);
@@ -789,17 +789,37 @@ void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * ele
 
 
 
-UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value): element(element), init_value(init_value), target_value(target_value), type(type)
+UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, float loops,  const float init_value, const float target_value): 
+	init_value(init_value), target_value(target_value) ,element(element), max_loops(loops), type(type)
 {
 	ratetime = 1.f / seconds;
+	max_loops = loops;
+
+	if (init_value == -1.f || target_value == -1.f)
+	{
+		switch (type)
+		{
+		case FX_TYPE::FADE_ON:
+			this->init_value = 0.f;
+			this->target_value = 255.f;
+			break;
+		case FX_TYPE::FADE_OUT:
+			this->init_value = 255.f;
+			this->target_value = 0.f;
+			break;
+		case FX_TYPE::INTERMITTENT:
+			this->init_value = 0.f;
+			this->target_value = 255.f;
+			break;
+		}
+	}
+
 }
 
 bool UI_Fade_FX::Update(float dt)
 {
-	switch (type)
+	if (type == UI_Fade_FX::FX_TYPE::FADE_ON || type == UI_Fade_FX::FX_TYPE::FADE_ON)
 	{
-	case UI_Fade_FX::FX_TYPE::FADE:
-
 		ax += dt * ratetime;
 		element->alpha = lerp(init_value, target_value, ax);
 
@@ -807,22 +827,24 @@ bool UI_Fade_FX::Update(float dt)
 		{
 			finished = true;
 		}
+	}
 
-		break;
-	case UI_Fade_FX::FX_TYPE::INTERMITTENT:
-
+	else if (type == UI_Fade_FX::FX_TYPE::INTERMITTENT)
+	{
 		ax += dt * ratetime;
 		element->alpha = lerp(init_value, target_value, ax);
 
 		if (element->alpha == target_value)
 		{
 			swap(init_value, target_value);
+			loops_count += 0.5f;
 			ax = 0.f;
 		}
 
-		break;
-	default:
-		break;
+		if (loops_count > max_loops)
+		{
+			finished = true;
+		}
 	}
 
 	return true;

@@ -157,25 +157,23 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 void Player_GUI::Fade_GUI(bool fade_on)
 {
-	float init_value = 0.f, target_value = 0.f;
+	UI_Fade_FX::FX_TYPE type;
 
 	if (fade_on)
 	{
-		init_value = 0.f;
-		target_value = 255.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_ON;
 	}
 	else
 	{
-		init_value = 255.f;
-		target_value = 0.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
 
-	weapon_frame			->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	weapon_icon				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	item_frame				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	item_icon				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	charged_shot_bar		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	life_bar				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	weapon_frame		->SetFX(type, 3.5F);
+	weapon_icon			->SetFX(type, 3.5F);
+	item_frame			->SetFX(type, 3.5F);
+	item_icon			->SetFX(type, 3.5F);
+	charged_shot_bar	->SetFX(type, 3.5F);
+	life_bar			->SetFX(type, 3.5F);
 
 }
 

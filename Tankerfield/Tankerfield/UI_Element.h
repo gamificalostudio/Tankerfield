@@ -105,7 +105,7 @@ public:
 
 	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
 
-	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float init_value, float target_value);
+	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float loops = -1.F, float init_value = -1.F, float target_value = -1.F);
 
 	fRect GetSection();
 

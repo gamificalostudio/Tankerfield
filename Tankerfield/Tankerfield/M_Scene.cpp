@@ -77,7 +77,7 @@ bool M_Scene::Start()
 	// UI Elements
 
 	//Create all tanks
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(70.f, 60.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
 	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
@@ -112,6 +112,10 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	{
+		app->ui->general_hud->SetRoundNumber(2);
 	}
 
 	return true;

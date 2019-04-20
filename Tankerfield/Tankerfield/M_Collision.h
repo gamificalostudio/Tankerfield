@@ -5,6 +5,7 @@
 
 #include <list>
 #include <vector>
+#include <map>
 #include <typeinfo>
 
 #include "PugiXml/src/pugixml.hpp"
@@ -18,19 +19,18 @@ class M_Collision;
 class Collider
 {
 public:
-	
 	enum class TAG : int
 	{
 		NONE = -1,
 		WALL,
 		BULLET,
 		FRIENDLY_BULLET,
-		PLAYER,
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
 		PICK_UP,
 		REWARD_BOX,
+		PLAYER,
 		MAX
 	};
 
