@@ -51,6 +51,9 @@ template <class VALUE_TYPE> void SWAP(VALUE_TYPE& a, VALUE_TYPE& b)
 	b = tmp;
 }
 
+//Limits not included in <limits> file
+#define FLOAT_MAX 340282300000000000000000000000000000000.f
+
 // Standard string size
 #define SHORT_STR	32
 #define MID_STR		255

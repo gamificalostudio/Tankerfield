@@ -100,7 +100,7 @@ bool M_ObjManager::Update(float dt)
 				if ((*iterator)->type == ObjectType::TANK)
 				{
 					Obj_Tank* aux = (Obj_Tank*)(*iterator);
-					obj_tanks.remove((*iterator));
+					obj_tanks.remove((Obj_Tank*)(*iterator));
 				}
 
 				if ((*iterator)->coll != nullptr)
@@ -209,7 +209,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::TANK:
 		ret = DBG_NEW Obj_Tank(pos);
 		ret->type = ObjectType::TANK;
-		obj_tanks.push_back(ret);
+		obj_tanks.push_back((Obj_Tank*)ret);
 		break;
 	case ObjectType::BASIC_BULLET:
 		ret = DBG_NEW Bullet_Basic(pos);
@@ -293,32 +293,33 @@ void M_ObjManager::DeleteObjects()
 }
 
 
-Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_distanace)
+Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 {
-	Obj_Tank* ret = (Obj_Tank*)(*obj_tanks.begin());
-	if (ret != nullptr)
+	Obj_Tank * closest_tank = nullptr;
+	float max_dist_squared;
+	if (max_dist == FLOAT_MAX)
 	{
-		float distance = pos.DistanceNoSqrt(ret->pos_map);
-		for (std::list<Object*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
-		{
-			float new_distance = pos.DistanceNoSqrt((*iter)->pos_map);
-			if (new_distance  < distance)
-			{
-				distance = new_distance;
-				ret = (Obj_Tank*)*iter;
-			}
-		}
-		if (max_distanace > 0 && pos.DistanceManhattan(ret->pos_map) <= max_distanace)
-		{
-			return ret;
-		}
-		else if (max_distanace == 0)
-			return ret;
+		max_dist_squared = FLOAT_MAX;//Can't get any higher value
+	}
+	else
+	{
+		max_dist_squared = max_dist * max_dist;
+	}
+	float lowest_distance = max_dist_squared;
 
-		return nullptr;
+	for (std::list<Obj_Tank*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
+	{
+		float distance = pos.DistanceNoSqrt((*iter)->pos_map);
+		if ((*iter)->GetLife() > 0
+			&& distance < max_dist_squared
+			&& distance < lowest_distance)
+		{
+			closest_tank = (*iter);
+			lowest_distance = distance;
+		}
 	}
 
-	return ret;
+	return closest_tank;
 }
 
 std::list<Object*> M_ObjManager::GetObjects() const
