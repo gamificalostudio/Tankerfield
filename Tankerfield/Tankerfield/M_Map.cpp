@@ -497,8 +497,9 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		/* Reward Zones locations */
 		if(object_group->name == "Reward_zones")
 		{
-			fPoint map_pos = app->map->ScreenToMapF((float)(object_group->objects[i].pos.x), (float)(object_group->objects[i].pos.y));
-			int i_size = obj_node.attribute("size").as_int(3);
+			//fPoint map_pos = app->map->ScreenToMapF((float)(object_group->objects[i].pos.x), (float)(object_group->objects[i].pos.y));
+			fPoint map_pos = { (float)(object_group->objects[i].pos.x), (float)(object_group->objects[i].pos.y) };
+			int i_size = obj_node.child("properties").child("property").attribute("value").as_int(3);
 
 			RewardZone* ret = app->reward_zone_manager->CreateRewardZone(map_pos, i_size);
 		}
