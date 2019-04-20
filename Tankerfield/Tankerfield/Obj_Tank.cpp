@@ -25,6 +25,7 @@
 #include "Player_GUI.h"
 #include "UI_InGameElement.h"
 #include "M_UI.h"
+#include "M_ObjManager.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -729,26 +730,19 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ReviveTank()
 {
-
-
-	Obj_Tank* tank_arr[4];
-
-	tank_arr[0] = app->scene->tank_1;
-	tank_arr[1] = app->scene->tank_2;
-	tank_arr[2] = app->scene->tank_3;
-	tank_arr[3] = app->scene->tank_4;
-
 	//fPoint circlePos = { 3.f,3.f };
 	//circlePos = app->map->MapToScreenF(circlePos);
 	//app->render->DrawCircle(circlePos.x, circlePos.y, revive_range, 0, 255, 0, 100);
 
 	bool show_tutorial = false;
 
-	for (int i = 0; i < 4; i++)
+	for (std::list<Obj_Tank*>::iterator iter = app->objectmanager->obj_tanks.begin();
+		iter != app->objectmanager->obj_tanks.end();
+		++iter)
 	{
-		if (this != tank_arr[i]
-			&& pos_map.DistanceNoSqrt(tank_arr[i]->pos_map) <= revive_range_squared
-			&& tank_arr[i]->life == 0
+		if (this != (*iter)
+			&& pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
+			&& (*iter)->life == 0
 			&& this->life != 0)
 		{
 			if (!show_tutorial)
@@ -759,8 +753,8 @@ void Obj_Tank::ReviveTank()
 			if ((controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN)
 				|| app->input->GetKey(kb_interact) == KeyState::KEY_DOWN || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT))
 			{
-				tank_arr[i]->curr_speed = speed;
-				tank_arr[i]->SetLife(revive_life);
+				(*iter)->curr_speed = speed;
+				(*iter)->SetLife(revive_life);
 			}
 		}
 	}
