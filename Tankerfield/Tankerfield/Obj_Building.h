@@ -12,14 +12,10 @@ class Obj_Building : public Object
 {
 public:
 
-	Obj_Building();
 	Obj_Building(fPoint pos);
 	~Obj_Building();
 
-	bool Awake(pugi::xml_node & static_node) override;
-	bool Start() override;
-
-	void SetTexture(const char* path);
+	void SetTexture(const char* path, fPoint rect_collider);
 
 public:
 	const char* path;

@@ -13,10 +13,6 @@
 
 SDL_Texture * Obj_Building::texture = nullptr;
 
-Obj_Building::Obj_Building() : Object()
-{
-
-}
 
 Obj_Building::Obj_Building(fPoint pos) : Object(pos)
 {
@@ -27,26 +23,18 @@ Obj_Building::~Obj_Building()
 {
 }
 
-bool Obj_Building::Awake(pugi::xml_node & static_node)
-{
-	return true;
-}
 
-bool Obj_Building::Start()
-{
-	coll = app->collision->AddCollider(pos_map, 4.f, 4.f, Collider::TAG::WALL, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
-
-	return true;
-}
-
-void Obj_Building::SetTexture(const char* path)
+void Obj_Building::SetTexture(const char* path, fPoint rect_collider)
 {
 	texture = app->tex->Load(path);
 	curr_tex = texture;
 	frame.x = 0;
 	frame.y = 0;
+	
 	SDL_QueryTexture(texture, NULL, NULL, &frame.w, &frame.h);
+
+	coll = app->collision->AddCollider(pos_map, rect_collider.x, rect_collider.y, Collider::TAG::WALL, 0.f, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
 	
 }
 
