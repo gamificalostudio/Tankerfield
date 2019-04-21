@@ -67,6 +67,13 @@ bool Obj_Tank::Start()
 
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
+	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
+
+	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
+	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
+	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
+	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
+
 	switch (tank_num) {
 	case 0:
 		kb_up		= SDL_SCANCODE_W;
@@ -291,29 +298,10 @@ void Obj_Tank::Movement(float dt)
 
 	}
 
-	velocity = iso_dir * curr_speed * dt;   
-	if (ReleaseShot())
-	{
-		if (charged_timer.ReadMs() < charge_time)
-		{
-			velocity_retroceso_speed_max = 50.f;
-		}
-		//- Charged shot
-		else
-		{
-			velocity_retroceso_speed_max = 100.f;
-		}
-		
-	}
-	else
-	{
-		if (velocity_retroceso_speed_max > 0)
-		velocity_retroceso_speed_max -= 2.f;
-	}
-	fPoint velocity_retroceso_aux = -GetShotDir() * velocity_retroceso_speed_max * dt;
-	velocity_retroceso = lerp({ 0,0 }, velocity_retroceso_aux, 0.5f*dt);
+	velocity = iso_dir * curr_speed * dt;  
 
-	velocity += velocity_retroceso;
+	ShotRecoilMovement(dt);
+
 	pos_map += velocity;
 
 	
@@ -324,6 +312,36 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
+}
+
+void Obj_Tank::ShotRecoilMovement(float &dt)
+{
+	if (ReleaseShot())
+	{
+		//- Basic shot
+		if (charged_timer.ReadMs() < charge_time)
+		{
+			velocity_recoil_curr_speed = velocity_recoil_speed_max;
+		}
+		//- Charged shot
+		else
+		{
+			velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
+		}
+
+	}
+	else
+	{
+		//reduce the velocity
+		if (velocity_recoil_curr_speed > 0)
+		{
+			velocity_recoil_curr_speed -= velocity_recoil_decay;
+		}
+	}
+	velocity_recoil_final_lerp = -GetShotDir() * velocity_recoil_curr_speed * dt;
+	velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
+
+	velocity += velocity_recoil_lerp;
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
