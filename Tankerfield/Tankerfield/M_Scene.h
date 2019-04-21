@@ -90,6 +90,9 @@ private:
 	uint initial_num_enemies = 0;
 private:
 
+	/* Game variables*/
+	bool game_over = false;
+
 	/* Wave System */
 	int time_between_rounds			= 0;
 	int Tesla_trooper_units			= 0;

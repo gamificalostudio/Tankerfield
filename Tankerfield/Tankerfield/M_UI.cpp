@@ -257,9 +257,6 @@ bool M_UI::PreUpdate()
 }
 
 
-
-//app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
-
 bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
@@ -801,8 +798,7 @@ void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds,  UI_Element * el
 
 
 
-UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, float loops,  const float init_value, const float target_value): 
-	init_value(init_value), target_value(target_value) ,element(element), max_loops(loops), type(type)
+UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, float loops,  const float init_value, const float target_value): element(element), max_loops(loops), type(type)
 {
 	ratetime = 1.f / seconds;
 
@@ -823,13 +819,20 @@ UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * el
 			this->target_value = 255.f;
 			break;
 		}
+
+		element->alpha = this->init_value;
+	}
+	else
+	{
+		this->init_value = init_value;
+		this->target_value = target_value;
 	}
 
 }
 
 bool UI_Fade_FX::Update(float dt)
 {
-	if (type == UI_Fade_FX::FX_TYPE::FADE_ON || type == UI_Fade_FX::FX_TYPE::FADE_ON)
+	if (type == UI_Fade_FX::FX_TYPE::FADE_ON || type == UI_Fade_FX::FX_TYPE::FADE_OUT)
 	{
 		ax += dt * ratetime;
 		element->alpha = lerp(init_value, target_value, ax);
@@ -852,7 +855,7 @@ bool UI_Fade_FX::Update(float dt)
 			ax = 0.f;
 		}
 
-		if (loops_count > max_loops)
+		if ( max_loops != -1.f && loops_count > max_loops)
 		{
 			finished = true;
 		}

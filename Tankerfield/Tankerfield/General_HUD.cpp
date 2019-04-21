@@ -13,14 +13,16 @@ General_HUD::General_HUD()
 
 	game_word = app->ui->CreateImage(fPoint(750.f, 335.f), UI_ImageDef({ 555,10 ,424,188 }));
 	over_word = app->ui->CreateImage(fPoint(770.f, 521.f), UI_ImageDef({ 555 ,200,383 ,188 }));
-	game_word->SetState(ELEMENT_STATE::HIDDEN);
-	over_word->SetState(ELEMENT_STATE::HIDDEN);
+	game_word->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	over_word->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	game_word->alpha = 0;
+	over_word->alpha = 0;
 
 	image_def.sprite_section = { 170 , 10, 105, 105 };
 	round_element = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
-	UI_LabelDef label_def("1", app->ui->rounds_font);
+	UI_LabelDef label_def("", app->ui->rounds_font);
 	round_number_label = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
 	round_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	round_number_label->SetParent(round_element);
@@ -28,6 +30,7 @@ General_HUD::General_HUD()
 	image_def.sprite_section = { 120, 515, 179, 179 };
 	round_fx = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	round_fx->alpha = 0.f;
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
 	left_tank_life = app->ui->CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
@@ -53,10 +56,10 @@ void General_HUD::FadeGeneralHUD(bool fade_on)
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
 
-	round_number_label	->SetFX(type, 3.5F);
-	round_element		->SetFX(type, 3.5F);
-	left_tank_life		->SetFX(type, 3.5F);
-	right_tank_life		->SetFX(type, 3.5F);
+	round_number_label	->SetFX(type, 3.F);
+	round_element		->SetFX(type, 3.F);
+	left_tank_life		->SetFX(type, 3.F);
+	right_tank_life		->SetFX(type, 3.F);
 }
 
 void General_HUD::SetRoundNumber(int round)
