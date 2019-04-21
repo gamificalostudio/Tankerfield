@@ -167,6 +167,9 @@
       <Filter>Tools\QuadTree</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="UI_Quad.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -356,6 +359,9 @@
       <Filter>Tools\QuadTree</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="UI_Quad.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">
@@ -397,9 +403,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml">
-      <Filter>Core</Filter>
-    </Xml>
-    <Xml Include="..\Game\animations.xml">
       <Filter>Core</Filter>
     </Xml>
   </ItemGroup>

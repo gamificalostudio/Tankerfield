@@ -178,6 +178,7 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
     <ClCompile Include="M_SceneManager.cpp" />
     <ClCompile Include="Obj_TeslaTrooper.cpp" />
+    <ClCompile Include="UI_Quad.cpp" />
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
     <ClInclude Include="M_SceneManager.h" />
     <ClInclude Include="Obj_TeslaTrooper.h" />
+    <ClInclude Include="UI_Quad.h" />
     <ClInclude Include="UI_Slider.h" />
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />

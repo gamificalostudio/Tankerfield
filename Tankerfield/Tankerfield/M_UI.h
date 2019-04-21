@@ -26,6 +26,7 @@ class M_UI;
 class UI_Listener;
 class UI_Image;
 class UI_Bar;
+class UI_Quad;
 class UI_Button;
 class UI_Slider;
 class UI_Label;
@@ -39,6 +40,7 @@ class UI_IG_Helper;
 struct UI_ElementDef;
 struct UI_ButtonDef;
 struct UI_BarDef;
+struct UI_QuadDef;
 struct UI_LabelDef;
 struct UI_ImageDef;
 struct UI_SliderDef;
@@ -168,6 +170,8 @@ public:
 	// Creation functions ---------------------------------------------------------
 
 	UI_Element	 * CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener* listener = nullptr);
+
+	UI_Quad      * CreateQuad(const fPoint position, const UI_QuadDef definition, UI_Listener* listener = nullptr);
 
 	UI_Label	 * CreateLabel(const fPoint position, const  UI_LabelDef definition, UI_Listener* listener = nullptr);
 

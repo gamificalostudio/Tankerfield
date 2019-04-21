@@ -4,8 +4,8 @@
 class UI_Image;
 class UI_Bar;
 class UI_Button;
-class UI_Slider;
 class UI_Label;
+class UI_Quad;
 
 class General_HUD
 {
@@ -37,6 +37,9 @@ private:
 	UI_Image* game_word = nullptr;
 
 	UI_Image* over_word = nullptr;
+
+	UI_Quad*  background = nullptr;
+
 };
 
 #endif // __MODULE_UI_H__

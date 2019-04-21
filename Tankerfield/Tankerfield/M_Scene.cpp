@@ -26,9 +26,12 @@
 #include "M_RewardZoneManager.h"
 #include "M_UI.h"
 #include "General_HUD.h"
+#include "Player_GUI.h"
+
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
 #include "Object.h"
+
 
 #include "UI_Image.h"
 
@@ -121,6 +124,14 @@ bool M_Scene::PreUpdate()
 	{
 		app->objectmanager->CreateObject(ObjectType::PICK_UP, (fPoint)mouse_pos);
 	}
+	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
+	{
+		tank_1->SetLife(0);
+		tank_2->SetLife(0);
+		tank_3->SetLife(0);
+		tank_4->SetLife(0);
+
+	}
 	return true;
 }
 
@@ -212,6 +223,18 @@ bool M_Scene::Update(float dt)
 
 	}
 
+	if (game_over == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
+	{
+		game_over = true;
+		
+		app->ui->player_1_gui->Fade_GUI(false);
+		app->ui->player_2_gui->Fade_GUI(false);
+		app->ui->player_3_gui->Fade_GUI(false);
+		app->ui->player_4_gui->Fade_GUI(false);
+		app->ui->general_hud->FadeGeneralHUD(false);
+
+		app->ui->general_hud->FadeGameOver(true);
+	}
 
 	return true;
 }
