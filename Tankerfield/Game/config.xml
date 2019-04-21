@@ -301,7 +301,7 @@
             <frame x= "1584" y= "456" w="66" h="76" />
           </dir>
         </attack>
-        <death speed="10" rotation="counter-clockwise">
+        <death speed="10" loop =" false" rotation="counter-clockwise">
           <dir>
             <frame x="660"  y="304" w="66" h="76"/>
             <frame x="726"  y="304" w="66" h="76"/>
