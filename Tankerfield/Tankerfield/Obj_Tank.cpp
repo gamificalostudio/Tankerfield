@@ -696,7 +696,7 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(0.25f);
+			camera_player->AddTrauma(0.5f);
 			if (controller != nullptr)
 			{
 				(*controller)->PlayRumble(0.4f, 100);
@@ -707,7 +707,7 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(0.5f);
+			camera_player->AddTrauma(0.75f);
 			if (controller != nullptr)
 			{
 				(*controller)->PlayRumble(0.7f, 100);
