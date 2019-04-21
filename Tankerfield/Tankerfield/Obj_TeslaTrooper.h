@@ -10,13 +10,16 @@
 struct SDL_Texture;
 class Timer;
 class Obj_Tank;
+struct SpawnPoint;
 
 enum class TROOPER_STATE
 {
 	IDLE,
 	GET_PATH,
 	MOVE,
-	RECHEAD_POINT
+	RECHEAD_POINT,
+	GET_TELEPORT_POINT,
+	TELEPORT,
 };
 
 class Obj_TeslaTrooper : public Object 
@@ -33,6 +36,8 @@ public:
 
 	void DrawDebug(const Camera* camera) override;
 
+	bool Draw(float dt, Camera * camera) override;
+
 	bool Awake(pugi::xml_node&) { return true; };
 
 	void OnTrigger(Collider* collider);
@@ -45,8 +50,9 @@ private:
 	int life					= 0;
 	float detection_range		= 0.0f;
 	float check_path_time		= 0.f;
+	float check_teleport_time	= 0.f;
 	float speed					= 0.f;
-	Timer timer;
+	Timer path_timer;
 
 	Obj_Tank* target			= nullptr;
 	std::vector<fPoint> path;
@@ -63,10 +69,17 @@ private:
 	float attack_range_squared	= 0.f;
 	int attack_damage			= 0;
 	PerfTimer perf_timer;
+	Timer	teleport_timer;
 
 	Animation walk;
 	Animation attack;
+	Animation portal_animation;
+	Animation portal_close_anim;
+	Animation* in_portal = nullptr;
 	SDL_Texture * tex			= nullptr;
+	SDL_Texture * portal_tex			= nullptr;
+
+	SpawnPoint* teleport_spawnpoint = nullptr;
 
 };
 

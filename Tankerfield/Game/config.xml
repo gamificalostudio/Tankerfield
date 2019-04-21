@@ -135,9 +135,8 @@
   <map>
    <folder>Maps/</folder>
       <levels>
-        <level name="Level1.tmx"/>
+        <level name="SnowMap.tmx"/>
       </levels>
-  
   </map>
 
   <scene>
@@ -1172,6 +1171,33 @@
         </rotate_turr>
       </animations>
     </tank>
+    <portal>
+      <animations>
+        <open speed="10" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame name="sprite1"  x="0"  y="0"   w="44" h="44"></frame>
+            <frame name="sprite2"  x="44" y="0"   w="44" h="44"></frame>
+            <frame name="sprite3"  x="88" y="0"   w="44" h="44"></frame>
+            <frame name="sprite4"  x="0"  y="44"  w="44" h="44"></frame>
+            <frame name="sprite5"  x="44" y="44"  w="44" h="44"></frame>
+            <frame name="sprite6"  x="88" y="44"  w="44" h="44"></frame>
+            <frame name="sprite7"  x="0"  y="88"  w="44" h="44"></frame>
+            <frame name="sprite8"  x="44" y="88"  w="44" h="44"></frame>
+            <frame name="sprite9"  x="88" y="88"  w="44" h="44"></frame>
+          </dir>
+        </open>
+        <close speed="10" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame name="sprite10" x="0"  y="132" w="44" h="44"></frame>
+            <frame name="sprite11" x="44" y="132" w="44" h="44"></frame>
+            <frame name="sprite12" x="88" y="132" w="44" h="44"></frame>
+            <frame name="sprite13" x="0"  y="176" w="44" h="44"></frame>
+            <frame name="sprite14" x="44" y="176" w="44" h="44"></frame>
+            <frame name="sprite15" x="88" y="176" w="44" h="44"></frame>
+          </dir>
+        </close>
+      </animations>
+    </portal>
     <explosion>
       <speed value="0"/>
       <life value="1000"/>
@@ -1206,7 +1232,7 @@
     <fire_dead_tank>
       <tex path="textures/objects/fire_dead_tank.png"/>
       <animations>
-        <fire speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+        <fire speed="10" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <frame x="0" y="0" w="74" h="112"/>
             <frame x="74" y="0" w="74" h="112"/>
