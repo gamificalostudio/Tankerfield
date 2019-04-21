@@ -25,6 +25,10 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 	curr_tex = texture;
 	frame = { 14, 21, 28,34 };
 	draw_offset = { 14,20 };
+
+	shadow_frame = { 89, 37, 30, 18 };
+	draw_shadow_offset = { 0, 5 };
+
 	life = 100;
 
 	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , Collider::TAG::REWARD_BOX, 0.f, this);//width and height hardcoded
@@ -52,6 +56,19 @@ void Obj_RewardBox::OnTrigger(Collider * collider)
 //
 //	return true;
 //}
+
+bool Obj_RewardBox::DrawShadow(Camera * camera)
+{
+	app->render->Blit(
+		texture,
+		pos_screen.x,
+		pos_screen.y-draw_shadow_offset.y,
+		camera,
+		&shadow_frame
+	);
+
+	return true;
+}
 
 
 void Obj_RewardBox::GetDamage(float damage)

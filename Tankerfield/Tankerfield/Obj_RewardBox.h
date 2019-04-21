@@ -6,6 +6,7 @@
 
 class SDL_Texture;
 class SpawnPoint;
+
 class Obj_RewardBox : public Object
 {
 private:
@@ -16,7 +17,9 @@ private:
 	uint reward_box_dead_sound_int	= 0u;
 
 	SDL_Texture* texture;
-	const char* path;
+	SDL_Rect shadow_frame;
+	iPoint draw_shadow_offset;
+
 
 public:
 	SpawnPoint* my_spawn_point			= nullptr;
@@ -32,6 +35,8 @@ public:
 	void OnTrigger(Collider * collider);
 
 	void GetDamage(float damage);
+
+	bool DrawShadow(Camera* camera);
 
 	void Dead();
 };
