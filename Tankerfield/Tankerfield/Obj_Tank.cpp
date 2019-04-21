@@ -267,7 +267,6 @@ void Obj_Tank::Movement(float dt)
 	}
 
 	//The tank has to go up in isometric space, so we need to rotate the input vector by 45 degrees
-
 	fPoint iso_dir(0.f, 0.f);
 	iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
 	iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
@@ -633,6 +632,10 @@ void Obj_Tank::Shoot(float dt)
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(0.25f);
+			if ((*controller) != nullptr)
+			{
+				(*controller)->PlayRumble(0.4, 100);
+			}
 		}
 		//- Charged shot
 		else
@@ -640,6 +643,10 @@ void Obj_Tank::Shoot(float dt)
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(0.5f);
+			if ((*controller) != nullptr)
+			{
+				(*controller)->PlayRumble(0.7, 100);
+			}
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
