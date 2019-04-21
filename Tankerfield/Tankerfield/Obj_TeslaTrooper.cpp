@@ -220,6 +220,9 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	break;
 	case TROOPER_STATE::TELEPORT_IN:
 	{
+		if (in_portal != nullptr)
+			in_portal->NextFrame(dt);
+
 		if (teleport_anim_duration.ReadSec() >= 1)
 		{
 			in_portal = &portal_close_anim;
@@ -234,8 +237,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			}
 		}
 		
-		if(in_portal!=nullptr)
-			in_portal->NextFrame(dt);
+		
 	}
 		break;
 	case TROOPER_STATE::TELEPORT_OUT:
