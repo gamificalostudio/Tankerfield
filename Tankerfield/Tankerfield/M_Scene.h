@@ -20,7 +20,8 @@ enum class WaveStat
 	ENTER_IN_WAVE,
 	IN_WAVE,
 	EXIT_OF_WAVE,
-	OUT_WAVE
+	OUT_WAVE,
+	GAME_OVER
 };
 class PerfTimer;
 class M_Scene : public Module
