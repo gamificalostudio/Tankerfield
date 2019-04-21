@@ -27,6 +27,7 @@
 #include "UI_InGameElement.h"
 #include "M_UI.h"
 #include "M_ObjManager.h"
+#include "Camera.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -203,6 +204,13 @@ bool Obj_Tank::Start()
 	tutorial_revive->AddTextHelper("REVIVE", { 0.f, 70.f });
 	tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
+	////- PickUp
+	tutorial_pick_up = app->ui->CreateInGameHelper(pos_map, clue_def);
+	tutorial_pick_up->single_camera = camera_player;
+	tutorial_pick_up->AddButtonHelper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f });
+	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
+	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+
 	return true;
 }
 
@@ -240,18 +248,9 @@ void Obj_Tank::CameraMovement(float dt)
 	if (camera_player == nullptr)
 		return;
 
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-	fPoint target_pos =
-	{
-		(float)camera_player->rect.x,
-		(float)camera_player->rect.y
-	};
-
-	//camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.1f /*37.5f*/ * dt);
-	//camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.1f /*37.5f*/ * dt);
-
-	camera_player->rect.x = screen_pos.x - (float) camera_player->rect.w * 0.5f;
-	camera_player->rect.y = screen_pos.y - (float) camera_player->rect.h * 0.5f;
+	camera_player->ResetCamera();
+	camera_player->FollowPlayer(dt, this);
+	camera_player->ShakeCamera(dt);
 }
 
 void Obj_Tank::Movement(float dt)
@@ -436,11 +435,20 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
+		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
 		if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
 		{
 			SetPickUp(pick_up);
 		}
+	}
+}
+
+void Obj_Tank::OnTriggerExit(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	{
+		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
 }
 
@@ -624,12 +632,14 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(0.25f);
 		}
 		//- Charged shot
 		else
 		{
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(0.5f);
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
@@ -891,7 +901,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	{
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 	}
-
+	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();
 }
 

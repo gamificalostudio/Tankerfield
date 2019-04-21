@@ -42,6 +42,8 @@ public:
 
 	void OnTrigger(Collider* c1);
 
+	void OnTriggerExit(Collider* c1);
+
 public:
 	//- Logic
 	void SetLife(int life);
@@ -155,6 +157,7 @@ private:
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
+	UI_IG_Helper * tutorial_pick_up			= nullptr;
 
 	//- GUI
 	Player_GUI*  gui                        = nullptr;

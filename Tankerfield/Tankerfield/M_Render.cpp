@@ -14,6 +14,7 @@
 #include "M_ObjManager.h"
 #include "M_Scene.h"
 #include "MathUtils.h"
+#include "Camera.h"
 
 M_Render::M_Render() : Module()
 {
@@ -26,7 +27,17 @@ M_Render::M_Render() : Module()
 
 // Destructor
 M_Render::~M_Render()
-{}
+{
+	for (std::vector<Camera*>::iterator item_cam = cameras.begin(); item_cam != cameras.end(); ++item_cam)
+	{
+		if ((*item_cam) != nullptr)
+		{
+			delete (*item_cam);
+			(*item_cam) = nullptr;
+		}
+	}
+	cameras.clear();
+}
 
 // Called before render is available
 bool M_Render::Awake(pugi::xml_node& config)
@@ -59,7 +70,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_1_pos_screen = app->map->MapToScreenF(app->scene->tank_1->pos_map);
 		camera_aux->rect.x = tank_1_pos_screen.x - camera_aux->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux->rect.y = tank_1_pos_screen.y + camera_aux->rect.h + 40; //Magic numbres to pos the camera with the player in center
-		camera_aux->viewport = {
+		camera_aux->screen_section = {
 			0,
 			0,
 			(int)(app->win->screen_surface->w * .5f),
@@ -73,7 +84,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_2_pos_screen = app->map->MapToScreenF(app->scene->tank_2->pos_map);
 		camera_aux2->rect.x = tank_2_pos_screen.x - camera_aux2->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux2->rect.y = tank_2_pos_screen.y + camera_aux2->rect.h * 2 - 30; //Magic numbres to pos the camera with the player in center
-		camera_aux2->viewport = {
+		camera_aux2->screen_section = {
 			(int)(app->win->screen_surface->w * .5f),
 			0,
 			(int)(app->win->screen_surface->w * .5f),
@@ -87,7 +98,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_3_pos_screen = app->map->MapToScreenF(app->scene->tank_3->pos_map);
 		camera_aux3->rect.x = tank_3_pos_screen.x - camera_aux3->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux3->rect.y = tank_3_pos_screen.y + camera_aux3->rect.h*2.75f - 10; //Magic numbres to pos the camera with the player in center
-		camera_aux3->viewport = {
+		camera_aux3->screen_section = {
 			0,
 			(int)(app->win->screen_surface->h * .5f),
 			(int)(app->win->screen_surface->w * .5f),
@@ -102,7 +113,7 @@ bool M_Render::Awake(pugi::xml_node& config)
 		fPoint tank_4_pos_screen = app->map->MapToScreenF(app->scene->tank_4->pos_map);
 		camera_aux4->rect.x = tank_4_pos_screen.x - camera_aux4->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
 		camera_aux4->rect.y = tank_4_pos_screen.y + camera_aux4->rect.h*3.5f + 10; //Magic numbres to pos the camera with the player in center
-		camera_aux4->viewport = {
+		camera_aux4->screen_section = {
 			(int)(app->win->screen_surface->w * .5f),
 			(int)(app->win->screen_surface->h * .5f),
 			(int)(app->win->screen_surface->w * .5f),
@@ -162,8 +173,8 @@ bool M_Render::PostUpdate(float dt)
 			cameras.front()->rect.w = app->win->screen_surface->w;
 			cameras.front()->rect.h = app->win->screen_surface->h;
 
-			cameras.front()->viewport.w = app->win->screen_surface->w;
-			cameras.front()->viewport.h = app->win->screen_surface->h;
+			cameras.front()->screen_section.w = app->win->screen_surface->w;
+			cameras.front()->screen_section.h = app->win->screen_surface->h;
 		}
 		else
 		{
@@ -179,8 +190,8 @@ bool M_Render::PostUpdate(float dt)
 			cameras.front()->rect.w *= 0.5f;
 			cameras.front()->rect.h *= 0.5f;
 
-			cameras.front()->viewport.w *= 0.5f;
-			cameras.front()->viewport.h *= 0.5f;
+			cameras.front()->screen_section.w *= 0.5f;
+			cameras.front()->screen_section.h *= 0.5f;
 		}
 	}
 
@@ -193,15 +204,7 @@ bool M_Render::CleanUp()
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
 
-	for (std::vector<Camera*>::iterator item_cam = cameras.begin(); item_cam != cameras.end(); ++item_cam)
-	{
-		if ((*item_cam) != nullptr)
-		{
-			delete (*item_cam);
-			(*item_cam) = nullptr;
-		}
-	}
-	cameras.clear();
+
 	return true;
 }
 
@@ -279,8 +282,8 @@ void M_Render::Blit( SDL_Texture* texture,  const int screen_x, const int screen
 		spritesheet_rect.h = rect_in_screen.h;
 	}
 	//Move the rect_in_screen to their correct screen =========================== 	
-	rect_in_screen.x += current_camera->viewport.x;
-	rect_in_screen.y += current_camera->viewport.y;
+	rect_in_screen.x += current_camera->screen_section.x;
+	rect_in_screen.y += current_camera->screen_section.y;
 
 	//Print the rect_in_screen ============================================
 	if (SDL_RenderCopy(renderer, texture, &spritesheet_rect, &rect_in_screen) )
@@ -303,7 +306,7 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 
 	if (camera != nullptr)
 	{
-		SDL_RenderSetClipRect(renderer, &camera->viewport);
+		SDL_RenderSetClipRect(renderer, &camera->screen_section);
 	}
 
 	if (section != NULL)
@@ -348,7 +351,7 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 std::vector<Camera*>::iterator item_cam;
 	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
-		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 		if (use_camera)
 		{
 			rec.x = (int)(-(*item_cam)->rect.x + rect.x * scale);
@@ -426,10 +429,10 @@ bool M_Render::DrawLineSplitScreen( int x1, int y1, int x2, int y2, Uint8 r, Uin
 	if (camera != nullptr)
 	{
 	
-		x1 += camera->viewport.x;
-		x2 += camera->viewport.x;
-		y1 += camera->viewport.y;
-		y2 += camera->viewport.y;
+		x1 += camera->screen_section.x;
+		x2 += camera->screen_section.x;
+		y1 += camera->screen_section.y;
+		y2 += camera->screen_section.y;
 
 		result = SDL_RenderDrawLine(renderer, -camera->rect.x + x1 * scale, -camera->rect.y + y1 * scale, -camera->rect.x + x2 * scale, -camera->rect.y + y2 * scale);
 	}
@@ -463,8 +466,8 @@ bool M_Render::DrawCircle(int x, int y, int radius, Camera* camera, Uint8 r, Uin
 	int x_in_viewport = x;
 	int y_in_viewport = y;
 
-	x_in_viewport += camera->viewport.x;
-	y_in_viewport += camera->viewport.y;
+	x_in_viewport += camera->screen_section.x;
+	y_in_viewport += camera->screen_section.y;
 
 
 	if (use_camera)
@@ -510,8 +513,8 @@ bool M_Render::DrawIsoCircle(int x, int y, int radius, Camera* camera, Uint8 r, 
 
 	float factor = (float)M_PI / 180.0f;
 
-	int x_in_viewport = x + camera->viewport.x;
-	int y_in_viewport = y + camera->viewport.y;
+	int x_in_viewport = x + camera->screen_section.x;
+	int y_in_viewport = y + camera->screen_section.y;
 
 	if (use_camera)
 	{

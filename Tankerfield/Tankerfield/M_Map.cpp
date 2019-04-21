@@ -77,7 +77,7 @@ bool M_Map::PostUpdate(float dt)
 		
 	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
-		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 
 		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
 
@@ -110,7 +110,7 @@ bool M_Map::PostUpdate(float dt)
 		
 		for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 		{
-			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 			for (int i = 0; i <= data.columns; ++i)
 			{
 				point_1 = MapToScreenI(i, 0);
@@ -650,7 +650,7 @@ bool M_Map::LoadMap()
 		;
 
 		uint level = 1;
-		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->cameras.begin())->viewport.w*0.25, level);
+		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->cameras.begin())->screen_section.w*0.25, level);
 		data.qt = DBG_NEW Quadtree_Map(area, 0, level);
 
 	}
@@ -778,8 +778,8 @@ fPoint M_Map::MapToCamera(const fPoint map_pos, const Camera* camera)
 {
 	fPoint camera_pos(0.0F, 0.0F);
 	
-	camera_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f)  - (float)camera->rect.x + (float)camera->viewport.x ;
-	camera_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f) - (float)camera->rect.y + (float)camera->viewport.y;
+	camera_pos.x = (map_pos.x - map_pos.y) * (data.tile_width * 0.5f)  - (float)camera->rect.x + (float)camera->screen_section.x ;
+	camera_pos.y = (map_pos.x + map_pos.y) * (data.tile_height * 0.5f) - (float)camera->rect.y + (float)camera->screen_section.y;
 
 	return camera_pos;
 }

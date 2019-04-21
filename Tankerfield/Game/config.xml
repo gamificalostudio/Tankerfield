@@ -135,7 +135,7 @@
   <map>
    <folder>Maps/</folder>
       <levels>
-        <level name="Level1.tmx"/>
+        <level name="SnowMap.tmx"/>
       </levels>
   
   </map>
@@ -155,13 +155,13 @@
 
   <pick_manager>
     <percentage_spawn_item_from_enemy value="1"/>
-    <percentage_spawn_reward_box value="50"/>
-    
+    <percentage_spawn_reward_box value="50"/>   
   </pick_manager>
   
   <object>
     <reward_box>
       <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
+      <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
     <tesla_trooper>
       <animations>
