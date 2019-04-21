@@ -360,6 +360,7 @@ bool M_UI::Update(float dt)
 		}
 	}
 
+	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
 	// Hover Callbacks =============================================
 
@@ -383,8 +384,6 @@ bool M_UI::Update(float dt)
 			break;
 		}
 	}
-
-	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
 	// In Game Elements Update ============================================
 
@@ -431,11 +430,6 @@ bool M_UI::PostUpdate(float dt)
 
 	fRect full_screen = app->win->GetWindowRect();
 
-	//Split Lines ==========================================================================================================
-
-	app->render->DrawQuad({(int) (full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
-	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
-
 	// Draw all In Game elements ====================================
 
 	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
@@ -446,6 +440,11 @@ bool M_UI::PostUpdate(float dt)
 	}
 
 	current_camera = nullptr;
+
+	//Split Screen Lines ==========================================================================================================
+
+	app->render->DrawQuad({ (int)(full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
+	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
 
 	// Draw all UI elements ====================================
 
