@@ -14,6 +14,7 @@ struct SpawnPoint;
 
 enum class TROOPER_STATE
 {
+	APPEAR,
 	IDLE,
 	GET_PATH,
 	MOVE,
@@ -81,10 +82,13 @@ private:
 	Animation attack;
 	Animation portal_animation;
 	Animation portal_close_anim;
+	Animation appear_anim_explosion;
+
 	bool draw = true;
 	Animation* in_portal = nullptr;
 	SDL_Texture * tex			= nullptr;
 	SDL_Texture * portal_tex			= nullptr;
+	SDL_Texture * explosion_apper_tex			= nullptr;
 
 	SpawnPoint* teleport_spawnpoint = nullptr;
 
