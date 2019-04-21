@@ -27,6 +27,7 @@
 #include "UI_TextPanel.h"
 #include "UI_InGameElement.h"
 #include "UI_Bar.h"
+#include "UI_Quad.h"
 
 #include <vector>
 
@@ -478,6 +479,23 @@ bool M_UI::PostUpdate(float dt)
  UI_Element * M_UI::CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
  {
 	 UI_Element* object = DBG_NEW UI_Element(position, definition, listener);
+
+	 if (definition.is_in_game == true)
+	 {
+		 object->SetParent(main_in_game_element);
+		 ig_elements_list.push_back(object);
+	 }
+	 else
+	 {
+		 object->SetParent(main_ui_element);
+		 elements_list.push_back(object);
+	 }
+	 return object;
+ }
+
+ UI_Quad * M_UI::CreateQuad(const fPoint position, const UI_QuadDef definition, UI_Listener * listener)
+ {
+	 UI_Quad* object = DBG_NEW UI_Quad(position, definition, listener);
 
 	 if (definition.is_in_game == true)
 	 {

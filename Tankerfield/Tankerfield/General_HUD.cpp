@@ -4,6 +4,7 @@
 #include "UI_Image.h"
 #include "UI_Label.h"
 #include "UI_Element.h"
+#include "UI_Quad.h"
 #include "M_Window.h"
 
 General_HUD::General_HUD()
@@ -11,12 +12,18 @@ General_HUD::General_HUD()
 	UI_ImageDef image_def;
 	fRect full_screen = app->win->GetWindowRect();
 
-	game_word = app->ui->CreateImage(fPoint(750.f, 335.f), UI_ImageDef({ 555,10 ,424,188 }));
-	over_word = app->ui->CreateImage(fPoint(770.f, 521.f), UI_ImageDef({ 555 ,200,383 ,188 }));
+	background = app->ui->CreateQuad({ 0.f, 0.f }, UI_QuadDef({ 0,0, (int)full_screen.w , (int)full_screen.h }, { 0, 0, 0 , 200 }));
+	background->alpha = 0;
+
+	game_word = app->ui->CreateImage({ full_screen.w * .5f  + 10.f ,  full_screen.h * .5f - 90.f } , UI_ImageDef({ 555,10 ,424,188 }));
+	over_word = app->ui->CreateImage({ full_screen.w * .5f  + 10.f ,  full_screen.h * .5f + 90.f }, UI_ImageDef({ 555 ,200,383 ,188 }));
 	game_word->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	over_word->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	game_word->alpha = 0;
 	over_word->alpha = 0;
+	game_word->SetParent(background);
+	game_word->SetParent(background);
+
 
 	image_def.sprite_section = { 170 , 10, 105, 105 };
 	round_element = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
@@ -80,7 +87,7 @@ void General_HUD::FadeGameOver(bool fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
-
+	background->SetFX(type, 2.F);
 	game_word->SetFX(type, 2.F);
 	over_word->SetFX(type, 2.F);
 }
