@@ -12,9 +12,9 @@ class M_Render : public Module
 public:
 
 	M_Render();
-
+	
 	// Destructor
-	virtual ~M_Render();
+	~M_Render();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node&) override;

@@ -27,7 +27,17 @@ M_Render::M_Render() : Module()
 
 // Destructor
 M_Render::~M_Render()
-{}
+{
+	for (std::vector<Camera*>::iterator item_cam = cameras.begin(); item_cam != cameras.end(); ++item_cam)
+	{
+		if ((*item_cam) != nullptr)
+		{
+			delete (*item_cam);
+			(*item_cam) = nullptr;
+		}
+	}
+	cameras.clear();
+}
 
 // Called before render is available
 bool M_Render::Awake(pugi::xml_node& config)
@@ -194,15 +204,7 @@ bool M_Render::CleanUp()
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
 
-	for (std::vector<Camera*>::iterator item_cam = cameras.begin(); item_cam != cameras.end(); ++item_cam)
-	{
-		if ((*item_cam) != nullptr)
-		{
-			delete (*item_cam);
-			(*item_cam) = nullptr;
-		}
-	}
-	cameras.clear();
+
 	return true;
 }
 
