@@ -75,7 +75,9 @@ bool Obj_Tank::Start()
 	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
 
 	movement_sfx = app->audio->LoadFx("audio/Fx/vlanstab.wav");
-	revive_sound = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
+	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
+	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
+
 	switch (tank_num) {
 	case 0:
 		kb_up		= SDL_SCANCODE_W;
@@ -512,16 +514,20 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 
 void Obj_Tank::SetLife(int life)
 {
-	this->life = life;
 
-	if (this->life > GetMaxLife())
+	if (life > GetMaxLife())
 	{
 		this->life = GetMaxLife();
 	}
 
-	else if (this->life < 0)
+	else if (life <= 0 && this->life != 0)
 	{
 		this->life = 0;
+		app->audio->PlayFx(die_sfx);
+	}
+	else
+	{
+		this->life = life;
 	}
 
 	gui->SetLifeBar(this->life);
@@ -842,7 +848,7 @@ void Obj_Tank::ReviveTank()
 				(*iter)->SetLife(revive_life);
 				reviving_tank[(*iter)->tank_num] = false;
 				(*iter)->fire_dead = false;
-				app->audio->PlayFx(revive_sound);
+				app->audio->PlayFx(revive_sfx);
 			}
 		}
 		else

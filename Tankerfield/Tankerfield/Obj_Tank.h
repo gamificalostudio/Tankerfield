@@ -157,7 +157,7 @@ private:
 	UI_IG_Helper * tutorial_revive			= nullptr;
 	bool reviving_tank[4]					= { false };//Is this tank reviving [?] tank?
 	Timer revive_timer[4];					//Time that you've been reviving other tanks
-	uint revive_sound						= 0u;
+	uint revive_sfx						= 0u;
 
 
 
@@ -221,6 +221,11 @@ private:
 	Animation rotate_turr;
 	SDL_Texture * turr_tex				= nullptr;
 	SDL_Texture * turr_shadow_tex		= nullptr;
+
+
+
+	//sfx 
+	uint die_sfx						= 0u;
 
 public:
 	Camera* camera_player				= nullptr;
