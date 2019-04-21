@@ -156,6 +156,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			next_pos = (fPoint)(*path.begin());
 			move_vect = (fPoint)(next_pos)-pos_map;
 			move_vect.Normalize();
+
 			//Change sprite direction
 			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
 			state = TROOPER_STATE::MOVE;
@@ -178,38 +179,61 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			{
 				if (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
 				{
-					nearest_spawners_points = (*spawn_point);
-					last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+					if (teleport_spawnpoint==nullptr || teleport_spawnpoint != nearest_spawners_points)
+					{
+						nearest_spawners_points = (*spawn_point);
+						last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+					}
+					
 				}
 			}
 		}
 		if (nearest_spawners_points != nullptr)
 		{
 			teleport_spawnpoint = nearest_spawners_points;
-			state = TROOPER_STATE::TELEPORT;
+			state = TROOPER_STATE::TELEPORT_IN;
 			in_portal = &portal_animation;
 			angle = -90;
 			teleport_timer.Start();
+			teleport_anim_duration.Start();
 		}
 	}
 	break;
-	case TROOPER_STATE::TELEPORT:
+	case TROOPER_STATE::TELEPORT_IN:
 	{
-		if (teleport_timer.ReadSec() >= 2)
+		if (teleport_anim_duration.ReadSec() >= 1)
 		{
 			in_portal = &portal_close_anim;
+			draw = false;
 			if (in_portal->Finished())
 			{
-				in_portal = nullptr;
 				pos_map = teleport_spawnpoint->pos;
-				state = TROOPER_STATE::GET_PATH;
+				state = TROOPER_STATE::TELEPORT_OUT;
 				teleport_timer.Start();
+				angle = 90;
+
 			}
 		}
+		
 		if(in_portal!=nullptr)
 			in_portal->NextFrame(dt);
 	}
 		break;
+	case TROOPER_STATE::TELEPORT_OUT:
+	{
+			if (in_portal->Finished())
+			{
+				in_portal = &portal_animation;
+				state = TROOPER_STATE::GET_PATH;
+				angle = -90;
+				draw = true;
+			}
+
+		if (in_portal != nullptr)
+			in_portal->NextFrame(dt);
+	}
+	break;
+	
 	default:
 		assert(true && "A tesla trooper have no state");
 		break;
@@ -233,7 +257,7 @@ void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
 
 bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 {
-	if (state == TROOPER_STATE::TELEPORT && in_portal != nullptr)
+	if (state == TROOPER_STATE::TELEPORT_IN && in_portal != nullptr)
 	{
 	SDL_Rect portal_frame = in_portal->GetFrame(0);
 		app->render->Blit(
@@ -243,6 +267,7 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			camera,
 			&portal_frame);
 	}
+	if(draw)
 	app->render->Blit(
 		curr_tex,
 		pos_screen.x - draw_offset.x,

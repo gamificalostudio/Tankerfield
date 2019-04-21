@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="isometric" renderorder="left-up" width="150" height="150" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="57">
+<map version="1.2" tiledversion="1.2.3" orientation="isometric" renderorder="left-up" width="150" height="150" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="59">
  <properties>
   <property name="offset_x" type="int" value="-30"/>
   <property name="offset_y" type="int" value="0"/>
@@ -45058,31 +45058,10 @@
   <object id="8" type="REWARD_BOX" x="759.333" y="542">
    <point/>
   </object>
-  <object id="9" type="ENEMY" x="1830" y="1298">
-   <point/>
-  </object>
-  <object id="10" type="ENEMY" x="1866" y="1280.67">
+  <object id="9" type="ENEMY" x="1867.5" y="1357.5">
    <point/>
   </object>
   <object id="11" type="ENEMY" x="1911.33" y="1315.33">
-   <point/>
-  </object>
-  <object id="12" type="ENEMY" x="1960.67" y="1378">
-   <point/>
-  </object>
-  <object id="13" type="ENEMY" x="1822.67" y="1348">
-   <point/>
-  </object>
-  <object id="14" type="ENEMY" x="1806" y="1380.67">
-   <point/>
-  </object>
-  <object id="15" type="ENEMY" x="1845.33" y="1437.33">
-   <point/>
-  </object>
-  <object id="16" type="ENEMY" x="1905.33" y="1452">
-   <point/>
-  </object>
-  <object id="17" type="ENEMY" x="1958.67" y="1430.67">
    <point/>
   </object>
   <object id="18" type="ENEMY" x="1637.33" y="1837.33">
@@ -45112,31 +45091,16 @@
   <object id="26" type="ENEMY" x="1764" y="1996">
    <point/>
   </object>
-  <object id="38" type="ENEMY" x="2398" y="1746">
-   <point/>
-  </object>
-  <object id="39" type="ENEMY" x="2355.33" y="1738">
-   <point/>
-  </object>
-  <object id="40" type="ENEMY" x="2321.33" y="1750.67">
-   <point/>
-  </object>
-  <object id="41" type="ENEMY" x="2318" y="1786">
-   <point/>
-  </object>
-  <object id="42" type="ENEMY" x="2470" y="1847.33">
-   <point/>
-  </object>
-  <object id="43" type="ENEMY" x="2469.33" y="1805.33">
-   <point/>
-  </object>
-  <object id="44" type="ENEMY" x="2454.67" y="1878.67">
+  <object id="41" type="ENEMY" x="2385" y="1807.5">
    <point/>
   </object>
   <object id="45" type="ENEMY" x="2418" y="1912.67">
    <point/>
   </object>
-  <object id="46" type="ENEMY" x="2320.67" y="1836.67">
+  <object id="57" type="ENEMY" x="2595" y="2415">
+   <point/>
+  </object>
+  <object id="58" type="ENEMY" x="2992.5" y="2482.5">
    <point/>
   </object>
  </objectgroup>

@@ -19,7 +19,8 @@ enum class TROOPER_STATE
 	MOVE,
 	RECHEAD_POINT,
 	GET_TELEPORT_POINT,
-	TELEPORT,
+	TELEPORT_IN,
+	TELEPORT_OUT,
 };
 
 class Obj_TeslaTrooper : public Object 
@@ -70,11 +71,13 @@ private:
 	int attack_damage			= 0;
 	PerfTimer perf_timer;
 	Timer	teleport_timer;
+	Timer	teleport_anim_duration;
 
 	Animation walk;
 	Animation attack;
 	Animation portal_animation;
 	Animation portal_close_anim;
+	bool draw = true;
 	Animation* in_portal = nullptr;
 	SDL_Texture * tex			= nullptr;
 	SDL_Texture * portal_tex			= nullptr;
