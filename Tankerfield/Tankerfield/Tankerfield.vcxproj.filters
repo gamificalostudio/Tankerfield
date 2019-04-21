@@ -163,8 +163,8 @@
     <ClCompile Include="Obj_Fire.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Tools</Filter>
+    <ClCompile Include="Quadtree_Points.cpp">
+      <Filter>Tools\QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -351,8 +351,8 @@
     <ClInclude Include="Obj_Fire.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Tools</Filter>
+    <ClInclude Include="Quadtree_Points.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
