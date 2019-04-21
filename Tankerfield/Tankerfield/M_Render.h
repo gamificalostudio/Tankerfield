@@ -4,14 +4,9 @@
 #include "SDL/include/SDL.h"
 #include "Point.h"
 #include "Module.h"
+#include "Camera.h"
 #include <vector>
-class Camera {
-public:
-	SDL_Rect rect{ 0,0,0,0 };
-	SDL_Rect viewport{ 0,0,0,0 };
-	bool assigned = false;
-	uint number_player = 0;
-};
+
 class M_Render : public Module
 {
 public:

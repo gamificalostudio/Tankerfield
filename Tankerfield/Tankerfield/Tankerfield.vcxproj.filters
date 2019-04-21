@@ -163,6 +163,9 @@
     <ClCompile Include="Obj_Fire.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -347,6 +350,9 @@
     </ClInclude>
     <ClInclude Include="Obj_Fire.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,10 +18,11 @@
 #include "UI_InGameElement.h"
 #include "UI_Label.h"
 #include "UI_Bar.h"
+#include "Camera.h"
 
 Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : type(type), player(player_object)
 {
-	viewport.create(player_object->camera_player->viewport.x, player_object->camera_player->viewport.y, player_object->camera_player->viewport.w, player_object->camera_player->viewport.h);
+	viewport.create(player_object->camera_player->screen_section.x, player_object->camera_player->screen_section.y, player_object->camera_player->screen_section.w, player_object->camera_player->screen_section.h);
 	viewport_with_margin = { (int)(viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.w - margin.x) ,(int)(viewport.h - margin.y) };
 	margin = { 30.f, 30.f };
 
