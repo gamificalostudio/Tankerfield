@@ -28,7 +28,6 @@ General_HUD::General_HUD()
 	image_def.sprite_section = { 120, 515, 179, 179 };
 	round_fx = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	round_fx->alpha = 0.F;
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
 	left_tank_life = app->ui->CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);

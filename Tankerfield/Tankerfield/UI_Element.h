@@ -130,7 +130,6 @@ public:
 	Camera*               single_camera = nullptr;
 	Camera*               not_in_camera = nullptr;
 	float                 alpha = 255.f;
-	bool                  active_fx = false;
 
 protected:
 
@@ -145,6 +144,7 @@ protected:
 
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	HoverState			  hover_state = HoverState::NONE;
+	UI_Fade_FX*           element_fx = nullptr;
 
 	// Hierarchy =========================================
 

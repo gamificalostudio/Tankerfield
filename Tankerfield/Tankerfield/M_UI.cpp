@@ -77,14 +77,15 @@ bool M_UI::Awake(pugi::xml_node& config)
 	button_sprites[(int)GAMEPAD_BUTTON::RB] = { 330,60 ,50 ,50 };
 
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE] = { 500,500 ,34 ,34 };
-	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER] = { 540,500 ,34 ,34 };
-	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT] = { 390,500 ,34 ,34 };
-	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER] = { 390,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER] =   { 540,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT] =   { 620,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER] =          { 580,500 ,34 ,34 };
 
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE] = { 500,595,44 ,44 };
-	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER] = { 550,595,44 ,44 };
-	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT] = { 390,595,44 ,44 };
-	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER] = { 390,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER] =   { 550,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT] =   { 650,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER] =          { 600,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC] =          { 700,595,44 ,44 };
 
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,545 ,40 ,40 };
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 545,545 ,40 ,40 };
@@ -306,9 +307,13 @@ bool M_UI::Update(float dt)
 
 	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
 	{
-		if ((*iter)->element->to_destroy == true || (*iter)->finished == true || (*iter)->element->active_fx == false )
+		if ((*iter)->element->to_destroy == true || (*iter)->finished == true)
 		{
-			(*iter)->element->active_fx = false;
+			if ((*iter)->element->element_fx == (*iter))
+			{
+				(*iter)->element->element_fx = nullptr;
+			}
+
 			RELEASE(*iter);
 			iter = active_fxs.erase(iter);
 		}
@@ -783,7 +788,15 @@ void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 
 void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds,  UI_Element * element, const float loops , const float init_value, const float target_value)
 {
-	UI_Fade_FX* new_fx = DBG_NEW  UI_Fade_FX(type, seconds, element, init_value, target_value);
+	UI_Fade_FX* new_fx = DBG_NEW  UI_Fade_FX(type, seconds, element, loops,  init_value, target_value);
+
+	if (element->element_fx != nullptr)
+	{
+		element->element_fx->Destroy();
+	}
+
+	element->element_fx = new_fx;
+
 	active_fxs.push_back(new_fx);
 }
 
@@ -793,7 +806,6 @@ UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * el
 	init_value(init_value), target_value(target_value) ,element(element), max_loops(loops), type(type)
 {
 	ratetime = 1.f / seconds;
-	max_loops = loops;
 
 	if (init_value == -1.f || target_value == -1.f)
 	{
@@ -852,4 +864,5 @@ bool UI_Fade_FX::Update(float dt)
 
 void UI_Fade_FX::Destroy()
 {
+	finished = true;
 }
