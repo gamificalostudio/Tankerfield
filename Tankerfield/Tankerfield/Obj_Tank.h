@@ -125,7 +125,7 @@ private:
 	float velocity_recoil_speed_max			= 0.f;
 	float velocity_recoil_speed_max_charged = 0.f;
 	float lerp_factor_recoil				= 0.f;
-	
+	uint movement_sfx						= 0;
 	
 
 
@@ -156,6 +156,9 @@ private:
 	UI_IG_Helper * tutorial_revive			= nullptr;
 	bool reviving_tank[4]					= { false };//Is this tank reviving [?] tank?
 	Timer revive_timer[4];					//Time that you've been reviving other tanks
+	uint revive_sound						= 0u;
+
+
 
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::BASIC;

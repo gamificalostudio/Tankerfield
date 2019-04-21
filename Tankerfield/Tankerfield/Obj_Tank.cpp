@@ -74,6 +74,8 @@ bool Obj_Tank::Start()
 	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
 	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
 
+	movement_sfx = app->audio->LoadFx("audio/Fx/vlanstab.wav");
+	revive_sound = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	switch (tank_num) {
 	case 0:
 		kb_up		= SDL_SCANCODE_W;
@@ -281,7 +283,9 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		tutorial_move_timer.Start();
+		//app->audio->PlayFx(movement_sfx);
+		
+			tutorial_move_timer.Start();
 		tutorial_move_pressed = true;
 
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
@@ -684,7 +688,7 @@ void Obj_Tank::Shoot(float dt)
 			camera_player->AddTrauma(0.25f);
 			if (controller != nullptr)
 			{
-				(*controller)->PlayRumble(0.4, 100);
+				(*controller)->PlayRumble(0.4f, 100);
 			}
 		}
 		//- Charged shot
@@ -695,7 +699,7 @@ void Obj_Tank::Shoot(float dt)
 			camera_player->AddTrauma(0.5f);
 			if (controller != nullptr)
 			{
-				(*controller)->PlayRumble(0.7, 100);
+				(*controller)->PlayRumble(0.7f, 100);
 			}
 		}
 		shot_timer.Start();
@@ -833,6 +837,7 @@ void Obj_Tank::ReviveTank()
 				(*iter)->SetLife(revive_life);
 				reviving_tank[(*iter)->tank_num] = false;
 				(*iter)->fire_dead = false;
+				app->audio->PlayFx(revive_sound);
 			}
 		}
 		else
