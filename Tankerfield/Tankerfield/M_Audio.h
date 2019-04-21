@@ -48,7 +48,7 @@ public:
 
 private:
 	_Mix_Music* music = nullptr;
-	//std::map<std::string, _Mix_Music*> musics;
+	std::map<std::string, uint> sfx_map;
 	std::list<Mix_Chunk*>	fx;
 };
 
