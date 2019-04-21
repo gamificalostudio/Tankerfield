@@ -18,7 +18,7 @@
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
 #include "M_Input.h"
-#include "Animation.h"
+#include "M_Audio.h"
 #include "M_Map.h"
 #include "M_Collision.h"
 #include "WeaponInfo.h"
@@ -26,6 +26,7 @@
 #include "M_AnimationBank.h"
 #include "M_Scene.h"
 #include "Obj_Tank.h"
+
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
@@ -35,11 +36,14 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	portal_tex = app->tex->Load("textures/Objects/portal.png");
 	curr_tex = tex;
 
+
+	//Assets loading ------------------------------------------------------------------------------------------------------------------------
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 	curr_anim = &walk;
+	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/laser-tesla-trooper.wav");
 
 
 	//Things
@@ -85,6 +89,7 @@ void Obj_TeslaTrooper::Attack()
 		curr_anim = &attack;
 		target->SetLife(target->GetLife() - attack_damage);
 		perf_timer.Start();
+		app->audio->PlayFx(sfx_attack);
 	}
 
 	if (curr_anim == &attack&&curr_anim->Finished())
