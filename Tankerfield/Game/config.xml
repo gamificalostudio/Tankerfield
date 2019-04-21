@@ -301,6 +301,25 @@
             <frame x= "1584" y= "456" w="66" h="76" />
           </dir>
         </attack>
+        <death speed="10" rotation="counter-clockwise">
+          <dir>
+            <frame x="660"  y="304" w="66" h="76"/>
+            <frame x="726"  y="304" w="66" h="76"/>
+            <frame x="792"  y="304" w="66" h="76"/>
+            <frame x="858"  y="304" w="66" h="76"/>
+            <frame x="924"  y="304" w="66" h="76"/>
+            <frame x="990"  y="304" w="66" h="76"/>
+            <frame x="1056" y="304" w="66" h="76"/>
+            <frame x="1122" y="304" w="66" h="76"/>
+            <frame x="1188" y="304" w="66" h="76"/>
+            <frame x="1254" y="304" w="66" h="76"/>
+            <frame x="1320" y="304" w="66" h="76"/>
+            <frame x="1386" y="304" w="66" h="76"/>
+            <frame x="1452" y="304" w="66" h="76"/>
+            <frame x="1518" y="304" w="66" h="76"/>
+            <frame x="1584" y="304" w="66" h="76"/>
+          </dir>
+        </death>
       </animations>
     </tesla_trooper>
     <brute>

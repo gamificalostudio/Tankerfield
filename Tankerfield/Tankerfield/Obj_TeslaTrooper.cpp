@@ -41,6 +41,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	//Assets loading ------------------------------------------------------------------------------------------------------------------------
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
+	death.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("death"));
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 	curr_anim = &walk;
@@ -254,7 +255,26 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			in_portal->NextFrame(dt);
 	}
 	break;
-	
+	case  TROOPER_STATE::DEAD:
+	{
+		if (curr_anim != &death)
+		{
+			curr_anim = &death;	
+			if (coll != nullptr)
+			{
+				coll->Destroy();
+				coll = nullptr;
+			}
+		}
+		else
+		{
+			if (death.Finished())
+			{
+				to_remove = true;
+			}
+		}
+	}
+	break;
 	default:
 		assert(true && "A tesla trooper have no state");
 		break;
@@ -327,7 +347,7 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		if (life <= 0)
 		{
 			app->pick_manager->PickUpFromEnemy(pos_map);
-			to_remove = true;
+			state = TROOPER_STATE::DEAD;
 		}
 	}
 }

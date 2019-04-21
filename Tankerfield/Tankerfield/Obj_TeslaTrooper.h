@@ -22,6 +22,7 @@ enum class TROOPER_STATE
 	GET_TELEPORT_POINT,
 	TELEPORT_IN,
 	TELEPORT_OUT,
+	DEAD,
 };
 
 class Obj_TeslaTrooper : public Object 
@@ -80,6 +81,7 @@ private:
 
 	Animation walk;
 	Animation attack;
+	Animation death;
 	Animation portal_animation;
 	Animation portal_close_anim;
 	Animation appear_anim_explosion;
@@ -91,6 +93,7 @@ private:
 	SDL_Texture * explosion_apper_tex			= nullptr;
 
 	SpawnPoint* teleport_spawnpoint = nullptr;
+
 
 };
 
