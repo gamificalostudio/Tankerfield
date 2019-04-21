@@ -203,6 +203,13 @@ bool Obj_Tank::Start()
 	tutorial_revive->AddTextHelper("REVIVE", { 0.f, 70.f });
 	tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
+	////- PickUp
+	tutorial_pick_up = app->ui->CreateInGameHelper(pos_map, clue_def);
+	tutorial_pick_up->single_camera = camera_player;
+	tutorial_pick_up->AddButtonHelper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f });
+	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
+	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+
 	return true;
 }
 
@@ -436,11 +443,20 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
+		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
 		if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
 		{
 			SetPickUp(pick_up);
 		}
+	}
+}
+
+void Obj_Tank::OnTriggerExit(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	{
+		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
 }
 
@@ -890,7 +906,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	{
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 	}
-
+	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();
 }
 
