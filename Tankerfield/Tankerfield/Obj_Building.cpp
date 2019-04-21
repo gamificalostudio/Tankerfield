@@ -13,10 +13,6 @@
 
 SDL_Texture * Obj_Building::texture = nullptr;
 
-Obj_Building::Obj_Building() : Object()
-{
-
-}
 
 Obj_Building::Obj_Building(fPoint pos) : Object(pos)
 {
@@ -27,17 +23,6 @@ Obj_Building::~Obj_Building()
 {
 }
 
-bool Obj_Building::Awake(pugi::xml_node & static_node)
-{
-	return true;
-}
-
-bool Obj_Building::Start()
-{
-	
-
-	return true;
-}
 
 void Obj_Building::SetTexture(const char* path)
 {
