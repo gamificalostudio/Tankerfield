@@ -399,7 +399,7 @@ Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
 //This funtion returns axis and triggers state value
 // The state is a value ranging from -32768 to 32767.
 //strengh -> from 0 to 1
-//length  -> strength of the rumble to play as a 0-1 float value
+//length  -> time of the rumble in milliseconds
 int Controller::PlayRumble(float strengh, Uint32 length)
 {
 	if (this == nullptr || haptic == nullptr)

@@ -55,6 +55,7 @@ public:
 	int GetLife();
 	int GetMaxLife();
 	int GetTimeBetweenBullets();
+	fPoint GetShotDir() const;
 
 	bool IsReady() const;
 
@@ -68,6 +69,7 @@ public:
 private:
 	//- Movement
 	void Movement(float dt);
+	void ShotRecoilMovement(float &dt);
 	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
 
@@ -114,6 +116,19 @@ private:
 	float curr_speed						= 0.f;
 	float speed								= 0.f;
 	fPoint velocity							= { 0.f, 0.f };
+
+	fPoint velocity_recoil_lerp				= { 0.f, 0.f };
+	fPoint velocity_recoil_final_lerp		= { 0.f, 0.f };
+	fPoint recoil_dir						= { 0.f, 0.f };
+	float velocity_recoil_curr_speed		= 0.f;
+	float velocity_recoil_decay				= 0.f;
+	float velocity_recoil_speed_max			= 0.f;
+	float velocity_recoil_speed_max_charged = 0.f;
+	float lerp_factor_recoil				= 0.f;
+	
+	
+
+
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
 	float base_angle_lerp_factor			= 0.f;
