@@ -35,6 +35,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	tex = app->tex->Load("textures/Objects/shk-sheet.png");
 	portal_tex = app->tex->Load("textures/Objects/portal.png");
 	curr_tex = tex;
+	explosion_apper_tex = app->tex->Load("textures/Objects/explosion2.png");
 
 
 	//Assets loading ------------------------------------------------------------------------------------------------------------------------
@@ -44,10 +45,10 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 	curr_anim = &walk;
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/laser-tesla-trooper.wav");
-
-
+	appear_anim_explosion.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("explotions").child("animations").child("explotion2"));
+	draw = false;
 	//Things
-	state				= TROOPER_STATE::GET_PATH;
+	state				= TROOPER_STATE::APPEAR;
 	speed				= 1.5F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
@@ -105,6 +106,19 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	
 	switch (state)
 	{
+	case TROOPER_STATE::APPEAR:
+	{
+		appear_anim_explosion.NextFrame(dt);
+		if ((int)appear_anim_explosion.current_frame == 6)
+		{
+			draw = true;
+		}
+		if (appear_anim_explosion.Finished())
+		{
+			state = TROOPER_STATE::GET_PATH;
+		}
+	}
+			break;
 	case TROOPER_STATE::GET_PATH:
 	{
 		path.clear();
@@ -264,21 +278,37 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 {
 	if (state == TROOPER_STATE::TELEPORT_IN && in_portal != nullptr)
 	{
-	SDL_Rect portal_frame = in_portal->GetFrame(0);
-		app->render->Blit(
-			portal_tex,
-			pos_screen.x - portal_frame.w*0.5f,
-			pos_screen.y- portal_frame.h,
-			camera,
-			&portal_frame);
+		SDL_Rect portal_frame = in_portal->GetFrame(0);
+			app->render->Blit(
+				portal_tex,
+				pos_screen.x - portal_frame.w*0.5f,
+				pos_screen.y- portal_frame.h,
+				camera,
+				&portal_frame);
 	}
-	if(draw)
-	app->render->Blit(
-		curr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&frame);
+
+	if (draw)
+	{
+		app->render->Blit(
+			curr_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&frame);
+	}
+	
+
+	if (state == TROOPER_STATE::APPEAR)
+	{
+		SDL_Rect rect = appear_anim_explosion.GetFrame(0);
+		app->render->Blit(
+			explosion_apper_tex,
+			pos_screen.x - rect.w*0.5f,
+			pos_screen.y - rect.h*0.5f,
+			camera,
+			&rect);
+		
+	}
 	return true;
 }
 

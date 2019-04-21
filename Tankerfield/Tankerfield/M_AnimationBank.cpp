@@ -1,4 +1,5 @@
 #include "M_AnimationBank.h"
+#include "Log.h"
 
 Frames * M_AnimationBank::LoadFrames(pugi::xml_node node)
 {
@@ -33,6 +34,27 @@ bool M_AnimationBank::UnloadFrames(Frames * frames)
 	}
 }
 
+M_AnimationBank::M_AnimationBank()
+{
+	name.assign("animations_bank");
+}
+
+bool M_AnimationBank::Awake(pugi::xml_node & config)
+{
+	std::string path = config.child_value();
+	pugi::xml_parse_result result = animations_xml_doc.load_file(path.c_str());
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
+	}
+	else
+	{
+		animations_xml_node = animations_xml_doc.child("animations");
+	}
+	
+	return true;
+}
+
 bool M_AnimationBank::CleanUp()
 {
 	for (std::map<std::string, Frames*>::iterator iter = frames_map.begin(); iter != frames_map.end();)
@@ -42,6 +64,6 @@ bool M_AnimationBank::CleanUp()
 		iter = frames_map.erase(iter);
 	}
 	frames_map.clear();
-
+	
 	return true;
 }
