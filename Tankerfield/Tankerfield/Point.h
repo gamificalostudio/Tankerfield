@@ -73,6 +73,16 @@ public:
 		return(r);
 	}
 
+	Point operator -() const
+	{
+		Point r;
+
+		r.x = -x;
+		r.y = -y;
+
+		return(r);
+	}
+
 	const Point& operator -=(const Point &v)
 	{
 		x -= v.x;

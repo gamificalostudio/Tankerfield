@@ -67,6 +67,13 @@ bool Obj_Tank::Start()
 
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
 
+	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
+
+	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
+	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
+	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
+	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
+
 	switch (tank_num) {
 	case 0:
 		kb_up		= SDL_SCANCODE_W;
@@ -232,9 +239,9 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
+	Movement(dt);
 	Shoot(dt);
 	Item();
-	Movement(dt);
 	StopTank();
 	ReviveTank();
 	CameraMovement(dt);
@@ -290,14 +297,57 @@ void Obj_Tank::Movement(float dt)
 
 	}
 
-	velocity = iso_dir * curr_speed * dt;                                                               
+	velocity = iso_dir * curr_speed * dt;  
+
+	ShotRecoilMovement(dt);
+
 	pos_map += velocity;
+
+	
+
 
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
 	{
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
+}
+
+void Obj_Tank::ShotRecoilMovement(float &dt)
+{
+	//if the player shot
+	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+	{
+		//- Basic shot
+		if (charged_timer.ReadMs() < charge_time)
+		{
+			//set the max velocity in a basic shot
+			velocity_recoil_curr_speed = velocity_recoil_speed_max;
+		}
+		//- Charged shot
+		else
+		{
+			//set the max velocity in a charged shot
+			velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
+		}
+		// set the direction when shot
+		recoil_dir = -GetShotDir();
+	}
+	else
+	{
+		//reduce the velocity to 0 with decay
+		if (velocity_recoil_curr_speed > 0)
+		{
+			velocity_recoil_curr_speed -= velocity_recoil_decay;
+		}
+	}
+	//calculate the max position of the lerp
+	velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
+
+	//calculate the velocity in lerp
+	velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
+
+	velocity += velocity_recoil_lerp;
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -650,6 +700,7 @@ void Obj_Tank::Shoot(float dt)
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
+
 	}
 }
 
@@ -932,5 +983,10 @@ void Obj_Tank::InputReadyKeyboard()
 	{
 		ready = false;
 	}
+}
+
+fPoint Obj_Tank::GetShotDir() const
+{
+	return shot_dir;
 }
 
