@@ -27,6 +27,7 @@
 #include "UI_InGameElement.h"
 #include "M_UI.h"
 #include "M_ObjManager.h"
+#include "Camera.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -247,18 +248,9 @@ void Obj_Tank::CameraMovement(float dt)
 	if (camera_player == nullptr)
 		return;
 
-	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-	fPoint target_pos =
-	{
-		(float)camera_player->rect.x,
-		(float)camera_player->rect.y
-	};
-
-	//camera_player->rect.x = lerp(screen_pos.x - camera_player->rect.w * 0.5f, target_pos.x, 0.1f /*37.5f*/ * dt);
-	//camera_player->rect.y = lerp(screen_pos.y - camera_player->rect.h * 0.5f, target_pos.y, 0.1f /*37.5f*/ * dt);
-
-	camera_player->rect.x = screen_pos.x - (float) camera_player->rect.w * 0.5f;
-	camera_player->rect.y = screen_pos.y - (float) camera_player->rect.h * 0.5f;
+	camera_player->ResetCamera();
+	camera_player->FollowPlayer(dt, this);
+	camera_player->ShakeCamera(dt);
 }
 
 void Obj_Tank::Movement(float dt)
@@ -640,12 +632,14 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(0.25f);
 		}
 		//- Charged shot
 		else
 		{
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(0.5f);
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);

@@ -268,7 +268,7 @@ bool M_Collision::PostUpdate(float dt)
 	{
 		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 		{
-			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 			if ((*item)->to_destroy == true)
 			{
 				continue;

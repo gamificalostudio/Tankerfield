@@ -1,16 +1,24 @@
 #include <math.h>
-
 #include "MathUtils.h"
 
 //Returns the interpolated value from the current value to the target value with the given a factor
-float lerp(float curr_value, float trg_value, float factor) {
-
+float lerp(float curr_value, float trg_value, float factor)
+{
 	if (factor > 1.f)
 	{
 		factor = 1.f;
 	}
 
-	return 	(1.f - factor)*curr_value + factor * trg_value;
+	return 	curr_value * (1.f - factor) + trg_value * factor;
+}
+
+fPoint lerp(fPoint curr_value, fPoint trg_value, float factor)
+{
+	if (factor > 1.f)
+	{
+		factor = 1.f;
+	}
+	return 	curr_value * (1.f - factor) + trg_value * factor;
 }
 
 //Clamps the rotation between 0 and 360 degrees
