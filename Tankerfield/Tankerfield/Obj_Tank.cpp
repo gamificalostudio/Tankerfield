@@ -206,6 +206,7 @@ bool Obj_Tank::Start()
 	tutorial_move->AddButtonHelper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
 	tutorial_move_time = 2500;
+	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
@@ -283,7 +284,11 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		//app->audio->PlayFx(movement_sfx);
+		if (movement_timer.ReadSec() >= 0.7)
+		{
+			//app->audio->PlayFx(movement_sfx);
+			movement_timer.Start();
+		}
 		
 			tutorial_move_timer.Start();
 		tutorial_move_pressed = true;

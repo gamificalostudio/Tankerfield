@@ -126,6 +126,7 @@ private:
 	float velocity_recoil_speed_max_charged = 0.f;
 	float lerp_factor_recoil				= 0.f;
 	uint movement_sfx						= 0;
+	Timer movement_timer;
 	
 
 
