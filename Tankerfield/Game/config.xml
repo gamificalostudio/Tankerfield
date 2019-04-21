@@ -17,6 +17,7 @@
     <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
+  <animations_bank>animations.xml</animations_bank>
 
   <ui>
     <atlas file="ui/atlas.png"/>

@@ -12,14 +12,21 @@
 class M_AnimationBank : public Module
 {
 public:
+	M_AnimationBank();
+
+	bool Awake(pugi::xml_node& config);
+
 	bool CleanUp() override;
 
 	Frames* LoadFrames(pugi::xml_node node);
 
 	bool UnloadFrames(Frames * frames);
 
-private:
+	//XML document
+	pugi::xml_node		animations_xml_node;
 
+private:
+	pugi::xml_document animations_xml_doc;
 	std::map<std::string, Frames*> frames_map;
 };
 
