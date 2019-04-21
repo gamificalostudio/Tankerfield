@@ -136,7 +136,7 @@
   <map>
    <folder>Maps/</folder>
       <levels>
-        <level name="Map.tmx"/>
+        <level name="Map1.tmx"/>
       </levels>
   </map>
 
