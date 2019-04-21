@@ -294,11 +294,17 @@ void Obj_Tank::Movement(float dt)
 	velocity = iso_dir * curr_speed * dt;   
 	if (ReleaseShot())
 	{
-		fPoint velocity_retroceso_aux = -GetShotDir() * 10 * dt;
-		velocity_retroceso = lerp({0,0}, velocity_retroceso_aux, 0.85*dt);
-		
-		velocity += velocity_retroceso;
+		velocity_retroceso_speed_max = 50.f;
 	}
+	else
+	{
+		if (velocity_retroceso_speed_max > 0)
+		velocity_retroceso_speed_max -= 1.f;
+	}
+	fPoint velocity_retroceso_aux = -GetShotDir() * velocity_retroceso_speed_max * dt;
+	velocity_retroceso = lerp({ 0,0 }, velocity_retroceso_aux, 0.85*dt);
+
+	velocity += velocity_retroceso;
 	pos_map += velocity;
 
 	
