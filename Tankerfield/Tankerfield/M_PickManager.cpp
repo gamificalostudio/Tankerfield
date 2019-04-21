@@ -44,7 +44,6 @@ void M_PickManager::PickUpFromEnemy(fPoint pos_map)
 	{
 		CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
 	}
-
 }
 
 void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, uint levels_to_add)

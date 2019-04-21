@@ -105,7 +105,7 @@ public:
 
 	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
 
-	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float init_value, float target_value);
+	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float loops = -1.F, float init_value = -1.F, float target_value = -1.F);
 
 	fRect GetSection();
 
@@ -130,7 +130,6 @@ public:
 	Camera*               single_camera = nullptr;
 	Camera*               not_in_camera = nullptr;
 	float                 alpha = 255.f;
-	bool                  active_fx = false;
 
 protected:
 
@@ -145,6 +144,7 @@ protected:
 
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
 	HoverState			  hover_state = HoverState::NONE;
+	UI_Fade_FX*           element_fx = nullptr;
 
 	// Hierarchy =========================================
 

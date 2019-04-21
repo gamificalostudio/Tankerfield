@@ -86,33 +86,39 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 
 	// Add icon ====================================================
 
+	weapon_icon = app->ui->CreateImage(position + app->map->ScreenToMapF(0.f, -29.f), img_def);
+	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	weapon_icon->SetParent(weapon_frame);
+
 	Obj_PickUp* pick_up_obj = (Obj_PickUp*)pointed_obj;
 	
 	switch (pick_up_obj->type_of_weapon)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
+		break;
+	case WEAPON::HEALING_SHOT:
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_HEALING_SHOT];
 		break;
 	case WEAPON::FLAMETHROWER:
-		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
-	default:
-		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
+	case WEAPON::LASER_SHOT:
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_LASER];
+		break;
+	case WEAPON::BASIC:
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
-
-	weapon_icon = app->ui->CreateImage(position + app->map->ScreenToMapF(0.f, -29.f), img_def);
-	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
-	weapon_icon->SetParent(weapon_frame);
 
 	level_indicator = app->ui->CreateImage(position + app->map->ScreenToMapF(-32.f,- 64.f), img_def);
 	level_indicator->SetParent(weapon_frame);
 	UpdateLevel();
 
 
-	weapon_frame	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
-	weapon_icon		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
-	level_indicator	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+	weapon_frame	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	weapon_icon		->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	level_indicator	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
 }
 
 bool UI_IG_Weapon::Draw()
@@ -207,8 +213,8 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	item_icon->SetParent(item_frame);
 	
-	item_icon->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
-	item_frame->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, 0.F, 255.F);
+	item_icon->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	item_frame->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
 }
 
 void UI_IG_Item::Destroy()

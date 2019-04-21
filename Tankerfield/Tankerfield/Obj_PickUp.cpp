@@ -88,6 +88,9 @@ ObjectType Obj_PickUp::RandomItem() const
 
 void Obj_PickUp::DeletePickUp()
 {
-	in_game_element->Destroy();
+	if (in_game_element != nullptr)
+	{
+		in_game_element->Destroy();
+	}
 	to_remove = true;
 }

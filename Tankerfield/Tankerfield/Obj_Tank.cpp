@@ -886,6 +886,7 @@ void Obj_Tank::Item()
 		new_item->caster = this;
 		new_item->Use();
 		item = ObjectType::NO_TYPE;
+		gui->SetItemIcon(item);
 	}
 }
 

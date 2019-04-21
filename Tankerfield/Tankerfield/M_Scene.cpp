@@ -77,7 +77,7 @@ bool M_Scene::Start()
 	// UI Elements
 
 	//Create all tanks
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(70.f, 60.f));
+	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
 	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
@@ -113,7 +113,14 @@ bool M_Scene::PreUpdate()
 	{
 		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
 	}
-
+	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	{
+		app->ui->general_hud->SetRoundNumber(2);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::PICK_UP, (fPoint)mouse_pos);
+	}
 	return true;
 }
 
@@ -160,7 +167,6 @@ bool M_Scene::Update(float dt)
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
-		app->ui->general_hud->SetRoundNumber(round);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;
@@ -357,8 +363,8 @@ void M_Scene::NewWave()
 	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
-
 	++round;
+	app->ui->general_hud->SetRoundNumber(round);
 }
 
 bool M_Scene::AllPlayersReady() const

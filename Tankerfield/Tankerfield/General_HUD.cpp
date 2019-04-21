@@ -28,7 +28,6 @@ General_HUD::General_HUD()
 	image_def.sprite_section = { 120, 515, 179, 179 };
 	round_fx = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_fx->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	round_fx->SetState(ELEMENT_STATE::HIDDEN);
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
 	left_tank_life = app->ui->CreateImage({ 0.f ,  full_screen.h * .5f }, image_def);
@@ -43,45 +42,42 @@ General_HUD::General_HUD()
 
 void General_HUD::FadeGeneralHUD(bool fade_on)
 {
-	float init_value = 0.f, target_value = 0.f;
+	UI_Fade_FX::FX_TYPE type;
 
 	if (fade_on)
 	{
-		init_value = 0.f;
-		target_value = 255.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_ON;
 	}
 	else
 	{
-		init_value = 255.f;
-		target_value = 0.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
 
-	round_number_label	->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	round_element		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	left_tank_life		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	right_tank_life		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	round_number_label	->SetFX(type, 3.5F);
+	round_element		->SetFX(type, 3.5F);
+	left_tank_life		->SetFX(type, 3.5F);
+	right_tank_life		->SetFX(type, 3.5F);
 }
 
 void General_HUD::SetRoundNumber(int round)
 {
-	round_number_label->SetText(std::to_string(1).c_str());
+	round_number_label->SetText(std::to_string(round).c_str());
+	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1.F, 3.F);
 }
 
 void General_HUD::FadeGameOver(bool fade_on)
 {
-	float init_value = 0.f, target_value = 0.f;
+	UI_Fade_FX::FX_TYPE type;
 
 	if (fade_on)
 	{
-		init_value = 0.f;
-		target_value = 255.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_ON;
 	}
 	else
 	{
-		init_value = 255.f;
-		target_value = 0.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
 
-	game_word->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
-	over_word->SetFX(UI_Fade_FX::FX_TYPE::FADE, 2.F, init_value, target_value);
+	game_word->SetFX(type, 2.F);
+	over_word->SetFX(type, 2.F);
 }

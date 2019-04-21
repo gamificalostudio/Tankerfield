@@ -106,6 +106,8 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 		weapon_icon->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 	}
 
+	SetWeaponIcon(WEAPON::BASIC);
+
 	UI_BarDef life_bar_def(UI_Bar::DIR::UP, 1.f, { 0, 160, 0, 255 }, { 80, 80, 80, 255 });
 	life_bar_def.section_width = 20.f;
 	life_bar_def.section_height = 234.f;
@@ -158,25 +160,23 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 void Player_GUI::Fade_GUI(bool fade_on)
 {
-	float init_value = 0.f, target_value = 0.f;
+	UI_Fade_FX::FX_TYPE type;
 
 	if (fade_on)
 	{
-		init_value = 0.f;
-		target_value = 255.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_ON;
 	}
 	else
 	{
-		init_value = 255.f;
-		target_value = 0.f;
+		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
 
-	weapon_frame			->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	weapon_icon				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	item_frame				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	item_icon				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	charged_shot_bar		->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
-	life_bar				->SetFX(UI_Fade_FX::FX_TYPE::FADE, 3.5F, init_value, target_value);
+	weapon_frame		->SetFX(type, 3.5F);
+	weapon_icon			->SetFX(type, 3.5F);
+	item_frame			->SetFX(type, 3.5F);
+	item_icon			->SetFX(type, 3.5F);
+	charged_shot_bar	->SetFX(type, 3.5F);
+	life_bar			->SetFX(type, 3.5F);
 
 }
 
@@ -205,6 +205,8 @@ void Player_GUI::SetChargedShotBar(float percent)
 
 void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 {
+	weapon_icon->SetState(ELEMENT_STATE::VISIBLE);
+
 	switch (weapon_type)
 	{
 	case WEAPON::DOUBLE_MISSILE:
@@ -216,16 +218,19 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 	case WEAPON::FLAMETHROWER:
 		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
-	case WEAPON::BASIC:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
+	case WEAPON::LASER_SHOT:
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_LASER];
 		break;
-	default:
+	case WEAPON::BASIC:
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
 }
 
 void Player_GUI::SetItemIcon( ObjectType type)
 {
+	item_icon->SetState(ELEMENT_STATE::VISIBLE);
+
 	switch (type)
 	{
 	case ObjectType::HEALTH_BAG:
@@ -234,8 +239,8 @@ void Player_GUI::SetItemIcon( ObjectType type)
 	case ObjectType::HAPPY_HOUR_ITEM:
 		item_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
-	default:
-		item_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
+	case ObjectType::NO_TYPE:
+		item_icon->SetState(ELEMENT_STATE::HIDDEN);
 		break;
 	}
 }

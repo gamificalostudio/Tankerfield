@@ -8,6 +8,7 @@
 //It doesn't have any functionality more than loading the properties
 
 enum class WEAPON {
+	NO_TYPE = -1,
 	BASIC,
 	DOUBLE_MISSILE,
 	HEALING_SHOT,

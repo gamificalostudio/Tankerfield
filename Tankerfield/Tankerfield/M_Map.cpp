@@ -88,7 +88,7 @@ bool M_Map::PostUpdate(float dt)
 
 		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
 		{
-			//TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
+			TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
 
 			app->render->Blit(sorted_tiles->texture,
 				(*sorted_tiles).rect.x,

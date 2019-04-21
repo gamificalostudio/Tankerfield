@@ -80,10 +80,11 @@ public:
 	{
 		NO_TYPE,
 		INTERMITTENT,
-		FADE,
+		FADE_ON,
+		FADE_OUT
 	};
 
-	UI_Fade_FX(const FX_TYPE type, float seconds, UI_Element* element, float init_value, float target_value);
+	UI_Fade_FX(const FX_TYPE type, float seconds, UI_Element* element, float loops = -1, float init_value = -1.f, float target_value = -1.f);
 	bool Update(float dt);
 	void Destroy();
 
@@ -96,6 +97,8 @@ private:
 	float			target_value = 255;
 	float			init_value = 0;
 	bool			finished = false;
+	float           loops_count = 0;
+	float           max_loops = -1.f;
 
 	friend M_UI;
 };
@@ -204,7 +207,7 @@ private:
 
 	void UpdateGuiPositions(UI_Element* object, fPoint cumulated_position);
 
-	void AddFX( UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float init_value, const float target_value);
+	void AddFX( UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float loops ,const float init_value, const float target_value);
 
 private:
 

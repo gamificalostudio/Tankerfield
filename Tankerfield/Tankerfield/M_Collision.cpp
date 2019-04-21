@@ -155,7 +155,19 @@ bool M_Collision::Update(float dt)
 					DoOnTrigger(collider_2, collider_1);
 				}
 
-				SolveOverlapDD(collider_1, collider_2);
+				if ((int)collider_1->tag > (int)collider_2->tag)
+				{
+					SolveOverlapDS(collider_2, collider_1);
+				}
+				else if ((int)collider_1->tag < (int)collider_2->tag)
+				{
+					SolveOverlapDS(collider_1, collider_2);
+				}
+				else
+				{
+					SolveOverlapDD(collider_1, collider_2);
+				}
+
 			}
 			else
 			{
