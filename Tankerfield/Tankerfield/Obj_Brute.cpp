@@ -34,6 +34,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 
 	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
+	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
 	curr_anim = &walk;
 
 	state = BRUTE_STATE::GET_PATH;
@@ -86,7 +87,7 @@ void Obj_Brute::Attack()
 
 void Obj_Brute::Movement(float &dt)
 {
-	if (timer.ReadSec() >= check_path_time)
+	if (timer.ReadSec() >= check_path_time&&state!=BRUTE_STATE::DEAD)
 		state = BRUTE_STATE::GET_PATH;
 
 	switch (state)
@@ -142,6 +143,14 @@ void Obj_Brute::Movement(float &dt)
 			state = BRUTE_STATE::GET_PATH;
 	}
 	break;
+	case BRUTE_STATE::DEAD:
+	{
+		curr_anim = &death;
+		if (curr_anim==&death&&curr_anim->Finished())
+		{
+			to_remove = true;
+		}
+	}
 	default:
 		assert(true && "A tesla trooper have no state");
 		break;
@@ -174,7 +183,7 @@ void Obj_Brute::OnTrigger(Collider* collider)
 		life -= collider->damage;
 		if (life <= 0)
 		{
-			to_remove = true;
+			state = BRUTE_STATE::DEAD;
 		}
 	}
 }

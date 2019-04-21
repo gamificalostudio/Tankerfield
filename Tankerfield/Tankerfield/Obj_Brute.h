@@ -16,7 +16,8 @@ enum class BRUTE_STATE
 	IDLE,
 	GET_PATH,
 	MOVE,
-	RECHEAD_POINT
+	RECHEAD_POINT,
+	DEAD
 };
 
 class Obj_Brute : public Object
@@ -68,6 +69,7 @@ private:
 
 	Animation walk;
 	Animation attack;
+	Animation death;
 	SDL_Texture * tex = nullptr;
 
 };
