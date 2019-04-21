@@ -119,11 +119,13 @@ private:
 
 	fPoint velocity_recoil_lerp				= { 0.f, 0.f };
 	fPoint velocity_recoil_final_lerp		= { 0.f, 0.f };
+	fPoint recoil_dir						= { 0.f, 0.f };
 	float velocity_recoil_curr_speed		= 0.f;
 	float velocity_recoil_decay				= 0.f;
 	float velocity_recoil_speed_max			= 0.f;
 	float velocity_recoil_speed_max_charged = 0.f;
 	float lerp_factor_recoil				= 0.f;
+	
 	
 
 

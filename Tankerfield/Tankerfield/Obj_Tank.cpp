@@ -239,9 +239,9 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
+	Movement(dt);
 	Shoot(dt);
 	Item();
-	Movement(dt);
 	StopTank();
 	ReviveTank();
 	CameraMovement(dt);
@@ -316,29 +316,36 @@ void Obj_Tank::Movement(float dt)
 
 void Obj_Tank::ShotRecoilMovement(float &dt)
 {
-	if (ReleaseShot())
+	//if the player shot
+	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
 		//- Basic shot
 		if (charged_timer.ReadMs() < charge_time)
 		{
+			//set the max velocity in a basic shot
 			velocity_recoil_curr_speed = velocity_recoil_speed_max;
 		}
 		//- Charged shot
 		else
 		{
+			//set the max velocity in a charged shot
 			velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
 		}
-
+		// set the direction when shot
+		recoil_dir = -GetShotDir();
 	}
 	else
 	{
-		//reduce the velocity
+		//reduce the velocity to 0 with decay
 		if (velocity_recoil_curr_speed > 0)
 		{
 			velocity_recoil_curr_speed -= velocity_recoil_decay;
 		}
 	}
-	velocity_recoil_final_lerp = -GetShotDir() * velocity_recoil_curr_speed * dt;
+	//calculate the max position of the lerp
+	velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
+
+	//calculate the velocity in lerp
 	velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
 
 	velocity += velocity_recoil_lerp;
