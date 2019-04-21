@@ -15,27 +15,31 @@
 
 Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 {
-	coll = app->collision->AddCollider(pos, 2, 2, Collider::TAG::REWARD_BOX, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
-	frame.w = 200;
-	frame.h = 200;
+
+	pugi::xml_node reward_box_node = app->config.child("object").child("reward_box");
+
+	reward_box_dead_sound_string = reward_box_node.child("sound").attribute("value").as_string();
+	reward_box_dead_sound_int = app->audio->LoadFx(reward_box_dead_sound_string);
+
+	texture = app->tex->Load(reward_box_node.child("image_path").attribute("value").as_string());
+	curr_tex = texture;
+	frame = { 14, 21, 28,34 };
+	draw_offset = { 14,20 };
+
+	shadow_frame = { 89, 37, 30, 18 };
+	draw_shadow_offset = { 0, 5 };
 
 	life = 100;
+
+	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , Collider::TAG::REWARD_BOX, 0.f, this);//width and height hardcoded
+	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
 }
 
 Obj_RewardBox::~Obj_RewardBox()
 {
 }
 
-bool Obj_RewardBox::Start()
-{
-	pugi::xml_node reward_box_node = app->config.child("object").child("reward_box");
 
-	reward_box_dead_sound_string = reward_box_node.child("sound").attribute("value").as_string();
-	reward_box_dead_sound_int = app->audio->LoadFx(reward_box_dead_sound_string);
-
-	return true;
-}
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
 {
@@ -46,9 +50,22 @@ void Obj_RewardBox::OnTrigger(Collider * collider)
 
 }
 
-bool Obj_RewardBox::Draw(float dt, Camera * camera)
+//bool Obj_RewardBox::Draw(float dt, Camera * camera)
+//{
+//	app->render->DrawIsometricQuad(pos_map.x, pos_map.y, 2, 2, { 255,255,255,255 }, camera);
+//
+//	return true;
+//}
+
+bool Obj_RewardBox::DrawShadow(Camera * camera)
 {
-	app->render->DrawIsometricQuad(pos_map.x, pos_map.y, 2, 2, { 255,255,255,255 }, camera);
+	app->render->Blit(
+		texture,
+		pos_screen.x,
+		pos_screen.y-draw_shadow_offset.y,
+		camera,
+		&shadow_frame
+	);
 
 	return true;
 }
