@@ -55,6 +55,7 @@ public:
 	int GetLife();
 	int GetMaxLife();
 	int GetTimeBetweenBullets();
+	fPoint GetShotDir() const;
 
 	bool IsReady() const;
 
@@ -114,6 +115,7 @@ private:
 	float curr_speed						= 0.f;
 	float speed								= 0.f;
 	fPoint velocity							= { 0.f, 0.f };
+	fPoint velocity_retroceso				= { 0.f, 0.f };
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
 	float base_angle_lerp_factor			= 0.f;

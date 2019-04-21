@@ -291,8 +291,18 @@ void Obj_Tank::Movement(float dt)
 
 	}
 
-	velocity = iso_dir * curr_speed * dt;                                                               
+	velocity = iso_dir * curr_speed * dt;   
+	if (ReleaseShot())
+	{
+		fPoint velocity_retroceso_aux = -GetShotDir() * 10 * dt;
+		velocity_retroceso = lerp({0,0}, velocity_retroceso_aux, 0.85*dt);
+		
+		velocity += velocity_retroceso;
+	}
 	pos_map += velocity;
+
+	
+
 
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
 	{
@@ -643,6 +653,7 @@ void Obj_Tank::Shoot(float dt)
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
+
 	}
 }
 
@@ -925,5 +936,10 @@ void Obj_Tank::InputReadyKeyboard()
 	{
 		ready = false;
 	}
+}
+
+fPoint Obj_Tank::GetShotDir() const
+{
+	return shot_dir;
 }
 
