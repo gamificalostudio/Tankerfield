@@ -497,7 +497,8 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		/* Reward Zones locations */
 		if(object_group->name == "Reward_zones")
 		{
-			//fPoint map_pos = app->map->ScreenToMapF((float)(object_group->objects[i].pos.x), (float)(object_group->objects[i].pos.y));
+			
+
 			fPoint map_pos = { (float)(object_group->objects[i].pos.x), (float)(object_group->objects[i].pos.y) };
 			int i_size = obj_node.child("properties").child("property").attribute("value").as_int(3);
 
@@ -511,9 +512,11 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	{
 		for (i = 0; i < object_group->size; ++i)
 		{
+			if (object_group->objects[i].pos.x == 0 && object_group->objects[i].pos.y == 0)
+				LOG("here");
 			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x / data.tile_height),  (float)(object_group->objects[i].pos.y/ data.tile_height) };
-			fPoint mesure = { (float)object_group->objects[i].w / data.tile_height, (float)object_group->objects[i].h / data.tile_height };
+			fPoint pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
+			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h};
 			app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
 		}
 	}
