@@ -7,7 +7,7 @@ Camera::Camera()
 	max_offset = 16.f;
 	trauma_decay = 0.9f;
 	random_generator.seed(random_device());
-	lerp_factor = 37.5f;
+	lerp_factor = 5.f;
 }
 
 
@@ -57,12 +57,12 @@ float Camera::GetShakeAmount() const
 void Camera::FollowPlayer(float dt, Obj_Tank * player)
 {
 	fPoint source_pos ((float)rect.x, (float)rect.y);
-
 	fPoint player_pos = app->map->MapToScreenF(player->pos_map);
 	fPoint target_pos(player_pos.x - rect.w * 0.5f, player_pos.y - rect.h * 0.5f);
 
-	rect.x = lerp(source_pos.x, target_pos.x, lerp_factor * dt);
-	rect.y = lerp(source_pos.y, target_pos.y, lerp_factor * dt);
+	fPoint lerp_pos = lerp(source_pos, target_pos, lerp_factor * dt);
+	rect.x = lerp_pos.x;
+	rect.y = lerp_pos.y;
 }
 
 float Camera::GetRandomValue(float min_value, float max_value)
