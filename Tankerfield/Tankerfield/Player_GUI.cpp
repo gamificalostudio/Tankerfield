@@ -171,12 +171,12 @@ void Player_GUI::Fade_GUI(bool fade_on)
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
 
-	weapon_frame		->SetFX(type, 3.5F);
-	weapon_icon			->SetFX(type, 3.5F);
-	item_frame			->SetFX(type, 3.5F);
-	item_icon			->SetFX(type, 3.5F);
-	charged_shot_bar	->SetFX(type, 3.5F);
-	life_bar			->SetFX(type, 3.5F);
+	weapon_frame		->SetFX(type, 3.f);
+	weapon_icon			->SetFX(type, 3.f);
+	item_frame			->SetFX(type, 3.f);
+	item_icon			->SetFX(type, 3.f);
+	charged_shot_bar	->SetFX(type, 3.f);
+	life_bar			->SetFX(type, 3.f);
 
 }
 

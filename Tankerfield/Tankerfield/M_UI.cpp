@@ -27,6 +27,7 @@
 #include "UI_TextPanel.h"
 #include "UI_InGameElement.h"
 #include "UI_Bar.h"
+#include "UI_Quad.h"
 
 #include <vector>
 
@@ -257,9 +258,6 @@ bool M_UI::PreUpdate()
 }
 
 
-
-//app->scene->tank_1->SetLife( lerp(init_value, target_value, ax));
-
 bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
@@ -360,6 +358,7 @@ bool M_UI::Update(float dt)
 		}
 	}
 
+	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
 	// Hover Callbacks =============================================
 
@@ -383,8 +382,6 @@ bool M_UI::Update(float dt)
 			break;
 		}
 	}
-
-	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
 	// In Game Elements Update ============================================
 
@@ -431,11 +428,6 @@ bool M_UI::PostUpdate(float dt)
 
 	fRect full_screen = app->win->GetWindowRect();
 
-	//Split Lines ==========================================================================================================
-
-	app->render->DrawQuad({(int) (full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
-	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
-
 	// Draw all In Game elements ====================================
 
 	for (list<Player_GUI*>::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
@@ -446,6 +438,11 @@ bool M_UI::PostUpdate(float dt)
 	}
 
 	current_camera = nullptr;
+
+	//Split Screen Lines ==========================================================================================================
+
+	app->render->DrawQuad({ (int)(full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
+	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
 
 	// Draw all UI elements ====================================
 
@@ -482,6 +479,23 @@ bool M_UI::PostUpdate(float dt)
  UI_Element * M_UI::CreateElement(const fPoint position, const UI_ElementDef definition, UI_Listener * listener)
  {
 	 UI_Element* object = DBG_NEW UI_Element(position, definition, listener);
+
+	 if (definition.is_in_game == true)
+	 {
+		 object->SetParent(main_in_game_element);
+		 ig_elements_list.push_back(object);
+	 }
+	 else
+	 {
+		 object->SetParent(main_ui_element);
+		 elements_list.push_back(object);
+	 }
+	 return object;
+ }
+
+ UI_Quad * M_UI::CreateQuad(const fPoint position, const UI_QuadDef definition, UI_Listener * listener)
+ {
+	 UI_Quad* object = DBG_NEW UI_Quad(position, definition, listener);
 
 	 if (definition.is_in_game == true)
 	 {
@@ -802,8 +816,7 @@ void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds,  UI_Element * el
 
 
 
-UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, float loops,  const float init_value, const float target_value): 
-	init_value(init_value), target_value(target_value) ,element(element), max_loops(loops), type(type)
+UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * element, float loops,  const float init_value, const float target_value): element(element), max_loops(loops), type(type)
 {
 	ratetime = 1.f / seconds;
 
@@ -824,13 +837,20 @@ UI_Fade_FX::UI_Fade_FX( const FX_TYPE type, const float seconds, UI_Element * el
 			this->target_value = 255.f;
 			break;
 		}
+
+		element->alpha = this->init_value;
+	}
+	else
+	{
+		this->init_value = init_value;
+		this->target_value = target_value;
 	}
 
 }
 
 bool UI_Fade_FX::Update(float dt)
 {
-	if (type == UI_Fade_FX::FX_TYPE::FADE_ON || type == UI_Fade_FX::FX_TYPE::FADE_ON)
+	if (type == UI_Fade_FX::FX_TYPE::FADE_ON || type == UI_Fade_FX::FX_TYPE::FADE_OUT)
 	{
 		ax += dt * ratetime;
 		element->alpha = lerp(init_value, target_value, ax);
@@ -853,7 +873,7 @@ bool UI_Fade_FX::Update(float dt)
 			ax = 0.f;
 		}
 
-		if (loops_count > max_loops)
+		if ( max_loops != -1.f && loops_count > max_loops)
 		{
 			finished = true;
 		}

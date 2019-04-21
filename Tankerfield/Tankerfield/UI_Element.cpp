@@ -103,7 +103,6 @@ void UI_Element::SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y)
 
 void UI_Element::SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float loops, float init_value, float target_value)
 {
-	alpha = init_value;
 	app->ui->AddFX(type, seconds, this, loops,init_value, target_value);
 }
 
