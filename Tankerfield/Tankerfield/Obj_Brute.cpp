@@ -145,6 +145,8 @@ void Obj_Brute::Movement(float &dt)
 	break;
 	case BRUTE_STATE::DEAD:
 	{
+		coll->to_destroy = true;
+		coll = nullptr;
 		curr_anim = &death;
 		if (curr_anim==&death&&curr_anim->Finished())
 		{
