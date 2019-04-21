@@ -469,9 +469,10 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			// To ortogonal tile pos-----------------
 			fPoint pos = { (float)(object_group->objects[i].pos.x ),  (float)(object_group->objects[i].pos.y ) };
 			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h};
-
+			
 
 			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, pos);
+
 			for (pugi::xml_node property_node = obj_node.child("properties").child("property"); property_node; property_node = property_node.next_sibling("property"))
 			{
 				std::string name = (property_node.attribute("name").as_string());
@@ -490,7 +491,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 				}	
 				
 			}
-			ret->SetTexture(ret->path);
+			ret->SetTexture(ret->path, fPoint{mesure.x, mesure.y});
 
 		}
 
