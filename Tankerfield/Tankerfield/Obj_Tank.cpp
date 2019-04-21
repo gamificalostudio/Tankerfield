@@ -294,15 +294,24 @@ void Obj_Tank::Movement(float dt)
 	velocity = iso_dir * curr_speed * dt;   
 	if (ReleaseShot())
 	{
-		velocity_retroceso_speed_max = 50.f;
+		if (charged_timer.ReadMs() < charge_time)
+		{
+			velocity_retroceso_speed_max = 50.f;
+		}
+		//- Charged shot
+		else
+		{
+			velocity_retroceso_speed_max = 100.f;
+		}
+		
 	}
 	else
 	{
 		if (velocity_retroceso_speed_max > 0)
-		velocity_retroceso_speed_max -= 1.f;
+		velocity_retroceso_speed_max -= 2.f;
 	}
 	fPoint velocity_retroceso_aux = -GetShotDir() * velocity_retroceso_speed_max * dt;
-	velocity_retroceso = lerp({ 0,0 }, velocity_retroceso_aux, 0.85*dt);
+	velocity_retroceso = lerp({ 0,0 }, velocity_retroceso_aux, 0.5f*dt);
 
 	velocity += velocity_retroceso;
 	pos_map += velocity;
