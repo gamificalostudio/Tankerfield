@@ -37,6 +37,7 @@
 #include "Item_HappyHour.h"
 #include "Obj_PickUp.h"
 #include "Obj_RewardBox.h"
+#include "Camera.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -155,7 +156,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
-		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 
 		for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
@@ -315,7 +316,7 @@ Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 	for (std::list<Obj_Tank*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
 	{
 		float distance = pos.DistanceNoSqrt((*iter)->pos_map);
-		if ((*iter)->GetLife() > 0
+		if ((*iter)->Alive()
 			&& distance < max_dist_squared
 			&& distance < lowest_distance)
 		{

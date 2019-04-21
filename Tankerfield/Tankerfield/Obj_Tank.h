@@ -42,6 +42,8 @@ public:
 
 	void OnTrigger(Collider* c1);
 
+	void OnTriggerExit(Collider* c1);
+
 public:
 	//- Logic
 	void SetLife(int life);
@@ -61,6 +63,7 @@ public:
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
+	bool Alive();
 
 private:
 	//- Movement
@@ -93,7 +96,6 @@ private:
 	//- TankDeath
 	void ReviveTank();
 	void StopTank();
-	bool Alive();
 
 	//- Item
 	void Item();
@@ -155,6 +157,7 @@ private:
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
+	UI_IG_Helper * tutorial_pick_up			= nullptr;
 
 	//- GUI
 	Player_GUI*  gui                        = nullptr;

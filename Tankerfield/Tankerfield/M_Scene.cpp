@@ -157,7 +157,7 @@ bool M_Scene::Update(float dt)
 	case WaveStat::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
-		//NewWave();
+		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->ui->general_hud->SetRoundNumber(round);
@@ -293,7 +293,7 @@ void M_Scene::DebugPathfinding()
 					
 					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
-						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
 					}
 					SDL_RenderSetClipRect(app->render->renderer, nullptr);
@@ -306,7 +306,7 @@ void M_Scene::DebugPathfinding()
 
 		for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 		{
-			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->viewport);
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
 		}SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
