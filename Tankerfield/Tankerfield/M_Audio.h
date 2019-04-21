@@ -42,9 +42,9 @@ public:
 	void PauseFx(unsigned int id, int fade_out);
 
 public:
-	unsigned int GetExplosionFx();
+	uint GetExplosionFx();
 
-	unsigned int explosion_fx;
+	uint explosion_fx;
 
 private:
 	_Mix_Music* music = nullptr;
