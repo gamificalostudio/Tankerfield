@@ -69,6 +69,10 @@ private:
 	float attack_range			= 0.f;//Tile distance in which the enemy can attack
 	float attack_range_squared	= 0.f;
 	int attack_damage			= 0;
+	uint sfx_attack = 0;
+
+
+
 	PerfTimer perf_timer;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;

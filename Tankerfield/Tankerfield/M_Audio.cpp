@@ -77,6 +77,7 @@ bool M_Audio::CleanUp()
 		Mix_FreeChunk(*item);
 
 	fx.clear();
+	sfx_map.clear();
 
 	Mix_CloseAudio();
 	Mix_Quit();
@@ -149,18 +150,26 @@ unsigned int M_Audio::LoadFx(const char* path)
 	if (!active)
 		return 0;
 
-	Mix_Chunk* chunk = Mix_LoadWAV(path);
-
-	if (chunk == NULL)
+	std::map<std::string, uint>::iterator iter = sfx_map.find(path);
+	if (iter != sfx_map.end())
 	{
-		LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
+		return ret = iter->second;
 	}
 	else
 	{
-		fx.push_back(chunk);
-		ret = fx.size();
-	}
+		Mix_Chunk* chunk = Mix_LoadWAV(path);
 
+		if (chunk == NULL)
+		{
+			LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
+		}
+		else
+		{
+			fx.push_back(chunk);
+			ret = fx.size();
+			sfx_map[path] = ret;
+		}
+	}
 	return ret;
 }
 
