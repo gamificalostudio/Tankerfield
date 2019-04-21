@@ -34,8 +34,7 @@ bool Obj_Building::Awake(pugi::xml_node & static_node)
 
 bool Obj_Building::Start()
 {
-	coll = app->collision->AddCollider(pos_map, 4.f, 4.f, Collider::TAG::WALL, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
+	
 
 	return true;
 }
@@ -47,6 +46,9 @@ void Obj_Building::SetTexture(const char* path)
 	frame.x = 0;
 	frame.y = 0;
 	SDL_QueryTexture(texture, NULL, NULL, &frame.w, &frame.h);
+
+	coll = app->collision->AddCollider(pos_map, frame.w, frame.h, Collider::TAG::WALL, 0.f, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
 	
 }
 
