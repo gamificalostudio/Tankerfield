@@ -242,11 +242,6 @@ void Obj_Tank::CameraMovement(float dt)
 		return;
 
 	camera_player->ResetCamera();
-
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-	{
-		camera_player->AddTrauma(0.13f);
-	}
 	camera_player->FollowPlayer(dt, this);
 	camera_player->ShakeCamera(dt);
 }
@@ -621,12 +616,14 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(0.25f);
 		}
 		//- Charged shot
 		else
 		{
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(0.5f);
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);

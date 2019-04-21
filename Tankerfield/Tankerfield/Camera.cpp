@@ -4,8 +4,8 @@
 
 Camera::Camera()
 {
-	max_offset = 16.f;
-	trauma_decay = 0.9f;
+	max_offset = 30.f;
+	trauma_decay = 1.f;
 	random_generator.seed(random_device());
 	lerp_factor = 5.f;
 }
