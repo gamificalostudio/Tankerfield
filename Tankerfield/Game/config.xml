@@ -133,9 +133,9 @@
   </ui>
 
   <map>
-   <folder>Maps/</folder>
+   <folder>Maps/AllTiles/</folder>
       <levels>
-        <level name="SnowMap.tmx"/>
+        <level name="Map.tmx"/>
       </levels>
   </map>
 
