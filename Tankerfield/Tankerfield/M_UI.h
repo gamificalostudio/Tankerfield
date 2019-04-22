@@ -163,6 +163,8 @@ public:
 
 	bool CleanUp() override;
 
+	bool Reset();
+
 	SDL_Texture* GetAtlas() const;
 
 	ClickState GetClickState() const;

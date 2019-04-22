@@ -50,6 +50,18 @@ General_HUD::General_HUD()
 	FadeGeneralHUD(true);
 }
 
+General_HUD::~General_HUD()
+{
+	round_number_label	->Destroy();
+	round_element		->Destroy();
+	round_fx			->Destroy();
+	left_tank_life		->Destroy();
+	right_tank_life		->Destroy();
+	game_word			->Destroy();
+	over_word			->Destroy();
+	background			->Destroy();
+}
+
 void General_HUD::FadeGeneralHUD(bool fade_on)
 {
 	UI_Fade_FX::FX_TYPE type;

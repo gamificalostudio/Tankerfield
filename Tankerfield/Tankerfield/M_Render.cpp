@@ -288,7 +288,7 @@ void M_Render::Blit( SDL_Texture* texture,  const int screen_x, const int screen
 	//Print the rect_in_screen ============================================
 	if (SDL_RenderCopy(renderer, texture, &spritesheet_rect, &rect_in_screen) )
 	{
-		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+		//LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
 }

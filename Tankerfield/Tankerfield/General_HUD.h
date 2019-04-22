@@ -13,6 +13,8 @@ public:
 
 	General_HUD();
 
+	~General_HUD();
+
 	void FadeGeneralHUD(bool fade_on);
 
 	void SetRoundNumber(int round);

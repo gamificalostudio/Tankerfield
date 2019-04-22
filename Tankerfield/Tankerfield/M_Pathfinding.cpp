@@ -46,6 +46,13 @@ bool M_Pathfinding::CleanUp()
 	return true;
 }
 
+bool M_Pathfinding::Reset()
+{
+	last_path.clear();
+	RELEASE_ARRAY(map);
+	return true;
+}
+
 // Sets up the walkability map
 void M_Pathfinding::SetMap(uint width, uint height, uchar* data)
 {

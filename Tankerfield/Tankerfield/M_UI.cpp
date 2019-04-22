@@ -141,6 +141,8 @@ bool M_UI::CleanUp()
 	font_open_sants_bold_12 = nullptr;
 	atlas = nullptr;
 
+	RELEASE(general_hud);
+
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
 	{
 		RELEASE((*gui));
@@ -167,6 +169,40 @@ bool M_UI::CleanUp()
 
 	active_fxs.clear();
 
+	general_hud = nullptr;
+	player_1_gui = nullptr;
+	player_2_gui = nullptr;
+	player_3_gui = nullptr;
+	player_4_gui = nullptr;
+
+	return true;
+}
+
+bool M_UI::Reset()
+{
+	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
+	{
+		RELEASE((*gui));
+	}
+
+	players_guis.clear();
+
+	for (list < UI_Element*> ::iterator element = ig_elements_list.begin(); element != ig_elements_list.end(); ++element)
+	{
+		if ((*element) != main_in_game_element)
+		{
+			(*element)->Destroy();
+		}
+	}
+
+	for (list < UI_Element*> ::iterator element = elements_list.begin(); element != elements_list.end(); ++element)
+	{
+		if ((*element) != main_ui_element)
+		{
+			(*element)->Destroy();
+		}
+	}
+
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
@@ -177,7 +213,6 @@ bool M_UI::CleanUp()
 
 	return true;
 }
-
 
 // Update all guis
 bool M_UI::PreUpdate()
@@ -301,8 +336,6 @@ bool M_UI::Update(float dt)
 	//}
 	// Update FX ===================================================
 
-	int count = 0;
-
 	for (std::list<UI_Fade_FX*>::iterator iter = active_fxs.begin(); iter != active_fxs.end(); )
 	{
 		if ((*iter)->element->to_destroy == true || (*iter)->finished == true)
@@ -317,13 +350,11 @@ bool M_UI::Update(float dt)
 		}
 		else
 		{
-			++count;
 			(*iter)->Update(dt);
 			++iter;
 		}
 	}
 
-	//LOG("Active FX ====> %i", count);
 
 	// UI Elements Update =====================================================
 
