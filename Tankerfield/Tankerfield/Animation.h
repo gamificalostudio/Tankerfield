@@ -28,6 +28,7 @@ public:
 	{
 		//Load animation variables
 		speed = node.attribute("speed").as_float();
+		loop = node.attribute("loop").as_bool(true);
 		std::string rotation_string = node.attribute("rotation").as_string();
 		if (rotation_string == "clockwise")
 		{

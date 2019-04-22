@@ -75,10 +75,11 @@ void General_HUD::FadeGeneralHUD(bool fade_on)
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
 
-	round_number_label	->SetFX(type, 3.F);
-	round_element		->SetFX(type, 3.F);
-	left_tank_life		->SetFX(type, 3.F);
-	right_tank_life		->SetFX(type, 3.F);
+	round_fx->FinishFX();
+	round_number_label	->SetFX(type, 2.F);
+	round_element		->SetFX(type, 2.F);
+	left_tank_life		->SetFX(type, 2.F);
+	right_tank_life		->SetFX(type, 2.F);
 }
 
 void General_HUD::SetRoundNumber(int round)

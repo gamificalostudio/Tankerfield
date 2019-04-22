@@ -227,19 +227,26 @@ bool M_Scene::Update(float dt)
 		{
 			stat_of_wave = WaveStat::ENTER_IN_WAVE;
 		}
+		break;
 
-	}
+	case WaveStat::GAME_OVER:
 
-	if (game_over == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
-	{
 		game_over = true;
-		
 		app->ui->player_1_gui->Fade_GUI(false);
 		app->ui->player_2_gui->Fade_GUI(false);
 		app->ui->player_3_gui->Fade_GUI(false);
 		app->ui->player_4_gui->Fade_GUI(false);
 		app->ui->general_hud->FadeGeneralHUD(false);
 		app->ui->general_hud->FadeGameOver(true);
+		stat_of_wave = WaveStat::NO_TYPE;
+
+		break;
+	}
+
+	if (game_over == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
+	{
+		stat_of_wave = WaveStat::GAME_OVER;
+		game_over = true;
 	}
 
 	return true;
