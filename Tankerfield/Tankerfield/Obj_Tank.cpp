@@ -38,12 +38,21 @@ Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 
 Obj_Tank::~Obj_Tank()
 {
-	//number_of_tanks--;
+	number_of_tanks--;
 	if (app->on_clean_up == false)
 	{
-		tutorial_move->Destroy();
-		tutorial_pick_up->Destroy();
-		tutorial_revive->Destroy();
+		if (tutorial_move != nullptr)
+		{
+			tutorial_move->Destroy();
+		}
+		if (tutorial_pick_up != nullptr)
+		{
+			tutorial_pick_up->Destroy();
+		}
+		if (tutorial_revive != nullptr)
+		{
+			tutorial_revive->Destroy();
+		}
 	}
 
 	if (camera_player != nullptr)

@@ -1,7 +1,7 @@
 #ifndef __M_FONTS_H__
 #define __M_FONTS_H__
 
-#include <list>
+#include <map>
 
 #include "SDL\include\SDL_pixels.h"
 
@@ -41,8 +41,8 @@ public:
 
 public:
 
-	list <_TTF_Font*>	fonts;
-	_TTF_Font*			default_font = nullptr;
+	map <string, _TTF_Font*>	fonts;
+	_TTF_Font*			         default_font = nullptr;
 };
 
 

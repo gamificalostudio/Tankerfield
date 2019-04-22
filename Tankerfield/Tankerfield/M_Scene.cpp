@@ -87,7 +87,7 @@ bool M_Scene::Start()
 
 	round = 1;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
-
+	game_over = false;
 
 	/* Generate Reward Zones */
 	//reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);

@@ -49,11 +49,11 @@ bool M_Fonts::CleanUp()
 {
 	LOG("Freeing True Type fonts and library");
 
-	list<_TTF_Font*>::iterator item;
-
-	for (item = fonts.begin(); item != fonts.end(); ++item)
+	for (std::map<std::string, TTF_Font*>::iterator iter = fonts.begin(); iter != fonts.end();)
 	{
-		TTF_CloseFont((*item));
+		TTF_CloseFont(iter->second);
+		iter->second = nullptr;
+		iter = fonts.erase(iter);
 	}
 
 	fonts.clear();
@@ -65,16 +65,29 @@ bool M_Fonts::CleanUp()
 TTF_Font* const M_Fonts::Load(const char* path, int size)
 {
 	BROFILER_CATEGORY("M_FontsLoad", Profiler::Color::Yellow)
-	TTF_Font* font = TTF_OpenFont(path, size);
 
-	if(font == NULL)
+	TTF_Font* font = nullptr;
+
+	std::map<std::string, TTF_Font *>::iterator iter = fonts.find(path);
+
+	if (iter != fonts.end())
 	{
-		LOG("Could not load TTF font with path: %s. TTF_OpenFont: %s", path, TTF_GetError());
+		//Return the texture if it's already been loaded onto the map
+		font = iter->second;
 	}
 	else
 	{
-		LOG("Successfully loaded font %s size %d", path, size);
-		fonts.push_back(font);
+		font = TTF_OpenFont(path, size);
+
+		//Load a new texture if there isn't a texture loaded with that path
+		if (font == nullptr)
+		{
+			LOG("Could not load TTF font with path: %s. TTF_OpenFont: %s", path, TTF_GetError());
+		}
+		else
+		{
+			fonts[path] = font;
+		}
 	}
 
 	return font;
@@ -84,17 +97,18 @@ bool M_Fonts::Unload(_TTF_Font * font)
 {
 	list<_TTF_Font*>::iterator item;
 
-	for (item = fonts.begin(); item != fonts.end(); ++item)
+	for (std::map<std::string, _TTF_Font *>::iterator iter = fonts.begin(); iter != fonts.end(); ++iter)
 	{
-		if (font == (*item))
+		if ((iter->second) == font)
 		{
-			TTF_CloseFont((*item));
-			fonts.erase(item);
+			TTF_CloseFont(iter->second);
+			iter->second = nullptr;
+			iter = fonts.erase(iter);
 			return true;
 		}
 	}
 
-	LOG("Texture to unload not found");
+	LOG("Font to unload not found");
 	return false;
 }
 

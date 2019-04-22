@@ -29,6 +29,12 @@ void UI_Label::SetText(String text)
 		app->tex->UnLoad(label_texture);
 		label_texture = nullptr;
 	}
+	 
+	if (text == "")
+	{
+		LOG("Label text is null");
+		return;
+	}
 
 	app->font->CalcSize( text.c_str() , sprite_section.w, sprite_section.h, font);
 	label_texture = app->font->Print( text.c_str(), color, font);
@@ -37,8 +43,12 @@ void UI_Label::SetText(String text)
 bool UI_Label::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
-	
+
+	if (label_texture != nullptr)
+	{
+		app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+	}
+
 	return true;
 }
 
