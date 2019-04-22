@@ -154,7 +154,7 @@
   </scene>
 
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="1"/>
+    <percentage_spawn_item_from_enemy value="100"/>
     <percentage_spawn_reward_box value="50"/>   
   </pick_manager>
   
@@ -584,7 +584,6 @@
         <velocity_recoil_decay value="900"/>
         <velocity_recoil_speed_max value="25"/>
         <velocity_recoil_speed_max_charged value="50"/>
-       <!-- <lerp_factor_recoil value="0.5"/>-->
       </recoil>
       <time_between_bullets value ="100"/>
       <spritesheets>
