@@ -66,14 +66,12 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
-	//base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
-	base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
-	//base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
+	//Textures-------------------------------------------------
+	base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
+	base_tex_green = app->tex->Load(tank_node.child("spritesheets").child("base_green").text().as_string());
 	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
-	base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
-	//base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
-	//base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
+	base_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("base_blue").text().as_string());
+
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
@@ -103,7 +101,7 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
 		kb_ready	= SDL_SCANCODE_Z;
-		curr_tex = base_tex_red;
+		curr_tex = base_tex_green;
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -113,7 +111,7 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
 		kb_ready	= SDL_SCANCODE_V;
-		curr_tex = base_tex_light_blue;
+		curr_tex = base_tex_blue;
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -133,10 +131,10 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_KP_7;
 		kb_interact	= SDL_SCANCODE_KP_9;
 		kb_ready	= SDL_SCANCODE_KP_2;
-		curr_tex = base_tex_yellow;
+		curr_tex = base_tex_orange;
 		break;
 	default:
-		curr_tex = base_tex_yellow;
+		curr_tex = base_tex_orange;
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
