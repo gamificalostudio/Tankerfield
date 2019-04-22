@@ -388,7 +388,7 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 	point_4 = app->map->MapToScreenF({x, y + h});
 
 		SDL_Rect rect_tile{
-			point_1.x - app->map->data.tile_width * 0.5f,
+			point_4.x,
 			point_1.y,
 			point_2.x - point_4.x,
 			point_3.y - point_1.y
