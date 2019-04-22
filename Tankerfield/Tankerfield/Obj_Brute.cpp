@@ -186,6 +186,19 @@ void Obj_Brute::Movement(float &dt)
 	}
 }
 
+bool Obj_Brute::Draw(float dt, Camera * camera)
+{
+	app->render->BlitScaled(
+		curr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&frame,
+		2.f);
+
+	return true;
+}
+
 void Obj_Brute::DrawDebug(const Camera* camera)
 {
 	if (path.size() >= 2)
