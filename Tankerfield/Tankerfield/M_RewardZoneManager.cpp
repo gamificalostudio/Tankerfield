@@ -123,7 +123,8 @@ bool M_RewardZoneManager::PostUpdate(float dt)
 							rz_counter++;
 							if (rz_counter == rz_size)
 							{
-								this->RewardZoneCompleted();
+								// check if objs are alive or not
+								//this->RewardZoneCompleted();
 							}
 							item_enemyobject++;
 						}
