@@ -6,11 +6,15 @@
 #include "Module.h"
 #include "Point.h"
 
+class Object;
+
 class RewardZone
 {
 public:
 	RewardZone();
 	~RewardZone();
+
+	std::list<Object*> enemy_list;
 
 public:
 	fPoint GetPos() const;

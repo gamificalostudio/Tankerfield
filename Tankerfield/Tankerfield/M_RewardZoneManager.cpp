@@ -119,17 +119,19 @@ RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint si
 	temp_rz->SetNumberOfUnits(pow(size, 2) + 1);
 
 	/* Generate reward zone */
-	app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(map_center_pos));
+	Object* temp_obj_01 = (Reward_Zone*)app->objectmanager->CreateObject(ObjectType::REWARD_ZONE, fPoint(map_center_pos));;
+	temp_rz->enemy_list.push_back(temp_obj_01);
 
 	/* Generate enemies */
 	for (int i = map_center_pos.x - size / 2; i <= map_center_pos.x + size / 2; i++)
 	{
 		for (int j = map_center_pos.y - size / 2; j <= map_center_pos.y + size / 2; j++)
 		{
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(i, j));
+			Object* temp_obj_02 = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(i, j));
+			temp_rz->enemy_list.push_back(temp_obj_02);
 		}
 	}
-
+	
 	reward_zones.push_back(temp_rz);
 
 	return temp_rz;
