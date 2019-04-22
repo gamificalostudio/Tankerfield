@@ -29,6 +29,7 @@ public:
 
 	bool Update(float dt) override;
 
+	bool Draw(float dt, Camera * camera) override;
 
 	void Attack();
 
@@ -57,11 +58,8 @@ private:
 	Circle range_pos;
 
 	// ----------
-
-	int enemy_width = 66;
-	int enemy_height = 76;
-	iPoint spawn_draw_offset = { 130,152 };
-	iPoint normal_draw_offset = { 70, 35 };
+	iPoint spawn_draw_offset	= { 0,0 };
+	iPoint normal_draw_offset	= { 0, 0 };
 
 	/* Attack properties */
 	float attack_frequency = 0.f;
@@ -70,13 +68,18 @@ private:
 	int attack_damage = 0;
 	PerfTimer perf_timer;
 
+	float coll_w = 0.f;
+	float coll_h = 0.f;
+
 	Animation walk;
 	Animation attack;
 	Animation death;
 	Animation spawn;
 	SDL_Texture * tex = nullptr;
+	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * spawn_tex = nullptr;
-
+	Timer damaged_sprite_timer;
+	int damaged_sprite_time = 0;
 };
 
 #endif

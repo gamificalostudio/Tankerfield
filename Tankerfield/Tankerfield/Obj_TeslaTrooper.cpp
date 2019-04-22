@@ -34,6 +34,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
 	tex = app->tex->Load("textures/Objects/shk-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/shk-sheet-white.png");
 	portal_tex = app->tex->Load("textures/Objects/portal.png");
 	curr_tex = tex;
 	explosion_apper_tex = app->tex->Load("textures/Objects/explosion2.png");
@@ -46,9 +47,13 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 	curr_anim = &walk;
-	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/laser-tesla-trooper.wav");
-	appear_anim_explosion.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("explotions").child("animations").child("explotion2"));
+	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
+
+	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
+	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav",20);
+	app->audio->PlayFx(sfx_spawn);
 	draw = false;
+
 	//Things
 	state				= TROOPER_STATE::APPEAR;
 	speed				= 1.5F;
@@ -58,7 +63,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -.25f, -.25f });
-	draw_offset			= { 32, 38 };
+	draw_offset			= { 24, 28 };
 	
 
 	//parameters-------------------------------------------
@@ -72,6 +77,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	teleport_timer.Start();
 	check_path_time = 1.f; // 1s
 	path_timer.Start();
+
+	damaged_sprite_time = 150;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -82,6 +89,10 @@ bool Obj_TeslaTrooper::Update(float dt)
 {
 	Movement(dt);
 	Attack();
+	if (damaged_sprite_timer.Read() > damaged_sprite_time)
+	{
+		curr_tex = tex;
+	}
 	
 	return true;
 }
@@ -112,17 +123,18 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	switch (state)
 	{
 	case TROOPER_STATE::APPEAR:
-	{
-		appear_anim_explosion.NextFrame(dt);
-		if ((int)appear_anim_explosion.current_frame == 6)
-		{
-			draw = true;
-		}
-		if (appear_anim_explosion.Finished())
-		{
-			state = TROOPER_STATE::GET_PATH;
-		}
-	}
+			{
+				appear_anim.NextFrame(dt);
+				if ((int)appear_anim.current_frame == 6)
+				{
+					draw = true;
+				}
+				if (appear_anim.Finished())
+				{
+					appear_anim.Reset();
+					state = TROOPER_STATE::GET_PATH;
+				}
+			}
 			break;
 	case TROOPER_STATE::GET_PATH:
 	{
@@ -249,6 +261,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 			if (in_portal->Finished())
 			{
+				in_portal->Reset();
 				in_portal = &portal_animation;
 				state = TROOPER_STATE::GET_PATH;
 				angle = -90;
@@ -305,36 +318,37 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 	if (state == TROOPER_STATE::TELEPORT_IN && in_portal != nullptr)
 	{
 		SDL_Rect portal_frame = in_portal->GetFrame(0);
-			app->render->Blit(
-				portal_tex,
-				pos_screen.x - portal_frame.w*0.5f,
-				pos_screen.y- portal_frame.h,
-				camera,
-				&portal_frame);
+		app->render->Blit(
+			portal_tex,
+			pos_screen.x - portal_frame.w * 0.5f,
+			pos_screen.y- portal_frame.h,
+			camera,
+			&portal_frame);
 	}
-
+	
 	if (draw)
 	{
-		app->render->Blit(
+		app->render->BlitScaled(
 			curr_tex,
 			pos_screen.x - draw_offset.x,
 			pos_screen.y - draw_offset.y,
 			camera,
-			&frame);
+			&frame,
+			0.75f);
 	}
-	
-
 	if (state == TROOPER_STATE::APPEAR)
 	{
-		SDL_Rect rect = appear_anim_explosion.GetFrame(0);
+		SDL_Rect rect = appear_anim.GetFrame(0);
 		app->render->Blit(
-			explosion_apper_tex,
+			portal_tex,
 			pos_screen.x - rect.w*0.5f,
-			pos_screen.y - rect.h*0.5f,
+			pos_screen.y - rect.h,
 			camera,
 			&rect);
-		
+
 	}
+
+
 	return true;
 }
 
@@ -348,8 +362,9 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 	if ( (collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET) )
 	{
 		life -= collider->damage;
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
 		collider->SetTag(Collider::TAG::NONE);
-
 
 		if (life <= 0)
 		{

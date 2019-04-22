@@ -66,14 +66,13 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	base_tex_yellow = app->tex->Load(tank_node.child("spritesheets").child("base_yellow").text().as_string());
-	//base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
-	base_tex_red = app->tex->Load(tank_node.child("spritesheets").child("base_red").text().as_string());
-	//base_tex_light_green = app->tex->Load(tank_node.child("spritesheets").child("base_light_green").text().as_string());
+	//Textures-------------------------------------------------
+	//base
+	base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
+	base_tex_green = app->tex->Load(tank_node.child("spritesheets").child("base_green").text().as_string());
 	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
-	base_tex_light_blue = app->tex->Load(tank_node.child("spritesheets").child("base_light_blue").text().as_string());
-	//base_tex_dark_blue = app->tex->Load(tank_node.child("spritesheets").child("base_dark_blue").text().as_string());
-	//base_tex_purple = app->tex->Load(tank_node.child("spritesheets").child("babase_purplese").text().as_string());
+	base_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("base_blue").text().as_string());
+
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
@@ -103,7 +102,7 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
 		kb_ready	= SDL_SCANCODE_Z;
-		curr_tex = base_tex_red;
+		curr_tex = base_tex_green;
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -113,7 +112,7 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
 		kb_ready	= SDL_SCANCODE_V;
-		curr_tex = base_tex_light_blue;
+		curr_tex = base_tex_blue;
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -133,10 +132,10 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_KP_7;
 		kb_interact	= SDL_SCANCODE_KP_9;
 		kb_ready	= SDL_SCANCODE_KP_2;
-		curr_tex = base_tex_yellow;
+		curr_tex = base_tex_orange;
 		break;
 	default:
-		curr_tex = base_tex_yellow;
+		curr_tex = base_tex_orange;
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
@@ -147,7 +146,7 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	curr_speed = speed = 14.f;//TODO: Load from xml
+	curr_speed = speed = 5.f;//TODO: Load from xml
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -266,7 +265,7 @@ bool Obj_Tank::Update(float dt)
 	Item();
 	StopTank();
 	ReviveTank();
-	CameraMovement(dt);
+	CameraMovement(dt);//Camera moves after the player
 	InputReadyKeyboard();
 
 	return true;
@@ -280,6 +279,11 @@ void Obj_Tank::CameraMovement(float dt)
 	camera_player->ResetCamera();
 	camera_player->FollowPlayer(dt, this);
 	camera_player->ShakeCamera(dt);
+}
+
+fPoint Obj_Tank::GetTurrPos()
+{
+	return turr_pos;
 }
 
 void Obj_Tank::Movement(float dt)
@@ -367,16 +371,20 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 			//reduce the velocity to 0 with decay
 			if (velocity_recoil_curr_speed > 0)
 			{
-				velocity_recoil_curr_speed -= velocity_recoil_decay;
+				velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
+				if (velocity_recoil_curr_speed < 0)
+				{
+					velocity_recoil_curr_speed = 0;
+				}
 			}
 		}
 		//calculate the max position of the lerp
 		velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
 
 		//calculate the velocity in lerp
-		velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
+		//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
 
-		velocity += velocity_recoil_lerp;
+		velocity += velocity_recoil_final_lerp;
 	}
 }
 
@@ -449,8 +457,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
-
-	
 
 																							//only appears when hes dead and disappear when he has been revived
 	//DEBUG

@@ -35,12 +35,13 @@ public:
 private:
 	//Follow player
 	float lerp_factor		= 0.f;
+	float aim_distance		= 0.f;
 
 	//Camera shake
 	std::random_device random_device;	//Will be used to obtain a seed for the random number engine
 	std::mt19937 random_generator;		//Standard mersenne_twister_engine seeded with rd()
 	float trauma			= 0.f;
-	float max_offset		= 0.f;//The maximum amount the camera can be displaced from its original position (unaltered_pos)
+	float max_shake_offset	= 0.f;//The maximum amount the camera can be displaced from its original position (unaltered_pos)
 	float trauma_decay		= 0.f;
 
 	friend class Obj_Tank;

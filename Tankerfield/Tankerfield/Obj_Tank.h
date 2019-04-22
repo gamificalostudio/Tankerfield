@@ -32,7 +32,7 @@ public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 
-	void CameraMovement(float dt);
+
 
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera) override;
@@ -65,6 +65,7 @@ public:
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
 	bool Alive();
+	fPoint GetTurrPos();
 
 private:
 	//- Movement
@@ -72,6 +73,9 @@ private:
 	void ShotRecoilMovement(float &dt);
 	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
+
+	//- Camera
+	void CameraMovement(float dt);
 
 	//- Shooting
 	void Shoot(float dt);
@@ -83,7 +87,6 @@ private:
 
 	//- Input
 	void SelectInputMethod();
-
 	void InputReadyKeyboard();
 	bool PressInteract();
 	bool ReleaseInteract();
@@ -207,14 +210,13 @@ private:
 	//- Drawing
 	//-- Base
 	Animation rotate_base;
-	SDL_Texture * base_tex_yellow		= nullptr;
-	//SDL_Texture * base_tex_orange		= nullptr;
-	SDL_Texture * base_tex_red			= nullptr;
-	//SDL_Texture * base_tex_light_green= nullptr;
+	SDL_Texture * base_tex_orange		= nullptr;
+	SDL_Texture * base_tex_green			= nullptr;
+	
+
 	SDL_Texture * base_tex_pink			= nullptr;
-	SDL_Texture * base_tex_light_blue	= nullptr;
-	//SDL_Texture * base_tex_dark_blue	= nullptr;
-	//SDL_Texture * base_tex_purple		= nullptr;
+	SDL_Texture * base_tex_blue	= nullptr;
+	
 	SDL_Texture * base_shadow_tex		= nullptr;
 
 	//-- Turret

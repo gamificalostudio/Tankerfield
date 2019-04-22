@@ -11,11 +11,11 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="1"/>
+    <resolution width="1920" height="1080" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
-    <fullscreen_window value="false"/>
+    <fullscreen_window value="true"/>
   </window>
   <animations_bank>animations.xml</animations_bank>
 
@@ -581,21 +581,19 @@
     <tank>
       <speed value ="1"/>
       <recoil>
-        <velocity_recoil_decay value="2"/>
-        <velocity_recoil_speed_max value="50"/>
-        <velocity_recoil_speed_max_charged value="100"/>
-        <lerp_factor_recoil value="0.5"/>
+        <velocity_recoil_decay value="900"/>
+        <velocity_recoil_speed_max value="25"/>
+        <velocity_recoil_speed_max_charged value="50"/>
+       <!-- <lerp_factor_recoil value="0.5"/>-->
       </recoil>
       <time_between_bullets value ="100"/>
       <spritesheets>
-        <base_yellow>textures/objects/tank/base - yellow.png</base_yellow>
         <base_orange>textures/objects/tank/base - orange.png</base_orange>
-        <base_red>textures/objects/tank/base - red.png</base_red>
-        <base_light_green>textures/objects/tank/base - light green.png</base_light_green>
+        <base_green>textures/objects/tank/base - green.png</base_green>
         <base_pink>textures/objects/tank/base - pink.png</base_pink>
-        <base_light_blue>textures/objects/tank/base - light blue.png</base_light_blue>
-        <base_dark_blue>textures/objects/tank/base - dark blue.png</base_dark_blue>
-        <base_purple>textures/objects/tank/base - purple.png</base_purple>
+        <base_blue>textures/objects/tank/base - blue.png</base_blue>
+  
+       
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
         <turr>textures/objects/tank/turr.png</turr>
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
