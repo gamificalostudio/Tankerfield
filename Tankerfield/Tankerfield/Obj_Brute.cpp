@@ -146,14 +146,18 @@ bool Obj_Brute::IsOnGoal(fPoint goal)
 
 void Obj_Brute::OnTrigger(Collider* collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET)
+	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
+		collider->SetTag(Collider::TAG::NONE);
+
 		if (life <= 0)
 		{
+			// DROP A PICK UP ITEM 
 			to_remove = true;
 		}
 	}
+
 }
 
 bool Obj_Brute::BruteCanAttack(const fPoint& enemy_screen_pos, const fPoint& target_screen_pos) const
