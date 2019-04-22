@@ -58,13 +58,15 @@ void Camera::FollowPlayer(float dt, Obj_Tank * player)
 {
 	float camera_aim_distance = 2.5f;
 
-	fPoint source_pos ((float)rect.x, (float)rect.y);
-	fPoint aim_pos = app->map->MapToScreenF(/*player->GetTurrPos()*/player->pos_map + player->GetShotDir() * camera_aim_distance) + fPoint(0, -6);
-	fPoint target_pos(aim_pos.x - rect.w * 0.5f, aim_pos.y - rect.h * 0.5f);
+	fPoint source_pos((float) rect.x, (float)rect.y);
 
-	fPoint lerp_pos = lerp(source_pos, target_pos, lerp_factor * dt);
-	rect.x = lerp_pos.x;
-	rect.y = lerp_pos.y;
+	fPoint aim_pos = app->map->MapToScreenF(player->pos_map + player->GetShotDir() * camera_aim_distance);
+	fPoint target_pos (aim_pos.x - rect.w * 0.5f, aim_pos.y - rect.h * 0.5f);
+
+	fPoint lerp_pos = lerp(source_pos, target_pos, dt);
+
+	rect.x = aim_pos.x - rect.w * 0.5f;
+	rect.y = aim_pos.y - rect.h * 0.5f;
 }
 
 //Remove

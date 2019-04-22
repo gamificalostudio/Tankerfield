@@ -30,6 +30,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
 	tex = app->tex->Load("textures/Objects/brute-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/brute-sheet-white.png");
 	spawn_tex = app->tex->Load("textures/Objects/spawn_brute.png");
 	curr_tex = spawn_tex;
 
@@ -51,6 +52,8 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
+	life = 1000;
+	time_damaged = 500;
 }
 
 Obj_Brute::~Obj_Brute()
@@ -62,7 +65,10 @@ bool Obj_Brute::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-
+	if (spawn.Finished() && damaged_timer.Read() > time_damaged)
+	{
+		curr_tex = tex;
+	}
 	return true;
 }
 
@@ -203,6 +209,10 @@ void Obj_Brute::OnTrigger(Collider* collider)
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
+
+		damaged_timer.Start();
+		curr_tex = tex_damaged;
+
 		if (life <= 0)
 		{
 			state = BRUTE_STATE::DEAD;
