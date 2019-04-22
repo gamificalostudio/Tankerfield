@@ -53,7 +53,11 @@ bool M_Audio::Start()
 		active = false;
 		ret = true;
 	}
-
+	else
+	{
+		Mix_VolumeMusic(100);
+		Mix_AllocateChannels(16);
+	}
 	explosion_fx = LoadFx("audio/Fx/explosion.wav");
 
 	return ret;
@@ -143,7 +147,7 @@ bool M_Audio::PlayMusic(const char* path, float fade_time)
 
 
 // Load WAV
-unsigned int M_Audio::LoadFx(const char* path)
+unsigned int M_Audio::LoadFx(const char* path, int volume)
 {
 	unsigned int ret = 0;
 
@@ -158,7 +162,8 @@ unsigned int M_Audio::LoadFx(const char* path)
 	else
 	{
 		Mix_Chunk* chunk = Mix_LoadWAV(path);
-
+		//set volume in a range of 0 to MIX_MAX_VOLUME (128)
+		Mix_VolumeChunk(chunk, volume);
 		if (chunk == NULL)
 		{
 			LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
@@ -174,7 +179,8 @@ unsigned int M_Audio::LoadFx(const char* path)
 }
 
 // Play WAV
-int M_Audio::PlayFx(unsigned int id, int repeat)
+int M_Audio::PlayFx
+(unsigned int id, int repeat)
 {
 	int ret = -1;
 
