@@ -85,7 +85,7 @@ bool M_Scene::Start()
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
-	round = 1;
+	round = 0;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
@@ -105,12 +105,6 @@ bool M_Scene::PreUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
 	{
-		//++current_level;
-
-		//if (current_level == app->map->GetMaxLevels())
-		//	current_level = 0;
-
-	/*	app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);*/
 		Reset();
 	}
 
@@ -185,7 +179,7 @@ bool M_Scene::Update(float dt)
 		/* Generate new wave, restart the vars and increase units number */
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
-	/*	app->audio->PlayMusic(main_music, 2.0f);*/
+		app->audio->PlayMusic(main_music, 2.0f);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;

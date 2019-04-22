@@ -97,6 +97,11 @@ public:
 		return tag;
 	}
 
+	void SetTag(const TAG new_tag)
+	{
+		tag = new_tag;
+	}
+
 	void AddRigidBody(const Collider::BODY_TYPE new_body_type)
 	{
 		body_type = new_body_type;

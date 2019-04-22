@@ -154,7 +154,7 @@
   </scene>
 
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="1"/>
+    <percentage_spawn_item_from_enemy value="100"/>
     <percentage_spawn_reward_box value="50"/>   
   </pick_manager>
   
@@ -581,21 +581,18 @@
     <tank>
       <speed value ="1"/>
       <recoil>
-        <velocity_recoil_decay value="2"/>
-        <velocity_recoil_speed_max value="50"/>
-        <velocity_recoil_speed_max_charged value="100"/>
-        <lerp_factor_recoil value="0.5"/>
+        <velocity_recoil_decay value="900"/>
+        <velocity_recoil_speed_max value="25"/>
+        <velocity_recoil_speed_max_charged value="50"/>
       </recoil>
       <time_between_bullets value ="100"/>
       <spritesheets>
-        <base_yellow>textures/objects/tank/base - yellow.png</base_yellow>
         <base_orange>textures/objects/tank/base - orange.png</base_orange>
-        <base_red>textures/objects/tank/base - red.png</base_red>
-        <base_light_green>textures/objects/tank/base - light green.png</base_light_green>
+        <base_green>textures/objects/tank/base - green.png</base_green>
         <base_pink>textures/objects/tank/base - pink.png</base_pink>
-        <base_light_blue>textures/objects/tank/base - light blue.png</base_light_blue>
-        <base_dark_blue>textures/objects/tank/base - dark blue.png</base_dark_blue>
-        <base_purple>textures/objects/tank/base - purple.png</base_purple>
+        <base_blue>textures/objects/tank/base - blue.png</base_blue>
+  
+       
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
         <turr>textures/objects/tank/turr.png</turr>
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
