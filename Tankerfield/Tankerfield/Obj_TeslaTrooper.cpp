@@ -58,7 +58,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -.25f, -.25f });
-	draw_offset			= { 32, 38 };
+	draw_offset			= { 24, 28 };
 	
 	attack_damage		= 10;
 	attack_range		= 1;
