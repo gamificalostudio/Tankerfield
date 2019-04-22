@@ -495,7 +495,7 @@
             <frame x="3350" y="288" w="134" h="96" />
           </dir>
         </death>
-        <spawn speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+        <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <frame x="0" y="0" w="260" h="304" />
             <frame x="260" y="0" w="260" h="304" />

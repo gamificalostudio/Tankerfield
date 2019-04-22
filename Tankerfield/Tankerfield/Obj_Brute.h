@@ -41,7 +41,7 @@ public:
 private:
 	inline bool IsOnGoal(fPoint goal);
 
-	BRUTE_STATE state = BRUTE_STATE::IDLE;
+	BRUTE_STATE state = BRUTE_STATE::SPAWN;
 	fPoint move_vect = { 0.0f, 0.0f };
 	int life = 0;
 	float detection_range = 0.0f;
@@ -60,6 +60,8 @@ private:
 
 	int enemy_width = 66;
 	int enemy_height = 76;
+	iPoint spawn_draw_offset = { 130,152 };
+	iPoint normal_draw_offset = { 70, 35 };
 
 	/* Attack properties */
 	float attack_frequency = 0.f;

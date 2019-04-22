@@ -45,7 +45,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 	check_path_time = 1.f;
-	draw_offset = { 70, 35 };
+	draw_offset = spawn_draw_offset;
 	timer.Start();
 	attack_damage = 10;
 	attack_range = 1;
@@ -87,22 +87,28 @@ void Obj_Brute::Attack()
 
 void Obj_Brute::Movement(float &dt)
 {
-	if (timer.ReadSec() >= check_path_time&&state!=BRUTE_STATE::DEAD&&state!=BRUTE_STATE::SPAWN)
+	if ((state != BRUTE_STATE::DEAD)
+		&& (state != BRUTE_STATE::SPAWN)
+		&& (timer.ReadSec() >= check_path_time))
+	{
 		state = BRUTE_STATE::GET_PATH;
+	}
 
 	switch (state)
 	{
 	case BRUTE_STATE::SPAWN:
 	{
-		if (curr_anim == &spawn&&curr_anim->Finished())
+		if (curr_anim->Finished())
 		{
 			curr_tex = tex;
 			coll = app->collision->AddCollider(pos_map, 0.7f, 0.7f, Collider::TAG::ENEMY, 0.f, this);
 			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+			draw_offset = normal_draw_offset;
 			curr_anim = &walk;
 			state=BRUTE_STATE::GET_PATH;
 		}
 	}
+	break;
 	case BRUTE_STATE::GET_PATH:
 	{
 		path.clear();
