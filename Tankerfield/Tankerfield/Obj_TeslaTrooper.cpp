@@ -33,6 +33,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
 	tex = app->tex->Load("textures/Objects/shk-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/shk-sheet-white.png");
 	portal_tex = app->tex->Load("textures/Objects/portal.png");
 	curr_tex = tex;
 	explosion_apper_tex = app->tex->Load("textures/Objects/explosion2.png");
@@ -68,6 +69,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	teleport_timer.Start();
 	check_path_time = 1.f; // 1s
 	path_timer.Start();
+
+	damaged_sprite_time = 150;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -78,6 +81,10 @@ bool Obj_TeslaTrooper::Update(float dt)
 {
 	Movement(dt);
 	Attack();
+	if (damaged_sprite_timer.Read() > damaged_sprite_time)
+	{
+		curr_tex = tex;
+	}
 	
 	return true;
 }
@@ -344,6 +351,10 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 	if ((collider->GetTag() == Collider::TAG::BULLET)||(collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
+
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
+
 		if (life <= 0)
 		{
 			app->pick_manager->PickUpFromEnemy(pos_map);

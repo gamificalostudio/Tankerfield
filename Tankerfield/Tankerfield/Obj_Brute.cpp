@@ -52,8 +52,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
+
 	life = 1000;
-	time_damaged = 150;
+	damaged_sprite_time = 150;
 }
 
 Obj_Brute::~Obj_Brute()
@@ -65,7 +66,7 @@ bool Obj_Brute::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	if (spawn.Finished() && damaged_timer.Read() > time_damaged)
+	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
 	{
 		curr_tex = tex;
 	}
@@ -210,7 +211,7 @@ void Obj_Brute::OnTrigger(Collider* collider)
 	{
 		life -= collider->damage;
 
-		damaged_timer.Start();
+		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
 
 		if (life <= 0)

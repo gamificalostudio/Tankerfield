@@ -77,8 +77,8 @@ private:
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * spawn_tex = nullptr;
-	Timer damaged_timer;
-	int time_damaged = 0;
+	Timer damaged_sprite_timer;
+	int damaged_sprite_time = 0;
 };
 
 #endif
