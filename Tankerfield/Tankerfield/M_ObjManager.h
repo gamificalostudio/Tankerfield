@@ -70,6 +70,8 @@ public:
 
 	bool CleanUp() override;
 
+	bool Reset();
+
 	Object* CreateObject(ObjectType type, fPoint map_pos);
 
 	static bool SortByYPos(Object * obj1, Object * obj2);
@@ -78,7 +80,6 @@ public:
 
 	Obj_Tank* GetNearestTank(fPoint pos, float max_distanace = FLT_MAX);
 
-	
 	std::list<Object*> GetObjects() const;
 
 	inline void DrawDebug(const Object* obj, Camera* camera);

@@ -18,7 +18,7 @@ void UI_Label::Destroy()
 
 	if (label_texture != nullptr)
 	{
-		app->tex->UnLoad(label_texture);
+		app->tex->UnLoad(label_texture, true);
 	}
 }
 
@@ -26,8 +26,14 @@ void UI_Label::SetText(String text)
 {
 	if (label_texture != nullptr)
 	{
-		app->tex->UnLoad(label_texture);
+		app->tex->UnLoad(label_texture, true);
 		label_texture = nullptr;
+	}
+	 
+	if (text == "")
+	{
+		LOG("Label text is null");
+		return;
 	}
 
 	app->font->CalcSize( text.c_str() , sprite_section.w, sprite_section.h, font);
@@ -37,8 +43,12 @@ void UI_Label::SetText(String text)
 bool UI_Label::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
-	
+
+	if (label_texture != nullptr)
+	{
+		app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+	}
+
 	return true;
 }
 

@@ -75,6 +75,37 @@ M_Collision::M_Collision()
 M_Collision::~M_Collision()
 {}
 
+bool M_Collision::CleanUp()
+{
+	LOG("Freeing all colliders");
+
+	// Remove all colliders =====================
+
+	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+	{
+		if (*item != nullptr)
+		{
+			RELEASE(*item);
+		}
+	}
+
+	colliders.clear();
+
+	return true;
+}
+
+bool M_Collision::Reset()
+{
+
+	for (std::list<Collider*>::iterator iter = colliders.begin(); iter != colliders.end(); )
+	{
+		RELEASE(*iter);
+		iter = colliders.erase(iter);
+	}
+
+	return true;
+}
+
 bool M_Collision::Update(float dt)
 {
 	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange);
@@ -96,6 +127,8 @@ bool M_Collision::Update(float dt)
 	{
 		if ((*iterator)->to_destroy == true)
 		{
+			// Destroy from current colliders on collision ==============
+
 			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
 			{
 				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
@@ -106,7 +139,7 @@ bool M_Collision::Update(float dt)
 				}
 			}
 
-			// Destroy =============================
+			// Destroy ==================================================
 
 			RELEASE(*iterator);
 			iterator = colliders.erase(iterator);
@@ -281,6 +314,7 @@ bool M_Collision::PostUpdate(float dt)
 		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
+
 			if ((*item)->to_destroy == true)
 			{
 				continue;
@@ -299,32 +333,9 @@ bool M_Collision::PostUpdate(float dt)
 				break;
 			}
 
-			//if ((*item)->object != nullptr && (*item)->obj_offset != fPoint(0.f, 0.f))
-			//{
-			//	app->render->DrawIsometricLine((*item)->position, (*item)->object->pos_map, { 255, 255 ,0 ,255 }, (*item_cam));
-			//}
 			SDL_RenderSetClipRect(app->render->renderer, nullptr);
 		}
 	}
-	return true;
-}
-
-bool M_Collision::CleanUp()
-{
-	LOG("Freeing all colliders");
-
-	// Remove all colliders =====================
-
-	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
-	{
-		if (*item != nullptr)
-		{
-			RELEASE(*item);
-		}
-	}
-
-	colliders.clear();
-
 	return true;
 }
 

@@ -64,6 +64,8 @@ public:
 	// Called before all Updates
 	bool PostUpdate(float dt) override;
 
+	bool Reset();
+
 	// Called before quitting
 	bool CleanUp() override;
 

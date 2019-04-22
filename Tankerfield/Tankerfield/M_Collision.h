@@ -151,6 +151,8 @@ public:
 
 	bool CleanUp() override;
 
+	bool Reset();
+
 	Collider* AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage=0.f, Object* object = nullptr);
 
 	Collider* AddCollider(float x, float y, float width, float height, Collider::TAG type, float damage = 0.f, Object* object = nullptr);

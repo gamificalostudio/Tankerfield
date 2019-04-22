@@ -99,11 +99,11 @@ bool M_ObjManager::Update(float dt)
 			{
 				//When we remove an element from the list, the other elements shift 1 space to our position
 				//So we don't need increment the iterator to go to the next one
-				if ((*iterator)->type == ObjectType::TANK)
-				{
-					Obj_Tank* aux = (Obj_Tank*)(*iterator);
-					obj_tanks.remove((Obj_Tank*)(*iterator));
-				}
+				//if ((*iterator)->type == ObjectType::TANK)
+				//{
+				//	Obj_Tank* aux = (Obj_Tank*)(*iterator);
+				//	obj_tanks.remove((Obj_Tank*)(*iterator));
+				//}
 
 				if ((*iterator)->coll != nullptr)
 				{
@@ -195,6 +195,27 @@ bool M_ObjManager::PostUpdate(float dt)
 bool M_ObjManager::CleanUp()
 {
 	DeleteObjects();
+
+	return true;
+}
+
+bool M_ObjManager::Reset()
+{
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
+	{
+		if ((*iterator)->coll != nullptr)
+		{
+			(*iterator)->coll->object = nullptr;
+			(*iterator)->coll->Destroy();
+			(*iterator)->coll = nullptr;
+		}
+
+		delete((*iterator));
+		(*iterator) = nullptr;
+		iterator = objects.erase(iterator);
+	}
+
+	obj_tanks.clear();
 
 	return true;
 }

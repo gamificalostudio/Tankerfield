@@ -87,11 +87,11 @@ bool M_Scene::Start()
 
 	round = 1;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
-
+	game_over = false;
 
 	/* Generate Reward Zones */
-	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
-	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
+	//reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
+	//reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
 }
@@ -99,6 +99,20 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+		return false;
+
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
+	{
+		//++current_level;
+
+		//if (current_level == app->map->GetMaxLevels())
+		//	current_level = 0;
+
+	/*	app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);*/
+		Reset();
+	}
+
 	if (app->input->controllers.size())
 	{
 		control1 = &(*app->input->controllers.begin());
@@ -108,6 +122,7 @@ bool M_Scene::PreUpdate()
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
 	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
 	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
+
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
@@ -145,15 +160,7 @@ bool M_Scene::Update(float dt)
 		draw_debug = !draw_debug;
 
 
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
-	{
-		++current_level;
 
-		if (current_level == app->map->GetMaxLevels())
-			current_level = 0;
-
-		app->scmanager->FadeToBlack(app->scene, app->scene, 1.F);
-	}
 
 	/* Check if a round is over. It is only checked after x time. */
 	//accumulated_time += dt * 1000.0f;
@@ -177,7 +184,7 @@ bool M_Scene::Update(float dt)
 		/* Generate new wave, restart the vars and increase units number */
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
-		app->audio->PlayMusic(main_music, 2.0f);
+	/*	app->audio->PlayMusic(main_music, 2.0f);*/
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;
@@ -249,9 +256,6 @@ bool M_Scene::Update(float dt)
 bool M_Scene::PostUpdate(float dt)
 {
 	bool ret = true;
-
-	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
 	//
 	//DebugPathfinding();
 
@@ -259,16 +263,27 @@ bool M_Scene::PostUpdate(float dt)
 }
 
 // Called before quitting
+bool M_Scene::Reset()
+{
+	app->map->Unload();
+	app->ui->Reset();
+	app->collision->Reset();
+	app->objectmanager->Reset();
+	Start();
+	app->ui->Start();
+	/*app->collision->Reset();*/
+	//app->pathfinding->Reset();
+
+
+	//app->scene->Start();
+	//app->objectmanager->Start();
+	//app->collision->Start();
+	return true;
+}
+
 bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
-	app->map->Unload();
-	app->collision->CleanUp();
-	app->objectmanager->DeleteObjects();
-	app->pathfinding->CleanUp();
-	app->ui->CleanUp();
-
-
 	return true;
 }
 

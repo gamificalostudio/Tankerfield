@@ -43,6 +43,8 @@ public:
 	// Called before quitting
 	bool CleanUp() override;
 
+	bool Reset();
+
 	// Sets up the walkability map
 	void SetMap(uint width, uint height, uchar* data);
 

@@ -101,18 +101,32 @@ SDL_Texture* const M_Textures::Load(const char* path)
 }
 
 // Unload texture
-bool M_Textures::UnLoad(SDL_Texture* texture)
+bool M_Textures::UnLoad(SDL_Texture* texture, bool is_text_texture)
 {
-	for (std::map<std::string, SDL_Texture *>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+	if (is_text_texture)
 	{
-		if ((iter->second) == texture)
+		std::list<SDL_Texture*>::iterator text_find = std::find(text_textures.begin(), text_textures.end(), texture);
+
+		if (text_find != text_textures.end())
 		{
-			SDL_DestroyTexture((iter->second));
-			iter->second = nullptr;
-			textures.erase(iter);
-			return true;
+			SDL_DestroyTexture(*text_find);
+			text_textures.erase(text_find);
 		}
 	}
+	else
+	{
+		for (std::map<std::string, SDL_Texture *>::iterator iter = textures.begin(); iter != textures.end(); ++iter)
+		{
+			if ((iter->second) == texture)
+			{
+				SDL_DestroyTexture((iter->second));
+				iter->second = nullptr;
+				textures.erase(iter);
+				return true;
+			}
+		}
+	}
+
 	return true;
 }
 

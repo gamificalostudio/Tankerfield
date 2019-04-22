@@ -39,10 +39,26 @@ Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 Obj_Tank::~Obj_Tank()
 {
 	number_of_tanks--;
+	if (app->on_clean_up == false)
+	{
+		if (tutorial_move != nullptr)
+		{
+			tutorial_move->Destroy();
+		}
+		if (tutorial_pick_up != nullptr)
+		{
+			tutorial_pick_up->Destroy();
+		}
+		if (tutorial_revive != nullptr)
+		{
+			tutorial_revive->Destroy();
+		}
+	}
+
 	if (camera_player != nullptr)
 	{
 		camera_player->assigned = false;
-		camera_player->number_player = 0;
+		camera_player = nullptr;
 	}
 }
 
@@ -187,6 +203,7 @@ bool Obj_Tank::Start()
 	//item = ObjectType::HEALTH_BAG;
 
 	std::vector<Camera*>::iterator item_cam;
+
 	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		if (!(*item_cam)->assigned)

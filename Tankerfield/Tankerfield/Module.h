@@ -76,6 +76,14 @@ public:
 		return true;
 	}
 
+	// Reset module 
+
+	virtual bool Reset() 
+	{
+		return true;
+	}
+
+
 // Enable and disable
 
 	bool IsEnabled() const { return enabled; }
