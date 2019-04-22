@@ -36,7 +36,7 @@ public:
 
 	// Load Texture
 	SDL_Texture* const	Load(const char* path);
-	bool				UnLoad(SDL_Texture* texture);
+	bool				UnLoad(SDL_Texture* texture, bool is_text_texture = false);
 	SDL_Texture * const LoadTextSurface(SDL_Surface* surface);
 	void				GetSize(const SDL_Texture* texture, uint& width, uint& height) const;
 

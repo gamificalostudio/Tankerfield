@@ -184,7 +184,7 @@ bool M_Scene::Update(float dt)
 		/* Generate new wave, restart the vars and increase units number */
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
-		app->audio->PlayMusic(main_music, 2.0f);
+	/*	app->audio->PlayMusic(main_music, 2.0f);*/
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;

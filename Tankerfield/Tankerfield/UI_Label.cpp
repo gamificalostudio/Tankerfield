@@ -18,7 +18,7 @@ void UI_Label::Destroy()
 
 	if (label_texture != nullptr)
 	{
-		app->tex->UnLoad(label_texture);
+		app->tex->UnLoad(label_texture, true);
 	}
 }
 
@@ -26,7 +26,7 @@ void UI_Label::SetText(String text)
 {
 	if (label_texture != nullptr)
 	{
-		app->tex->UnLoad(label_texture);
+		app->tex->UnLoad(label_texture, true);
 		label_texture = nullptr;
 	}
 	 

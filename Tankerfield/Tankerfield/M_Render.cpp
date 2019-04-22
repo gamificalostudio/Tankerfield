@@ -387,20 +387,21 @@ bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color c
 	// bot_left
 	point_4 = app->map->MapToScreenF({x, y + h});
 
-		SDL_Rect rect_tile{
-			point_1.x - app->map->data.tile_width * 0.5f,
-			point_1.y,
-			point_2.x - point_4.x,
-			point_3.y - point_1.y
-		};
-		if (SDL_HasIntersection(&rect_tile, &camera->rect))
-		{
-			app->render->DrawLineSplitScreen(point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, camera);
-			app->render->DrawLineSplitScreen(point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, camera);
-			app->render->DrawLineSplitScreen(point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, camera);
-			app->render->DrawLineSplitScreen(point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, camera);
+	SDL_Rect rect_tile{
+		point_1.x - app->map->data.tile_width * 0.5f,
+		point_1.y,
+		point_2.x - point_4.x,
+		point_3.y - point_1.y
+	};
 
-		}
+	if (SDL_HasIntersection(&rect_tile, &camera->rect))
+	{
+		app->render->DrawLineSplitScreen(point_1.x, point_1.y, point_2.x, point_2.y, color.r, color.g, color.b, color.a, camera);
+		app->render->DrawLineSplitScreen(point_2.x, point_2.y, point_3.x, point_3.y, color.r, color.g, color.b, color.a, camera);
+		app->render->DrawLineSplitScreen(point_3.x, point_3.y, point_4.x, point_4.y, color.r, color.g, color.b, color.a, camera);
+		app->render->DrawLineSplitScreen(point_4.x, point_4.y, point_1.x, point_1.y, color.r, color.g, color.b, color.a, camera);
+
+	}
 
 	return true;
 }
