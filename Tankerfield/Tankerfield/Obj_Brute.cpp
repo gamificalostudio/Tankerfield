@@ -53,7 +53,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
 	life = 1000;
-	time_damaged = 500;
+	time_damaged = 150;
 }
 
 Obj_Brute::~Obj_Brute()
