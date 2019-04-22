@@ -45,6 +45,8 @@ public:
 
 	void OnTrigger(Collider* collider);
 
+	bool IsAlive() const;
+
 private:
 	inline bool IsOnGoal(fPoint goal);
 

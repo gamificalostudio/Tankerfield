@@ -93,7 +93,18 @@ bool M_RewardZoneManager::PostUpdate(float dt)
 
 	if (do_check)
 	{
-		
+		/* Check if objects stored in every reward zone are alive */
+		/*for (std::list<RewardZone*>::const_iterator item_rewardzone	= this->GetRewardZones().begin();
+			item_rewardzone != this->GetRewardZones().end(); item_rewardzone++)
+		{
+			int rz_size = (*item_rewardzone)->enemy_list.size();
+			int rz_counter = 0;
+			for (std::list<Object*>::const_iterator item_object = (*item_rewardzone)->enemy_list.begin();
+				item_object != (*item_rewardzone)->enemy_list.end(); item_object++)
+			{
+				//if((*item_object)->)
+			}
+		}*/
 	}
 
 	return true;

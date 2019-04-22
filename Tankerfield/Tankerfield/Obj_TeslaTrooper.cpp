@@ -351,3 +351,8 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		}
 	}
 }
+
+bool Obj_TeslaTrooper::IsAlive() const
+{
+	return this->life > 0;
+}
