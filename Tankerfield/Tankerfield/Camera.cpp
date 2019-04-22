@@ -4,16 +4,17 @@
 
 Camera::Camera()
 {
-	max_offset = 30.f;
-	trauma_decay = 1.f;
+	max_shake_offset = 30.f;
+	trauma_decay = 0.75f;
 	random_generator.seed(random_device());
-	lerp_factor = 0.85f;
+	aim_distance = 2.5f;
+	lerp_factor = 3.f;
 }
 
 
 void Camera::AddTrauma(float value)
 {
-	if (trauma + value >= 1.0f)
+	if (trauma + value >= 1.f)
 	{
 		trauma = 1.f;
 	}
@@ -36,11 +37,11 @@ void Camera::ShakeCamera(float dt)
 	unaltered_pos.y = rect.y;
 
 	//Apply the camera shake
-	if (trauma > 0)
+	if (trauma > 0.f)
 	{
 		float shake = GetShakeAmount();
-		rect.x += max_offset * shake * GetRandomValue(-1.f, 1.f);
-		rect.y += max_offset * shake * GetRandomValue(-1.f, 1.f);
+		rect.x += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
+		rect.y += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
 
 		//Reduce trauma
 		trauma -= trauma_decay * dt;
@@ -56,17 +57,15 @@ float Camera::GetShakeAmount() const
 
 void Camera::FollowPlayer(float dt, Obj_Tank * player)
 {
-	float camera_aim_distance = 2.5f;
-
 	fPoint source_pos((float) rect.x, (float)rect.y);
 
-	fPoint aim_pos = app->map->MapToScreenF(player->pos_map + player->GetShotDir() * camera_aim_distance);
+	fPoint aim_pos = app->map->MapToScreenF(player->pos_map + player->GetShotDir() * aim_distance);
 	fPoint target_pos (aim_pos.x - rect.w * 0.5f, aim_pos.y - rect.h * 0.5f);
 
-	fPoint lerp_pos = lerp(source_pos, target_pos, dt);
+	fPoint lerp_pos = lerp(source_pos, target_pos, dt * lerp_factor);
 
-	rect.x = aim_pos.x - rect.w * 0.5f;
-	rect.y = aim_pos.y - rect.h * 0.5f;
+	rect.x = lerp_pos.x;
+	rect.y = lerp_pos.y;
 }
 
 //Remove
