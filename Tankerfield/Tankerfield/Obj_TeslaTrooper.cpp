@@ -344,6 +344,8 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 	if ( (collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET) )
 	{
 		life -= collider->damage;
+		collider->SetTag(Collider::TAG::NONE);
+
 
 		if (life <= 0)
 		{
