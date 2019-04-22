@@ -317,8 +317,8 @@ void M_Render::BlitScaled(SDL_Texture* texture, const int screen_x, const int sc
 		spritesheet_rect.h = rect_in_screen.h;
 	}
 	//Move the rect_in_screen to their correct screen =========================== 	
-	rect_in_screen.x += current_camera->screen_section.x * custom_scale;
-	rect_in_screen.y += current_camera->screen_section.y * custom_scale;
+	rect_in_screen.x += current_camera->screen_section.x;
+	rect_in_screen.y += current_camera->screen_section.y;
 
 	//Print the rect_in_screen ============================================
 	if (SDL_RenderCopy(renderer, texture, &spritesheet_rect, &rect_in_screen))
