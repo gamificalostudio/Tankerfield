@@ -372,15 +372,19 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 			if (velocity_recoil_curr_speed > 0)
 			{
 				velocity_recoil_curr_speed -= velocity_recoil_decay;
+				if (velocity_recoil_curr_speed < 0)
+				{
+					velocity_recoil_curr_speed = 0;
+				}
 			}
 		}
 		//calculate the max position of the lerp
 		velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
 
 		//calculate the velocity in lerp
-		velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
+		//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
 
-		velocity += velocity_recoil_lerp;
+		velocity += velocity_recoil_final_lerp;
 	}
 }
 
