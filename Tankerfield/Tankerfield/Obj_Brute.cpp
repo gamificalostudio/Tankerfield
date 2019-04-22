@@ -30,21 +30,21 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
 	tex = app->tex->Load("textures/Objects/brute-sheet.png");
-	curr_tex = tex;
+	spawn_tex = app->tex->Load("textures/Objects/spawn_brute.png");
+	curr_tex = spawn_tex;
 
 	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
 	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
-	curr_anim = &walk;
+	spawn.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("spawn"));
+	curr_anim = &spawn;
 
-	state = BRUTE_STATE::GET_PATH;
+	state = BRUTE_STATE::SPAWN;
 	speed = 1.F;
 	detection_range = 10.0f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 	check_path_time = 1.f;
-	coll = app->collision->AddCollider(pos, 0.7f, 0.7f, Collider::TAG::ENEMY, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	draw_offset = { 70, 35 };
 	timer.Start();
 	attack_damage = 10;
@@ -87,11 +87,22 @@ void Obj_Brute::Attack()
 
 void Obj_Brute::Movement(float &dt)
 {
-	if (timer.ReadSec() >= check_path_time&&state!=BRUTE_STATE::DEAD)
+	if (timer.ReadSec() >= check_path_time&&state!=BRUTE_STATE::DEAD&&state!=BRUTE_STATE::SPAWN)
 		state = BRUTE_STATE::GET_PATH;
 
 	switch (state)
 	{
+	case BRUTE_STATE::SPAWN:
+	{
+		if (curr_anim == &spawn&&curr_anim->Finished())
+		{
+			curr_tex = tex;
+			coll = app->collision->AddCollider(pos_map, 0.7f, 0.7f, Collider::TAG::ENEMY, 0.f, this);
+			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+			curr_anim = &walk;
+			state=BRUTE_STATE::GET_PATH;
+		}
+	}
 	case BRUTE_STATE::GET_PATH:
 	{
 		path.clear();
@@ -145,9 +156,12 @@ void Obj_Brute::Movement(float &dt)
 	break;
 	case BRUTE_STATE::DEAD:
 	{
-		coll->to_destroy = true;
-		coll = nullptr;
 		curr_anim = &death;
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
 		if (curr_anim==&death&&curr_anim->Finished())
 		{
 			to_remove = true;

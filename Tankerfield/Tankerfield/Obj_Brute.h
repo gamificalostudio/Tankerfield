@@ -13,6 +13,7 @@ class Obj_Tank;
 
 enum class BRUTE_STATE
 {
+	SPAWN,
 	IDLE,
 	GET_PATH,
 	MOVE,
@@ -70,7 +71,9 @@ private:
 	Animation walk;
 	Animation attack;
 	Animation death;
+	Animation spawn;
 	SDL_Texture * tex = nullptr;
+	SDL_Texture * spawn_tex = nullptr;
 
 };
 
