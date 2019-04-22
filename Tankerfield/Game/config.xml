@@ -324,6 +324,32 @@
     </tesla_trooper>
     <brute>
       <animations>
+        <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame x="0" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="134" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="268" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="402" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="536" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="670" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="804" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="938" y="0" w="134" h="96" />
+          </dir>
+        </idle>
         <walk speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <!--starts in frame number 8-->

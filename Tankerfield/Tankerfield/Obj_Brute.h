@@ -71,6 +71,7 @@ private:
 	float coll_w = 0.f;
 	float coll_h = 0.f;
 
+	Animation idle;
 	Animation walk;
 	Animation attack;
 	Animation death;

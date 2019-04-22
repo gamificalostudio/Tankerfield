@@ -34,6 +34,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	spawn_tex = app->tex->Load("textures/Objects/spawn_brute.png");
 	curr_tex = spawn_tex;
 
+	idle.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
 	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
@@ -121,7 +122,7 @@ void Obj_Brute::Movement(float &dt)
 			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
-			curr_anim = &walk;
+			curr_anim = &idle;
 			state=BRUTE_STATE::GET_PATH;
 		}
 	}
@@ -130,7 +131,7 @@ void Obj_Brute::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-
+		curr_anim = &idle;
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
@@ -160,6 +161,7 @@ void Obj_Brute::Movement(float &dt)
 		}
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
+		curr_anim = &walk;
 	}
 	break;
 	case BRUTE_STATE::RECHEAD_POINT:
