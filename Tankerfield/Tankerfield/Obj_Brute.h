@@ -58,11 +58,8 @@ private:
 	Circle range_pos;
 
 	// ----------
-
-	int enemy_width = 66;
-	int enemy_height = 76;
-	iPoint spawn_draw_offset = { 130,152 };
-	iPoint normal_draw_offset = { 70, 35 };
+	iPoint spawn_draw_offset	= { 0,0 };
+	iPoint normal_draw_offset	= { 0, 0 };
 
 	/* Attack properties */
 	float attack_frequency = 0.f;
@@ -70,6 +67,9 @@ private:
 	float attack_range_squared = 0.f;
 	int attack_damage = 0;
 	PerfTimer perf_timer;
+
+	float coll_w = 0.f;
+	float coll_h = 0.f;
 
 	Animation walk;
 	Animation attack;

@@ -41,17 +41,26 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	curr_anim = &spawn;
 
 	state = BRUTE_STATE::SPAWN;
-	speed = 1.F;
+	speed = 1.f;
 	detection_range = 10.0f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 	check_path_time = 1.f;
+
+	spawn_draw_offset = { 260, 274 };
+	normal_draw_offset = { 132, 75 };
 	draw_offset = spawn_draw_offset;
+
+	angle = 180;//REMOVE
+
 	timer.Start();
 	attack_damage = 10;
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
+
+	coll_w = 0.7f;
+	coll_h = 0.7f;
 
 	life = 1000;
 	damaged_sprite_time = 150;
@@ -108,8 +117,9 @@ void Obj_Brute::Movement(float &dt)
 		if (curr_anim->Finished())
 		{
 			curr_tex = tex;
-			coll = app->collision->AddCollider(pos_map, 0.7f, 0.7f, Collider::TAG::ENEMY, 0.f, this);
+			coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
 			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
 			curr_anim = &walk;
 			state=BRUTE_STATE::GET_PATH;
