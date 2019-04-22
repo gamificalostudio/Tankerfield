@@ -29,7 +29,7 @@ General_HUD::General_HUD()
 	round_element = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
-	UI_LabelDef label_def("", app->ui->rounds_font);
+	UI_LabelDef label_def("0", app->ui->rounds_font);
 	round_number_label = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
 	round_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	round_number_label->SetParent(round_element);

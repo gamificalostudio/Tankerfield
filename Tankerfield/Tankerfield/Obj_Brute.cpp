@@ -203,9 +203,13 @@ void Obj_Brute::OnTrigger(Collider* collider)
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
+		collider->SetTag(Collider::TAG::NONE);
+
 		if (life <= 0)
 		{
+			// DROP A PICK UP ITEM 
 			state = BRUTE_STATE::DEAD;
 		}
 	}
+
 }

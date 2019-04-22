@@ -341,9 +341,12 @@ bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 
 void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
-	if ((collider->GetTag() == Collider::TAG::BULLET)||(collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
+	if ( (collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET) )
 	{
 		life -= collider->damage;
+		collider->SetTag(Collider::TAG::NONE);
+
+
 		if (life <= 0)
 		{
 			app->pick_manager->PickUpFromEnemy(pos_map);
