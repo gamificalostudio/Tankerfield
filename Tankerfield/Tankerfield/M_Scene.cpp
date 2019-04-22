@@ -33,8 +33,6 @@
 #include "Object.h"
 
 
-#include "UI_Image.h"
-
 M_Scene::M_Scene() : Module()
 {
 	name.assign("scene");

@@ -21,7 +21,7 @@ class Collider
 public:
 	enum class TAG : int
 	{
-		NONE = -1,
+		NONE = 0,
 		WALL,
 		BULLET,
 		FRIENDLY_BULLET,

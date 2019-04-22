@@ -170,6 +170,9 @@
     <ClCompile Include="UI_Quad.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="M_MainMenu.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -361,6 +364,9 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="UI_Quad.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="M_MainMenu.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

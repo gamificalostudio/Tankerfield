@@ -220,9 +220,6 @@ bool M_UI::Reset()
 
 	active_fxs.clear();
 
-	//main_in_game_element->element_sons.clear();
-	//main_ui_element->element_sons.clear();
-
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
@@ -924,7 +921,7 @@ bool UI_Fade_FX::Update(float dt)
 			ax = 0.f;
 		}
 
-		if ( max_loops != -1.f && loops_count > max_loops)
+		if ( max_loops != -1.f && loops_count >= max_loops)
 		{
 			finished = true;
 		}
