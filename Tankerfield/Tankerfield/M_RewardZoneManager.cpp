@@ -113,6 +113,15 @@ bool M_RewardZoneManager::PostUpdate(float dt)
 			{
 				if (*item_rewardzone != nullptr)
 				{
+					std::list<Object*>::iterator item_enemyobject = (*item_rewardzone)->enemy_list.begin();
+					while (item_enemyobject != (*item_rewardzone)->enemy_list.end())
+					{
+						if ((*item_rewardzone)->enemy_list.size() > 0 && *item_enemyobject != nullptr)
+						{
+							item_enemyobject++;
+						}
+					}
+					
 					item_rewardzone++;
 				}
 			}
