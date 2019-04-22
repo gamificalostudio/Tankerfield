@@ -147,7 +147,7 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	curr_speed = speed = 14.f;//TODO: Load from xml
+	curr_speed = speed = 5.f;//TODO: Load from xml
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -266,7 +266,7 @@ bool Obj_Tank::Update(float dt)
 	Item();
 	StopTank();
 	ReviveTank();
-	CameraMovement(dt);
+	CameraMovement(dt);//Camera moves after the player
 	InputReadyKeyboard();
 
 	return true;
@@ -280,6 +280,11 @@ void Obj_Tank::CameraMovement(float dt)
 	camera_player->ResetCamera();
 	camera_player->FollowPlayer(dt, this);
 	camera_player->ShakeCamera(dt);
+}
+
+fPoint Obj_Tank::GetTurrPos()
+{
+	return turr_pos;
 }
 
 void Obj_Tank::Movement(float dt)
@@ -447,8 +452,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
-
-	
 
 																							//only appears when hes dead and disappear when he has been revived
 	//DEBUG

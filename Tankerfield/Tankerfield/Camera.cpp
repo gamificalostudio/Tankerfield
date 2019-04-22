@@ -56,14 +56,27 @@ float Camera::GetShakeAmount() const
 
 void Camera::FollowPlayer(float dt, Obj_Tank * player)
 {
+	float camera_aim_distance = 2.5f;
+
 	fPoint source_pos ((float)rect.x, (float)rect.y);
-	fPoint player_pos = app->map->MapToScreenF(player->pos_map);
-	fPoint target_pos(player_pos.x - rect.w * 0.5f, player_pos.y - rect.h * 0.5f);
+	fPoint aim_pos = app->map->MapToScreenF(/*player->GetTurrPos()*/player->pos_map + player->GetShotDir() * camera_aim_distance) + fPoint(0, -6);
+	fPoint target_pos(aim_pos.x - rect.w * 0.5f, aim_pos.y - rect.h * 0.5f);
 
 	fPoint lerp_pos = lerp(source_pos, target_pos, lerp_factor * dt);
 	rect.x = lerp_pos.x;
 	rect.y = lerp_pos.y;
 }
+
+//Remove
+	//float line_length = 5.f;
+	////1-- Set a position in the isometric space
+	//fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
+	////2-- Transform that poin to screen coordinates
+	//iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+	//app->render->DrawLineSplitScreen(
+	//	pos_screen.x, pos_screen.y - cannon_height,
+	//	input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
+//}
 
 float Camera::GetRandomValue(float min_value, float max_value)
 {
