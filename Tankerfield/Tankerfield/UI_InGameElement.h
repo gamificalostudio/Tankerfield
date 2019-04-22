@@ -92,7 +92,7 @@ public:
 
 	UI_IG_Helper(const fPoint map_pos, const UI_InGameElementDef definition);
 
-	void AddButtonHelper(const M_UI::GAMEPAD_BUTTON button_type, const fPoint offset);
+	void AddButtonHelper(const GAMEPAD_BUTTON button_type, const fPoint offset);
 
 	void AddTextHelper(const String text, const  fPoint offset);
 

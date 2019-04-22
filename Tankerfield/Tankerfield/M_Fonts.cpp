@@ -44,6 +44,14 @@ bool M_Fonts::Awake(pugi::xml_node& conf)
 	return ret;
 }
 
+bool M_Fonts::Start()
+{
+	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
+	rounds_font = app->font->Load("fonts/round_font.ttf", 35);
+
+	return true;
+}
+
 // Called before quitting
 bool M_Fonts::CleanUp()
 {
@@ -55,6 +63,9 @@ bool M_Fonts::CleanUp()
 		iter->second = nullptr;
 		iter = fonts.erase(iter);
 	}
+
+	font_open_sants_bold_12 = nullptr;
+	rounds_font = nullptr;
 
 	fonts.clear();
 	TTF_Quit();

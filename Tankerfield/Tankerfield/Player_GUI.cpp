@@ -8,6 +8,7 @@
 #include "M_Window.h"
 #include "M_UI.h"
 #include "M_Render.h"
+#include "M_Fonts.h"
 
 #include "Object.h"
 #include "M_ObjManager.h"
@@ -20,7 +21,7 @@
 #include "UI_Bar.h"
 #include "Camera.h"
 
-Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : type(type), player(player_object)
+Player_GUI::Player_GUI(const GUI_TYPE type, Obj_Tank * player_object) : type(type), player(player_object)
 {
 	viewport.create(player_object->camera_player->screen_section.x, player_object->camera_player->screen_section.y, player_object->camera_player->screen_section.w, player_object->camera_player->screen_section.h);
 	viewport_with_margin = { (int)(viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.w - margin.x) ,(int)(viewport.h - margin.y) };
@@ -35,16 +36,16 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 	switch (type)
 	{
-	case TYPE::PLAYER_1:
+	case GUI_TYPE::PLAYER_1:
 		arrow_def.arrow_color = ARROW_COLOR::GREEN;
 		break;
-	case TYPE::PLAYER_2:
+	case GUI_TYPE::PLAYER_2:
 		arrow_def.arrow_color = ARROW_COLOR::BLUE;
 		break;
-	case TYPE::PLAYER_3:
+	case GUI_TYPE::PLAYER_3:
 		arrow_def.arrow_color = ARROW_COLOR::PINK;
 		break;
-	case TYPE::PLAYER_4:
+	case GUI_TYPE::PLAYER_4:
 		arrow_def.arrow_color = ARROW_COLOR::ORANGE;
 		break;
 	}
@@ -58,24 +59,24 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 	image_def.sprite_section = { 80, 10, 65, 65 };        
 
-	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	if (type == GUI_TYPE::PLAYER_1 || type == GUI_TYPE::PLAYER_2)
 	{
 		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, image_def);
 		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
-	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	else if (type == GUI_TYPE::PLAYER_3 || type == GUI_TYPE::PLAYER_4)
 	{
 		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetBottom() - margin.y - 30.f }, image_def);
 		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
 	image_def.sprite_section = { 0, 0, 0, 0 };
 
-	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	if (type == GUI_TYPE::PLAYER_1 || type == GUI_TYPE::PLAYER_2)
 	{
 		item_icon = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, image_def);
 		item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	}
-	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	else if (type == GUI_TYPE::PLAYER_3 || type == GUI_TYPE::PLAYER_4)
 	{
 		item_icon = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetBottom() - margin.y - 30.f }, image_def);
 		item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
@@ -83,24 +84,24 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 	image_def.sprite_section = { 10, 10, 60, 60 };
 
-	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	if (type == GUI_TYPE::PLAYER_1 || type == GUI_TYPE::PLAYER_2)
 	{
 		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - margin.x  ,viewport.GetTop() + margin.y }, image_def);
 		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
 	}
-	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	else if (type == GUI_TYPE::PLAYER_3 || type == GUI_TYPE::PLAYER_4)
 	{
 		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - margin.x ,viewport.GetBottom() - margin.y }, image_def);
 		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 	}
 	image_def.sprite_section = { 0, 0, 0, 0 };
 
-	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	if (type == GUI_TYPE::PLAYER_1 || type == GUI_TYPE::PLAYER_2)
 	{
 		weapon_icon = app->ui->CreateImage({ viewport.GetRight() - margin.x - 8.f,viewport.GetTop() + margin.y + 8.f }, image_def);
 		weapon_icon->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
 	}
-	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	else if (type == GUI_TYPE::PLAYER_3 || type == GUI_TYPE::PLAYER_4)
 	{
 		weapon_icon = app->ui->CreateImage({ viewport.GetRight() - margin.x - 8.f ,viewport.GetBottom() - margin.y - 8.f }, image_def);
 		weapon_icon->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
@@ -114,22 +115,22 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 
 	switch (type)
 	{
-	case Player_GUI::TYPE::PLAYER_1:
+	case GUI_TYPE::PLAYER_1:
 		life_bar_def.direction = UI_Bar::DIR::UP;
 		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
 		break;
-	case Player_GUI::TYPE::PLAYER_2:
+	case GUI_TYPE::PLAYER_2:
 		life_bar_def.direction = UI_Bar::DIR::UP;
 		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 		break;
-	case Player_GUI::TYPE::PLAYER_3:
+	case GUI_TYPE::PLAYER_3:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
 		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
 		break;
-	case Player_GUI::TYPE::PLAYER_4:
+	case GUI_TYPE::PLAYER_4:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
 		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
@@ -142,13 +143,13 @@ Player_GUI::Player_GUI(const Player_GUI::TYPE type, Obj_Tank * player_object) : 
 	charged_shot_bar_def.section_width = 44.f;
 	charged_shot_bar_def.section_height = 44.f;
 	
-	if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
+	if (type == GUI_TYPE::PLAYER_1 || type == GUI_TYPE::PLAYER_2)
 	{           
 		charged_shot_bar_def.direction = UI_Bar::DIR::DOWN;
 		charged_shot_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x - 8.f, viewport.GetTop() + margin.y + 8.f }, charged_shot_bar_def);
 		charged_shot_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
 	}
-	else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
+	else if (type == GUI_TYPE::PLAYER_3 || type == GUI_TYPE::PLAYER_4)
 	{
 		charged_shot_bar_def.direction = UI_Bar::DIR::UP;
 		charged_shot_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x - 8.f, viewport.GetBottom() - margin.y - 8.f }, charged_shot_bar_def);
@@ -210,19 +211,19 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 	switch (weapon_type)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE];
 		break;
 	case WEAPON::HEALING_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_HEALING_SHOT];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
 		break;
 	case WEAPON::FLAMETHROWER:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	case WEAPON::LASER_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_LASER];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER];
 		break;
 	case WEAPON::BASIC:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::WEAPON_BASIC];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
 }
@@ -234,10 +235,10 @@ void Player_GUI::SetItemIcon( ObjectType type)
 	switch (type)
 	{
 	case ObjectType::HEALTH_BAG:
-		item_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
+		item_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
 	case ObjectType::HAPPY_HOUR_ITEM:
-		item_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::BIG][(int)M_UI::ICON_TYPE::ITEM_HAPPY_HOUR];
+		item_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
 	case ObjectType::NO_TYPE:
 		item_icon->SetState(ELEMENT_STATE::HIDDEN);
@@ -261,15 +262,15 @@ void Player_GUI::SetHelper()
 
 }
 
-void Player_GUI::AddButtonHelper( const M_UI::GAMEPAD_BUTTON button_type)
+void Player_GUI::AddButtonHelper( const GAMEPAD_BUTTON button_type)
 {
 	app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)button_type]));
 
 }
 
-void Player_GUI::AddTextHelper(const String text)
+void Player_GUI::AddTextHelper(const std::string text)
 {
-	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->ui->font_open_sants_bold_12));
+	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->font->font_open_sants_bold_12));
 }
 
 Player_GUI::~Player_GUI()

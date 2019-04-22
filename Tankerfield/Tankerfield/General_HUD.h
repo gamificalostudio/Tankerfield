@@ -42,6 +42,10 @@ private:
 
 	UI_Quad*  background = nullptr;
 
+	UI_Quad*  vertical_split_rect = nullptr;
+
+	UI_Quad*  horizontal_split_rect = nullptr;
+
 };
 
 #endif // __MODULE_UI_H__

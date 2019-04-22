@@ -8,7 +8,6 @@ struct SDL_Texture;
 struct Controller;
 
 class UI_Image;
-class UI_Button;
 
 class M_MainMenu : public Module
 {
@@ -34,11 +33,11 @@ public:
 
 private:
 
-	UI_Image		* background = nullptr;
+	SDL_Texture     * background_texture = nullptr;
 	UI_Image		* logo = nullptr;
-	UI_Button		* single_player = nullptr;
-	UI_Button		* multi_player = nullptr;
-	UI_Button		* exit = nullptr;
+	//UI_Button		* single_player = nullptr;
+	//UI_Button		* multi_player = nullptr;
+	//UI_Button		* exit = nullptr;
 
 };
 

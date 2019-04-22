@@ -26,6 +26,7 @@ public:
 	// Called before render is available
 	bool Awake(pugi::xml_node&);
 
+	bool Start();
 	// Called before quitting
 	bool CleanUp();
 
@@ -42,7 +43,10 @@ public:
 public:
 
 	map <string, _TTF_Font*>	fonts;
-	_TTF_Font*			         default_font = nullptr;
+
+	_TTF_Font*			        default_font = nullptr;
+	_TTF_Font*					font_open_sants_bold_12 = nullptr;
+	_TTF_Font*					rounds_font = nullptr;
 };
 
 

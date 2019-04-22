@@ -5,6 +5,8 @@
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
+#include "M_UI.h"
+#include "M_Fonts.h"
 #include "M_Input.h"
 #include "M_Textures.h"
 #include "M_Audio.h"
@@ -24,7 +26,6 @@
 #include "PerfTimer.h"
 #include "Obj_Tank.h"
 #include "M_RewardZoneManager.h"
-#include "M_UI.h"
 #include "General_HUD.h"
 #include "Player_GUI.h"
 
@@ -83,6 +84,13 @@ bool M_Scene::Start()
 	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
 	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 
+	player_1_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_1, app->scene->tank_1);
+	player_2_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_2, app->scene->tank_2);
+	player_3_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_3, app->scene->tank_3);
+	player_4_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_4, app->scene->tank_4);
+	
+	general_hud = DBG_NEW General_HUD();
+
 	round = 0;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
@@ -125,7 +133,7 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 	{
-		app->ui->general_hud->SetRoundNumber(2);
+		general_hud->SetRoundNumber(2);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
@@ -224,12 +232,12 @@ bool M_Scene::Update(float dt)
 	case WaveStat::GAME_OVER:
 
 		game_over = true;
-		app->ui->player_1_gui->Fade_GUI(false);
-		app->ui->player_2_gui->Fade_GUI(false);
-		app->ui->player_3_gui->Fade_GUI(false);
-		app->ui->player_4_gui->Fade_GUI(false);
-		app->ui->general_hud->FadeGeneralHUD(false);
-		app->ui->general_hud->FadeGameOver(true);
+		player_1_gui->Fade_GUI(false);
+		player_2_gui->Fade_GUI(false);
+		player_3_gui->Fade_GUI(false);
+		player_4_gui->Fade_GUI(false);
+		general_hud->FadeGeneralHUD(false);
+		general_hud->FadeGameOver(true);
 		stat_of_wave = WaveStat::NO_TYPE;
 
 		break;
@@ -257,25 +265,28 @@ bool M_Scene::PostUpdate(float dt)
 // Called before quitting
 bool M_Scene::Reset()
 {
+	CleanUp();
 	app->map->Unload();
 	app->ui->Reset();
 	app->collision->Reset();
 	app->objectmanager->Reset();
 	Start();
-	app->ui->Start();
-	/*app->collision->Reset();*/
-	//app->pathfinding->Reset();
 
-
-	//app->scene->Start();
-	//app->objectmanager->Start();
-	//app->collision->Start();
 	return true;
 }
 
 bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
+	RELEASE(general_hud);
+
+	general_hud = nullptr;
+	player_1_gui = nullptr;
+	player_2_gui = nullptr;
+	player_3_gui = nullptr;
+	player_4_gui = nullptr;
+
 	return true;
 }
 
@@ -400,7 +411,7 @@ void M_Scene::NewWave()
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
 	++round;
-	app->ui->general_hud->SetRoundNumber(round);
+	general_hud->SetRoundNumber(round);
 }
 
 bool M_Scene::AllPlayersReady() const

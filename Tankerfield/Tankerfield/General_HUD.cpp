@@ -6,11 +6,18 @@
 #include "UI_Element.h"
 #include "UI_Quad.h"
 #include "M_Window.h"
+#include "M_Fonts.h"
 
 General_HUD::General_HUD()
 {
 	UI_ImageDef image_def;
 	fRect full_screen = app->win->GetWindowRect();
+
+	vertical_split_rect = app->ui->CreateQuad({ full_screen.w * 0.5f, full_screen.h * 0.5f }, UI_QuadDef({ 0 ,0, 6 , (int)full_screen.h }, { 150, 150, 150, 255 }));
+	vertical_split_rect->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+
+	horizontal_split_rect = app->ui->CreateQuad({ full_screen.w * 0.5f, full_screen.h * 0.5f }, UI_QuadDef({ 0,0, (int)full_screen.w , 6 }, { 150, 150, 150, 255 }));
+	horizontal_split_rect->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
 	background = app->ui->CreateQuad({ 0.f, 0.f }, UI_QuadDef({ 0,0, (int)full_screen.w , (int)full_screen.h }, { 0, 0, 0 , 200 }));
 	background->alpha = 0;
@@ -29,7 +36,7 @@ General_HUD::General_HUD()
 	round_element = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
-	UI_LabelDef label_def("0", app->ui->rounds_font);
+	UI_LabelDef label_def("0", app->font->rounds_font);
 	round_number_label = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
 	round_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	round_number_label->SetParent(round_element);
@@ -52,14 +59,16 @@ General_HUD::General_HUD()
 
 General_HUD::~General_HUD()
 {
-	round_number_label	->Destroy();
-	round_element		->Destroy();
-	round_fx			->Destroy();
-	left_tank_life		->Destroy();
-	right_tank_life		->Destroy();
-	game_word			->Destroy();
-	over_word			->Destroy();
-	background			->Destroy();
+	round_number_label	  ->Destroy();
+	round_element		  ->Destroy();
+	round_fx			  ->Destroy();
+	left_tank_life		  ->Destroy();
+	right_tank_life		  ->Destroy();
+	game_word			  ->Destroy();
+	over_word			  ->Destroy();
+	background			  ->Destroy();
+	vertical_split_rect   ->Destroy();
+	horizontal_split_rect ->Destroy();
 }
 
 void General_HUD::FadeGeneralHUD(bool fade_on)

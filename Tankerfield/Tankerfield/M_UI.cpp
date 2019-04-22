@@ -14,8 +14,6 @@
 #include "M_AnimationBank.h"
 
 #include "Player_GUI.h"
-#include "General_HUD.h"
-#include "Obj_Tank.h"
 
 // UI includes --------------------------
 #include "UI_Element.h"
@@ -105,8 +103,6 @@ bool M_UI::Start()
 	// Assets ========================================
 
 	atlas = app->tex->Load("textures/ui/atlas.png");
-	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
-	rounds_font = app->font->Load("fonts/round_font.ttf", 35);
 
 	if (main_in_game_element == nullptr)
 	{
@@ -117,25 +113,6 @@ bool M_UI::Start()
 		main_ui_element = DBG_NEW UI_Element({ 0,0 }, UI_ElementDef(), nullptr);
 	}
 
-	// HUD ===========================================
-	player_1_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_1, app->scene->tank_1);
-	app->scene->tank_1->SetGui(player_1_gui);
-	players_guis.push_back(player_1_gui);
-
-	player_2_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_2, app->scene->tank_2);
-	app->scene->tank_2->SetGui(player_2_gui);
-	players_guis.push_back(player_2_gui);
-
-	player_3_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_3, app->scene->tank_3);
-	app->scene->tank_3->SetGui(player_3_gui);
-	players_guis.push_back(player_3_gui);
-
-	player_4_gui = DBG_NEW Player_GUI(Player_GUI::TYPE::PLAYER_4, app->scene->tank_4);
-	app->scene->tank_4->SetGui(player_4_gui);
-	players_guis.push_back(player_4_gui);
-
-	general_hud = DBG_NEW General_HUD();
-
 	return true;
 }
 
@@ -145,12 +122,7 @@ bool M_UI::CleanUp()
 	LOG("Freeing all UI objects");
 
 	app->tex->UnLoad(atlas);
-	app->font->Unload(font_open_sants_bold_12);
-
-	font_open_sants_bold_12 = nullptr;
 	atlas = nullptr;
-
-	RELEASE(general_hud);
 
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
 	{
@@ -178,12 +150,6 @@ bool M_UI::CleanUp()
 	}
 
 	active_fxs.clear();
-
-	general_hud = nullptr;
-	player_1_gui = nullptr;
-	player_2_gui = nullptr;
-	player_3_gui = nullptr;
-	player_4_gui = nullptr;
 
 	return true;
 }
@@ -220,15 +186,15 @@ bool M_UI::Reset()
 
 	active_fxs.clear();
 
-	RELEASE(general_hud);
-
-	general_hud = nullptr;
-	player_1_gui = nullptr;
-	player_2_gui = nullptr;
-	player_3_gui = nullptr;
-	player_4_gui = nullptr;
-
 	return true;
+}
+
+Player_GUI * M_UI::AddPlayerGUI(GUI_TYPE type, Obj_Tank * player)
+{
+	Player_GUI* player_gui = DBG_NEW Player_GUI(type, player);
+	player->SetGui(player_gui);
+	players_guis.push_back(player_gui);
+	return player_gui;
 }
 
 // Update all guis
@@ -486,11 +452,6 @@ bool M_UI::PostUpdate(float dt)
 	}
 
 	current_camera = nullptr;
-
-	//Split Screen Lines ==========================================================================================================
-
-	app->render->DrawQuad({ (int)(full_screen.w * .5f) - 3,  0, 6, (int)full_screen.h }, 150, 150, 150, 255, true, false);
-	app->render->DrawQuad({ 0 ,(int)(full_screen.h * .5f) - 3, (int)full_screen.w, 6 }, 150, 150, 150, 255, true, false);
 
 	// Draw all UI elements ====================================
 

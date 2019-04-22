@@ -7,22 +7,21 @@
 #include "SDL_ttf/include/SDL_ttf.h"
 
 #include "Module.h"
+#include "Obj_Tank.h"
 #include "Animation.h"
 #include "Point.h"
-
 
 #define CURSOR_WIDTH 2
 
 using namespace std;
 typedef string String;
 
-enum class ELEMENT_STATE;
-class UI_Element;
-class Player_GUI;
-class General_HUD;
-class Camera;
 class M_UI;
+class Camera;
+enum class ELEMENT_STATE;
+enum class GUI_TYPE;
 
+class UI_Element;
 class UI_Listener;
 class UI_Image;
 class UI_Bar;
@@ -54,6 +53,44 @@ enum class ClickState
 	EXIT,
 	REPEAT,
 	NONE
+};
+
+enum class GAMEPAD_BUTTON : int
+{
+	NONE = -1,
+	A,
+	B,
+	Y,
+	X,
+	L,
+	LT,
+	LB,
+	R,
+	RT,
+	RB,
+	MAX
+};
+
+enum class ICON_SIZE : int
+{
+	NONE = -1,
+	SMALL,
+	BIG,
+	MAX
+};
+
+enum class ICON_TYPE : int
+{
+	NONE = -1,
+	WEAPON_BASIC,
+	WEAPON_DOUBLE_MISSILE,
+	WEAPON_HEALING_SHOT,
+	WEAPON_LASER,
+	WEAPON_FLAMETHROWER,
+	ITEM_HEALTH_BAG,
+	ITEM_HAPPY_HOUR,
+	ITEM_INSTANT_HELP,
+	MAX
 };
 
 class UI_Listener
@@ -109,44 +146,6 @@ class M_UI : public Module
 {
 public:
 
-	enum class GAMEPAD_BUTTON: int
-	{
-		NONE = -1,
-		A,
-		B,
-		Y,
-		X,
-		L,
-		LT,
-		LB,
-		R,
-		RT,
-		RB,
-		MAX
-	};
-
-	enum class ICON_SIZE : int
-	{
-		NONE = -1,
-		SMALL,
-		BIG,
-		MAX
-	};
-
-	enum class ICON_TYPE : int
-	{
-		NONE = -1,
-		WEAPON_BASIC,
-		WEAPON_DOUBLE_MISSILE,
-		WEAPON_HEALING_SHOT,
-		WEAPON_LASER,
-		WEAPON_FLAMETHROWER,
-		ITEM_HEALTH_BAG,
-		ITEM_HAPPY_HOUR,
-		ITEM_INSTANT_HELP,
-		MAX
-	};
-
 	M_UI();
 
 	virtual ~M_UI();
@@ -164,6 +163,8 @@ public:
 	bool CleanUp() override;
 
 	bool Reset();
+
+	Player_GUI* AddPlayerGUI( GUI_TYPE type, Obj_Tank* player);
 
 	SDL_Texture* GetAtlas() const;
 
@@ -243,18 +244,8 @@ private:
 
 
 public:
-	// Mouse ----------------------------------------------
-	General_HUD* general_hud = nullptr;
 
 	Player_GUI* current_gui = nullptr;
-
-	Player_GUI  *player_1_gui = nullptr;
-
-	Player_GUI  *player_2_gui = nullptr;
-
-	Player_GUI  *player_3_gui = nullptr;
-
-	Player_GUI  *player_4_gui = nullptr;
 
 	Camera*     current_camera = nullptr;
 
@@ -267,10 +258,6 @@ public:
 	SDL_Rect button_sprites[(int)GAMEPAD_BUTTON::MAX];
 
 	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
-
-	_TTF_Font*  font_open_sants_bold_12 = nullptr;
-
-	_TTF_Font*  rounds_font = nullptr;
 
 	Animation	green_arrow_anim;
 
