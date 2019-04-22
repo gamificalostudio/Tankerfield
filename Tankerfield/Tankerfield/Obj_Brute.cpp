@@ -58,12 +58,12 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
-
+  
 	coll_w = 0.7f;
 	coll_h = 0.7f;
-
-	life = 1000;
+  
 	damaged_sprite_time = 150;
+	life = pow(5, app->scene->round);
 }
 
 Obj_Brute::~Obj_Brute()
@@ -233,13 +233,16 @@ void Obj_Brute::OnTrigger(Collider* collider)
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
-
+    
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
+		collider->SetTag(Collider::TAG::NONE);
 
 		if (life <= 0)
 		{
+			// DROP A PICK UP ITEM 
 			state = BRUTE_STATE::DEAD;
 		}
 	}
+
 }

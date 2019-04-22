@@ -476,18 +476,17 @@
             <frame x="670" y="864" w="134" h="96" />
           </dir>
         </attack>
-        <death speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+        <death speed="7.5" rotation="counter-clockwise" first_dir_angle ="0" loop="false">
           <dir>
             <frame x="3484" y="192" w="134" h="96" />
             <frame x="3618" y="192" w="134" h="96" />
             <frame x="3752" y="192" w="134" h="96" />
             <frame x="3886" y="192" w="134" h="96" />
-            <frame x="0" y="192" w="134" h="96" />
+            <frame x="0" y="288" w="134" h="96" />
             <frame x="134" y="288" w="134" h="96" />
             <frame x="268" y="288" w="134" h="96" />
-            <frame x="670" y="288" w="134" h="96" />
-            <frame x="134" y="288" w="134" h="96" />
-            <frame x="268" y="288" w="134" h="96" />
+            <frame x="402" y="288" w="134" h="96" />
+            <frame x="536" y="288" w="134" h="96" />
             <frame x="670" y="288" w="134" h="96" />
             <frame x="804" y="288" w="134" h="96" />
             <frame x="938" y="288" w="134" h="96" />
@@ -508,13 +507,12 @@
             <frame x="2680" y="288" w="134" h="96" />
             <frame x="2814" y="288" w="134" h="96" />
             <frame x="2948" y="288" w="134" h="96" />
-            <frame x="938" y="288" w="134" h="96" />
             <frame x="3082" y="288" w="134" h="96" />
             <frame x="3216" y="288" w="134" h="96" />
             <frame x="3350" y="288" w="134" h="96" />
           </dir>
         </death>
-        <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="0">
+        <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="0" loop="false">
           <dir>
             <frame x="0" y="0" w="260" h="304" />
             <frame x="260" y="0" w="260" h="304" />

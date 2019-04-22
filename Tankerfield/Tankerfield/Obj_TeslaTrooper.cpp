@@ -1,6 +1,7 @@
 #include <list>
 #include <assert.h>
 #include <vector>
+#include <math.h>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
@@ -46,9 +47,13 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 	curr_anim = &walk;
-	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/laser-tesla-trooper.wav");
-	appear_anim_explosion.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("explotions").child("animations").child("explotion2"));
+	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
+
+	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
+	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav",20);
+	app->audio->PlayFx(sfx_spawn);
 	draw = false;
+
 	//Things
 	state				= TROOPER_STATE::APPEAR;
 	speed				= 1.5F;
@@ -60,10 +65,13 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	coll->SetObjOffset({ -.25f, -.25f });
 	draw_offset			= { 24, 28 };
 	
+
+	//parameters-------------------------------------------
 	attack_damage		= 10;
 	attack_range		= 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
+	life = pow(1.5, app->scene->round);
 	//Timers ----------------
 	check_teleport_time = 1; //10s
 	teleport_timer.Start();
@@ -115,17 +123,18 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	switch (state)
 	{
 	case TROOPER_STATE::APPEAR:
-	{
-		appear_anim_explosion.NextFrame(dt);
-		if ((int)appear_anim_explosion.current_frame == 6)
-		{
-			draw = true;
-		}
-		if (appear_anim_explosion.Finished())
-		{
-			state = TROOPER_STATE::GET_PATH;
-		}
-	}
+			{
+				appear_anim.NextFrame(dt);
+				if ((int)appear_anim.current_frame == 6)
+				{
+					draw = true;
+				}
+				if (appear_anim.Finished())
+				{
+					appear_anim.Reset();
+					state = TROOPER_STATE::GET_PATH;
+				}
+			}
 			break;
 	case TROOPER_STATE::GET_PATH:
 	{
@@ -252,6 +261,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 			if (in_portal->Finished())
 			{
+				in_portal->Reset();
 				in_portal = &portal_animation;
 				state = TROOPER_STATE::GET_PATH;
 				angle = -90;
@@ -315,7 +325,7 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			camera,
 			&portal_frame);
 	}
-
+	
 	if (draw)
 	{
 		app->render->BlitScaled(
@@ -326,19 +336,19 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			&frame,
 			0.75f);
 	}
-	
-
 	if (state == TROOPER_STATE::APPEAR)
 	{
-		SDL_Rect rect = appear_anim_explosion.GetFrame(0);
+		SDL_Rect rect = appear_anim.GetFrame(0);
 		app->render->Blit(
-			explosion_apper_tex,
+			portal_tex,
 			pos_screen.x - rect.w*0.5f,
-			pos_screen.y - rect.h*0.5f,
+			pos_screen.y - rect.h,
 			camera,
 			&rect);
-		
+
 	}
+
+
 	return true;
 }
 
@@ -349,12 +359,12 @@ bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 
 void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
-	if ((collider->GetTag() == Collider::TAG::BULLET)||(collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
+	if ( (collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET) )
 	{
 		life -= collider->damage;
-
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
+		collider->SetTag(Collider::TAG::NONE);
 
 		if (life <= 0)
 		{

@@ -71,7 +71,7 @@ private:
 	float attack_range			= 0.f;//Tile distance in which the enemy can attack
 	float attack_range_squared	= 0.f;
 	int attack_damage			= 0;
-	uint sfx_attack = 0;
+	
 
 
 
@@ -79,21 +79,25 @@ private:
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
 
+
 	Animation walk;
 	Animation attack;
 	Animation death;
 	Animation portal_animation;
 	Animation portal_close_anim;
-	Animation appear_anim_explosion;
+	Animation appear_anim;
 
 	bool draw = true;
 	Animation* in_portal				= nullptr;
 	SDL_Texture * tex					= nullptr;
 	SDL_Texture * tex_damaged			= nullptr;
 	SDL_Texture * portal_tex			= nullptr;
-	SDL_Texture * explosion_apper_tex	= nullptr;
+	SDL_Texture * explosion_apper_tex			= nullptr;
 
-	SpawnPoint* teleport_spawnpoint		= nullptr;
+	uint sfx_attack = 0;
+	uint sfx_spawn = 0;
+
+	SpawnPoint* teleport_spawnpoint = nullptr;
 
 	Timer damaged_sprite_timer;
 	int damaged_sprite_time				= 0;
