@@ -232,9 +232,15 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			state = TROOPER_STATE::TELEPORT_IN;
 			in_portal = &portal_animation;
 			angle = -90;
-			teleport_timer.Start();
+		
 			teleport_anim_duration.Start();
 		}
+		else
+		{
+			state = TROOPER_STATE::GET_PATH;
+
+		}
+		teleport_timer.Start();
 	}
 	break;
 	case TROOPER_STATE::TELEPORT_IN:
@@ -248,6 +254,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			draw = false;
 			if (in_portal->Finished())
 			{
+				in_portal->Reset();
 				pos_map = teleport_spawnpoint->pos;
 				state = TROOPER_STATE::TELEPORT_OUT;
 				teleport_timer.Start();

@@ -76,7 +76,14 @@ bool Obj_Tank::Start()
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	//tur
+	std::string aux = tank_node.child("spritesheets").child("turr_orange").text().as_string();
+	turr_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("turr_orange").text().as_string());
+	turr_tex_green = app->tex->Load(tank_node.child("spritesheets").child("turr_green").text().as_string());
+	turr_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("turr_pink").text().as_string());
+	turr_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("turr_blue").text().as_string());
+	
+	
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
@@ -103,6 +110,7 @@ bool Obj_Tank::Start()
 		kb_interact	= SDL_SCANCODE_E;
 		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_green;
+		turr_tex = turr_tex_green;
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -113,6 +121,8 @@ bool Obj_Tank::Start()
 		kb_interact = SDL_SCANCODE_Y;
 		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_blue;
+		turr_tex = turr_tex_blue;
+
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -123,6 +133,8 @@ bool Obj_Tank::Start()
 		kb_interact = SDL_SCANCODE_O;
 		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
+		turr_tex = turr_tex_pink;
+
 		break;
 	case 3:
 		kb_up		= SDL_SCANCODE_KP_8;
@@ -133,6 +145,8 @@ bool Obj_Tank::Start()
 		kb_interact	= SDL_SCANCODE_KP_9;
 		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_orange;
+		turr_tex = turr_tex_orange;
+
 		break;
 	default:
 		curr_tex = base_tex_orange;
