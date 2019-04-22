@@ -99,27 +99,29 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 void Obj_TeslaTrooper::Attack()
 {
-	if (target != nullptr
-		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
-		&& perf_timer.ReadMs() > (double)attack_frequency)
+	if (life > 0)
 	{
-		curr_anim = &attack;
-		target->SetLife(target->GetLife() - attack_damage);
-		perf_timer.Start();
-		app->audio->PlayFx(sfx_attack);
-	}
+		if (target != nullptr
+			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+			&& perf_timer.ReadMs() > (double)attack_frequency)
+		{
+			curr_anim = &attack;
+			target->SetLife(target->GetLife() - attack_damage);
+			perf_timer.Start();
+			app->audio->PlayFx(sfx_attack);
+		}
 
-	if (curr_anim == &attack&&curr_anim->Finished())
-	{
-		curr_anim = &walk;
-		attack.Reset();
+		if (curr_anim == &attack
+			&& curr_anim->Finished())
+		{
+			curr_anim = &walk;
+			attack.Reset();
+		}
 	}
-
 }
 
 void Obj_TeslaTrooper::Movement(float &dt)
 {
-	
 	switch (state)
 	{
 	case TROOPER_STATE::APPEAR:
