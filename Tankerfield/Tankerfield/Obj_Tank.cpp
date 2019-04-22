@@ -370,7 +370,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 			//reduce the velocity to 0 with decay
 			if (velocity_recoil_curr_speed > 0)
 			{
-				velocity_recoil_curr_speed -= velocity_recoil_decay;
+				velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
 				if (velocity_recoil_curr_speed < 0)
 				{
 					velocity_recoil_curr_speed = 0;
