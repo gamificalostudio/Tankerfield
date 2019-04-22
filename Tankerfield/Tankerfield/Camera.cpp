@@ -4,16 +4,17 @@
 
 Camera::Camera()
 {
-	max_offset = 30.f;
-	trauma_decay = 1.f;
+	max_shake_offset = 30.f;
+	trauma_decay = 0.75f;
 	random_generator.seed(random_device());
-	lerp_factor = 0.85f;
+	aim_distance = 2.5f;
+	lerp_factor = 3.f;
 }
 
 
 void Camera::AddTrauma(float value)
 {
-	if (trauma + value >= 1.0f)
+	if (trauma + value >= 1.f)
 	{
 		trauma = 1.f;
 	}
@@ -36,11 +37,11 @@ void Camera::ShakeCamera(float dt)
 	unaltered_pos.y = rect.y;
 
 	//Apply the camera shake
-	if (trauma > 0)
+	if (trauma > 0.f)
 	{
 		float shake = GetShakeAmount();
-		rect.x += max_offset * shake * GetRandomValue(-1.f, 1.f);
-		rect.y += max_offset * shake * GetRandomValue(-1.f, 1.f);
+		rect.x += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
+		rect.y += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
 
 		//Reduce trauma
 		trauma -= trauma_decay * dt;
@@ -56,14 +57,27 @@ float Camera::GetShakeAmount() const
 
 void Camera::FollowPlayer(float dt, Obj_Tank * player)
 {
-	fPoint source_pos ((float)rect.x, (float)rect.y);
-	fPoint player_pos = app->map->MapToScreenF(player->pos_map);
-	fPoint target_pos(player_pos.x - rect.w * 0.5f, player_pos.y - rect.h * 0.5f);
+	fPoint source_pos((float) rect.x, (float)rect.y);
 
-	fPoint lerp_pos = lerp(source_pos, target_pos, lerp_factor * dt);
+	fPoint aim_pos = app->map->MapToScreenF(player->pos_map + player->GetShotDir() * aim_distance);
+	fPoint target_pos (aim_pos.x - rect.w * 0.5f, aim_pos.y - rect.h * 0.5f);
+
+	fPoint lerp_pos = lerp(source_pos, target_pos, dt * lerp_factor);
+
 	rect.x = lerp_pos.x;
 	rect.y = lerp_pos.y;
 }
+
+//Remove
+	//float line_length = 5.f;
+	////1-- Set a position in the isometric space
+	//fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
+	////2-- Transform that poin to screen coordinates
+	//iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+	//app->render->DrawLineSplitScreen(
+	//	pos_screen.x, pos_screen.y - cannon_height,
+	//	input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
+//}
 
 float Camera::GetRandomValue(float min_value, float max_value)
 {

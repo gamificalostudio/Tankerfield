@@ -88,8 +88,9 @@ private:
 	Animation appear_anim;
 
 	bool draw = true;
-	Animation* in_portal = nullptr;
-	SDL_Texture * tex			= nullptr;
+	Animation* in_portal				= nullptr;
+	SDL_Texture * tex					= nullptr;
+	SDL_Texture * tex_damaged			= nullptr;
 	SDL_Texture * portal_tex			= nullptr;
 	SDL_Texture * explosion_apper_tex			= nullptr;
 
@@ -98,7 +99,8 @@ private:
 
 	SpawnPoint* teleport_spawnpoint = nullptr;
 
-
+	Timer damaged_sprite_timer;
+	int damaged_sprite_time				= 0;
 };
 
 // TODO REMOVE IT 
