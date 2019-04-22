@@ -581,10 +581,10 @@
     <tank>
       <speed value ="1"/>
       <recoil>
-        <velocity_recoil_decay value="2"/>
+        <velocity_recoil_decay value="15"/>
         <velocity_recoil_speed_max value="50"/>
         <velocity_recoil_speed_max_charged value="100"/>
-        <lerp_factor_recoil value="0.5"/>
+       <!-- <lerp_factor_recoil value="0.5"/>-->
       </recoil>
       <time_between_bullets value ="100"/>
       <spritesheets>
