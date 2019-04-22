@@ -906,6 +906,8 @@ void Obj_Tank::StopTank()
 			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 			dead_fire->tank = this;
 		}
+		this->SetWeapon(WEAPON::BASIC, 0);
+		this->SetItem(ObjectType::NO_TYPE);
 	}
 }
 
