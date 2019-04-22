@@ -67,6 +67,7 @@ bool Obj_Tank::Start()
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
 	//Textures-------------------------------------------------
+	//base
 	base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
 	base_tex_green = app->tex->Load(tank_node.child("spritesheets").child("base_green").text().as_string());
 	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
