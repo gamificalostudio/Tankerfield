@@ -1,6 +1,7 @@
 #include <list>
 #include <assert.h>
 #include <vector>
+#include <math.h>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
@@ -59,10 +60,13 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	coll->SetObjOffset({ -.25f, -.25f });
 	draw_offset			= { 32, 38 };
 	
+
+	//parameters-------------------------------------------
 	attack_damage		= 10;
 	attack_range		= 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
+	life = pow(1.5, app->scene->round);
 	//Timers ----------------
 	check_teleport_time = 1; //10s
 	teleport_timer.Start();

@@ -51,6 +51,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
+	life = pow(5, app->scene->round);
 }
 
 Obj_Brute::~Obj_Brute()
