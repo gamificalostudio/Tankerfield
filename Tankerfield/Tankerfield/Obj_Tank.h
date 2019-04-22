@@ -210,12 +210,12 @@ private:
 	//- Drawing
 	//-- Base
 	Animation rotate_base;
-	SDL_Texture * base_tex_yellow		= nullptr;
+	SDL_Texture * base_tex_orange		= nullptr;
 	//SDL_Texture * base_tex_orange		= nullptr;
-	SDL_Texture * base_tex_red			= nullptr;
+	SDL_Texture * base_tex_green			= nullptr;
 	//SDL_Texture * base_tex_light_green= nullptr;
 	SDL_Texture * base_tex_pink			= nullptr;
-	SDL_Texture * base_tex_light_blue	= nullptr;
+	SDL_Texture * base_tex_blue	= nullptr;
 	//SDL_Texture * base_tex_dark_blue	= nullptr;
 	//SDL_Texture * base_tex_purple		= nullptr;
 	SDL_Texture * base_shadow_tex		= nullptr;
