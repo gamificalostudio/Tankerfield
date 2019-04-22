@@ -113,11 +113,18 @@ bool M_RewardZoneManager::PostUpdate(float dt)
 			{
 				if (*item_rewardzone != nullptr)
 				{
+					int rz_size = (*item_rewardzone)->enemy_list.size();
+					int rz_counter = 0;
 					std::list<Object*>::iterator item_enemyobject = (*item_rewardzone)->enemy_list.begin();
 					while (item_enemyobject != (*item_rewardzone)->enemy_list.end())
 					{
 						if ((*item_rewardzone)->enemy_list.size() > 0 && *item_enemyobject != nullptr)
 						{
+							rz_counter++;
+							if (rz_counter == rz_size)
+							{
+								this->RewardZoneCompleted();
+							}
 							item_enemyobject++;
 						}
 					}
@@ -181,4 +188,9 @@ void M_RewardZoneManager::DeleteRewardZones()
 std::list<RewardZone*> M_RewardZoneManager::GetRewardZones() const
 {
 	return this->reward_zones;
+}
+
+void M_RewardZoneManager::RewardZoneCompleted()
+{
+
 }

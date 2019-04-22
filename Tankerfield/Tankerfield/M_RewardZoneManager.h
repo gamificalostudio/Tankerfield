@@ -56,6 +56,8 @@ public:
 
 	std::list<RewardZone*> GetRewardZones() const;
 
+	void RewardZoneCompleted();
+
 public: // Change to private when fixed Getter error
 	std::list<RewardZone*> reward_zones;
 
