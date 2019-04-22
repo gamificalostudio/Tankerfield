@@ -15,7 +15,7 @@
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
-    <fullscreen_window value="false"/>
+    <fullscreen_window value="true"/>
   </window>
   <animations_bank>animations.xml</animations_bank>
 
