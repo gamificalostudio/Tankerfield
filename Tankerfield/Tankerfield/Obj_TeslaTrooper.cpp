@@ -34,6 +34,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
 	tex = app->tex->Load("textures/Objects/shk-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/shk-sheet-white.png");
 	portal_tex = app->tex->Load("textures/Objects/portal.png");
 	curr_tex = tex;
 	explosion_apper_tex = app->tex->Load("textures/Objects/explosion2.png");
@@ -62,7 +63,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -.25f, -.25f });
-	draw_offset			= { 32, 38 };
+	draw_offset			= { 24, 28 };
 	
 
 	//parameters-------------------------------------------
@@ -76,6 +77,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	teleport_timer.Start();
 	check_path_time = 1.f; // 1s
 	path_timer.Start();
+
+	damaged_sprite_time = 150;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -86,6 +89,10 @@ bool Obj_TeslaTrooper::Update(float dt)
 {
 	Movement(dt);
 	Attack();
+	if (damaged_sprite_timer.Read() > damaged_sprite_time)
+	{
+		curr_tex = tex;
+	}
 	
 	return true;
 }
@@ -311,22 +318,23 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 	if (state == TROOPER_STATE::TELEPORT_IN && in_portal != nullptr)
 	{
 		SDL_Rect portal_frame = in_portal->GetFrame(0);
-			app->render->Blit(
-				portal_tex,
-				pos_screen.x - portal_frame.w*0.5f,
-				pos_screen.y- portal_frame.h,
-				camera,
-				&portal_frame);
+		app->render->Blit(
+			portal_tex,
+			pos_screen.x - portal_frame.w * 0.5f,
+			pos_screen.y- portal_frame.h,
+			camera,
+			&portal_frame);
 	}
 	
 	if (draw)
 	{
-		app->render->Blit(
+		app->render->BlitScaled(
 			curr_tex,
 			pos_screen.x - draw_offset.x,
 			pos_screen.y - draw_offset.y,
 			camera,
-			&frame);
+			&frame,
+			0.75f);
 	}
 	if (state == TROOPER_STATE::APPEAR)
 	{
@@ -354,8 +362,9 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 	if ( (collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET) )
 	{
 		life -= collider->damage;
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
 		collider->SetTag(Collider::TAG::NONE);
-
 
 		if (life <= 0)
 		{
