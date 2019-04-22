@@ -405,6 +405,8 @@
     <Xml Include="..\Game\config.xml">
       <Filter>Core</Filter>
     </Xml>
-    <Xml Include="..\Game\animations.xml" />
+    <Xml Include="..\Game\animations.xml">
+      <Filter>Core</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
