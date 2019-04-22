@@ -56,7 +56,7 @@ public:
 
 	std::list<RewardZone*> GetRewardZones() const;
 
-private:
+public: // Change to private when fixed Getter error
 	std::list<RewardZone*> reward_zones;
 
 	float accumulated_time = 0.0f;

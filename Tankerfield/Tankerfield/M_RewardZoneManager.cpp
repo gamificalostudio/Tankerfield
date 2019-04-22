@@ -94,7 +94,7 @@ bool M_RewardZoneManager::PostUpdate(float dt)
 	if (do_check)
 	{
 		/* Check if objects stored in every reward zone are alive */
-		/*for (std::list<RewardZone*>::const_iterator item_rewardzone	= this->GetRewardZones().begin();
+		/*for (std::list<RewardZone*>::const_iterator item_rewardzone = this->GetRewardZones().begin();
 			item_rewardzone != this->GetRewardZones().end(); item_rewardzone++)
 		{
 			int rz_size = (*item_rewardzone)->enemy_list.size();
@@ -105,6 +105,18 @@ bool M_RewardZoneManager::PostUpdate(float dt)
 				//if((*item_object)->)
 			}
 		}*/
+		if (GetRewardZones().size() > 0)
+		{
+			// In the next line, cant use the Getter
+			std::list<RewardZone*>::iterator item_rewardzone = this->reward_zones.begin();
+			while (item_rewardzone != this->reward_zones.end())
+			{
+				if (*item_rewardzone != nullptr)
+				{
+					item_rewardzone++;
+				}
+			}
+		}
 	}
 
 	return true;

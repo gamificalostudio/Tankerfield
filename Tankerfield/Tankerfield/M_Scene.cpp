@@ -91,7 +91,8 @@ bool M_Scene::Start()
 
 	/* Generate Reward Zones */
 	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(5.0f, 5.0f), 3);
-	//reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
+	reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
+	reward_zone_03 = app->reward_zone_manager->CreateRewardZone(fPoint(9.0f, 9.0f), 3);
 
 	return true;
 }

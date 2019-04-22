@@ -118,7 +118,7 @@ private:
 	/* Reward Zones */
 	RewardZone* reward_zone_01 = nullptr;
 	RewardZone* reward_zone_02 = nullptr;
-
+	RewardZone* reward_zone_03 = nullptr;
 };
 
 #endif // __j1SCENE_H__
