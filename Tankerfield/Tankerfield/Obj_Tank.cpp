@@ -282,6 +282,11 @@ bool Obj_Tank::Update(float dt)
 	CameraMovement(dt);//Camera moves after the player
 	InputReadyKeyboard();
 
+	if (app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+	{
+		SetWeapon(WEAPON::HEALING_SHOT, 1);
+	}
+
 	return true;
 }
 
@@ -524,11 +529,19 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
-		Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
-		new_particle->tank = this;
-		if (GetLife()<GetMaxLife())
+		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
+		if (bullet->tank_parent != this) // he does not heal himself
 		{
-			SetLife(GetLife() + weapon_info.bullet_healing);
+			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+			new_particle->tank = this;
+			if (GetLife() < GetMaxLife())
+			{
+				SetLife(GetLife() + weapon_info.bullet_healing);
+			}
+		}
+		else
+		{
+			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
 	}
 
@@ -975,6 +988,8 @@ void Obj_Tank::ShootHealingShot()
 		weapon_info.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	heal_bullet->tank_parent = this;
 }
 
 void Obj_Tank::ShootLaserShot()

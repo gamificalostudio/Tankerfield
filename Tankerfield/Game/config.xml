@@ -154,7 +154,7 @@
   </scene>
 
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="100"/>
+    <percentage_spawn_item_from_enemy value="1"/>
     <percentage_spawn_reward_box value="50"/>   
   </pick_manager>
   
