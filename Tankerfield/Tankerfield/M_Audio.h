@@ -32,9 +32,11 @@ public:
 	//_Mix_Music* LoadMusic(const char* path, float fade_time);
 
 	// Load a WAV in memory
-	unsigned int LoadFx(const char* path);
+	unsigned int LoadFx(const char* path, int volume = 50);
 
 	// Play a previously loaded WAV
+	//if the reapeat ==-1 it loops infinite
+	//this funtion returns the number of the channel the sfx is play on, so you can stop that chanel if you want
 	int PlayFx(unsigned int fx, int repeat = 0);
 
 	void PauseMusic(int fade_out);
@@ -42,9 +44,9 @@ public:
 	void PauseFx(unsigned int id, int fade_out);
 
 public:
-	unsigned int GetExplosionFx();
+	uint GetExplosionFx();
 
-	unsigned int explosion_fx;
+	uint explosion_fx;
 
 private:
 	_Mix_Music* music = nullptr;

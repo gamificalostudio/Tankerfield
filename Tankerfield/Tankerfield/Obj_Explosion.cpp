@@ -34,8 +34,7 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	coll = app->collision->AddCollider(pos_map, 3.f, 3.f, Collider::TAG::BULLET, 200.f, nullptr);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 
-	explosion_fx=app->audio->GetExplosionFx();
-	app->audio->PlayFx(explosion_fx);
+	app->audio->PlayFx(app->audio->GetExplosionFx());
 }
 
 Obj_Explosion::~Obj_Explosion()
