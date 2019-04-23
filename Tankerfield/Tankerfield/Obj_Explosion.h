@@ -20,6 +20,8 @@ public:
 
 	bool Update(float dt) override;
 
+	void SetExplosionDamage(WeaponInfo info);
+
 	bool Awake(pugi::xml_node&) { return true; };
 
 private:

@@ -4,6 +4,7 @@
 #include "M_Collision.h"
 #include "M_ObjManager.h"
 #include "Obj_Explosion.h"
+#include "Obj_Tank.h"
 
 Bullet_Missile::Bullet_Missile(fPoint pos) : Obj_Bullet(pos)
 {
@@ -15,7 +16,12 @@ Bullet_Missile::~Bullet_Missile()
 
 void Bullet_Missile::OnTrigger(Collider * collider_1)
 {
-	app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
+	if (player != nullptr)
+	{
+		Obj_Explosion* explosion_obj = (Obj_Explosion*)app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
+		explosion_obj->SetExplosionDamage(player->GetWeaponInfo());
+	}
+
 	to_remove = true;
 }
 

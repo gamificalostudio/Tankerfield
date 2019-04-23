@@ -15,6 +15,7 @@ public:
 	~Bullet_Missile();
 
 public:
+
 	//Add functions that are overriden
 	void OnTrigger(Collider* collider_1);
 

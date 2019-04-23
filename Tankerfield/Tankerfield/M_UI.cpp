@@ -224,6 +224,11 @@ bool M_UI::Update(float dt)
 
 	UpdateElements(dt);
 
+	if (interactive_elements.size() < 0)
+	{
+		return true;
+	}
+
 	UI_INPUT_TYPE new_type = UI_INPUT_TYPE::NO_TYPE;
 
 	if ( input_type != UI_INPUT_TYPE::MOUSE && mouse_position != last_mouse_position)
@@ -238,6 +243,7 @@ bool M_UI::Update(float dt)
 	if (new_type != UI_INPUT_TYPE::NO_TYPE)
 	{
 		input_type = new_type;
+		selected_element = nullptr;
 	}
 
 	switch (input_type)
@@ -245,7 +251,7 @@ bool M_UI::Update(float dt)
 	case UI_INPUT_TYPE::CONTROLLER:
 		FocusController();
 
-		if (selected_element != nullptr && (*app->input->controllers.begin())->GetButtonState(SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+	if (selected_element != nullptr && (*app->input->controllers.begin())->GetButtonState(SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			if (selected_element->listener != nullptr)
 			{

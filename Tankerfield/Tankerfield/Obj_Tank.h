@@ -166,7 +166,7 @@ private:
 
 
 	//-- Basic shoot
-	uint shot_type							= (uint)WEAPON::BASIC;
+	uint shot_type							= (uint)WEAPON::DOUBLE_MISSILE;
 
 	//-- Shoot
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.

@@ -6,6 +6,7 @@
 class PerfTimer;
 class Collision;
 struct SDL_Texture;
+class Obj_Tank;
 
 class Obj_Bullet : public Object
 {
@@ -25,6 +26,8 @@ public:
 
 	void SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle);
 
+	void SetPlayer(Obj_Tank* player);
+
 public:
 
 	float speed = 0.f;
@@ -38,6 +41,8 @@ public:
 	SDL_Texture * tex = nullptr;
 
 	Animation anim;
+
+	Obj_Tank* player = nullptr;
 
 	//SFX impact_sound
 
