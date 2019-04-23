@@ -53,6 +53,8 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	// Rounds to win the game
 	rounds_to_win = config.child("rounds_to_win").attribute("value").as_int();
 
+	time_round_check_frequency = config.child("time_round_check_frequency").attribute("value").as_float();
+
 	// Wave System setup
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	
@@ -268,6 +270,12 @@ bool M_Scene::Update(float dt)
 		stat_of_wave = WaveStat::NO_TYPE;
 
 		break;
+
+	case WaveStat::WIN_GAME:
+		
+		// TODO
+
+		break;
 	}
 
 	if (game_over == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
@@ -288,14 +296,17 @@ bool M_Scene::PostUpdate(float dt)
 
 	/* Keep track if we reached the maximum round and, therefore, win the game */
 	this->accumulated_time += dt * 1000.0f;
-	if (accumulated_time >= time_check_frequency)
+	if (accumulated_time >= time_round_check_frequency)
 	{
 		perform_round_check = true;
 	}
 
 	if (perform_round_check)
 	{
-
+		if (this->current_wave == rounds_to_win)
+		{
+			stat_of_wave = WaveStat::WIN_GAME;
+		}
 
 		perform_round_check = false;
 	}
