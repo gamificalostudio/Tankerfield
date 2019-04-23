@@ -18,7 +18,7 @@ bool M_MainMenu::Start()
 	fRect screen = app->win->GetWindowRect();
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
 
-	app->audio->PlayMusic("\audio\Music\menu_music.ogg");
+	app->audio->PlayMusic("audio/Music/menu_music.ogg");
 
 	logo_button = app->ui->CreateImage({ 151.f, 151.f }, UI_ImageDef({10, 710, 915, 260}));
 
