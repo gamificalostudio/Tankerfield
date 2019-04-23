@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 
@@ -616,11 +618,11 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	weapon_info.type = type;
 
 	gui->SetWeaponIcon(type);
-
+	
 	switch (type)
 	{
 	case WEAPON::BASIC:
-		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_damage = 25 + level * 2;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
@@ -634,15 +636,15 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
-		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_damage = 0;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
 		weapon_info.time_between_bullets = 500;
 		break;
 	case WEAPON::HEALING_SHOT:
-		weapon_info.bullet_damage = 0;
-		weapon_info.bullet_healing = 25 + 1 * level;
+		weapon_info.bullet_damage = 25+level;
+		weapon_info.bullet_healing = 5 + level;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
 		weapon_info.time_between_bullets = 500;
