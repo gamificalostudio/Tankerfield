@@ -283,7 +283,6 @@ bool M_Scene::Update(float dt)
 
 	case WaveStat::WIN_GAME:
 		
-		win_game = true;
 		player_1_gui->Fade_GUI(false);
 		player_2_gui->Fade_GUI(false);
 		player_3_gui->Fade_GUI(false);
@@ -299,11 +298,6 @@ bool M_Scene::Update(float dt)
 	{
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
-	}
-	if (!win_game)
-	{
-		stat_of_wave = WaveStat::WIN_GAME;
-		win_game = true;
 	}
 	
 	return true;
@@ -327,7 +321,11 @@ bool M_Scene::PostUpdate(float dt)
 	{
 		if (this->round == rounds_to_win + 1)
 		{
-			stat_of_wave = WaveStat::WIN_GAME;
+			if (!win_game)
+			{
+				stat_of_wave = WaveStat::WIN_GAME;
+				win_game = true;
+			}
 		}
 
 		perform_round_check = false;
