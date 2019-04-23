@@ -4,6 +4,7 @@
 #include "M_Map.h"
 #include "M_Collision.h"
 #include "M_AnimationBank.h"
+#include "Obj_Tank.h"
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
@@ -61,4 +62,9 @@ void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float da
 	this->bullet_life_ms = bullet_life_ms;
 	SetDamage(damage);
 	this->angle = angle;
+}
+
+void Obj_Bullet::SetPlayer(Obj_Tank * player)
+{
+	this->player = player;
 }

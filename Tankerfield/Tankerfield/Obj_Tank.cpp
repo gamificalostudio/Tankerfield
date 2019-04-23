@@ -1002,7 +1002,10 @@ void Obj_Tank::ShootDoubleMissile()
 	float missiles_offset = 0.2f;
 
 	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length + double_missiles_offset * missiles_offset);
+	left_missile->SetPlayer(this);
+
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
+	right_missile->SetPlayer(this);
 
 	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
 

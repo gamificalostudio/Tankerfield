@@ -35,9 +35,6 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	coll_w = 3.f;
 	coll_h = 3.f;
 
-	level = weapon_info.level_weapon;
-	damage = original_damage * level;
-
 	coll = app->collision->AddCollider(
 		pos_map - fPoint(coll_w, coll_h),
 		coll_w,
@@ -45,11 +42,6 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 		Collider::TAG::BULLET, damage,
 		nullptr);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-
-	
-
-	
-	
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
 }
@@ -73,4 +65,18 @@ bool Obj_Explosion::Update(float dt)
 
 	frame_explosion++;
 	return true;
+}
+
+void Obj_Explosion::SetExplosionDamage(WeaponInfo info)
+{
+	if (coll != nullptr)
+	{
+		coll->damage = original_damage * info.level_weapon;
+		// TODO HARCODE 
+		if (coll->damage == 0)
+		{
+			coll->damage = original_damage;
+		}
+	}
+	
 }
