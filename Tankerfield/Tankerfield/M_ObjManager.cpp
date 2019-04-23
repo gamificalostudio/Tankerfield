@@ -171,7 +171,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-		  (*item)->DrawShadow((*item_cam));
+		  (*item)->DrawShadow((*item_cam), dt);
 		}
 
 		//Draw the objects above the shadows

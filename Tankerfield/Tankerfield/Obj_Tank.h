@@ -35,7 +35,7 @@ public:
 
 
 	bool Draw(float dt, Camera * camera) override;
-	bool DrawShadow(Camera * camera) override;
+	bool DrawShadow(Camera * camera, float dt) override;
 
 
 	bool CleanUp() override;
@@ -210,25 +210,25 @@ private:
 	//- Drawing
 	//-- Base
 	Animation rotate_base;
-
-	SDL_Texture * base_tex_orange		= nullptr;
+	SDL_Texture * base_tex_orange			= nullptr;
 	SDL_Texture * base_tex_green			= nullptr;
-	SDL_Texture * base_tex_pink			= nullptr;
-	SDL_Texture * base_tex_blue	= nullptr;
-
-	SDL_Texture * base_shadow_tex		= nullptr;
+	SDL_Texture * base_tex_pink				= nullptr;
+	SDL_Texture * base_tex_blue				= nullptr;
+	SDL_Texture * base_shadow_tex			= nullptr;
 
 	//-- Turret
 	Animation rotate_turr;
-	SDL_Texture * turr_tex				= nullptr;
+	SDL_Texture * turr_tex						= nullptr;
 	SDL_Texture * turr_tex_orange				= nullptr;
 	SDL_Texture * turr_tex_green				= nullptr;
-	SDL_Texture * turr_tex_pink				= nullptr;
-	SDL_Texture * turr_tex_blue				= nullptr;
+	SDL_Texture * turr_tex_pink					= nullptr;
+	SDL_Texture * turr_tex_blue					= nullptr;
+	SDL_Texture * turr_shadow_tex				= nullptr;
 
-	SDL_Texture * turr_shadow_tex		= nullptr;
-
-
+	//-- Revive
+	SDL_Texture * cycle_bar_tex = nullptr;
+	Animation cycle_bar_anim;
+	bool draw_revive_cycle_bar = false;
 
 	//sfx 
 	uint die_sfx						= 0u;

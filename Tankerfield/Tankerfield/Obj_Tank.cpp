@@ -66,8 +66,15 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
+	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
+
+	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
+	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
+	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
+	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
+
 	//Textures-------------------------------------------------
-	//base
+	//-- Base
 	base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
 	base_tex_green = app->tex->Load(tank_node.child("spritesheets").child("base_green").text().as_string());
 	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
@@ -76,26 +83,20 @@ bool Obj_Tank::Start()
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	//tur
+	//-- Turr
 	std::string aux = tank_node.child("spritesheets").child("turr_orange").text().as_string();
 	turr_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("turr_orange").text().as_string());
 	turr_tex_green = app->tex->Load(tank_node.child("spritesheets").child("turr_green").text().as_string());
 	turr_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("turr_pink").text().as_string());
 	turr_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("turr_blue").text().as_string());
-	
-	
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
+	//-- Revive 
+	cycle_bar_tex = app->tex->Load(tank_node.child("spritesheets").child("cycle_bar_tex").text().as_string());
+	cycle_bar_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("cycle-progress-bar"));
 
+	//sfx -------------------------------------------------------------------------------------------------------
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
-
-	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
-
-	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
-	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
-	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
-	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
-
 	movement_sfx = app->audio->LoadFx("audio/Fx/vlanstab.wav");
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
@@ -474,7 +475,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 																							//only appears when hes dead and disappear when he has been revived
 	//DEBUG
-	//	iPoint debug_mouse_pos = { 0, 0 };
+	{
+		//	iPoint debug_mouse_pos = { 0, 0 };
 //	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 
 //	debug_mouse_pos.x += camera_player->rect.x;
@@ -488,13 +490,28 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 //	{
 	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
 //	}
+	}
+
 
 
 	return true;
 }
 
-bool Obj_Tank::DrawShadow(Camera * camera)
+bool Obj_Tank::DrawShadow(Camera * camera, float dt)
 {
+	// Revive cycle =================================
+	if (draw_revive_cycle_bar)
+	{
+		SDL_Rect rect = cycle_bar_anim.GetFrame(0);
+		app->render->BlitScaled(
+			cycle_bar_tex,
+			pos_screen.x - rect.w*0.5f * 0.5f,
+			pos_screen.y - rect.h*0.5f * 0.5f,
+			camera,
+			&rect,0.5f);
+		cycle_bar_anim.NextFrame(dt);
+	}
+
 	// Base =========================================
 	app->render->Blit(
 		base_shadow_tex,
@@ -874,14 +891,18 @@ void Obj_Tank::ReviveTank()
 			{
 				reviving_tank[(*iter)->tank_num] = true;
 				revive_timer[(*iter)->tank_num].Start();
+				(*iter)->cycle_bar_anim.Reset();
+				(*iter)->draw_revive_cycle_bar = true;
 				
 			}
 			else if (ReleaseInteract())
 			{
 				reviving_tank[(*iter)->tank_num] = false;
+				(*iter)->draw_revive_cycle_bar = false;
+				(*iter)->cycle_bar_anim.Reset();
 			}
 
-			if (reviving_tank[(*iter)->tank_num] && revive_timer[(*iter)->tank_num].Read() > revive_time)
+			if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
 			{
 				//Revive the tank
 				(*iter)->curr_speed = speed;
@@ -889,6 +910,8 @@ void Obj_Tank::ReviveTank()
 				reviving_tank[(*iter)->tank_num] = false;
 				(*iter)->fire_dead = false;
 				app->audio->PlayFx(revive_sfx);
+				(*iter)->draw_revive_cycle_bar = false;
+				(*iter)->cycle_bar_anim.Reset();
 			}
 		}
 		else
@@ -988,8 +1011,6 @@ void Obj_Tank::ShootLaserShot()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
-
-
 
 void Obj_Tank::Item()
 {
