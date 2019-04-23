@@ -85,6 +85,10 @@ private:
 
 	UI_Bar*   life_bar = nullptr;
 
+	UI_Image* item_helper = nullptr;
+
+	UI_Image*  weapon_helper = nullptr;
+
 	std::vector<UI_Element*> helper_elements;
 
 	// In Game Elements ======================

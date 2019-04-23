@@ -230,7 +230,7 @@ bool M_UI::Update(float dt)
 	{
 		new_type = UI_INPUT_TYPE::MOUSE;
 	}
-	else if (input_type != UI_INPUT_TYPE::CONTROLLER && app->input->controllers.size() > 0 && (*app->input->controllers.begin())->GetJoystick(Joystick::RIGHT) != iPoint(0.f, 0.f))
+	else if (input_type != UI_INPUT_TYPE::CONTROLLER && app->input->controllers.size() > 0 && (*app->input->controllers.begin())->GetJoystick(Joystick::LEFT) != iPoint(0.f, 0.f))
 	{
 		new_type = UI_INPUT_TYPE::CONTROLLER;
 	}
@@ -244,6 +244,15 @@ bool M_UI::Update(float dt)
 	{
 	case UI_INPUT_TYPE::CONTROLLER:
 		FocusController();
+
+		if (selected_element != nullptr && (*app->input->controllers.begin())->GetButtonState(SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		{
+			if (selected_element->listener != nullptr)
+			{
+				selected_element->listener->OutClick(selected_element);
+			}
+		}
+
 		break;
 	case UI_INPUT_TYPE::MOUSE:
 		FocusMouse();
@@ -417,7 +426,7 @@ void M_UI::FocusMouse()
 void M_UI::FocusController()
 {
 	Controller* controller = (*app->input->controllers.begin());
-	fPoint joy_stick_dir = (fPoint)controller->GetJoystick(Joystick::RIGHT);
+	fPoint joy_stick_dir = (fPoint)controller->GetJoystick(Joystick::LEFT);
 
 	if (abs(joy_stick_dir.x) < UI_DEAD_ZONE || abs(joy_stick_dir.y) < UI_DEAD_ZONE)
 	{
@@ -434,12 +443,10 @@ void M_UI::FocusController()
 		if (angle > 0)
 		{
 			dir = CONTROLLER_DIR::DOWN;
-			LOG("DOWN");
 		}
 		else 
 		{
 			dir = CONTROLLER_DIR::UP;
-			LOG("UP");
 		}
 	}
 	else
@@ -447,29 +454,23 @@ void M_UI::FocusController()
 		if (angle == 0)
 		{
 			dir = CONTROLLER_DIR::NO_DIR;
-			LOG("NO DIR");
 		}
 		else if (angle <= 45.f && angle > -45)
 		{
 			dir = CONTROLLER_DIR::RIGHT;
-			LOG("RIGHT");
 		}
 		else if (angle > 45 && angle <= 135)
 		{
 			dir = CONTROLLER_DIR::DOWN;
-			LOG("DOWN");
 
 		}
 		else if ((angle > 135 && angle <= 180) || angle >= -180 && angle <= -135)
 		{
 			dir = CONTROLLER_DIR::LEFT;
-			LOG("LEFT");
-
 		}
 		else if (angle > -135 && angle <= -45)
 		{
 			dir = CONTROLLER_DIR::UP;
-			LOG("UP");
 		}
 	}
 	
@@ -478,7 +479,7 @@ void M_UI::FocusController()
 	{
 		selected_element = (*interactive_elements.begin());
 	}
-	else if (btw_focus_timer.Read() > BTW_FOCUS_TIME && dir != CONTROLLER_DIR::NO_DIR)
+	else if (selected_element != nullptr && btw_focus_timer.Read() > BTW_FOCUS_TIME && dir != CONTROLLER_DIR::NO_DIR)
 	{
 		selected_element = GetNearestElement(selected_element, dir);
 	}

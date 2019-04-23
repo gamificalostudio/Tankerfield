@@ -802,6 +802,7 @@ void Obj_Tank::Shoot(float dt)
 			}
 
 		}
+		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
 
