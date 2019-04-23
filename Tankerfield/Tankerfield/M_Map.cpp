@@ -511,21 +511,30 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			RewardZone* ret = app->reward_zone_manager->CreateRewardZone(map_pos, i_size);
 		}
 
+		if (object_group->name == "Colliders")
+		{
+			
+			//if (object_group->objects[i].pos.x == 0 && object_group->objects[i].pos.y == 0)
+				//LOG("here");
+			// To ortogonal tile pos-----------------
+			fPoint pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
+			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h };
+			std::string type = obj_node.attribute("type").as_string("");
+			if (type == "WALL")
+			{
+				app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
+			}
+			else if (type == "WATER")
+			{
+				app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WATER);
+			}
+			
+		}
+
 		++i;
 	}
 	
-	if (object_group->name == "Colliders")
-	{
-		for (i = 0; i < object_group->size; ++i)
-		{
-			if (object_group->objects[i].pos.x == 0 && object_group->objects[i].pos.y == 0)
-				LOG("here");
-			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
-			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h};
-			app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
-		}
-	}
+	
 
 	
 	
