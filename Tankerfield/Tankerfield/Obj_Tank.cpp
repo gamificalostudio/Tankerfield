@@ -76,7 +76,14 @@ bool Obj_Tank::Start()
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	//tur
+	std::string aux = tank_node.child("spritesheets").child("turr_orange").text().as_string();
+	turr_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("turr_orange").text().as_string());
+	turr_tex_green = app->tex->Load(tank_node.child("spritesheets").child("turr_green").text().as_string());
+	turr_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("turr_pink").text().as_string());
+	turr_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("turr_blue").text().as_string());
+	
+	
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 
@@ -103,6 +110,7 @@ bool Obj_Tank::Start()
 		kb_interact	= SDL_SCANCODE_E;
 		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_green;
+		turr_tex = turr_tex_green;
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -113,6 +121,8 @@ bool Obj_Tank::Start()
 		kb_interact = SDL_SCANCODE_Y;
 		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_blue;
+		turr_tex = turr_tex_blue;
+
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -123,6 +133,8 @@ bool Obj_Tank::Start()
 		kb_interact = SDL_SCANCODE_O;
 		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
+		turr_tex = turr_tex_pink;
+
 		break;
 	case 3:
 		kb_up		= SDL_SCANCODE_KP_8;
@@ -133,6 +145,8 @@ bool Obj_Tank::Start()
 		kb_interact	= SDL_SCANCODE_KP_9;
 		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_orange;
+		turr_tex = turr_tex_orange;
+
 		break;
 	default:
 		curr_tex = base_tex_orange;
@@ -168,6 +182,7 @@ bool Obj_Tank::Start()
 	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
+	charged_shot_function[(uint)WEAPON::LASER_SHOT]		= &Obj_Tank::ShootLaserShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -267,6 +282,11 @@ bool Obj_Tank::Update(float dt)
 	ReviveTank();
 	CameraMovement(dt);//Camera moves after the player
 	InputReadyKeyboard();
+
+	if (app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+	{
+		SetWeapon(WEAPON::HEALING_SHOT, 1);
+	}
 
 	return true;
 }
@@ -510,20 +530,29 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
-		Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
-		new_particle->tank = this;
-		if (GetLife()<GetMaxLife())
+		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
+		if (bullet->tank_parent != this) // he does not heal himself
 		{
-			SetLife(GetLife() + weapon_info.bullet_healing);
+			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+			new_particle->tank = this;
+			if (GetLife() < GetMaxLife())
+			{
+				SetLife(GetLife() + weapon_info.bullet_healing);
+			}
+		}
+		else
+		{
+			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
 	}
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-		if (app->input->GetKey(kb_interact) == KEY_DOWN || app->input->GetKey(gamepad_interact) == KEY_DOWN)
+		
+		if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
 		{
+			Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
 			SetPickUp(pick_up);
 		}
 	}
@@ -960,6 +989,8 @@ void Obj_Tank::ShootHealingShot()
 		weapon_info.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	heal_bullet->tank_parent = this;
 }
 
 void Obj_Tank::ShootLaserShot()

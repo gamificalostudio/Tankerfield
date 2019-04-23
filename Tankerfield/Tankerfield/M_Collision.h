@@ -23,8 +23,10 @@ public:
 	{
 		NONE = 0,
 		WALL,
+		WATER,
 		BULLET,
 		FRIENDLY_BULLET,
+		BULLET_LASER,
 		ENEMY,
 		GOD,
 		REWARD_ZONE,

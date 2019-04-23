@@ -71,6 +71,7 @@ private:
 	float coll_w = 0.f;
 	float coll_h = 0.f;
 
+	Animation idle;
 	Animation walk;
 	Animation attack;
 	Animation death;
@@ -80,6 +81,10 @@ private:
 	SDL_Texture * spawn_tex = nullptr;
 	Timer damaged_sprite_timer;
 	int damaged_sprite_time = 0;
+	bool to_hit = true;
+
+	uint sfx_hit = 0;
+	uint sfx_death = 0;
 };
 
 #endif

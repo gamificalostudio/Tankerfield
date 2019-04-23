@@ -210,18 +210,22 @@ private:
 	//- Drawing
 	//-- Base
 	Animation rotate_base;
+
 	SDL_Texture * base_tex_orange		= nullptr;
 	SDL_Texture * base_tex_green			= nullptr;
-	
-
 	SDL_Texture * base_tex_pink			= nullptr;
 	SDL_Texture * base_tex_blue	= nullptr;
-	
+
 	SDL_Texture * base_shadow_tex		= nullptr;
 
 	//-- Turret
 	Animation rotate_turr;
 	SDL_Texture * turr_tex				= nullptr;
+	SDL_Texture * turr_tex_orange				= nullptr;
+	SDL_Texture * turr_tex_green				= nullptr;
+	SDL_Texture * turr_tex_pink				= nullptr;
+	SDL_Texture * turr_tex_blue				= nullptr;
+
 	SDL_Texture * turr_shadow_tex		= nullptr;
 
 

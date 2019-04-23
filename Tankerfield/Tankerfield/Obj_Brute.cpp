@@ -24,6 +24,10 @@
 #include "WeaponInfo.h"
 #include "M_AnimationBank.h"
 #include "Obj_Tank.h"
+#include "M_PickManager.h"
+#include "Bullet_Laser.h"
+#include "Obj_Bullet.h"
+#include "M_Audio.h"
 
 Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
@@ -34,11 +38,15 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	spawn_tex = app->tex->Load("textures/Objects/spawn_brute.png");
 	curr_tex = spawn_tex;
 
+	idle.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
 	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
 	spawn.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("spawn"));
 	curr_anim = &spawn;
+
+	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
+	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
 
 	state = BRUTE_STATE::SPAWN;
 	speed = 1.f;
@@ -121,7 +129,7 @@ void Obj_Brute::Movement(float &dt)
 			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
-			curr_anim = &walk;
+			curr_anim = &idle;
 			state=BRUTE_STATE::GET_PATH;
 		}
 	}
@@ -130,7 +138,7 @@ void Obj_Brute::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-
+		curr_anim = &idle;
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
@@ -160,6 +168,7 @@ void Obj_Brute::Movement(float &dt)
 		}
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
+		curr_anim = &walk;
 	}
 	break;
 	case BRUTE_STATE::RECHEAD_POINT:
@@ -179,13 +188,17 @@ void Obj_Brute::Movement(float &dt)
 	break;
 	case BRUTE_STATE::DEAD:
 	{
-		curr_anim = &death;
-		if (coll != nullptr)
+		if (curr_anim != &death)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			curr_anim = &death;
+			app->audio->PlayFx(sfx_death);
+			if (coll != nullptr)
+			{
+				coll->Destroy();
+				coll = nullptr;
+			}
 		}
-		if (curr_anim==&death&&curr_anim->Finished())
+		else if (curr_anim->Finished())
 		{
 			to_remove = true;
 		}
@@ -241,8 +254,54 @@ void Obj_Brute::OnTrigger(Collider* collider)
 		if (life <= 0)
 		{
 			// DROP A PICK UP ITEM 
+			app->pick_manager->PickUpFromEnemy(pos_map, PICKUP_TYPE::WEAPON);
 			state = BRUTE_STATE::DEAD;
 		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
+	
 	}
+
+
+	else if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	{
+		Laser_Bullet* bullet = (Laser_Bullet*)collider->GetObj();
+		for (std::vector<Object*>::iterator iterator = bullet->hitted_enemies.begin(); iterator != bullet->hitted_enemies.end(); ++iterator)
+		{
+			if ((*iterator) == this)
+			{
+				to_hit = false;
+				break;
+			}
+			else
+			{
+				to_hit = true;
+			}
+		}
+		if (to_hit || bullet->hitted_enemies.size() == 0)
+		{
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = BRUTE_STATE::DEAD;
+			}
+			else
+			{
+				bullet->hitted_enemies.push_back(this);
+				app->audio->PlayFx(sfx_hit);
+			}		
+
+		}
+		
+	}
+
 
 }
