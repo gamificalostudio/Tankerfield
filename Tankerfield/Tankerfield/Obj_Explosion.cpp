@@ -29,9 +29,18 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	curr_tex = tex;
 
 	draw_offset.x = 99;
-	draw_offset.y = 10;
+	draw_offset.y = 75;
 
-	coll = app->collision->AddCollider(pos_map, 3.f, 3.f, Collider::TAG::BULLET, 200.f, nullptr);
+	coll_w = 3.f;
+	coll_h = 3.f;
+
+	coll = app->collision->AddCollider(
+		pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
+		coll_w,
+		coll_h,
+		Collider::TAG::BULLET, 200.f,
+		nullptr);
+
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
@@ -43,7 +52,8 @@ Obj_Explosion::~Obj_Explosion()
 
 bool Obj_Explosion::Update(float dt)
 {
-	if (curr_anim != nullptr&&curr_anim->Finished())
+	if (curr_anim != nullptr
+		&& curr_anim->Finished())
 	{
 		to_remove = true;
 	}

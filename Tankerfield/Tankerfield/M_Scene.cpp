@@ -168,7 +168,14 @@ bool M_Scene::PreUpdate()
 		tank_2->SetLife(0);
 		tank_3->SetLife(0);
 		tank_4->SetLife(0);
-
+	}
+	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
+	{
+		iPoint mouse_pos;
+		app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+		mouse_pos += iPoint(app->render->cameras[0]->rect.x, app->render->cameras[0]->rect.y);
+		fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
+		app->objectmanager->CreateObject(ObjectType::EXPLOSION, map_mouse_pos);
 	}
 	return true;
 }
@@ -271,7 +278,6 @@ bool M_Scene::Update(float dt)
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
 	}
-
 	return true;
 }
 

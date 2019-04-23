@@ -35,6 +35,9 @@ private:
 	// ---
 	Animation anim;
 	SDL_Texture * tex = nullptr;
+
+	float coll_w = 0.f;
+	float coll_h = 0.f;
 };
 
 #endif
