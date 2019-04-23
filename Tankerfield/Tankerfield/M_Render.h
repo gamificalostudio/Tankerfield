@@ -47,6 +47,8 @@ public:
 
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 
+	bool DrawQuadUI(const SDL_Rect section, Camera * camera, const SDL_Color color);
+
 	bool DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color = {255,255,255,255}, const Camera* camera = nullptr);
 
 	void DrawIsometricLine(fPoint point_1, fPoint point_2, SDL_Color color, const Camera* camera = nullptr);

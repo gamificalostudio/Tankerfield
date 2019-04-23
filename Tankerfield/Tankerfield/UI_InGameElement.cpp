@@ -11,6 +11,7 @@
 
 #include "UI_Image.h"
 #include "UI_Label.h"
+#include "UI_Quad.h"
 
 #include "Point.h"
 
@@ -256,9 +257,20 @@ void UI_IG_Helper::AddTextHelper(const String text, const fPoint offset)
 	UI_Label* ui_helper = app->ui->CreateLabel(position + app->map->ScreenToMapF(offset.x, offset.y), def);
 	ui_helper->single_camera = this->single_camera;
 	ui_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
-	ui_helper->SetParent(this);
+	
+	UI_QuadDef quad_def({ 0,0, ui_helper->sprite_section.w, ui_helper->sprite_section.h }, { 100, 100, 100, 100 });
+	quad_def.is_in_game = true;
 
+	UI_Quad* back_quad = app->ui->CreateQuad(position + app->map->ScreenToMapF(offset.x, offset.y), quad_def);
+	back_quad->single_camera = this->single_camera;
+	back_quad->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+
+	back_quad->SetParent(this);
+	ui_helper->SetParent(back_quad);
+
+	helper_elements.push_back(back_quad);
 	helper_elements.push_back(ui_helper);
+
 }
 
 void UI_IG_Helper::Destroy()
