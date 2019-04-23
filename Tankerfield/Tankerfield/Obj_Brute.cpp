@@ -71,7 +71,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	coll_h = 1.f;
   
 	damaged_sprite_time = 150;
-	life = 100;//pow(5, app->scene->round);
+	life = pow(5, app->scene->round);
 }
 
 Obj_Brute::~Obj_Brute()
