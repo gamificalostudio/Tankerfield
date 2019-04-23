@@ -141,7 +141,7 @@
   </map>
 
   <scene>
-    <rounds_to_win value="1"/>
+    <rounds_to_win value="10"/>
     <time_round_check_frequency value="2"/>
     
     <time_between_rounds value="5000"/>
@@ -1455,12 +1455,30 @@
         </close>
       </animations>
     </portal>
+    <cannon_fire>
+      <animations>
+        <cannon_fire speed ="30" loop ="false">
+          <dir>
+              <frame num ="01" x="0"   y="0"   w="148" h="158"/>
+              <frame num ="02" x="148" y="0"   w="148" h="158"/>
+              <frame num ="03" x="296" y="0"   w="148" h="158"/>
+              <frame num ="04" x="444" y="0"   w="148" h="158"/>
+              <frame num ="05" x="592" y="0"   w="148" h="158"/>
+              <frame num ="06" x="740" y="0"   w="148" h="158"/>
+              <frame num ="07" x="0"   y="158" w="148" h="158"/>
+              <frame num ="08" x="148" y="158" w="148" h="158"/>
+              <frame num ="09" x="296" y="158" w="148" h="158"/>
+              <frame num ="10" x="444" y="158" w="148" h="158"/>
+          </dir>
+        </cannon_fire>
+      </animations>
+    </cannon_fire>
     <explosion>
       <speed value="0"/>
       <life value="1000"/>
       <tex path="textures/objects/explosion-sheet.png"/>
       <animations>
-        <explosion speed="80">
+        <explosion speed="80" loop ="false">
           <dir>
             <frame x="0" y="0" w="198" h="128"/>
             <frame x="198" y="0" w="198" h="128"/>

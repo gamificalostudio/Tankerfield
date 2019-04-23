@@ -106,7 +106,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 void Obj_TeslaTrooper::Attack()
 {
-	if (life > 0)
+	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
 		if (target != nullptr
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
@@ -226,7 +226,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
 		{
 			float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
-			if (distance_to_this_spawnpoint < distance_to_tank && target->pos_map.DistanceManhattan((*spawn_point)->pos))
+			if (target->pos_map.DistanceManhattan((*spawn_point)->pos))
 			{
 				if (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
 				{

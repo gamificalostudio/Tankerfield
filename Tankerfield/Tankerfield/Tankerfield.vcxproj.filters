@@ -173,6 +173,9 @@
     <ClCompile Include="M_MainMenu.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_CannonFire.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -367,6 +370,9 @@
     </ClInclude>
     <ClInclude Include="M_MainMenu.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_CannonFire.h">
+      <Filter>Objects\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
