@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Object.h"
 #include "PerfTimer.h"
+#include "WeaponInfo.h"
 
 struct SDL_Texture;
 class Timer;
