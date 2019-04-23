@@ -306,15 +306,15 @@ bool M_Scene::PostUpdate(float dt)
 		perform_round_check = true;
 	}
 
-	if (perform_round_check)
-	{
-		if (this->round == rounds_to_win + 1)
-		{
-			stat_of_wave = WaveStat::WIN_GAME;
-		}
+	//if (perform_round_check)
+	//{
+	//	if (this->round == rounds_to_win + 1)
+	//	{
+	//		stat_of_wave = WaveStat::WIN_GAME;
+	//	}
 
-		perform_round_check = false;
-	}
+	//	perform_round_check = false;
+	//}
 
 	return ret;
 }
