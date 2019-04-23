@@ -289,7 +289,7 @@ bool M_Scene::Update(float dt)
 		player_3_gui->Fade_GUI(false);
 		player_4_gui->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
-		//general_hud->FadeGameOver(false);
+		general_hud->FadeWinScreen(true);
 		stat_of_wave = WaveStat::NO_TYPE;
 
 		break;
@@ -300,7 +300,7 @@ bool M_Scene::Update(float dt)
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
 	}
-	if (win_game == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
+	if (!win_game)
 	{
 		stat_of_wave = WaveStat::WIN_GAME;
 		win_game = true;
