@@ -22,7 +22,7 @@ class WeaponInfo
 {
 public:
 
-	WEAPON type					= WEAPON::BASIC;
+	WEAPON type					= WEAPON::DOUBLE_MISSILE;
 	int level_weapon			= 0;
 	int    bullet_damage        = 0;
 	float  bullet_speed			= 0.f;
