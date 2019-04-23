@@ -267,15 +267,13 @@ bool M_Scene::Update(float dt)
 
 	case WaveStat::GAME_OVER:
 
-		game_over = true;
 		player_1_gui->Fade_GUI(false);
 		player_2_gui->Fade_GUI(false);
 		player_3_gui->Fade_GUI(false);
 		player_4_gui->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
-		general_hud->FadeGameOver(true);
+		general_hud->FadeGameOverScreen(true, round);
 		stat_of_wave = WaveStat::NO_TYPE;
-
 		break;
 
 	case WaveStat::WIN_GAME:

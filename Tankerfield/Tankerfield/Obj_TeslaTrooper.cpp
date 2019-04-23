@@ -50,6 +50,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
+	//curr_anim = &idle;
 	curr_anim = &walk;
 	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
 
@@ -71,7 +72,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -.25f, -.25f });
 	draw_offset			= { 24, 28 };
-	
 
 	//parameters-------------------------------------------
 	attack_damage		= 10;
@@ -165,9 +165,8 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					}
 
 					state = TROOPER_STATE::RECHEAD_POINT;
+					//curr_anim = &idle;
 				}
-				
-			
 			}
 			else 
 			{
@@ -177,7 +176,9 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				else
 					state = TROOPER_STATE::GET_PATH;
 			}
-
+		}
+		else {
+			//curr_anim = &idle;
 		}
 
 		path_timer.Start();

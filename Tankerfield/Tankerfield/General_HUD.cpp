@@ -13,6 +13,8 @@ General_HUD::General_HUD()
 	UI_ImageDef image_def;
 	fRect full_screen = app->win->GetWindowRect();
 
+	// Split screen quads ==================================
+
 	vertical_split_rect = app->ui->CreateQuad({ full_screen.w * 0.5f, full_screen.h * 0.5f }, UI_QuadDef({ 0 ,0, 6 , (int)full_screen.h }, { 150, 150, 150, 255 }));
 	vertical_split_rect->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
@@ -22,6 +24,8 @@ General_HUD::General_HUD()
 	background = app->ui->CreateQuad({ 0.f, 0.f }, UI_QuadDef({ 0,0, (int)full_screen.w , (int)full_screen.h }, { 0, 0, 0 , 200 }));
 	background->alpha = 0;
 
+	// Game Over && Win screen ====================================
+
 	game_word = app->ui->CreateImage({ full_screen.w * .5f  + 10.f ,  full_screen.h * .5f - 90.f } , UI_ImageDef({ 555,10 ,424,188 }));
 	over_word = app->ui->CreateImage({ full_screen.w * .5f  + 10.f ,  full_screen.h * .5f + 90.f }, UI_ImageDef({ 555 ,200,383 ,188 }));
 	game_word->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
@@ -29,15 +33,32 @@ General_HUD::General_HUD()
 	game_word->alpha = 0;
 	over_word->alpha = 0;
 	game_word->SetParent(background);
-	game_word->SetParent(background);
+	over_word->SetParent(background);
 
+	you_word = app->ui->CreateImage({ full_screen.w * .5f + 10.f ,  full_screen.h * .5f - 90.f }, UI_ImageDef({ 990,10 ,314,183 }));
+	you_word->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	you_word->alpha = 0;
+	you_word->SetParent(background);
+
+	survived_word = app->ui->CreateImage({ full_screen.w * .5f + 10.f ,  full_screen.h * .5f + 90.f }, UI_ImageDef({ 990,200 ,732,183 }));
+	survived_word->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	survived_word->alpha = 0;
+	survived_word->SetParent(background);
+
+	UI_LabelDef label_survived_def("text", app->font->label_font_38, { 200, 0 , 0 ,255});
+	you_survived = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f + 280.f }, label_survived_def);
+	you_survived->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	you_survived->SetParent(background);
+	you_survived->alpha = 0;
+
+	// General HUD =================================================
 
 	image_def.sprite_section = { 170 , 10, 105, 105 };
 	round_element = app->ui->CreateImage({ full_screen.w * .5f ,  full_screen.h * .5f }, image_def);
 	round_element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 
-	UI_LabelDef label_def("0", app->font->rounds_font);
-	round_number_label = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_def);
+	UI_LabelDef label_round_def("1", app->font->rounds_font);
+	round_number_label = app->ui->CreateLabel({ full_screen.w * .5f ,  full_screen.h * .5f }, label_round_def);
 	round_number_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	round_number_label->SetParent(round_element);
 
@@ -101,6 +122,14 @@ General_HUD::~General_HUD()
 		{
 			horizontal_split_rect->Destroy();
 		}
+		if (you_survived != nullptr)
+		{
+			you_survived->Destroy();
+		}
+		if (you_survived != nullptr)
+		{
+			you_survived->Destroy();
+		}
 	}
 	
 	round_number_label = nullptr;
@@ -113,6 +142,8 @@ General_HUD::~General_HUD()
 	background = nullptr;
 	vertical_split_rect = nullptr;
 	horizontal_split_rect = nullptr;
+	you_survived = nullptr;
+	you_word = nullptr;
 }
 
 void General_HUD::FadeGeneralHUD(bool fade_on)
@@ -142,7 +173,7 @@ void General_HUD::SetRoundNumber(int round)
 	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1.F, 3.F);
 }
 
-void General_HUD::FadeGameOver(bool fade_on)
+void General_HUD::FadeGameOverScreen(bool fade_on, int rounds_survived)
 {
 	UI_Fade_FX::FX_TYPE type;
 
@@ -154,7 +185,48 @@ void General_HUD::FadeGameOver(bool fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 	}
+	
+	String round_str;
+
+	if (rounds_survived != -1)
+	{
+		if (rounds_survived > 1)
+		{
+			round_str = "YOU SURVIVED " + to_string(rounds_survived) + " ROUNDS";
+		}
+		else
+		{
+			round_str = "YOU SURVIVED " + to_string(1) + " ROUND";
+		}
+
+		you_survived->SetText(round_str);
+		you_survived->SetFX(type, 2.F);
+	}
+
 	background->SetFX(type, 2.F);
 	game_word->SetFX(type, 2.F);
 	over_word->SetFX(type, 2.F);
+}
+
+void General_HUD::FadeWinScreen(bool fade_on)
+{
+	UI_Fade_FX::FX_TYPE type;
+
+	if (fade_on)
+	{
+		type = UI_Fade_FX::FX_TYPE::FADE_ON;
+	}
+	else
+	{
+		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
+	}
+
+	String round_str = "NOT BAD AT ALL FOR A ROOKIES...";
+   
+	you_survived->SetText(round_str);
+	you_survived->SetFX(type, 2.F);
+    
+	background->SetFX(type, 2.F);
+	you_word->SetFX(type, 2.F);
+	survived_word->SetFX(type, 2.F);
 }

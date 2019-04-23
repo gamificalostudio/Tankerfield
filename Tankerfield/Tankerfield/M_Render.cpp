@@ -382,7 +382,7 @@ bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a
 
 	SDL_Rect rec(rect);
 
-std::vector<Camera*>::iterator item_cam;
+    std::vector<Camera*>::iterator item_cam;
 	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
@@ -406,6 +406,34 @@ std::vector<Camera*>::iterator item_cam;
 	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 
 	return ret;
+}
+
+bool M_Render::DrawQuadUI( const SDL_Rect section, Camera* camera, const SDL_Color color)
+{
+	if (color.a == 0.f)
+	{
+		return true;
+	}
+
+	SDL_Rect rect(section);
+
+	if (camera != nullptr)
+	{
+		SDL_RenderSetClipRect(renderer, &camera->screen_section);
+	}
+
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+	SDL_RenderFillRect(renderer, &rect);
+	SDL_RenderFillRect(renderer, &rect);
+
+	if (camera != nullptr)
+	{
+		SDL_RenderSetClipRect(renderer, nullptr);
+	}
+
+	return true;
 }
 
 bool M_Render::DrawIsometricQuad(float x, float y, float w, float h, SDL_Color color, const Camera* camera)
