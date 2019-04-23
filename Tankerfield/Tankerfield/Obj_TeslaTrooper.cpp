@@ -50,7 +50,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
-	curr_anim = &walk;
+	curr_anim = &idle;
 	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
@@ -165,9 +165,8 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					}
 
 					state = TROOPER_STATE::RECHEAD_POINT;
+					curr_anim = &idle;
 				}
-				
-			
 			}
 			else 
 			{
@@ -175,7 +174,9 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				if (teleport_timer.ReadSec() >= check_teleport_time)
 					state = TROOPER_STATE::GET_TELEPORT_POINT;
 			}
-
+		}
+		else {
+			curr_anim = &idle;
 		}
 
 		path_timer.Start();
