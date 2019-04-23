@@ -78,12 +78,32 @@ bool M_Scene::Start()
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
 	
 	// UI Elements
-
-	//Create all tanks
-	tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-	tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
-	tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
-	tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
+	std::list<ObjectGroup*>::iterator players_layer = app->map->data.object_layers.begin();
+	for (; players_layer != app->map->data.object_layers.end(); ++players_layer)
+	{
+		if ((*players_layer)->name == "Players")
+		{
+			break;
+		}
+	}
+	if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
+	{
+		//Create all tanks
+		tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+		tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
+		tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
+		tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
+	}
+	else
+	{
+		
+		//Create all tanks
+		tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
+		tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
+		tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
+		tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
+	}
+	
 
 	player_1_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_1, app->scene->tank_1);
 	player_2_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_2, app->scene->tank_2);

@@ -535,12 +535,6 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		++i;
 	}
 	
-	
-
-	
-	
-	
-	
 	object_group->properties.LoadProperties(object_group_node.child("properties"));
 	return ret;
 }
