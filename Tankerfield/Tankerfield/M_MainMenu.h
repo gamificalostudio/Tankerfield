@@ -10,7 +10,7 @@ struct Controller;
 
 class UI_Image;
 class UI_Button;
-
+class UI_Label;
 
 class M_MainMenu : public Module, public UI_Listener
 {
@@ -44,6 +44,7 @@ private:
 	UI_Button		* single_player_button = nullptr;
 	UI_Button		* multi_player_button = nullptr;
 	UI_Button		* exit_button = nullptr;
+	UI_Label        * version_label = nullptr;
 
 	bool              exit_game = false;
 };
