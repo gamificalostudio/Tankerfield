@@ -481,7 +481,7 @@ void M_Scene::NewWave()
 	else 
 	{
 		Tesla_trooper_units = (round * 18 + round * 14) * 6;
-		Brute_units = round * 3;
+		Brute_units = round * 2;
 	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
