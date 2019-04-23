@@ -106,7 +106,7 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 void Obj_TeslaTrooper::Attack()
 {
-	if (life > 0)
+	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
 		if (target != nullptr
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared

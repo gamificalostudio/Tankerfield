@@ -186,6 +186,10 @@ bool M_Scene::PreUpdate()
 	{
 		++this->round;
 	}
+	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
+	{
+		stat_of_wave = WaveStat::WIN_GAME;
+	}
 
 	return true;
 }

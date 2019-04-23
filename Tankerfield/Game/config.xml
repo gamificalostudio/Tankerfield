@@ -141,7 +141,7 @@
   </map>
 
   <scene>
-    <rounds_to_win value="2"/>
+    <rounds_to_win value="10"/>
     <time_round_check_frequency value="2"/>
     
     <time_between_rounds value="5000"/>
