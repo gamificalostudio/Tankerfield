@@ -27,7 +27,6 @@ Player_GUI::Player_GUI(const GUI_TYPE type, Obj_Tank * player_object) : type(typ
 	viewport_with_margin = { (int)(viewport.GetLeft() + margin.x * 0.5f) ,  (int)(viewport.GetTop() + +margin.y * 0.5f) , (int)(viewport.w - margin.x) ,(int)(viewport.h - margin.y) };
 	margin = { 30.f, 30.f };
 
-
 	// In Game Elements =====================================================
 
 	UI_InGameElementDef arrow_def;
@@ -50,9 +49,8 @@ Player_GUI::Player_GUI(const GUI_TYPE type, Obj_Tank * player_object) : type(typ
 		break;
 	}
 
-
 	player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
-	//player_arrow->not_in_camera = player->camera_player;
+
 	// HUD  Elements ========================================================
 
 	UI_ImageDef image_def;
@@ -156,6 +154,29 @@ Player_GUI::Player_GUI(const GUI_TYPE type, Obj_Tank * player_object) : type(typ
 		charged_shot_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 	}
 
+	if (type == GUI_TYPE::PLAYER_1 || type == GUI_TYPE::PLAYER_2)
+	{
+		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, 55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::RT] }));
+		item_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	}
+	else if (type == GUI_TYPE::PLAYER_3 || type == GUI_TYPE::PLAYER_4)
+	{
+		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, -55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::RT] }));
+		item_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	}
+
+	if (type == GUI_TYPE::PLAYER_1 || type == GUI_TYPE::PLAYER_2)
+	{
+		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, 28.F), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::LB] }));
+		weapon_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	}
+	else if (type == GUI_TYPE::PLAYER_3 || type == GUI_TYPE::PLAYER_4)
+	{
+		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, -28.F), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::LB] }));
+		weapon_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	}
+
+
 	Fade_GUI(true);
 }
 
@@ -173,12 +194,14 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	}
 
 	weapon_frame		->SetFX(type, 3.f);
+	weapon_helper		->SetFX(type, 3.f);
 	weapon_icon			->SetFX(type, 3.f);
 	item_frame			->SetFX(type, 3.f);
+	item_helper			->SetFX(type, 3.f);
 	item_icon			->SetFX(type, 3.f);
 	charged_shot_bar	->SetFX(type, 3.f);
 	life_bar			->SetFX(type, 3.f);
-
+	
 }
 
 
@@ -206,7 +229,6 @@ void Player_GUI::SetChargedShotBar(float percent)
 
 void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 {
-	weapon_icon->SetState(ELEMENT_STATE::VISIBLE);
 
 	switch (weapon_type)
 	{
@@ -226,6 +248,8 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
+	weapon_icon->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1, 3.5F);
+
 }
 
 void Player_GUI::SetItemIcon( ObjectType type)
@@ -244,6 +268,8 @@ void Player_GUI::SetItemIcon( ObjectType type)
 		item_icon->SetState(ELEMENT_STATE::HIDDEN);
 		break;
 	}
+	item_icon->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1, 3.5F);
+
 }
 
 
@@ -305,6 +331,16 @@ Player_GUI::~Player_GUI()
 		{
 			life_bar->Destroy();
 			life_bar = nullptr;
+		}
+		if (weapon_helper != nullptr)
+		{
+			weapon_helper->Destroy();
+			weapon_helper = nullptr;
+		}
+		if (item_helper != nullptr)
+		{
+			item_helper->Destroy();
+			item_helper = nullptr;
 		}
 	}
 }
