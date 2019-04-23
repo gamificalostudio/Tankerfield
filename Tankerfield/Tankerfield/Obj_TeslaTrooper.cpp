@@ -63,10 +63,10 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 	//Things
 	state				= TROOPER_STATE::APPEAR;
-	speed				= 1.5F;
+	speed				= 3.F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
-	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)*1.5f;
+	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width);
 	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -.25f, -.25f });
@@ -174,6 +174,8 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				check_teleport_time = 1 * app->objectmanager->GetNumberOfEnemies();
 				if (teleport_timer.ReadSec() >= check_teleport_time)
 					state = TROOPER_STATE::GET_TELEPORT_POINT;
+				else
+					state = TROOPER_STATE::GET_PATH;
 			}
 
 		}
@@ -198,6 +200,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	break;
 	case TROOPER_STATE::RECHEAD_POINT:
 	{
+		move_vect.SetToZero();
 		if (path.size() > 0)
 		{
 			next_pos = (fPoint)(*path.begin());
@@ -254,6 +257,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	break;
 	case TROOPER_STATE::TELEPORT_IN:
 	{
+		move_vect.SetToZero();
 		if (in_portal != nullptr)
 			in_portal->NextFrame(dt);
 

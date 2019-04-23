@@ -707,7 +707,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 	{
 		MapLayer* layer = *item;
 
-		if (layer->layer_properties.GetAsFloat("Navigation", 0) == 0)
+		if (layer->name != "Navigation")
 			continue;
 
 		uchar* map = DBG_NEW uchar[layer->columns * layer->rows];
