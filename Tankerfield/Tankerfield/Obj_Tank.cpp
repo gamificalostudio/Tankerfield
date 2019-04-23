@@ -470,7 +470,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
 		app->render->DrawLineSplitScreen(
 			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 255, 255, 255, 123, camera);
+			input_screen_pos.x, input_screen_pos.y, 0, 0, 255, 123, camera);
 	}
 
 	// Turret =======================================

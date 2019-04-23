@@ -96,9 +96,9 @@ int Quadtree_Map::InsertTile(Tile tile)
 std::vector<Tile> Quadtree_Map::GetTilesIntersection(const Camera &camera)
 {
 	SDL_Rect cam = camera.rect;
-	cam.y -= 50;
+	cam.y -= 75;
 	cam.w += 60;
-	cam.h += 50;
+	cam.h += 75;
 	std::vector<Tile> ret;
 
 	if (SDL_HasIntersection(&cam, &area))
