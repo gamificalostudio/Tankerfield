@@ -471,12 +471,12 @@ void M_Scene::NewWave()
 	if (round <= 5)
 	{
 		Tesla_trooper_units = 500 + (round - 1) * 4 * 6;/*the * 4 is because is coop */
-		Brute_units = (round - 5) * 3;
+		Brute_units = (round - 2) * 2;
 	}
 	else 
 	{
 		Tesla_trooper_units = (round * 18 + round * 14) * 6;
-		Brute_units = round * 3;
+		Brute_units = round * 2;
 	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();

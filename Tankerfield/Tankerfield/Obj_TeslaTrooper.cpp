@@ -78,7 +78,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	attack_range		= 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
-	life = pow(1.5, app->scene->round);
+	life = pow(5, app->scene->round);
 	//Timers ----------------
 	check_teleport_time = 1; //10s
 	teleport_timer.Start();
