@@ -274,6 +274,7 @@ bool M_Scene::Update(float dt)
 	case WaveStat::WIN_GAME:
 		
 		// TODO
+		int iiiii = 0;
 
 		break;
 	}
@@ -296,7 +297,7 @@ bool M_Scene::PostUpdate(float dt)
 
 	/* Keep track if we reached the maximum round and, therefore, win the game */
 	this->accumulated_time += dt * 1000.0f;
-	if (accumulated_time >= time_round_check_frequency)
+	if (accumulated_time >= time_round_check_frequency * 1000.0f)
 	{
 		perform_round_check = true;
 	}
