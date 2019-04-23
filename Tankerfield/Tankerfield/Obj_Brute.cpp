@@ -47,6 +47,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
+	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
 
 	state = BRUTE_STATE::SPAWN;
 	speed = 1.f;
@@ -97,6 +98,7 @@ void Obj_Brute::Attack()
 		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{
 		curr_anim = &attack;
+		app->audio->PlayFx(sfx_attack);
 		target->SetLife(target->GetLife() - attack_damage);
 		perf_timer.Start();
 	}
@@ -129,7 +131,7 @@ void Obj_Brute::Movement(float &dt)
 			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
-			curr_anim = &idle;
+			curr_anim = &walk;
 			state=BRUTE_STATE::GET_PATH;
 		}
 	}
@@ -138,7 +140,7 @@ void Obj_Brute::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-		curr_anim = &idle;
+		//curr_anim = &idle;
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
