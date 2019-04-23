@@ -746,14 +746,14 @@ void Obj_Tank::Shoot(float dt)
 	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
 		//- Basic shot
-		if (charged_timer.ReadMs() < charge_time) 
+		if (charged_timer.ReadMs() < charge_time)
 		{
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(0.5f);
+			camera_player->AddTrauma(0.54f);
 			if (controller != nullptr)
 			{
-				(*controller)->PlayRumble(0.4f, 100);
+				(*controller)->PlayRumble(0.92f, 250);
 			}
 		}
 		//- Charged shot
@@ -761,10 +761,10 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(0.75f);
+			camera_player->AddTrauma(0.76f);
 			if (controller != nullptr)
 			{
-				(*controller)->PlayRumble(0.7f, 100);
+				(*controller)->PlayRumble(1.0f, 400);
 			}
 		}
 		shot_timer.Start();
