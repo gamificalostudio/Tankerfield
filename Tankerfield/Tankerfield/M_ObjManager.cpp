@@ -104,6 +104,10 @@ bool M_ObjManager::Update(float dt)
 				//	Obj_Tank* aux = (Obj_Tank*)(*iterator);
 				//	obj_tanks.remove((Obj_Tank*)(*iterator));
 				//}
+				if ((*iterator)->type == ObjectType::TESLA_TROOPER || (*iterator)->type == ObjectType::BRUTE)
+				{
+					enemies.remove((*iterator));
+				}
 
 				if ((*iterator)->coll != nullptr)
 				{
@@ -229,6 +233,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::TESLA_TROOPER:
 		ret = DBG_NEW Obj_TeslaTrooper(pos);
 		ret->type = ObjectType::TESLA_TROOPER;
+		enemies.push_back(ret);
 		break;
 	case ObjectType::TANK:
 		ret = DBG_NEW Obj_Tank(pos);
@@ -262,6 +267,8 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::BRUTE:
 		ret = new Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
+		enemies.push_back(ret);
+
 		break;
 	case ObjectType::EXPLOSION:
 		ret = DBG_NEW Obj_Explosion(pos);
@@ -318,6 +325,7 @@ void M_ObjManager::DeleteObjects()
 
 	objects.clear();
 	obj_tanks.clear();
+	enemies.clear();
 }
 
 
@@ -335,7 +343,7 @@ Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 	}
 	float lowest_distance = max_dist_squared;
 
-	for (std::list<Obj_Tank*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
+	for (std::vector<Obj_Tank*>::iterator iter = obj_tanks.begin(); iter != obj_tanks.end(); ++iter)
 	{
 		float distance = pos.DistanceNoSqrt((*iter)->pos_map);
 		if ((*iter)->Alive()
@@ -379,6 +387,10 @@ void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
 
 	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
 }
+
+
+
+
 
 bool M_ObjManager::Load(pugi::xml_node& load)
 {

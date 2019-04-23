@@ -436,10 +436,10 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 	for (pugi::xml_node obj_node = object_group_node.child("object"); obj_node; obj_node = obj_node.next_sibling())
 	{
 		object_group->objects[i].create(
-			obj_node.attribute("x").as_int(0) / data.tile_height,
-			obj_node.attribute("y").as_int(0) / data.tile_height,
-			obj_node.attribute("width").as_int(0) / data.tile_height,
-			obj_node.attribute("height").as_int(0) / data.tile_height);
+			obj_node.attribute("x").as_float(0) / data.tile_height,
+			obj_node.attribute("y").as_float(0) / data.tile_height,
+			obj_node.attribute("width").as_float(0) / data.tile_height,
+			obj_node.attribute("height").as_float(0) / data.tile_height);
 
 		//	SpawnPoints
 		if (object_group->name == "SpawnPoints")
@@ -514,20 +514,15 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 
 		if (object_group->name == "Colliders")
 		{
-			
-			//if (object_group->objects[i].pos.x == 0 && object_group->objects[i].pos.y == 0)
-				//LOG("here");
-			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
-			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h };
+			// To ortogonal tile pos----------------
 			std::string type = obj_node.attribute("type").as_string("");
 			if (type == "WALL")
 			{
-				app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WALL);
+				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WALL);
 			}
 			else if (type == "WATER")
 			{
-				app->collision->AddCollider(pos, mesure.x, mesure.y, Collider::TAG::WATER);
+				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WATER);
 			}
 			
 		}
@@ -712,7 +707,7 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 	{
 		MapLayer* layer = *item;
 
-		if (layer->layer_properties.GetAsFloat("Navigation", 0) == 0)
+		if (layer->name != "Navigation")
 			continue;
 
 		uchar* map = DBG_NEW uchar[layer->columns * layer->rows];

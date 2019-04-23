@@ -15,7 +15,7 @@ Bullet_Missile::~Bullet_Missile()
 
 void Bullet_Missile::OnTrigger(Collider * collider_1)
 {
-	app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map-explosion_offset);
+	app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
 	to_remove = true;
 }
 

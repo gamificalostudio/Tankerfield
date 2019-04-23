@@ -50,7 +50,12 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	/* Wave System setup */
+	// Rounds to win the game
+	rounds_to_win = config.child("rounds_to_win").attribute("value").as_int();
+
+	time_round_check_frequency = config.child("time_round_check_frequency").attribute("value").as_float();
+
+	// Wave System setup
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
@@ -117,7 +122,7 @@ bool M_Scene::Start()
 	game_over = false;
 
 	/* Generate Reward Zones */
-	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
+	//reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
 	//reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
@@ -168,7 +173,14 @@ bool M_Scene::PreUpdate()
 		tank_2->SetLife(0);
 		tank_3->SetLife(0);
 		tank_4->SetLife(0);
-
+	}
+	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
+	{
+		iPoint mouse_pos;
+		app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+		mouse_pos += iPoint(app->render->cameras[0]->rect.x, app->render->cameras[0]->rect.y);
+		fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
+		app->objectmanager->CreateObject(ObjectType::EXPLOSION, map_mouse_pos);
 	}
 	return true;
 }
@@ -205,6 +217,7 @@ bool M_Scene::Update(float dt)
 	case WaveStat::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
+		++round;
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
@@ -226,8 +239,8 @@ bool M_Scene::Update(float dt)
 				++iterator;
 			}
 		}
-		int ret = enemies_in_wave.size();
-		if (ret == 0)
+		
+		if (enemies_in_wave.size() == 0)
 		{
 			stat_of_wave = WaveStat::EXIT_OF_WAVE;
 		}
@@ -262,6 +275,13 @@ bool M_Scene::Update(float dt)
 		general_hud->FadeGameOverScreen(true, round);
 		stat_of_wave = WaveStat::NO_TYPE;
 		break;
+
+	case WaveStat::WIN_GAME:
+		
+		// TODO
+		int iiiii = 0;
+
+		break;
 	}
 
 	if (game_over == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
@@ -269,7 +289,6 @@ bool M_Scene::Update(float dt)
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
 	}
-
 	return true;
 }
 
@@ -279,6 +298,23 @@ bool M_Scene::PostUpdate(float dt)
 	bool ret = true;
 	//
 	//DebugPathfinding();
+
+	/* Keep track if we reached the maximum round and, therefore, win the game */
+	this->accumulated_time += dt * 1000.0f;
+	if (accumulated_time >= time_round_check_frequency * 1000.0f)
+	{
+		perform_round_check = true;
+	}
+
+	if (perform_round_check)
+	{
+		if (this->round == rounds_to_win + 1)
+		{
+			stat_of_wave = WaveStat::WIN_GAME;
+		}
+
+		perform_round_check = false;
+	}
 
 	return ret;
 }
@@ -431,7 +467,6 @@ void M_Scene::NewWave()
 	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
-	++round;
 	general_hud->SetRoundNumber(round);
 }
 

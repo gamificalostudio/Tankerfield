@@ -39,6 +39,8 @@ public:
 
 	void OnTrigger(Collider* collider);
 
+	void OnTriggerEnter(Collider* collider);
+
 private:
 	inline bool IsOnGoal(fPoint goal);
 
@@ -85,6 +87,8 @@ private:
 
 	uint sfx_hit = 0;
 	uint sfx_death = 0;
+	uint sfx_attack = 0;
+	uint sfx_spawn = 0;
 };
 
 #endif
