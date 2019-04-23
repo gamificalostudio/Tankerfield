@@ -653,7 +653,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.bullet_damage = 50 + level * 2;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
+		weapon_info.bullet_speed = 20;
 		weapon_info.time_between_bullets = 500;
 		break;
 	}
@@ -769,7 +769,14 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(0.54f);
+			if (weapon_info.type != WEAPON::LASER_SHOT)
+			{
+				camera_player->AddTrauma(0.54f);
+			}
+			else
+			{
+				camera_player->AddTrauma(0.54f * 0.75f);
+			}
 			if (controller != nullptr)
 			{
 				(*controller)->PlayRumble(0.92f, 250);
@@ -780,11 +787,20 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(0.76f);
+			if(weapon_info.type != WEAPON::LASER_SHOT)
+			{
+				camera_player->AddTrauma(0.76f);
+			}
+			else
+			{
+				camera_player->AddTrauma(0.76f * 0.75f);
+			}
+
 			if (controller != nullptr)
 			{
 				(*controller)->PlayRumble(1.0f, 400);
 			}
+
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);

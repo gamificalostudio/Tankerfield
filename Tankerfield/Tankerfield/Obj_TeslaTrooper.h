@@ -43,6 +43,8 @@ public:
 
 	bool Awake(pugi::xml_node&) { return true; };
 
+	void OnTriggerEnter(Collider * collider);
+
 	void OnTrigger(Collider* collider);
 
 private:
