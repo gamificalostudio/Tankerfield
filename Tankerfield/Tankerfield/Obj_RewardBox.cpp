@@ -88,19 +88,19 @@ void Obj_RewardBox::Dead()
 {
 	uint probability = rand() % 100;
 
-	if (probability < 25)
+	if (probability < 15)
 	{
 		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
 	}
 
-	else if (probability < 50)
+	else if (probability < 25)
 	{
 		fPoint offset{ 0.5f,0 };
 		app->pick_manager->CreatePickUp(pos_map - offset, PICKUP_TYPE::ITEM);
 		app->pick_manager->CreatePickUp(pos_map + offset, PICKUP_TYPE::ITEM);
 	}
 
-	else if (probability < 80)
+	else if (probability < 75)
 	{
 		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
 	}
