@@ -42,14 +42,10 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 		pos_map - fPoint(coll_w, coll_h),
 		coll_w,
 		coll_h,
-		Collider::TAG::BULLET, damage,
+		Collider::TAG::BULLET,
+		200 + app->scene->round * 100,
 		nullptr);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-
-	
-
-	
-	
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
 }
