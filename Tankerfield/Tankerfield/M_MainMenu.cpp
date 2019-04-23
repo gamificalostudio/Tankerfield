@@ -11,11 +11,14 @@
 #include "M_SceneManager.h"
 #include "M_Scene.h"
 #include "M_Window.h"
+#include "M_Audio.h"
 
 bool M_MainMenu::Start()
 {
 	fRect screen = app->win->GetWindowRect();
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
+
+	app->audio->PlayMusic("\audio\Music\menu_music.ogg");
 
 	logo_button = app->ui->CreateImage({ 151.f, 151.f }, UI_ImageDef({10, 710, 915, 260}));
 
@@ -61,6 +64,7 @@ bool M_MainMenu::PostUpdate(float dt)
 bool M_MainMenu::CleanUp()
 {
 	app->tex->UnLoad(background_texture);
+	app->audio->PauseMusic(2.F);
 
 	if (app->on_clean_up == false)
 	{
