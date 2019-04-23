@@ -17,6 +17,7 @@
 #include "M_AnimationBank.h"
 #include "M_Audio.h"
 #include "Obj_Tank.h"
+#include "WeaponInfo.h"
 
 Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 {
@@ -41,6 +42,10 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 		Collider::TAG::BULLET, 200.f,
 		nullptr);
 
+	level = weapon_info.level_weapon;
+	damage = original_damage * level;
+
+	coll = app->collision->AddCollider(pos_map, 3.f, 3.f, Collider::TAG::BULLET, damage, nullptr);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
