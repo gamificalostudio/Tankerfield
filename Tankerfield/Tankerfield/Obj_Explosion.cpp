@@ -36,7 +36,7 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	coll_h = 3.f;
 
 	coll = app->collision->AddCollider(
-		pos_map - fPoint(coll_w, coll_h),
+		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
 		coll_w,
 		coll_h,
 		Collider::TAG::BULLET,
