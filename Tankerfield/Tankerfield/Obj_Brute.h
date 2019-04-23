@@ -82,6 +82,9 @@ private:
 	Timer damaged_sprite_timer;
 	int damaged_sprite_time = 0;
 	bool to_hit = true;
+
+	uint sfx_hit = 0;
+	uint sfx_death = 0;
 };
 
 #endif

@@ -59,7 +59,7 @@ public:
 
 	virtual bool Draw(float dt, Camera * camera);
 
-	virtual bool DrawShadow(Camera * camera) { return true; }
+	virtual bool DrawShadow(Camera * camera, float dt) { return true; }
 
 	virtual bool CleanUp() { return true; };
 

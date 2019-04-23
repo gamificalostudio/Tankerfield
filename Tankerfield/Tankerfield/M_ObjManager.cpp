@@ -171,7 +171,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-		  (*item)->DrawShadow((*item_cam));
+		  (*item)->DrawShadow((*item_cam), dt);
 		}
 
 		//Draw the objects above the shadows
@@ -205,7 +205,7 @@ bool M_ObjManager::Reset()
 	{
 		if ((*iterator)->coll != nullptr)
 		{
-			(*iterator)->coll->object = nullptr;
+			(*iterator)->CleanUp();
 			(*iterator)->coll->Destroy();
 			(*iterator)->coll = nullptr;
 		}
@@ -216,6 +216,7 @@ bool M_ObjManager::Reset()
 	}
 
 	obj_tanks.clear();
+	objects.clear();
 
 	return true;
 }

@@ -11,19 +11,14 @@ class Module
 {
 
 private:
-	bool enabled = true;
+	bool enabled = false;
 
 public:
-	Module() : active(false)
+	Module() : active(true)
 	{}
 
 	virtual ~Module()
 	{}
-
-	void Init()
-	{
-		active = true;
-	}
 
 	// Called before render is available
 	virtual bool Awake(pugi::xml_node&)
@@ -92,6 +87,7 @@ public:
 	{
 		if (enabled == false)
 		{
+			active = true;
 			enabled = true;
 			Start();
 		}
@@ -101,6 +97,7 @@ public:
 	{
 		if (enabled == true)
 		{
+			active = false;
 			enabled = false;
 			CleanUp();
 		}
@@ -112,6 +109,7 @@ public:
 
 	bool		active = false;
 
+	friend App;
 };
 
 #endif // __j1MODULE_H__

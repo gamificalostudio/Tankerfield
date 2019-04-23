@@ -43,16 +43,21 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 
 	//Assets loading ------------------------------------------------------------------------------------------------------------------------
+	idle.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
 	death.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("death"));
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
+
 	curr_anim = &walk;
 	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav",20);
+	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/hit.wav", 25);
+	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
+
 	app->audio->PlayFx(sfx_spawn);
 	draw = false;
 
@@ -288,6 +293,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		if (curr_anim != &death)
 		{
 			curr_anim = &death;	
+			app->audio->PlayFx(sfx_death);
 			if (coll != nullptr)
 			{
 				coll->Destroy();
@@ -382,6 +388,10 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 			app->pick_manager->PickUpFromEnemy(pos_map);
 			state = TROOPER_STATE::DEAD;
 		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
 	}
 
 	else if (collider->GetTag() == Collider::TAG::BULLET_LASER)
@@ -412,7 +422,12 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = TROOPER_STATE::DEAD;
 			}
-			bullet->hitted_enemies.push_back(this);
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+				bullet->hitted_enemies.push_back(this);
+			}
+			
 
 		}
 

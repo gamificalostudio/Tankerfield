@@ -2,6 +2,7 @@
 #include "App.h"
 #include "M_UI.h"
 #include "M_Map.h"
+#include "M_Fonts.h"
 #include "Player_GUI.h"
 
 #include "Obj_Tank.h"
@@ -95,19 +96,19 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	switch (pick_up_obj->type_of_weapon)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_DOUBLE_MISSILE];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE];
 		break;
 	case WEAPON::HEALING_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_HEALING_SHOT];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
 		break;
 	case WEAPON::FLAMETHROWER:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_FLAMETHROWER];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	case WEAPON::LASER_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_LASER];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER];
 		break;
 	case WEAPON::BASIC:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::WEAPON_BASIC];
+		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
 
@@ -199,13 +200,13 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	switch (pick_up_obj->type_of_item)
 	{
 	case ObjectType::HEALTH_BAG:
-		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
+		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
 	case ObjectType::HAPPY_HOUR_ITEM:
-		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HAPPY_HOUR];
+		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
 	default:
-		img_def.sprite_section = app->ui->icon_sprites[(int)M_UI::ICON_SIZE::SMALL][(int)M_UI::ICON_TYPE::ITEM_HEALTH_BAG];
+		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
 	}
 
@@ -235,7 +236,7 @@ UI_IG_Helper::UI_IG_Helper(const fPoint position, const UI_InGameElementDef defi
 {
 }
 
-void UI_IG_Helper::AddButtonHelper( const M_UI::GAMEPAD_BUTTON button_type, const fPoint offset)
+void UI_IG_Helper::AddButtonHelper( const CONTROLLER_BUTTON button_type, const fPoint offset)
 {
 	UI_ImageDef def(app->ui->button_sprites[(int)button_type]);
 	def.is_in_game = true;
@@ -249,7 +250,7 @@ void UI_IG_Helper::AddButtonHelper( const M_UI::GAMEPAD_BUTTON button_type, cons
 
 void UI_IG_Helper::AddTextHelper(const String text, const fPoint offset)
 {
-	UI_LabelDef def(text, app->ui->font_open_sants_bold_12);
+	UI_LabelDef def(text, app->font->font_open_sants_bold_12);
 	def.is_in_game = true;
 
 	UI_Label* ui_helper = app->ui->CreateLabel(position + app->map->ScreenToMapF(offset.x, offset.y), def);
