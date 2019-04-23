@@ -47,6 +47,10 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
+	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
+	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
+
+	app->audio->PlayFx(sfx_spawn);
 
 	state = BRUTE_STATE::SPAWN;
 	speed = 1.f;
@@ -97,6 +101,7 @@ void Obj_Brute::Attack()
 		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{
 		curr_anim = &attack;
+		app->audio->PlayFx(sfx_attack);
 		target->SetLife(target->GetLife() - attack_damage);
 		perf_timer.Start();
 	}
@@ -129,7 +134,7 @@ void Obj_Brute::Movement(float &dt)
 			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
-			curr_anim = &idle;
+			curr_anim = &walk;
 			state=BRUTE_STATE::GET_PATH;
 		}
 	}
@@ -138,7 +143,7 @@ void Obj_Brute::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-		curr_anim = &idle;
+		//curr_anim = &idle;
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
@@ -241,12 +246,36 @@ bool Obj_Brute::IsOnGoal(fPoint goal)
 	return range_pos.IsPointIn(goal);
 }
 
+void Obj_Brute::OnTriggerEnter(Collider * collider)
+{
+	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	{
+
+		life -= collider->damage;
+
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
+
+		if (life <= 0)
+		{
+			// DROP A PICK UP ITEM 
+			app->pick_manager->PickUpFromEnemy(pos_map);
+			state = BRUTE_STATE::DEAD;
+		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
+
+	}
+}
+
 void Obj_Brute::OnTrigger(Collider* collider)
 {
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
-    
+
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
 		collider->SetTag(Collider::TAG::NONE);
@@ -261,47 +290,6 @@ void Obj_Brute::OnTrigger(Collider* collider)
 		{
 			app->audio->PlayFx(sfx_hit);
 		}
-	
+
 	}
-
-
-	else if (collider->GetTag() == Collider::TAG::BULLET_LASER)
-	{
-		Laser_Bullet* bullet = (Laser_Bullet*)collider->GetObj();
-		for (std::vector<Object*>::iterator iterator = bullet->hitted_enemies.begin(); iterator != bullet->hitted_enemies.end(); ++iterator)
-		{
-			if ((*iterator) == this)
-			{
-				to_hit = false;
-				break;
-			}
-			else
-			{
-				to_hit = true;
-			}
-		}
-		if (to_hit || bullet->hitted_enemies.size() == 0)
-		{
-			life -= collider->damage;
-
-			damaged_sprite_timer.Start();
-			curr_tex = tex_damaged;
-
-			if (life <= 0)
-			{
-				// DROP A PICK UP ITEM 
-				app->pick_manager->PickUpFromEnemy(pos_map);
-				state = BRUTE_STATE::DEAD;
-			}
-			else
-			{
-				bullet->hitted_enemies.push_back(this);
-				app->audio->PlayFx(sfx_hit);
-			}		
-
-		}
-		
-	}
-
-
 }

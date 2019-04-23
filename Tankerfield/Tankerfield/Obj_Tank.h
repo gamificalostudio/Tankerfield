@@ -44,6 +44,7 @@ public:
 
 	void OnTriggerExit(Collider* c1);
 
+
 public:
 	//- Logic
 	void SetLife(int life);
