@@ -515,12 +515,12 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		if (object_group->name == "Colliders")
 		{
 			// To ortogonal tile pos----------------
-			std::string name = obj_node.attribute("name").as_string("");
-			if (name == "WALL")
+			std::string type = obj_node.attribute("type").as_string("");
+			if (type == "WALL")
 			{
 				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WALL);
 			}
-			else if (name == "WATER")
+			else if (type == "WATER")
 			{
 				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WATER);
 			}
