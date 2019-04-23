@@ -113,8 +113,8 @@ private:
 	bool win_game = false;
 
 	int rounds_to_win = NULL;
-	int current_wave = 0;
 	float accumulated_time = 0.0f;
+
 	// Every two seconds we check
 	float time_round_check_frequency = 0.0f;
 	bool perform_round_check = false;

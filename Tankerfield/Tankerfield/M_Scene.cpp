@@ -210,8 +210,8 @@ bool M_Scene::Update(float dt)
 	case WaveStat::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
+		++round;
 		NewWave();
-		current_wave++;
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
@@ -232,8 +232,8 @@ bool M_Scene::Update(float dt)
 				++iterator;
 			}
 		}
-		int ret = enemies_in_wave.size();
-		if (ret == 0)
+		
+		if (enemies_in_wave.size() == 0)
 		{
 			stat_of_wave = WaveStat::EXIT_OF_WAVE;
 		}
@@ -304,7 +304,7 @@ bool M_Scene::PostUpdate(float dt)
 
 	if (perform_round_check)
 	{
-		if (this->current_wave == rounds_to_win)
+		if (this->round == rounds_to_win + 1)
 		{
 			stat_of_wave = WaveStat::WIN_GAME;
 		}
@@ -463,7 +463,6 @@ void M_Scene::NewWave()
 	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
-	++round;
 	general_hud->SetRoundNumber(round);
 }
 
