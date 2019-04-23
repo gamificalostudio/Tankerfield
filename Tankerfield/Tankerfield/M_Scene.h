@@ -24,7 +24,8 @@ enum class WaveStat
 	IN_WAVE,
 	EXIT_OF_WAVE,
 	OUT_WAVE,
-	GAME_OVER
+	GAME_OVER,
+	WIN_GAME
 };
 
 class PerfTimer;
@@ -109,12 +110,19 @@ private:
 
 	/* Game variables*/
 	bool game_over = false;
+	bool win_game = false;
+
+	int rounds_to_win = NULL;
+	float accumulated_time = 0.0f;
+
+	// Every two seconds we check
+	float time_round_check_frequency = 0.0f;
+	bool perform_round_check = false;
 
 	/* Wave System */
 	int time_between_rounds			= 0;
 	int Tesla_trooper_units			= 0;
 	int Brute_units					= 0;
-
 
 	// Fx and Music
 	const char* finish_wave_sound_string;
