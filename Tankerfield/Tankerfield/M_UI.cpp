@@ -123,7 +123,7 @@ bool M_UI::CleanUp()
 
 	app->tex->UnLoad(atlas);
 	atlas = nullptr;
-
+	selected_element = nullptr;
 	interactive_elements.clear();
 
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
@@ -156,6 +156,7 @@ bool M_UI::CleanUp()
 
 bool M_UI::Reset()
 {
+	selected_element = nullptr;
 
 	interactive_elements.clear();
 

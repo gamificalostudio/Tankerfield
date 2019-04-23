@@ -29,8 +29,9 @@ public:
 	bool CleanUp() override;
 
 	bool Reset();
+
+	bool OutClick(UI_Element * element);
 	
-	bool OnClick(UI_Element* element);
 
 public:
 

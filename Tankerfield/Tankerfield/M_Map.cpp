@@ -320,6 +320,7 @@ bool M_Map::Unload()
 	}
 	data.map_properties.UnloadProperties();
 
+	map_loaded = false;
 
 	return true;
 }

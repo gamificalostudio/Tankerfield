@@ -18,6 +18,7 @@
 #include "M_Pathfinding.h"
 #include "M_ObjManager.h"
 #include "M_Collision.h"
+#include "M_MainMenu.h"
 #include "Point.h"
 #include "Brofiler/Brofiler.h"
 #include "Rect.h"
@@ -106,11 +107,13 @@ bool M_Scene::Start()
 bool M_Scene::PreUpdate()
 {
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		return false;
+	{
+		app->scmanager->FadeToBlack(this, app->main_menu, 4.f, 2.f );
+	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
 	{
-		Reset();
+		app->scmanager->FadeToBlack(this, this, 2.f, 2.f);
 	}
 
 	if (app->input->controllers.size())
@@ -265,12 +268,11 @@ bool M_Scene::PostUpdate(float dt)
 // Called before quitting
 bool M_Scene::Reset()
 {
-	CleanUp();
+	app->audio->PauseMusic(2.f);
 	app->map->Unload();
 	app->ui->Reset();
-	app->collision->Reset();
 	app->objectmanager->Reset();
-	Start();
+	app->collision->Reset();
 
 	return true;
 }
@@ -278,6 +280,7 @@ bool M_Scene::Reset()
 bool M_Scene::CleanUp()
 {
 	LOG("Freeing scene");
+	app->audio->PauseMusic(2.f);
 
 	RELEASE(general_hud);
 

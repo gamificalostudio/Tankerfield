@@ -36,7 +36,7 @@ bool M_MainMenu::Start()
 
 bool M_MainMenu::PreUpdate()
 {
-	if (exit_game == true)
+	if ( app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || exit_game == true)
 	{
 		return false;
 	}
@@ -58,23 +58,26 @@ bool M_MainMenu::CleanUp()
 {
 	app->tex->UnLoad(background_texture);
 
-	if (logo_button != nullptr)
+	if (app->on_clean_up == false)
 	{
-		logo_button->Destroy();
+		if (logo_button != nullptr)
+		{
+			logo_button->Destroy();
+		}
+		if (single_player_button != nullptr)
+		{
+			single_player_button->Destroy();
+		}
+		if (multi_player_button != nullptr)
+		{
+			multi_player_button->Destroy();
+		}
+		if (exit_button != nullptr)
+		{
+			exit_button->Destroy();
+		}
 	}
-	if (single_player_button != nullptr)
-	{
-		single_player_button->Destroy();
-	}
-	if (multi_player_button != nullptr)
-	{
-		multi_player_button->Destroy();
-	}
-	if (exit_button != nullptr)
-	{
-		exit_button->Destroy();
-	}
-	
+
 	logo_button = nullptr;
 	single_player_button = nullptr;
 	multi_player_button = nullptr;
@@ -88,7 +91,7 @@ bool M_MainMenu::Reset()
 	return true;
 }
 
-bool M_MainMenu::OnClick(UI_Element * element)
+bool M_MainMenu::OutClick(UI_Element * element)
 {
 	if (element == multi_player_button)
 	{

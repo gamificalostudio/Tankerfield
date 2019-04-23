@@ -56,7 +56,7 @@ bool M_SceneManager::PostUpdate(float dt)
 			{
 				(*iter)->Reset();
 			}
-
+			module_off->Reset();
 			module_on->Enable();
 			current_step = fade_step::fade_from_black;
 			std::swap(init_value, target_value);
