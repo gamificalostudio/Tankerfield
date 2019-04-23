@@ -30,7 +30,7 @@ public:
 	// -1 error
 	int InsertTile(Tile rect);
 
-	std::vector<Tile> GetTilesIntersection(const Camera & camera);
+	 std::vector<Tile> GetTilesIntersection(const Camera & camera);
 
 	int compare(const Tile& a, const Tile& b)
 	{
@@ -46,7 +46,6 @@ private:
 	Quadtree_Map* nodes[4] = { nullptr,nullptr,nullptr,nullptr };
 
 	void Subdivide() override;
-
 };
 
 
