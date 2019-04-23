@@ -467,11 +467,16 @@ void M_Scene::CreateEnemyWave()
 }
 
 void M_Scene::NewWave()
-{	
-	if (round <= 5)
+{
+	if (round == 1)
 	{
-		Tesla_trooper_units = 500 + (round - 1) * 4 * 6;/*the * 4 is because is coop */
-		Brute_units = (round - 2) * 2;
+		Tesla_trooper_units = 100 + (round - 1) * 4 * 6;/*the * 4 is because is coop */
+		Brute_units = (round - 5) * 3;
+	}
+	if (round >1 && round <= 5)
+	{
+		Tesla_trooper_units = 300 + (round - 1) * 4 * 6;/*the * 4 is because is coop */
+		Brute_units = (round -1) * 5;
 	}
 	else 
 	{
