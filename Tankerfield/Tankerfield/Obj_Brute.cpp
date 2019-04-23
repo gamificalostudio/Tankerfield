@@ -27,6 +27,7 @@
 #include "M_PickManager.h"
 #include "Bullet_Laser.h"
 #include "Obj_Bullet.h"
+#include "M_Audio.h"
 
 Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
@@ -43,6 +44,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
 	spawn.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("spawn"));
 	curr_anim = &spawn;
+
+	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
+	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
 
 	state = BRUTE_STATE::SPAWN;
 	speed = 1.f;
@@ -67,7 +71,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	coll_h = 1.f;
   
 	damaged_sprite_time = 150;
-	life = pow(5, app->scene->round);
+	life = 100;//pow(5, app->scene->round);
 }
 
 Obj_Brute::~Obj_Brute()
@@ -184,13 +188,17 @@ void Obj_Brute::Movement(float &dt)
 	break;
 	case BRUTE_STATE::DEAD:
 	{
-		curr_anim = &death;
-		if (coll != nullptr)
+		if (curr_anim != &death)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			curr_anim = &death;
+			app->audio->PlayFx(sfx_death);
+			if (coll != nullptr)
+			{
+				coll->Destroy();
+				coll = nullptr;
+			}
 		}
-		if (curr_anim==&death&&curr_anim->Finished())
+		else if (curr_anim->Finished())
 		{
 			to_remove = true;
 		}
@@ -249,6 +257,10 @@ void Obj_Brute::OnTrigger(Collider* collider)
 			app->pick_manager->PickUpFromEnemy(pos_map, PICKUP_TYPE::WEAPON);
 			state = BRUTE_STATE::DEAD;
 		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
 	
 	}
 
@@ -281,7 +293,11 @@ void Obj_Brute::OnTrigger(Collider* collider)
 				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = BRUTE_STATE::DEAD;
 			}
-			bullet->hitted_enemies.push_back(this);
+			else
+			{
+				bullet->hitted_enemies.push_back(this);
+				app->audio->PlayFx(sfx_hit);
+			}		
 
 		}
 		

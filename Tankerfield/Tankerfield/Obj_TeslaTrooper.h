@@ -98,7 +98,7 @@ private:
 	uint sfx_attack = 0;
 	uint sfx_spawn = 0;
 	uint sfx_hit = 0;
-	uint sfx_dead = 0;
+	uint sfx_death = 0;
 
 	SpawnPoint* teleport_spawnpoint = nullptr;
 
