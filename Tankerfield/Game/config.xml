@@ -637,14 +637,14 @@
         <base_pink>textures/objects/tank/base - pink.png</base_pink>
         <base_blue>textures/objects/tank/base - blue.png</base_blue>
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
-        
         <turr>textures/objects/tank/turr.png</turr>
+        
         <turr_orange>textures/objects/tank/turr-orange.png</turr_orange>
         <turr_green>textures/objects/tank/turr-green.png</turr_green>
         <turr_pink>textures/objects/tank/turr-pink.png</turr_pink>
         <turr_blue>textures/objects/tank/turr-blue.png</turr_blue>
-        
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
+        <cycle_bar_tex>textures/objects/tank/circle-loading-bar.png</cycle_bar_tex>
       </spritesheets>
       <sounds>
         <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
