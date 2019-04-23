@@ -165,6 +165,25 @@
     </reward_box>
     <tesla_trooper>
       <animations>
+        <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+          <dir>
+              <frame x="594"  y="152" width="66" height="76"/>
+              <frame x="660"  y="152" width="66" height="76" />
+              <frame x="726"  y="152" width="66" height="76" />
+              <frame x="792"  y="152" width="66" height="76" />
+              <frame x="858"  y="152" width="66" height="76" />
+              <frame x="924"  y="152" width="66" height="76" />
+              <frame x="990"  y="152" width="66" height="76" />
+              <frame x="1056" y="152" width="66" height="76"/>
+              <frame x="1122" y="152" width="66" height="76"/>
+              <frame x="1188" y="152" width="66" height="76"/>
+              <frame x="1254" y="152" width="66" height="76"/>
+              <frame x="1320" y="152" width="66" height="76"/>
+              <frame x="1386" y="152" width="66" height="76"/>
+              <frame x="1452" y="152" width="66" height="76"/>
+              <frame x="1518" y="152" width="66" height="76"/>
+          </dir>
+        </idle>
         <walk speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <!--starts in frame number 8-->

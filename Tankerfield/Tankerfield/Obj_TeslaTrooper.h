@@ -80,7 +80,7 @@ private:
 	Timer	teleport_anim_duration;
 	bool to_hit = true;
 
-
+	Animation idle;
 	Animation walk;
 	Animation attack;
 	Animation death;
