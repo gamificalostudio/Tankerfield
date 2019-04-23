@@ -27,6 +27,8 @@
 #include "M_AnimationBank.h"
 #include "M_Scene.h"
 #include "Obj_Tank.h"
+#include "Bullet_Laser.h"
+#include "Obj_Bullet.h"
 
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
@@ -380,5 +382,39 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 			app->pick_manager->PickUpFromEnemy(pos_map);
 			state = TROOPER_STATE::DEAD;
 		}
+	}
+
+	else if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	{
+		Laser_Bullet* bullet = (Laser_Bullet*)collider->GetObj();
+		for (std::vector<Object*>::iterator iterator = bullet->hitted_enemies.begin(); iterator != bullet->hitted_enemies.end(); ++iterator)
+		{
+			if ((*iterator) == this)
+			{
+				to_hit = false;
+				break;
+			}
+			else
+			{
+				to_hit = true;
+			}
+		}
+		if (to_hit || bullet->hitted_enemies.size() == 0)
+		{
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = TROOPER_STATE::DEAD;
+			}
+			bullet->hitted_enemies.push_back(this);
+
+		}
+
 	}
 }

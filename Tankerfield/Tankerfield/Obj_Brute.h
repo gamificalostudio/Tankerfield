@@ -81,6 +81,7 @@ private:
 	SDL_Texture * spawn_tex = nullptr;
 	Timer damaged_sprite_timer;
 	int damaged_sprite_time = 0;
+	bool to_hit = true;
 };
 
 #endif

@@ -29,7 +29,7 @@ public:
 	Obj_RewardBox* CreateRewardBox(fPoint pos_map);
 
 	//Calculate if a pickUp has to be created after enemy die
-	void PickUpFromEnemy(fPoint pos_map);
+	void PickUpFromEnemy(fPoint pos_map, PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::MAX_TYPES);
 
 	void CreateRewardBoxWave();
 

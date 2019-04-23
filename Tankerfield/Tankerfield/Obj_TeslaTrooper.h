@@ -78,6 +78,7 @@ private:
 	PerfTimer perf_timer;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
+	bool to_hit = true;
 
 
 	Animation walk;
