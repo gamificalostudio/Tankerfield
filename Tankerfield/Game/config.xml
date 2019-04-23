@@ -11,7 +11,7 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="1"/>
+    <resolution width="1920" height="1080" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -154,7 +154,7 @@
   </scene>
 
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="100"/>
+    <percentage_spawn_item_from_enemy value="1"/>
     <percentage_spawn_reward_box value="50"/>   
   </pick_manager>
   
@@ -165,6 +165,25 @@
     </reward_box>
     <tesla_trooper>
       <animations>
+        <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+          <dir>
+              <frame x="594"  y="152" width="66" height="76"/>
+              <frame x="660"  y="152" width="66" height="76" />
+              <frame x="726"  y="152" width="66" height="76" />
+              <frame x="792"  y="152" width="66" height="76" />
+              <frame x="858"  y="152" width="66" height="76" />
+              <frame x="924"  y="152" width="66" height="76" />
+              <frame x="990"  y="152" width="66" height="76" />
+              <frame x="1056" y="152" width="66" height="76"/>
+              <frame x="1122" y="152" width="66" height="76"/>
+              <frame x="1188" y="152" width="66" height="76"/>
+              <frame x="1254" y="152" width="66" height="76"/>
+              <frame x="1320" y="152" width="66" height="76"/>
+              <frame x="1386" y="152" width="66" height="76"/>
+              <frame x="1452" y="152" width="66" height="76"/>
+              <frame x="1518" y="152" width="66" height="76"/>
+          </dir>
+        </idle>
         <walk speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <!--starts in frame number 8-->
@@ -324,6 +343,32 @@
     </tesla_trooper>
     <brute>
       <animations>
+        <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame x="0" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="134" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="268" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="402" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="536" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="670" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="804" y="0" w="134" h="96" />
+          </dir>
+          <dir>
+            <frame x="938" y="0" w="134" h="96" />
+          </dir>
+        </idle>
         <walk speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <!--starts in frame number 8-->
@@ -591,11 +636,15 @@
         <base_green>textures/objects/tank/base - green.png</base_green>
         <base_pink>textures/objects/tank/base - pink.png</base_pink>
         <base_blue>textures/objects/tank/base - blue.png</base_blue>
-  
-       
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
         <turr>textures/objects/tank/turr.png</turr>
+        
+        <turr_orange>textures/objects/tank/turr-orange.png</turr_orange>
+        <turr_green>textures/objects/tank/turr-green.png</turr_green>
+        <turr_pink>textures/objects/tank/turr-pink.png</turr_pink>
+        <turr_blue>textures/objects/tank/turr-blue.png</turr_blue>
         <turr_shadow>textures/objects/tank/turr_shadow.png</turr_shadow>
+        <cycle_bar_tex>textures/objects/tank/circle-loading-bar.png</cycle_bar_tex>
       </spritesheets>
       <sounds>
         <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>

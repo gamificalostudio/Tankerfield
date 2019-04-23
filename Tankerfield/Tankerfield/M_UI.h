@@ -7,22 +7,23 @@
 #include "SDL_ttf/include/SDL_ttf.h"
 
 #include "Module.h"
+#include "Obj_Tank.h"
 #include "Animation.h"
 #include "Point.h"
 
-
 #define CURSOR_WIDTH 2
+#define BTW_FOCUS_TIME 150
+#define UI_DEAD_ZONE 5000
 
 using namespace std;
 typedef string String;
 
-enum class ELEMENT_STATE;
-class UI_Element;
-class Player_GUI;
-class General_HUD;
-class Camera;
 class M_UI;
+class Camera;
+enum class ELEMENT_STATE;
+enum class GUI_TYPE;
 
+class UI_Element;
 class UI_Listener;
 class UI_Image;
 class UI_Bar;
@@ -48,12 +49,74 @@ struct UI_CheckboxDef;
 struct UI_TextPanelDef;
 struct UI_InGameElementDef;
 
-enum class ClickState
+enum class FocusState
 {
 	ENTER,
 	EXIT,
 	REPEAT,
 	NONE
+};
+
+enum class FOCUS_AXIS
+{
+	X,
+	Y,
+	BOTH
+};
+
+enum class UI_INPUT_TYPE
+{
+	NO_TYPE,
+	CONTROLLER,
+	MOUSE,
+	KEYBOARD
+};
+
+enum class CONTROLLER_DIR
+{
+	NO_DIR,
+	UP,
+	DOWN,
+	RIGHT,
+	LEFT
+};
+
+enum class CONTROLLER_BUTTON : int
+{
+	NONE = -1,
+	A,
+	B,
+	Y,
+	X,
+	L,
+	LT,
+	LB,
+	R,
+	RT,
+	RB,
+	MAX
+};
+
+enum class ICON_SIZE : int
+{
+	NONE = -1,
+	SMALL,
+	BIG,
+	MAX
+};
+
+enum class ICON_TYPE : int
+{
+	NONE = -1,
+	WEAPON_BASIC,
+	WEAPON_DOUBLE_MISSILE,
+	WEAPON_HEALING_SHOT,
+	WEAPON_LASER,
+	WEAPON_FLAMETHROWER,
+	ITEM_HEALTH_BAG,
+	ITEM_HAPPY_HOUR,
+	ITEM_INSTANT_HELP,
+	MAX
 };
 
 class UI_Listener
@@ -109,44 +172,6 @@ class M_UI : public Module
 {
 public:
 
-	enum class GAMEPAD_BUTTON: int
-	{
-		NONE = -1,
-		A,
-		B,
-		Y,
-		X,
-		L,
-		LT,
-		LB,
-		R,
-		RT,
-		RB,
-		MAX
-	};
-
-	enum class ICON_SIZE : int
-	{
-		NONE = -1,
-		SMALL,
-		BIG,
-		MAX
-	};
-
-	enum class ICON_TYPE : int
-	{
-		NONE = -1,
-		WEAPON_BASIC,
-		WEAPON_DOUBLE_MISSILE,
-		WEAPON_HEALING_SHOT,
-		WEAPON_LASER,
-		WEAPON_FLAMETHROWER,
-		ITEM_HEALTH_BAG,
-		ITEM_HAPPY_HOUR,
-		ITEM_INSTANT_HELP,
-		MAX
-	};
-
 	M_UI();
 
 	virtual ~M_UI();
@@ -165,9 +190,13 @@ public:
 
 	bool Reset();
 
+	Player_GUI* AddPlayerGUI( GUI_TYPE type, Obj_Tank* player);
+
+	void AddInteractiveElement(UI_Element * element);
+
 	SDL_Texture* GetAtlas() const;
 
-	ClickState GetClickState() const;
+	FocusState GetClickState() const;
 
 	// Creation functions ---------------------------------------------------------
 
@@ -199,13 +228,24 @@ public:
 
 	// Object functions ----------------------------------------------------------
 
-	UI_Element*  GetClickedObject();
+	UI_Element*  GetSelectedElement();
 
 	UI_Element* GetScreen();
 
+	UI_INPUT_TYPE GetInputType() const;
+
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
+
 private:
+
+	void UpdateElements(float dt);
+
+	void FocusMouse();
+
+	void FocusController();
+
+	UI_Element* GetNearestElement(UI_Element * element, CONTROLLER_DIR dir);
 
 	bool SelectClickedObject();
 
@@ -229,6 +269,8 @@ private:
 
 	list<UI_Element*> ig_elements_list;
 
+	list<UI_Element*> interactive_elements;
+
 	list<Player_GUI*> players_guis;
 
 	list<UI_Fade_FX*> active_fxs;
@@ -239,22 +281,15 @@ private:
 
 	UI_Element* selected_element = nullptr;
 
-	ClickState click_state = ClickState::NONE;
+	FocusState click_state = FocusState::NONE;
 
+	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
+
+	Timer btw_focus_timer;
 
 public:
-	// Mouse ----------------------------------------------
-	General_HUD* general_hud = nullptr;
 
 	Player_GUI* current_gui = nullptr;
-
-	Player_GUI  *player_1_gui = nullptr;
-
-	Player_GUI  *player_2_gui = nullptr;
-
-	Player_GUI  *player_3_gui = nullptr;
-
-	Player_GUI  *player_4_gui = nullptr;
 
 	Camera*     current_camera = nullptr;
 
@@ -262,15 +297,13 @@ public:
 
 	fPoint		mouse_offset;
 
+	FOCUS_AXIS  able_axis = FOCUS_AXIS::BOTH;
+
 	// Assets --------------------------------------------
 
-	SDL_Rect button_sprites[(int)GAMEPAD_BUTTON::MAX];
+	SDL_Rect button_sprites[(int)CONTROLLER_BUTTON::MAX];
 
 	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
-
-	_TTF_Font*  font_open_sants_bold_12 = nullptr;
-
-	_TTF_Font*  rounds_font = nullptr;
 
 	Animation	green_arrow_anim;
 

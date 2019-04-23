@@ -66,8 +66,15 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
+	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
+
+	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
+	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
+	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
+	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
+
 	//Textures-------------------------------------------------
-	//base
+	//-- Base
 	base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
 	base_tex_green = app->tex->Load(tank_node.child("spritesheets").child("base_green").text().as_string());
 	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
@@ -76,19 +83,20 @@ bool Obj_Tank::Start()
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	turr_tex = app->tex->Load(tank_node.child("spritesheets").child("turr").text().as_string());
+	//-- Turr
+	std::string aux = tank_node.child("spritesheets").child("turr_orange").text().as_string();
+	turr_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("turr_orange").text().as_string());
+	turr_tex_green = app->tex->Load(tank_node.child("spritesheets").child("turr_green").text().as_string());
+	turr_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("turr_pink").text().as_string());
+	turr_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("turr_blue").text().as_string());
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
+	//-- Revive 
+	cycle_bar_tex = app->tex->Load(tank_node.child("spritesheets").child("cycle_bar_tex").text().as_string());
+	cycle_bar_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("cycle-progress-bar"));
 
+	//sfx -------------------------------------------------------------------------------------------------------
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
-
-	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
-
-	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
-	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
-	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
-	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
-
 	movement_sfx = app->audio->LoadFx("audio/Fx/vlanstab.wav");
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
@@ -103,6 +111,7 @@ bool Obj_Tank::Start()
 		kb_interact	= SDL_SCANCODE_E;
 		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_green;
+		turr_tex = turr_tex_green;
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -113,6 +122,8 @@ bool Obj_Tank::Start()
 		kb_interact = SDL_SCANCODE_Y;
 		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_blue;
+		turr_tex = turr_tex_blue;
+
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -123,6 +134,8 @@ bool Obj_Tank::Start()
 		kb_interact = SDL_SCANCODE_O;
 		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
+		turr_tex = turr_tex_pink;
+
 		break;
 	case 3:
 		kb_up		= SDL_SCANCODE_KP_8;
@@ -133,6 +146,8 @@ bool Obj_Tank::Start()
 		kb_interact	= SDL_SCANCODE_KP_9;
 		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_orange;
+		turr_tex = turr_tex_orange;
+
 		break;
 	default:
 		curr_tex = base_tex_orange;
@@ -168,6 +183,7 @@ bool Obj_Tank::Start()
 	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
 	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
+	charged_shot_function[(uint)WEAPON::LASER_SHOT]		= &Obj_Tank::ShootLaserShot;
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
@@ -221,21 +237,21 @@ bool Obj_Tank::Start()
 
 	tutorial_move = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_move->single_camera = camera_player;
-	tutorial_move->AddButtonHelper(M_UI::GAMEPAD_BUTTON::L, {0.f, 100.f});
+	tutorial_move->AddButtonHelper(CONTROLLER_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
 	tutorial_move_time = 2500;
 	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
-	tutorial_revive->AddButtonHelper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f });
+	tutorial_revive->AddButtonHelper(CONTROLLER_BUTTON::X, { 0.f, 100.f });
 	tutorial_revive->AddTextHelper("REVIVE", { 0.f, 70.f });
 	tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 	////- PickUp
 	tutorial_pick_up = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_pick_up->single_camera = camera_player;
-	tutorial_pick_up->AddButtonHelper(M_UI::GAMEPAD_BUTTON::X, { 0.f, 100.f });
+	tutorial_pick_up->AddButtonHelper(CONTROLLER_BUTTON::X, { 0.f, 100.f });
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
@@ -267,6 +283,11 @@ bool Obj_Tank::Update(float dt)
 	ReviveTank();
 	CameraMovement(dt);//Camera moves after the player
 	InputReadyKeyboard();
+
+	if (app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+	{
+		SetWeapon(WEAPON::HEALING_SHOT, 1);
+	}
 
 	return true;
 }
@@ -460,7 +481,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 																							//only appears when hes dead and disappear when he has been revived
 	//DEBUG
-	//	iPoint debug_mouse_pos = { 0, 0 };
+	{
+		//	iPoint debug_mouse_pos = { 0, 0 };
 //	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
 
 //	debug_mouse_pos.x += camera_player->rect.x;
@@ -474,13 +496,28 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 //	{
 	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
 //	}
+	}
+
 
 
 	return true;
 }
 
-bool Obj_Tank::DrawShadow(Camera * camera)
+bool Obj_Tank::DrawShadow(Camera * camera, float dt)
 {
+	// Revive cycle =================================
+	if (draw_revive_cycle_bar)
+	{
+		SDL_Rect rect = cycle_bar_anim.GetFrame(0);
+		app->render->BlitScaled(
+			cycle_bar_tex,
+			pos_screen.x - rect.w*0.5f * 0.5f,
+			pos_screen.y - rect.h*0.5f * 0.5f,
+			camera,
+			&rect,0.5f);
+		cycle_bar_anim.NextFrame(dt);
+	}
+
 	// Base =========================================
 	app->render->Blit(
 		base_shadow_tex,
@@ -510,11 +547,19 @@ void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
-		Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
-		new_particle->tank = this;
-		if (GetLife()<GetMaxLife())
+		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
+		if (bullet->tank_parent != this) // he does not heal himself
 		{
-			SetLife(GetLife() + weapon_info.bullet_healing);
+			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+			new_particle->tank = this;
+			if (GetLife() < GetMaxLife())
+			{
+				SetLife(GetLife() + weapon_info.bullet_healing);
+			}
+		}
+		else
+		{
+			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
 	}
 
@@ -860,14 +905,18 @@ void Obj_Tank::ReviveTank()
 			{
 				reviving_tank[(*iter)->tank_num] = true;
 				revive_timer[(*iter)->tank_num].Start();
+				(*iter)->cycle_bar_anim.Reset();
+				(*iter)->draw_revive_cycle_bar = true;
 				
 			}
 			else if (ReleaseInteract())
 			{
 				reviving_tank[(*iter)->tank_num] = false;
+				(*iter)->draw_revive_cycle_bar = false;
+				(*iter)->cycle_bar_anim.Reset();
 			}
 
-			if (reviving_tank[(*iter)->tank_num] && revive_timer[(*iter)->tank_num].Read() > revive_time)
+			if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
 			{
 				//Revive the tank
 				(*iter)->curr_speed = speed;
@@ -875,6 +924,8 @@ void Obj_Tank::ReviveTank()
 				reviving_tank[(*iter)->tank_num] = false;
 				(*iter)->fire_dead = false;
 				app->audio->PlayFx(revive_sfx);
+				(*iter)->draw_revive_cycle_bar = false;
+				(*iter)->cycle_bar_anim.Reset();
 			}
 		}
 		else
@@ -961,6 +1012,8 @@ void Obj_Tank::ShootHealingShot()
 		weapon_info.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	heal_bullet->tank_parent = this;
 }
 
 void Obj_Tank::ShootLaserShot()
@@ -974,8 +1027,6 @@ void Obj_Tank::ShootLaserShot()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
-
-
 
 void Obj_Tank::Item()
 {

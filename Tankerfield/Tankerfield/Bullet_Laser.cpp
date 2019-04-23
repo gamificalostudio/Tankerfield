@@ -34,7 +34,7 @@ bool Laser_Bullet::Start()
 
 	draw_offset = { 35, 14 };
 
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::FRIENDLY_BULLET, 0.f, this);
+	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET_LASER, 0.f, this);
 	coll->SetObjOffset({ -0.25f, -0.25f });
 
 	return true;

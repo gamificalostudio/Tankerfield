@@ -29,6 +29,7 @@ public:
 	float  bullet_life_ms		= 0.f;
 	float  time_between_bullets	= 0.f;
 	int		bullet_healing = 0;
+	//Obj_Tank* tank_parent		= nullptr;
 };
 
 #endif

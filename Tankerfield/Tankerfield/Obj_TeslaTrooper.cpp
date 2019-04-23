@@ -27,6 +27,8 @@
 #include "M_AnimationBank.h"
 #include "M_Scene.h"
 #include "Obj_Tank.h"
+#include "Bullet_Laser.h"
+#include "Obj_Bullet.h"
 
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
@@ -41,16 +43,21 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 
 	//Assets loading ------------------------------------------------------------------------------------------------------------------------
+	idle.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
 	death.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("death"));
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
+
 	curr_anim = &walk;
 	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav",20);
+	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/hit.wav", 25);
+	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
+
 	app->audio->PlayFx(sfx_spawn);
 	draw = false;
 
@@ -99,27 +106,29 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 void Obj_TeslaTrooper::Attack()
 {
-	if (target != nullptr
-		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
-		&& perf_timer.ReadMs() > (double)attack_frequency)
+	if (life > 0)
 	{
-		curr_anim = &attack;
-		target->SetLife(target->GetLife() - attack_damage);
-		perf_timer.Start();
-		app->audio->PlayFx(sfx_attack);
-	}
+		if (target != nullptr
+			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+			&& perf_timer.ReadMs() > (double)attack_frequency)
+		{
+			curr_anim = &attack;
+			target->SetLife(target->GetLife() - attack_damage);
+			perf_timer.Start();
+			app->audio->PlayFx(sfx_attack);
+		}
 
-	if (curr_anim == &attack&&curr_anim->Finished())
-	{
-		curr_anim = &walk;
-		attack.Reset();
+		if (curr_anim == &attack
+			&& curr_anim->Finished())
+		{
+			curr_anim = &walk;
+			attack.Reset();
+		}
 	}
-
 }
 
 void Obj_TeslaTrooper::Movement(float &dt)
 {
-	
 	switch (state)
 	{
 	case TROOPER_STATE::APPEAR:
@@ -230,9 +239,15 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			state = TROOPER_STATE::TELEPORT_IN;
 			in_portal = &portal_animation;
 			angle = -90;
-			teleport_timer.Start();
+		
 			teleport_anim_duration.Start();
 		}
+		else
+		{
+			state = TROOPER_STATE::GET_PATH;
+
+		}
+		teleport_timer.Start();
 	}
 	break;
 	case TROOPER_STATE::TELEPORT_IN:
@@ -246,6 +261,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			draw = false;
 			if (in_portal->Finished())
 			{
+				in_portal->Reset();
 				pos_map = teleport_spawnpoint->pos;
 				state = TROOPER_STATE::TELEPORT_OUT;
 				teleport_timer.Start();
@@ -277,6 +293,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		if (curr_anim != &death)
 		{
 			curr_anim = &death;	
+			app->audio->PlayFx(sfx_death);
 			if (coll != nullptr)
 			{
 				coll->Destroy();
@@ -371,6 +388,49 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 			app->pick_manager->PickUpFromEnemy(pos_map);
 			state = TROOPER_STATE::DEAD;
 		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
+	}
+
+	else if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	{
+		Laser_Bullet* bullet = (Laser_Bullet*)collider->GetObj();
+		for (std::vector<Object*>::iterator iterator = bullet->hitted_enemies.begin(); iterator != bullet->hitted_enemies.end(); ++iterator)
+		{
+			if ((*iterator) == this)
+			{
+				to_hit = false;
+				break;
+			}
+			else
+			{
+				to_hit = true;
+			}
+		}
+		if (to_hit || bullet->hitted_enemies.size() == 0)
+		{
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = TROOPER_STATE::DEAD;
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+				bullet->hitted_enemies.push_back(this);
+			}
+			
+
+		}
+
 	}
 }
 

@@ -127,7 +127,6 @@ public:
 	fPoint                section_offset = { 0.f, 0.f };
 	fPoint                screen_offset = { 0.f, 0.f };
 	bool			      is_draggable = false;
-	bool				  is_interactive = false;
 	bool                  is_in_game = false;
 	Camera*               single_camera = nullptr;
 	Camera*               not_in_camera = nullptr;
@@ -141,6 +140,7 @@ protected:
 	Pivot                 pivot;
 	bool                  to_destroy = false;
 	UI_Listener         * listener = nullptr;
+	bool				  is_interactive = false;
 
 	// Properties ========================================
 

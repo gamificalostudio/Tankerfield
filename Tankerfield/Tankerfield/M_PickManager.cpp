@@ -36,13 +36,19 @@ bool M_PickManager::Start()
 }
 
 
-void M_PickManager::PickUpFromEnemy(fPoint pos_map)
+void M_PickManager::PickUpFromEnemy(fPoint pos_map, PICKUP_TYPE type_of_pick_up)
 {
 	uint probability = rand() % 100;
-
-	if (probability < percentage_spawn_item_from_enemy)
+	if (type_of_pick_up == PICKUP_TYPE::MAX_TYPES) // if you do not pass a type of pickUp, create an item with the probability defined in the config.
 	{
-		CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
+		if (probability < percentage_spawn_item_from_enemy)
+		{
+			CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
+		}
+	}
+	else //if you pass a type of pickUp, create it directly. For direct rewards.
+	{
+		CreatePickUp(pos_map, type_of_pick_up);
 	}
 }
 
@@ -52,7 +58,7 @@ void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, ui
 
 	ret->GenerationOfPickUp(type_of_pick_up, levels_to_add);
 
-	}
+}
 
 Obj_RewardBox* M_PickManager::CreateRewardBox(fPoint pos_map)
 {

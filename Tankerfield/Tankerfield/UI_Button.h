@@ -16,11 +16,12 @@ struct UI_ButtonDef: public UI_ElementDef
 {
 public:
 	UI_ButtonDef() {}
-	UI_ButtonDef(SDL_Rect idle_rect, SDL_Rect hover_rect, SDL_Rect pushed_rect) : idle_rect(idle_rect), hover_rect(hover_rect), pushed_rect(pushed_rect) {}
+	UI_ButtonDef(const SDL_Rect idle_rect, const  SDL_Rect pushed_rect,const  SDL_Rect normal_fx,const SDL_Rect focus_fx) : idle_rect(idle_rect), pushed_rect(pushed_rect) , normal_fx(normal_fx),focus_fx(focus_fx){}
 
 	SDL_Rect idle_rect = {0,0,0,0};
 	SDL_Rect pushed_rect = { 0,0,0,0 };
-	SDL_Rect hover_rect = { 0,0,0,0 };
+	SDL_Rect focus_fx = { 0,0,0,0 };
+	SDL_Rect normal_fx = { 0,0,0,0 };
 };
 
 class UI_Button : public UI_Element, public UI_Listener
@@ -32,15 +33,13 @@ public:
 
 	virtual ~UI_Button();
 
+	bool PreUpdate();
+
 	bool Draw();
 
 	bool SetLabel(const fPoint position, const UI_LabelDef definition);
 
-	void SetDefinition(UI_ButtonDef definition);
-
-private:
-
-	bool PreUpdate();
+	void SetDefinition(const UI_ButtonDef def);
 
 private:
 

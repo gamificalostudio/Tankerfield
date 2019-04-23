@@ -43,7 +43,7 @@ Obj_RewardBox::~Obj_RewardBox()
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET || collider->GetTag() == Collider::TAG::FRIENDLY_BULLET)
+	if (collider->GetTag() == Collider::TAG::BULLET || collider->GetTag() == Collider::TAG::FRIENDLY_BULLET || collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
 		GetDamage(collider->damage);
 	}
@@ -110,7 +110,10 @@ void Obj_RewardBox::Dead()
 		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
 	}
 
-	my_spawn_point->occupied = false;
+	if (my_spawn_point != nullptr)
+	{
+		my_spawn_point->occupied = false;
+	}
 	to_remove = true;
 
 	app->audio->PlayFx(reward_box_dead_sound_int);

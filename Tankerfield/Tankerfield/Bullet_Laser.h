@@ -6,6 +6,7 @@
 #include "Obj_Bullet.h"
 
 struct SDL_Texture;
+class Obj_TeslaTrooper;
 
 class Laser_Bullet : public Obj_Bullet
 {
@@ -21,6 +22,9 @@ public:
 public:
 	bool Start();
 	Collider* explosion = nullptr;
+
+public:
+	std::vector<Object*> hitted_enemies; //object to include all types of enemies
 
 private:
 

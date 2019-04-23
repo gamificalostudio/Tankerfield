@@ -8,6 +8,7 @@ UI_Quad::UI_Quad(const fPoint position, const UI_QuadDef def, UI_Listener * list
 
 bool UI_Quad::Draw()
 {
-	app->render->DrawQuad(sprite_section, color.r, color.g, color.b, color.a * (alpha / 255.F), true, false);
+	SDL_Rect draw_rect = GetDrawRect();
+	app->render->DrawQuad(draw_rect, color.r, color.g, color.b, color.a * (alpha / 255.F), true, false);
 	return true;
 }

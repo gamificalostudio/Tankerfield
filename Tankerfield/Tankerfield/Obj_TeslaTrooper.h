@@ -80,8 +80,9 @@ private:
 	PerfTimer perf_timer;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
+	bool to_hit = true;
 
-
+	Animation idle;
 	Animation walk;
 	Animation attack;
 	Animation death;
@@ -98,6 +99,8 @@ private:
 
 	uint sfx_attack = 0;
 	uint sfx_spawn = 0;
+	uint sfx_hit = 0;
+	uint sfx_death = 0;
 
 	SpawnPoint* teleport_spawnpoint = nullptr;
 
