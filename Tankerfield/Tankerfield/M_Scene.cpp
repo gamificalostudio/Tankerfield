@@ -182,6 +182,11 @@ bool M_Scene::PreUpdate()
 		fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
 		app->objectmanager->CreateObject(ObjectType::EXPLOSION, map_mouse_pos);
 	}
+	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
+	{
+		++this->round;
+	}
+
 	return true;
 }
 
@@ -278,8 +283,13 @@ bool M_Scene::Update(float dt)
 
 	case WaveStat::WIN_GAME:
 		
-		// TODO
-		int iiiii = 0;
+		player_1_gui->Fade_GUI(false);
+		player_2_gui->Fade_GUI(false);
+		player_3_gui->Fade_GUI(false);
+		player_4_gui->Fade_GUI(false);
+		general_hud->FadeGeneralHUD(false);
+		general_hud->FadeWinScreen(true);
+		stat_of_wave = WaveStat::NO_TYPE;
 
 		break;
 	}
@@ -289,6 +299,7 @@ bool M_Scene::Update(float dt)
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
 	}
+	
 	return true;
 }
 
@@ -306,16 +317,14 @@ bool M_Scene::PostUpdate(float dt)
 		perform_round_check = true;
 	}
 
-	if (perform_round_check)
+
+	if (perform_round_check
+		&& this->round >= rounds_to_win + 1
+		&& !win_game)
 	{
-		if (this->round == rounds_to_win + 1)
-		{
-			stat_of_wave = WaveStat::WIN_GAME;
-		}
-
-		perform_round_check = false;
+		stat_of_wave = WaveStat::WIN_GAME;
+		win_game = true;
 	}
-
 	return ret;
 }
 
