@@ -53,7 +53,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	app->audio->PlayFx(sfx_spawn);
 
 	state = BRUTE_STATE::SPAWN;
-	speed = 1.f;
+	speed = 1.5f;
 	detection_range = 10.0f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;

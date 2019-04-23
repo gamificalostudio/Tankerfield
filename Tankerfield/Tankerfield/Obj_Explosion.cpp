@@ -35,18 +35,21 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	coll_w = 3.f;
 	coll_h = 3.f;
 
-	coll = app->collision->AddCollider(
-		pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
-		coll_w,
-		coll_h,
-		Collider::TAG::BULLET, 200.f,
-		nullptr);
-
 	level = weapon_info.level_weapon;
 	damage = original_damage * level;
 
-	coll = app->collision->AddCollider(pos_map, 3.f, 3.f, Collider::TAG::BULLET, damage, nullptr);
+	coll = app->collision->AddCollider(
+		pos_map - fPoint(coll_w, coll_h),
+		coll_w,
+		coll_h,
+		Collider::TAG::BULLET, damage,
+		nullptr);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+
+	
+
+	
+	
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
 }
