@@ -19,7 +19,7 @@ void Bullet_Missile::OnTrigger(Collider * collider_1)
 	if (player != nullptr)
 	{
 		Obj_Explosion* explosion_obj = (Obj_Explosion*)app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
-		explosion_obj->SetExplosionDamage(player->GetWeaponInfo());
+		//explosion_obj->SetExplosionDamage(player->GetWeaponInfo());
 	}
 
 	to_remove = true;

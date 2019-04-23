@@ -68,16 +68,16 @@ bool Obj_Explosion::Update(float dt)
 	return true;
 }
 
-void Obj_Explosion::SetExplosionDamage(WeaponInfo info)
-{
-	if (coll != nullptr)
-	{
-		coll->damage = original_damage * info.level_weapon;
-		// TODO HARCODE 
-		if (coll->damage == 0)
-		{
-			coll->damage = original_damage;
-		}
-	}
-	
-}
+//void Obj_Explosion::SetExplosionDamage(WeaponInfo info)
+//{
+//	if (coll != nullptr)
+//	{
+//		coll->damage = original_damage * info.level_weapon;
+//		// TODO HARCODE 
+//		if (coll->damage == 0)
+//		{
+//			coll->damage = original_damage;
+//		}
+//	}
+//	
+//}
