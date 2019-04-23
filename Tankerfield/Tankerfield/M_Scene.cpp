@@ -50,9 +50,10 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
+	// Rounds to win the game
 	rounds_to_win = config.child("rounds_to_win").attribute("value").as_int();
 
-	/* Wave System setup */
+	// Wave System setup
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
@@ -208,6 +209,7 @@ bool M_Scene::Update(float dt)
 	{
 		/* Generate new wave, restart the vars and increase units number */
 		NewWave();
+		current_wave++;
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
@@ -283,6 +285,20 @@ bool M_Scene::PostUpdate(float dt)
 	bool ret = true;
 	//
 	//DebugPathfinding();
+
+	/* Keep track if we reached the maximum round and, therefore, win the game */
+	this->accumulated_time += dt * 1000.0f;
+	if (accumulated_time >= time_check_frequency)
+	{
+		perform_round_check = true;
+	}
+
+	if (perform_round_check)
+	{
+
+
+		perform_round_check = false;
+	}
 
 	return ret;
 }
