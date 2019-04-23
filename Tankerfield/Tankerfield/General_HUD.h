@@ -19,7 +19,9 @@ public:
 
 	void SetRoundNumber(int round);
 
-	void FadeGameOver(bool fade_on);
+	void FadeGameOverScreen(bool fade_on, int round = -1);
+
+	void FadeWinScreen(bool fade_on);
 
 
 private:
@@ -39,6 +41,12 @@ private:
 	UI_Image* game_word = nullptr;
 
 	UI_Image* over_word = nullptr;
+
+	UI_Image* you_word = nullptr;
+
+	UI_Image* survived_word = nullptr;
+
+	UI_Label* you_survived = nullptr;
 
 	UI_Quad*  background = nullptr;
 
