@@ -3,13 +3,16 @@
 
 #include "SDL/include/SDL_rect.h"
 #include "Module.h"
+#include "M_UI.h"
 
 struct SDL_Texture;
 struct Controller;
 
 class UI_Image;
+class UI_Button;
 
-class M_MainMenu : public Module
+
+class M_MainMenu : public Module, public UI_Listener
 {
 public:
 
@@ -26,6 +29,8 @@ public:
 	bool CleanUp() override;
 
 	bool Reset();
+	
+	bool OnClick(UI_Element* element);
 
 public:
 
@@ -34,11 +39,12 @@ public:
 private:
 
 	SDL_Texture     * background_texture = nullptr;
-	UI_Image		* logo = nullptr;
-	//UI_Button		* single_player = nullptr;
-	//UI_Button		* multi_player = nullptr;
-	//UI_Button		* exit = nullptr;
+	UI_Image		* logo_button = nullptr;
+	UI_Button		* single_player_button = nullptr;
+	UI_Button		* multi_player_button = nullptr;
+	UI_Button		* exit_button = nullptr;
 
+	bool              exit_game = false;
 };
 
 #endif // __j1SCENE_H__

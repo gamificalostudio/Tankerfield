@@ -236,7 +236,7 @@ UI_IG_Helper::UI_IG_Helper(const fPoint position, const UI_InGameElementDef defi
 {
 }
 
-void UI_IG_Helper::AddButtonHelper( const GAMEPAD_BUTTON button_type, const fPoint offset)
+void UI_IG_Helper::AddButtonHelper( const CONTROLLER_BUTTON button_type, const fPoint offset)
 {
 	UI_ImageDef def(app->ui->button_sprites[(int)button_type]);
 	def.is_in_game = true;

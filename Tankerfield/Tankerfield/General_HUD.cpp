@@ -59,16 +59,60 @@ General_HUD::General_HUD()
 
 General_HUD::~General_HUD()
 {
-	round_number_label	  ->Destroy();
-	round_element		  ->Destroy();
-	round_fx			  ->Destroy();
-	left_tank_life		  ->Destroy();
-	right_tank_life		  ->Destroy();
-	game_word			  ->Destroy();
-	over_word			  ->Destroy();
-	background			  ->Destroy();
-	vertical_split_rect   ->Destroy();
-	horizontal_split_rect ->Destroy();
+	if (app->on_clean_up == false)
+	{
+		if (round_number_label != nullptr)
+		{
+			round_number_label->Destroy();
+		}
+		if (round_element != nullptr)
+		{
+			round_element->Destroy();
+		}
+		if (round_fx != nullptr)
+		{
+			round_fx->Destroy();
+		}
+		if (left_tank_life != nullptr)
+		{
+			left_tank_life->Destroy();
+		}
+		if (right_tank_life != nullptr)
+		{
+			right_tank_life->Destroy();
+		}
+		if (game_word != nullptr)
+		{
+			game_word->Destroy();
+		}
+		if (over_word != nullptr)
+		{
+			over_word->Destroy();
+		}
+		if (background != nullptr)
+		{
+			background->Destroy();
+		}
+		if (vertical_split_rect != nullptr)
+		{
+			vertical_split_rect->Destroy();
+		}
+		if (horizontal_split_rect != nullptr)
+		{
+			horizontal_split_rect->Destroy();
+		}
+	}
+	
+	round_number_label = nullptr;
+	round_element = nullptr;
+	round_fx = nullptr;
+	left_tank_life = nullptr;
+	right_tank_life = nullptr;
+	game_word = nullptr;
+	over_word = nullptr;
+	background = nullptr;
+	vertical_split_rect = nullptr;
+	horizontal_split_rect = nullptr;
 }
 
 void General_HUD::FadeGeneralHUD(bool fade_on)

@@ -221,21 +221,21 @@ bool Obj_Tank::Start()
 
 	tutorial_move = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_move->single_camera = camera_player;
-	tutorial_move->AddButtonHelper(GAMEPAD_BUTTON::L, {0.f, 100.f});
+	tutorial_move->AddButtonHelper(CONTROLLER_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
 	tutorial_move_time = 2500;
 	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
-	tutorial_revive->AddButtonHelper(GAMEPAD_BUTTON::X, { 0.f, 100.f });
+	tutorial_revive->AddButtonHelper(CONTROLLER_BUTTON::X, { 0.f, 100.f });
 	tutorial_revive->AddTextHelper("REVIVE", { 0.f, 70.f });
 	tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 	////- PickUp
 	tutorial_pick_up = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_pick_up->single_camera = camera_player;
-	tutorial_pick_up->AddButtonHelper(GAMEPAD_BUTTON::X, { 0.f, 100.f });
+	tutorial_pick_up->AddButtonHelper(CONTROLLER_BUTTON::X, { 0.f, 100.f });
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 

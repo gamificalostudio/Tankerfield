@@ -12,6 +12,8 @@
 #include "Point.h"
 
 #define CURSOR_WIDTH 2
+#define BTW_FOCUS_TIME 150
+#define UI_DEAD_ZONE 5000
 
 using namespace std;
 typedef string String;
@@ -47,7 +49,7 @@ struct UI_CheckboxDef;
 struct UI_TextPanelDef;
 struct UI_InGameElementDef;
 
-enum class ClickState
+enum class FocusState
 {
 	ENTER,
 	EXIT,
@@ -55,7 +57,31 @@ enum class ClickState
 	NONE
 };
 
-enum class GAMEPAD_BUTTON : int
+enum class FOCUS_AXIS
+{
+	X,
+	Y,
+	BOTH
+};
+
+enum class UI_INPUT_TYPE
+{
+	NO_TYPE,
+	CONTROLLER,
+	MOUSE,
+	KEYBOARD
+};
+
+enum class CONTROLLER_DIR
+{
+	NO_DIR,
+	UP,
+	DOWN,
+	RIGHT,
+	LEFT
+};
+
+enum class CONTROLLER_BUTTON : int
 {
 	NONE = -1,
 	A,
@@ -166,9 +192,11 @@ public:
 
 	Player_GUI* AddPlayerGUI( GUI_TYPE type, Obj_Tank* player);
 
+	void AddInteractiveElement(UI_Element * element);
+
 	SDL_Texture* GetAtlas() const;
 
-	ClickState GetClickState() const;
+	FocusState GetClickState() const;
 
 	// Creation functions ---------------------------------------------------------
 
@@ -200,13 +228,24 @@ public:
 
 	// Object functions ----------------------------------------------------------
 
-	UI_Element*  GetClickedObject();
+	UI_Element*  GetSelectedElement();
 
 	UI_Element* GetScreen();
 
+	UI_INPUT_TYPE GetInputType() const;
+
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
+
 private:
+
+	void UpdateElements(float dt);
+
+	void FocusMouse();
+
+	void FocusController();
+
+	UI_Element* GetNearestElement(UI_Element * element, CONTROLLER_DIR dir);
 
 	bool SelectClickedObject();
 
@@ -230,6 +269,8 @@ private:
 
 	list<UI_Element*> ig_elements_list;
 
+	list<UI_Element*> interactive_elements;
+
 	list<Player_GUI*> players_guis;
 
 	list<UI_Fade_FX*> active_fxs;
@@ -240,8 +281,11 @@ private:
 
 	UI_Element* selected_element = nullptr;
 
-	ClickState click_state = ClickState::NONE;
+	FocusState click_state = FocusState::NONE;
 
+	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
+
+	Timer btw_focus_timer;
 
 public:
 
@@ -253,9 +297,11 @@ public:
 
 	fPoint		mouse_offset;
 
+	FOCUS_AXIS  able_axis = FOCUS_AXIS::BOTH;
+
 	// Assets --------------------------------------------
 
-	SDL_Rect button_sprites[(int)GAMEPAD_BUTTON::MAX];
+	SDL_Rect button_sprites[(int)CONTROLLER_BUTTON::MAX];
 
 	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
 

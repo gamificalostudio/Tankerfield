@@ -262,7 +262,7 @@ void Player_GUI::SetHelper()
 
 }
 
-void Player_GUI::AddButtonHelper( const GAMEPAD_BUTTON button_type)
+void Player_GUI::AddButtonHelper( const CONTROLLER_BUTTON button_type)
 {
 	app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)button_type]));
 

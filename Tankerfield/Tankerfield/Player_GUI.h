@@ -16,7 +16,7 @@ class UI_Element;
 class UI_InGameElement;
 class M_UI;
 
-enum class GAMEPAD_BUTTON;
+enum class CONTROLLER_BUTTON;
 enum class WEAPON;
 enum class ObjectType;
 
@@ -41,7 +41,7 @@ public:
 
 	void SetHelper();
 
-	void AddButtonHelper(const GAMEPAD_BUTTON button_type);
+	void AddButtonHelper(const CONTROLLER_BUTTON button_type);
 
 	void AddTextHelper(const std::string text);
 

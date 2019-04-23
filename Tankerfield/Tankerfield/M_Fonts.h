@@ -1,7 +1,7 @@
 #ifndef __M_FONTS_H__
 #define __M_FONTS_H__
 
-#include <map>
+#include <list>
 
 #include "SDL\include\SDL_pixels.h"
 
@@ -42,11 +42,13 @@ public:
 
 public:
 
-	map <string, _TTF_Font*>	fonts;
+	list <_TTF_Font*>	fonts;
 
 	_TTF_Font*			        default_font = nullptr;
 	_TTF_Font*					font_open_sants_bold_12 = nullptr;
 	_TTF_Font*					rounds_font = nullptr;
+	_TTF_Font*					button_font = nullptr;
+	
 };
 
 

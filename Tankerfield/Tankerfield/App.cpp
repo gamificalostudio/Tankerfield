@@ -53,6 +53,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
   
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
+
 	AddModule(input);
 	AddModule(win);
 	AddModule(tex);
@@ -60,18 +61,20 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(pathfinding);
 	AddModule(map);
-	AddModule(scmanager);
 	AddModule(scene);
-	//AddModule(main_menu);
+	AddModule(main_menu);
 	AddModule(objectmanager);
 	AddModule(pick_manager);
 	AddModule(reward_zone_manager);
 	AddModule(collision);
 	AddModule(ui);
 	AddModule(anim_bank);
+	AddModule(scmanager);
 	// render last to swap buffer
 	AddModule(render);
 	
+	scene->active = false;
+
 	PERF_PEEK(ptimer);
 }
 
@@ -92,7 +95,6 @@ App::~App()
 
 void App::AddModule(Module* module)
 {
-	module->Init();
 	modules.push_back(module);
 }
 
@@ -161,7 +163,11 @@ bool App::Start()
 
 	while (item != modules.end())
 	{
-		ret = (*item)->Start();
+		if ((*item)->active == true)
+		{
+			(*item)->enabled = true;
+			ret = (*item)->Start();
+		}
 		item++;
 	}
 	
