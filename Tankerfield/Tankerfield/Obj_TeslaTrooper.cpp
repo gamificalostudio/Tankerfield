@@ -376,9 +376,33 @@ bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 	return range_pos.IsPointIn(goal);
 }
 
+void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
+{
+	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	{
+
+		life -= collider->damage;
+
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
+
+		if (life <= 0)
+		{
+			// DROP A PICK UP ITEM 
+			app->pick_manager->PickUpFromEnemy(pos_map);
+			state = TROOPER_STATE::DEAD;
+		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
+
+	}
+}
+
 void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 {
-	if ( (collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET) )
+	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
@@ -396,42 +420,5 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		}
 	}
 
-	else if (collider->GetTag() == Collider::TAG::BULLET_LASER)
-	{
-		Laser_Bullet* bullet = (Laser_Bullet*)collider->GetObj();
-		for (std::vector<Object*>::iterator iterator = bullet->hitted_enemies.begin(); iterator != bullet->hitted_enemies.end(); ++iterator)
-		{
-			if ((*iterator) == this)
-			{
-				to_hit = false;
-				break;
-			}
-			else
-			{
-				to_hit = true;
-			}
-		}
-		if (to_hit || bullet->hitted_enemies.size() == 0)
-		{
-			life -= collider->damage;
 
-			damaged_sprite_timer.Start();
-			curr_tex = tex_damaged;
-
-			if (life <= 0)
-			{
-				// DROP A PICK UP ITEM 
-				app->pick_manager->PickUpFromEnemy(pos_map);
-				state = TROOPER_STATE::DEAD;
-			}
-			else
-			{
-				app->audio->PlayFx(sfx_hit);
-				bullet->hitted_enemies.push_back(this);
-			}
-			
-
-		}
-
-	}
 }

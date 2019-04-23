@@ -39,6 +39,8 @@ public:
 
 	void OnTrigger(Collider* collider);
 
+	void OnTriggerEnter(Collider* collider);
+
 private:
 	inline bool IsOnGoal(fPoint goal);
 
