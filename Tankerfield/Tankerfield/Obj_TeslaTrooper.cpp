@@ -169,9 +169,11 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				
 			
 			}
-			else if (teleport_timer.ReadSec() >= check_teleport_time)
+			else 
 			{
-				state = TROOPER_STATE::GET_TELEPORT_POINT;
+				check_teleport_time = 1 * app->objectmanager->GetNumberOfEnemies();
+				if (teleport_timer.ReadSec() >= check_teleport_time)
+					state = TROOPER_STATE::GET_TELEPORT_POINT;
 			}
 
 		}

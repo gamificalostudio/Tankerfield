@@ -84,11 +84,18 @@ public:
 
 	inline void DrawDebug(const Object* obj, Camera* camera);
 
+	uint GetNumberOfEnemies()
+	{
+		return enemies.size();
+	 }
+
 public:
-	std::list<Obj_Tank*> obj_tanks;
+	std::vector<Obj_Tank*> obj_tanks;
 
 private:
 	std::list<Object*> objects;
+	std::list<Object*> enemies;
+
 
 };
 

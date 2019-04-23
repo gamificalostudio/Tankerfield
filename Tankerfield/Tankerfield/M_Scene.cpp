@@ -117,7 +117,7 @@ bool M_Scene::Start()
 	game_over = false;
 
 	/* Generate Reward Zones */
-	reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
+	//reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
 	//reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;

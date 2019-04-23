@@ -887,7 +887,7 @@ void Obj_Tank::ReviveTank()
 
 	bool can_revive = false;
 
-	for (std::list<Obj_Tank*>::iterator iter = app->objectmanager->obj_tanks.begin();
+	for (std::vector<Obj_Tank*>::iterator iter = app->objectmanager->obj_tanks.begin();
 		iter != app->objectmanager->obj_tanks.end();
 		++iter)
 	{
