@@ -32,8 +32,6 @@ bool M_PickManager::Start()
 {
 	bool ret = true;
 
-	CreateRewardBox(app->scene->tank_2->pos_map);
-
 	return ret;
 }
 

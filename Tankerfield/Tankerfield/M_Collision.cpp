@@ -73,8 +73,7 @@ M_Collision::M_Collision()
 
 	matrix[(int)Collider::TAG::PICK_UP][(int)Collider::TAG::PLAYER] = true;
 
-	matrix[(int)Collider::TAG::BULLET_LASER][(int)Collider::TAG::WALL] = true;//todo
-	matrix[(int)Collider::TAG::BULLET_LASER][(int)Collider::TAG::REWARD_BOX] = true;//todo
+	matrix[(int)Collider::TAG::BULLET_LASER][(int)Collider::TAG::WALL] = true;
 
 }
 
