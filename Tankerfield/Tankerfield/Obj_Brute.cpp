@@ -48,6 +48,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
+	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
+
+	app->audio->PlayFx(sfx_spawn);
 
 	state = BRUTE_STATE::SPAWN;
 	speed = 1.f;
