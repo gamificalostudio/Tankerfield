@@ -38,6 +38,7 @@
 #include "Obj_PickUp.h"
 #include "Obj_RewardBox.h"
 #include "Camera.h"
+#include "Obj_CannonFire.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -268,11 +269,14 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
 		enemies.push_back(ret);
-
 		break;
 	case ObjectType::EXPLOSION:
 		ret = DBG_NEW Obj_Explosion(pos);
 		ret->type = ObjectType::EXPLOSION;
+		break;
+	case ObjectType::CANNON_FIRE:
+		ret = DBG_NEW Obj_CannonFire(pos);
+		ret->type = ObjectType::CANNON_FIRE;
 		break;
 	case ObjectType::HEALING_ANIMATION:
 		ret = new Obj_Healing_Animation(pos);
