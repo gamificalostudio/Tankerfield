@@ -49,7 +49,9 @@ bool M_Fonts::Start()
 	font_open_sants_bold_12 = app->font->Load("fonts/open_sans/OpenSans-Bold.ttf");
 	rounds_font = app->font->Load("fonts/round_font.ttf", 35);
 	button_font = app->font->Load("fonts/round_font.ttf", 22);
-	label_font = app->font->Load("fonts/labels.ttf", 24);
+	label_font_24 = app->font->Load("fonts/labels.ttf", 24);
+	label_font_38 = app->font->Load("fonts/labels.ttf", 38);
+
 	return true;
 }
 
@@ -66,7 +68,7 @@ bool M_Fonts::CleanUp()
 	font_open_sants_bold_12 = nullptr;
 	rounds_font = nullptr;
 	button_font = nullptr;
-	label_font = nullptr;
+	label_font_24 = nullptr;
 
 	fonts.clear();
 	TTF_Quit();

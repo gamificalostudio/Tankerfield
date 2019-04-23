@@ -251,7 +251,7 @@ void UI_IG_Helper::AddButtonHelper( const CONTROLLER_BUTTON button_type, const f
 
 void UI_IG_Helper::AddTextHelper(const String text, const fPoint offset)
 {
-	UI_LabelDef def(text, app->font->label_font);
+	UI_LabelDef def(text, app->font->label_font_24);
 	def.is_in_game = true;
 
 	UI_Label* ui_helper = app->ui->CreateLabel(position + app->map->ScreenToMapF(offset.x, offset.y), def);
