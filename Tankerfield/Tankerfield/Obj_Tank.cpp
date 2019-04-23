@@ -650,7 +650,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		break;
 	case WEAPON::LASER_SHOT:
-		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.bullet_damage = 10 + level * 2;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 20;

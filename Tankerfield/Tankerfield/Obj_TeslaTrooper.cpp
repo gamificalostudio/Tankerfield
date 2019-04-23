@@ -74,8 +74,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	draw_offset			= { 24, 28 };
 
 	//parameters-------------------------------------------
-	attack_damage		= 10;
-	attack_range		= 1;
+	attack_damage		= 5;
+	attack_range		= 1.5f;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
 	life = pow(5, app->scene->round);
