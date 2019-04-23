@@ -141,8 +141,10 @@
   </map>
 
   <scene>
+    <rounds_to_win value="7"/>
+    
     <time_between_rounds value="5000"/>
-
+  
     <music>
       <main_music music ="audio/Music/indeep.ogg"/>
     </music>

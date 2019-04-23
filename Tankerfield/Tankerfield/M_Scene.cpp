@@ -50,6 +50,8 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
+	rounds_to_win = config.child("rounds_to_win").attribute("value").as_int();
+
 	/* Wave System setup */
 	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	

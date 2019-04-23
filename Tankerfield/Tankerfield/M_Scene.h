@@ -109,12 +109,14 @@ private:
 
 	/* Game variables*/
 	bool game_over = false;
+	bool win_game = false;
+
+	int rounds_to_win = NULL;
 
 	/* Wave System */
 	int time_between_rounds			= 0;
 	int Tesla_trooper_units			= 0;
 	int Brute_units					= 0;
-
 
 	// Fx and Music
 	const char* finish_wave_sound_string;
