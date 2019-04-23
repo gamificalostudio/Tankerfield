@@ -205,7 +205,7 @@ bool M_ObjManager::Reset()
 	{
 		if ((*iterator)->coll != nullptr)
 		{
-			(*iterator)->coll->object = nullptr;
+			(*iterator)->CleanUp();
 			(*iterator)->coll->Destroy();
 			(*iterator)->coll = nullptr;
 		}
@@ -216,6 +216,7 @@ bool M_ObjManager::Reset()
 	}
 
 	obj_tanks.clear();
+	objects.clear();
 
 	return true;
 }

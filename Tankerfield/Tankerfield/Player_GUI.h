@@ -1,8 +1,8 @@
 #ifndef __PLAYER_GUI_H_
 #define __PLAYER_GUI_H_
 
-#include "M_UI.h"
 #include <list>
+#include <string>
 #include <vector>
 #include "Rect.h"
 
@@ -12,24 +12,28 @@ class UI_Label;
 class UI_Bar;
 class Object;
 class UI_PickUpElement;
+class UI_Element;
+class UI_InGameElement;
+class M_UI;
 
+enum class CONTROLLER_BUTTON;
 enum class WEAPON;
 enum class ObjectType;
 
-class Player_GUI: public UI_Listener
+enum class GUI_TYPE
+{
+	SINGLE_PLAYER,
+	PLAYER_1,
+	PLAYER_2,
+	PLAYER_3,
+	PLAYER_4
+};
+
+class Player_GUI
 {
 public:
 
-	enum class TYPE
-	{
-		SINGLE_PLAYER,
-		PLAYER_1,
-		PLAYER_2,
-		PLAYER_3,
-		PLAYER_4
-	};
-
-	Player_GUI(const Player_GUI::TYPE type, Obj_Tank* target);
+	Player_GUI(const GUI_TYPE type, Obj_Tank* target);
 
 	void Update(float dt);
 
@@ -37,9 +41,9 @@ public:
 
 	void SetHelper();
 
-	void AddButtonHelper(const M_UI::GAMEPAD_BUTTON button_type);
+	void AddButtonHelper(const CONTROLLER_BUTTON button_type);
 
-	void AddTextHelper(const String text);
+	void AddTextHelper(const std::string text);
 
 	void SetLifeBar( float life);
 
@@ -55,7 +59,7 @@ public:
 
 public:
 	
-	TYPE type = TYPE::SINGLE_PLAYER;
+	GUI_TYPE type = GUI_TYPE::SINGLE_PLAYER;
 
 	Obj_Tank* player = nullptr;
 

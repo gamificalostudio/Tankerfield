@@ -11,6 +11,11 @@
 UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener) : UI_Element(position, definition, listener)
 {
 	this->definition = definition;
+	this->is_interactive = true;
+	SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	section_width = definition.idle_rect.w;
+	section_height = definition.idle_rect.h;
+	sprite_section = definition.idle_rect;
 }
 
 
@@ -18,28 +23,56 @@ UI_Button::~UI_Button()
 {
 	if (label != nullptr)
 	{
-		label->to_destroy = true;
+		label->Destroy();
 		label = nullptr;
 	}
 }
 
 bool UI_Button::Draw()
 {
-	ClickState state = app->ui->GetClickState();
-	SDL_Rect current_frame;
+	FocusState state = app->ui->GetClickState();
 
-	if (app->ui->GetClickedObject() == this && state != ClickState::NONE &&  state != ClickState::EXIT)
+	if (app->ui->GetInputType() == UI_INPUT_TYPE::MOUSE)
 	{
-		current_frame = definition.pushed_rect;
+		if (app->ui->GetSelectedElement() == this && state != FocusState::NONE &&  state != FocusState::EXIT)
+		{
+			sprite_section = definition.pushed_rect;
+		}
+		else
+		{
+			sprite_section = definition.idle_rect;
+		}
+
+		if (hover_state == HoverState::REPEAT)
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
+		}
+		else
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
+		}
 	}
-	else if (hover_state != HoverState::NONE)
+	else if (app->ui->GetInputType() == UI_INPUT_TYPE::CONTROLLER)
 	{
-		current_frame = definition.hover_rect;
+	
+		sprite_section = definition.idle_rect;
+
+
+		if (app->ui->GetSelectedElement() == this)
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
+		}
+		else
+		{
+			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
+		}
 	}
-	else
-	{
-		current_frame = definition.idle_rect;
-	}
+
+
+	SDL_Rect draw_rect = GetDrawRect();
+
+	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+
 
 	return true;
 }
@@ -48,29 +81,30 @@ bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 {
 	if (label != nullptr)
 	{
-		label->to_destroy = true;
+		label->Destroy();
 		label = nullptr;
 	}
 
 	label = app->ui->CreateLabel(position + this->position, definition, this);
+	label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	label->SetParent(this);
 
 	return true;
 }
 
-void UI_Button::SetDefinition(UI_ButtonDef definition)
-{
-	this->definition = definition;
-}
-
 bool UI_Button::PreUpdate()
 {
-	if (hover_state == HoverState::ENTER && app->ui->GetClickedObject() != this)
+	if (hover_state == HoverState::ENTER && app->ui->GetSelectedElement() != this)
 	{
 		// TODO 1: Add SFX  
 	}
 	
 	return true;
+}
+
+void UI_Button::SetDefinition(const UI_ButtonDef def)
+{
+	this->definition = def;
 }
 
 
