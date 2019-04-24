@@ -43,7 +43,7 @@
       </appear>
     </animations>
   </portal>
-  <cycle-progress-bar speed="15" rotation="counter-clockwise" first_dir_angle ="0">
+  <cycle-progress-bar speed="60" rotation="counter-clockwise" first_dir_angle ="0">
     <dir>
         <frame name="sprite1"   x="0"    y="0"    w="308" h="314"></frame>
         <frame name="sprite2"   x="308"  y="0"    w="308" h="314"></frame>

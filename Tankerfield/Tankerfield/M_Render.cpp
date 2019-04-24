@@ -292,7 +292,7 @@ void M_Render::Blit( SDL_Texture* texture,  const int screen_x, const int screen
 }
 
 
-void M_Render::BlitScaled(SDL_Texture* texture, const int screen_x, const int screen_y, Camera* current_camera, const SDL_Rect* section, float custom_scale) const
+void M_Render::BlitScaled(SDL_Texture* texture, const int screen_x, const int screen_y, Camera* current_camera, const SDL_Rect* section, float scale_w, float scale_h) const
 {
 	bool ret = true;
 	uint scale = app->win->GetScale();
@@ -307,8 +307,8 @@ void M_Render::BlitScaled(SDL_Texture* texture, const int screen_x, const int sc
 	if (section != NULL)
 	{
 		spritesheet_rect = *section;
-		rect_in_screen.w = section->w * scale * custom_scale;
-		rect_in_screen.h = section->h * scale * custom_scale;
+		rect_in_screen.w = section->w * scale * scale_w;
+		rect_in_screen.h = section->h * scale * scale_h;
 	}
 	else
 	{

@@ -282,14 +282,9 @@ bool Obj_Tank::Update(float dt)
 	Shoot(dt);
 	Item();
 	StopTank();
-	ReviveTank();
+	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player
 	InputReadyKeyboard();
-
-	if (app->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
-	{
-		SetWeapon(WEAPON::HEALING_SHOT, 1);
-	}
 
 	return true;
 }
@@ -444,15 +439,6 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
-
-	if (life == 0)
-	{
-		fPoint circlePos = pos_map;
-
-		circlePos = app->map->MapToScreenF(circlePos);
-		app->render->DrawIsoCircle(circlePos.x, circlePos.y, revive_range * 30, camera, 255, 0, 0, 100);// 30 = tile mesure
-	}
-
 	// Base =========================================
 	app->render->Blit(
 		curr_tex,
@@ -510,15 +496,32 @@ bool Obj_Tank::DrawShadow(Camera * camera, float dt)
 	// Revive cycle =================================
 	if (draw_revive_cycle_bar)
 	{
-		SDL_Rect rect = cycle_bar_anim.GetFrame(0);
+		SDL_Rect rect = cycle_bar_anim.GetFrame(0.f);
+		float scale_w = 0.63f;
+		float scale_h = scale_w * 0.5f;//In isometric drawing, h is half of w
 		app->render->BlitScaled(
 			cycle_bar_tex,
-			pos_screen.x - rect.w*0.5f * 0.5f,
-			pos_screen.y - rect.h*0.5f * 0.5f,
+			pos_screen.x - rect.w * scale_w * 0.5f - 2,//-2 and + 2 = offset because blit and draw iso circle don't draw completely on the same position
+			pos_screen.y - rect.h * scale_h * 0.5f + 2,
 			camera,
-			&rect,0.5f);
-		cycle_bar_anim.NextFrame(dt);
+			&rect,
+			scale_w,
+			scale_h);
+		//TO DO: (low importance) relate scale of the circle with the revive_range so it doesn't have to be adjusted manually
 	}
+	else if (life <= 0)
+	{
+		app->render->DrawIsoCircle(
+			pos_screen.x,
+			pos_screen.y,
+			revive_range * app->map->data.tile_height,
+			camera,
+			200,
+			200,
+			200,
+			123);// 30 = tile mesure
+	}
+	
 
 	// Base =========================================
 	app->render->Blit(
@@ -898,11 +901,16 @@ void Obj_Tank::ShootFlameThrower()
 }
 
 
-void Obj_Tank::ReviveTank()
+void Obj_Tank::ReviveTank(float dt)
 {
 	//fPoint circlePos = { 3.f,3.f };
 	//circlePos = app->map->MapToScreenF(circlePos);
 	//app->render->DrawCircle(circlePos.x, circlePos.y, revive_range, 0, 255, 0, 100);
+
+	if (draw_revive_cycle_bar)
+	{
+		cycle_bar_anim.NextFrame(dt);
+	}
 
 	bool can_revive = false;
 
@@ -920,14 +928,15 @@ void Obj_Tank::ReviveTank()
 				can_revive = true;
 			}
 
-			if (!reviving_tank[(*iter)->tank_num] && PressInteract() || app->input->GetKey(kb_interact) == KeyState::KEY_REPEAT)
+			//Presses the button
+			if (!reviving_tank[(*iter)->tank_num] && PressInteract())
 			{
 				reviving_tank[(*iter)->tank_num] = true;
 				revive_timer[(*iter)->tank_num].Start();
 				(*iter)->cycle_bar_anim.Reset();
 				(*iter)->draw_revive_cycle_bar = true;
-				
 			}
+			//Releases the button
 			else if (ReleaseInteract())
 			{
 				reviving_tank[(*iter)->tank_num] = false;
@@ -935,9 +944,9 @@ void Obj_Tank::ReviveTank()
 				(*iter)->cycle_bar_anim.Reset();
 			}
 
+			//Finishes reviving the tank
 			if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
 			{
-				//Revive the tank
 				(*iter)->curr_speed = speed;
 				(*iter)->SetLife(revive_life);
 				reviving_tank[(*iter)->tank_num] = false;

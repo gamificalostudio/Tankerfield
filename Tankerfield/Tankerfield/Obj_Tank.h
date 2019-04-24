@@ -100,7 +100,7 @@ private:
 	void ShootLaserShot();
 
 	//- TankDeath
-	void ReviveTank();
+	void ReviveTank(float dt);
 	void StopTank();
 
 	//- Item

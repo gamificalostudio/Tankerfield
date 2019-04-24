@@ -358,6 +358,7 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			pos_screen.y - draw_offset.y,
 			camera,
 			&frame,
+			0.75f,
 			0.75f);
 	}
 	if (state == TROOPER_STATE::APPEAR)

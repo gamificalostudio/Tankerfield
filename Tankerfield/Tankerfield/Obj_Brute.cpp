@@ -222,6 +222,7 @@ bool Obj_Brute::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&frame,
+		2.f,
 		2.f);
 
 	return true;
