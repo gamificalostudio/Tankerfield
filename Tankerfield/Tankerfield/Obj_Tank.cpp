@@ -306,6 +306,11 @@ fPoint Obj_Tank::GetTurrPos()
 
 void Obj_Tank::Movement(float dt)
 {
+	//Don't move if tank is dead
+	if (life <= 0) {
+		return;
+	}
+
 	fPoint input_dir(0.f, 0.f);
 
 	if (move_input == INPUT_METHOD::KEYBOARD_MOUSE)
@@ -947,7 +952,6 @@ void Obj_Tank::ReviveTank(float dt)
 			//Finishes reviving the tank
 			if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
 			{
-				(*iter)->curr_speed = speed;
 				(*iter)->SetLife(revive_life);
 				reviving_tank[(*iter)->tank_num] = false;
 				(*iter)->fire_dead = false;
@@ -983,12 +987,11 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::StopTank()
 {
-	if (life == 0)
+	if (life <= 0)
 	{
-		curr_speed = 0;
-		if (!(this->fire_dead))
+		if (!fire_dead)
 		{
-			this->fire_dead = true;
+			fire_dead = true;
 			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 			dead_fire->tank = this;
 		}
