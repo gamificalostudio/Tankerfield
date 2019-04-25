@@ -148,8 +148,7 @@ private:
 	fPoint turr_pos							= { 0.f, 0.f };//The position of the turret in the map
 	float turr_angle						= 0.f;
 	fPoint shot_dir							= { 0.f, 0.f };
-	float cannon_height						= 0.f;//Used to calculate the shot position
-	float cannon_length						= 0.f;//The offset at which the bullet will spawn from the shot position (pos + shot height)
+	float cannon_height						= 0.f;//Used to calculate the turr position (position from which bullets are shot)
 	float shot_angle_lerp_factor			= 0.f;
 	float turr_target_angle					= 0.f;
 
@@ -157,11 +156,11 @@ private:
 	float revive_range						= 0.f;
 	float revive_range_squared				= 0.f;
 	int	  revive_life						= 0;
-	float revive_time						= 0.f;
+	float revive_time						= 0.f;//RTime it takes to revive an ally (in seconds)
 	UI_IG_Helper * tutorial_revive			= nullptr;
 	bool reviving_tank[4]					= { false };//Is this tank reviving [?] tank?
 	Timer revive_timer[4];					//Time that you've been reviving other tanks
-	uint revive_sfx						= 0u;
+	uint revive_sfx							= 0u;
 
 
 

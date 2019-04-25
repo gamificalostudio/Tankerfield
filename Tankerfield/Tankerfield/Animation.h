@@ -76,14 +76,25 @@ public:
 		{
 			rects[i].resize(frames_per_direction);
 		}
-		max_frames = frames_per_direction - 1;
+		max_frames = frames_per_direction - 1u;
+	}
+
+	//Changing this will change the speed on all animations
+	void SetSpeed(float speed)
+	{
+		this->speed = speed;
+	}
+
+	uint GetMaxFrames()
+	{
+		return max_frames;
 	}
 
 private:
 	//	 direction,  current_frame
 	std::vector<std::vector <SDL_Rect>> rects;
-	int max_dirs			= 0;
-	int max_frames			= 0;
+	uint max_dirs			= 0;
+	uint max_frames			= 0;
 	bool loop				= true;
 	float first_dir_angle	= 0.f;//The angle on the first sprite
 	ROTATION_DIR rotation	= ROTATION_DIR::COUNTER_CLOCKWISE;
@@ -106,9 +117,9 @@ public:
 	void NextFrame(float dt)
 	{
 		current_frame += frames->speed * dt;
-		if (current_frame >= frames->max_frames)
+		if (current_frame >= (float)frames->max_frames)
 		{
-			current_frame = (frames->loop) ? 0.0f : frames->max_frames - 1;
+			current_frame = (frames->loop) ? 0.0f : (float)frames->max_frames - 1.f;
 			loops++;
 		}
 	}
@@ -146,23 +157,23 @@ private:
 	uint GetRotatedIndex(float angle)
 	{
 		//Avoid all the calculations if it only has one frame
-		if (frames->max_dirs == 1)
+		if (frames->max_dirs == 1u)
 		{
-			return 0;
+			return 0u;
 		}
 
 		//Account for the spritesheet not starting at the 0 degree rotation
 		angle -= frames->first_dir_angle;
 
 		angle = ClampRotation(angle);
-		float ind = round((angle * frames->max_dirs) / 360.f);
+		float ind = round((angle * (float)frames->max_dirs) / 360.f);
 
 		if (frames->rotation == ROTATION_DIR::CLOCKWISE) {
-			ind = frames->max_dirs - ind;
+			ind = (float)frames->max_dirs - ind;
 		}
 
 		//If it's the last frame, start over again
-		if (ind == frames->max_dirs)
+		if (ind == (float)frames->max_dirs)
 		{
 			ind = 0.f;
 		}

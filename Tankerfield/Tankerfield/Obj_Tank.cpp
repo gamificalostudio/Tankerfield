@@ -94,8 +94,14 @@ bool Obj_Tank::Start()
 	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
 	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
 	//-- Revive 
+	revive_range = 2.5f;
+	revive_range_squared = revive_range * revive_range;
+	revive_life = 100;
+	revive_time = 2.f;
 	cycle_bar_tex = app->tex->Load(tank_node.child("spritesheets").child("cycle_bar_tex").text().as_string());
 	cycle_bar_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("cycle-progress-bar"));
+	cycle_bar_anim.frames->SetSpeed(cycle_bar_anim.frames->GetMaxFrames() / revive_time);
+
 
 	//sfx -------------------------------------------------------------------------------------------------------
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
@@ -192,7 +198,6 @@ bool Obj_Tank::Start()
 	coll->SetObjOffset({ -0.4f, -0.4f });
 
 	cannon_height = 11.f;
-	cannon_length = 0.f;
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -210,11 +215,6 @@ bool Obj_Tank::Start()
 
 	life = 90;
 	max_life = 100;
-
-	revive_range = 2.5f;
-	revive_range_squared = revive_range * revive_range;
-	revive_life = 100;
-	revive_time = 3000.f;
 
 	//Life inicialistation
 	//item = ObjectType::HEALTH_BAG;
@@ -892,7 +892,7 @@ void Obj_Tank::SelectInputMethod()
 
 void Obj_Tank::ShootBasic()
 {
-	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos + shot_dir * cannon_length);
+	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
 	bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
@@ -1013,10 +1013,10 @@ void Obj_Tank::ShootDoubleMissile()
 	double_missiles_offset.RotateDegree(90);
 	float missiles_offset = 0.2f;
 
-	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length + double_missiles_offset * missiles_offset);
+	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
 	left_missile->SetPlayer(this);
 
-	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + shot_dir * cannon_length - double_missiles_offset * missiles_offset);
+	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
 	right_missile->SetPlayer(this);
 
 	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
@@ -1038,7 +1038,7 @@ void Obj_Tank::ShootDoubleMissile()
 
 void Obj_Tank::ShootHealingShot()
 {
-	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir * cannon_length);
+	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir);
 
 	heal_bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
@@ -1052,7 +1052,7 @@ void Obj_Tank::ShootHealingShot()
 
 void Obj_Tank::ShootLaserShot()
 {
-	Laser_Bullet *	 laser_bullet= (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir * cannon_length);
+	Laser_Bullet *	 laser_bullet= (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir);
 
 	laser_bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
