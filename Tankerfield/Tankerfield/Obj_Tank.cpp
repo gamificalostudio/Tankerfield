@@ -100,7 +100,7 @@ bool Obj_Tank::Start()
 	revive_time = 2.f;
 	cycle_bar_tex = app->tex->Load(tank_node.child("spritesheets").child("cycle_bar_tex").text().as_string());
 	cycle_bar_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("cycle-progress-bar"));
-	cycle_bar_anim.frames->SetSpeed(cycle_bar_anim.frames->GetMaxFrames() / revive_time);
+	cycle_bar_anim.frames->SetSpeed((float)cycle_bar_anim.frames->GetMaxFrames() / revive_time);
 
 
 	//sfx -------------------------------------------------------------------------------------------------------
