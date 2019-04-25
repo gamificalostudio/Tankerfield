@@ -1,6 +1,7 @@
 #include <list>
 #include <assert.h>
 #include <vector>
+#include <tgmath.h>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
@@ -28,6 +29,7 @@
 #include "Bullet_Laser.h"
 #include "Obj_Bullet.h"
 #include "M_Audio.h"
+
 
 Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
@@ -75,7 +77,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	coll_h = 1.f;
   
 	damaged_sprite_time = 150;
-	life = 1000+(1000* app->scene->round);
+	life = 750* (log(app->scene->round)+2);
 }
 
 Obj_Brute::~Obj_Brute()
