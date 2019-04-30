@@ -28,7 +28,7 @@ public:
 	//1 Added 
 	// 2 added on child
 	// -1 error
-	int InsertTile(Tile rect);
+	void InsertTile(Tile rect);
 
 	 std::vector<Tile> GetTilesIntersection(const Camera & camera);
 
@@ -40,6 +40,11 @@ public:
 	}
 
 	int ReturnNumbreOfLevels(int area_with, int camera_with, uint& levels);
+
+	inline bool CheckIntersection(const SDL_Rect& rect, const SDL_Rect& rect2)
+	{
+		return !(rect.x >= (rect2.x + rect2.w) || (rect.x + rect.w) <= rect2.x || rect.y >= (rect2.y + rect2.h) || (rect.y + rect.h) <= rect2.y);
+	}
 
 private:
 	std::vector<Tile> elements;
