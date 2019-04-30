@@ -57,12 +57,12 @@ void Quadtree_Map::Draw() const
 	}
 }
 
-int Quadtree_Map::InsertTile(Tile tile)
+void Quadtree_Map::InsertTile(Tile tile)
 {
 	int ret = 0;
-	if (!SDL_HasIntersection(&tile.rect,&area))
+	if (!SDL_HasIntersection(&tile.rect, &area))
 	{
-		return ret;
+		return;
 	}
 	else
 	{
@@ -70,45 +70,37 @@ int Quadtree_Map::InsertTile(Tile tile)
 		if (level >= max_levels)
 		{
 			elements.push_back(tile);
-			return 1;
+			return;
 		}
 		else
 		{
-			
+
 			if (!this->isDivided)
 			{
 				this->Subdivide();
 			}
 			for (uint i = 0; i < 4; ++i)
 			{
-				if (nodes[i]->InsertTile(tile) == 1)
-				{
-					return ret = 2;
-				}
+				nodes[i]->InsertTile(tile);
 			}
 		}
-		
+
 
 	}
-	return ret = -1;
 }
 
 std::vector<Tile> Quadtree_Map::GetTilesIntersection(const Camera &camera)
 {
-	SDL_Rect cam = camera.rect;
-	cam.y -= 75;
-	cam.w += 60;
-	cam.h += 75;
 	std::vector<Tile> ret;
 
-	if (SDL_HasIntersection(&cam, &area))
+	if (CheckIntersection(camera.rect, area))
 	{
 		if (!isDivided)
 		{
 			
 			for (std::vector<Tile>::iterator i = elements.begin(); i != elements.end(); ++i)
 			{
-				if (SDL_HasIntersection(&cam,&(*i).rect))
+				if (CheckIntersection(camera.rect, (*i).rect))
 				{
 					ret.push_back((*i));
 				}
