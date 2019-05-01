@@ -22,6 +22,7 @@ struct SpawnPoint
 {
 	fPoint pos;
 	bool occupied = false;
+	iPoint pixels_pos;
 };
 
 struct Properties

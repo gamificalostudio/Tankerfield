@@ -61,7 +61,6 @@ bool M_Input::Awake(pugi::xml_node& config)
 bool M_Input::Start()
 {
 	bool ret = true;
-	SDL_StopTextInput();
 
 	if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0)
 	{
