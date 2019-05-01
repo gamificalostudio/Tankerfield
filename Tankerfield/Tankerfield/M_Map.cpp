@@ -616,8 +616,6 @@ bool M_Map::LoadMap()
 		data.tile_width = map.attribute("tilewidth").as_int();
 		data.tile_height = map.attribute("tileheight").as_int();
 
-		bool ret = false;
-
 		data.map_properties.LoadProperties(map.child("properties"));
 		data.objects_path = data.map_properties.GetAsString("object_texture");
 		data.offset_x = data.map_properties.GetAsInt("offset_x");
@@ -717,9 +715,9 @@ bool M_Map::CreateWalkabilityMap(int& width, int &height, uchar** buffer) const
 		{
 			for (int x = 0; x < data.columns; ++x)
 			{
-				int i = (y*layer->rows) + x;
+				int i = (y*layer->columns) + x;
+				int tile_id = layer->Get(i);
 
-				int tile_id = layer->Get(x, y);
 				TileSet* tileset = (tile_id > 0) ? GetTilesetFromTileId(tile_id) : NULL;
 
 				if (tileset != NULL)
