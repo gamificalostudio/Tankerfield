@@ -450,6 +450,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		{
 			SpawnPoint* ret = new SpawnPoint;
 			ret->pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
+			ret->pixels_pos = this->MapToScreenI(ret->pos.x, ret->pos.y);
 
 			std::string type = obj_node.attribute("type").as_string("");
 			if (type == "REWARD_BOX")

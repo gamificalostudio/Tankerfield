@@ -172,7 +172,6 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			}
 			else 
 			{
-				check_teleport_time = 1 * app->objectmanager->GetNumberOfEnemies();
 				if (teleport_timer.ReadSec() >= check_teleport_time)
 					state = TROOPER_STATE::GET_TELEPORT_POINT;
 				else
@@ -241,8 +240,10 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				}
 			}
 		}
-		if (nearest_spawners_points != nullptr)
+		if (nearest_spawners_points != nullptr && distance_to_tank > last_distance_to_spawnpoint)
 		{
+			check_teleport_time = nearest_spawners_points->pixels_pos.DistanceTo((iPoint)pos_screen)/speed;
+
 			teleport_spawnpoint = nearest_spawners_points;
 			state = TROOPER_STATE::TELEPORT_IN;
 			in_portal = &portal_animation;
