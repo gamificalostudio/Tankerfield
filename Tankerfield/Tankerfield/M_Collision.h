@@ -33,6 +33,7 @@ public:
 		PICK_UP,
 		REWARD_BOX,
 		PLAYER,
+		ROAD,
 		MAX
 	};
 
