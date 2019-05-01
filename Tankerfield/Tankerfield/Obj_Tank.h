@@ -116,11 +116,14 @@ private:
 
 	bool ready								= false;
 	bool fire_dead = false;	
+
+
 	//- Movement
 	float curr_speed						= 0.f;
 	float speed								= 0.f;
+	float road_buff							= 0.f;
 	fPoint velocity							= { 0.f, 0.f };
-
+	fPoint max_velocity						= { 0.f, 0.f };
 	fPoint velocity_recoil_lerp				= { 0.f, 0.f };
 	fPoint velocity_recoil_final_lerp		= { 0.f, 0.f };
 	fPoint recoil_dir						= { 0.f, 0.f };
@@ -129,7 +132,6 @@ private:
 	float velocity_recoil_speed_max			= 0.f;
 	float velocity_recoil_speed_max_charged = 0.f;
 	float lerp_factor_recoil				= 0.f;
-	uint movement_sfx						= 0;
 	Timer movement_timer;
 	
 
