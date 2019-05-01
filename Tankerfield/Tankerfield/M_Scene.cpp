@@ -121,9 +121,6 @@ bool M_Scene::Start()
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
-	/* Generate Reward Zones */
-	//reward_zone_01 = app->reward_zone_manager->CreateRewardZone(fPoint(2.0f, 2.0f), 3);
-	//reward_zone_02 = app->reward_zone_manager->CreateRewardZone(fPoint(18.0f, 18.0f), 5);
 
 	return true;
 }
@@ -133,7 +130,11 @@ bool M_Scene::PreUpdate()
 {
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
-		app->scmanager->FadeToBlack(this, app->main_menu, 4.f, 2.f );
+		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
+		if (SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE)
+		{
+			SDL_ShowCursor(SDL_ENABLE);
+		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)

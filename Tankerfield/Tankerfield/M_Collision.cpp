@@ -75,6 +75,9 @@ M_Collision::M_Collision()
 
 	matrix[(int)Collider::TAG::BULLET_LASER][(int)Collider::TAG::WALL] = true;
 
+	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::PICK_UP] = true;
+
+
 }
 
 M_Collision::~M_Collision()
