@@ -147,6 +147,10 @@ struct MapLayer
 	{
 		return data[(y*columns) + x];
 	}
+	inline uint Get(int id)
+	{
+		return data[id];
+	}
 
 	inline fPoint GetTilePos(int id) const
 	{
