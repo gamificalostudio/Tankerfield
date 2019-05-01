@@ -380,15 +380,15 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 		layer->data = DBG_NEW uint[layer->columns*layer->rows];
 		memset(layer->data, 0, layer->columns*layer->rows);
 
-		if (layer->visible)
+		
+		uint i = 0, layernum = data.map_layers.size() + 1;
+		for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
 		{
-			uint i = 0, layernum = data.map_layers.size() + 1;
-			for (pugi::xml_node tile = layer_data.child("tile"); tile; tile = tile.next_sibling("tile"))
+			Tile qtile;
+			layer->data[i] = tile.attribute("gid").as_int(0);
+			qtile.id = layer->data[i];
+			if (layer->visible)
 			{
-				Tile qtile;
-				layer->data[i] = tile.attribute("gid").as_int(0);
-				qtile.id = layer->data[i];
-
 				if (qtile.id != 0)
 				{
 					TileSet* this_Tile = app->map->GetTilesetFromTileId(qtile.id);
@@ -400,16 +400,20 @@ bool M_Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 						qtile.texture = this_Tile->texture;
 
 					qtile.section = this_Tile->GetTileRect(qtile.id);
-					qtile.rect = { (int)(data.screen_tile_rect[i].pos.x + this_Tile->offset_x - app->map->data.tile_width*0.5f),(int) (data.screen_tile_rect[i].pos.y + app->map->data.tile_height - qtile.section.h) + this_Tile->offset_y, qtile.section.w, qtile.section.h };
+					qtile.rect = { (int)(data.screen_tile_rect[i].pos.x + this_Tile->offset_x - app->map->data.tile_width*0.5f),(int)(data.screen_tile_rect[i].pos.y + app->map->data.tile_height - qtile.section.h) + this_Tile->offset_y, qtile.section.w, qtile.section.h };
 					qtile.layer = layernum;
-					qtile.sorting_value = (i+1) * layernum;
+					qtile.sorting_value = (i + 1) * layernum;
 					data.qt->InsertTile(qtile);
 				}
-				++i;
+					
 			}
+			++i;
 		}
-
-		
+		if (layer->name != "Navigation")
+		{
+			delete layer->data;
+			layer->data = false;
+		}
 	}
 
 	return ret;
