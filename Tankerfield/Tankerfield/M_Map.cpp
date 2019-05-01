@@ -529,7 +529,11 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			{
 				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WATER);
 			}
-			
+			else if (type == "ROAD")
+			{
+				Collider* coll = app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::ROAD);
+				coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+			}
 		}
 
 		++i;

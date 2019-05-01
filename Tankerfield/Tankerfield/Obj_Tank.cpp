@@ -105,7 +105,6 @@ bool Obj_Tank::Start()
 
 	//sfx -------------------------------------------------------------------------------------------------------
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
-	movement_sfx = app->audio->LoadFx("audio/Fx/vlanstab.wav");
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -170,7 +169,7 @@ bool Obj_Tank::Start()
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
 	curr_speed = speed = 5.f;//TODO: Load from xml
-
+	road_buff = 3.f;
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
@@ -339,7 +338,6 @@ void Obj_Tank::Movement(float dt)
 	{
 		if (movement_timer.ReadSec() >= 0.7)
 		{
-			//app->audio->PlayFx(movement_sfx);
 			movement_timer.Start();
 		}
 		
@@ -560,6 +558,7 @@ bool Obj_Tank::CleanUp()
 }
 
 
+
 void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
@@ -590,6 +589,11 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			SetPickUp(pick_up);
 		}
 	}
+
+	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed < speed + road_buff)
+	{
+			curr_speed += road_buff;
+	}
 }
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
@@ -598,6 +602,10 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
+	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed >= speed + road_buff)
+		{
+			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
+		}
 }
 
 void Obj_Tank::SetLife(int life)
