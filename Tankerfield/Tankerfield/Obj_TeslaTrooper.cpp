@@ -149,14 +149,13 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			break;
 	case TROOPER_STATE::GET_PATH:
 	{
-		path.clear();
 		move_vect.SetToZero();
-
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
 		{
 			if (this->pos_map.DistanceManhattan(target->pos_map) <= detection_range)
 			{
+				path.clear();
 				if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 				{
 
@@ -175,11 +174,11 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				if (teleport_timer.ReadSec() >= check_teleport_time)
 					state = TROOPER_STATE::GET_TELEPORT_POINT;
 				else
-					state = TROOPER_STATE::GET_PATH;
+					state = TROOPER_STATE::RECHEAD_POINT;
 			}
 		}
 		else {
-			//curr_anim = &idle;
+			state = TROOPER_STATE::RECHEAD_POINT;
 		}
 
 		path_timer.Start();
@@ -240,7 +239,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				}
 			}
 		}
-		if (nearest_spawners_points != nullptr && distance_to_tank > last_distance_to_spawnpoint)
+		if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
 		{
 			check_teleport_time = nearest_spawners_points->pixels_pos.DistanceTo((iPoint)pos_screen)/speed;
 
@@ -334,7 +333,7 @@ void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
 		{
 			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
 			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
+			app->render->DrawIsometricLine(point1, point2, { 255,0,0,255 }, camera);
 		}
 	}
 
