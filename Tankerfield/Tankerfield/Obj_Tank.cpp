@@ -272,7 +272,14 @@ bool Obj_Tank::PreUpdate()
 	{
 		show_crosshairs = !show_crosshairs;
 	}
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+	{
+		if(coll->GetTag() == Collider::TAG::PLAYER)
+			coll->SetTag(Collider::TAG::GOD);
+		else
+			coll->SetTag(Collider::TAG::PLAYER);
 
+	}
 	return true;
 }
 

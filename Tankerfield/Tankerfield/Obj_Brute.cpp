@@ -98,7 +98,8 @@ bool Obj_Brute::Update(float dt)
 
 void Obj_Brute::Attack()
 {
-	if (target != nullptr
+	if (target != nullptr 
+		&& target->coll->GetTag() == Collider::TAG::PLAYER
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{

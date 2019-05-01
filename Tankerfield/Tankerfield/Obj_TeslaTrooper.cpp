@@ -106,9 +106,10 @@ bool Obj_TeslaTrooper::Update(float dt)
 
 void Obj_TeslaTrooper::Attack()
 {
-	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
+	if (  life > 0  && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
-		if (target != nullptr
+		if (target != nullptr 
+			&& target->coll->GetTag() == Collider::TAG::PLAYER
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{

@@ -51,9 +51,11 @@ https://github.com/AitorVelez
 - F2: Activate / deactivate splitscreen
 - F3: Show / hide sprite sorting rects and pivots
 - F4: Show / hide tank crosshairs
-- F9: show colliders
-- F1: show map grid
 - F5: Reset level
+- F7: Activete/ Desactivate god Mode
+- F9: show colliders
+
+
 
 ## Keyboard controls:
 - Move mouse: Aim
