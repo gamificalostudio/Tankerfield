@@ -240,7 +240,7 @@ bool Obj_Tank::Start()
 	tutorial_move->single_camera = camera_player;
 	tutorial_move->AddButtonHelper(CONTROLLER_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
-	tutorial_move_time = 2500;
+	tutorial_move_time = 4500;
 	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
@@ -312,6 +312,11 @@ fPoint Obj_Tank::GetTurrPos()
 
 void Obj_Tank::Movement(float dt)
 {
+	if (!tutorial_move_pressed)
+		tutorial_move_timer.Start();
+
+	tutorial_move_pressed = true;
+
 	//Don't move if tank is dead
 	if (life <= 0) {
 		return;
@@ -340,9 +345,6 @@ void Obj_Tank::Movement(float dt)
 		{
 			movement_timer.Start();
 		}
-		
-			tutorial_move_timer.Start();
-		tutorial_move_pressed = true;
 
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
