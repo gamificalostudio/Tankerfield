@@ -39,15 +39,8 @@ public:
 
 	int current_level				= 0;
 
-	Obj_Tank * tank_1				= nullptr;
-	Obj_Tank * tank_2				= nullptr;
-	Obj_Tank * tank_3				= nullptr;
-	Obj_Tank * tank_4				= nullptr;
-
-	Player_GUI * player_1_gui       = nullptr;
-	Player_GUI * player_2_gui       = nullptr;
-	Player_GUI * player_3_gui       = nullptr;
-	Player_GUI * player_4_gui       = nullptr;
+	Obj_Tank * tanks[4]				= { nullptr };
+	Player_GUI * tanks_gui[4]		= { nullptr };
 
 	General_HUD * general_hud		= nullptr;
 

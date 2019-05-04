@@ -188,7 +188,7 @@ bool Obj_Tank::Start()
 		}
 	}
 
-	app->scene->player_1_gui = app->ui->AddPlayerGUI(this);
+	app->scene->tanks_gui[tank_num] = app->ui->AddPlayerGUI(this);
 	InitWeapons();
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
