@@ -481,7 +481,7 @@ void M_UI::FocusController()
 	}
 	
 
-	if (selected_element == nullptr && dir != CONTROLLER_DIR::NO_DIR)
+	if (selected_element == nullptr && dir != CONTROLLER_DIR::NO_DIR && interactive_elements.size()>0)
 	{
 		selected_element = (*interactive_elements.begin());
 	}
