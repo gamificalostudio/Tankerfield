@@ -73,6 +73,11 @@ public:
 	//length  -> strength of the rumble to play as a 0-1 float value
 	int PlayRumble(float strengh, Uint32 length);
 	int StopRumble();
+	void DetachController()
+	{
+		if(this != nullptr)
+			attached = false;
+	}
 private:
 	bool attached = false;
 

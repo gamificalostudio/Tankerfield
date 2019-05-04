@@ -36,6 +36,10 @@ int Obj_Tank::number_of_tanks = 0;
 Obj_Tank::Obj_Tank(fPoint pos) : Object(pos)
 {
 	tank_num = number_of_tanks++;
+
+
+
+
 }
 
 Obj_Tank::~Obj_Tank()
@@ -61,6 +65,11 @@ Obj_Tank::~Obj_Tank()
 	{
 		camera_player->assigned = false;
 		camera_player = nullptr;
+	}
+
+	if (controller != nullptr)
+	{
+		(*controller)->DetachController();
 	}
 }
 
