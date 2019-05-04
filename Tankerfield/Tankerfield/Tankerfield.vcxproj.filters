@@ -176,6 +176,9 @@
     <ClCompile Include="Obj_CannonFire.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Tank_Weapons.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">

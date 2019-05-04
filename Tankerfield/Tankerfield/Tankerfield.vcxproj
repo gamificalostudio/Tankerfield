@@ -140,6 +140,7 @@
     <ClCompile Include="Obj_CannonFire.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
+    <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
