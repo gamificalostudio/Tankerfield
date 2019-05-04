@@ -123,6 +123,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_green;
 		turr_tex = turr_tex_green;
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -134,7 +135,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_blue;
 		turr_tex = turr_tex_blue;
-
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -146,7 +147,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
 		turr_tex = turr_tex_pink;
-
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 3:
 		kb_up		= SDL_SCANCODE_KP_8;
@@ -158,7 +159,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_orange;
 		turr_tex = turr_tex_orange;
-
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	default:
 		curr_tex = base_tex_orange;
@@ -417,7 +418,7 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input)
 
 void Obj_Tank::InputMovementController(fPoint & input)
 {
-	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
+	input = (fPoint)(*controller)->GetJoystick(gamepad_move, dead_zone);
 }
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
@@ -635,7 +636,7 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 {
 	if (controller != nullptr)
 	{
-		input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim);
+		input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim, dead_zone);
 		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
 		iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 		iso_dir.Normalize();
@@ -764,7 +765,7 @@ void Obj_Tank::SelectInputMethod()
 	}
 	if (move_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
-		&& !(*controller)->GetJoystick(gamepad_move).IsZero()))
+		&& !(*controller)->GetJoystick(gamepad_move, dead_zone).IsZero()))
 	{
 		move_input = INPUT_METHOD::CONTROLLER;
 	}
@@ -778,7 +779,7 @@ void Obj_Tank::SelectInputMethod()
 	}
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
-		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
+		&& (!(*controller)->GetJoystick(gamepad_aim, dead_zone).IsZero()
 		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;

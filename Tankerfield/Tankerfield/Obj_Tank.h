@@ -193,6 +193,7 @@ private:
 	//-- Controller inputs
 	Joystick gamepad_move							= Joystick::INVALID;
 	Joystick gamepad_aim							= Joystick::INVALID;
+	int dead_zone									= 0;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;
