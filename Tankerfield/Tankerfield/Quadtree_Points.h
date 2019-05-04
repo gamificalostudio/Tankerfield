@@ -5,7 +5,7 @@
 class QuadtreePoints : public Quadtree
 {
 public:
-	QuadtreePoints(SDL_Rect area, uint level = 4, uint max_levels = 1, uint maxElements = 4);
+	QuadtreePoints(SDL_Rect area, uint level = 4, uint max_levels = 1);
 	~QuadtreePoints();
 
 private:
