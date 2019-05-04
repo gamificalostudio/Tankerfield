@@ -663,7 +663,7 @@ bool M_Map::LoadMap()
 		;
 
 		uint level = 1;
-		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->cameras.begin())->screen_section.w*0.25, level);
+		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->cameras.begin())->screen_section.w * 0.25f, level);
 		data.qt = DBG_NEW Quadtree_Map(area, 0, level);
 
 	}

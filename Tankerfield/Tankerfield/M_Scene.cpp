@@ -73,11 +73,6 @@ bool M_Scene::Start()
 {
 	path_tex = app->tex->Load("maps/path.png");
 
-	// Load the first level of the list on first game start -------------------------
-	std::list<Levels*>::iterator levelData = app->map->levels.begin();
-	std::advance(levelData, current_level);
-	app->map->Load((*levelData)->name.c_str());
-
 	// Load Fxs
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
@@ -114,7 +109,11 @@ bool M_Scene::Start()
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
-	app->render->SetTankCameras();//TO IMPROVE: Each tank should create its own camera, not depend on this function to create it
+	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
+	// Load the first level of the list on first game start -------------------------
+	std::list<Levels*>::iterator levelData = app->map->levels.begin();
+	std::advance(levelData, current_level);
+	app->map->Load((*levelData)->name.c_str());
 
 	return true;
 }

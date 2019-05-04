@@ -22,8 +22,6 @@ public:
 	// Called before the first frame
 	bool Start() override;
 
-	void SetTankCameras();
-
 	// Called each loop iteration
 	bool PreUpdate() override;
 	bool PostUpdate(float dt) override;
@@ -64,6 +62,9 @@ public:
 
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
+
+	Camera* CreateCamera(Obj_Tank * tank);
+	void DestroyCamera(Camera * camera);
 
 public:
 
