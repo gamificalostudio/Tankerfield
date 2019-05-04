@@ -59,8 +59,7 @@ Obj_Tank::~Obj_Tank()
 
 	if (camera_player != nullptr)
 	{
-		camera_player->assigned = false;
-		camera_player = nullptr;
+		app->render->DestroyCamera(camera_player);
 	}
 
 	if (controller != nullptr)
@@ -178,17 +177,8 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
-	{
-		if (!(*item_cam)->assigned)
-		{
-			(*item_cam)->assigned = true;
-			camera_player = (*item_cam);
-			break;
-		}
-	}
-
-	app->scene->tanks_gui[tank_num] = app->ui->AddPlayerGUI(this);
+	camera_player = app->render->CreateCamera(this);
+	app->ui->AddPlayerGUI(this);
 	InitWeapons();
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
