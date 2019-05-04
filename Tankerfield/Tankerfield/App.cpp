@@ -331,10 +331,7 @@ bool App::PostUpdate()
 		if (pModule->active == false) {
 			continue;
 		}
-
 		ret = (*item)->PostUpdate(dt);
-
-
 	}
 
 	return ret;

@@ -95,10 +95,8 @@ bool M_Map::PostUpdate(float dt)
 				&sorted_tiles->section);
 				
 		}
-		SDL_RenderSetClipRect(app->render->renderer, nullptr);
-	
 	}
-
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 
 
 	//// Draw Grid ==============================================
