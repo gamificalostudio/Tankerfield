@@ -191,9 +191,9 @@ bool M_UI::Reset()
 	return true;
 }
 
-Player_GUI * M_UI::AddPlayerGUI(GUI_TYPE type, Obj_Tank * player)
+Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
 {
-	Player_GUI* player_gui = DBG_NEW Player_GUI(type, player);
+	Player_GUI* player_gui = DBG_NEW Player_GUI(player);
 	player->SetGui(player_gui);
 	players_guis.push_back(player_gui);
 	return player_gui;

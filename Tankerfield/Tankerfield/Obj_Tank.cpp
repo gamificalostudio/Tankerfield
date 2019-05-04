@@ -178,6 +178,17 @@ bool Obj_Tank::Start()
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
+	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
+	{
+		if (!(*item_cam)->assigned)
+		{
+			(*item_cam)->assigned = true;
+			camera_player = (*item_cam);
+			break;
+		}
+	}
+
+	app->scene->player_1_gui = app->ui->AddPlayerGUI(this);
 	InitWeapons();
 
 	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
@@ -202,21 +213,6 @@ bool Obj_Tank::Start()
 
 	life = 90;
 	max_life = 100;
-
-	//Life inicialistation
-	//item = ObjectType::HEALTH_BAG;
-
-	std::vector<Camera*>::iterator item_cam;
-
-	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
-	{
-		if (!(*item_cam)->assigned)
-		{
-			(*item_cam)->assigned = true;
-			camera_player = (*item_cam);
-			break;
-		}
-	}
 
 	//- Tutorial
 	//-- Move
@@ -601,54 +597,6 @@ void Obj_Tank::SetItem(ObjectType type)
 	gui->SetItemIcon(type);
 }
 
-void Obj_Tank::SetWeapon(WEAPON type, uint level)
-{
-	weapon_info.level_weapon = level;
-	weapon_info.type = type;
-
-	gui->SetWeaponIcon(type);
-	
-	switch (type)
-	{
-	case WEAPON::BASIC:
-		weapon_info.bullet_damage = 25 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::FLAMETHROWER:
-		weapon_info.bullet_damage = 50 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::DOUBLE_MISSILE:
-		weapon_info.bullet_damage = 0;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::HEALING_SHOT:
-		weapon_info.bullet_damage = 25+level;
-		weapon_info.bullet_healing = 5 + level;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::LASER_SHOT:
-		weapon_info.bullet_damage = 10 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 20;
-		weapon_info.time_between_bullets = 500;
-		break;
-	}
-
-}
-
 WeaponInfo Obj_Tank::GetWeaponInfo() const 
 {
 	return weapon_info;
@@ -758,43 +706,20 @@ void Obj_Tank::Shoot(float dt)
 		{
 			(this->*basic_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			if (weapon_info.type != WEAPON::LASER_SHOT)
-			{
-				camera_player->AddTrauma(0.54f);
-			}
-			else
-			{
-				camera_player->AddTrauma(0.54f * 0.75f);
-			}
-			if (controller != nullptr)
-			{
-				(*controller)->PlayRumble(0.92f, 250);
-			}
+			camera_player->AddTrauma(weapon_info.basic_shot_trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
 		}
 		//- Charged shot
 		else
 		{
 			(this->*charged_shot_function[(uint)weapon_info.type])();
 			app->audio->PlayFx(shot_sound);
-			if(weapon_info.type != WEAPON::LASER_SHOT)
-			{
-				camera_player->AddTrauma(0.76f);
-			}
-			else
-			{
-				camera_player->AddTrauma(0.76f * 0.75f);
-			}
-
-			if (controller != nullptr)
-			{
-				(*controller)->PlayRumble(1.0f, 400);
-			}
-
+			camera_player->AddTrauma(weapon_info.charged_shot_trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(1.0f, 400); }
 		}
 		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
-
 	}
 }
 
@@ -1008,6 +933,11 @@ void Obj_Tank::SetGui(Player_GUI * gui)
 bool Obj_Tank::IsReady() const
 {
 	return ready;
+}
+
+int Obj_Tank::GetTankNum()
+{
+	return tank_num;
 }
 
 void Obj_Tank::InputReadyKeyboard()

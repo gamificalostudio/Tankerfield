@@ -21,7 +21,6 @@ typedef string String;
 class M_UI;
 class Camera;
 enum class ELEMENT_STATE;
-enum class GUI_TYPE;
 
 class UI_Element;
 class UI_Listener;
@@ -190,7 +189,7 @@ public:
 
 	bool Reset();
 
-	Player_GUI* AddPlayerGUI( GUI_TYPE type, Obj_Tank* player);
+	Player_GUI* AddPlayerGUI(Obj_Tank* player);
 
 	void AddInteractiveElement(UI_Element * element);
 
