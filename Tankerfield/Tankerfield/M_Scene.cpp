@@ -349,10 +349,12 @@ bool M_Scene::CleanUp()
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
-	app->objectmanager->obj_tanks[0]->gui = nullptr;
-	app->objectmanager->obj_tanks[1]->gui = nullptr;
-	app->objectmanager->obj_tanks[2]->gui = nullptr;
-	app->objectmanager->obj_tanks[3]->gui = nullptr;
+	for (uint i = 0; i < 4; ++i)
+	{
+		if(app->objectmanager->obj_tanks[i]!=nullptr)
+			app->objectmanager->obj_tanks[i]->gui = nullptr;
+	}
+	
 
 	return true;
 }
