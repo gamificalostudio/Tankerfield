@@ -39,6 +39,7 @@
 #include "Obj_RewardBox.h"
 #include "Camera.h"
 #include "Obj_CannonFire.h"
+#include "Quadtree_rect.h"
 
 M_ObjManager::M_ObjManager()
 {

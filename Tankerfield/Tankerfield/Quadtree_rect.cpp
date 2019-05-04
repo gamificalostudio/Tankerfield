@@ -1,6 +1,10 @@
+#include "SDL/include/SDL_rect.h"
+
+#include <vector>
+
 #include "Quadtree.h"
 #include "Quadtree_rect.h"
-#include <vector>
+
 
 template<class TYPE>
 Quadtree_rect<TYPE>::Quadtree_rect(SDL_Rect area, uint level, uint max_levels): Quadtree(area,level,max_levels)
@@ -35,7 +39,7 @@ int Quadtree_rect<TYPE>::ReturnNumbreOfLevels(int area_with, int camera_with, ui
 }
 
 template<class TYPE>
-void Quadtree_rect<TYPE>::InsertTile(SDL_Rect rect, TYPE data)
+void Quadtree_rect<TYPE>::InsertElement(const SDL_Rect& rect, const TYPE& data)
 {
 	if(!SDL_HasIntersection(&rect, &area))
 	{
@@ -45,7 +49,7 @@ void Quadtree_rect<TYPE>::InsertTile(SDL_Rect rect, TYPE data)
 	{
 		if (level >= max_levels)
 		{
-			Element<TYPE> new_element(rect, data);
+			Element new_element(rect, data);
 			elements.push_back(new_element);
 		}
 		else
@@ -57,7 +61,6 @@ void Quadtree_rect<TYPE>::InsertTile(SDL_Rect rect, TYPE data)
 
 			for (uint i = 0; i < 4; ++i)
 			{
-				
 				childs[i]->InsertElement(rect, data);
 			}
 		}
@@ -69,15 +72,15 @@ std::vector<TYPE> Quadtree_rect<TYPE>::GetElementsIntersection(SDL_Rect camera)
 {
 	std::vector<TYPE> ret;
 
-	if (CheckIntersection(camera.rect, area))
+	if (CheckIntersection(camera, area))
 	{
 		if (!isDivided)
 		{
-			for (std::vector<Element<TYPE>>::iterator i = elements.begin(); i != elements.end(); ++i)
+			for (std::vector<Element>::iterator i = elements.begin(); i != elements.end(); ++i)
 			{
-				if (CheckIntersection(camera.rect, (*i).rect))
+				if (CheckIntersection(camera, (*i).rect))
 				{
-					ret.push_back((*i).data);
+					ret.push_back((TYPE)(*i).data);
 				}
 			}
 			return ret;

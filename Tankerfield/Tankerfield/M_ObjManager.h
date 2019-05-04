@@ -48,6 +48,9 @@ class Object;
 class Camera;
 class Obj_Tank;
 
+template <class>
+class Quadtree_rect;
+
 class M_ObjManager : public Module
 {
 public:
@@ -96,6 +99,7 @@ public:
 private:
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
+	Quadtree_rect<Object*> qt_objects;
 
 
 };
