@@ -77,31 +77,43 @@ bool M_Scene::Start()
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
 	
-	// UI Elements
-	std::list<ObjectGroup*>::iterator players_layer = app->map->data.object_layers.begin();
-	for (; players_layer != app->map->data.object_layers.end(); ++players_layer)
+
+
+	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
+// Load the first level of the list on first game start -------------------------
+	std::list<Levels*>::iterator levelData = app->map->levels.begin();
+	std::advance(levelData, current_level);
+	app->map->Load((*levelData)->name.c_str());
+
+
+	//Set pos players
 	{
-		if ((*players_layer)->name == "Players")
+		std::list<ObjectGroup*>::iterator players_layer = app->map->data.object_layers.begin();
+		for (; players_layer != app->map->data.object_layers.end(); ++players_layer)
 		{
-			break;
+			if ((*players_layer)->name == "Players")
+			{
+				break;
+			}
+		}
+		if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
+		{
+			//Create all tanks
+			app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
+			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
+			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
+		}
+		else
+		{
+			//Create all tanks
+			app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
+			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
+			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
+			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 		}
 	}
-	if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
-	{
-		//Create all tanks
-		app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-		app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
-		app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
-		app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
-	}
-	else
-	{
-		//Create all tanks
-		app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
-		app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
-		app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
-		app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
-	}
+	
 	
 	general_hud = DBG_NEW General_HUD();
 
@@ -109,11 +121,7 @@ bool M_Scene::Start()
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
-	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
-	// Load the first level of the list on first game start -------------------------
-	std::list<Levels*>::iterator levelData = app->map->levels.begin();
-	std::advance(levelData, current_level);
-	app->map->Load((*levelData)->name.c_str());
+
 
 	return true;
 }
@@ -349,10 +357,9 @@ bool M_Scene::CleanUp()
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
-	for (uint i = 0; i < 4; ++i)
+	for (std::vector<Obj_Tank*>::iterator i = app->objectmanager->obj_tanks.begin(); i != app->objectmanager->obj_tanks.end() ; ++i)
 	{
-		if(app->objectmanager->obj_tanks[i]!=nullptr)
-			app->objectmanager->obj_tanks[i]->gui = nullptr;
+			(*i)->gui = nullptr;
 	}
 	
 
