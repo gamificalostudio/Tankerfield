@@ -99,7 +99,7 @@ public:
 private:
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
-	Quadtree_rect<Object*> qt_objects;
+	Quadtree_rect<Object*>* qt_objects = nullptr;
 
 
 };

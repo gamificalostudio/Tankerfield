@@ -69,6 +69,13 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
+	if (qt_objects == nullptr)
+	{
+		uint max_levels = 1;
+		qt_objects->ReturnNumbreOfLevels(app->map->data.map_rect.w,app->win->screen_surface->w *0.25, max_levels);
+		qt_objects = new Quadtree_rect<Object*>(app->map->data.map_rect, 0, max_levels);
+	}
+
 	return ret;
 }
 
@@ -309,7 +316,8 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	if (ret != nullptr)
 	{
 		objects.push_back(ret);
-		qt_objects.InsertElement(ret->frame, ret);
+		if(qt_objects!=nullptr)
+			qt_objects->InsertElement(ret->frame, ret);
 		ret->Start();
 
 	}
