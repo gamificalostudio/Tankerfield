@@ -175,9 +175,6 @@ private:
 	ObjectType item							= ObjectType::NO_TYPE;
 	UI_IG_Helper * tutorial_pick_up			= nullptr;
 
-	//- GUI
-	Player_GUI*  gui                        = nullptr;
-
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
 	INPUT_METHOD shot_input					= INPUT_METHOD::KEYBOARD_MOUSE;
@@ -229,6 +226,9 @@ private:
 
 public:
 	Camera* camera_player				= nullptr;
+
+	//- GUI
+	Player_GUI*  gui = nullptr;
 };
 
 #endif

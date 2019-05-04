@@ -94,18 +94,18 @@ bool M_Scene::Start()
 	if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
 	{
 		//Create all tanks
-		tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-		tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
-		tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
-		tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
+		app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+		app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
+		app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
+		app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 	}
 	else
 	{
 		//Create all tanks
-		tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
-		tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
-		tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
-		tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
+		app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
+		app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
+		app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
+		app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 	}
 	
 	general_hud = DBG_NEW General_HUD();
@@ -163,10 +163,10 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
 	{
-		tanks[0]->SetLife(0);
-		tanks[1]->SetLife(0);
-		tanks[2]->SetLife(0);
-		tanks[3]->SetLife(0);
+		app->objectmanager->obj_tanks[0]->SetLife(0);
+		app->objectmanager->obj_tanks[1]->SetLife(0);
+		app->objectmanager->obj_tanks[2]->SetLife(0);
+		app->objectmanager->obj_tanks[3]->SetLife(0);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
 	{
@@ -269,11 +269,10 @@ bool M_Scene::Update(float dt)
 		break;
 
 	case WaveStat::GAME_OVER:
-
-		tanks_gui[0]->Fade_GUI(false);
-		tanks_gui[1]->Fade_GUI(false);
-		tanks_gui[2]->Fade_GUI(false);
-		tanks_gui[3]->Fade_GUI(false);
+		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
 		general_hud->FadeGameOverScreen(true, round);
 		stat_of_wave = WaveStat::NO_TYPE;
@@ -281,10 +280,10 @@ bool M_Scene::Update(float dt)
 
 	case WaveStat::WIN_GAME:
 		
-		tanks_gui[0]->Fade_GUI(false);
-		tanks_gui[1]->Fade_GUI(false);
-		tanks_gui[2]->Fade_GUI(false);
-		tanks_gui[3]->Fade_GUI(false);
+		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
 		general_hud->FadeWinScreen(true);
 		stat_of_wave = WaveStat::NO_TYPE;
@@ -293,10 +292,10 @@ bool M_Scene::Update(float dt)
 	}
 
 	if (!game_over
-		&& !tanks[0]->Alive()
-		&& !tanks[1]->Alive()
-		&& !tanks[2]->Alive()
-		&& !tanks[3]->Alive())
+		&& !app->objectmanager->obj_tanks[0]->Alive()
+		&& !app->objectmanager->obj_tanks[1]->Alive()
+		&& !app->objectmanager->obj_tanks[2]->Alive()
+		&& !app->objectmanager->obj_tanks[3]->Alive())
 	{
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
@@ -350,10 +349,10 @@ bool M_Scene::CleanUp()
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
-	tanks_gui[0] = nullptr;
-	tanks_gui[1] = nullptr;
-	tanks_gui[2] = nullptr;
-	tanks_gui[3] = nullptr;
+	app->objectmanager->obj_tanks[0]->gui = nullptr;
+	app->objectmanager->obj_tanks[1]->gui = nullptr;
+	app->objectmanager->obj_tanks[2]->gui = nullptr;
+	app->objectmanager->obj_tanks[3]->gui = nullptr;
 
 	return true;
 }
@@ -488,8 +487,8 @@ void M_Scene::NewWave()
 
 bool M_Scene::AllPlayersReady() const
 {
-	return (tanks[0]->IsReady()
-		&& tanks[0]->IsReady()
-		&& tanks[0]->IsReady()
-		&& tanks[0]->IsReady());
+	return (app->objectmanager->obj_tanks[0]->IsReady()
+		&&  app->objectmanager->obj_tanks[1]->IsReady()
+		&&  app->objectmanager->obj_tanks[2]->IsReady()
+		&&  app->objectmanager->obj_tanks[3]->IsReady());
 }

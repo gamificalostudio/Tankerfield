@@ -36,11 +36,7 @@ private:
 	Controller** control1			= nullptr;
 
 public:
-
 	int current_level				= 0;
-
-	Obj_Tank * tanks[4]				= { nullptr };
-	Player_GUI * tanks_gui[4]		= { nullptr };
 
 	General_HUD * general_hud		= nullptr;
 
