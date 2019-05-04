@@ -94,23 +94,23 @@ bool M_Scene::Start()
 	if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
 	{
 		//Create all tanks
-		tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-		tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
-		tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
-		tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
+		tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+		tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
+		tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
+		tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
 	}
 	else
 	{
 		//Create all tanks
-		tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
-		tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
-		tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
-		tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
+		tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
+		tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
+		tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
+		tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 	}
 	
 	general_hud = DBG_NEW General_HUD();
 
-	round = 0;
+	round = 0u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
@@ -163,10 +163,10 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
 	{
-		tank_1->SetLife(0);
-		tank_2->SetLife(0);
-		tank_3->SetLife(0);
-		tank_4->SetLife(0);
+		tanks[0]->SetLife(0);
+		tanks[1]->SetLife(0);
+		tanks[2]->SetLife(0);
+		tanks[3]->SetLife(0);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
 	{
@@ -270,10 +270,10 @@ bool M_Scene::Update(float dt)
 
 	case WaveStat::GAME_OVER:
 
-		player_1_gui->Fade_GUI(false);
-		player_2_gui->Fade_GUI(false);
-		player_3_gui->Fade_GUI(false);
-		player_4_gui->Fade_GUI(false);
+		tanks_gui[0]->Fade_GUI(false);
+		tanks_gui[1]->Fade_GUI(false);
+		tanks_gui[2]->Fade_GUI(false);
+		tanks_gui[3]->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
 		general_hud->FadeGameOverScreen(true, round);
 		stat_of_wave = WaveStat::NO_TYPE;
@@ -281,10 +281,10 @@ bool M_Scene::Update(float dt)
 
 	case WaveStat::WIN_GAME:
 		
-		player_1_gui->Fade_GUI(false);
-		player_2_gui->Fade_GUI(false);
-		player_3_gui->Fade_GUI(false);
-		player_4_gui->Fade_GUI(false);
+		tanks_gui[0]->Fade_GUI(false);
+		tanks_gui[1]->Fade_GUI(false);
+		tanks_gui[2]->Fade_GUI(false);
+		tanks_gui[3]->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
 		general_hud->FadeWinScreen(true);
 		stat_of_wave = WaveStat::NO_TYPE;
@@ -292,7 +292,11 @@ bool M_Scene::Update(float dt)
 		break;
 	}
 
-	if (game_over == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
+	if (!game_over
+		&& !tanks[0]->Alive()
+		&& !tanks[1]->Alive()
+		&& !tanks[2]->Alive()
+		&& !tanks[3]->Alive())
 	{
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
@@ -346,10 +350,10 @@ bool M_Scene::CleanUp()
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
-	player_1_gui = nullptr;
-	player_2_gui = nullptr;
-	player_3_gui = nullptr;
-	player_4_gui = nullptr;
+	tanks_gui[0] = nullptr;
+	tanks_gui[1] = nullptr;
+	tanks_gui[2] = nullptr;
+	tanks_gui[3] = nullptr;
 
 	return true;
 }
@@ -484,8 +488,8 @@ void M_Scene::NewWave()
 
 bool M_Scene::AllPlayersReady() const
 {
-	return (tank_1->IsReady()
-		&& tank_2->IsReady()
-		&& tank_3->IsReady()
-		&& tank_4->IsReady());
+	return (tanks[0]->IsReady()
+		&& tanks[0]->IsReady()
+		&& tanks[0]->IsReady()
+		&& tanks[0]->IsReady());
 }
