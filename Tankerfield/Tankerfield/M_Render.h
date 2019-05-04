@@ -22,6 +22,8 @@ public:
 	// Called before the first frame
 	bool Start() override;
 
+	void SetTankCameras();
+
 	// Called each loop iteration
 	bool PreUpdate() override;
 	bool PostUpdate(float dt) override;

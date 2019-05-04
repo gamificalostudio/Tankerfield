@@ -114,6 +114,7 @@ bool M_Scene::Start()
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
+	app->render->SetTankCameras();//TO IMPROVE: Each tank should create its own camera, not depend on this function to create it
 
 	return true;
 }

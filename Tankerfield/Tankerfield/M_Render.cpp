@@ -60,74 +60,6 @@ bool M_Render::Awake(pugi::xml_node& config)
 		LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	else
-	{
-
-		Camera* camera_aux = nullptr;
-		camera_aux = DBG_NEW Camera();
-		camera_aux->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_1_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[0]->pos_map);
-		camera_aux->rect.x = tank_1_pos_screen.x - camera_aux->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux->rect.y = tank_1_pos_screen.y + camera_aux->rect.h + 40; //Magic numbres to pos the camera with the player in center
-		camera_aux->screen_section = {
-			0,
-			0,
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-		Camera* camera_aux2 = nullptr;
-		camera_aux2 = DBG_NEW Camera();
-		camera_aux2->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux2->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_2_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[1]->pos_map);
-		camera_aux2->rect.x = tank_2_pos_screen.x - camera_aux2->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux2->rect.y = tank_2_pos_screen.y + camera_aux2->rect.h * 2 - 30; //Magic numbres to pos the camera with the player in center
-		camera_aux2->screen_section = {
-			(int)(app->win->screen_surface->w * .5f),
-			0,
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-		Camera* camera_aux3 = nullptr;
-		camera_aux3 = DBG_NEW Camera();
-		camera_aux3->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux3->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_3_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[2]->pos_map);
-		camera_aux3->rect.x = tank_3_pos_screen.x - camera_aux3->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux3->rect.y = tank_3_pos_screen.y + camera_aux3->rect.h*2.75f - 10; //Magic numbres to pos the camera with the player in center
-		camera_aux3->screen_section = {
-			0,
-			(int)(app->win->screen_surface->h * .5f),
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-
-		Camera* camera_aux4 = nullptr;
-		camera_aux4 = DBG_NEW Camera();
-		camera_aux4->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux4->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_4_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[3]->pos_map);
-		camera_aux4->rect.x = tank_4_pos_screen.x - camera_aux4->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux4->rect.y = tank_4_pos_screen.y + camera_aux4->rect.h*3.5f + 10; //Magic numbres to pos the camera with the player in center
-		camera_aux4->screen_section = {
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f),
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-
-		cameras.push_back(camera_aux);
-		cameras.push_back(camera_aux2);
-		cameras.push_back(camera_aux3);
-		cameras.push_back(camera_aux4);
-
-	
-	}
 
 	return ret;
 }
@@ -136,9 +68,76 @@ bool M_Render::Awake(pugi::xml_node& config)
 bool M_Render::Start()
 {
 	LOG("render start");
+
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
 	return true;
+}
+
+void M_Render::SetTankCameras()
+{
+	Camera* camera_aux = nullptr;
+	camera_aux = DBG_NEW Camera();
+	camera_aux->rect.w = app->win->screen_surface->w * .5f;
+	camera_aux->rect.h = app->win->screen_surface->h * .5f;
+	fPoint tank_1_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[0]->pos_map);
+	camera_aux->rect.x = tank_1_pos_screen.x - camera_aux->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
+	camera_aux->rect.y = tank_1_pos_screen.y + camera_aux->rect.h + 40; //Magic numbres to pos the camera with the player in center
+	camera_aux->screen_section = {
+		0,
+		0,
+		(int)(app->win->screen_surface->w * .5f),
+		(int)(app->win->screen_surface->h * .5f)
+	};
+
+	Camera* camera_aux2 = nullptr;
+	camera_aux2 = DBG_NEW Camera();
+	camera_aux2->rect.w = app->win->screen_surface->w * .5f;
+	camera_aux2->rect.h = app->win->screen_surface->h * .5f;
+	fPoint tank_2_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[1]->pos_map);
+	camera_aux2->rect.x = tank_2_pos_screen.x - camera_aux2->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
+	camera_aux2->rect.y = tank_2_pos_screen.y + camera_aux2->rect.h * 2 - 30; //Magic numbres to pos the camera with the player in center
+	camera_aux2->screen_section = {
+		(int)(app->win->screen_surface->w * .5f),
+		0,
+		(int)(app->win->screen_surface->w * .5f),
+		(int)(app->win->screen_surface->h * .5f)
+	};
+
+	Camera* camera_aux3 = nullptr;
+	camera_aux3 = DBG_NEW Camera();
+	camera_aux3->rect.w = app->win->screen_surface->w * .5f;
+	camera_aux3->rect.h = app->win->screen_surface->h * .5f;
+	fPoint tank_3_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[2]->pos_map);
+	camera_aux3->rect.x = tank_3_pos_screen.x - camera_aux3->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
+	camera_aux3->rect.y = tank_3_pos_screen.y + camera_aux3->rect.h*2.75f - 10; //Magic numbres to pos the camera with the player in center
+	camera_aux3->screen_section = {
+		0,
+		(int)(app->win->screen_surface->h * .5f),
+		(int)(app->win->screen_surface->w * .5f),
+		(int)(app->win->screen_surface->h * .5f)
+	};
+
+
+	Camera* camera_aux4 = nullptr;
+	camera_aux4 = DBG_NEW Camera();
+	camera_aux4->rect.w = app->win->screen_surface->w * .5f;
+	camera_aux4->rect.h = app->win->screen_surface->h * .5f;
+	fPoint tank_4_pos_screen = app->map->MapToScreenF(app->objectmanager->obj_tanks[3]->pos_map);
+	camera_aux4->rect.x = tank_4_pos_screen.x - camera_aux4->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
+	camera_aux4->rect.y = tank_4_pos_screen.y + camera_aux4->rect.h*3.5f + 10; //Magic numbres to pos the camera with the player in center
+	camera_aux4->screen_section = {
+		(int)(app->win->screen_surface->w * .5f),
+		(int)(app->win->screen_surface->h * .5f),
+		(int)(app->win->screen_surface->w * .5f),
+		(int)(app->win->screen_surface->h * .5f)
+	};
+
+
+	cameras.push_back(camera_aux);
+	cameras.push_back(camera_aux2);
+	cameras.push_back(camera_aux3);
+	cameras.push_back(camera_aux4);
 }
 
 // Called each loop iteration
