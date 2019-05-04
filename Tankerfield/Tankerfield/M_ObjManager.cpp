@@ -72,8 +72,8 @@ bool M_ObjManager::Start()
 	if (qt_objects == nullptr)
 	{
 		uint max_levels = 1;
-		qt_objects->ReturnNumbreOfLevels(app->map->data.map_rect.w,app->win->screen_surface->w *0.25, max_levels);
-		qt_objects = new Quadtree_rect<Object*>(app->map->data.map_rect, 0, max_levels);
+		//qt_objects->ReturnNumbreOfLevels(app->map->data.map_rect.w,app->win->screen_surface->w *0.25, max_levels);
+		qt_objects = new Quadtree_rect<Object*>(app->map->data.map_rect, 0u, 5);
 	}
 
 	return ret;
@@ -157,7 +157,7 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
-	std::vector<Object*> draw_objects;
+	//std::vector<Object*> draw_objects;
 
 	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
@@ -171,13 +171,14 @@ bool M_ObjManager::PostUpdate(float dt)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 
-		for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
+		std::vector<Object*>draw_objects = qt_objects->GetElementsIntersection((*item_cam)->rect);
+	/*	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
 			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
 			{
 				draw_objects.push_back(*item);
 			}
-		}
+		}*/
 
 		std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
 

@@ -49,7 +49,7 @@ void Quadtree_rect<TYPE>::InsertElement(const SDL_Rect& rect, const TYPE& data)
 	{
 		if (level >= max_levels)
 		{
-			Element new_element(rect, data);
+			Element new_element(rect, &data);
 			elements.push_back(new_element);
 		}
 		else
@@ -80,7 +80,7 @@ std::vector<TYPE> Quadtree_rect<TYPE>::GetElementsIntersection(SDL_Rect camera)
 			{
 				if (CheckIntersection(camera, (*i).rect))
 				{
-					ret.push_back((TYPE)(*i).data);
+					ret.push_back((TYPE)*((*i).data));
 				}
 			}
 			return ret;

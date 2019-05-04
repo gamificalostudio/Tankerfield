@@ -176,7 +176,7 @@ struct MapData
   
 	MapTypes			type;
 	SDL_Color			background_color;
-
+	std::string objects_path;
 	std::list<TileSet*>		tilesets;
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
