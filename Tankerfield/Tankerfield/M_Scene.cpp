@@ -101,19 +101,12 @@ bool M_Scene::Start()
 	}
 	else
 	{
-		
 		//Create all tanks
 		tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
 		tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
 		tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 		tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 	}
-	
-
-	player_1_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_1, app->scene->tank_1);
-	player_2_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_2, app->scene->tank_2);
-	player_3_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_3, app->scene->tank_3);
-	player_4_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_4, app->scene->tank_4);
 	
 	general_hud = DBG_NEW General_HUD();
 

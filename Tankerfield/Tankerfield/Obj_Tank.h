@@ -27,30 +27,22 @@ public:
 	~Obj_Tank();
 
 public:
-
 	bool Start() override;
-	void InitWeapons();
 	bool PreUpdate() override;
 	bool Update(float dt) override;
-
-
 
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
 
-
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);
-
 	void OnTriggerExit(Collider* c1);
-
 
 public:
 	//- Logic
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
-
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
@@ -58,8 +50,8 @@ public:
 	int GetMaxLife();
 	int GetTimeBetweenBullets();
 	fPoint GetShotDir() const;
-
 	bool IsReady() const;
+	int GetTankNum();
 
 public:
 
@@ -94,6 +86,7 @@ private:
 	bool ReleaseInteract();
 
 	//- Weapons methods
+	void InitWeapons();
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
@@ -116,7 +109,7 @@ private:
 	static int number_of_tanks;
 
 	bool ready								= false;
-	bool fire_dead = false;	
+	bool fire_dead							= false;
 
 
 	//- Movement
@@ -164,8 +157,6 @@ private:
 	bool reviving_tank[4]					= { false };//Is this tank reviving [?] tank?
 	Timer revive_timer[4];					//Time that you've been reviving other tanks
 	uint revive_sfx							= 0u;
-
-
 
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::DOUBLE_MISSILE;

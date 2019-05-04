@@ -22,14 +22,24 @@ class WeaponInfo
 {
 public:
 
-	WEAPON type					= WEAPON::BASIC;
-	int level_weapon			= 0;
-	int    bullet_damage        = 0;
-	float  bullet_speed			= 0.f;
-	float  bullet_life_ms		= 0.f;
-	float  time_between_bullets	= 0.f;
-	int		bullet_healing = 0;
-	//Obj_Tank* tank_parent		= nullptr;
+	WEAPON type						= WEAPON::BASIC;
+	int level_weapon				= 0;
+	int    bullet_damage			= 0;
+	float  bullet_speed				= 0.f;
+	float  bullet_life_ms			= 0.f;
+	float  time_between_bullets		= 0.f;
+	int		bullet_healing			= 0;
+
+	//Screen shake
+	float basic_shot_trauma			= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake
+	float charged_shot_trauma		= 0.f;//The amount of trauma that it will create when you press use the charged shot, related to the screen shake
+
+	//Controller rumble
+	float basic_rumble_strength		= 0.f;
+	Uint32 basic_rumble_duration	= 0u;
+
+	float charged_rumble_strength	= 0.f;
+	Uint32 charged_rumble_duration	= 0u;
 };
 
 #endif
