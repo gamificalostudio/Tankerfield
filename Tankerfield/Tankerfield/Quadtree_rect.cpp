@@ -73,7 +73,6 @@ std::vector<TYPE> Quadtree_rect<TYPE>::GetElementsIntersection(SDL_Rect camera)
 	{
 		if (!isDivided)
 		{
-
 			for (std::vector<Element<TYPE>>::iterator i = elements.begin(); i != elements.end(); ++i)
 			{
 				if (CheckIntersection(camera.rect, (*i).rect))

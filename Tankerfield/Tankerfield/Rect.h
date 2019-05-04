@@ -4,17 +4,17 @@
 #include "Point.h"
 #include "SDL/include/SDL_rect.h"
 
-template<class TYPE1, class TYPE2> 
+template<class TYPE1, class TYPE> 
 class Rect
 {
 public:
 	Point<TYPE1> pos;
-	TYPE2 w, h;
+	TYPE w, h;
 
 	Rect()
 	{}
 
-	Rect(const Rect<TYPE1, TYPE2>& r) :
+	Rect(const Rect<TYPE1, TYPE>& r) :
 		w(r.w),
 		h(r.h)
 	{
@@ -22,7 +22,7 @@ public:
 		pos.y = r.pos.y;
 	}
 
-	Rect(const TYPE1& x, const TYPE1& y, const TYPE2 & w, const TYPE2 & h) :
+	Rect(const TYPE1& x, const TYPE1& y, const TYPE & w, const TYPE & h) :
 		w(w),
 		h(h)
 	{
@@ -30,7 +30,7 @@ public:
 		pos.y = y;
 	}
 
-	Rect& create(const TYPE1& x, const TYPE1& y, const TYPE2 & w, const TYPE2 & h)
+	Rect& create(const TYPE1& x, const TYPE1& y, const TYPE & w, const TYPE & h)
 	{
 		this->pos.x = x;
 		this->pos.y = y;

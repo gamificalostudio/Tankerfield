@@ -3,15 +3,15 @@
 
 class Quadtree;
 class vector;
-template<class TYPE2>
+template<class TYPE>
 struct Element
 {
 public:
-	Element(SDL_Rect rect, TYPE2 data) : rect(rect), data(data)
+	Element(SDL_Rect rect, TYPE data) : rect(rect), data(data)
 	{};
 
 	SDL_Rect rect;
-	TYPE2 data;
+	TYPE data;
 };
 
 template <class TYPE>
