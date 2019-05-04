@@ -232,84 +232,86 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	Object* ret = nullptr;
 	switch (type)
 	{
-	case ObjectType::TESLA_TROOPER:
-		ret = DBG_NEW Obj_TeslaTrooper(pos);
-		ret->type = ObjectType::TESLA_TROOPER;
-		enemies.push_back(ret);
-		break;
-	case ObjectType::TANK:
-		ret = DBG_NEW Obj_Tank(pos);
-		ret->type = ObjectType::TANK;
-		obj_tanks.push_back((Obj_Tank*)ret);
-		break;
-	case ObjectType::BASIC_BULLET:
-		ret = DBG_NEW Bullet_Basic(pos);
-		ret->type = ObjectType::BASIC_BULLET;
-		break;
-	case ObjectType::BULLET_MISSILE:
-		ret = DBG_NEW Bullet_Missile(pos);
-		ret->type = ObjectType::BULLET_MISSILE;
-		break;
-	case ObjectType::BULLET_LASER:
-		ret = new Laser_Bullet(pos);
-		ret->type = ObjectType::BULLET_LASER;
-		break;
-	case ObjectType::HEALING_BULLET:
-		ret = new Healing_Bullet(pos);
-		ret->type = ObjectType::HEALING_BULLET;
-		break;
-	case ObjectType::STATIC:
-		ret = DBG_NEW Obj_Building(pos);
-		ret->type = ObjectType::STATIC;
-		break;
-	case ObjectType::REWARD_ZONE:
-		ret = DBG_NEW Reward_Zone(pos);
-		ret->type = ObjectType::REWARD_ZONE;
-		break;
-	case ObjectType::BRUTE:
-		ret = new Obj_Brute(pos);
-		ret->type = ObjectType::BRUTE;
-		enemies.push_back(ret);
-		break;
-	case ObjectType::EXPLOSION:
-		ret = DBG_NEW Obj_Explosion(pos);
-		ret->type = ObjectType::EXPLOSION;
-		break;
-	case ObjectType::CANNON_FIRE:
-		ret = DBG_NEW Obj_CannonFire(pos);
-		ret->type = ObjectType::CANNON_FIRE;
-		break;
-	case ObjectType::HEALING_ANIMATION:
-		ret = new Obj_Healing_Animation(pos);
-		ret->type = ObjectType::HEALING_ANIMATION;
-		break;
-	case ObjectType::FIRE_DEAD:
-		ret = new Obj_Fire(pos);
-		ret->type = ObjectType::FIRE_DEAD;
-		break;
-	case ObjectType::HEALTH_BAG:
-		ret = DBG_NEW Item_HealthBag(pos);
-		ret->type = ObjectType::HEALTH_BAG;
-		break;
-	case ObjectType::HAPPY_HOUR_ITEM:
-		ret = new Item_HappyHour(pos);
-		ret->type = ObjectType::HAPPY_HOUR_ITEM;
-		break;
-	case ObjectType::PICK_UP:
-		ret = DBG_NEW Obj_PickUp(pos);
-		ret->type = ObjectType::PICK_UP;
-		break;
-	case ObjectType::REWARD_BOX:
-		ret = new Obj_RewardBox(pos);
-		ret->type = ObjectType::REWARD_BOX;
-		break;
+			case ObjectType::TESLA_TROOPER:
+				ret = DBG_NEW Obj_TeslaTrooper(pos);
+				ret->type = ObjectType::TESLA_TROOPER;
+				enemies.push_back(ret);
+				break;
+			case ObjectType::TANK:
+				ret = DBG_NEW Obj_Tank(pos);
+				ret->type = ObjectType::TANK;
+				obj_tanks.push_back((Obj_Tank*)ret);
+				break;
+			case ObjectType::BASIC_BULLET:
+				ret = DBG_NEW Bullet_Basic(pos);
+				ret->type = ObjectType::BASIC_BULLET;
+				break;
+			case ObjectType::BULLET_MISSILE:
+				ret = DBG_NEW Bullet_Missile(pos);
+				ret->type = ObjectType::BULLET_MISSILE;
+				break;
+			case ObjectType::BULLET_LASER:
+				ret = new Laser_Bullet(pos);
+				ret->type = ObjectType::BULLET_LASER;
+				break;
+			case ObjectType::HEALING_BULLET:
+				ret = new Healing_Bullet(pos);
+				ret->type = ObjectType::HEALING_BULLET;
+				break;
+			case ObjectType::STATIC:
+				ret = DBG_NEW Obj_Building(pos);
+				ret->type = ObjectType::STATIC;
+				break;
+			case ObjectType::REWARD_ZONE:
+				ret = DBG_NEW Reward_Zone(pos);
+				ret->type = ObjectType::REWARD_ZONE;
+				break;
+			case ObjectType::BRUTE:
+				ret = new Obj_Brute(pos);
+				ret->type = ObjectType::BRUTE;
+				enemies.push_back(ret);
+				break;
+			case ObjectType::EXPLOSION:
+				ret = DBG_NEW Obj_Explosion(pos);
+				ret->type = ObjectType::EXPLOSION;
+				break;
+			case ObjectType::CANNON_FIRE:
+				ret = DBG_NEW Obj_CannonFire(pos);
+				ret->type = ObjectType::CANNON_FIRE;
+				break;
+			case ObjectType::HEALING_ANIMATION:
+				ret = new Obj_Healing_Animation(pos);
+				ret->type = ObjectType::HEALING_ANIMATION;
+				break;
+			case ObjectType::FIRE_DEAD:
+				ret = new Obj_Fire(pos);
+				ret->type = ObjectType::FIRE_DEAD;
+				break;
+			case ObjectType::HEALTH_BAG:
+				ret = DBG_NEW Item_HealthBag(pos);
+				ret->type = ObjectType::HEALTH_BAG;
+				break;
+			case ObjectType::HAPPY_HOUR_ITEM:
+				ret = new Item_HappyHour(pos);
+				ret->type = ObjectType::HAPPY_HOUR_ITEM;
+				break;
+			case ObjectType::PICK_UP:
+				ret = DBG_NEW Obj_PickUp(pos);
+				ret->type = ObjectType::PICK_UP;
+				break;
+			case ObjectType::REWARD_BOX:
+				ret = new Obj_RewardBox(pos);
+				ret->type = ObjectType::REWARD_BOX;
+				break;
 	}
 	
   
 	if (ret != nullptr)
 	{
-		ret->Start();
 		objects.push_back(ret);
+		qt_objects.InsertElement(ret->frame, ret);
+		ret->Start();
+
 	}
   
 	return ret;
