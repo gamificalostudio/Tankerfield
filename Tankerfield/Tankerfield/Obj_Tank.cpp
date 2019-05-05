@@ -182,9 +182,11 @@ bool Obj_Tank::Start()
 	app->ui->AddPlayerGUI(this);
 	InitWeapons();
 
-	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
+	float coll_w = 0.8f;
+	float coll_h = 0.8f;
+	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ -0.4f, -0.4f });
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	cannon_height = 11.f;
 
@@ -356,7 +358,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 		{
 			//- Basic shot
-			if (charged_timer.ReadMs() < charge_time)
+			if (charged_shot_timer.ReadMs() < charge_time)
 			{
 				//set the max velocity in a basic shot
 				velocity_recoil_curr_speed = velocity_recoil_speed_max;
@@ -660,26 +662,27 @@ void Obj_Tank::ShootChargedWeapon()
 {
 	if (PressShot())
 	{
-		charged_timer.Start();
+		charged_shot_timer.Start();
 	}
 
 	if (HoldShot())
 	{
-		if (charged_timer.ReadMs() / charge_time > 0.1f)
+		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
-			gui->SetChargedShotBar(charged_timer.ReadMs() / charge_time);
+			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 		}
 	}
 
-	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+	if (ReleaseShot()
+		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
 		//- Basic shot
-		if (charged_timer.ReadMs() < charge_time)
+		if (charged_shot_timer.ReadMs() < charge_time)
 		{
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.basic_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
 		}
 		//- Charged shot
 		else
@@ -687,7 +690,7 @@ void Obj_Tank::ShootChargedWeapon()
 			(this->*shot2_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.charged_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(1.0f, 400); }
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
 		}
 		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
@@ -697,7 +700,29 @@ void Obj_Tank::ShootChargedWeapon()
 
 void Obj_Tank::ShootSustainedWeapon()
 {
+	if (PressShot())
+	{
+		sustained_shot_timer.Start();
+	}
 
+	//- Sustained shot
+	if (HoldShot()
+		&& sustained_shot_timer.ReadMs() > quick_shot_time)
+	{
+		(this->*shot2_function[(uint)weapon_info.weapon])();
+		//TODO: Play wepon sfx
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
+	}
+
+	//- Quick shot
+	if (ReleaseShot()
+		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets
+		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
+	{
+		(this->*shot1_function[(uint)weapon_info.weapon])();
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
+		shot_timer.Start();
+	}
 }
 
 void Obj_Tank::Aim(float dt)
