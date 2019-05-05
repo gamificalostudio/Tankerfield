@@ -189,9 +189,9 @@ void Obj_Tank::ShootLaserShotCharged()
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-
-	laser_bullet->charged = true; //TODO: pasar este booleano a SetBulletProperties()?
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45,
+		true);
+	//Se podría mirar de juntar las dos funciones (cargada y sin cargar) del láser y pasarle el parámetro en la funcion si está charged o no y pasarlo al SetBulletsProperties. No sé si para el resto de armas es útil o no.
 
 }
 
