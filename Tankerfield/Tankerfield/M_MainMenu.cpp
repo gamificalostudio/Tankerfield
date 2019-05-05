@@ -65,7 +65,7 @@ bool M_MainMenu::PostUpdate(float dt)
 bool M_MainMenu::CleanUp()
 {
 	app->tex->UnLoad(background_texture);
-	app->audio->PauseMusic(2.F);
+	app->audio->PauseMusic(2);
 
 	if (app->on_clean_up == false)
 	{

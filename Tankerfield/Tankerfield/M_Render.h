@@ -63,6 +63,9 @@ public:
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
+	Camera* CreateCamera(Obj_Tank * tank);
+	void DestroyCamera(Camera * camera);
+
 public:
 
 	SDL_Renderer*					renderer = nullptr;

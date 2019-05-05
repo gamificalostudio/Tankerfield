@@ -108,7 +108,8 @@ bool M_ObjManager::Update(float dt)
 				//	Obj_Tank* aux = (Obj_Tank*)(*iterator);
 				//	obj_tanks.remove((Obj_Tank*)(*iterator));
 				//}
-				if ((*iterator)->type == ObjectType::TESLA_TROOPER || (*iterator)->type == ObjectType::BRUTE)
+				if ((*iterator)->type == ObjectType::TESLA_TROOPER
+					|| (*iterator)->type == ObjectType::BRUTE)
 				{
 					enemies.remove((*iterator));
 				}

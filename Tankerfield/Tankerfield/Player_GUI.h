@@ -20,20 +20,11 @@ enum class CONTROLLER_BUTTON;
 enum class WEAPON;
 enum class ObjectType;
 
-enum class GUI_TYPE
-{
-	SINGLE_PLAYER,
-	PLAYER_1,
-	PLAYER_2,
-	PLAYER_3,
-	PLAYER_4
-};
-
 class Player_GUI
 {
 public:
 
-	Player_GUI(const GUI_TYPE type, Obj_Tank* target);
+	Player_GUI(Obj_Tank* target);
 
 	void Update(float dt);
 
@@ -58,9 +49,6 @@ public:
 	~Player_GUI();
 
 public:
-	
-	GUI_TYPE type = GUI_TYPE::SINGLE_PLAYER;
-
 	Obj_Tank* player = nullptr;
 
 	fRect viewport;

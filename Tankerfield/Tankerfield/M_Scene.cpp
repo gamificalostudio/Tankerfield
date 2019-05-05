@@ -73,53 +73,54 @@ bool M_Scene::Start()
 {
 	path_tex = app->tex->Load("maps/path.png");
 
-	// Load the first level of the list on first game start -------------------------
-	std::list<Levels*>::iterator levelData = app->map->levels.begin();
-	std::advance(levelData, current_level);
-	app->map->Load((*levelData)->name.c_str());
-
 	// Load Fxs
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
 	
-	// UI Elements
-	std::list<ObjectGroup*>::iterator players_layer = app->map->data.object_layers.begin();
-	for (; players_layer != app->map->data.object_layers.end(); ++players_layer)
+
+
+	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
+// Load the first level of the list on first game start -------------------------
+	std::list<Levels*>::iterator levelData = app->map->levels.begin();
+	std::advance(levelData, current_level);
+	app->map->Load((*levelData)->name.c_str());
+
+
+	//Set pos players
 	{
-		if ((*players_layer)->name == "Players")
+		std::list<ObjectGroup*>::iterator players_layer = app->map->data.object_layers.begin();
+		for (; players_layer != app->map->data.object_layers.end(); ++players_layer)
 		{
-			break;
+			if ((*players_layer)->name == "Players")
+			{
+				break;
+			}
+		}
+		if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
+		{
+			//Create all tanks
+			app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
+			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
+			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
+			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
+		}
+		else
+		{
+			//Create all tanks
+			app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
+			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
+			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
+			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 		}
 	}
-	if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
-	{
-		//Create all tanks
-		tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(0.f, 0.f));
-		tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(21.5f, 13.5f));
-		tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(11.5f, 22.5f));
-		tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(22.5f, 22.5f));
-	}
-	else
-	{
-		
-		//Create all tanks
-		tank_1 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
-		tank_2 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
-		tank_3 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
-		tank_4 = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
-	}
 	
-
-	player_1_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_1, app->scene->tank_1);
-	player_2_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_2, app->scene->tank_2);
-	player_3_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_3, app->scene->tank_3);
-	player_4_gui = app->ui->AddPlayerGUI(GUI_TYPE::PLAYER_4, app->scene->tank_4);
 	
 	general_hud = DBG_NEW General_HUD();
 
-	round = 0;
+	round = 0u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
+
 
 
 	return true;
@@ -170,10 +171,10 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
 	{
-		tank_1->SetLife(0);
-		tank_2->SetLife(0);
-		tank_3->SetLife(0);
-		tank_4->SetLife(0);
+		app->objectmanager->obj_tanks[0]->SetLife(0);
+		app->objectmanager->obj_tanks[1]->SetLife(0);
+		app->objectmanager->obj_tanks[2]->SetLife(0);
+		app->objectmanager->obj_tanks[3]->SetLife(0);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
 	{
@@ -276,11 +277,10 @@ bool M_Scene::Update(float dt)
 		break;
 
 	case WaveStat::GAME_OVER:
-
-		player_1_gui->Fade_GUI(false);
-		player_2_gui->Fade_GUI(false);
-		player_3_gui->Fade_GUI(false);
-		player_4_gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
 		general_hud->FadeGameOverScreen(true, round);
 		stat_of_wave = WaveStat::NO_TYPE;
@@ -288,10 +288,10 @@ bool M_Scene::Update(float dt)
 
 	case WaveStat::WIN_GAME:
 		
-		player_1_gui->Fade_GUI(false);
-		player_2_gui->Fade_GUI(false);
-		player_3_gui->Fade_GUI(false);
-		player_4_gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
+		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
 		general_hud->FadeGeneralHUD(false);
 		general_hud->FadeWinScreen(true);
 		stat_of_wave = WaveStat::NO_TYPE;
@@ -299,7 +299,11 @@ bool M_Scene::Update(float dt)
 		break;
 	}
 
-	if (game_over == false && tank_1->Alive() == false && tank_2->Alive() == false && tank_3->Alive() == false && tank_4->Alive() == false)
+	if (!game_over
+		&& !app->objectmanager->obj_tanks[0]->Alive()
+		&& !app->objectmanager->obj_tanks[1]->Alive()
+		&& !app->objectmanager->obj_tanks[2]->Alive()
+		&& !app->objectmanager->obj_tanks[3]->Alive())
 	{
 		stat_of_wave = WaveStat::GAME_OVER;
 		game_over = true;
@@ -353,10 +357,11 @@ bool M_Scene::CleanUp()
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
-	player_1_gui = nullptr;
-	player_2_gui = nullptr;
-	player_3_gui = nullptr;
-	player_4_gui = nullptr;
+	for (std::vector<Obj_Tank*>::iterator i = app->objectmanager->obj_tanks.begin(); i != app->objectmanager->obj_tanks.end() ; ++i)
+	{
+			(*i)->gui = nullptr;
+	}
+	
 
 	return true;
 }
@@ -491,8 +496,8 @@ void M_Scene::NewWave()
 
 bool M_Scene::AllPlayersReady() const
 {
-	return (tank_1->IsReady()
-		&& tank_2->IsReady()
-		&& tank_3->IsReady()
-		&& tank_4->IsReady());
+	return (app->objectmanager->obj_tanks[0]->IsReady()
+		&&  app->objectmanager->obj_tanks[1]->IsReady()
+		&&  app->objectmanager->obj_tanks[2]->IsReady()
+		&&  app->objectmanager->obj_tanks[3]->IsReady());
 }

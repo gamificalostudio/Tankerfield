@@ -27,29 +27,22 @@ public:
 	~Obj_Tank();
 
 public:
-
 	bool Start() override;
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 
-
-
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
-
 
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);
-
 	void OnTriggerExit(Collider* c1);
-
 
 public:
 	//- Logic
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
-
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
@@ -57,8 +50,8 @@ public:
 	int GetMaxLife();
 	int GetTimeBetweenBullets();
 	fPoint GetShotDir() const;
-
 	bool IsReady() const;
+	int GetTankNum();
 
 public:
 
@@ -79,7 +72,10 @@ private:
 	void CameraMovement(float dt);
 
 	//- Shooting
-	void Shoot(float dt);
+	void Aim(float dt);
+	void Shoot();
+	void ShootChargedWeapon();
+	void ShootSustainedWeapon();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
@@ -93,6 +89,7 @@ private:
 	bool ReleaseInteract();
 
 	//- Weapons methods
+	void InitWeapons();
 	void ShootBasic();
 	void ShootFlameThrower();
 	void ShootDoubleMissile();
@@ -115,7 +112,7 @@ private:
 	static int number_of_tanks;
 
 	bool ready								= false;
-	bool fire_dead = false;	
+	bool fire_dead							= false;
 
 
 	//- Movement
@@ -164,27 +161,24 @@ private:
 	Timer revive_timer[4];					//Time that you've been reviving other tanks
 	uint revive_sfx							= 0u;
 
-
-
 	//-- Basic shoot
 	uint shot_type							= (uint)WEAPON::DOUBLE_MISSILE;
 
 	//-- Shoot
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
-	PerfTimer shot_timer;
-	PerfTimer charged_timer;
+	PerfTimer shot_timer;				//Determines how much time it must pass to be albe to shoot another shot again
+	PerfTimer charged_shot_timer;
+	PerfTimer sustained_shot_timer;
 	float charge_time						= 0.f;//Charge time in ms
+	float quick_shot_time					= 0.f;//If time is bigger than this, you will start to use the sustained shot and won't use a qucik shot
 	uint shot_sound							= 0u;
-	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX_WEAPONS])();
-	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
+	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
 
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
 	UI_IG_Helper * tutorial_pick_up			= nullptr;
-
-	//- GUI
-	Player_GUI*  gui                        = nullptr;
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
@@ -204,6 +198,7 @@ private:
 	//-- Controller inputs
 	Joystick gamepad_move							= Joystick::INVALID;
 	Joystick gamepad_aim							= Joystick::INVALID;
+	int dead_zone									= 0;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;
@@ -237,6 +232,9 @@ private:
 
 public:
 	Camera* camera_player				= nullptr;
+
+	//- GUI
+	Player_GUI*  gui = nullptr;
 };
 
 #endif

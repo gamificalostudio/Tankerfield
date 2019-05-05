@@ -96,10 +96,8 @@ bool M_Map::PostUpdate(float dt)
 				&sorted_tiles->section);
 				
 		}
-		SDL_RenderSetClipRect(app->render->renderer, nullptr);
-	
 	}
-
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 
 
 	//// Draw Grid ==============================================
@@ -664,7 +662,7 @@ bool M_Map::LoadMap()
 		;
 
 		uint level = 1;
-		data.qt->ReturnNumbreOfLevels(data.map_rect.w, (*app->render->cameras.begin())->screen_section.w*0.25, level);
+		data.qt->ReturnNumbreOfLevels(data.map_rect.w, app->win->screen_surface->w * 0.25f, level);
 		data.qt = DBG_NEW Quadtree_Map(data.map_rect, 0, level);
 		if (app->objectmanager->qt_static_objects != nullptr)
 		{
