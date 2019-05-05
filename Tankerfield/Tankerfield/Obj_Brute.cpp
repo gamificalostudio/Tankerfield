@@ -128,6 +128,21 @@ void Obj_Brute::Movement(float &dt)
 
 	switch (state)
 	{
+	case BRUTE_STATE::IDLE:
+	{
+		path.clear();
+		move_vect.SetToZero();
+		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+		if (target != nullptr)
+		{
+			state = BRUTE_STATE::GET_PATH;
+		}
+		else
+		{
+			curr_anim = &idle;
+		}
+	}
+	break;
 	case BRUTE_STATE::SPAWN:
 	{
 		if (curr_anim->Finished())
@@ -146,7 +161,6 @@ void Obj_Brute::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-		//curr_anim = &idle;
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
@@ -162,6 +176,10 @@ void Obj_Brute::Movement(float &dt)
 
 
 			state = BRUTE_STATE::RECHEAD_POINT;
+		}
+		else
+		{
+			state = BRUTE_STATE::IDLE;
 		}
 
 		timer.Start();
