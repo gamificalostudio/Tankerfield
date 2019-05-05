@@ -186,7 +186,6 @@
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
-    <ClCompile Include="WeaponInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
