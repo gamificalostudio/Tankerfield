@@ -9,9 +9,9 @@ enum class WEAPON {
 	BASIC,
 	DOUBLE_MISSILE,
 	HEALING_SHOT,
-	FLAMETHROWER,
 	LASER_SHOT,
 	MAX_WEAPONS,// must be in the last position of the weapons that work. Needed from the creation of pickUps
+	FLAMETHROWER,
 };
 
 
