@@ -153,7 +153,7 @@
     <ClCompile Include="Obj_PickUp.cpp" />
     <ClCompile Include="Obj_Building.cpp" />
     <ClCompile Include="Quadtree_Map.cpp" />
-    <ClCompile Include="Quadtree_objects.cpp" />
+    <ClCompile Include="Quadtree_Points.cpp" />
     <ClCompile Include="UI_Bar.cpp" />
     <ClCompile Include="UI_Button.cpp" />
     <ClCompile Include="UI_Checkbox.cpp" />
@@ -216,7 +216,7 @@
     <ClInclude Include="Obj_Building.h" />
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Quadtree_Map.h" />
-    <ClInclude Include="Quadtree_rect.h" />
+    <ClInclude Include="Quadtree_Points.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="UI_Bar.h" />
     <ClInclude Include="UI_Button.h" />

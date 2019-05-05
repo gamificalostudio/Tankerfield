@@ -1,12 +1,13 @@
 #include "Quadtree_Map.h"
 #include "M_Map.h"
-Quadtree_Map::Quadtree_Map(SDL_Rect area, uint level, uint max_levels):
-	Quadtree(area, level, max_levels)
+Quadtree_Map::Quadtree_Map(SDL_Rect area, uint level, uint max_levels, uint maxElements) :
+	Quadtree(area, level, max_levels, maxElements)
 {
 
 }
 Quadtree_Map::~Quadtree_Map()
 {
+	this;
 	for (uint i = 0; i < 4; ++i)
 	{
 		if (nodes[i] != nullptr)
@@ -44,7 +45,6 @@ void Quadtree_Map::Subdivide()
 
 	nodes[(int)QUADRANT::SOUTH_WEST] = DBG_NEW Quadtree_Map({ area.x, area.y + half_height, half_width, half_height }, level + 1, max_levels);
 }
-
 void Quadtree_Map::Draw() const
 {
 	app->render->DrawQuad(area, 0, 0, 255, 255, false);
@@ -59,6 +59,7 @@ void Quadtree_Map::Draw() const
 
 void Quadtree_Map::InsertTile(Tile tile)
 {
+	int ret = 0;
 	if (!SDL_HasIntersection(&tile.rect, &area))
 	{
 		return;

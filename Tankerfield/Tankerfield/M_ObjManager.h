@@ -11,7 +11,6 @@
 #include "Module.h"
 #include "Point.h"
 
-
 enum class ObjectType
 {
 	//ITEMS need to be first because of the random selection from Obj_PickUp .
@@ -48,9 +47,6 @@ enum class ObjectType
 class Object;
 class Camera;
 class Obj_Tank;
-
-template <class>
-class Quadtree_rect;
 
 class M_ObjManager : public Module
 {
@@ -96,16 +92,12 @@ public:
 
 public:
 	std::vector<Obj_Tank*> obj_tanks;
-	Quadtree_rect<Object*>* qt_static_objects = nullptr;
 
 private:
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
-	std::vector<Object*> dynamic_objects;
 
 
-
-	
 };
 
 #endif

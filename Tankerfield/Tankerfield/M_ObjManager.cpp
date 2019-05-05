@@ -39,7 +39,6 @@
 #include "Obj_RewardBox.h"
 #include "Camera.h"
 #include "Obj_CannonFire.h"
-#include "Quadtree_rect.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -69,8 +68,6 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	
-
 	return ret;
 }
 
@@ -153,7 +150,7 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
-	//std::vector<Object*> draw_objects;
+	std::vector<Object*> draw_objects;
 
 	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
@@ -167,21 +164,13 @@ bool M_ObjManager::PostUpdate(float dt)
 	{
 		SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 
-		
-		std::vector<Object*>draw_objects;
-		for (std::vector<Object*>::iterator item = dynamic_objects.begin(); item != dynamic_objects.end(); ++item)
+		for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
 			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
 			{
 				draw_objects.push_back(*item);
 			}
 		}
-		if (qt_static_objects != nullptr)
-		{
-			std::vector<Object*>draw_static_objects = qt_static_objects->GetElementsIntersection((*item_cam)->rect);
-			draw_objects.insert(draw_objects.end(), draw_static_objects.begin(), draw_static_objects.end());
-		}
-		
 
 		std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
 
@@ -218,7 +207,22 @@ bool M_ObjManager::CleanUp()
 
 bool M_ObjManager::Reset()
 {
-	DeleteObjects();
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
+	{
+		if ((*iterator)->coll != nullptr)
+		{
+			(*iterator)->CleanUp();
+			(*iterator)->coll->Destroy();
+			(*iterator)->coll = nullptr;
+		}
+
+		delete((*iterator));
+		(*iterator) = nullptr;
+		iterator = objects.erase(iterator);
+	}
+
+	obj_tanks.clear();
+	objects.clear();
 
 	return true;
 }
@@ -228,116 +232,84 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	Object* ret = nullptr;
 	switch (type)
 	{
-			case ObjectType::TESLA_TROOPER:
-				ret = DBG_NEW Obj_TeslaTrooper(pos);
-				ret->type = ObjectType::TESLA_TROOPER;
-				enemies.push_back(ret);
-				dynamic_objects.push_back(ret);
-				break;
-			case ObjectType::TANK:
-				ret = DBG_NEW Obj_Tank(pos);
-				ret->type = ObjectType::TANK;
-				obj_tanks.push_back((Obj_Tank*)ret);
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::BASIC_BULLET:
-				ret = DBG_NEW Bullet_Basic(pos);
-				ret->type = ObjectType::BASIC_BULLET;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::BULLET_MISSILE:
-				ret = DBG_NEW Bullet_Missile(pos);
-				ret->type = ObjectType::BULLET_MISSILE;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::BULLET_LASER:
-				ret = new Laser_Bullet(pos);
-				ret->type = ObjectType::BULLET_LASER;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::HEALING_BULLET:
-				ret = new Healing_Bullet(pos);
-				ret->type = ObjectType::HEALING_BULLET;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::STATIC:
-				ret = DBG_NEW Obj_Building(pos);
-				ret->type = ObjectType::STATIC;
-				break;
-			case ObjectType::REWARD_ZONE:
-				ret = DBG_NEW Reward_Zone(pos);
-				ret->type = ObjectType::REWARD_ZONE;
-				
-
-				break;
-			case ObjectType::BRUTE:
-				ret = new Obj_Brute(pos);
-				ret->type = ObjectType::BRUTE;
-				enemies.push_back(ret);
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::EXPLOSION:
-				ret = DBG_NEW Obj_Explosion(pos);
-				ret->type = ObjectType::EXPLOSION;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::CANNON_FIRE:
-				ret = DBG_NEW Obj_CannonFire(pos);
-				ret->type = ObjectType::CANNON_FIRE;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::HEALING_ANIMATION:
-				ret = new Obj_Healing_Animation(pos);
-				ret->type = ObjectType::HEALING_ANIMATION;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::FIRE_DEAD:
-				ret = new Obj_Fire(pos);
-				ret->type = ObjectType::FIRE_DEAD;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::HEALTH_BAG:
-				ret = DBG_NEW Item_HealthBag(pos);
-				ret->type = ObjectType::HEALTH_BAG;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::HAPPY_HOUR_ITEM:
-				ret = new Item_HappyHour(pos);
-				ret->type = ObjectType::HAPPY_HOUR_ITEM;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::PICK_UP:
-				ret = DBG_NEW Obj_PickUp(pos);
-				ret->type = ObjectType::PICK_UP;
-				dynamic_objects.push_back(ret);
-
-				break;
-			case ObjectType::REWARD_BOX:
-				ret = new Obj_RewardBox(pos);
-				ret->type = ObjectType::REWARD_BOX;
-				dynamic_objects.push_back(ret);
-
-				break;
+	case ObjectType::TESLA_TROOPER:
+		ret = DBG_NEW Obj_TeslaTrooper(pos);
+		ret->type = ObjectType::TESLA_TROOPER;
+		enemies.push_back(ret);
+		break;
+	case ObjectType::TANK:
+		ret = DBG_NEW Obj_Tank(pos);
+		ret->type = ObjectType::TANK;
+		obj_tanks.push_back((Obj_Tank*)ret);
+		break;
+	case ObjectType::BASIC_BULLET:
+		ret = DBG_NEW Bullet_Basic(pos);
+		ret->type = ObjectType::BASIC_BULLET;
+		break;
+	case ObjectType::BULLET_MISSILE:
+		ret = DBG_NEW Bullet_Missile(pos);
+		ret->type = ObjectType::BULLET_MISSILE;
+		break;
+	case ObjectType::BULLET_LASER:
+		ret = new Laser_Bullet(pos);
+		ret->type = ObjectType::BULLET_LASER;
+		break;
+	case ObjectType::HEALING_BULLET:
+		ret = new Healing_Bullet(pos);
+		ret->type = ObjectType::HEALING_BULLET;
+		break;
+	case ObjectType::STATIC:
+		ret = DBG_NEW Obj_Building(pos);
+		ret->type = ObjectType::STATIC;
+		break;
+	case ObjectType::REWARD_ZONE:
+		ret = DBG_NEW Reward_Zone(pos);
+		ret->type = ObjectType::REWARD_ZONE;
+		break;
+	case ObjectType::BRUTE:
+		ret = new Obj_Brute(pos);
+		ret->type = ObjectType::BRUTE;
+		enemies.push_back(ret);
+		break;
+	case ObjectType::EXPLOSION:
+		ret = DBG_NEW Obj_Explosion(pos);
+		ret->type = ObjectType::EXPLOSION;
+		break;
+	case ObjectType::CANNON_FIRE:
+		ret = DBG_NEW Obj_CannonFire(pos);
+		ret->type = ObjectType::CANNON_FIRE;
+		break;
+	case ObjectType::HEALING_ANIMATION:
+		ret = new Obj_Healing_Animation(pos);
+		ret->type = ObjectType::HEALING_ANIMATION;
+		break;
+	case ObjectType::FIRE_DEAD:
+		ret = new Obj_Fire(pos);
+		ret->type = ObjectType::FIRE_DEAD;
+		break;
+	case ObjectType::HEALTH_BAG:
+		ret = DBG_NEW Item_HealthBag(pos);
+		ret->type = ObjectType::HEALTH_BAG;
+		break;
+	case ObjectType::HAPPY_HOUR_ITEM:
+		ret = new Item_HappyHour(pos);
+		ret->type = ObjectType::HAPPY_HOUR_ITEM;
+		break;
+	case ObjectType::PICK_UP:
+		ret = DBG_NEW Obj_PickUp(pos);
+		ret->type = ObjectType::PICK_UP;
+		break;
+	case ObjectType::REWARD_BOX:
+		ret = new Obj_RewardBox(pos);
+		ret->type = ObjectType::REWARD_BOX;
+		break;
 	}
 	
   
 	if (ret != nullptr)
 	{
-		objects.push_back(ret);
 		ret->Start();
-
+		objects.push_back(ret);
 	}
   
 	return ret;
@@ -359,13 +331,6 @@ void M_ObjManager::DeleteObjects()
 	objects.clear();
 	obj_tanks.clear();
 	enemies.clear();
-	dynamic_objects.clear();
-	if (qt_static_objects != nullptr)
-	{
-		delete qt_static_objects;
-		qt_static_objects = nullptr;
-	}
-	
 }
 
 
