@@ -20,6 +20,7 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
+	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
@@ -47,10 +48,10 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		weapon_info.basic_shot_trauma = 0.54f;
 		weapon_info.charged_shot_trauma = 0.76f;
-		weapon_info.basic_rumble_strength = 0.92f;
-		weapon_info.basic_rumble_duration = 250;
-		weapon_info.charged_rumble_strength = 1.0f;
-		weapon_info.charged_rumble_duration = 400;
+		weapon_info.shot1_rumble_strength = 0.92f;
+		weapon_info.shot1_rumble_duration = 250;
+		weapon_info.shot2_rumble_strength = 1.0f;
+		weapon_info.shot2_rumble_duration = 400;
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
@@ -61,10 +62,10 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		weapon_info.basic_shot_trauma = 0.54f;
 		weapon_info.charged_shot_trauma = 0.76f;
-		weapon_info.basic_rumble_strength = 0.92f;
-		weapon_info.basic_rumble_duration = 250;
-		weapon_info.charged_rumble_strength = 1.0f;
-		weapon_info.charged_rumble_duration = 400;
+		weapon_info.shot1_rumble_strength = 0.92f;
+		weapon_info.shot1_rumble_duration = 250;
+		weapon_info.shot2_rumble_strength = 1.0f;
+		weapon_info.shot2_rumble_duration = 400;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -75,10 +76,10 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		weapon_info.basic_shot_trauma = 0.54f;
 		weapon_info.charged_shot_trauma = 0.76f;
-		weapon_info.basic_rumble_strength = 0.92f;
-		weapon_info.basic_rumble_duration = 250;
-		weapon_info.charged_rumble_strength = 1.0f;
-		weapon_info.charged_rumble_duration = 400;
+		weapon_info.shot1_rumble_strength = 0.92f;
+		weapon_info.shot1_rumble_duration = 250;
+		weapon_info.shot2_rumble_strength = 1.0f;
+		weapon_info.shot2_rumble_duration = 400;
 		break;
 	case WEAPON::HEALING_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -89,10 +90,10 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		weapon_info.basic_shot_trauma = 0.54f;
 		weapon_info.charged_shot_trauma = 0.76f;
-		weapon_info.basic_rumble_strength = 0.92f;
-		weapon_info.basic_rumble_duration = 250;
-		weapon_info.charged_rumble_strength = 1.0f;
-		weapon_info.charged_rumble_duration = 400;
+		weapon_info.shot1_rumble_strength = 0.92f;
+		weapon_info.shot1_rumble_duration = 250;
+		weapon_info.shot2_rumble_strength = 1.0f;
+		weapon_info.shot2_rumble_duration = 400;
 		break;
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -103,10 +104,10 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		weapon_info.basic_shot_trauma = 0.405f;
 		weapon_info.charged_shot_trauma = 0.57f;
-		weapon_info.basic_rumble_strength = 0.92f;
-		weapon_info.basic_rumble_duration = 250;
-		weapon_info.charged_rumble_strength = 1.0f;
-		weapon_info.charged_rumble_duration = 400;
+		weapon_info.shot1_rumble_strength = 0.92f;
+		weapon_info.shot1_rumble_duration = 250;
+		weapon_info.shot2_rumble_strength = 1.0f;
+		weapon_info.shot2_rumble_duration = 400;
 		break;
 	}
 }

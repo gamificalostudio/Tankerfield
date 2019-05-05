@@ -44,11 +44,13 @@ public:
 	float charged_shot_trauma		= 0.f;//The amount of trauma that it will create when you press use the charged shot, related to the screen shake
 
 	//Controller rumble
-	float basic_rumble_strength		= 0.f;
-	Uint32 basic_rumble_duration	= 0u;
+	//Shot 1 (basic shot on charged weapons and quick shot on sustained weapons)
+	float shot1_rumble_strength		= 0.f;
+	Uint32 shot1_rumble_duration	= 0u;
 
-	float charged_rumble_strength	= 0.f;
-	Uint32 charged_rumble_duration	= 0u;
+	//Shot 2 (charged shot on charged weapons and sustained shot on sustained weapons)
+	float shot2_rumble_strength	= 0.f;
+	Uint32 shot2_rumble_duration	= 0u;
 };
 
 #endif
