@@ -24,7 +24,7 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
-	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
+	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
 }
 
 //if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
@@ -168,6 +168,7 @@ void Obj_Tank::ShootHealingShot()
 
 void Obj_Tank::ShootLaserShot()
 {
+
 	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir);
 
 	laser_bullet->SetBulletProperties(
@@ -176,6 +177,22 @@ void Obj_Tank::ShootLaserShot()
 		weapon_info.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+}
+
+void Obj_Tank::ShootLaserShotCharged()
+{
+
+	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir);
+
+	laser_bullet->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	laser_bullet->charged = true; //TODO: pasar este booleano a SetBulletProperties()?
+
 }
 
 void Obj_Tank::ShootFlameThrower()

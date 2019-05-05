@@ -391,21 +391,35 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
-
-		life -= collider->damage;
-
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
+		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
+		if (obj->kill_counter < 2)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
 		{
-			// DROP A PICK UP ITEM 
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = TROOPER_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = TROOPER_STATE::DEAD;
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+			}
+
+
+			if (!obj->charged)
+			{
+				++obj->kill_counter;
+				if (obj->kill_counter >= 2)
+				{
+					obj->to_remove = true;
+
+				}
+			}
 		}
 
 	}
@@ -429,6 +443,11 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		{
 			app->audio->PlayFx(sfx_hit);
 		}
+	}
+
+	else if (collider->GetTag() != Collider::TAG::ENEMY)
+	{
+		LOG("yeep");
 	}
 
 
