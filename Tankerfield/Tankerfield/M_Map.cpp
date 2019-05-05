@@ -4,6 +4,7 @@
 #include "Brofiler\Brofiler.h"
 
 #include "Log.h"
+#include "Quadtree_rect.h"
 
 #include "App.h"
 #include "M_Map.h"
@@ -654,17 +655,23 @@ bool M_Map::LoadMap()
 				data.screen_tile_rect[(y*data.columns) + x].create(pos.x + data.offset_x, pos.y + data.offset_y, data.tile_width, data.tile_height);
 			}
 		}
-		SDL_Rect area = { data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x,
+		 data.map_rect = { data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x,
 					 0,
 					 (data.screen_tile_rect[(data.columns - 1)].GetRight() + abs(data.screen_tile_rect[(data.rows - 1)*(data.columns)].pos.x)),
 					data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].pos.y + data.screen_tile_rect[((data.rows - 1)*data.columns) + (data.columns - 1)].h };
 		;
 
 		uint level = 1;
-	
-		data.qt->ReturnNumbreOfLevels(area.w, app->win->screen_surface->w * 0.25f, level);
-		data.qt = DBG_NEW Quadtree_Map(area, 0, level);
+		data.qt->ReturnNumbreOfLevels(data.map_rect.w, app->win->screen_surface->w * 0.25f, level);
+		data.qt = DBG_NEW Quadtree_Map(data.map_rect, 0, level);
+		if (app->objectmanager->qt_static_objects != nullptr)
+		{
+			delete app->objectmanager->qt_static_objects;
+		}
 
+		uint max_levels = 1;
+		app->objectmanager->qt_static_objects->ReturnNumbreOfLevels(app->map->data.map_rect.w, app->win->screen_surface->w *0.25, max_levels);
+		app->objectmanager->qt_static_objects = new Quadtree_rect<Object*>(app->map->data.map_rect, 0u, max_levels);
 	}
 
 	return ret;

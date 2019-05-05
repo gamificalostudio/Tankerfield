@@ -130,6 +130,9 @@
     <ClCompile Include="UI_InGameElement.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="WeaponInfo.cpp">
+      <Filter>Weapons</Filter>
+    </ClCompile>
     <ClCompile Include="Obj_PickUp.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -160,9 +163,7 @@
     <ClCompile Include="Obj_Fire.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Quadtree_Points.cpp">
-      <Filter>Tools\QuadTree</Filter>
-    </ClCompile>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="UI_Quad.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -172,11 +173,8 @@
     <ClCompile Include="Obj_CannonFire.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Tank_Weapons.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Utils</Filter>
+    <ClCompile Include="Quadtree_objects.cpp">
+      <Filter>Tools\QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -327,6 +325,9 @@
     <ClInclude Include="Rect.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="WeaponInfo.h">
+      <Filter>Weapons</Filter>
+    </ClInclude>
     <ClInclude Include="Obj_PickUp.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -360,9 +361,7 @@
     <ClInclude Include="Obj_Fire.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree_Points.h">
-      <Filter>Tools\QuadTree</Filter>
-    </ClInclude>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="UI_Quad.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -372,11 +371,8 @@
     <ClInclude Include="Obj_CannonFire.h">
       <Filter>Objects\Items</Filter>
     </ClInclude>
-    <ClInclude Include="WeaponInfo.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="Quadtree_rect.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +399,9 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{e04ab093-71bc-428e-bbd0-6a9ad67abeb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Weapons">
+      <UniqueIdentifier>{82e0d428-2283-4035-94a8-f385e7ef9a4c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Objects\Bullets">
       <UniqueIdentifier>{7fdb053f-2696-4225-9b31-203b4b8cbd8f}</UniqueIdentifier>

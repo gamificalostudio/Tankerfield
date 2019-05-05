@@ -33,15 +33,13 @@ protected:
 
 	bool isDivided;			//true when have subnodes
 
-	uint maxElements; //max elements to divide;
 
 
 public:
 	//Constructor
-	Quadtree( SDL_Rect area, uint level = 4, uint max_levels = 1, uint maxElements = 4) :max_levels(max_levels), 
+	Quadtree( SDL_Rect area, uint level = 4, uint max_levels = 1) :max_levels(max_levels), 
 		level(level),
 		area(area),
-		maxElements(maxElements),
 		isDivided(false)
 	{
 	}
@@ -52,6 +50,7 @@ public:
 
 	virtual void Draw() const {};
 
+	
 	
 
 

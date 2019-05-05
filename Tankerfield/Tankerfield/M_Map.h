@@ -170,14 +170,13 @@ enum MapTypes
 
 struct MapData
 {
-	std::string			objects_path;
 	int					columns = NULL,	rows = NULL;
 	int					tile_width = NULL,	tile_height = NULL;
 	int					offset_x = NULL, offset_y = NULL;
   
 	MapTypes			type;
 	SDL_Color			background_color;
-
+	std::string objects_path;
 	std::list<TileSet*>		tilesets;
 	std::list<MapLayer*>	map_layers;
 	std::list<Collider*>    colliders_list;
@@ -187,10 +186,9 @@ struct MapData
 	std::vector<SpawnPoint*>	spawners_position_enemy;
 	Properties				map_properties;
 
-	Quadtree_Map*				qt = nullptr;
 	
 	iRect*		screen_tile_rect = nullptr;
-
+	SDL_Rect map_rect;
 
 	~MapData()
 	{
@@ -209,7 +207,10 @@ struct MapData
 
 
 	}
-	
+private:
+	Quadtree_Map*				qt = nullptr;
+
+	friend class M_Map;
 };
 
 class M_Map : public Module
