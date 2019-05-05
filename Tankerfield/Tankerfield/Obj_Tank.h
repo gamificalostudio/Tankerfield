@@ -72,7 +72,10 @@ private:
 	void CameraMovement(float dt);
 
 	//- Shooting
-	void Shoot(float dt);
+	void Aim(float dt);
+	void Shoot();
+	void ShootChargedWeapon();
+	void ShootSustainedWeapon();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
 	bool PressShot();
@@ -167,8 +170,8 @@ private:
 	PerfTimer charged_timer;
 	float charge_time						= 0.f;//Charge time in ms
 	uint shot_sound							= 0u;
-	void(Obj_Tank::*basic_shot_function[(uint)WEAPON::MAX_WEAPONS])();
-	void(Obj_Tank::*charged_shot_function[(uint)WEAPON::MAX_WEAPONS])();
+	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
+	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
 
 	//- Items

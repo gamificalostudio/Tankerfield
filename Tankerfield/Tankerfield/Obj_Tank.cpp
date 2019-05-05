@@ -262,13 +262,13 @@ bool Obj_Tank::PreUpdate()
 bool Obj_Tank::Update(float dt)
 {
 	Movement(dt);
-	Shoot(dt);
+	Aim(dt);//INFO: Aim always has to go before void Shoot()
+	Shoot();
 	Item();
 	StopTank();
 	ReviveTank(dt);
-	CameraMovement(dt);//Camera moves after the player
+	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
-
 	return true;
 }
 
@@ -341,9 +341,6 @@ void Obj_Tank::Movement(float dt)
 	ShotRecoilMovement(dt);
 
 	pos_map += velocity;
-
-	
-
 
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
 	{
@@ -643,13 +640,73 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 	}
 }
 
-void Obj_Tank::Shoot(float dt)
+void Obj_Tank::Shoot()
+{
+	switch (weapon_info.type)
+	{
+	case WEAPON_TYPE::CHARGED:
+		ShootChargedWeapon();
+		break;
+	case WEAPON_TYPE::SUSTAINED:
+		ShootSustainedWeapon();
+		break;
+	default:
+		LOG("Weapon type not set correctly");
+		break;
+	}
+}
+
+void Obj_Tank::ShootChargedWeapon()
+{
+	if (PressShot())
+	{
+		charged_timer.Start();
+	}
+
+	if (HoldShot())
+	{
+		if (charged_timer.ReadMs() / charge_time > 0.1f)
+		{
+			gui->SetChargedShotBar(charged_timer.ReadMs() / charge_time);
+		}
+	}
+
+	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+	{
+		//- Basic shot
+		if (charged_timer.ReadMs() < charge_time)
+		{
+			(this->*shot1_function[(uint)weapon_info.weapon])();
+			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(weapon_info.basic_shot_trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
+		}
+		//- Charged shot
+		else
+		{
+			(this->*shot2_function[(uint)weapon_info.weapon])();
+			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(weapon_info.charged_shot_trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(1.0f, 400); }
+		}
+		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
+		shot_timer.Start();
+		gui->SetChargedShotBar(0.f);
+	}
+}
+
+void Obj_Tank::ShootSustainedWeapon()
+{
+
+}
+
+void Obj_Tank::Aim(float dt)
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
-	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
-	fPoint iso_dir (0.f, 0.f);
-	fPoint input_dir (0.f, 0.f);
+	turr_pos = pos_map - app->map->ScreenToMapF(0, cannon_height);
+	fPoint iso_dir(0.f, 0.f);
+	fPoint input_dir(0.f, 0.f);
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputShotMouse(turr_pos, input_dir, iso_dir);
@@ -676,42 +733,6 @@ void Obj_Tank::Shoot(float dt)
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 	turr_angle = lerp(turr_angle, turr_target_angle, shot_angle_lerp_factor * dt);
-
-	if (PressShot())
-	{
-		charged_timer.Start();
-	}
-
-	if (HoldShot())
-	{
-		if (charged_timer.ReadMs() / charge_time > 0.1f)
-		{
-			gui->SetChargedShotBar(charged_timer.ReadMs() / charge_time);
-		}
-	}
-
-	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
-	{
-		//- Basic shot
-		if (charged_timer.ReadMs() < charge_time)
-		{
-			(this->*basic_shot_function[(uint)weapon_info.type])();
-			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(weapon_info.basic_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
-		}
-		//- Charged shot
-		else
-		{
-			(this->*charged_shot_function[(uint)weapon_info.type])();
-			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(weapon_info.charged_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(1.0f, 400); }
-		}
-		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
-		shot_timer.Start();
-		gui->SetChargedShotBar(0.f);
-	}
 }
 
 bool Obj_Tank::PressShot()
