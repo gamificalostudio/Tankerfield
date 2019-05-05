@@ -14,16 +14,16 @@ void Obj_Tank::InitWeapons()
 	//Basic weapon starting properties
 	SetWeapon(WEAPON::BASIC, 1u);
 
-	basic_shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
-	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
-	basic_shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
-	basic_shot_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
+	shot1_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	shot1_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	shot1_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
+	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
-	charged_shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
-	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
-	charged_shot_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
-	charged_shot_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
+	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
+	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
 }
 
 //if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
@@ -32,13 +32,14 @@ void Obj_Tank::InitWeapons()
 void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
 	weapon_info.level_weapon = level;
-	weapon_info.type = type;
+	weapon_info.weapon = type;
 
 	gui->SetWeaponIcon(type);
 
 	switch (type)
 	{
 	case WEAPON::BASIC:
+		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 25 + level * 2;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
@@ -52,6 +53,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.charged_rumble_duration = 400;
 		break;
 	case WEAPON::FLAMETHROWER:
+		weapon_info.type = WEAPON_TYPE::SUSTAINED;
 		weapon_info.bullet_damage = 50 + level * 2;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
@@ -65,6 +67,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.charged_rumble_duration = 400;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
+		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 0;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
@@ -78,6 +81,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.charged_rumble_duration = 400;
 		break;
 	case WEAPON::HEALING_SHOT:
+		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 25 + level;
 		weapon_info.bullet_healing = 5 + level;
 		weapon_info.bullet_life_ms = 2000;
@@ -91,6 +95,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.charged_rumble_duration = 400;
 		break;
 	case WEAPON::LASER_SHOT:
+		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 10 + level * 2;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
