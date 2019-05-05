@@ -187,10 +187,17 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
 	{
 		++this->round;
+		general_hud->SetRoundNumber(round);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
 	{
 		stat_of_wave = WaveStat::WIN_GAME;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		int new_weapon = (int)app->objectmanager->obj_tanks[0]->GetWeaponInfo().weapon;
+		++new_weapon;
+		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
 	}
 
 	return true;

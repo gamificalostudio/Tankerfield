@@ -54,13 +54,14 @@ void Obj_Bullet::OnTrigger(Collider * collider_1)
 	to_remove = true;
 }
 
-void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle)
+void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle, bool charged)
 {
 	this->speed = speed;
 	this->direction = direction;
 	this->bullet_life_ms = bullet_life_ms;
 	SetDamage(damage);
 	this->angle = angle;
+	this->charged = charged;
 }
 
 void Obj_Bullet::SetPlayer(Obj_Tank * player)

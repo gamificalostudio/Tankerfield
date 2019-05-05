@@ -68,6 +68,8 @@ bool Obj_Explosion::Update(float dt)
 	return true;
 }
 
+
+
 //void Obj_Explosion::SetExplosionDamage(WeaponInfo info)
 //{
 //	if (coll != nullptr)
