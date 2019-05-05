@@ -12,9 +12,10 @@ enum class WEAPON {
 	BASIC,
 	DOUBLE_MISSILE,
 	HEALING_SHOT,
+	FLAMETHROWER,
 	LASER_SHOT,
 	MAX_WEAPONS,// must be in the last position of the weapons that work. Needed from the creation of pickUps
-	FLAMETHROWER,
+
 
 };
 
@@ -22,7 +23,7 @@ class WeaponInfo
 {
 public:
 
-	WEAPON type						= WEAPON::BASIC;
+	WEAPON type						= WEAPON::FLAMETHROWER;
 	int level_weapon				= 0;
 	int    bullet_damage			= 0;
 	float  bullet_speed				= 0.f;
