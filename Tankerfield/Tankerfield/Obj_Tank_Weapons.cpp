@@ -8,11 +8,12 @@
 #include "Bullet_Missile.h"
 #include "Healing_Bullet.h"
 #include "Bullet_Laser.h"
+#include "Bullet_FlameThrower.h"
 
 void Obj_Tank::InitWeapons()
 {
 	//Basic weapon starting properties
-	SetWeapon(WEAPON::BASIC, 1u);
+	SetWeapon(WEAPON::FLAMETHROWER, 1u);
 
 	basic_shot_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
@@ -174,4 +175,12 @@ void Obj_Tank::ShootLaserShot()
 
 void Obj_Tank::ShootFlameThrower()
 {
+	FlameThrower_Bullet *	 flamethrower_bullet = (FlameThrower_Bullet*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, turr_pos + shot_dir);
+
+	flamethrower_bullet->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }

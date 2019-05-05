@@ -126,6 +126,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet_FlameThrower.cpp" />
     <ClCompile Include="Bullet_Laser.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="General_HUD.cpp" />
@@ -189,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Bullet_FlameThrower.h" />
     <ClInclude Include="Bullet_Laser.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="General_HUD.h" />

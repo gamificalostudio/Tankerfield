@@ -179,6 +179,9 @@
     <ClCompile Include="Obj_Tank_Weapons.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet_FlameThrower.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="Obj_CannonFire.h">
       <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_FlameThrower.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
