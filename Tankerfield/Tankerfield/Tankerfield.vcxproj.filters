@@ -176,9 +176,6 @@
     <ClCompile Include="Obj_CannonFire.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Quadtree_rect.cpp">
-      <Filter>Tools\QuadTree</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
