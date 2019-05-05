@@ -4,6 +4,7 @@
 #include "Brofiler\Brofiler.h"
 
 #include "Log.h"
+#include "Quadtree_rect.h"
 
 #include "App.h"
 #include "M_Map.h"
@@ -665,7 +666,14 @@ bool M_Map::LoadMap()
 		uint level = 1;
 		data.qt->ReturnNumbreOfLevels(data.map_rect.w, (*app->render->cameras.begin())->screen_section.w*0.25, level);
 		data.qt = DBG_NEW Quadtree_Map(data.map_rect, 0, level);
+		if (app->objectmanager->qt_static_objects != nullptr)
+		{
+			delete app->objectmanager->qt_static_objects;
+		}
 
+		uint max_levels = 1;
+		app->objectmanager->qt_static_objects->ReturnNumbreOfLevels(app->map->data.map_rect.w, app->win->screen_surface->w *0.25, max_levels);
+		app->objectmanager->qt_static_objects = new Quadtree_rect<Object*>(app->map->data.map_rect, 0u, max_levels);
 	}
 
 	return ret;

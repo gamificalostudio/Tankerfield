@@ -40,7 +40,7 @@ void Obj_Building::SetTexture(const char* path, fPoint rect_collider)
 		CalculateDrawVariables();
 
 		//iPoint pos_screen_aux=app->map->MapToScreenI(pos_map.x, pos_map.y);
-		SDL_Rect screen_rect{ pos_screen.x - draw_offset.x,pos_screen.x - draw_offset.x, frame.w,frame.h};
+		SDL_Rect screen_rect{ pos_screen.x - draw_offset.x,pos_screen.y - draw_offset.y, frame.w,frame.h};
 		app->objectmanager->qt_static_objects->InsertElement(screen_rect, this);
 
 	}

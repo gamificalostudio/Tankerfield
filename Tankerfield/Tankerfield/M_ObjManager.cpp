@@ -69,12 +69,7 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	if (qt_static_objects == nullptr)
-	{
-		uint max_levels = 1;
-		qt_static_objects->ReturnNumbreOfLevels(app->map->data.map_rect.w,app->win->screen_surface->w *0.25, max_levels);
-		qt_static_objects = new Quadtree_rect<Object*>(app->map->data.map_rect, 0u, max_levels);
-	}
+	
 
 	return ret;
 }
@@ -180,9 +175,12 @@ bool M_ObjManager::PostUpdate(float dt)
 				draw_objects.push_back(*item);
 			}
 		}
-
-		std::vector<Object*>draw_static_objects = qt_static_objects->GetElementsIntersection((*item_cam)->rect);
-		draw_objects.insert(draw_objects.end(), draw_static_objects.begin(), draw_static_objects.end());
+		if (qt_static_objects != nullptr)
+		{
+			std::vector<Object*>draw_static_objects = qt_static_objects->GetElementsIntersection((*item_cam)->rect);
+			draw_objects.insert(draw_objects.end(), draw_static_objects.begin(), draw_static_objects.end());
+		}
+		
 
 		std::sort(draw_objects.begin(), draw_objects.end(), M_ObjManager::SortByYPos);
 
@@ -219,22 +217,7 @@ bool M_ObjManager::CleanUp()
 
 bool M_ObjManager::Reset()
 {
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
-	{
-		if ((*iterator)->coll != nullptr)
-		{
-			(*iterator)->CleanUp();
-			(*iterator)->coll->Destroy();
-			(*iterator)->coll = nullptr;
-		}
-
-		delete((*iterator));
-		(*iterator) = nullptr;
-		iterator = objects.erase(iterator);
-	}
-
-	obj_tanks.clear();
-	objects.clear();
+	DeleteObjects();
 
 	return true;
 }
