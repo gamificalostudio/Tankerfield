@@ -60,7 +60,7 @@ bool M_MainMenu::Update(float dt)
 
 bool M_MainMenu::PostUpdate(float dt)
 {
-	app->render->BlitUI(background_texture, 0, 0, NULL);
+	SDL_RenderCopy(app->render->renderer, background_texture, NULL, &(SDL_Rect)app->win->GetWindowRect());
 	return true;
 }
 

@@ -4,6 +4,9 @@
   <app>
     <title>Title</title>
     <organization>UPC</organization>
+    <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
+    <mode value ="2" />  
+
   </app>
 	
   <renderer>
@@ -17,6 +20,7 @@
     <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
+  
   <animations_bank>animations.xml</animations_bank>
 
   <ui>
