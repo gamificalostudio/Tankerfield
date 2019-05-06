@@ -70,10 +70,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(ui);
 	AddModule(anim_bank);
 	AddModule(scmanager);
-	// render last to swap buffer
-	AddModule(render);
-	
-	scene->active = false;
+	AddModule(render);      // Render last to swap buffer
 
 	PERF_PEEK(ptimer);
 }
@@ -114,6 +111,34 @@ bool App::Awake()
 		app_config = config.child("app");
 		title.assign(app_config.child("title").child_value());
 		organization.assign(app_config.child("organization").child_value());
+
+	
+		switch (app_config.child("mode").attribute("value").as_int(0))
+		{
+		case 0:
+			mode = APP_MODE::RELEASE;
+			break;
+		case 1:
+			mode = APP_MODE::DEBUG_MULTIPLAYER;
+			break;
+		case 2:
+			mode = APP_MODE::DEBUG_MAIN_MENU;
+			break;
+		}
+
+		switch (mode)
+		{
+		case APP_MODE::RELEASE:
+			scene->active = false;
+			break;
+		case APP_MODE::DEBUG_MAIN_MENU:
+			scene->active = false;
+			break;
+		case APP_MODE::DEBUG_MULTIPLAYER:
+			main_menu->active = false;
+			break;
+		}
+
 
 		int cap = app_config.attribute("framerate_cap").as_int(-1);
 

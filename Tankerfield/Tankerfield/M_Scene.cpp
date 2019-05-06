@@ -111,6 +111,8 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
+		
+			app->objectmanager->CreateObject(ObjectType::BRUTE, (*players_layer)->objects[0].pos);
 		}
 	}
 	
@@ -132,10 +134,6 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
-		if (SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE)
-		{
-			SDL_ShowCursor(SDL_ENABLE);
-		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
@@ -187,10 +185,17 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
 	{
 		++this->round;
+		general_hud->SetRoundNumber(round);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
 	{
 		stat_of_wave = WaveStat::WIN_GAME;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		int new_weapon = (int)app->objectmanager->obj_tanks[0]->GetWeaponInfo().weapon;
+		++new_weapon;
+		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
 	}
 
 	return true;

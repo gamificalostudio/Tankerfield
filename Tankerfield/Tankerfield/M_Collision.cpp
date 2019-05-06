@@ -279,7 +279,7 @@ bool M_Collision::Update(float dt)
 			{
 				continue;
 			}
-
+	
 			if (collider_1->CheckCollision(collider_2))
 			{
 				if (matrix[(int)collider_1->tag][(int)collider_2->tag])

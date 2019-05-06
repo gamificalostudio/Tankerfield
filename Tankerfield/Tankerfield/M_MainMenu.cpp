@@ -38,6 +38,8 @@ bool M_MainMenu::Start()
 	version_label->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 	app->ui->able_axis = FOCUS_AXIS::Y;
 
+	SDL_ShowCursor(SDL_ENABLE);
+
 	return true;
 }
 
@@ -58,7 +60,7 @@ bool M_MainMenu::Update(float dt)
 
 bool M_MainMenu::PostUpdate(float dt)
 {
-	app->render->BlitUI(background_texture, 0, 0, NULL);
+	SDL_RenderCopy(app->render->renderer, background_texture, NULL, &(SDL_Rect)app->win->GetWindowRect());
 	return true;
 }
 
@@ -111,10 +113,6 @@ bool M_MainMenu::OutClick(UI_Element * element)
 	if (element == multi_player_button)
 	{
 		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
-		if (SDL_ShowCursor(SDL_QUERY) == SDL_ENABLE)
-		{
-			SDL_ShowCursor(SDL_DISABLE);
-		}
 	}
 	else if (element == exit_button)
 	{

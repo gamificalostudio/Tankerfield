@@ -4,6 +4,9 @@
   <app>
     <title>Title</title>
     <organization>UPC</organization>
+    <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
+    <mode value ="2" />  
+
   </app>
 	
   <renderer>
@@ -17,6 +20,7 @@
     <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
+  
   <animations_bank>animations.xml</animations_bank>
 
   <ui>
@@ -1733,6 +1737,7 @@
       <speed value ="0.5"/>
       <life value ="1000"/>
       <tex path="textures/objects/laser-sheet.png"/>
+      <kill_counter_max value="5"/>
       <animations>
         <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
           <dir>

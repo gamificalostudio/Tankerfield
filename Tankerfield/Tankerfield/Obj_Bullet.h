@@ -24,7 +24,7 @@ public:
 	
 	void OnTrigger(Collider* collider_1);
 
-	void SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle);
+	void SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle, bool charged = false);
 
 	void SetPlayer(Obj_Tank* player);
 
@@ -43,6 +43,8 @@ public:
 	Animation anim;
 
 	Obj_Tank* player = nullptr;
+
+	bool charged = false;
 
 	//SFX impact_sound
 

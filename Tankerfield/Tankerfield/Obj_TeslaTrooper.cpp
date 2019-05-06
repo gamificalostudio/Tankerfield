@@ -135,6 +135,21 @@ void Obj_TeslaTrooper::Movement(float &dt)
 {
 	switch (state)
 	{
+	case TROOPER_STATE::IDLE:
+	{
+		path.clear();
+		move_vect.SetToZero();
+		target = app->objectmanager->GetNearestTank(pos_map);
+		if (target != nullptr)
+		{
+			state = TROOPER_STATE::GET_PATH;
+		}
+		else
+		{
+			curr_anim = &idle;
+		}
+	}
+	break;
 	case TROOPER_STATE::APPEAR:
 			{
 				appear_anim.NextFrame(dt);
@@ -153,7 +168,6 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
 		{
@@ -169,7 +183,6 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					}
 
 					state = TROOPER_STATE::RECHEAD_POINT;
-					//curr_anim = &idle;
 				}
 			}
 			else 
@@ -180,8 +193,9 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					state = TROOPER_STATE::GET_PATH;
 			}
 		}
-		else {
-			//curr_anim = &idle;
+		else 
+		{
+			state = TROOPER_STATE::IDLE;
 		}
 
 		path_timer.Start();
@@ -391,21 +405,35 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
-
-		life -= collider->damage;
-
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
+		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
+		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
 		{
-			// DROP A PICK UP ITEM 
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = TROOPER_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = TROOPER_STATE::DEAD;
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+			}
+
+
+			if (!obj->charged)
+			{
+				++obj->kill_counter;
+				if (obj->kill_counter >= obj->kill_counter_max)
+				{
+					obj->to_remove = true;
+
+				}
+			}
 		}
 
 	}
@@ -429,6 +457,11 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		{
 			app->audio->PlayFx(sfx_hit);
 		}
+	}
+
+	else if (collider->GetTag() != Collider::TAG::ENEMY)
+	{
+		LOG("yeep");
 	}
 
 

@@ -95,6 +95,7 @@ private:
 	void ShootDoubleMissile();
 	void ShootHealingShot();
 	void ShootLaserShot();
+	void ShootLaserShotCharged();
 
 	//- TankDeath
 	void ReviveTank(float dt);
