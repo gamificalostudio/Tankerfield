@@ -134,10 +134,6 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
-		if (SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE)
-		{
-			SDL_ShowCursor(SDL_ENABLE);
-		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
