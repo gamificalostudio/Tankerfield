@@ -35,9 +35,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
-	tex = app->tex->Load("textures/Objects/brute-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/brute-sheet-white.png");
-	spawn_tex = app->tex->Load("textures/Objects/spawn_brute.png");
+	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white.png");
+	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
 	idle.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("idle"));
