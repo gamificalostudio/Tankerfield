@@ -123,48 +123,8 @@ bool M_Render::PostUpdate(float dt)
 {
 	// Camera fix TODO: Move it to camera class
 
-	std::vector<Camera*>::iterator item_cam;
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
-
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		debug = !debug;
-		if (!debug)
-		{
-			camera_saves.push_back(cameras.back());
-			cameras.pop_back();
-
-			camera_saves.push_back(cameras.back());
-			cameras.pop_back();
-
-			camera_saves.push_back(cameras.back());
-			cameras.pop_back();
-
-			cameras.front()->rect.w = app->win->screen_surface->w;
-			cameras.front()->rect.h = app->win->screen_surface->h;
-
-			cameras.front()->screen_section.w = app->win->screen_surface->w;
-			cameras.front()->screen_section.h = app->win->screen_surface->h;
-		}
-		else
-		{
-			cameras.push_back(camera_saves.back());
-			camera_saves.pop_back();
-
-			cameras.push_back(camera_saves.back());
-			camera_saves.pop_back();
-
-			cameras.push_back(camera_saves.back());
-			camera_saves.pop_back();
-
-			cameras.front()->rect.w *= 0.5f;
-			cameras.front()->rect.h *= 0.5f;
-
-			cameras.front()->screen_section.w *= 0.5f;
-			cameras.front()->screen_section.h *= 0.5f;
-		}
-	}
 
 	return true;
 }
