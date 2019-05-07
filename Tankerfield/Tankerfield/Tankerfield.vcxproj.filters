@@ -178,6 +178,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Suicidal.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -377,6 +380,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Suicidal.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
