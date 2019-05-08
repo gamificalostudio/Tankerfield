@@ -112,7 +112,7 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 		
-			app->objectmanager->CreateObject(ObjectType::BRUTE, (*players_layer)->objects[0].pos);
+			app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
 		}
 	}
 	

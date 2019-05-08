@@ -28,6 +28,7 @@ enum class ObjectType
 	//ENEMIES
 	TESLA_TROOPER,
 	BRUTE,
+	SUICIDAL,
 
 	//BULLETS
 	BASIC_BULLET,
@@ -96,8 +97,6 @@ public:
 private:
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
-
-
 };
 
 #endif

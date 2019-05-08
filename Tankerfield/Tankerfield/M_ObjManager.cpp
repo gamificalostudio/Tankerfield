@@ -16,6 +16,7 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "Obj_TeslaTrooper.h"
+#include "Obj_Suicidal.h"
 #include "Obj_Brute.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
@@ -235,6 +236,11 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::TESLA_TROOPER:
 		ret = DBG_NEW Obj_TeslaTrooper(pos);
 		ret->type = ObjectType::TESLA_TROOPER;
+		enemies.push_back(ret);
+		break;
+	case ObjectType::SUICIDAL:
+		ret = DBG_NEW Obj_Suicidal(pos);
+		ret->type = ObjectType::SUICIDAL;
 		enemies.push_back(ret);
 		break;
 	case ObjectType::TANK:
