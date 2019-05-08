@@ -232,6 +232,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
+	SetItem(ObjectType::HEALTH_BAG);
 	return true;
 }
 

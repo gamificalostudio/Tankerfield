@@ -35,11 +35,11 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
-	tex = app->tex->Load("textures/Objects/shk-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/shk-sheet-white.png");
-	portal_tex = app->tex->Load("textures/Objects/portal.png");
+	tex = app->tex->Load("textures/Objects/enemies/shk-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/enemies/shk-sheet-white.png");
+	portal_tex = app->tex->Load("textures/Objects/enemies/portal.png");
 	curr_tex = tex;
-	explosion_apper_tex = app->tex->Load("textures/Objects/explosion2.png");
+	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 
 
 	//Assets loading ------------------------------------------------------------------------------------------------------------------------

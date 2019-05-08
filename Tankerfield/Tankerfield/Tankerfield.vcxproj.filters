@@ -182,6 +182,9 @@
     <ClCompile Include="Obj_FlamethrowerFlame.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Suicidal.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -384,6 +387,9 @@
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Obj_FlamethrowerFlame.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Suicidal.h">
       <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
