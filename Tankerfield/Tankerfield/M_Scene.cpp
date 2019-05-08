@@ -191,10 +191,14 @@ bool M_Scene::PreUpdate()
 	{
 		stat_of_wave = WaveStat::WIN_GAME;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		int new_weapon = (int)app->objectmanager->obj_tanks[0]->GetWeaponInfo().weapon;
 		++new_weapon;
+		if (new_weapon == (int)WEAPON::MAX_WEAPONS)
+		{
+			new_weapon = (int)WEAPON::DOUBLE_MISSILE;
+		}
 		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
 	}
 
