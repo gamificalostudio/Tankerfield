@@ -113,6 +113,7 @@ void Obj_Suicidal::Attack()
 	{
 		curr_anim = &walk;
 		attack.Reset();
+		to_remove = true;
 	}
 
 }
