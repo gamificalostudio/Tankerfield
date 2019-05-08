@@ -39,6 +39,7 @@
 #include "Obj_RewardBox.h"
 #include "Camera.h"
 #include "Obj_CannonFire.h"
+#include "Obj_FlameThrowerFlame.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -270,6 +271,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
 		enemies.push_back(ret);
+		break;
+	case ObjectType::FLAMETHROWER_FLAME:
+		ret = new Obj_FlamethrowerFlame(pos);
+		ret->type = ObjectType::FLAMETHROWER_FLAME;
 		break;
 	case ObjectType::EXPLOSION:
 		ret = DBG_NEW Obj_Explosion(pos);

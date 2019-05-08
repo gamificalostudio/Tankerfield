@@ -130,9 +130,6 @@
     <ClCompile Include="UI_InGameElement.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="WeaponInfo.cpp">
-      <Filter>Weapons</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_PickUp.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -181,6 +178,9 @@
     </ClCompile>
     <ClCompile Include="Bullet_FlameThrower.cpp">
       <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_FlamethrowerFlame.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="Bullet_FlameThrower.h">
       <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_FlamethrowerFlame.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

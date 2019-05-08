@@ -17,10 +17,10 @@ public:
 
 public:
 	//Add functions that are overriden
-	//void OnTrigger(Collider* collider_1);
+	void OnTrigger(Collider* collider_1);
 
 public:
-	bool Start();
+	//bool Start();
 	Collider* explosion = nullptr;
 
 public:

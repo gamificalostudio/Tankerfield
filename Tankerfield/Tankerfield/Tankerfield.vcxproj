@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -140,6 +140,7 @@
     <ClCompile Include="Obj_Brute.cpp" />
     <ClCompile Include="Obj_CannonFire.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
+    <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
     <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Obj_Brute.h" />
     <ClInclude Include="Obj_CannonFire.h" />
     <ClInclude Include="Obj_Fire.h" />
+    <ClInclude Include="Obj_FlamethrowerFlame.h" />
     <ClInclude Include="Obj_RewardBox.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
