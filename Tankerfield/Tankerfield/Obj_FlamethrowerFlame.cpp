@@ -32,8 +32,8 @@ Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) :Object(pos)
 	draw_offset.x = 99;
 	draw_offset.y = 75;
 
-	coll_w = 5.f;
-	coll_h = 5.f;
+	coll_w = 2.f;
+	coll_h = 2.f;
 
 	coll = app->collision->AddCollider(
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),

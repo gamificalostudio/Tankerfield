@@ -13,19 +13,22 @@
 void Obj_Tank::InitWeapons()
 {
 	//Basic weapon starting properties
-	SetWeapon(WEAPON::BASIC, 1u);
+	SetWeapon(WEAPON::FLAMETHROWER, 1u);
 
 	shot1_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot1_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot1_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
+	shot1_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	quick_shot_time = 500.f;
+
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
+	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 }
 
 //if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
@@ -198,7 +201,7 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
-	FlameThrower_Bullet *	 flamethrower_bullet = (FlameThrower_Bullet*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, turr_pos + shot_dir);
+	FlameThrower_Bullet *	 flamethrower_bullet = (FlameThrower_Bullet*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, turr_pos + shot_dir);
 
 	flamethrower_bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
