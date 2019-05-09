@@ -107,15 +107,14 @@ void Obj_Suicidal::Attack()
 		app->audio->PlayFx(sfx_attack);
 		target->SetLife(0);
 		perf_timer.Start();
+		state = SUICIDAL_STATE::DEAD;
 	}
 
 	if (curr_anim == &attack&&curr_anim->Finished())
 	{
 		curr_anim = &walk;
 		attack.Reset();
-		to_remove = true;
 	}
-
 }
 
 void Obj_Suicidal::Movement(float &dt)
