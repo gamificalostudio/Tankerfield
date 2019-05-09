@@ -232,7 +232,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ObjectType::HEALTH_BAG);
+	SetItem(ItemType::HEALTH_BAG);
 	return true;
 }
 
@@ -582,7 +582,7 @@ void Obj_Tank::SetLife(int life)
 	gui->SetLifeBar(this->life);
 }
 
-void Obj_Tank::SetItem(ObjectType type) 
+void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
 	gui->SetItemIcon(type);
@@ -924,7 +924,7 @@ void Obj_Tank::StopTank()
 			dead_fire->tank = this;
 		}
 		this->SetWeapon(WEAPON::BASIC, 0);
-		this->SetItem(ObjectType::NO_TYPE);
+		this->SetItem(ItemType::NO_TYPE);
 	}
 }
 
@@ -935,15 +935,15 @@ bool Obj_Tank::Alive()
 
 void Obj_Tank::Item()
 {
-	if(item != ObjectType::NO_TYPE
+	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
 			|| (controller != nullptr
 				&& (*controller)->GetButtonState(gamepad_item) == KEY_DOWN)))
 	{
-		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
+		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);
 		new_item->caster = this;
 		new_item->Use();
-		item = ObjectType::NO_TYPE;
+		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
 	}
 }

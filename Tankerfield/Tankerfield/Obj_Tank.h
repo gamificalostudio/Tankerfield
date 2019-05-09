@@ -42,7 +42,7 @@ public:
 public:
 	//- Logic
 	void SetLife(int life);
-	void SetItem(ObjectType Type);
+	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
@@ -178,7 +178,7 @@ private:
 	bool show_crosshairs					= false;
 
 	//- Items
-	ObjectType item							= ObjectType::NO_TYPE;
+	ItemType item							= ItemType::NO_TYPE;
 	UI_IG_Helper * tutorial_pick_up			= nullptr;
 
 	//- Input

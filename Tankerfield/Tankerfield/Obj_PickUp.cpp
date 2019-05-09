@@ -81,9 +81,9 @@ WEAPON Obj_PickUp::RandomWeapon()
 	return (WEAPON)(rand() % ((uint)WEAPON::MAX_WEAPONS - 1)+1 /*The plus 1 is because the basic shoot is the number 0, and it can't be created, and the -1 is because the max weapon include the basic bullet*/);
 }
 
-ObjectType Obj_PickUp::RandomItem() const
+ItemType Obj_PickUp::RandomItem() const
 {
-	return (ObjectType)(rand() % (uint)ObjectType::MAX_ITEMS);
+	return (ItemType)(rand() % (uint)ItemType::MAX_ITEMS);
 }
 
 void Obj_PickUp::DeletePickUp()

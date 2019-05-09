@@ -40,6 +40,7 @@
 #include "Obj_RewardBox.h"
 #include "Camera.h"
 #include "Obj_CannonFire.h"
+#include "Obj_Item.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -293,14 +294,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_Fire(pos);
 		ret->type = ObjectType::FIRE_DEAD;
 		break;
-	case ObjectType::HEALTH_BAG:
-		ret = DBG_NEW Item_HealthBag(pos);
-		ret->type = ObjectType::HEALTH_BAG;
-		break;
-	case ObjectType::HAPPY_HOUR_ITEM:
-		ret = new Item_HappyHour(pos);
-		ret->type = ObjectType::HAPPY_HOUR_ITEM;
-		break;
+
 	case ObjectType::PICK_UP:
 		ret = DBG_NEW Obj_PickUp(pos);
 		ret->type = ObjectType::PICK_UP;
@@ -318,6 +312,30 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		objects.push_back(ret);
 	}
   
+	return ret;
+}
+
+Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
+{
+	Obj_Item* ret = nullptr;
+
+	switch (type)
+	{
+	case ItemType::HEALTH_BAG:
+		ret = DBG_NEW Item_HealthBag(pos);
+		ret->type = ItemType::HEALTH_BAG;
+		break;
+	case ItemType::HAPPY_HOUR_ITEM:
+		ret = new Item_HappyHour(pos);
+		ret->type = ItemType::HAPPY_HOUR_ITEM;
+		break;
+	}
+
+	if (ret != nullptr)
+	{
+		objects.push_back(ret);
+	}
+
 	return ret;
 }
 

@@ -13,11 +13,6 @@
 
 enum class ObjectType
 {
-	//ITEMS need to be first because of the random selection from Obj_PickUp .
-	HEALTH_BAG = 0,
-	HAPPY_HOUR_ITEM,
-	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
-
 	//OTHER
 	TANK,
 	STATIC,
@@ -45,7 +40,16 @@ enum class ObjectType
 	NO_TYPE
 };
 
+enum class ItemType
+{
+	NO_TYPE = -1,
+	HEALTH_BAG ,
+	HAPPY_HOUR_ITEM,
+	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
+};
+
 class Object;
+class Obj_Item;
 class Camera;
 class Obj_Tank;
 
@@ -75,6 +79,7 @@ public:
 	bool Reset();
 
 	Object* CreateObject(ObjectType type, fPoint map_pos);
+	Obj_Item* CreateItem(ItemType type, fPoint map_pos);
 
 	static bool SortByYPos(Object * obj1, Object * obj2);
 
