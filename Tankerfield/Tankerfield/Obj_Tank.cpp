@@ -356,7 +356,9 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 {
 	if (this->life != 0) {
 		//if the player shot
-		if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+		if ((ReleaseShot()
+			|| GetShotAutomatically())
+			&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 		{
 			//- Basic shot
 			if (charged_shot_timer.ReadMs() < charge_time)
@@ -674,7 +676,8 @@ void Obj_Tank::ShootChargedWeapon()
 		}
 	}
 
-	if (ReleaseShot()
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
 		//- Basic shot
@@ -716,7 +719,8 @@ void Obj_Tank::ShootSustainedWeapon()
 	}
 
 	//- Quick shot
-	if (ReleaseShot()
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets
 		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
 	{
@@ -795,6 +799,21 @@ bool Obj_Tank::ReleaseShot()
 	{
 		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_UP;
 	}
+}
+
+void Obj_Tank::ShotAutormaticallyActivate()
+{
+	shot_automatically = true;
+}
+
+void Obj_Tank::ShotAutormaticallyDisactivate()
+{
+	shot_automatically = false;
+}
+
+bool Obj_Tank::GetShotAutomatically() const
+{
+	return shot_automatically;
 }
 
 //Select the input method depending on the last input pressed

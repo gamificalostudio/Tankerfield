@@ -52,6 +52,9 @@ public:
 	fPoint GetShotDir() const;
 	bool IsReady() const;
 	int GetTankNum();
+	void ShotAutormaticallyActivate();
+	void ShotAutormaticallyDisactivate();
+	bool GetShotAutomatically() const;
 
 public:
 
@@ -81,6 +84,7 @@ private:
 	bool PressShot();
 	bool HoldShot();
 	bool ReleaseShot();
+
 
 	//- Input
 	void SelectInputMethod();
@@ -176,6 +180,7 @@ private:
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
+	bool shot_automatically = false;
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
