@@ -2,6 +2,7 @@
 #define __OBJ_PICKUP_H__
 
 #include "Object.h"
+#include "Obj_Item.h"
 #include "Obj_Tank.h"
 
 class UI_InGameElement;
@@ -24,7 +25,7 @@ public:
 
 	PICKUP_TYPE type_of_pick_up					= PICKUP_TYPE::NO_TYPE;
 	WEAPON      type_of_weapon					= WEAPON::BASIC;
-	ObjectType  type_of_item					= ObjectType::NO_TYPE;
+	ItemType  type_of_item					= ItemType::NO_TYPE;
 
 	uint level_of_weapon						= NULL;
 
@@ -42,7 +43,7 @@ public:
 
 	WEAPON RandomWeapon() ;
 
-	ObjectType RandomItem() const;
+	ItemType RandomItem() const;
 
 	PICKUP_TYPE RandomPickUp() const;
 

@@ -200,10 +200,10 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 
 	switch (pick_up_obj->type_of_item)
 	{
-	case ObjectType::HEALTH_BAG:
+	case ItemType::HEALTH_BAG:
 		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
-	case ObjectType::HAPPY_HOUR_ITEM:
+	case ItemType::HAPPY_HOUR_ITEM:
 		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
 	default:

@@ -42,7 +42,7 @@ public:
 public:
 	//- Logic
 	void SetLife(int life);
-	void SetItem(ObjectType Type);
+	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
@@ -52,6 +52,9 @@ public:
 	fPoint GetShotDir() const;
 	bool IsReady() const;
 	int GetTankNum();
+	void ShotAutormaticallyActivate();
+	void ShotAutormaticallyDisactivate();
+	bool GetShotAutomatically() const;
 
 public:
 
@@ -81,6 +84,7 @@ private:
 	bool PressShot();
 	bool HoldShot();
 	bool ReleaseShot();
+
 
 	//- Input
 	void SelectInputMethod();
@@ -176,9 +180,10 @@ private:
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
+	bool shot_automatically = false;
 
 	//- Items
-	ObjectType item							= ObjectType::NO_TYPE;
+	ItemType item							= ItemType::NO_TYPE;
 	UI_IG_Helper * tutorial_pick_up			= nullptr;
 
 	//- Input
