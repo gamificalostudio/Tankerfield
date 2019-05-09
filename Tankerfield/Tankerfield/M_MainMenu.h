@@ -8,6 +8,7 @@
 struct SDL_Texture;
 struct Controller;
 
+class UI_Element;
 class UI_Image;
 class UI_Button;
 class UI_Label;
@@ -40,7 +41,10 @@ public:
 private:
 
 	SDL_Texture     * background_texture = nullptr;
-	UI_Image		* logo_button = nullptr;
+
+	std::list<UI_Element*> menu_elements;
+
+	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
 	UI_Button		* multi_player_button = nullptr;
 	UI_Button		* exit_button = nullptr;

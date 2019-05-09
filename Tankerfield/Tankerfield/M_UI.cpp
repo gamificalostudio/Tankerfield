@@ -191,14 +191,6 @@ bool M_UI::Reset()
 	return true;
 }
 
-Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
-{
-	Player_GUI* player_gui = DBG_NEW Player_GUI(player);
-	player->SetGui(player_gui);
-	players_guis.push_back(player_gui);
-	return player_gui;
-}
-
 bool M_UI::PreUpdate()
 {
 	BROFILER_CATEGORY("M_UI_Preupdate", Profiler::Color::Brown);
@@ -429,67 +421,67 @@ void M_UI::FocusMouse()
 	}
 }
 
-void M_UI::FocusController()
-{
-	Controller* controller = (*app->input->controllers.begin());
-	fPoint joy_stick_dir = (fPoint)controller->GetJoystick(Joystick::LEFT);
-
-	if (abs(joy_stick_dir.x) < UI_DEAD_ZONE || abs(joy_stick_dir.y) < UI_DEAD_ZONE)
-	{
-		return;
-	}
-
-	float angle = atan2(joy_stick_dir.y, joy_stick_dir.x) * RADTODEG;
-
-	CONTROLLER_DIR dir = CONTROLLER_DIR::NO_DIR;
-
-	if (able_axis == FOCUS_AXIS::Y)
-	{
-
-		if (angle > 0)
-		{
-			dir = CONTROLLER_DIR::DOWN;
-		}
-		else 
-		{
-			dir = CONTROLLER_DIR::UP;
-		}
-	}
-	else
-	{
-		if (angle == 0)
-		{
-			dir = CONTROLLER_DIR::NO_DIR;
-		}
-		else if (angle <= 45.f && angle > -45)
-		{
-			dir = CONTROLLER_DIR::RIGHT;
-		}
-		else if (angle > 45 && angle <= 135)
-		{
-			dir = CONTROLLER_DIR::DOWN;
-
-		}
-		else if ((angle > 135 && angle <= 180) || angle >= -180 && angle <= -135)
-		{
-			dir = CONTROLLER_DIR::LEFT;
-		}
-		else if (angle > -135 && angle <= -45)
-		{
-			dir = CONTROLLER_DIR::UP;
-		}
-	}
-	
-
-	if (selected_element == nullptr && dir != CONTROLLER_DIR::NO_DIR && interactive_elements.size()>0)
-	{
-		selected_element = (*interactive_elements.begin());
-	}
-	else if (selected_element != nullptr && btw_focus_timer.Read() > BTW_FOCUS_TIME && dir != CONTROLLER_DIR::NO_DIR)
-	{
-		selected_element = GetNearestElement(selected_element, dir);
-	}
-}
+//void M_UI::FocusController()
+//{
+//	Controller* controller = (*app->input->controllers.begin());
+//	fPoint joy_stick_dir = (fPoint)controller->GetJoystick(Joystick::LEFT);
+//
+//	if (abs(joy_stick_dir.x) < UI_DEAD_ZONE || abs(joy_stick_dir.y) < UI_DEAD_ZONE)
+//	{
+//		return;
+//	}
+//
+//	float angle = atan2(joy_stick_dir.y, joy_stick_dir.x) * RADTODEG;
+//
+//	CONTROLLER_DIR dir = CONTROLLER_DIR::NO_DIR;
+//
+//	if (able_axis == FOCUS_AXIS::Y)
+//	{
+//
+//		if (angle > 0)
+//		{
+//			dir = CONTROLLER_DIR::DOWN;
+//		}
+//		else 
+//		{
+//			dir = CONTROLLER_DIR::UP;
+//		}
+//	}
+//	else
+//	{
+//		if (angle == 0)
+//		{
+//			dir = CONTROLLER_DIR::NO_DIR;
+//		}
+//		else if (angle <= 45.f && angle > -45)
+//		{
+//			dir = CONTROLLER_DIR::RIGHT;
+//		}
+//		else if (angle > 45 && angle <= 135)
+//		{
+//			dir = CONTROLLER_DIR::DOWN;
+//
+//		}
+//		else if ((angle > 135 && angle <= 180) || angle >= -180 && angle <= -135)
+//		{
+//			dir = CONTROLLER_DIR::LEFT;
+//		}
+//		else if (angle > -135 && angle <= -45)
+//		{
+//			dir = CONTROLLER_DIR::UP;
+//		}
+//	}
+//	
+//
+//	if (selected_element == nullptr && dir != CONTROLLER_DIR::NO_DIR && interactive_elements.size()>0)
+//	{
+//		selected_element = (*interactive_elements.begin());
+//	}
+//	else if (selected_element != nullptr && btw_focus_timer.Read() > BTW_FOCUS_TIME && dir != CONTROLLER_DIR::NO_DIR)
+//	{
+//		selected_element = GetNearestElement(selected_element, dir);
+//	}
+//}
 
 void M_UI::UpdateElements(float dt)
 {
@@ -520,14 +512,14 @@ void M_UI::UpdateElements(float dt)
 	{
 		if ((*element)->to_destroy == true)
 		{
-			UI_Element* parent = (*element)->parent_element;
+			UI_Element* parent = (*element)->element_parent;
 			std::list<UI_Element*> * sons_list = (*element)->GetSons();
 
 			// Merge its sons to its parent
 
 			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
 			{
-				(*son)->parent_element = parent;
+				(*son)->element_parent = parent;
 				parent->element_sons.push_back((*son));
 			}
 
@@ -556,14 +548,14 @@ void M_UI::UpdateElements(float dt)
 	{
 		if ((*element)->to_destroy == true)
 		{
-			UI_Element* parent = (*element)->parent_element;
+			UI_Element* parent = (*element)->element_parent;
 			std::list<UI_Element*> * sons_list = (*element)->GetSons();
 
 			// Merge its sons to its parent
 
 			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
 			{
-				(*son)->parent_element = parent;
+				(*son)->element_parent = parent;
 				parent->element_sons.push_back((*son));
 			}
 
@@ -602,6 +594,15 @@ void M_UI::UpdateElements(float dt)
 	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
 }
+
+Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
+{
+	Player_GUI* player_gui = DBG_NEW Player_GUI(player);
+	player->SetGui(player_gui);
+	players_guis.push_back(player_gui);
+	return player_gui;
+}
+
 
  SDL_Texture* M_UI::GetAtlas() const 
 {
@@ -665,7 +666,7 @@ bool M_UI::SelectClickedObject()
 		for ( list<UI_Element*>::iterator item = clicked_objects.begin(); item != clicked_objects.end() ; ++item)
 		{
 			int count = 0;
-			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->parent_element)
+			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->element_parent)
 			{
 				++count;
 			}

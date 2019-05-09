@@ -172,6 +172,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="M_Window.cpp" />
     <ClCompile Include="UI_InGameElement.cpp" />
+    <ClCompile Include="UI_InteractiveGroup.cpp" />
     <ClCompile Include="UI_Label.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="M_UI.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="M_Window.h" />
     <ClInclude Include="UI_InGameElement.h" />
+    <ClInclude Include="UI_InteractiveGroup.h" />
     <ClInclude Include="UI_Label.h" />
     <ClInclude Include="M_UI.h" />
     <ClInclude Include="Object.h" />

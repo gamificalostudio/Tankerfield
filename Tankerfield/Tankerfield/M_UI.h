@@ -240,9 +240,9 @@ private:
 
 	void UpdateElements(float dt);
 
-	void FocusMouse();
+	//void FocusMouse();
 
-	void FocusController();
+	//void FocusController();
 
 	UI_Element* GetNearestElement(UI_Element * element, CONTROLLER_DIR dir);
 

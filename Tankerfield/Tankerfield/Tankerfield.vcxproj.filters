@@ -181,6 +181,9 @@
     <ClCompile Include="Obj_Suicidal.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="UI_InteractiveGroup.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -383,6 +386,9 @@
     </ClInclude>
     <ClInclude Include="Obj_Suicidal.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_InteractiveGroup.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
