@@ -366,6 +366,13 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 				//set the max velocity in a basic shot
 				velocity_recoil_curr_speed = velocity_recoil_speed_max;
 			}
+
+			//Item Happy hour activated
+			else if (GetShotAutomatically())
+			{
+				velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+			}
+
 			//- Charged shot
 			else
 			{
@@ -395,6 +402,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		velocity += velocity_recoil_final_lerp;
 	}
 }
+
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
