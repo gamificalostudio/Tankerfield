@@ -23,6 +23,10 @@ public:
 
 private:
 
+	UI_Element * GetNearestElement(UI_Element * element, CONTROLLER_DIR dir);
+
+private:
+
 	std::list< UI_Element*> group_elements;
 
 };

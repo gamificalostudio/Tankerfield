@@ -126,55 +126,30 @@ bool M_Collision::Update(float dt)
 	std::list<Collider*> dynamic_colliders;
 	std::list<Collider*> sensor_colliders;
 	std::list<Collider*> merged_colliders;
-
 	std::list<Collider*>::iterator iterator;
+
 	Collider* collider_1 = nullptr;
 	Collider* collider_2 = nullptr;
 
 	// Fill body types lists & Destroy colliders =====================
 
-	iterator = colliders.begin();
-
-	while (iterator != colliders.end())
+	for (std::list<Collider*>::iterator itr = colliders.begin(); itr != colliders.end(); ++itr)
 	{
-		if ((*iterator)->to_destroy == true)
-		{
-			// Destroy from current colliders on collision ==============
 
-			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
-			{
-				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
-
-				if (to_destroy != (*itr)->collisions_list.end())
-				{
-					(*itr)->collisions_list.erase(to_destroy);
-				}
-			}
-
-			// Destroy ==================================================
-
-			RELEASE(*iterator);
-			iterator = colliders.erase(iterator);
-
-			continue;
-		}
-
-		switch ((*iterator)->body_type)
+		switch ((*itr)->body_type)
 		{
 		case Collider::BODY_TYPE::STATIC:
-			static_colliders.push_back(*iterator);
-			merged_colliders.push_back(*iterator);
+			static_colliders.push_back(*itr);
+			merged_colliders.push_back(*itr);
 			break;
 		case Collider::BODY_TYPE::DYNAMIC:
-			dynamic_colliders.push_back(*iterator);
-			merged_colliders.push_back(*iterator);
+			dynamic_colliders.push_back(*itr);
+			merged_colliders.push_back(*itr);
 			break;
 		case Collider::BODY_TYPE::SENSOR:
-			sensor_colliders.push_back(*iterator);
+			sensor_colliders.push_back(*itr);
 			break;
 		}
-
-		++iterator;
 	}
 
 	// Dynamic VS Dynamic ========================================
@@ -189,7 +164,7 @@ bool M_Collision::Update(float dt)
 		{
 			collider_2 = *itr_2;
 
-			if (collider_1->CheckCollision(collider_2))
+			if (collider_1->CheckCollision(collider_2)  &&  collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
 				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
 				{
@@ -238,7 +213,7 @@ bool M_Collision::Update(float dt)
 		{
 			collider_2 = (*itr_2);
 
-			if (collider_1->CheckCollision(collider_2))
+			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
 				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
 				{
@@ -282,11 +257,11 @@ bool M_Collision::Update(float dt)
 	
 			if (collider_1->CheckCollision(collider_2))
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
+				if (matrix[(int)collider_1->tag][(int)collider_2->tag] && collider_1->to_destroy == false && collider_2->to_destroy == false)
 				{
 					DoOnTrigger(collider_1, collider_2);
 				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
+				if (matrix[(int)collider_2->tag][(int)collider_1->tag] &&  collider_2->to_destroy == false)
 				{
 					DoOnTrigger(collider_2, collider_1);
 				}
@@ -303,6 +278,34 @@ bool M_Collision::Update(float dt)
 				}
 			}
 		}
+	}
+
+	iterator = colliders.begin();
+
+	while (iterator != colliders.end())
+	{
+		if ((*iterator)->to_destroy == true)
+		{
+			// Destroy from current colliders on collision ==============
+
+			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
+			{
+				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
+
+				if (to_destroy != (*itr)->collisions_list.end())
+				{
+					(*itr)->collisions_list.erase(to_destroy);
+				}
+			}
+
+			// Destroy ==================================================
+
+			RELEASE(*iterator);
+			iterator = colliders.erase(iterator);
+
+			continue;
+		}
+		++iterator;
 	}
 
 	return true;

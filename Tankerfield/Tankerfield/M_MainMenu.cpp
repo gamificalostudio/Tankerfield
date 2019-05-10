@@ -48,7 +48,6 @@ bool M_MainMenu::Start()
 
 	// Set values ==========================================
 
-	app->ui->able_axis = FOCUS_AXIS::Y;
 	SDL_ShowCursor(SDL_ENABLE);
 
 	return true;
@@ -87,6 +86,8 @@ bool M_MainMenu::CleanUp()
 			(*iter)->Destroy();
 		}
 	}
+
+	menu_elements.clear();
 
 	logo_image = nullptr;
 	single_player_button = nullptr;

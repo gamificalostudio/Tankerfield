@@ -300,7 +300,6 @@ void Obj_Brute::OnTrigger(Collider* collider)
 
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-		collider->SetTag(Collider::TAG::NONE);
 
 		if (life <= 0)
 		{

@@ -34,7 +34,7 @@ bool UI_Button::Draw()
 
 	if (app->ui->GetInputType() == UI_INPUT_TYPE::MOUSE)
 	{
-		if (app->ui->GetSelectedElement() == this && state != FocusState::NONE &&  state != FocusState::EXIT)
+		if (app->ui->GetFocusedElement() == this && state != FocusState::NONE &&  state != FocusState::EXIT)
 		{
 			sprite_rect = definition.pushed_rect;
 		}
@@ -58,7 +58,7 @@ bool UI_Button::Draw()
 		sprite_rect = definition.idle_rect;
 
 
-		if (app->ui->GetSelectedElement() == this)
+		if (app->ui->GetFocusedElement() == this)
 		{
 			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
 		}
@@ -94,7 +94,7 @@ bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 
 bool UI_Button::PreUpdate()
 {
-	if (hover_state == HoverState::ENTER && app->ui->GetSelectedElement() != this)
+	if (hover_state == HoverState::ENTER && app->ui->GetFocusedElement() != this)
 	{
 		// TODO 1: Add SFX  
 	}

@@ -446,7 +446,6 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-		collider->SetTag(Collider::TAG::NONE);
 
 		if (life <= 0)
 		{
