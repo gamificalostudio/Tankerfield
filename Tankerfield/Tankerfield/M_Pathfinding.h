@@ -35,11 +35,6 @@ public:
 	// Destructor
 	~M_Pathfinding();
 
-	bool Start() override;
-
-	//Here were going to DebugPathfinding
-	bool PostUpdate(float dt) override;
-
 	// Called before quitting
 	bool CleanUp() override;
 

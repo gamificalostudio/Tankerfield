@@ -20,19 +20,6 @@ M_Pathfinding::~M_Pathfinding()
 	RELEASE_ARRAY(map);
 }
 
-bool M_Pathfinding::Start()
-{
-
-
-	return true;
-}
-
-bool M_Pathfinding::PostUpdate(float dt)
-{
-
-
-	return true;
-}
 
 // Called before quitting
 bool M_Pathfinding::CleanUp()

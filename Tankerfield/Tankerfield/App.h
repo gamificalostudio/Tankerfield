@@ -16,6 +16,7 @@ class M_Render;
 class M_Textures;
 class M_Audio;
 class M_Pathfinding;
+class M_JumpPointSearch;
 class M_Map;
 class M_Fonts;
 class M_UI;
@@ -27,6 +28,7 @@ class M_PickManager;
 class M_AnimationBank;
 class M_RewardZoneManager;
 class M_MainMenu;
+
 
 class App
 {
@@ -105,7 +107,7 @@ public:
 	M_AnimationBank*		anim_bank = nullptr;
 	M_RewardZoneManager*    reward_zone_manager = nullptr;
 	M_MainMenu*             main_menu = nullptr;
-
+	M_JumpPointSearch*		JPS_pathfinding = nullptr;
 	//XML document
 	pugi::xml_node		config;
 

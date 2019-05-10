@@ -16,6 +16,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
+#include "M_JumpPointSearch.h"
 #include "M_SceneManager.h"
 #include "M_Map.h"
 #include "M_Fonts.h"
@@ -39,6 +40,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tex = DBG_NEW M_Textures();
 	audio = DBG_NEW M_Audio();
 	pathfinding = DBG_NEW M_Pathfinding();
+	JPS_pathfinding = DBG_NEW M_JumpPointSearch();
 	map = DBG_NEW M_Map();
 	scene = DBG_NEW M_Scene();
 	font = DBG_NEW M_Fonts();
@@ -60,6 +62,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(font);
 	AddModule(audio);
 	AddModule(pathfinding);
+	AddModule(JPS_pathfinding);
 	AddModule(map);
 	AddModule(scene);
 	AddModule(main_menu);

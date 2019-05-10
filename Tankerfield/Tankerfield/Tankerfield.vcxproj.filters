@@ -178,6 +178,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="M_JumpPointSearch.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -377,6 +380,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="M_JumpPointSearch.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
