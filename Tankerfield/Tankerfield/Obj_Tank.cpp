@@ -234,7 +234,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ObjectType::HEALTH_BAG);
+	SetItem(ItemType::HEALTH_BAG);
 	return true;
 }
 
@@ -358,7 +358,9 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 {
 	if (this->life != 0) {
 		//if the player shot
-		if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+		if ((ReleaseShot()
+			|| GetShotAutomatically())
+			&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 		{
 			//- Basic shot
 			if (charged_shot_timer.ReadMs() < charge_time)
@@ -366,6 +368,13 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 				//set the max velocity in a basic shot
 				velocity_recoil_curr_speed = velocity_recoil_speed_max;
 			}
+
+			//Item Happy hour activated
+			else if (GetShotAutomatically())
+			{
+				velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+			}
+
 			//- Charged shot
 			else
 			{
@@ -395,6 +404,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		velocity += velocity_recoil_final_lerp;
 	}
 }
+
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
@@ -584,7 +594,7 @@ void Obj_Tank::SetLife(int life)
 	gui->SetLifeBar(this->life);
 }
 
-void Obj_Tank::SetItem(ObjectType type) 
+void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
 	gui->SetItemIcon(type);
@@ -676,7 +686,8 @@ void Obj_Tank::ShootChargedWeapon()
 		}
 	}
 
-	if (ReleaseShot()
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
 		//- Basic shot
@@ -718,7 +729,8 @@ void Obj_Tank::ShootSustainedWeapon()
 	}
 
 	//- Quick shot
-	if (ReleaseShot()
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets
 		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
 	{
@@ -797,6 +809,21 @@ bool Obj_Tank::ReleaseShot()
 	{
 		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_UP;
 	}
+}
+
+void Obj_Tank::ShotAutormaticallyActivate()
+{
+	shot_automatically = true;
+}
+
+void Obj_Tank::ShotAutormaticallyDisactivate()
+{
+	shot_automatically = false;
+}
+
+bool Obj_Tank::GetShotAutomatically() const
+{
+	return shot_automatically;
 }
 
 //Select the input method depending on the last input pressed
@@ -926,7 +953,7 @@ void Obj_Tank::StopTank()
 			dead_fire->tank = this;
 		}
 		this->SetWeapon(WEAPON::BASIC, 0);
-		this->SetItem(ObjectType::NO_TYPE);
+		this->SetItem(ItemType::NO_TYPE);
 	}
 }
 
@@ -937,15 +964,15 @@ bool Obj_Tank::Alive()
 
 void Obj_Tank::Item()
 {
-	if(item != ObjectType::NO_TYPE
+	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
 			|| (controller != nullptr
 				&& (*controller)->GetButtonState(gamepad_item) == KEY_DOWN)))
 	{
-		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
+		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);
 		new_item->caster = this;
 		new_item->Use();
-		item = ObjectType::NO_TYPE;
+		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
 	}
 }

@@ -14,6 +14,7 @@
 #include "M_ObjManager.h"
 #include "Obj_Tank.h"
 #include "WeaponInfo.h"
+#include "Obj_Item.h"
 
 #include "UI_Image.h"
 #include "UI_InGameElement.h"
@@ -261,19 +262,19 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 
 }
 
-void Player_GUI::SetItemIcon( ObjectType type)
+void Player_GUI::SetItemIcon(ItemType type)
 {
 	item_icon->SetState(ELEMENT_STATE::VISIBLE);
 
 	switch (type)
 	{
-	case ObjectType::HEALTH_BAG:
+	case ItemType::HEALTH_BAG:
 		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
-	case ObjectType::HAPPY_HOUR_ITEM:
+	case ItemType::HAPPY_HOUR_ITEM:
 		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
-	case ObjectType::NO_TYPE:
+	case ItemType::NO_TYPE:
 		item_icon->SetState(ELEMENT_STATE::HIDDEN);
 		break;
 	}

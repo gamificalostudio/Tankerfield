@@ -165,7 +165,7 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
-		app->objectmanager->CreateObject(ObjectType::PICK_UP, (fPoint)mouse_pos);
+		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
 	{
