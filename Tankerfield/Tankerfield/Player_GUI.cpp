@@ -278,6 +278,7 @@ void Player_GUI::SetItemIcon(ItemType type)
 		item_icon->SetState(ELEMENT_STATE::HIDDEN);
 		break;
 	}
+
 	item_icon->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1, 3.5F);
 
 }
