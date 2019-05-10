@@ -43,6 +43,7 @@ Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) :Object(pos)
 		200 + app->scene->round * 100,
 		this);
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
 }
