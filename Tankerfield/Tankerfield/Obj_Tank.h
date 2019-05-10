@@ -167,7 +167,7 @@ private:
 	uint revive_sfx							= 0u;
 
 	//-- Basic shoot
-	uint shot_type							= (uint)WEAPON::DOUBLE_MISSILE;
+	uint shot_type							= (uint)WEAPON::LASER_SHOT;
 
 	//-- Shoot
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.

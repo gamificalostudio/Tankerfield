@@ -66,10 +66,10 @@ bool UI_InGameElement::Draw()
 	if (SDL_PointInRect( &screen_point, &app->ui->current_gui->viewport_with_margin) == false)
 	{
 		fPoint vector = app->ui->current_gui->player->pos_map - pointed_obj->pos_map;
-		sprite_section = arrow_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
+		sprite_rect = arrow_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
 		vector.Normalize();
 		screen_pos = app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 2.f, app->ui->current_camera);
-		app->render->BlitUI( app->ui->GetAtlas(), screen_pos.x - (float)sprite_section.w * 0.5f, screen_pos.y - (float)sprite_section.h * 0.5f, &sprite_section ,app->ui->current_camera);
+		app->render->BlitUI( app->ui->GetAtlas(), screen_pos.x - (float)sprite_rect.w * 0.5f, screen_pos.y - (float)sprite_rect.h * 0.5f, &sprite_rect ,app->ui->current_camera);
 	}
 }
 
@@ -97,19 +97,19 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	switch (pick_up_obj->type_of_weapon)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE];
 		break;
 	case WEAPON::HEALING_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
 		break;
 	case WEAPON::FLAMETHROWER:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	case WEAPON::LASER_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER];
 		break;
 	case WEAPON::BASIC:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_BASIC];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
 
@@ -151,11 +151,11 @@ void UI_IG_Weapon::UpdateLevel()
 
 	if (diference > 0)
 	{
-		level_indicator->sprite_section = { 460, 160, 15, 10 * abs(diference)};
+		level_indicator->sprite_rect = { 460, 160, 15, 10 * abs(diference)};
 	}
 	else
 	{
-		level_indicator->sprite_section = { 460, 205, 15, 10 * abs(diference) };
+		level_indicator->sprite_rect = { 460, 205, 15, 10 * abs(diference) };
 	}
 
 
@@ -258,7 +258,7 @@ void UI_IG_Helper::AddTextHelper(const String text, const fPoint offset)
 	ui_helper->single_camera = this->single_camera;
 	ui_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	
-	UI_QuadDef quad_def({ 0,0, ui_helper->sprite_section.w, ui_helper->sprite_section.h }, { 100, 100, 100, 100 });
+	UI_QuadDef quad_def({ 0,0, ui_helper->sprite_rect.w, ui_helper->sprite_rect.h }, { 100, 100, 100, 100 });
 	quad_def.is_in_game = true;
 
 	UI_Quad* back_quad = app->ui->CreateQuad(position + app->map->ScreenToMapF(offset.x, offset.y), quad_def);

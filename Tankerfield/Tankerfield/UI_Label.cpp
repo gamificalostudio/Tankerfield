@@ -36,7 +36,7 @@ void UI_Label::SetText(String text)
 		return;
 	}
 
-	app->font->CalcSize( text.c_str() , sprite_section.w, sprite_section.h, font);
+	app->font->CalcSize( text.c_str() , sprite_rect.w, sprite_rect.h, font);
 	label_texture = app->font->Print( text.c_str(), color, font);
 }
 
@@ -46,7 +46,7 @@ bool UI_Label::Draw()
 
 	if (label_texture != nullptr)
 	{
-		app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
+		app->render->BlitUI(label_texture, draw_rect.x, draw_rect.y, &sprite_rect, app->ui->current_camera, (int)alpha);
 	}
 
 	return true;

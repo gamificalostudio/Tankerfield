@@ -275,27 +275,27 @@ void App::FinishUpdate()
 	if (want_to_load == true)
 		LoadGameNow();
 
-	// Framerate calculations --
-	if (last_sec_frame_time.Read() > 1000)
-	{
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}
+// Framerate calculations --
+if (last_sec_frame_time.Read() > 1000)
+{
+	last_sec_frame_time.Start();
+	prev_last_sec_frame_count = last_sec_frame_count;
+	last_sec_frame_count = 0;
+}
 
-	float avg_fps = float(frame_count) / startup_time.ReadSec();
-	float seconds_since_startup = startup_time.ReadSec();
-	uint32 last_frame_ms = frame_time.Read();
-	uint32 frames_on_last_update = prev_last_sec_frame_count;
+float avg_fps = float(frame_count) / startup_time.ReadSec();
+float seconds_since_startup = startup_time.ReadSec();
+uint32 last_frame_ms = frame_time.Read();
+uint32 frames_on_last_update = prev_last_sec_frame_count;
 
-	static char title[256];
-	sprintf_s(title, 256, "Tankerfield | FPS: %u", frames_on_last_update);
-	app->win->SetTitle(title);
+static char title[256];
+sprintf_s(title, 256, "Tankerfield | FPS: %u", frames_on_last_update);
+app->win->SetTitle(title);
 
-	//if (capped_ms > 0 && last_frame_ms < capped_ms)
-	//{
-	//	SDL_Delay(capped_ms - last_frame_ms);
-	//}
+//if (capped_ms > 0 && last_frame_ms < capped_ms)
+//{
+//	SDL_Delay(capped_ms - last_frame_ms);
+//}
 }
 
 // Call modules before each loop iteration
@@ -373,7 +373,10 @@ bool App::CleanUp()
 
 	while (item != modules.rend() && ret == true)
 	{
-		ret = (*item)->CleanUp();
+		if ((*item)->active == true)
+		{
+			ret = (*item)->CleanUp();
+		}
 		item++;
 	}
 
