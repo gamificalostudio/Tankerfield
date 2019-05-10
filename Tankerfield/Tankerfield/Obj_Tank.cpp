@@ -207,7 +207,7 @@ bool Obj_Tank::Start()
 	life = 90;
 	max_life = 100;
 
-	SetWeapon(WEAPON::LASER_SHOT, 3);
+	SetWeapon(WEAPON::DOUBLE_MISSILE, 3);
 
 	//- Tutorial
 	//-- Move

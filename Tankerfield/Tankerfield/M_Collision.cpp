@@ -25,7 +25,6 @@ void Collider::SetPosToObj()
 void Collider::Destroy()
 {
 	to_destroy = true;
-	tag = TAG::NONE;
 }
 
 bool Collider::CheckCollision(Collider*  coll) const
@@ -286,6 +285,46 @@ bool M_Collision::Update(float dt)
 	{
 		if ((*iterator)->to_destroy == true)
 		{
+			switch ((*iterator)->tag)
+			{
+			case Collider::TAG::BULLET:
+				LOG("Destroyed Bullet Collider");
+				break;
+			case Collider::TAG::BULLET_LASER:
+				LOG("Destroyed Bullet Laser Collider");
+				break;
+			case Collider::TAG::ENEMY:
+				LOG("Destroyed Enemy Collider");
+				break;
+			case Collider::TAG::FRIENDLY_BULLET:
+				LOG("Destroyed Friendly Bullet Collider");
+				break;
+			case Collider::TAG::GOD:
+				LOG("Destroyed God Collider");
+				break;
+			case Collider::TAG::PICK_UP:
+				LOG("Destroyed PickUp Collider");
+				break;
+			case Collider::TAG::PLAYER:
+				LOG("Destroyed Player Collider");
+				break;
+			case Collider::TAG::REWARD_BOX:
+				LOG("Destroyed Reward Box Collider");
+				break;
+			case Collider::TAG::REWARD_ZONE:
+				LOG("Destroyed Reward Zone Collider");
+				break;
+			case Collider::TAG::ROAD:
+				LOG("Destroyed Road Collider");
+				break;
+			case Collider::TAG::WATER:
+				LOG("Destroyed Water Collider");
+				break;
+			case Collider::TAG::NONE:
+				LOG("Destroyed None Collider");
+				break;
+			}
+
 			// Destroy from current colliders on collision ==============
 
 			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
