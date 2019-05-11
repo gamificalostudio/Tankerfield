@@ -81,15 +81,13 @@ bool M_Map::PostUpdate(float dt)
 
 		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
 
-		std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
+	/*	std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
 		{
 			return a.sorting_value < b.sorting_value;
-		});
+		});*/
 
 		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
 		{
-			TileSet* tileset = app->map->GetTilesetFromTileId((*sorted_tiles).id);
-
 			app->render->Blit(sorted_tiles->texture,
 				(*sorted_tiles).rect.x,
 				(*sorted_tiles).rect.y,
@@ -97,10 +95,8 @@ bool M_Map::PostUpdate(float dt)
 				&sorted_tiles->section);
 				
 		}
-		SDL_RenderSetClipRect(app->render->renderer, nullptr);
-	
 	}
-
+	SDL_RenderSetClipRect(app->render->renderer, nullptr);
 
 
 	//// Draw Grid ==============================================
@@ -529,7 +525,11 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			{
 				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WATER);
 			}
-			
+			else if (type == "ROAD")
+			{
+				Collider* coll = app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::ROAD);
+				coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+			}
 		}
 
 		++i;
@@ -661,7 +661,8 @@ bool M_Map::LoadMap()
 		;
 
 		uint level = 1;
-		data.qt->ReturnNumbreOfLevels(area.w, (*app->render->cameras.begin())->screen_section.w*0.25, level);
+	
+		data.qt->ReturnNumbreOfLevels(area.w, app->win->screen_surface->w * 0.25f, level);
 		data.qt = DBG_NEW Quadtree_Map(area, 0, level);
 
 	}

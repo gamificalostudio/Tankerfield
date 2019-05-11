@@ -140,6 +140,8 @@
     <ClCompile Include="Obj_CannonFire.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
+    <ClCompile Include="Obj_Suicidal.cpp" />
+    <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
     <ClCompile Include="MathUtils.cpp" />
@@ -170,6 +172,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="M_Window.cpp" />
     <ClCompile Include="UI_InGameElement.cpp" />
+    <ClCompile Include="UI_InteractiveGroup.cpp" />
     <ClCompile Include="UI_Label.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="M_UI.cpp" />
@@ -184,7 +187,6 @@
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
-    <ClCompile Include="WeaponInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -203,6 +205,7 @@
     <ClInclude Include="Obj_CannonFire.h" />
     <ClInclude Include="Obj_Fire.h" />
     <ClInclude Include="Obj_RewardBox.h" />
+    <ClInclude Include="Obj_Suicidal.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
@@ -236,6 +239,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="M_Window.h" />
     <ClInclude Include="UI_InGameElement.h" />
+    <ClInclude Include="UI_InteractiveGroup.h" />
     <ClInclude Include="UI_Label.h" />
     <ClInclude Include="M_UI.h" />
     <ClInclude Include="Object.h" />

@@ -59,8 +59,12 @@ Obj_Tank::~Obj_Tank()
 
 	if (camera_player != nullptr)
 	{
-		camera_player->assigned = false;
-		camera_player = nullptr;
+		app->render->DestroyCamera(camera_player);
+	}
+
+	if (controller != nullptr)
+	{
+		(*controller)->DetachController();
 	}
 }
 
@@ -105,7 +109,6 @@ bool Obj_Tank::Start()
 
 	//sfx -------------------------------------------------------------------------------------------------------
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
-	movement_sfx = app->audio->LoadFx("audio/Fx/vlanstab.wav");
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -120,6 +123,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_Z;
 		curr_tex = base_tex_green;
 		turr_tex = turr_tex_green;
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -131,7 +135,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_V;
 		curr_tex = base_tex_blue;
 		turr_tex = turr_tex_blue;
-
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -143,7 +147,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_M;
 		curr_tex = base_tex_pink;
 		turr_tex = turr_tex_pink;
-
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 3:
 		kb_up		= SDL_SCANCODE_KP_8;
@@ -155,7 +159,7 @@ bool Obj_Tank::Start()
 		kb_ready	= SDL_SCANCODE_KP_2;
 		curr_tex = base_tex_orange;
 		turr_tex = turr_tex_orange;
-
+		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	default:
 		curr_tex = base_tex_orange;
@@ -170,32 +174,19 @@ bool Obj_Tank::Start()
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
 	curr_speed = speed = 5.f;//TODO: Load from xml
-
+	road_buff = 3.f;
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
-	//Basic weapon starting properties
-	weapon_info.bullet_damage = 50;
-	weapon_info.bullet_healing = 0;
-	weapon_info.bullet_life_ms = 2000;
-	weapon_info.bullet_speed = 10;
-	weapon_info.time_between_bullets = 500;
+	camera_player = app->render->CreateCamera(this);
+	app->ui->AddPlayerGUI(this);
+	InitWeapons();
 
-	basic_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	basic_shot_function[(uint)WEAPON::DOUBLE_MISSILE]	= &Obj_Tank::ShootDoubleMissile;
-	basic_shot_function[(uint)WEAPON::HEALING_SHOT]		= &Obj_Tank::ShootHealingShot;
-	basic_shot_function[(uint)WEAPON::LASER_SHOT]		= &Obj_Tank::ShootLaserShot;
-
-
-	charge_time = 3000.f; // Same for all bullets (player gets used to it)
-	charged_shot_function[(uint)WEAPON::BASIC]			= &Obj_Tank::ShootBasic;
-	charged_shot_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
-	charged_shot_function[(uint)WEAPON::HEALING_SHOT]	= &Obj_Tank::ShootHealingShot;
-	charged_shot_function[(uint)WEAPON::LASER_SHOT]		= &Obj_Tank::ShootLaserShot;
-
-	coll = app->collision->AddCollider(pos_map, 0.8f, 0.8f, Collider::TAG::PLAYER,0.f,this);
+	float coll_w = 0.8f;
+	float coll_h = 0.8f;
+	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::PLAYER,0.f,this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ -0.4f, -0.4f });
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	cannon_height = 11.f;
 
@@ -216,22 +207,6 @@ bool Obj_Tank::Start()
 	life = 90;
 	max_life = 100;
 
-	//Life inicialistation
-	//item = ObjectType::HEALTH_BAG;
-
-	std::vector<Camera*>::iterator item_cam;
-
-	for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
-	{
-		if (!(*item_cam)->assigned)
-		{
-			(*item_cam)->assigned = true;
-			camera_player = (*item_cam);
-			break;
-		}
-	}
-
-
 	//- Tutorial
 	//-- Move
 	UI_InGameElementDef clue_def;
@@ -241,7 +216,7 @@ bool Obj_Tank::Start()
 	tutorial_move->single_camera = camera_player;
 	tutorial_move->AddButtonHelper(CONTROLLER_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
-	tutorial_move_time = 2500;
+	tutorial_move_time = 4500;
 	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
@@ -257,6 +232,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
+	SetItem(ItemType::HEALTH_BAG);
 	return true;
 }
 
@@ -274,11 +250,14 @@ bool Obj_Tank::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
-		if(coll->GetTag() == Collider::TAG::PLAYER)
+		if (coll->GetTag() == Collider::TAG::PLAYER)
+		{
 			coll->SetTag(Collider::TAG::GOD);
+		}
 		else
+		{
 			coll->SetTag(Collider::TAG::PLAYER);
-
+		}
 	}
 	return true;
 }
@@ -286,13 +265,13 @@ bool Obj_Tank::PreUpdate()
 bool Obj_Tank::Update(float dt)
 {
 	Movement(dt);
-	Shoot(dt);
+	Aim(dt);//INFO: Aim always has to go before void Shoot()
+	Shoot();
 	Item();
 	StopTank();
 	ReviveTank(dt);
-	CameraMovement(dt);//Camera moves after the player
+	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
-
 	return true;
 }
 
@@ -313,6 +292,11 @@ fPoint Obj_Tank::GetTurrPos()
 
 void Obj_Tank::Movement(float dt)
 {
+	if (!tutorial_move_pressed)
+		tutorial_move_timer.Start();
+
+	tutorial_move_pressed = true;
+
 	//Don't move if tank is dead
 	if (life <= 0) {
 		return;
@@ -339,12 +323,8 @@ void Obj_Tank::Movement(float dt)
 	{
 		if (movement_timer.ReadSec() >= 0.7)
 		{
-			//app->audio->PlayFx(movement_sfx);
 			movement_timer.Start();
 		}
-		
-			tutorial_move_timer.Start();
-		tutorial_move_pressed = true;
 
 		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
@@ -365,9 +345,6 @@ void Obj_Tank::Movement(float dt)
 
 	pos_map += velocity;
 
-	
-
-
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
 	{
 		tutorial_move->Destroy();
@@ -379,14 +356,23 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 {
 	if (this->life != 0) {
 		//if the player shot
-		if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+		if ((ReleaseShot()
+			|| GetShotAutomatically())
+			&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 		{
 			//- Basic shot
-			if (charged_timer.ReadMs() < charge_time)
+			if (charged_shot_timer.ReadMs() < charge_time)
 			{
 				//set the max velocity in a basic shot
 				velocity_recoil_curr_speed = velocity_recoil_speed_max;
 			}
+
+			//Item Happy hour activated
+			else if (GetShotAutomatically())
+			{
+				velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+			}
+
 			//- Charged shot
 			else
 			{
@@ -413,31 +399,27 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 
 		//calculate the velocity in lerp
 		//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
-
 		velocity += velocity_recoil_final_lerp;
 	}
 }
+
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
 	if (app->input->GetKey(kb_up) == KEY_DOWN || app->input->GetKey(kb_up) == KEY_REPEAT)
 	{
-		//app->render->camera.y -= floor(100.0f * dt);
 		input.y -= 1.f;
 	}
 	if (app->input->GetKey(kb_left) == KEY_DOWN || app->input->GetKey(kb_left) == KEY_REPEAT)
 	{
-		//app->render->camera.x -= floor(100.0f * dt);
 		input.x -= 1.f;
 	}
 	if (app->input->GetKey(kb_down) == KEY_DOWN || app->input->GetKey(kb_down) == KEY_REPEAT)
 	{
-		//app->render->camera.y += floor(100.0f * dt);
 		input.y += 1.f;
 	}
 	if (app->input->GetKey(kb_right) == KEY_DOWN || app->input->GetKey(kb_right) == KEY_REPEAT)
 	{
-		//app->render->camera.x += floor(100.0f * dt);
 		input.x += 1.f;
 	}
 
@@ -446,7 +428,7 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input)
 
 void Obj_Tank::InputMovementController(fPoint & input)
 {
-	input = (fPoint)(*controller)->GetJoystick(gamepad_move);
+	input = (fPoint)(*controller)->GetJoystick(gamepad_move, dead_zone);
 }
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
@@ -478,27 +460,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
-
-																							//only appears when hes dead and disappear when he has been revived
-	//DEBUG
-	{
-		//	iPoint debug_mouse_pos = { 0, 0 };
-//	app->input->GetMousePosition(debug_mouse_pos.x, debug_mouse_pos.y);
-
-//	debug_mouse_pos.x += camera_player->rect.x;
-//	debug_mouse_pos.y += camera_player->rect.y;
-
-//	fPoint shot_pos(pos_map - app->map->ScreenToMapF( 0.f, cannon_height ));
-//	fPoint debug_screen_pos = app->map->MapToScreenF(shot_pos);
-
-	//  std::vector<Camera*>::iterator item_cam;
-//	for (item_cam = app->render->camera.begin(); item_cam != app->render->camera.end(); ++item_cam)
-//	{
-	//	app->render->DrawLineSplitScreen((*item_cam), debug_mouse_pos.x, debug_mouse_pos.y, debug_screen_pos.x, debug_screen_pos.y,  0, 255, 0);
-//	}
-	}
-
-
 
 	return true;
 }
@@ -560,6 +521,7 @@ bool Obj_Tank::CleanUp()
 }
 
 
+
 void Obj_Tank::OnTrigger(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
@@ -590,6 +552,11 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			SetPickUp(pick_up);
 		}
 	}
+
+	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed < speed + road_buff)
+	{
+			curr_speed += road_buff;
+	}
 }
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
@@ -598,6 +565,10 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
+	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed >= speed + road_buff)
+		{
+			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
+		}
 }
 
 void Obj_Tank::SetLife(int life)
@@ -621,58 +592,10 @@ void Obj_Tank::SetLife(int life)
 	gui->SetLifeBar(this->life);
 }
 
-void Obj_Tank::SetItem(ObjectType type) 
+void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
 	gui->SetItemIcon(type);
-}
-
-void Obj_Tank::SetWeapon(WEAPON type, uint level)
-{
-	weapon_info.level_weapon = level;
-	weapon_info.type = type;
-
-	gui->SetWeaponIcon(type);
-	
-	switch (type)
-	{
-	case WEAPON::BASIC:
-		weapon_info.bullet_damage = 25 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::FLAMETHROWER:
-		weapon_info.bullet_damage = 50 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::DOUBLE_MISSILE:
-		weapon_info.bullet_damage = 0;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::HEALING_SHOT:
-		weapon_info.bullet_damage = 25+level;
-		weapon_info.bullet_healing = 5 + level;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 10;
-		weapon_info.time_between_bullets = 500;
-		break;
-	case WEAPON::LASER_SHOT:
-		weapon_info.bullet_damage = 10 + level * 2;
-		weapon_info.bullet_healing = 0;
-		weapon_info.bullet_life_ms = 2000;
-		weapon_info.bullet_speed = 20;
-		weapon_info.time_between_bullets = 500;
-		break;
-	}
-
 }
 
 WeaponInfo Obj_Tank::GetWeaponInfo() const 
@@ -723,20 +646,105 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 {
 	if (controller != nullptr)
 	{
-		input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim);
+		input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim, dead_zone);
 		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
 		iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 		iso_dir.Normalize();
 	}
 }
 
-void Obj_Tank::Shoot(float dt)
+void Obj_Tank::Shoot()
+{
+	switch (weapon_info.type)
+	{
+	case WEAPON_TYPE::CHARGED:
+		ShootChargedWeapon();
+		break;
+	case WEAPON_TYPE::SUSTAINED:
+		ShootSustainedWeapon();
+		break;
+	default:
+		LOG("Weapon type not set correctly");
+		break;
+	}
+}
+
+void Obj_Tank::ShootChargedWeapon()
+{
+	if (PressShot())
+	{
+		charged_shot_timer.Start();
+	}
+
+	if (HoldShot())
+	{
+		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
+		{
+			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
+		}
+	}
+
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
+		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+	{
+		//- Basic shot
+		if (charged_shot_timer.ReadMs() < charge_time)
+		{
+			(this->*shot1_function[(uint)weapon_info.weapon])();
+			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(weapon_info.basic_shot_trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
+		}
+		//- Charged shot
+		else
+		{
+			(this->*shot2_function[(uint)weapon_info.weapon])();
+			app->audio->PlayFx(shot_sound);
+			camera_player->AddTrauma(weapon_info.charged_shot_trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
+		}
+		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
+		shot_timer.Start();
+		gui->SetChargedShotBar(0.f);
+	}
+}
+
+void Obj_Tank::ShootSustainedWeapon()
+{
+	if (PressShot())
+	{
+		sustained_shot_timer.Start();
+	}
+
+	//- Sustained shot
+	if (HoldShot()
+		&& sustained_shot_timer.ReadMs() > quick_shot_time)
+	{
+		(this->*shot2_function[(uint)weapon_info.weapon])();
+		//TODO: Play wepon sfx
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
+	}
+
+	//- Quick shot
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
+		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets
+		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
+	{
+		(this->*shot1_function[(uint)weapon_info.weapon])();
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
+		shot_timer.Start();
+	}
+}
+
+void Obj_Tank::Aim(float dt)
 {
 	//fPoint Obj_Tank::pos is on the center of the base
 	//fPoint shot_pos is on the center of the turret (considers the cannon_height)
-	turr_pos = pos_map - app->map->ScreenToMapF(  0, cannon_height );
-	fPoint iso_dir (0.f, 0.f);
-	fPoint input_dir (0.f, 0.f);
+	turr_pos = pos_map - app->map->ScreenToMapF(0, cannon_height);
+	fPoint iso_dir(0.f, 0.f);
+	fPoint input_dir(0.f, 0.f);
 	if (shot_input == INPUT_METHOD::KEYBOARD_MOUSE)
 	{
 		InputShotMouse(turr_pos, input_dir, iso_dir);
@@ -763,65 +771,6 @@ void Obj_Tank::Shoot(float dt)
 		shot_dir = iso_dir;//Keep the last direction to shoot bullets if the joystick is not being aimed
 	}
 	turr_angle = lerp(turr_angle, turr_target_angle, shot_angle_lerp_factor * dt);
-
-	if (PressShot())
-	{
-		charged_timer.Start();
-	}
-
-	if (HoldShot())
-	{
-		if (charged_timer.ReadMs() / charge_time > 0.1f)
-		{
-			gui->SetChargedShotBar(charged_timer.ReadMs() / charge_time);
-		}
-	}
-
-	if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
-	{
-		//- Basic shot
-		if (charged_timer.ReadMs() < charge_time)
-		{
-			(this->*basic_shot_function[(uint)weapon_info.type])();
-			app->audio->PlayFx(shot_sound);
-			if (weapon_info.type != WEAPON::LASER_SHOT)
-			{
-				camera_player->AddTrauma(0.54f);
-			}
-			else
-			{
-				camera_player->AddTrauma(0.54f * 0.75f);
-			}
-			if (controller != nullptr)
-			{
-				(*controller)->PlayRumble(0.92f, 250);
-			}
-		}
-		//- Charged shot
-		else
-		{
-			(this->*charged_shot_function[(uint)weapon_info.type])();
-			app->audio->PlayFx(shot_sound);
-			if(weapon_info.type != WEAPON::LASER_SHOT)
-			{
-				camera_player->AddTrauma(0.76f);
-			}
-			else
-			{
-				camera_player->AddTrauma(0.76f * 0.75f);
-			}
-
-			if (controller != nullptr)
-			{
-				(*controller)->PlayRumble(1.0f, 400);
-			}
-
-		}
-		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
-		shot_timer.Start();
-		gui->SetChargedShotBar(0.f);
-
-	}
 }
 
 bool Obj_Tank::PressShot()
@@ -860,6 +809,21 @@ bool Obj_Tank::ReleaseShot()
 	}
 }
 
+void Obj_Tank::ShotAutormaticallyActivate()
+{
+	shot_automatically = true;
+}
+
+void Obj_Tank::ShotAutormaticallyDisactivate()
+{
+	shot_automatically = false;
+}
+
+bool Obj_Tank::GetShotAutomatically() const
+{
+	return shot_automatically;
+}
+
 //Select the input method depending on the last input pressed
 //Prioritize controller if both inputs are being pressed at the same time
 void Obj_Tank::SelectInputMethod()
@@ -875,7 +839,7 @@ void Obj_Tank::SelectInputMethod()
 	}
 	if (move_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
-		&& !(*controller)->GetJoystick(gamepad_move).IsZero()))
+		&& !(*controller)->GetJoystick(gamepad_move, dead_zone).IsZero()))
 	{
 		move_input = INPUT_METHOD::CONTROLLER;
 	}
@@ -889,29 +853,13 @@ void Obj_Tank::SelectInputMethod()
 	}
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
-		&& (!(*controller)->GetJoystick(gamepad_aim).IsZero()
+		&& (!(*controller)->GetJoystick(gamepad_aim, dead_zone).IsZero()
 		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
 	}
 }
-
-void Obj_Tank::ShootBasic()
-{
-	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
-	bullet->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-}
-
-void Obj_Tank::ShootFlameThrower()
-{
-}
-
 
 void Obj_Tank::ReviveTank(float dt)
 {
@@ -1003,7 +951,7 @@ void Obj_Tank::StopTank()
 			dead_fire->tank = this;
 		}
 		this->SetWeapon(WEAPON::BASIC, 0);
-		this->SetItem(ObjectType::NO_TYPE);
+		this->SetItem(ItemType::NO_TYPE);
 	}
 }
 
@@ -1012,74 +960,17 @@ bool Obj_Tank::Alive()
 	return life > 0;
 }
 
-
-
-void Obj_Tank::ShootDoubleMissile()
-{
-	fPoint double_missiles_offset = shot_dir;
-	double_missiles_offset.RotateDegree(90);
-	float missiles_offset = 0.2f;
-
-	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
-	left_missile->SetPlayer(this);
-
-	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
-	right_missile->SetPlayer(this);
-
-	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
-
-	left_missile->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		bullet_angle);
-
-	right_missile->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		bullet_angle);
-}
-
-void Obj_Tank::ShootHealingShot()
-{
-	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir);
-
-	heal_bullet->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-
-	heal_bullet->tank_parent = this;
-}
-
-void Obj_Tank::ShootLaserShot()
-{
-	Laser_Bullet *	 laser_bullet= (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir);
-
-	laser_bullet->SetBulletProperties(
-		weapon_info.bullet_speed,
-		weapon_info.bullet_life_ms,
-		weapon_info.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-}
-
 void Obj_Tank::Item()
 {
-	if(item != ObjectType::NO_TYPE
+	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
 			|| (controller != nullptr
 				&& (*controller)->GetButtonState(gamepad_item) == KEY_DOWN)))
 	{
-		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
+		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);
 		new_item->caster = this;
 		new_item->Use();
-		item = ObjectType::NO_TYPE;
+		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
 	}
 }
@@ -1107,6 +998,11 @@ void Obj_Tank::SetGui(Player_GUI * gui)
 bool Obj_Tank::IsReady() const
 {
 	return ready;
+}
+
+int Obj_Tank::GetTankNum()
+{
+	return tank_num;
 }
 
 void Obj_Tank::InputReadyKeyboard()

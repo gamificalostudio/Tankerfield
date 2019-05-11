@@ -10,7 +10,7 @@ Obj_CannonFire::Obj_CannonFire(fPoint pos_map) : Object(pos_map)
 	anim.frames = app->anim_bank->LoadFrames(cannon_fire_node.child("animations").child("cannon_fire"));
 	curr_anim = &anim;
 
-	tex = app->tex->Load("textures/objects/cannon_fire.png");
+	tex = app->tex->Load("textures/objects/particles/cannon_fire.png");
 	curr_tex = tex;
 
 	draw_offset.x = 74;

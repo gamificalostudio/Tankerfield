@@ -21,7 +21,6 @@ typedef string String;
 class M_UI;
 class Camera;
 enum class ELEMENT_STATE;
-enum class GUI_TYPE;
 
 class UI_Element;
 class UI_Listener;
@@ -190,7 +189,7 @@ public:
 
 	bool Reset();
 
-	Player_GUI* AddPlayerGUI( GUI_TYPE type, Obj_Tank* player);
+	Player_GUI* AddPlayerGUI(Obj_Tank* player);
 
 	void AddInteractiveElement(UI_Element * element);
 
@@ -228,32 +227,28 @@ public:
 
 	// Object functions ----------------------------------------------------------
 
-	UI_Element*  GetSelectedElement();
+	UI_Element*  GetFocusedElement();
 
-	UI_Element* GetScreen();
-
-	UI_INPUT_TYPE GetInputType() const;
+	UI_INPUT_TYPE GetInputType();
 
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
 
 private:
 
-	void UpdateElements(float dt);
-
-	void FocusMouse();
-
-	void FocusController();
-
-	UI_Element* GetNearestElement(UI_Element * element, CONTROLLER_DIR dir);
+	void AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float loops, const float init_value, const float target_value);
 
 	bool SelectClickedObject();
 
-	void DrawUI(UI_Element* object); // Recursive function to draw gui as a tree
+	void UpdateElements(float dt);
 
-	void UpdateGuiPositions(UI_Element* object, fPoint cumulated_position);
+	void UpdateHerarchyPositions(UI_Element* object, fPoint cumulated_position);
 
-	void AddFX( UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float loops ,const float init_value, const float target_value);
+	void FocusMouse();
+
+	void DrawUI(UI_Element* object);
+
+
 
 private:
 
@@ -285,8 +280,6 @@ private:
 
 	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
 
-	Timer btw_focus_timer;
-
 public:
 
 	Player_GUI* current_gui = nullptr;
@@ -296,8 +289,6 @@ public:
 	fPoint		mouse_position;
 
 	fPoint		mouse_offset;
-
-	FOCUS_AXIS  able_axis = FOCUS_AXIS::BOTH;
 
 	// Assets --------------------------------------------
 

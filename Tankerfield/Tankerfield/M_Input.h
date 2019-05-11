@@ -14,7 +14,7 @@
 //#define NUM_KEYS 352
 #define NUM_MOUSE_BUTTONS 5
 #define MAX_CONTROLLERS 4
-#define DEAD_ZONE 3000
+#define DEFAULT_DEAD_ZONE 7500
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
@@ -60,19 +60,24 @@ public:
 
 	KeyState GetButtonState(SDL_GameControllerButton button);
 	
-	iPoint GetJoystick(Joystick joystick);
+	iPoint GetJoystick(Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
 
 	//Treat triggers like buttons or keys to more easily manage them
 	KeyState GetTriggerState(SDL_GameControllerAxis axis);
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEAD_ZONE);
+	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
 	
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
 	int PlayRumble(float strengh, Uint32 length);
 	int StopRumble();
+	void DetachController()
+	{
+		if(this != nullptr)
+			attached = false;
+	}
 private:
 	bool attached = false;
 

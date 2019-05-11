@@ -44,9 +44,26 @@ bool M_Window::Awake(pugi::xml_node& config)
 		height = config.child("resolution").attribute("height").as_int(480);
 		scale = config.child("resolution").attribute("scale").as_int(1);
 
+		SDL_DisplayMode mode;
+		SDL_GetCurrentDisplayMode(0, &mode);
+
+		if (width > mode.w)
+		{
+			width = mode.w;
+		}
+		if (height > mode.h)
+		{
+			height = mode.h;
+		}
+		
 		if(fullscreen == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
+		}
+
+		if (fullscreen_window == true)
+		{
+			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
 		if(borderless == true)
@@ -57,11 +74,6 @@ bool M_Window::Awake(pugi::xml_node& config)
 		if(resizable == true)
 		{
 			flags |= SDL_WINDOW_RESIZABLE;
-		}
-
-		if(fullscreen_window == true)
-		{
-			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
 		window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);

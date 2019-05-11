@@ -35,9 +35,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
-	tex = app->tex->Load("textures/Objects/brute-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/brute-sheet-white.png");
-	spawn_tex = app->tex->Load("textures/Objects/spawn_brute.png");
+	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white.png");
+	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
 	idle.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("idle"));
@@ -128,6 +128,21 @@ void Obj_Brute::Movement(float &dt)
 
 	switch (state)
 	{
+	case BRUTE_STATE::IDLE:
+	{
+		path.clear();
+		move_vect.SetToZero();
+		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+		if (target != nullptr)
+		{
+			state = BRUTE_STATE::GET_PATH;
+		}
+		else
+		{
+			curr_anim = &idle;
+		}
+	}
+	break;
 	case BRUTE_STATE::SPAWN:
 	{
 		if (curr_anim->Finished())
@@ -146,7 +161,6 @@ void Obj_Brute::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-		//curr_anim = &idle;
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
@@ -162,6 +176,10 @@ void Obj_Brute::Movement(float &dt)
 
 
 			state = BRUTE_STATE::RECHEAD_POINT;
+		}
+		else
+		{
+			state = BRUTE_STATE::IDLE;
 		}
 
 		timer.Start();
@@ -282,7 +300,6 @@ void Obj_Brute::OnTrigger(Collider* collider)
 
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-		collider->SetTag(Collider::TAG::NONE);
 
 		if (life <= 0)
 		{

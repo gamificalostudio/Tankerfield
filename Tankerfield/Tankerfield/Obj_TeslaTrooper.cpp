@@ -35,11 +35,11 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
-	tex = app->tex->Load("textures/Objects/shk-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/shk-sheet-white.png");
-	portal_tex = app->tex->Load("textures/Objects/portal.png");
+	tex = app->tex->Load("textures/Objects/enemies/shk-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/enemies/shk-sheet-white.png");
+	portal_tex = app->tex->Load("textures/Objects/enemies/portal.png");
 	curr_tex = tex;
-	explosion_apper_tex = app->tex->Load("textures/Objects/explosion2.png");
+	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 
 
 	//Assets loading ------------------------------------------------------------------------------------------------------------------------
@@ -69,9 +69,11 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	range_pos.radius	= 0.5f;
 	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
 	
-	coll				= app->collision->AddCollider(pos, 0.5f, 0.5f, Collider::TAG::ENEMY,0.f, this);
+	float coll_w = 0.5f;
+	float coll_h = 0.5f;
+	coll				= app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY,0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ -.25f, -.25f });
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 	draw_offset			= { 24, 28 };
 
 	//parameters-------------------------------------------
@@ -133,6 +135,21 @@ void Obj_TeslaTrooper::Movement(float &dt)
 {
 	switch (state)
 	{
+	case TROOPER_STATE::IDLE:
+	{
+		path.clear();
+		move_vect.SetToZero();
+		target = app->objectmanager->GetNearestTank(pos_map);
+		if (target != nullptr)
+		{
+			state = TROOPER_STATE::GET_PATH;
+		}
+		else
+		{
+			curr_anim = &idle;
+		}
+	}
+	break;
 	case TROOPER_STATE::APPEAR:
 			{
 				appear_anim.NextFrame(dt);
@@ -166,7 +183,6 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					}
 
 					state = TROOPER_STATE::RECHEAD_POINT;
-					//curr_anim = &idle;
 				}
 			}
 			else 
@@ -177,8 +193,10 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					state = TROOPER_STATE::RECHEAD_POINT;
 			}
 		}
-		else {
-			state = TROOPER_STATE::RECHEAD_POINT;
+		else 
+		{
+			state = TROOPER_STATE::IDLE;
+
 		}
 
 		path_timer.Start();
@@ -388,21 +406,35 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
-
-		life -= collider->damage;
-
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
+		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
+		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
 		{
-			// DROP A PICK UP ITEM 
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = TROOPER_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = TROOPER_STATE::DEAD;
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+			}
+
+
+			if (!obj->charged)
+			{
+				++obj->kill_counter;
+				if (obj->kill_counter >= obj->kill_counter_max)
+				{
+					obj->to_remove = true;
+
+				}
+			}
 		}
 
 	}
@@ -415,7 +447,6 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-		collider->SetTag(Collider::TAG::NONE);
 
 		if (life <= 0)
 		{
@@ -426,6 +457,11 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		{
 			app->audio->PlayFx(sfx_hit);
 		}
+	}
+
+	else if (collider->GetTag() != Collider::TAG::ENEMY)
+	{
+		LOG("yeep");
 	}
 
 

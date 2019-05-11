@@ -25,13 +25,14 @@ bool Obj_Bullet::Start()
 	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	curr_tex = tex;
 
-	if (draw_offset.IsZero())
-	{
-		draw_offset = { 35, 14 };
-	}
+	draw_offset = { 35, 14 };
 
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET,0.f,this);
-  
+	float coll_w = 0.5f;
+	float coll_h = 0.5f;
+	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::BULLET,0.f,this);
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+
 	return true;
 }
 
@@ -42,9 +43,14 @@ bool Obj_Bullet::Update(float dt)
 	if (bullet_life_ms_timer.ReadMs() >= bullet_life_ms)
 	{
 		to_remove = true;
+
+		if (coll != nullptr)
+		{
+			coll->to_destroy = true;
+		}
+
 	}
 
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 
 	return true;
 }
@@ -54,14 +60,14 @@ void Obj_Bullet::OnTrigger(Collider * collider_1)
 	to_remove = true;
 }
 
-void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle)
+void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle, bool charged)
 {
-
 	this->speed = speed;
 	this->direction = direction;
 	this->bullet_life_ms = bullet_life_ms;
 	SetDamage(damage);
 	this->angle = angle;
+	this->charged = charged;
 }
 
 void Obj_Bullet::SetPlayer(Obj_Tank * player)

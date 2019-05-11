@@ -60,74 +60,6 @@ bool M_Render::Awake(pugi::xml_node& config)
 		LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	else
-	{
-
-		Camera* camera_aux = nullptr;
-		camera_aux = DBG_NEW Camera();
-		camera_aux->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_1_pos_screen = app->map->MapToScreenF(app->scene->tank_1->pos_map);
-		camera_aux->rect.x = tank_1_pos_screen.x - camera_aux->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux->rect.y = tank_1_pos_screen.y + camera_aux->rect.h + 40; //Magic numbres to pos the camera with the player in center
-		camera_aux->screen_section = {
-			0,
-			0,
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-		Camera* camera_aux2 = nullptr;
-		camera_aux2 = DBG_NEW Camera();
-		camera_aux2->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux2->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_2_pos_screen = app->map->MapToScreenF(app->scene->tank_2->pos_map);
-		camera_aux2->rect.x = tank_2_pos_screen.x - camera_aux2->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux2->rect.y = tank_2_pos_screen.y + camera_aux2->rect.h * 2 - 30; //Magic numbres to pos the camera with the player in center
-		camera_aux2->screen_section = {
-			(int)(app->win->screen_surface->w * .5f),
-			0,
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-		Camera* camera_aux3 = nullptr;
-		camera_aux3 = DBG_NEW Camera();
-		camera_aux3->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux3->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_3_pos_screen = app->map->MapToScreenF(app->scene->tank_3->pos_map);
-		camera_aux3->rect.x = tank_3_pos_screen.x - camera_aux3->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux3->rect.y = tank_3_pos_screen.y + camera_aux3->rect.h*2.75f - 10; //Magic numbres to pos the camera with the player in center
-		camera_aux3->screen_section = {
-			0,
-			(int)(app->win->screen_surface->h * .5f),
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-
-		Camera* camera_aux4 = nullptr;
-		camera_aux4 = DBG_NEW Camera();
-		camera_aux4->rect.w = app->win->screen_surface->w * .5f;
-		camera_aux4->rect.h = app->win->screen_surface->h * .5f;
-		fPoint tank_4_pos_screen = app->map->MapToScreenF(app->scene->tank_4->pos_map);
-		camera_aux4->rect.x = tank_4_pos_screen.x - camera_aux4->rect.w*0.5f; //Magic numbres to pos the camera with the player in center
-		camera_aux4->rect.y = tank_4_pos_screen.y + camera_aux4->rect.h*3.5f + 10; //Magic numbres to pos the camera with the player in center
-		camera_aux4->screen_section = {
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f),
-			(int)(app->win->screen_surface->w * .5f),
-			(int)(app->win->screen_surface->h * .5f)
-		};
-
-
-		cameras.push_back(camera_aux);
-		cameras.push_back(camera_aux2);
-		cameras.push_back(camera_aux3);
-		cameras.push_back(camera_aux4);
-
-	
-	}
 
 	return ret;
 }
@@ -136,9 +68,48 @@ bool M_Render::Awake(pugi::xml_node& config)
 bool M_Render::Start()
 {
 	LOG("render start");
+
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
 	return true;
+}
+
+Camera* M_Render::CreateCamera(Obj_Tank * tank)
+{
+	Camera* camera_aux = DBG_NEW Camera();
+	fPoint cam_pos = app->map->MapToScreenF(tank->pos_map);
+	camera_aux->rect.x = cam_pos.x - camera_aux->rect.w * 0.5f;
+	camera_aux->rect.y = cam_pos.y + camera_aux->rect.h * 0.5f;
+	camera_aux->rect.w = app->win->screen_surface->w * 0.5f;
+	camera_aux->rect.h = app->win->screen_surface->h * 0.5f;
+	
+	int tank_num = tank->GetTankNum();
+	int camera_rows = 2;//The number of screen divisions vertically
+	int camera_columns = 2;//The number of screen divisions horizontally
+	camera_aux->screen_section = {
+		(tank_num % camera_columns) * (int)(app->win->screen_surface->w * 0.5f),
+		(tank_num / camera_rows)    * (int)(app->win->screen_surface->h * 0.5f),
+		(int)(app->win->screen_surface->w * .5f),
+		(int)(app->win->screen_surface->h * .5f)
+	};
+	cameras.push_back(camera_aux);
+	return camera_aux;
+}
+
+void M_Render::DestroyCamera(Camera * camera)
+{
+	for (std::vector<Camera*>::iterator iter = cameras.begin();
+		iter != cameras.end();
+		++iter)
+	{
+		if ((*iter) == camera)
+		{
+			delete (*iter);
+			(*iter) = nullptr;
+			iter = cameras.erase(iter);
+			break;
+		}
+	}
 }
 
 // Called each loop iteration
@@ -152,48 +123,8 @@ bool M_Render::PostUpdate(float dt)
 {
 	// Camera fix TODO: Move it to camera class
 
-	std::vector<Camera*>::iterator item_cam;
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
-
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		debug = !debug;
-		if (!debug)
-		{
-			camera_saves.push_back(cameras.back());
-			cameras.pop_back();
-
-			camera_saves.push_back(cameras.back());
-			cameras.pop_back();
-
-			camera_saves.push_back(cameras.back());
-			cameras.pop_back();
-
-			cameras.front()->rect.w = app->win->screen_surface->w;
-			cameras.front()->rect.h = app->win->screen_surface->h;
-
-			cameras.front()->screen_section.w = app->win->screen_surface->w;
-			cameras.front()->screen_section.h = app->win->screen_surface->h;
-		}
-		else
-		{
-			cameras.push_back(camera_saves.back());
-			camera_saves.pop_back();
-
-			cameras.push_back(camera_saves.back());
-			camera_saves.pop_back();
-
-			cameras.push_back(camera_saves.back());
-			camera_saves.pop_back();
-
-			cameras.front()->rect.w *= 0.5f;
-			cameras.front()->rect.h *= 0.5f;
-
-			cameras.front()->screen_section.w *= 0.5f;
-			cameras.front()->screen_section.h *= 0.5f;
-		}
-	}
 
 	return true;
 }
@@ -204,6 +135,14 @@ bool M_Render::CleanUp()
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
 
+	for (std::vector<Camera*>::iterator iter = cameras.begin();
+		iter != cameras.end();
+		++iter)
+	{
+		delete (*iter);
+		(*iter) = nullptr;
+	}
+	cameras.clear();
 
 	return true;
 }

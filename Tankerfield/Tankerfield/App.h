@@ -28,6 +28,14 @@ class M_AnimationBank;
 class M_RewardZoneManager;
 class M_MainMenu;
 
+
+enum class APP_MODE
+{
+	RELEASE,
+	DEBUG_MAIN_MENU,
+	DEBUG_MULTIPLAYER
+};
+
 class App
 {
 public:
@@ -83,10 +91,13 @@ private:
 
 	// Load / Save
 	bool LoadGameNow();
+
 	bool SavegameNow() const;
 
 public:
-	bool				on_clean_up = false;
+
+	bool				    on_clean_up = false;
+
 	// Modules
 	M_Window*				win = nullptr;
 	M_Input*				input = nullptr;
@@ -107,37 +118,38 @@ public:
 	M_MainMenu*             main_menu = nullptr;
 
 	//XML document
-	pugi::xml_node		config;
-
+	pugi::xml_node		   config;
+						   
 private:
-	std::list<Module*>	modules;
-	int					argc;
-	char**				args;
-
-	std::string			title;
-	std::string			organization;
-
-	mutable bool		want_to_save = false;
-	bool				want_to_load = false;
-	std::string			load_game;
-	mutable std::string	save_game;
-
-	PerfTimer			ptimer;
-	uint64				frame_count = 0;
-	Timer				startup_time;
-	Timer				frame_time;
-	Timer				last_sec_frame_time;
-	uint32				last_sec_frame_count = 0;
-	uint32				prev_last_sec_frame_count = 0;
-	float				dt = 0.0f;
-	int					capped_ms = -1;
-
-	//XML document
-	pugi::xml_document	config_file;
-	pugi::xml_node		app_config;
-
-	bool				pause = false;
-
+	                       
+	APP_MODE               mode = APP_MODE::RELEASE;    //  0.Release | 1.Debug(multiplayer) | 2.Debug(main menu)
+	std::list<Module*>	   modules;
+	int					   argc;
+	char**				   args;
+						   
+	std::string			   title;
+	std::string			   organization;
+						   
+	mutable bool		   want_to_save = false;
+	bool				   want_to_load = false;
+	std::string			   load_game;
+	mutable std::string	   save_game;
+						   
+	PerfTimer			   ptimer;
+	uint64				   frame_count = 0;
+	Timer				   startup_time;
+	Timer				   frame_time;
+	Timer				   last_sec_frame_time;
+	uint32				   last_sec_frame_count = 0;
+	uint32				   prev_last_sec_frame_count = 0;
+	float				   dt = 0.0f;
+	int					   capped_ms = -1;
+						   
+	//XML document		   
+	pugi::xml_document	   config_file;
+	pugi::xml_node		   app_config;
+						   
+	bool				   pause = false;
 };
 
 extern App* app;

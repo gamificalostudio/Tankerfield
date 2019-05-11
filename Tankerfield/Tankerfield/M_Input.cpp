@@ -366,7 +366,7 @@ KeyState Controller::GetTriggerState(SDL_GameControllerAxis axis)
 		return KeyState::KEY_IDLE;
 }
 
-iPoint Controller::GetJoystick(Joystick joystick)
+iPoint Controller::GetJoystick(Joystick joystick, int dead_zone)
 {
 	if (this == nullptr)
 		return iPoint(0, 0);

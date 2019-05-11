@@ -21,10 +21,11 @@ public:
 
 public:
 	bool Start();
-	Collider* explosion = nullptr;
 
 public:
-	std::vector<Object*> hitted_enemies; //object to include all types of enemies
+	bool charged = false;
+	uint kill_counter = 0u;
+	uint kill_counter_max = 0u;
 
 private:
 
