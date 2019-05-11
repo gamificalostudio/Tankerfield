@@ -55,7 +55,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Object(pos)
 	app->audio->PlayFx(sfx_spawn);
 
 	state = SUICIDAL_STATE::SPAWN;
-	speed = 7.5f;
+	speed = 0.0f;
 	detection_range = 10.0f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
@@ -68,7 +68,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Object(pos)
 	angle = 180;//REMOVE
 
 	timer.Start();
-	attack_damage = INT_MAX; // We don't really need a value for attack damage, as the suicidal will one shot the target.
+	attack_damage = 0; // We don't really need a value for attack damage, as the suicidal will one shot the target.
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
@@ -312,6 +312,5 @@ void Obj_Suicidal::OnTrigger(Collider* collider)
 		{
 			app->audio->PlayFx(sfx_hit);
 		}
-
 	}
 }

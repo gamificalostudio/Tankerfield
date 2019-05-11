@@ -140,6 +140,7 @@
     <ClCompile Include="Obj_CannonFire.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
+    <ClCompile Include="Obj_Shield.cpp" />
     <ClCompile Include="Obj_Suicidal.cpp" />
     <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Obj_CannonFire.h" />
     <ClInclude Include="Obj_Fire.h" />
     <ClInclude Include="Obj_RewardBox.h" />
+    <ClInclude Include="Obj_Shield.h" />
     <ClInclude Include="Obj_Suicidal.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />

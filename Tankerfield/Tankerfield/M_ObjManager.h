@@ -29,6 +29,7 @@ enum class ObjectType
 	TESLA_TROOPER,
 	BRUTE,
 	SUICIDAL,
+	SHIELD,
 
 	//BULLETS
 	BASIC_BULLET,

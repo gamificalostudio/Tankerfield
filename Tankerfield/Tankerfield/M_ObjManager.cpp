@@ -18,6 +18,7 @@
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Suicidal.h"
 #include "Obj_Brute.h"
+#include "Obj_Shield.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
@@ -275,6 +276,11 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::BRUTE:
 		ret = new Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
+		enemies.push_back(ret);
+		break;
+	case ObjectType::SHIELD:
+		ret = new Obj_Shield(pos);
+		ret->type = ObjectType::SHIELD;
 		enemies.push_back(ret);
 		break;
 	case ObjectType::EXPLOSION:

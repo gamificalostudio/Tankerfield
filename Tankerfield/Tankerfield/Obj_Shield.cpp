@@ -12,7 +12,7 @@
 
 #include "App.h"
 #include "Object.h"
-#include "Obj_Brute.h"
+#include "Obj_Shield.h"
 #include "M_Textures.h"
 #include "M_ObjManager.h"
 #include "M_Render.h"
@@ -31,7 +31,7 @@
 #include "M_Audio.h"
 
 
-Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
+Obj_Shield::Obj_Shield(fPoint pos) : Object(pos)
 {
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
@@ -54,9 +54,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 
 	app->audio->PlayFx(sfx_spawn);
 
-	state = BRUTE_STATE::SPAWN;
-	speed = 1.5f;
-	detection_range = 10.0f;
+	state = SHIELD_STATE::SPAWN;
+	speed = 2.f;
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 	check_path_time = 1.f;
@@ -72,20 +72,20 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
-  
+
 	coll_w = 1.f;
 	coll_h = 1.f;
-  
+
 	damaged_sprite_time = 150;
-	life = 750* (log(app->scene->round)+2);
+	life = 125 * (log(app->scene->round) + 2);
 }
 
-Obj_Brute::~Obj_Brute()
+Obj_Shield::~Obj_Shield()
 {
 }
 
 
-bool Obj_Brute::Update(float dt)
+bool Obj_Shield::Update(float dt)
 {
 	Movement(dt);
 	Attack();
@@ -96,9 +96,9 @@ bool Obj_Brute::Update(float dt)
 	return true;
 }
 
-void Obj_Brute::Attack()
+void Obj_Shield::Attack()
 {
-	if (target != nullptr 
+	if (target != nullptr
 		&& target->coll->GetTag() == Collider::TAG::PLAYER
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 		&& perf_timer.ReadMs() > (double)attack_frequency)
@@ -117,25 +117,25 @@ void Obj_Brute::Attack()
 
 }
 
-void Obj_Brute::Movement(float &dt)
+void Obj_Shield::Movement(float &dt)
 {
-	if ((state != BRUTE_STATE::DEAD)
-		&& (state != BRUTE_STATE::SPAWN)
+	if ((state != SHIELD_STATE::DEAD)
+		&& (state != SHIELD_STATE::SPAWN)
 		&& (timer.ReadSec() >= check_path_time))
 	{
-		state = BRUTE_STATE::GET_PATH;
+		state = SHIELD_STATE::GET_PATH;
 	}
 
 	switch (state)
 	{
-	case BRUTE_STATE::IDLE:
+	case SHIELD_STATE::IDLE:
 	{
 		path.clear();
 		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
-			state = BRUTE_STATE::GET_PATH;
+			state = SHIELD_STATE::GET_PATH;
 		}
 		else
 		{
@@ -143,7 +143,7 @@ void Obj_Brute::Movement(float &dt)
 		}
 	}
 	break;
-	case BRUTE_STATE::SPAWN:
+	case SHIELD_STATE::SPAWN:
 	{
 		if (curr_anim->Finished())
 		{
@@ -153,11 +153,11 @@ void Obj_Brute::Movement(float &dt)
 			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
 			curr_anim = &walk;
-			state=BRUTE_STATE::GET_PATH;
+			state = SHIELD_STATE::GET_PATH;
 		}
 	}
 	break;
-	case BRUTE_STATE::GET_PATH:
+	case SHIELD_STATE::GET_PATH:
 	{
 		path.clear();
 		move_vect.SetToZero();
@@ -175,29 +175,29 @@ void Obj_Brute::Movement(float &dt)
 			}
 
 
-			state = BRUTE_STATE::RECHEAD_POINT;
+			state = SHIELD_STATE::RECHEAD_POINT;
 		}
 		else
 		{
-			state = BRUTE_STATE::IDLE;
+			state = SHIELD_STATE::IDLE;
 		}
 
 		timer.Start();
 	}
 	break;
-	case BRUTE_STATE::MOVE:
+	case SHIELD_STATE::MOVE:
 	{
 		if (IsOnGoal(next_pos))
 		{
 			path.erase(path.begin());
-			state = BRUTE_STATE::RECHEAD_POINT;
+			state = SHIELD_STATE::RECHEAD_POINT;
 		}
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
 		curr_anim = &walk;
 	}
 	break;
-	case BRUTE_STATE::RECHEAD_POINT:
+	case SHIELD_STATE::RECHEAD_POINT:
 	{
 		if (path.size() > 0)
 		{
@@ -206,13 +206,13 @@ void Obj_Brute::Movement(float &dt)
 			move_vect.Normalize();
 			//Change sprite direction
 			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
-			state = BRUTE_STATE::MOVE;
+			state = SHIELD_STATE::MOVE;
 		}
 		else
-			state = BRUTE_STATE::GET_PATH;
+			state = SHIELD_STATE::GET_PATH;
 	}
 	break;
-	case BRUTE_STATE::DEAD:
+	case SHIELD_STATE::DEAD:
 	{
 		if (curr_anim != &death)
 		{
@@ -235,7 +235,7 @@ void Obj_Brute::Movement(float &dt)
 	}
 }
 
-bool Obj_Brute::Draw(float dt, Camera * camera)
+bool Obj_Shield::Draw(float dt, Camera * camera)
 {
 	app->render->BlitScaled(
 		curr_tex,
@@ -243,13 +243,13 @@ bool Obj_Brute::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&frame,
-		2.f,
-		2.f);
+		1.5f,
+		1.5f);
 
 	return true;
 }
 
-void Obj_Brute::DrawDebug(const Camera* camera)
+void Obj_Shield::DrawDebug(const Camera* camera)
 {
 	if (path.size() >= 2)
 	{
@@ -263,40 +263,69 @@ void Obj_Brute::DrawDebug(const Camera* camera)
 
 }
 
-bool Obj_Brute::IsOnGoal(fPoint goal)
+bool Obj_Shield::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
 }
 
-void Obj_Brute::OnTriggerEnter(Collider * collider)
+void Obj_Shield::OnTriggerEnter(Collider * collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
+		collider->GetObj()->angle -= 90;
 
-		life -= collider->damage;
+		if (collider->GetObj()->angle < 0)
+			collider->GetObj()->angle += 360;
 
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
+		if (collider->GetObj()->angle >= 180)
+			collider->GetObj()->angle -= 180;
 
-		if (life <= 0)
-		{
-			// DROP A PICK UP ITEM 
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = BRUTE_STATE::DEAD;
-		}
 		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}
+			collider->GetObj()->angle += 180;
 
+		if (this->angle < 0)
+			this->angle += 360;
+
+		if (collider->GetObj()->angle < this->angle - 60 || collider->GetObj()->angle > this->angle + 60) {
+
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = SHIELD_STATE::DEAD;
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+			}
+		}
 	}
 }
 
-void Obj_Brute::OnTrigger(Collider* collider)
+void Obj_Shield::OnTrigger(Collider* collider)
 {
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
+		collider->GetObj()->angle -= 90;
 
+		if (collider->GetObj()->angle < 0)
+			collider->GetObj()->angle += 360;
+
+		if (collider->GetObj()->angle >= 180)
+			collider->GetObj()->angle -= 180;
+
+		else
+			collider->GetObj()->angle += 180;
+
+		if (this->angle < 0)
+			this->angle += 360;
+
+		if (collider->GetObj()->angle < this->angle - 60 || collider->GetObj()->angle > this->angle + 60) {
 
 			life -= collider->damage;
 
@@ -308,11 +337,12 @@ void Obj_Brute::OnTrigger(Collider* collider)
 			{
 				// DROP A PICK UP ITEM 
 				app->pick_manager->PickUpFromEnemy(pos_map, PICKUP_TYPE::WEAPON);
-				state = BRUTE_STATE::DEAD;
+				state = SHIELD_STATE::DEAD;
 			}
 			else
 			{
 				app->audio->PlayFx(sfx_hit);
 			}
+		}
 	}
 }
