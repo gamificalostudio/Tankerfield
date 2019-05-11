@@ -18,6 +18,7 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot1_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
+	shot1_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOil;
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	quick_shot_time = 500.f;
@@ -25,6 +26,7 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
+	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOil;
 }
 
 //if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
@@ -104,6 +106,20 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.time_between_bullets = 500;
 		weapon_info.basic_shot_trauma = 0.405f;
 		weapon_info.charged_shot_trauma = 0.57f;
+		weapon_info.shot1_rumble_strength = 0.92f;
+		weapon_info.shot1_rumble_duration = 250;
+		weapon_info.shot2_rumble_strength = 1.0f;
+		weapon_info.shot2_rumble_duration = 400;
+		break;
+	case WEAPON::OIL:
+		weapon_info.type = WEAPON_TYPE::CHARGED;
+		weapon_info.bullet_damage = 25 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 2000;
+		weapon_info.bullet_speed = 10;
+		weapon_info.time_between_bullets = 500;
+		weapon_info.basic_shot_trauma = 0.54f;
+		weapon_info.charged_shot_trauma = 0.76f;
 		weapon_info.shot1_rumble_strength = 0.92f;
 		weapon_info.shot1_rumble_duration = 250;
 		weapon_info.shot2_rumble_strength = 1.0f;
@@ -197,4 +213,15 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
+}
+
+void Obj_Tank::ShootOil()
+{
+	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_OIL, turr_pos);
+	bullet->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }

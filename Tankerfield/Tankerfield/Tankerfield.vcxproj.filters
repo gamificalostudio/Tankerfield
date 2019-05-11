@@ -184,6 +184,9 @@
     <ClCompile Include="UI_InteractiveGroup.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet_Oil.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -389,6 +392,9 @@
     </ClInclude>
     <ClInclude Include="UI_InteractiveGroup.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet_Oil.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
