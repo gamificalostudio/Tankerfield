@@ -35,7 +35,9 @@ bool Laser_Bullet::Start()
 	draw_offset = { 35, 14 };
 
 	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET_LASER, 0.f, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 	coll->SetObjOffset({ -0.25f, -0.25f });
+
 	if (!charged)
 	{
 		kill_counter_max = bullet_node.child("kill_counter_max").attribute("value").as_int();

@@ -1,107 +1,97 @@
 #include "UI_InteractiveGroup.h"
+#include "M_Input.h"
+#include "App.h"
+#include "Obj_Tank.h"
 
-UI_InteractiveGroup::UI_InteractiveGroup(const fPoint position, const UI_ElementDef definition, UI_Listener * listener) : UI_Element( position, definition, listener)
+
+UI_InteractiveGroup::UI_InteractiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener * listener) : UI_Element( position, definition, listener) , columns(definition.columns), rows(definition.rows)
 {
+	for (int i = 0; i < rows* columns; ++i)
+	{
+		group_elements.push_back(nullptr);
+	}
 }
 
 UI_InteractiveGroup::~UI_InteractiveGroup()
 {
+
 }
 
-void UI_InteractiveGroup::AddElement(UI_Element * element)
+bool UI_InteractiveGroup::Update(float dt)
 {
-}
 
-UI_Element* UI_InteractiveGroup::GetNearestElement(UI_Element* element, CONTROLLER_DIR dir)
-{
-	UI_Element* nearest_element = nullptr;
-	float nearest_dis = 0;
-
-	for (std::list<UI_Element*>::iterator iter = group_elements.begin(); iter != group_elements.end(); ++iter)
+	for (std::vector<Obj_Tank*>::iterator iterator = app->objectmanager->obj_tanks.begin(); iterator != app->objectmanager->obj_tanks.end(); ++iterator)
 	{
-		if (element == (*iter))
+		Controller* controller = (*iterator)->GetController();
+
+		(*iterator)->GetTankNum();
+
+		if (controller == nullptr)
 		{
 			continue;
 		}
-
-		switch (dir)
+		else
 		{
-		case CONTROLLER_DIR::UP:
 
-			if ((*iter)->position.y < element->position.y)
-			{
-				if (nearest_dis == 0)
-				{
-					nearest_element = (*iter);
-					nearest_dis = element->position.y - (*iter)->position.y;
-				}
-				else if (nearest_dis > element->position.y - (*iter)->position.y)
-				{
-					nearest_element = (*iter);
-					nearest_dis = element->position.y - (*iter)->position.y;
-				}
-			}
-			break;
-
-		case CONTROLLER_DIR::DOWN:
-
-			if ((*iter)->position.y > element->position.y)
-			{
-				if (nearest_dis == 0)
-				{
-					nearest_element = (*iter);
-					nearest_dis = (*iter)->position.y - element->position.y;
-				}
-				else if (nearest_dis > (*iter)->position.y - element->position.y)
-				{
-					nearest_element = (*iter);
-					nearest_dis = (*iter)->position.y - element->position.y;
-				}
-			}
-			break;
-
-		case CONTROLLER_DIR::RIGHT:
-
-			if ((*iter)->position.x > element->position.x)
-			{
-				if (nearest_dis == 0)
-				{
-					nearest_element = (*iter);
-					nearest_dis = element->position.x - (*iter)->position.x;
-				}
-				else if (nearest_dis > element->position.x - (*iter)->position.x)
-				{
-					nearest_element = (*iter);
-					nearest_dis = element->position.x - (*iter)->position.x;
-				}
-			}
-			break;
-
-		case CONTROLLER_DIR::LEFT:
-
-			if ((*iter)->position.x < element->position.x)
-			{
-				if (nearest_dis == 0)
-				{
-					nearest_element = (*iter);
-					nearest_dis = element->position.x - (*iter)->position.x;
-				}
-				else if (nearest_dis > element->position.x - (*iter)->position.x)
-				{
-					nearest_element = (*iter);
-					nearest_dis = element->position.x - (*iter)->position.x;
-				}
-			}
-			break;
 		}
 	}
 
-	if (nearest_element != nullptr)
+	return true;
+}
+
+void UI_InteractiveGroup::SetElement(UI_Element* element, const iPoint position)
+{
+	group_elements[position.y * columns + position.x] = element;
+}
+
+UI_Element* UI_InteractiveGroup::GetNearestElement(PlayerFocus * player_focus, CONTROLLER_DIR dir)
+{
+	UI_Element* current_element = GetElement( player_focus->focused_element);
+	UI_Element* focused_element = nullptr;
+
+	switch (dir)
 	{
-		return nearest_element;
+	case CONTROLLER_DIR::UP:
+
+
+		break;
+
+	case CONTROLLER_DIR::DOWN:
+
+
+		break;
+
+	case CONTROLLER_DIR::RIGHT:
+
+
+		break;
+
+	case CONTROLLER_DIR::LEFT:
+
+		break;
+	}
+
+	if ( ElementIsFocused(focused_element) == false)
+	{
+		return focused_element;
 	}
 	else
 	{
-		return element;
+		return  current_element;
 	}
+}
+
+bool UI_InteractiveGroup::ElementIsFocused(UI_Element * element)
+{
+	for (std::vector<PlayerFocus*>::iterator iter = player_focus.begin(); iter != player_focus.end(); ++iter)
+	{
+
+	}
+
+	return false;
+}
+
+UI_Element* UI_InteractiveGroup::GetElement(iPoint position)
+{
+	return group_elements[ position.y * columns + position.x];
 }

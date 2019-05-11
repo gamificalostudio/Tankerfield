@@ -64,6 +64,9 @@ public:
 	bool Alive();
 	fPoint GetTurrPos();
 
+	//- Input
+	Controller * GetController();
+
 private:
 	//- Movement
 	void Movement(float dt);
@@ -91,6 +94,7 @@ private:
 	void InputReadyKeyboard();
 	bool PressInteract();
 	bool ReleaseInteract();
+	
 
 	//- Weapons methods
 	void InitWeapons();

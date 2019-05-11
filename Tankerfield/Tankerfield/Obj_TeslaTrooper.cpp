@@ -406,6 +406,7 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
 		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
+
 		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
 		{
 			life -= collider->damage;
@@ -435,7 +436,6 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 				}
 			}
 		}
-
 	}
 }
 

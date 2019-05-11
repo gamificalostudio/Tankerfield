@@ -175,6 +175,10 @@ public:
 
 private:
 
+	void DestroyColliders();
+
+private:
+
 	std::list<Collider*> colliders;
 
 	bool matrix[(int)Collider::TAG::MAX][(int)Collider::TAG::MAX];
