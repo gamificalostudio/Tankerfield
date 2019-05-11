@@ -50,6 +50,7 @@ https://github.com/AitorVelez
 - F1: Show / hide grid
 - F2: Activate / deactivate splitscreen
 - F3: Show / hide sprite sorting rects and pivots
+- F3: Show pathfinding lines
 - F4: Show / hide tank crosshairs
 - F5: Reset level
 - F7: Activete/ Desactivate god Mode
