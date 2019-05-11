@@ -12,7 +12,7 @@
 
 #include "App.h"
 #include "Object.h"
-#include "Obj_Brute.h"
+#include "Obj_Suicidal.h"
 #include "M_Textures.h"
 #include "M_ObjManager.h"
 #include "M_Render.h"
@@ -31,7 +31,7 @@
 #include "M_Audio.h"
 
 
-Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
+Obj_Suicidal::Obj_Suicidal(fPoint pos) : Object(pos)
 {
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
@@ -54,8 +54,8 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 
 	app->audio->PlayFx(sfx_spawn);
 
-	state = BRUTE_STATE::SPAWN;
-	speed = 1.5f;
+	state = SUICIDAL_STATE::SPAWN;
+	speed = 7.5f;
 	detection_range = 10.0f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
@@ -68,24 +68,24 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	angle = 180;//REMOVE
 
 	timer.Start();
-	attack_damage = 10;
+	attack_damage = INT_MAX; // We don't really need a value for attack damage, as the suicidal will one shot the target.
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
-  
+
 	coll_w = 1.f;
 	coll_h = 1.f;
-  
+
 	damaged_sprite_time = 150;
-	life = 750* (log(app->scene->round)+2);
+	life = 750 * (log(app->scene->round) + 2);
 }
 
-Obj_Brute::~Obj_Brute()
+Obj_Suicidal::~Obj_Suicidal()
 {
+
 }
 
-
-bool Obj_Brute::Update(float dt)
+bool Obj_Suicidal::Update(float dt)
 {
 	Movement(dt);
 	Attack();
@@ -96,17 +96,18 @@ bool Obj_Brute::Update(float dt)
 	return true;
 }
 
-void Obj_Brute::Attack()
+void Obj_Suicidal::Attack()
 {
-	if (target != nullptr 
+	if (target != nullptr
 		&& target->coll->GetTag() == Collider::TAG::PLAYER
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 		&& perf_timer.ReadMs() > (double)attack_frequency)
 	{
 		curr_anim = &attack;
 		app->audio->PlayFx(sfx_attack);
-		target->SetLife(target->GetLife() - attack_damage);
+		target->SetLife(0);
 		perf_timer.Start();
+		state = SUICIDAL_STATE::DEAD;
 	}
 
 	if (curr_anim == &attack&&curr_anim->Finished())
@@ -114,28 +115,27 @@ void Obj_Brute::Attack()
 		curr_anim = &walk;
 		attack.Reset();
 	}
-
 }
 
-void Obj_Brute::Movement(float &dt)
+void Obj_Suicidal::Movement(float &dt)
 {
-	if ((state != BRUTE_STATE::DEAD)
-		&& (state != BRUTE_STATE::SPAWN)
+	if ((state != SUICIDAL_STATE::DEAD)
+		&& (state != SUICIDAL_STATE::SPAWN)
 		&& (timer.ReadSec() >= check_path_time))
 	{
-		state = BRUTE_STATE::GET_PATH;
+		state = SUICIDAL_STATE::GET_PATH;
 	}
 
 	switch (state)
 	{
-	case BRUTE_STATE::IDLE:
+	case SUICIDAL_STATE::IDLE:
 	{
 		path.clear();
 		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 		if (target != nullptr)
 		{
-			state = BRUTE_STATE::GET_PATH;
+			state = SUICIDAL_STATE::GET_PATH;
 		}
 		else
 		{
@@ -143,7 +143,7 @@ void Obj_Brute::Movement(float &dt)
 		}
 	}
 	break;
-	case BRUTE_STATE::SPAWN:
+	case SUICIDAL_STATE::SPAWN:
 	{
 		if (curr_anim->Finished())
 		{
@@ -153,11 +153,11 @@ void Obj_Brute::Movement(float &dt)
 			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
 			curr_anim = &walk;
-			state=BRUTE_STATE::GET_PATH;
+			state = SUICIDAL_STATE::GET_PATH;
 		}
 	}
 	break;
-	case BRUTE_STATE::GET_PATH:
+	case SUICIDAL_STATE::GET_PATH:
 	{
 		path.clear();
 		move_vect.SetToZero();
@@ -175,29 +175,29 @@ void Obj_Brute::Movement(float &dt)
 			}
 
 
-			state = BRUTE_STATE::RECHEAD_POINT;
+			state = SUICIDAL_STATE::RECHEAD_POINT;
 		}
 		else
 		{
-			state = BRUTE_STATE::IDLE;
+			state = SUICIDAL_STATE::IDLE;
 		}
 
 		timer.Start();
 	}
 	break;
-	case BRUTE_STATE::MOVE:
+	case SUICIDAL_STATE::MOVE:
 	{
 		if (IsOnGoal(next_pos))
 		{
 			path.erase(path.begin());
-			state = BRUTE_STATE::RECHEAD_POINT;
+			state = SUICIDAL_STATE::RECHEAD_POINT;
 		}
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
 		curr_anim = &walk;
 	}
 	break;
-	case BRUTE_STATE::RECHEAD_POINT:
+	case SUICIDAL_STATE::RECHEAD_POINT:
 	{
 		if (path.size() > 0)
 		{
@@ -206,13 +206,13 @@ void Obj_Brute::Movement(float &dt)
 			move_vect.Normalize();
 			//Change sprite direction
 			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
-			state = BRUTE_STATE::MOVE;
+			state = SUICIDAL_STATE::MOVE;
 		}
 		else
-			state = BRUTE_STATE::GET_PATH;
+			state = SUICIDAL_STATE::GET_PATH;
 	}
 	break;
-	case BRUTE_STATE::DEAD:
+	case SUICIDAL_STATE::DEAD:
 	{
 		if (curr_anim != &death)
 		{
@@ -235,7 +235,7 @@ void Obj_Brute::Movement(float &dt)
 	}
 }
 
-bool Obj_Brute::Draw(float dt, Camera * camera)
+bool Obj_Suicidal::Draw(float dt, Camera * camera)
 {
 	app->render->BlitScaled(
 		curr_tex,
@@ -249,7 +249,7 @@ bool Obj_Brute::Draw(float dt, Camera * camera)
 	return true;
 }
 
-void Obj_Brute::DrawDebug(const Camera* camera)
+void Obj_Suicidal::DrawDebug(const Camera* camera)
 {
 	if (path.size() >= 2)
 	{
@@ -263,12 +263,12 @@ void Obj_Brute::DrawDebug(const Camera* camera)
 
 }
 
-bool Obj_Brute::IsOnGoal(fPoint goal)
+bool Obj_Suicidal::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
 }
 
-void Obj_Brute::OnTriggerEnter(Collider * collider)
+void Obj_Suicidal::OnTriggerEnter(Collider * collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
@@ -282,7 +282,7 @@ void Obj_Brute::OnTriggerEnter(Collider * collider)
 		{
 			// DROP A PICK UP ITEM 
 			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = BRUTE_STATE::DEAD;
+			state = SUICIDAL_STATE::DEAD;
 		}
 		else
 		{
@@ -292,7 +292,7 @@ void Obj_Brute::OnTriggerEnter(Collider * collider)
 	}
 }
 
-void Obj_Brute::OnTrigger(Collider* collider)
+void Obj_Suicidal::OnTrigger(Collider* collider)
 {
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
@@ -305,7 +305,7 @@ void Obj_Brute::OnTrigger(Collider* collider)
 		{
 			// DROP A PICK UP ITEM 
 			app->pick_manager->PickUpFromEnemy(pos_map, PICKUP_TYPE::WEAPON);
-			state = BRUTE_STATE::DEAD;
+			state = SUICIDAL_STATE::DEAD;
 		}
 		else
 		{

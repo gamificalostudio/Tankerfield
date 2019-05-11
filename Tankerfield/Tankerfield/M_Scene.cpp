@@ -111,6 +111,8 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
+		
+			//app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
 		}
 	}
 	
@@ -132,10 +134,6 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
-		if (SDL_ShowCursor(SDL_QUERY) == SDL_DISABLE)
-		{
-			SDL_ShowCursor(SDL_ENABLE);
-		}
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
@@ -167,7 +165,7 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
-		app->objectmanager->CreateObject(ObjectType::PICK_UP, (fPoint)mouse_pos);
+		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
 	{
@@ -193,10 +191,14 @@ bool M_Scene::PreUpdate()
 	{
 		stat_of_wave = WaveStat::WIN_GAME;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		int new_weapon = (int)app->objectmanager->obj_tanks[0]->GetWeaponInfo().weapon;
 		++new_weapon;
+		if (new_weapon == (int)WEAPON::MAX_WEAPONS)
+		{
+			new_weapon = (int)WEAPON::DOUBLE_MISSILE;
+		}
 		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
 	}
 
@@ -327,20 +329,20 @@ bool M_Scene::PostUpdate(float dt)
 	//DebugPathfinding();
 
 	/* Keep track if we reached the maximum round and, therefore, win the game */
-	this->accumulated_time += dt * 1000.0f;
-	if (accumulated_time >= time_round_check_frequency * 1000.0f)
-	{
-		perform_round_check = true;
-	}
+	//this->accumulated_time += dt * 1000.0f;
+	//if (accumulated_time >= time_round_check_frequency * 1000.0f)
+	//{
+	//	perform_round_check = true;
+	//}
 
 
-	if (perform_round_check
-		&& this->round >= rounds_to_win + 1
-		&& !win_game)
-	{
-		stat_of_wave = WaveStat::WIN_GAME;
-		win_game = true;
-	}
+	//if (perform_round_check
+	//	&& this->round >= rounds_to_win + 1
+	//	&& !win_game)
+	//{
+	//	stat_of_wave = WaveStat::WIN_GAME;
+	//	win_game = true;
+	//}
 	return ret;
 }
 

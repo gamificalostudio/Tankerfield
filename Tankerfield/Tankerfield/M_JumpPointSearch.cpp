@@ -3,11 +3,11 @@
 #include "Defs.h"
 #include "Log.h"
 #include "App.h"
-#include "M_JumpPointSearch.h"
 #include "M_input.h"
 #include "M_render.h"
 #include "M_Textures.h"
 #include "M_map.h"
+#include "M_Pathfinding.h"
 
 M_JumpPointSearch::M_JumpPointSearch() : Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
@@ -23,7 +23,7 @@ M_JumpPointSearch::~M_JumpPointSearch()
 bool M_JumpPointSearch::Start()
 {
 	path_tex = app->tex->Load(app->config.child("pathfinding").child("debug_textures").child_value());
-	path_tex_offset = {30,0};
+	path_tex_offset = {-30,0};
 	return true;
 }
 

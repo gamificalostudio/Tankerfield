@@ -181,6 +181,8 @@
     <ClCompile Include="M_JumpPointSearch.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Suicidal.cpp" />
+    <ClCompile Include="UI_InteractiveGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -381,9 +383,8 @@
     <ClInclude Include="Camera.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="M_JumpPointSearch.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
+    <ClInclude Include="Obj_Suicidal.h" />
+    <ClInclude Include="UI_InteractiveGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Tools">

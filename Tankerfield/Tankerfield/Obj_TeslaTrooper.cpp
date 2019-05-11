@@ -35,11 +35,11 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
-	tex = app->tex->Load("textures/Objects/shk-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/shk-sheet-white.png");
-	portal_tex = app->tex->Load("textures/Objects/portal.png");
+	tex = app->tex->Load("textures/Objects/enemies/shk-sheet.png");
+	tex_damaged = app->tex->Load("textures/Objects/enemies/shk-sheet-white.png");
+	portal_tex = app->tex->Load("textures/Objects/enemies/portal.png");
 	curr_tex = tex;
-	explosion_apper_tex = app->tex->Load("textures/Objects/explosion2.png");
+	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 
 
 	//Assets loading ------------------------------------------------------------------------------------------------------------------------
@@ -135,6 +135,21 @@ void Obj_TeslaTrooper::Movement(float &dt)
 {
 	switch (state)
 	{
+	case TROOPER_STATE::IDLE:
+	{
+		path.clear();
+		move_vect.SetToZero();
+		target = app->objectmanager->GetNearestTank(pos_map);
+		if (target != nullptr)
+		{
+			state = TROOPER_STATE::GET_PATH;
+		}
+		else
+		{
+			curr_anim = &idle;
+		}
+	}
+	break;
 	case TROOPER_STATE::APPEAR:
 			{
 				appear_anim.NextFrame(dt);
@@ -153,7 +168,6 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 		path.clear();
 		move_vect.SetToZero();
-
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
 		{
@@ -169,7 +183,6 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					}
 
 					state = TROOPER_STATE::RECHEAD_POINT;
-					//curr_anim = &idle;
 				}
 			}
 			else 
@@ -180,8 +193,9 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					state = TROOPER_STATE::GET_PATH;
 			}
 		}
-		else {
-			//curr_anim = &idle;
+		else 
+		{
+			state = TROOPER_STATE::IDLE;
 		}
 
 		path_timer.Start();
@@ -432,7 +446,6 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-		collider->SetTag(Collider::TAG::NONE);
 
 		if (life <= 0)
 		{

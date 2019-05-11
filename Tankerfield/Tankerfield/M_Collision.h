@@ -100,7 +100,7 @@ public:
 		return tag;
 	}
 
-	void SetTag(const TAG new_tag)
+	void SetTag(TAG new_tag)
 	{
 		tag = new_tag;
 	}

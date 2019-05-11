@@ -14,6 +14,7 @@
 #include "M_ObjManager.h"
 #include "Obj_Tank.h"
 #include "WeaponInfo.h"
+#include "Obj_Item.h"
 
 #include "UI_Image.h"
 #include "UI_InGameElement.h"
@@ -242,41 +243,42 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 	switch (weapon_type)
 	{
 	case WEAPON::DOUBLE_MISSILE:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE];
 		break;
 	case WEAPON::HEALING_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
 		break;
 	case WEAPON::FLAMETHROWER:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;
 	case WEAPON::LASER_SHOT:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER];
 		break;
 	case WEAPON::BASIC:
-		weapon_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
 	weapon_icon->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1, 3.5F);
 
 }
 
-void Player_GUI::SetItemIcon( ObjectType type)
+void Player_GUI::SetItemIcon(ItemType type)
 {
 	item_icon->SetState(ELEMENT_STATE::VISIBLE);
 
 	switch (type)
 	{
-	case ObjectType::HEALTH_BAG:
-		item_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG];
+	case ItemType::HEALTH_BAG:
+		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
-	case ObjectType::HAPPY_HOUR_ITEM:
-		item_icon->sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR];
+	case ItemType::HAPPY_HOUR_ITEM:
+		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
-	case ObjectType::NO_TYPE:
+	case ItemType::NO_TYPE:
 		item_icon->SetState(ELEMENT_STATE::HIDDEN);
 		break;
 	}
+
 	item_icon->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1, 3.5F);
 
 }
