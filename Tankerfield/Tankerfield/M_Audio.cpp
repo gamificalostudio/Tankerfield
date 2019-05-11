@@ -162,6 +162,7 @@ unsigned int M_Audio::LoadFx(const char* path, int volume)
 	else
 	{
 		Mix_Chunk* chunk = Mix_LoadWAV(path);
+
 		//set volume in a range of 0 to MIX_MAX_VOLUME (128)
 		Mix_VolumeChunk(chunk, volume);
 		if (chunk == NULL)

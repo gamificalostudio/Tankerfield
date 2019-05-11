@@ -25,6 +25,15 @@ struct PathNode
 
 	// Fills a list (PathList) of all valid adjacent pathnodes
 	uint FindWalkableAdjacents(PathList& list_to_fill) const;
+
+	//start_node-> start position of the horizontal scan
+	//hor_dir -> Horizontal direction (+1 or -1). 
+	// dist -> Distance traveled so far. 
+	// return jumpPoints
+	void Search_horizontal(int hor_dir, int dist, const PathList& list_to_fill);
+
+
+
 	// Calculates this tile score
 	int Score() const;
 	// Calculate the F for a specific destination tile
@@ -155,11 +164,7 @@ public:
 	void DebugPathfinding();
 
 
-	//start_node-> start position of the horizontal scan
-	//hor_dir -> Horizontal direction (+1 or -1). 
-	// dist -> Distance traveled so far. 
-	// return jumpPoints
-	void Search_horizontal(const PathNode& start_node, const PathNode& self_node, int hor_dir, int dist);
+	
 
 private:
 

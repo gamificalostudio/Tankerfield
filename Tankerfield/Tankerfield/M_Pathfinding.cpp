@@ -199,6 +199,24 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	return list_to_fill.list.size();
 }
 
+void PathNode::Search_horizontal(int hor_dir, int dist, const PathList & list_to_fill)
+{
+	PathNode new_node;
+	new_node.pos = (this->pos + iPoint(hor_dir, 0));
+	bool stop = false;
+	do
+	{
+
+	} while (!stop);
+	if (app->pathfinding->IsWalkable(new_node.pos))
+	{
+
+	}
+
+
+
+}
+
 // PathNode -------------------------------------------------------------------------
 // Calculates this tile score
 // ----------------------------------------------------------------------------------
