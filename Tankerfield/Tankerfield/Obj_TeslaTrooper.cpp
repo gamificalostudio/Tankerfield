@@ -91,7 +91,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 	//Timers ----------------
 
-	check_path_time = 1.f; // 1s
+	check_path_time = 10.f; // 10s
 	path_timer.Start();
 
 	damaged_sprite_time = 150;
