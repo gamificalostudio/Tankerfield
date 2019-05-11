@@ -61,9 +61,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(font);
 	AddModule(audio);
+	AddModule(map);
 	AddModule(pathfinding);
 	AddModule(JPS_pathfinding);
-	AddModule(map);
 	AddModule(scene);
 	AddModule(main_menu);
 	AddModule(objectmanager);

@@ -23,12 +23,13 @@ M_JumpPointSearch::~M_JumpPointSearch()
 bool M_JumpPointSearch::Start()
 {
 	path_tex = app->tex->Load(app->config.child("pathfinding").child("debug_textures").child_value());
-	path_tex_offset = {0,0};
+	path_tex_offset = {30,0};
 	return true;
 }
 
 bool M_JumpPointSearch::PostUpdate(float dt)
 {
+	DebugPathfinding();
 	return true;
 }
 
@@ -87,14 +88,17 @@ uchar M_JumpPointSearch::GetTileAt(const iPoint& pos) const
 
 void M_JumpPointSearch::DebugPathfinding()
 {
-		std::vector<Camera*>::iterator item_cam;
+		std::vector<Camera*>::iterator item_cam= app->render->cameras.begin();
+		if (item_cam == app->render->cameras.end())
+			return;
+
 		static iPoint origin;
 		static bool origin_selected = false;
 		static bool createdDebugPath = false;
 
 		iPoint mousePos;
 		app->input->GetMousePosition(mousePos.x, mousePos.y);
-		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, (*app->render->cameras.begin()));
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, *item_cam);
 		p = app->map->ScreenToMapI(p.x, p.y);
 
 		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
