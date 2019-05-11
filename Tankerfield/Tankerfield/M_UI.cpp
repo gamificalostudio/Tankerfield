@@ -79,12 +79,14 @@ bool M_UI::Awake(pugi::xml_node& config)
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER] =   { 540,500 ,34 ,34 };
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT] =   { 620,500 ,34 ,34 };
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER] =          { 580,500 ,34 ,34 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_OIL] =			 { 700,500 ,34 ,34 };
 
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_DOUBLE_MISSILE] = { 500,595,44 ,44 };
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER] =   { 550,595,44 ,44 };
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT] =   { 650,595,44 ,44 };
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER] =          { 600,595,44 ,44 };
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC] =          { 700,595,44 ,44 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_OIL] =			   { 750,595,44 ,44 };
 
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,545 ,40 ,40 };
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 545,545 ,40 ,40 };

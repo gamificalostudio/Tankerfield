@@ -108,6 +108,9 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	case WEAPON::LASER_SHOT:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER];
 		break;
+	case WEAPON::OIL:
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_OIL];
+		break;
 	case WEAPON::BASIC:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_BASIC];
 		break;

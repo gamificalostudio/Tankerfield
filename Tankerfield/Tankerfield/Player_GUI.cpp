@@ -254,6 +254,9 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 	case WEAPON::LASER_SHOT:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_LASER];
 		break;
+	case WEAPON::OIL:
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_OIL];
+		break;
 	case WEAPON::BASIC:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC];
 		break;
