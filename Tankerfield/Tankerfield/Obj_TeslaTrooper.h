@@ -14,7 +14,7 @@ struct SpawnPoint;
 
 enum class TROOPER_STATE
 {
-	APPEAR,
+	SPAWN,
 	IDLE,
 	GET_PATH,
 	MOVE,
@@ -88,7 +88,7 @@ private:
 	Animation death;
 	Animation portal_animation;
 	Animation portal_close_anim;
-	Animation appear_anim;
+	Animation spawn_anim;
 
 	bool draw = true;
 	Animation* in_portal				= nullptr;

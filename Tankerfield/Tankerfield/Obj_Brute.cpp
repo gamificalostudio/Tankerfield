@@ -88,7 +88,7 @@ Obj_Brute::~Obj_Brute()
 bool Obj_Brute::Update(float dt)
 {
 	Movement(dt);
-	Attack();
+	Attack();//SPAWN, TENER EN CUENTA
 	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
 	{
 		curr_tex = tex;

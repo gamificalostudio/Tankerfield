@@ -52,7 +52,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 	//curr_anim = &idle;
 	curr_anim = &walk;
-	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
+	spawn_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("spawn"));
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav",20);
@@ -63,7 +63,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	draw = false;
 
 	//Things
-	state				= TROOPER_STATE::APPEAR;
+	state				= TROOPER_STATE::SPAWN;
 	speed				= 3.F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
@@ -150,16 +150,16 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		}
 	}
 	break;
-	case TROOPER_STATE::APPEAR:
+	case TROOPER_STATE::SPAWN:
 			{
-				appear_anim.NextFrame(dt);
-				if ((int)appear_anim.current_frame == 6)
+				spawn_anim.NextFrame(dt);
+				if ((int)spawn_anim.current_frame == 6)
 				{
 					draw = true;
 				}
-				if (appear_anim.Finished())
+				if (spawn_anim.Finished())
 				{
-					appear_anim.Reset();
+					spawn_anim.Reset();
 					state = TROOPER_STATE::GET_PATH;
 				}
 			}
@@ -380,9 +380,9 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			0.75f,
 			0.75f);
 	}
-	if (state == TROOPER_STATE::APPEAR)
+	if (state == TROOPER_STATE::SPAWN)
 	{
-		SDL_Rect rect = appear_anim.GetFrame(0);
+		SDL_Rect rect = spawn_anim.GetFrame(0);
 		app->render->Blit(
 			portal_tex,
 			pos_screen.x - rect.w*0.5f,
@@ -457,11 +457,4 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 			app->audio->PlayFx(sfx_hit);
 		}
 	}
-
-	else if (collider->GetTag() != Collider::TAG::ENEMY)
-	{
-		LOG("yeep");
-	}
-
-
 }

@@ -138,6 +138,7 @@
     <ClCompile Include="M_RewardZoneManager.cpp" />
     <ClCompile Include="Obj_Brute.cpp" />
     <ClCompile Include="Obj_CannonFire.cpp" />
+    <ClCompile Include="Obj_Enemy.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
     <ClCompile Include="Obj_Suicidal.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="M_RewardZoneManager.h" />
     <ClInclude Include="Obj_Brute.h" />
     <ClInclude Include="Obj_CannonFire.h" />
+    <ClInclude Include="Obj_Enemy.h" />
     <ClInclude Include="Obj_Fire.h" />
     <ClInclude Include="Obj_RewardBox.h" />
     <ClInclude Include="Obj_Suicidal.h" />
