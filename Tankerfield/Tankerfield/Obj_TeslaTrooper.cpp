@@ -67,8 +67,10 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	speed				= 3.F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
-	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
-	
+	float margin = 1.33f;
+	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* margin; // 1.33 is 4/3
+	squared_detection_range = detection_range * detection_range;
+
 	float coll_w = 0.5f;
 	float coll_h = 0.5f;
 	coll				= app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY,0.f, this);
@@ -82,9 +84,13 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
 	life = pow(5, app->scene->round);
-	//Timers ----------------
+	//teleport 
 	check_teleport_time = 1; //10s
 	teleport_timer.Start();
+	teleport_enemies_max = tesla_trooper_node.child("values").child("teleport_max_enemies").attribute("num").as_uint();
+
+	//Timers ----------------
+
 	check_path_time = 1.f; // 1s
 	path_timer.Start();
 
@@ -133,27 +139,14 @@ void Obj_TeslaTrooper::Attack()
 
 void Obj_TeslaTrooper::Movement(float &dt)
 {
+	
+
 	switch (state)
 	{
-	case TROOPER_STATE::IDLE:
-	{
-		path.clear();
-		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map);
-		if (target != nullptr)
-		{
-			state = TROOPER_STATE::GET_PATH;
-		}
-		else
-		{
-			curr_anim = &idle;
-		}
-	}
-	break;
 	case TROOPER_STATE::APPEAR:
 			{
 				appear_anim.NextFrame(dt);
-				if ((int)appear_anim.current_frame == 6)
+				if (appear_anim.current_frame>=6)
 				{
 					draw = true;
 				}
@@ -168,37 +161,35 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map);
+
 		if (target != nullptr)
 		{
-			if (this->pos_map.DistanceManhattan(target->pos_map) <= detection_range)
-			{
-				path.clear();
+			if (pos_map.DistanceNoSqrt(target->pos_map) <= squared_detection_range)
+			{	
 				if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 				{
-
+					path.clear();
 					std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
 					for (std::vector<iPoint>::iterator iter = aux.begin()+1; iter != aux.end(); ++iter)
 					{
 						path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
 					}
+					if (path.size() > 0)
+					{
+						next_pos = (fPoint)(*path.begin());
+					}
 
-					state = TROOPER_STATE::RECHEAD_POINT;
+					state = TROOPER_STATE::MOVE;
 				}
 			}
 			else 
 			{
-				if (teleport_timer.ReadSec() >= check_teleport_time)
+				if (teleport_timer.ReadSec() >= check_teleport_time && path.size()==0)
 					state = TROOPER_STATE::GET_TELEPORT_POINT;
 				else
-					state = TROOPER_STATE::RECHEAD_POINT;
+					state = TROOPER_STATE::MOVE;
 			}
 		}
-		else 
-		{
-			state = TROOPER_STATE::IDLE;
-
-		}
-
 		path_timer.Start();
 	}
 	break;
@@ -206,32 +197,36 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 		if (IsOnGoal(next_pos))
 		{
-			path.erase(path.begin());
-			state = TROOPER_STATE::RECHEAD_POINT;
+			if (path.size() > 0)
+				path.erase(path.begin());
+
+			if (path.size() > 0)
+				next_pos = (fPoint)(*path.begin());
+
+			else
+			{
+				state = TROOPER_STATE::GET_PATH;
+				break;
+			}
 		}
+
+		move_vect = (fPoint)(next_pos)-pos_map;
+		move_vect.Normalize();
+
+		//Change sprite direction
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
 
 		if (path_timer.ReadSec() >= check_path_time)
 			state = TROOPER_STATE::GET_PATH;
-		
-	}
-	break;
-	case TROOPER_STATE::RECHEAD_POINT:
-	{
-		move_vect.SetToZero();
-		if (path.size() > 0)
-		{
-			next_pos = (fPoint)(*path.begin());
-			move_vect = (fPoint)(next_pos)-pos_map;
-			move_vect.Normalize();
 
-			//Change sprite direction
-			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
-			state = TROOPER_STATE::MOVE;
-		}
-		else
+		if (target == nullptr || !target->Alive())
+		{
 			state = TROOPER_STATE::GET_PATH;
+			//path.clear();
+		}
+		
 	}
 	break;
 
@@ -241,26 +236,29 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
 		SpawnPoint* nearest_spawners_points = nullptr;
 		float last_distance_to_spawnpoint = 0.f;
+
 		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
 		{
 			float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
-			if (target->pos_map.DistanceManhattan((*spawn_point)->pos))
+
+			if ((target->pos_map.DistanceManhattan((*spawn_point)->pos)<=distance_to_tank 
+				/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
+				&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+				&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
 			{
-				if (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
-				{
-					if (teleport_spawnpoint==nullptr || teleport_spawnpoint != nearest_spawners_points)
-					{
-						nearest_spawners_points = (*spawn_point);
-						last_distance_to_spawnpoint = distance_to_this_spawnpoint;
-					}
-					
-				}
-			}
+					nearest_spawners_points = (*spawn_point);
+					last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			}	
 		}
+	
 		if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
 		{
-			check_teleport_time = nearest_spawners_points->pixels_pos.DistanceTo((iPoint)pos_screen)/speed;
-
+			check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map)/speed;
+			uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
+			if (number_of_enemies <= teleport_enemies_max)
+			{
+				check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+			}
 			teleport_spawnpoint = nearest_spawners_points;
 			state = TROOPER_STATE::TELEPORT_IN;
 			in_portal = &portal_animation;

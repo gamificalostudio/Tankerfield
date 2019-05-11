@@ -14,7 +14,7 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1080" scale="1"/>
+    <resolution width="1920" height="1000" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -171,6 +171,9 @@
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
     <tesla_trooper>
+      <values>
+        <teleport_max_enemies num="100"/>
+      </values>
       <animations>
         <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>

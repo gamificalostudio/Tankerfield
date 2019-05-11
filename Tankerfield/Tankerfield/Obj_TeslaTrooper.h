@@ -15,10 +15,8 @@ struct SpawnPoint;
 enum class TROOPER_STATE
 {
 	APPEAR,
-	IDLE,
 	GET_PATH,
 	MOVE,
-	RECHEAD_POINT,
 	GET_TELEPORT_POINT,
 	TELEPORT_IN,
 	TELEPORT_OUT,
@@ -50,21 +48,31 @@ public:
 private:
 	inline bool IsOnGoal(fPoint goal);
 
-	TROOPER_STATE state			= TROOPER_STATE::IDLE;
+	TROOPER_STATE state			= TROOPER_STATE::APPEAR;
 	fPoint move_vect			= { 0.0f, 0.0f };
+
 	int life					= 0;
+
+	//move values -----------------
+
 	float detection_range		= 0.0f;
+	float squared_detection_range = 0.f;
 	float check_path_time		= 0.f;
-	float check_teleport_time	= 0.f;
-	float speed					= 0.f;
+	float speed = 0.f;
 	Timer path_timer;
-
-	Obj_Tank* target			= nullptr;
+	Obj_Tank* target = nullptr;
 	std::vector<fPoint> path;
-
-	fPoint next_pos				= {0.f, 0.f};
-	
+	fPoint next_pos = { 0.f, 0.f };
 	Circle range_pos;
+
+	//teleport values ----------
+	float check_teleport_time	= 0.f;
+	uint teleport_enemies_max;
+
+
+	
+
+	
 
 	// ----------
 
