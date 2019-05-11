@@ -26,6 +26,8 @@ public:
 
 	void Movement(float &dt);
 
+	void GetPath();
+
 	//void DrawDebug(const Camera* camera) override;
 
 	bool Draw(float dt, Camera * camera) override;

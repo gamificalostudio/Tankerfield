@@ -31,6 +31,8 @@ public:
 
 	void Movement(float &dt);
 
+	virtual void GetPath();
+
 	void OnTriggerEnter(Collider * collider);
 
 	void OnTrigger(Collider* collider);

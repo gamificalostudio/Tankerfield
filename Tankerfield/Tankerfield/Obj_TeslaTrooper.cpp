@@ -135,14 +135,14 @@ void Obj_TeslaTrooper::Movement(float &dt)
 {
 	switch (state)
 	{
-	/*case TROOPER_STATE::IDLE:
+	/*case ENEMY_STATE::IDLE:
 	{
 		path.clear();
 		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map);
 		if (target != nullptr)
 		{
-			state = TROOPER_STATE::GET_PATH;
+			state = ENEMY_STATE::GET_PATH;
 		}
 		else
 		{
@@ -166,37 +166,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			break;
 	case ENEMY_STATE::GET_PATH:
 	{
-		path.clear();
-		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map);
-		if (target != nullptr)
-		{
-			if (this->pos_map.DistanceManhattan(target->pos_map) <= detection_range)  //why
-			{
-				if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
-				{
-
-					std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
-					for (std::vector<iPoint>::iterator iter = aux.begin()+1; iter != aux.end(); ++iter) //why
-					{
-						path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
-					}
-
-					state = ENEMY_STATE::RECHEAD_POINT;
-				}
-			}
-			else 
-			{
-				if (teleport_timer.ReadSec() >= check_teleport_time)
-					state = ENEMY_STATE::GET_TELEPORT_POINT;
-				else
-					state = ENEMY_STATE::GET_PATH;
-			}
-		}
-		else 
-		{
-			state = ENEMY_STATE::IDLE;
-		}
+		GetPath();
 
 		//path_timer.Start();
 	}
@@ -340,6 +310,41 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		break;*/
 	}
 
+}
+
+void Obj_TeslaTrooper::GetPath()
+{
+	path.clear();
+	move_vect.SetToZero();
+	target = app->objectmanager->GetNearestTank(pos_map);
+	if (target != nullptr)
+	{
+		if (this->pos_map.DistanceManhattan(target->pos_map) <= detection_range)  //why
+		{
+			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+			{
+
+				std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
+				for (std::vector<iPoint>::iterator iter = aux.begin() + 1; iter != aux.end(); ++iter) //why
+				{
+					path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
+				}
+
+				state = ENEMY_STATE::RECHEAD_POINT;
+			}
+		}
+		else
+		{
+			if (teleport_timer.ReadSec() >= check_teleport_time)
+				state = ENEMY_STATE::GET_TELEPORT_POINT;
+			else
+				state = ENEMY_STATE::GET_PATH;
+		}
+	}
+	else
+	{
+		state = ENEMY_STATE::IDLE;
+	}
 }
 
 //void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
