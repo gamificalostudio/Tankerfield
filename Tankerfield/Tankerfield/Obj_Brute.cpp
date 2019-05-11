@@ -31,7 +31,7 @@
 #include "M_Audio.h"
 
 
-Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
+Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
@@ -52,14 +52,14 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
-	app->audio->PlayFx(sfx_spawn);
+	/*app->audio->PlayFx(sfx_spawn);*/
 
-	state = BRUTE_STATE::SPAWN;
+	state = ENEMY_STATE::SPAWN; 
 	speed = 1.5f;
-	detection_range = 10.0f;
+	detection_range = 10.0f; //change?
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
-	check_path_time = 1.f;
+	//check_path_time = 1.f;
 
 	spawn_draw_offset = { 260, 274 };
 	normal_draw_offset = { 132, 75 };
@@ -67,7 +67,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 
 	angle = 180;//REMOVE
 
-	timer.Start();
+	path_timer.Start();
 	attack_damage = 10;
 	attack_range = 1;
 	attack_range_squared = attack_range * attack_range;
@@ -78,6 +78,8 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
   
 	damaged_sprite_time = 150;
 	life = 750* (log(app->scene->round)+2);
+
+	scale = 2.f;
 }
 
 Obj_Brute::~Obj_Brute()
@@ -88,62 +90,72 @@ Obj_Brute::~Obj_Brute()
 bool Obj_Brute::Update(float dt)
 {
 	Movement(dt);
-	Attack();//SPAWN, TENER EN CUENTA
+	Obj_Enemy::Update(dt);
+	//Attack();//SPAWN, TENER EN CUENTA
+	//if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
+	//{
+	//	curr_tex = tex;
+	//}
+	return true;
+}
+
+void Obj_Brute::ChangeTexture()
+{
 	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
 	{
 		curr_tex = tex;
 	}
-	return true;
 }
 
-void Obj_Brute::Attack()
-{
-	if (target != nullptr 
-		&& target->coll->GetTag() == Collider::TAG::PLAYER
-		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
-		&& perf_timer.ReadMs() > (double)attack_frequency)
-	{
-		curr_anim = &attack;
-		app->audio->PlayFx(sfx_attack);
-		target->SetLife(target->GetLife() - attack_damage);
-		perf_timer.Start();
-	}
-
-	if (curr_anim == &attack&&curr_anim->Finished())
-	{
-		curr_anim = &walk;
-		attack.Reset();
-	}
-
-}
+//void Obj_Brute::Attack()
+//{
+//	if (target != nullptr 
+//		&& target->coll->GetTag() == Collider::TAG::PLAYER
+//		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+//		&& perf_timer.ReadMs() > (double)attack_frequency)
+//	{
+//		curr_anim = &attack;
+//		app->audio->PlayFx(sfx_attack);
+//		target->SetLife(target->GetLife() - attack_damage);
+//		perf_timer.Start();
+//	}
+//
+//	if (curr_anim == &attack&&curr_anim->Finished())
+//	{
+//		curr_anim = &walk;
+//		attack.Reset();
+//	}
+//
+//}
 
 void Obj_Brute::Movement(float &dt)
 {
-	if ((state != BRUTE_STATE::DEAD)
-		&& (state != BRUTE_STATE::SPAWN)
-		&& (timer.ReadSec() >= check_path_time))
+
+	if ((state != ENEMY_STATE::DEAD)
+		&& (state != ENEMY_STATE::SPAWN)
+		&& (path_timer.ReadSec() >= check_path_time))
 	{
-		state = BRUTE_STATE::GET_PATH;
+		state = ENEMY_STATE::GET_PATH;
 	}
 
 	switch (state)
 	{
-	case BRUTE_STATE::IDLE:
-	{
-		path.clear();
-		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
-		if (target != nullptr)
-		{
-			state = BRUTE_STATE::GET_PATH;
-		}
-		else
-		{
-			curr_anim = &idle;
-		}
-	}
+	//case BRUTE_STATE::IDLE:
+	//{
+	//	path.clear();
+	//	move_vect.SetToZero();
+	//	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+	//	if (target != nullptr)
+	//	{
+	//		state = BRUTE_STATE::GET_PATH;
+	//	}
+	//	else
+	//	{
+	//		curr_anim = &idle;
+	//	}
+	//}
 	break;
-	case BRUTE_STATE::SPAWN:
+	case ENEMY_STATE::SPAWN:
 	{
 		if (curr_anim->Finished())
 		{
@@ -153,11 +165,11 @@ void Obj_Brute::Movement(float &dt)
 			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
 			curr_anim = &walk;
-			state=BRUTE_STATE::GET_PATH;
+			state= ENEMY_STATE::GET_PATH;
 		}
 	}
 	break;
-	case BRUTE_STATE::GET_PATH:
+	/*case BRUTE_STATE::GET_PATH:
 	{
 		path.clear();
 		move_vect.SetToZero();
@@ -184,8 +196,8 @@ void Obj_Brute::Movement(float &dt)
 
 		timer.Start();
 	}
-	break;
-	case BRUTE_STATE::MOVE:
+	break;*/
+	/*case BRUTE_STATE::MOVE:
 	{
 		if (IsOnGoal(next_pos))
 		{
@@ -196,23 +208,23 @@ void Obj_Brute::Movement(float &dt)
 		range_pos.center = pos_map;
 		curr_anim = &walk;
 	}
-	break;
-	case BRUTE_STATE::RECHEAD_POINT:
-	{
-		if (path.size() > 0)
-		{
-			next_pos = (fPoint)(*path.begin());
-			move_vect = (fPoint)(next_pos)-pos_map;
-			move_vect.Normalize();
-			//Change sprite direction
-			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
-			state = BRUTE_STATE::MOVE;
-		}
-		else
-			state = BRUTE_STATE::GET_PATH;
-	}
-	break;
-	case BRUTE_STATE::DEAD:
+	break;*/
+	//case BRUTE_STATE::RECHEAD_POINT:
+	//{
+	//	if (path.size() > 0)
+	//	{
+	//		next_pos = (fPoint)(*path.begin());
+	//		move_vect = (fPoint)(next_pos)-pos_map;
+	//		move_vect.Normalize();
+	//		//Change sprite direction
+	//		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG /*+ ISO_COMPENSATION*/;
+	//		state = BRUTE_STATE::MOVE;
+	//	}
+	//	else
+	//		state = BRUTE_STATE::GET_PATH;
+	//}
+	//break;
+	/*case BRUTE_STATE::DEAD:
 	{
 		if (curr_anim != &death)
 		{
@@ -228,89 +240,90 @@ void Obj_Brute::Movement(float &dt)
 		{
 			to_remove = true;
 		}
-	}
-	default:
+	}*/
+	//break;
+	/*default:
 		assert(true && "A tesla trooper have no state");
-		break;
+		break;*/
 	}
 }
 
-bool Obj_Brute::Draw(float dt, Camera * camera)
-{
-	app->render->BlitScaled(
-		curr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&frame,
-		2.f,
-		2.f);
+//bool Obj_Brute::Draw(float dt, Camera * camera)
+//{
+//	app->render->BlitScaled(
+//		curr_tex,
+//		pos_screen.x - draw_offset.x,
+//		pos_screen.y - draw_offset.y,
+//		camera,
+//		&frame,
+//		scale,
+//		scale);
+//
+//	return true;
+//}
 
-	return true;
-}
+//void Obj_Brute::DrawDebug(const Camera* camera)
+//{
+//	if (path.size() >= 2)
+//	{
+//		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+//		{
+//			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+//			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+//			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
+//		}
+//	}
+//
+//}
 
-void Obj_Brute::DrawDebug(const Camera* camera)
-{
-	if (path.size() >= 2)
-	{
-		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
-		{
-			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
-			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
-		}
-	}
-
-}
-
-bool Obj_Brute::IsOnGoal(fPoint goal)
-{
-	return range_pos.IsPointIn(goal);
-}
-
-void Obj_Brute::OnTriggerEnter(Collider * collider)
-{
-	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
-	{
-
-		life -= collider->damage;
-
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
-		{
-			// DROP A PICK UP ITEM 
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = BRUTE_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}
-
-	}
-}
-
-void Obj_Brute::OnTrigger(Collider* collider)
-{
-	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
-	{
-		life -= collider->damage;
-
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
-		{
-			// DROP A PICK UP ITEM 
-			app->pick_manager->PickUpFromEnemy(pos_map, PICKUP_TYPE::WEAPON);
-			state = BRUTE_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}
-
-	}
-}
+//bool Obj_Brute::IsOnGoal(fPoint goal)
+//{
+//	return range_pos.IsPointIn(goal);
+//}
+//
+//void Obj_Brute::OnTriggerEnter(Collider * collider)
+//{
+//	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+//	{
+//
+//		life -= collider->damage;
+//
+//		damaged_sprite_timer.Start();
+//		curr_tex = tex_damaged;
+//
+//		if (life <= 0)
+//		{
+//			// DROP A PICK UP ITEM 
+//			app->pick_manager->PickUpFromEnemy(pos_map);
+//			state = BRUTE_STATE::DEAD;
+//		}
+//		else
+//		{
+//			app->audio->PlayFx(sfx_hit);
+//		}
+//
+//	}
+//}
+//
+//void Obj_Brute::OnTrigger(Collider* collider)
+//{
+//	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
+//	{
+//		life -= collider->damage;
+//
+//		damaged_sprite_timer.Start();
+//		curr_tex = tex_damaged;
+//
+//		if (life <= 0)
+//		{
+//			// DROP A PICK UP ITEM 
+//			app->pick_manager->PickUpFromEnemy(pos_map, PICKUP_TYPE::WEAPON);
+//			state = BRUTE_STATE::DEAD;
+//		}
+//		else
+//		{
+//			app->audio->PlayFx(sfx_hit);
+//		}
+//
+//	}
+//}

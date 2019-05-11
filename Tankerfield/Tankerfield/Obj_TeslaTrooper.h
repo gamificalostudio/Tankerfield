@@ -7,25 +7,14 @@
 #include "Object.h"
 #include "PerfTimer.h"
 
+#include "Obj_Enemy.h"
+
 struct SDL_Texture;
 class Timer;
 class Obj_Tank;
 struct SpawnPoint;
 
-enum class TROOPER_STATE
-{
-	SPAWN,
-	IDLE,
-	GET_PATH,
-	MOVE,
-	RECHEAD_POINT,
-	GET_TELEPORT_POINT,
-	TELEPORT_IN,
-	TELEPORT_OUT,
-	DEAD,
-};
-
-class Obj_TeslaTrooper : public Object 
+class Obj_TeslaTrooper : public Obj_Enemy 
 {
 public:
 	Obj_TeslaTrooper(fPoint pos);
@@ -33,79 +22,43 @@ public:
 
 	bool Update(float dt) override;
 
-	void Attack();
+	//void Attack();
 
 	void Movement(float &dt);
 
-	void DrawDebug(const Camera* camera) override;
+	//void DrawDebug(const Camera* camera) override;
 
 	bool Draw(float dt, Camera * camera) override;
 
-	bool Awake(pugi::xml_node&) { return true; };
+	/*bool Awake(pugi::xml_node&) { return true; };
 
 	void OnTriggerEnter(Collider * collider);
 
-	void OnTrigger(Collider* collider);
+	void OnTrigger(Collider* collider);*/
 
 private:
-	inline bool IsOnGoal(fPoint goal);
-
-	TROOPER_STATE state			= TROOPER_STATE::IDLE;
-	fPoint move_vect			= { 0.0f, 0.0f };
-	int life					= 0;
-	float detection_range		= 0.0f;
-	float check_path_time		= 0.f;
+	//inline bool IsOnGoal(fPoint goal);
+	
 	float check_teleport_time	= 0.f;
-	float speed					= 0.f;
-	Timer path_timer;
-
-	Obj_Tank* target			= nullptr;
-	std::vector<fPoint> path;
-
-	fPoint next_pos				= {0.f, 0.f};
-	
-	Circle range_pos;
-
-	// ----------
-
-	/* Attack properties */
-	float attack_frequency		= 0.f;
-	float attack_range			= 0.f;//Tile distance in which the enemy can attack
-	float attack_range_squared	= 0.f;
-	int attack_damage			= 0;
-	
 
 
-
-	PerfTimer perf_timer;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
-	bool to_hit = true;
 
-	Animation idle;
-	Animation walk;
-	Animation attack;
-	Animation death;
+	
 	Animation portal_animation;
 	Animation portal_close_anim;
 	Animation spawn_anim;
 
 	bool draw = true;
 	Animation* in_portal				= nullptr;
-	SDL_Texture * tex					= nullptr;
-	SDL_Texture * tex_damaged			= nullptr;
+
 	SDL_Texture * portal_tex			= nullptr;
 	SDL_Texture * explosion_apper_tex			= nullptr;
 
-	uint sfx_attack = 0;
-	uint sfx_spawn = 0;
-	uint sfx_hit = 0;
-	uint sfx_death = 0;
-
 	SpawnPoint* teleport_spawnpoint = nullptr;
 
-	Timer damaged_sprite_timer;
-	int damaged_sprite_time				= 0;
+
 };
 
 // TODO REMOVE IT 
