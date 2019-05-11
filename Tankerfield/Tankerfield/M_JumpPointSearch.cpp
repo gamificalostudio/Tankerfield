@@ -20,6 +20,13 @@ M_JumpPointSearch::~M_JumpPointSearch()
 	RELEASE_ARRAY(map);
 }
 
+bool M_JumpPointSearch::Start()
+{
+	path_tex = app->tex->Load(app->config.child("pathfinding").child("debug_textures").child_value());
+	path_tex_offset = {0,0};
+	return true;
+}
+
 bool M_JumpPointSearch::PostUpdate(float dt)
 {
 	return true;
@@ -77,6 +84,80 @@ uchar M_JumpPointSearch::GetTileAt(const iPoint& pos) const
 
 	return INVALID_WALK_CODE;
 }
+
+void M_JumpPointSearch::DebugPathfinding()
+{
+		std::vector<Camera*>::iterator item_cam;
+		static iPoint origin;
+		static bool origin_selected = false;
+		static bool createdDebugPath = false;
+
+		iPoint mousePos;
+		app->input->GetMousePosition(mousePos.x, mousePos.y);
+		iPoint p = app->render->ScreenToWorld(mousePos.x, mousePos.y, (*app->render->cameras.begin()));
+		p = app->map->ScreenToMapI(p.x, p.y);
+
+		if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KeyState::KEY_DOWN)
+		{
+			if (origin_selected == true)
+			{
+				origin_selected = false;
+
+				if (app->pathfinding->CreatePath(origin, p) != -1)
+				{
+					createdDebugPath = true;
+				}
+
+			}
+			else
+			{
+				origin = p;
+				origin_selected = true;
+				createdDebugPath = false;
+				debug_path.clear();
+			}
+		}
+
+		if (createdDebugPath)
+		{
+			uint debugPathSize = debug_path.size();
+			if (debugPathSize == 0)
+			{
+
+				const std::vector<iPoint>* path = app->pathfinding->GetLastPath();
+				uint sizeArray = path->size();
+				for (uint i = 0; i < sizeArray; ++i)
+				{
+					debug_path.push_back(path->at(i));
+				}
+			}
+			else
+			{
+				for (uint i = 0; i < debugPathSize; ++i)
+				{
+					iPoint pos = app->map->MapToScreenI(debug_path.at(i).x, debug_path.at(i).y);
+
+					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
+					{
+						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
+						app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y, (*item_cam));
+					}
+					SDL_RenderSetClipRect(app->render->renderer, nullptr);
+				}
+			}
+
+		}
+
+		p = app->map->MapToScreenI(p.x, p.y);
+
+		for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
+		{
+			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
+			app->render->Blit(path_tex, p.x + path_tex_offset.x, p.y + path_tex_offset.y, (*item_cam));
+		}SDL_RenderSetClipRect(app->render->renderer, nullptr);
+
+}
+
 
 // To request all tiles involved in the last generated path
 const std::vector<iPoint>* M_JumpPointSearch::GetLastPath() const

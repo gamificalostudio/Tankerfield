@@ -63,7 +63,8 @@ private:
 
 	std::vector<iPoint> debug_path;
 
-	SDL_Texture* path_texture = nullptr;
+	SDL_Texture* path_tex = nullptr;
+	iPoint path_tex_offset;
 };
 
 

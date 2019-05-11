@@ -18,7 +18,9 @@
     <fullscreen_window value="false"/>
   </window>
   <animations_bank>animations.xml</animations_bank>
-
+  <pathfinding>
+    <debug_textures>Maps/path_texture.png</debug_textures>
+  </pathfinding>
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>

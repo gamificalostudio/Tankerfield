@@ -76,7 +76,7 @@ public:
 	bool draw_debug = false;
 	// ---------
 
-	void DebugPathfinding();
+	
 
 private:
 	void CreateEnemyWave();
