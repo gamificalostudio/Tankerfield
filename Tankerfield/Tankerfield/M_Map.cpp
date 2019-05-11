@@ -122,12 +122,6 @@ bool M_Map::PostUpdate(float dt)
 		}
 		SDL_RenderSetClipRect(app->render->renderer, nullptr);
 	}
-
-	/*for (uint i = 0; i < app->map->data.tile_height* data.tile_width; ++i)
-	{
-		SDL_Rect rect = { data.screen_tile_rect[i].pos.x ,data.screen_tile_rect[i].pos.y ,2.f ,2.f };
-		app->render->DrawQuad(rect, 255, 255, 255, 255);
-	}*/
 	
 	return ret = true;
 }
@@ -446,7 +440,6 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		{
 			SpawnPoint* ret = new SpawnPoint;
 			ret->pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
-			ret->pixels_pos = this->MapToScreenI(ret->pos.x, ret->pos.y);
 
 			std::string type = obj_node.attribute("type").as_string("");
 			if (type == "REWARD_BOX")

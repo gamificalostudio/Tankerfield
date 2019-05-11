@@ -189,7 +189,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 		  if (app->scene->draw_debug) {
 			  (*item)->DrawDebug((*item_cam));
-			  DrawDebug((*item), (*item_cam));
+			 // DrawDebug((*item), (*item_cam));
 		  }
 		}
 		draw_objects.clear();
