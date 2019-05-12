@@ -33,25 +33,27 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
-	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
+	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
+	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla");
 
-	tex = app->tex->Load("textures/Objects/enemies/shk-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/enemies/shk-sheet-white.png");
-	portal_tex = app->tex->Load("textures/Objects/enemies/portal.png");
+	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
+	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
+	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	curr_tex = tex;
+
 	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 
+	//Loading animations ------------------------------------------------------------------------------------------------------------------------
+	idle.frames		= app->anim_bank->LoadFrames(anim_node.child("idle"));
+	walk.frames		= app->anim_bank->LoadFrames(anim_node.child("walk"));
+	attack.frames	= app->anim_bank->LoadFrames(anim_node.child("attack"));
+	death.frames	= app->anim_bank->LoadFrames(anim_node.child("death"));
+	curr_anim = &walk;
 
-	//Assets loading ------------------------------------------------------------------------------------------------------------------------
-	idle.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("idle"));
-	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
-	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
-	death.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("death"));
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
 	//curr_anim = &idle;
-	curr_anim = &walk;
 	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
@@ -64,33 +66,39 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 	//Things
 	state				= TROOPER_STATE::APPEAR;
-	speed				= 3.F;
+	speed				= tesla_trooper_node.child("speed").attribute("num").as_float();
+	
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
+
 	float margin = 1.33f;
 	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* margin; // 1.33 is 4/3
 	squared_detection_range = detection_range * detection_range;
 
-	float coll_w = 0.5f;
-	float coll_h = 0.5f;
-	coll				= app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY,0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	//Creating it's collider
+	{
+		float coll_w = 0.5f;
+		float coll_h = 0.5f;
+		coll = app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
+		coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+		coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	}
+
 	draw_offset			= { 24, 28 };
 
 	//parameters-------------------------------------------
-	attack_damage		= 5;
-	attack_range		= 1.5f;
+	attack_damage		= tesla_trooper_node.child("attack_damage").attribute("num").as_float();
+	attack_range		= tesla_trooper_node.child("attack_range").attribute("num").as_float();
 	attack_range_squared = attack_range * attack_range;
-	attack_frequency = 3000.0f;
-	life = pow(5, app->scene->round);
+	attack_frequency = tesla_trooper_node.child("attack_frequency").attribute("num").as_float();
+	life = pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
+	
 	//teleport 
 	check_teleport_time = 1; //10s
 	teleport_timer.Start();
-	teleport_enemies_max = tesla_trooper_node.child("values").child("teleport_max_enemies").attribute("num").as_uint();
+	teleport_enemies_max = tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_uint();
 
 	//Timers ----------------
-
 	check_path_time = 10.f; // 10s
 	path_timer.Start();
 
@@ -131,7 +139,7 @@ void Obj_TeslaTrooper::Attack()
 		if (curr_anim == &attack
 			&& curr_anim->Finished())
 		{
-			curr_anim = &walk;
+			curr_anim = &idle;
 			attack.Reset();
 		}
 	}
