@@ -48,12 +48,12 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	walk.frames		= app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames	= app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames	= app->anim_bank->LoadFrames(anim_node.child("death"));
-	curr_anim = &walk;
+	curr_anim = &idle;
 
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
-	//curr_anim = &idle;
+	
 	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
@@ -188,14 +188,21 @@ void Obj_TeslaTrooper::Movement(float &dt)
 					}
 
 					state = TROOPER_STATE::MOVE;
+					curr_anim = &walk;
 				}
 			}
 			else 
 			{
-				if (teleport_timer.ReadSec() >= check_teleport_time && path.size()==0)
+				if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
+				{
 					state = TROOPER_STATE::GET_TELEPORT_POINT;
+					curr_anim = &idle;
+				}
 				else
+				{
 					state = TROOPER_STATE::MOVE;
+					curr_anim = &walk;
+				}
 			}
 		}
 		path_timer.Start();
@@ -214,6 +221,7 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			else
 			{
 				state = TROOPER_STATE::GET_PATH;
+				curr_anim = &idle;
 				break;
 			}
 		}
@@ -226,15 +234,11 @@ void Obj_TeslaTrooper::Movement(float &dt)
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
 
-		if (path_timer.ReadSec() >= check_path_time)
-			state = TROOPER_STATE::GET_PATH;
-
-		if (target == nullptr || !target->Alive())
+		if (path_timer.ReadSec() >= check_path_time || (target == nullptr || !target->Alive()))
 		{
 			state = TROOPER_STATE::GET_PATH;
-			//path.clear();
+			curr_anim = &idle;
 		}
-		
 	}
 	break;
 
@@ -365,7 +369,7 @@ void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
 
 bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 {
-	if (state == TROOPER_STATE::TELEPORT_IN && in_portal != nullptr)
+	if ((state == TROOPER_STATE::TELEPORT_IN || state == TROOPER_STATE::TELEPORT_OUT) && in_portal != nullptr)
 	{
 		SDL_Rect portal_frame = in_portal->GetFrame(0);
 		app->render->Blit(
