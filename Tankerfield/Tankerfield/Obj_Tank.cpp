@@ -207,6 +207,8 @@ bool Obj_Tank::Start()
 	life = 90;
 	max_life = 100;
 
+	charged_shot_speed = 1.0f;
+
 	//- Tutorial
 	//-- Move
 	UI_InGameElementDef clue_def;
@@ -691,6 +693,7 @@ void Obj_Tank::ShootChargedWeapon()
 	{
 		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
+			this->curr_speed = charged_shot_speed;
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 		}
 	}
@@ -699,6 +702,7 @@ void Obj_Tank::ShootChargedWeapon()
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
+		this->curr_speed = speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
 		{

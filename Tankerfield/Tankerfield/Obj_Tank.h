@@ -140,6 +140,7 @@ private:
 	float lerp_factor_recoil				= 0.f;
 	Timer movement_timer;
 	
+	float charged_shot_speed = 0.0f;
 
 
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
