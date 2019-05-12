@@ -184,6 +184,12 @@
     <ClCompile Include="UI_InteractiveGroup.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Item_InstantHelp.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Portal.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -389,6 +395,12 @@
     </ClInclude>
     <ClInclude Include="UI_InteractiveGroup.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_InstantHelp.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Portal.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

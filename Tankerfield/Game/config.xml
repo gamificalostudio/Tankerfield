@@ -1511,6 +1511,24 @@
         </explosion>
       </animations>
     </explosion>
+    <portal>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/particles/portal.png"/>
+      <animations>
+        <portal speed="80" loop ="false">
+          <frame x="0" y="0" w="40" h="40"/>
+          <frame x="40" y="0" w="40" h="40"/>
+          <frame x="80" y="0" w="40" h="40"/>
+          <frame x="0" y="40" w="40" h="40"/>
+          <frame x="40" y="40" w="40" h="40"/>
+          <frame x="80" y="40" w="40" h="40"/>
+          <frame x="0" y="80" w="40" h="40"/>
+          <frame x="40" y="80" w="40" h="40"/>
+          <frame x="80" y="80" w="40" h="40"/>
+        </portal>
+      </animations>
+    </portal>
     <fire_dead_tank>
       <tex path="textures/objects/particles/fire_dead_tank.png"/>
       <animations>
