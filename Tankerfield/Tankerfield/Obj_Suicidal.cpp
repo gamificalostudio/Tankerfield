@@ -1,7 +1,7 @@
 #include <list>
 #include <assert.h>
 #include <vector>
-#include <tgmath.h>
+//#include <tgmath.h>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
@@ -105,7 +105,7 @@ void Obj_Suicidal::Attack()
 	{
 		curr_anim = &attack;
 		app->audio->PlayFx(sfx_attack);
-		target->SetLife(0);
+		target->SetLife((int)(target->GetMaxLife() * 0.25f));
 		perf_timer.Start();
 		state = SUICIDAL_STATE::DEAD;
 	}
