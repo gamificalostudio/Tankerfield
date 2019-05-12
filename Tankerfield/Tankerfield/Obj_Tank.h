@@ -101,6 +101,7 @@ private:
 	void ShootLaserShot();
 	void ShootLaserShotCharged();
 	void ShootOil();
+	void ShootOilCharged();
 
 	//- TankDeath
 	void ReviveTank(float dt);

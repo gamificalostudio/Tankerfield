@@ -35,6 +35,7 @@ public:
 		REWARD_BOX,
 		PLAYER,
 		ROAD,
+		OIL_POOL,
 		MAX
 	};
 

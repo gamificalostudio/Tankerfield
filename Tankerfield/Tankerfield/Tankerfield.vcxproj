@@ -140,6 +140,7 @@
     <ClCompile Include="Obj_Brute.cpp" />
     <ClCompile Include="Obj_CannonFire.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
+    <ClCompile Include="Obj_OilPool.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
     <ClCompile Include="Obj_Suicidal.cpp" />
     <ClCompile Include="Obj_Tank_Weapons.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Obj_Brute.h" />
     <ClInclude Include="Obj_CannonFire.h" />
     <ClInclude Include="Obj_Fire.h" />
+    <ClInclude Include="Obj_OilPool.h" />
     <ClInclude Include="Obj_RewardBox.h" />
     <ClInclude Include="Obj_Suicidal.h" />
     <ClInclude Include="Player_GUI.h" />

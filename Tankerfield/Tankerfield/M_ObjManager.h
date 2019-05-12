@@ -19,6 +19,7 @@ enum class ObjectType
 	REWARD_ZONE,
 	REWARD_BOX,
 	PICK_UP,
+	OIL_POOL,
 
 	//ENEMIES
 	TESLA_TROOPER,

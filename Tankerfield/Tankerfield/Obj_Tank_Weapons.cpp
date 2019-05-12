@@ -8,6 +8,8 @@
 #include "Bullet_Missile.h"
 #include "Healing_Bullet.h"
 #include "Bullet_Laser.h"
+#include "Bullet_Oil.h"
+#include "Obj_OilPool.h"
 
 void Obj_Tank::InitWeapons()
 {
@@ -26,7 +28,7 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
-	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOil;
+	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
 }
 
 //if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
@@ -217,11 +219,18 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ShootOil()
 {
-	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_OIL, turr_pos);
+	Bullet_Oil * bullet = (Bullet_Oil*)app->objectmanager->CreateObject(ObjectType::BULLET_OIL, turr_pos+shot_dir);
+
 	bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+}
+
+void Obj_Tank::ShootOilCharged()
+{
+	fPoint pool_offset = { 2.5,2.5 };
+	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, turr_pos + shot_dir-pool_offset);
 }

@@ -103,17 +103,11 @@
     <ClCompile Include="Bullet_Missile.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Explosion.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Bar.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Healing_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_HealingAnimation.cpp">
-      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Item_HealthBag.cpp">
       <Filter>Objects\Items</Filter>
@@ -157,9 +151,6 @@
     <ClCompile Include="Obj_Building.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Fire.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Quadtree_Points.cpp">
       <Filter>Tools\QuadTree</Filter>
     </ClCompile>
@@ -168,9 +159,6 @@
     </ClCompile>
     <ClCompile Include="M_MainMenu.cpp">
       <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_CannonFire.cpp">
-      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Tank_Weapons.cpp">
       <Filter>Objects</Filter>
@@ -186,6 +174,21 @@
     </ClCompile>
     <ClCompile Include="Bullet_Oil.cpp">
       <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_CannonFire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Explosion.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Fire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_HealingAnimation.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_OilPool.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,17 +312,11 @@
     <ClInclude Include="Bullet_Missile.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Explosion.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Bar.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Healing_Bullet.h">
       <Filter>Objects\Bullets</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_HealingAnimation.h">
-      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Item_HealthBag.h">
       <Filter>Objects\Items</Filter>
@@ -366,9 +363,6 @@
     <ClInclude Include="Obj_Building.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Fire.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Quadtree_Points.h">
       <Filter>Tools\QuadTree</Filter>
     </ClInclude>
@@ -377,9 +371,6 @@
     </ClInclude>
     <ClInclude Include="M_MainMenu.h">
       <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_CannonFire.h">
-      <Filter>Objects\Items</Filter>
     </ClInclude>
     <ClInclude Include="WeaponInfo.h">
       <Filter>Utils</Filter>
@@ -395,6 +386,21 @@
     </ClInclude>
     <ClInclude Include="Bullet_Oil.h">
       <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_CannonFire.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Explosion.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Fire.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_HealingAnimation.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_OilPool.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -430,6 +436,9 @@
     </Filter>
     <Filter Include="Objects\Items">
       <UniqueIdentifier>{aba53b5b-7250-4552-868c-ec6f3b202d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Particles">
+      <UniqueIdentifier>{6dcad452-07af-4a3e-8814-0339b26a0501}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

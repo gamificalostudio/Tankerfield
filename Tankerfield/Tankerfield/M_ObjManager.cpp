@@ -28,6 +28,7 @@
 #include "Bullet_Missile.h"
 #include "Bullet_Laser.h"
 #include "Bullet_Oil.h"
+#include "Obj_OilPool.h"
 #include "Healing_Bullet.h"
 #include "Obj_Explosion.h"
 #include "Obj_HealingAnimation.h"
@@ -277,6 +278,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::REWARD_ZONE:
 		ret = DBG_NEW Reward_Zone(pos);
 		ret->type = ObjectType::REWARD_ZONE;
+		break;
+	case ObjectType::OIL_POOL:
+		ret = DBG_NEW Obj_OilPool(pos);
+		ret->type = ObjectType::OIL_POOL;
 		break;
 	case ObjectType::BRUTE:
 		ret = new Obj_Brute(pos);
