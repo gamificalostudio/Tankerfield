@@ -94,12 +94,12 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	life = pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
 	
 	//teleport 
-	check_teleport_time = 1; //10s
+	check_teleport_time = 10; //10s
 	teleport_timer.Start();
 	teleport_enemies_max = tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_uint();
 
 	//Timers ----------------
-	check_path_time = 10.f; // 10s
+	check_path_time = 2.f; // 10s
 	path_timer.Start();
 
 	damaged_sprite_time = 150;
@@ -165,8 +165,17 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				}
 			}
 			break;
+	case TROOPER_STATE::IDLE:
+	{
+		if (path_timer.ReadSec() > check_path_time)
+		{
+			state = TROOPER_STATE::GET_PATH;
+		}
+	}
+		break;
 	case TROOPER_STATE::GET_PATH:
 	{
+		curr_anim = &idle;
 		move_vect.SetToZero();
 		target = app->objectmanager->GetNearestTank(pos_map);
 
@@ -177,15 +186,12 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 				{
 					path.clear();
-					std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
-					for (std::vector<iPoint>::iterator iter = aux.begin()+1; iter != aux.end(); ++iter)
-					{
-						path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
-					}
+					path = *app->pathfinding->GetLastPath();
 					if (path.size() > 0)
-					{
-						next_pos = (fPoint)(*path.begin());
-					}
+						path.erase(path.begin());
+
+					next_pos = (fPoint)(*path.begin());
+					UpdateVelocity();
 
 					state = TROOPER_STATE::MOVE;
 					curr_anim = &walk;
@@ -193,15 +199,21 @@ void Obj_TeslaTrooper::Movement(float &dt)
 			}
 			else 
 			{
-				if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
+				if (teleport_timer.ReadSec() >= check_teleport_time && path.size() > 0)
 				{
 					state = TROOPER_STATE::GET_TELEPORT_POINT;
 					curr_anim = &idle;
 				}
-				else
+				else if(path.size()>0)
 				{
 					state = TROOPER_STATE::MOVE;
 					curr_anim = &walk;
+				}
+				else
+				{
+					state = TROOPER_STATE::IDLE;
+					curr_anim = &idle;
+					path_timer.Start();
 				}
 			}
 		}
@@ -212,11 +224,16 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	{
 		if (IsOnGoal(next_pos))
 		{
+			update_velocity_vec.Start();
 			if (path.size() > 0)
 				path.erase(path.begin());
 
 			if (path.size() > 0)
+			{
 				next_pos = (fPoint)(*path.begin());
+				next_pos += {0.5f, 0.5f};
+				UpdateVelocity();
+			}
 
 			else
 			{
@@ -225,16 +242,14 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				break;
 			}
 		}
-
-		move_vect = (fPoint)(next_pos)-pos_map;
-		move_vect.Normalize();
-
-		//Change sprite direction
-		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+		if (update_velocity_vec.ReadSec() > 1)
+		{
+			UpdateVelocity();
+		}
 		pos_map += move_vect * speed * dt;
 		range_pos.center = pos_map;
 
-		if (path_timer.ReadSec() >= check_path_time || (target == nullptr || !target->Alive()))
+		if (path_timer.ReadSec() > check_path_time || (teleport_timer.ReadSec() >= check_teleport_time && (target == nullptr || !target->Alive())))
 		{
 			state = TROOPER_STATE::GET_PATH;
 			curr_anim = &idle;
@@ -357,7 +372,7 @@ void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
 {
 	if (path.size() >= 2)
 	{
-		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
 		{
 			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
 			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
@@ -410,6 +425,17 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
+}
+
+inline void Obj_TeslaTrooper::UpdateVelocity()
+{
+	fPoint new_move_vec = (fPoint)(next_pos)-pos_map;
+	new_move_vec.Normalize();
+	if (new_move_vec != move_vect)
+	{
+		move_vect = new_move_vec;
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+	}
 }
 
 void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
