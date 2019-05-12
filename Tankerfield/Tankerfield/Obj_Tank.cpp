@@ -204,8 +204,8 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	life = 90;
 	max_life = 100;
+	SetLife(100);
 
 	//- Tutorial
 	//-- Move
