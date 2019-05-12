@@ -37,7 +37,7 @@ public:
 
 	void DrawDebug(const Camera* camera) override;
 
-	void OnTrigger(Collider* collider);
+	//void OnTrigger(Collider* collider);
 
 	float GetAngle(fPoint shield_pos, fPoint bullet_pos);
 

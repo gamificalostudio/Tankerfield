@@ -150,7 +150,7 @@ void Obj_Shield::Movement(float &dt)
 			curr_tex = tex;
 			coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
 			coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
-			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
+			coll->SetObjOffset( fPoint( - coll_w * 0.5f, - coll_h * 0.5f));
 			draw_offset = normal_draw_offset;
 			curr_anim = &walk;
 			state = SHIELD_STATE::GET_PATH;
@@ -237,6 +237,8 @@ void Obj_Shield::Movement(float &dt)
 
 bool Obj_Shield::Draw(float dt, Camera * camera)
 {
+	app->render->DrawIsoCircle( pos_screen.x, pos_screen.y, 80, camera, 255, 0, 0, 255, true);
+
 	app->render->BlitScaled(
 		curr_tex,
 		pos_screen.x - draw_offset.x,
@@ -270,30 +272,29 @@ bool Obj_Shield::IsOnGoal(fPoint goal)
 
 void Obj_Shield::OnTriggerEnter(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	if (collider->GetTag() == Collider::TAG::BULLET_LASER  || collider->GetTag() == Collider::TAG::BULLET || collider->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
-		float bullet_angle = collider->GetObj()->angle -= 90;
+		fPoint bullet_pos = collider->GetObj()->pos_map;
 
-		if (bullet_angle < 0)
-			bullet_angle += 360;
+		float angle_dif = GetAngle(pos_map, bullet_pos);
+		float angle_dir = angle;
 
-		if (bullet_angle >= 180)
-			bullet_angle -= 180;
+		if (angle_dir < 0.f)
+			angle_dir += 360.f;
 
-		else
-			bullet_angle += 180;
+		if (angle_dif < 0.f)
+			angle_dif += 360.f;
 
-		if (angle < 0)
-			angle += 360;
+		LOG("%f", angle_dif);
 
-		if (bullet_angle < angle - 60 || bullet_angle > angle + 60) {
+		if (angle_dif < angle_dir - 60.f || angle_dif > angle_dir + 60.f) {
 
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
 			curr_tex = tex_damaged;
 
-			if (life <= 0)
+			if (life <= 0.f)
 			{
 				// DROP A PICK UP ITEM 
 				app->pick_manager->PickUpFromEnemy(pos_map);
@@ -307,68 +308,44 @@ void Obj_Shield::OnTriggerEnter(Collider * collider)
 	}
 }
 
-void Obj_Shield::OnTrigger(Collider* collider)
-{
-	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
-	{
-		//fPoint bullet_pos = collider->GetObj()->pos_screen;				
-		//
-		//float angle_dif = GetAngle(pos_screen, bullet_pos);
 
-		//if (angle > 0)
-		//	angle -= 360;
+/*float bullet_angle = collider->GetObj()->angle - 90.f;
 
-		//angle *= -1;
+if (bullet_angle < 0)
+	bullet_angle += 360;
 
-		float bullet_angle = collider->GetObj()->angle -= 90;
+if (bullet_angle >= 180)
+	bullet_angle -= 180;
 
-		if (bullet_angle < 0)
-			bullet_angle += 360;
+else
+	bullet_angle += 180;
 
-		if (bullet_angle >= 180)
-			bullet_angle -= 180;
+if (angle < 0)
+	angle += 360;*/
 
-		else
-			bullet_angle += 180;
-
-		if (angle < 0)
-			angle += 360;
-
-		
-		if (bullet_angle < angle - 60 || bullet_angle > angle + 60) {
-
-			life -= collider->damage;
-
-			damaged_sprite_timer.Start();
-			curr_tex = tex_damaged;
-			collider->SetTag(Collider::TAG::NONE);
-
-			if (life <= 0)
-			{
-				// DROP A PICK UP ITEM 
-				app->pick_manager->PickUpFromEnemy(pos_map, PICKUP_TYPE::WEAPON);
-				state = SHIELD_STATE::DEAD;
-			}
-			else
-			{
-				app->audio->PlayFx(sfx_hit);
-			}
-		}
-	}
-}
+//void Obj_Shield::OnTrigger(Collider* collider)
+//{
+//		//fPoint bullet_pos = collider->GetObj()->pos_screen;				
+//		//
+//		//float angle_dif = GetAngle(pos_screen, bullet_pos);
+//
+//		//if (angle > 0)
+//		//	angle -= 360;
+//
+//		//angle *= -1;
+//}
 
 float Obj_Shield::GetAngle(fPoint shield_pos, fPoint bullet_pos)
 {
-	fPoint vector_pos = shield_pos - bullet_pos;				// The vector of the player and enemy positions
-	fPoint vector_axis = { 0, 1 };							// We use the this vector because we want the angle that is formed with the Y axis
+	fPoint vector = shield_pos - bullet_pos;				
+	//fPoint vector_axis = { 0.f, 1.f };							    
 
-	double dot_x = vector_axis.y * vector_pos.y;			// Product of the two vectors to get the X position
-	double det_y = -(vector_axis.y * vector_pos.x);			// Determinant of the two vectors to get the Y position
+	//double dot_x = vector_axis.y * vector_pos.y;			    
+	//double det_y = -(vector_axis.y * vector_pos.x);				
 
-	float dir_angle = (atan2(det_y, dot_x)) * (180 / 3, 14);	// Arc tangent of the previous X and Y, multiply the result with RAD_TO_DEG to get the result in degrees instead of radiants
+	//float dir_angle = (atan2(det_y, dot_x)) * (180.f / 3.14f);	
 
-	if (dir_angle < 0)										// If the angle is negative we add +360 because in PlaySpatialFx() we need the channel to be positive
-		dir_angle += 360;
+	float dir_angle = atan2(vector.y, vector.x) * RADTODEG;
 
 	return dir_angle;
 }

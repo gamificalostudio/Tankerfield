@@ -145,9 +145,6 @@
     <ClCompile Include="Obj_RewardBox.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Brute.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
@@ -182,6 +179,9 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Shield.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Brute.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>

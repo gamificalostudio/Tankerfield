@@ -31,7 +31,8 @@ bool Obj_Bullet::Start()
 	float coll_h = 0.5f;
 	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::BULLET,0.f,this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
-  
+	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+
 	return true;
 }
 
@@ -43,8 +44,6 @@ bool Obj_Bullet::Update(float dt)
 	{
 		to_remove = true;
 	}
-
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 
 	return true;
 }
