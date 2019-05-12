@@ -14,7 +14,7 @@ Bullet_Oil::~Bullet_Oil()
 
 bool Bullet_Oil::Start()
 {
-	pugi::xml_node bullet_node = app->config.child("object").child("laser_bullet");
+	pugi::xml_node bullet_node = app->config.child("object").child("oil_bullet");
 
 	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
 	curr_anim = &anim;
