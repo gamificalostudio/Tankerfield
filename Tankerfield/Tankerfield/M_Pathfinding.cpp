@@ -213,23 +213,32 @@ bool PathNode::Search_horizontal(int hor_dir, int dist, const PathList& list_to_
 	bool ret = false;
 	bool stop = false;
 
-	PathNode new_node;
 	
 	uint distance_so_far = 0;
 	do
 	{
 		distance_so_far += 1;
-		new_node.pos = (this->pos + iPoint(hor_dir*distance_so_far, 0));
-		if (app->pathfinding->CheckBoundaries(new_node.pos))
-		{
-			break;
-		}
-		if (!app->pathfinding->IsWalkable(new_node.pos))
-		{
-			break;
-		}
-		if(!app->pathfinding->IsWalkable(new_node.pos))
 
+		iPoint new_node = (this->pos + iPoint(hor_dir*distance_so_far, 0));
+		iPoint next_pos = { new_node.x + hor_dir, new_node.y };
+		if (!(new_node.x > 0 && new_node.x < app->pathfinding->width && new_node.y>0 && new_node.y < app->pathfinding->height) 
+			|| !app->pathfinding->IsWalkable(new_node)
+			|| !app->pathfinding->IsWalkable(next_pos))
+		{
+			break;
+		}
+		
+		if (!app->pathfinding->IsWalkable(new_node.x, new_node.y - 1) && app->pathfinding->IsWalkable(next_pos.x, new_node.y - 1))
+		{
+			// add jump point
+		}
+		else if (!app->pathfinding->IsWalkable(new_node.x, new_node.y + 1) && app->pathfinding->IsWalkable(next_pos.x, new_node.y + 1))
+		{
+
+		}
+		else {
+
+		}
 	} while (!stop);
 
 	return ret;

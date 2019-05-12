@@ -123,6 +123,8 @@ private:
 	uchar* map = nullptr;
 	// we store the created path here
 	std::vector<iPoint> last_path;
+
+	friend class PathNode;
 };
 
 
