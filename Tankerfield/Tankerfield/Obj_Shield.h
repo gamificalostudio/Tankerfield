@@ -39,6 +39,8 @@ public:
 
 	void OnTrigger(Collider* collider);
 
+	float GetAngle(fPoint shield_pos, fPoint bullet_pos);
+
 	void OnTriggerEnter(Collider* collider);
 
 private:

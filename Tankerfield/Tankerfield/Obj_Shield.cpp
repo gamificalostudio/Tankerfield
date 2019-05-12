@@ -55,7 +55,7 @@ Obj_Shield::Obj_Shield(fPoint pos) : Object(pos)
 	app->audio->PlayFx(sfx_spawn);
 
 	state = SHIELD_STATE::SPAWN;
-	speed = 2.f;
+	speed = 0.f;
 	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
@@ -272,21 +272,21 @@ void Obj_Shield::OnTriggerEnter(Collider * collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
-		collider->GetObj()->angle -= 90;
+		float bullet_angle = collider->GetObj()->angle -= 90;
 
-		if (collider->GetObj()->angle < 0)
-			collider->GetObj()->angle += 360;
+		if (bullet_angle < 0)
+			bullet_angle += 360;
 
-		if (collider->GetObj()->angle >= 180)
-			collider->GetObj()->angle -= 180;
+		if (bullet_angle >= 180)
+			bullet_angle -= 180;
 
 		else
-			collider->GetObj()->angle += 180;
+			bullet_angle += 180;
 
-		if (this->angle < 0)
-			this->angle += 360;
+		if (angle < 0)
+			angle += 360;
 
-		if (collider->GetObj()->angle < this->angle - 60 || collider->GetObj()->angle > this->angle + 60) {
+		if (bullet_angle < angle - 60 || bullet_angle > angle + 60) {
 
 			life -= collider->damage;
 
@@ -311,21 +311,31 @@ void Obj_Shield::OnTrigger(Collider* collider)
 {
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
-		collider->GetObj()->angle -= 90;
+		//fPoint bullet_pos = collider->GetObj()->pos_screen;				
+		//
+		//float angle_dif = GetAngle(pos_screen, bullet_pos);
 
-		if (collider->GetObj()->angle < 0)
-			collider->GetObj()->angle += 360;
+		//if (angle > 0)
+		//	angle -= 360;
 
-		if (collider->GetObj()->angle >= 180)
-			collider->GetObj()->angle -= 180;
+		//angle *= -1;
+
+		float bullet_angle = collider->GetObj()->angle -= 90;
+
+		if (bullet_angle < 0)
+			bullet_angle += 360;
+
+		if (bullet_angle >= 180)
+			bullet_angle -= 180;
 
 		else
-			collider->GetObj()->angle += 180;
+			bullet_angle += 180;
 
-		if (this->angle < 0)
-			this->angle += 360;
+		if (angle < 0)
+			angle += 360;
 
-		if (collider->GetObj()->angle < this->angle - 60 || collider->GetObj()->angle > this->angle + 60) {
+		
+		if (bullet_angle < angle - 60 || bullet_angle > angle + 60) {
 
 			life -= collider->damage;
 
@@ -345,4 +355,20 @@ void Obj_Shield::OnTrigger(Collider* collider)
 			}
 		}
 	}
+}
+
+float Obj_Shield::GetAngle(fPoint shield_pos, fPoint bullet_pos)
+{
+	fPoint vector_pos = shield_pos - bullet_pos;				// The vector of the player and enemy positions
+	fPoint vector_axis = { 0, 1 };							// We use the this vector because we want the angle that is formed with the Y axis
+
+	double dot_x = vector_axis.y * vector_pos.y;			// Product of the two vectors to get the X position
+	double det_y = -(vector_axis.y * vector_pos.x);			// Determinant of the two vectors to get the Y position
+
+	float dir_angle = (atan2(det_y, dot_x)) * (180 / 3, 14);	// Arc tangent of the previous X and Y, multiply the result with RAD_TO_DEG to get the result in degrees instead of radiants
+
+	if (dir_angle < 0)										// If the angle is negative we add +360 because in PlaySpatialFx() we need the channel to be positive
+		dir_angle += 360;
+
+	return dir_angle;
 }

@@ -107,12 +107,12 @@ bool M_Scene::Start()
 		else
 		{
 			//Create all tanks
-			app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[0].pos);
+			app->objectmanager->obj_tanks[0] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, fPoint(90.f, 90.f));
 			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 		
-			app->objectmanager->CreateObject(ObjectType::SHIELD, (*players_layer)->objects[0].pos);
+			app->objectmanager->CreateObject(ObjectType::SHIELD, fPoint(90.f, 90.f));
 		}
 	}
 	
@@ -157,7 +157,7 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
+		app->objectmanager->CreateObject(ObjectType::SHIELD, (fPoint)mouse_pos);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 	{
