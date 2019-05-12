@@ -30,8 +30,7 @@ struct PathNode
 	//hor_dir -> Horizontal direction (+1 or -1). 
 	// dist -> Distance traveled so far. 
 	// return jumpPoints
-	void Search_horizontal(int hor_dir, int dist, const PathList& list_to_fill);
-
+	bool Search_horizontal(int hor_dir, int dist, const PathList& list_to_fill);
 
 
 	// Calculates this tile score
@@ -108,6 +107,8 @@ public:
 
 	// Utility: returns true is the tile is walkable
 	bool IsWalkable(const iPoint& pos) const;
+
+	bool IsWalkable(int x, int y) const;
 
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;

@@ -64,6 +64,15 @@ bool M_Pathfinding::IsWalkable(const iPoint& pos) const
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
+// Utility: returns true is the tile is walkable
+bool M_Pathfinding::IsWalkable(int x, int y) const
+{
+	
+	uchar t = GetTileAt(iPoint(x,y));
+	return t != INVALID_WALK_CODE && t > 0;
+}
+
+
 // Utility: return the walkability value of a tile
 uchar M_Pathfinding::GetTileAt(const iPoint& pos) const
 {
@@ -199,22 +208,31 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	return list_to_fill.list.size();
 }
 
-void PathNode::Search_horizontal(int hor_dir, int dist, const PathList & list_to_fill)
+bool PathNode::Search_horizontal(int hor_dir, int dist, const PathList& list_to_fill)
 {
-	PathNode new_node;
-	new_node.pos = (this->pos + iPoint(hor_dir, 0));
+	bool ret = false;
 	bool stop = false;
+
+	PathNode new_node;
+	
+	uint distance_so_far = 0;
 	do
 	{
+		distance_so_far += 1;
+		new_node.pos = (this->pos + iPoint(hor_dir*distance_so_far, 0));
+		if (app->pathfinding->CheckBoundaries(new_node.pos))
+		{
+			break;
+		}
+		if (!app->pathfinding->IsWalkable(new_node.pos))
+		{
+			break;
+		}
+		if(!app->pathfinding->IsWalkable(new_node.pos))
 
 	} while (!stop);
-	if (app->pathfinding->IsWalkable(new_node.pos))
-	{
 
-	}
-
-
-
+	return ret;
 }
 
 // PathNode -------------------------------------------------------------------------
