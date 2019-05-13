@@ -64,7 +64,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 
 	//Things
 	state				= TROOPER_STATE::APPEAR;
-	speed				= 3.F;
+	speed				= 0.F;
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
 	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
@@ -377,8 +377,8 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			pos_screen.y - draw_offset.y,
 			camera,
 			&frame,
-			0.75f,
-			0.75f);
+			2.f,
+			2.f);
 	}
 	if (state == TROOPER_STATE::APPEAR)
 	{
@@ -405,9 +405,26 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{
-		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
-		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
-		{
+		//Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
+		//if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
+		//{
+
+		fPoint bullet_pos = collider->GetObj()->pos_map;
+
+		float angle_dif = GetAngle(pos_map, bullet_pos);
+		float angle_dir = angle;
+
+		if (angle_dir < 0.f)
+			angle_dir += 360.f;
+
+		if (angle_dif > 0)
+			angle_dif -= 360;
+
+		angle_dif *= -1;
+
+		LOG("%f", angle_dif);
+
+		if (angle_dif < angle_dir - 60.f || angle_dif > angle_dir + 60.f) {
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
@@ -425,15 +442,15 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 			}
 
 
-			if (!obj->charged)
-			{
-				++obj->kill_counter;
-				if (obj->kill_counter >= obj->kill_counter_max)
-				{
-					obj->to_remove = true;
+			//if (!obj->charged)
+			//{
+			//	++obj->kill_counter;
+			//	if (obj->kill_counter >= obj->kill_counter_max)
+			//	{
+			//		obj->to_remove = true;
 
-				}
-			}
+			//	}
+			//}
 		}
 
 	}
@@ -465,4 +482,19 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 	}
 
 
+}
+
+float Obj_TeslaTrooper::GetAngle(fPoint shield_pos, fPoint bullet_pos)
+{
+	fPoint vector = shield_pos - bullet_pos;
+	//fPoint vector_axis = { 0.f, 1.f };							    
+
+	//double dot_x = vector_axis.y * vector_pos.y;			    
+	//double det_y = -(vector_axis.y * vector_pos.x);				
+
+	//float dir_angle = (atan2(det_y, dot_x)) * (180.f / 3.14f);	
+
+	float dir_angle = atan2(vector.y, vector.x) * RADTODEG;
+
+	return dir_angle;
 }

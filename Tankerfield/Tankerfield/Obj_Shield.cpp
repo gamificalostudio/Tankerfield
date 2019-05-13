@@ -55,7 +55,7 @@ Obj_Shield::Obj_Shield(fPoint pos) : Object(pos)
 	app->audio->PlayFx(sfx_spawn);
 
 	state = SHIELD_STATE::SPAWN;
-	speed = 0.f;
+	speed = 2.f;
 	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
@@ -282,8 +282,10 @@ void Obj_Shield::OnTriggerEnter(Collider * collider)
 		if (angle_dir < 0.f)
 			angle_dir += 360.f;
 
-		if (angle_dif < 0.f)
-			angle_dif += 360.f;
+		if (angle_dif > 0)
+			angle_dif -= 360;
+		
+		angle_dif *= -1;
 
 		LOG("%f", angle_dif);
 

@@ -159,6 +159,10 @@ bool M_Scene::PreUpdate()
 	{
 		app->objectmanager->CreateObject(ObjectType::SHIELD, (fPoint)mouse_pos);
 	}
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
+	}
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 	{
 		general_hud->SetRoundNumber(2);
