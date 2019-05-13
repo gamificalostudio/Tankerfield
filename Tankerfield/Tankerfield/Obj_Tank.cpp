@@ -557,15 +557,19 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
-		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		
 		if (this->Alive())
 		{
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
 			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
 				SetPickUp(pick_up);
 			}
+		}
+		else
+		{
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
 	}
 
