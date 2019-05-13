@@ -18,7 +18,6 @@ enum class TROOPER_STATE
 	IDLE,
 	GET_PATH,
 	MOVE,
-	RECHEAD_POINT,
 	GET_TELEPORT_POINT,
 	TELEPORT_IN,
 	TELEPORT_OUT,
@@ -47,24 +46,37 @@ public:
 
 	void OnTrigger(Collider* collider);
 
+
+
 private:
 	inline bool IsOnGoal(fPoint goal);
 
-	TROOPER_STATE state			= TROOPER_STATE::IDLE;
+	inline void UpdateVelocity();
+
+	TROOPER_STATE state			= TROOPER_STATE::APPEAR;
 	fPoint move_vect			= { 0.0f, 0.0f };
+
 	int life					= 0;
-	float detection_range		= 0.0f;
-	float check_path_time		= 0.f;
-	float check_teleport_time	= 0.f;
-	float speed					= 0.f;
+
+	//move values -----------------
+	float detection_range			= 0.0f;
+	float squared_detection_range	= 0.f;
+	float check_path_time			= 0.f;
+	float speed = 0.f;
 	Timer path_timer;
-
-	Obj_Tank* target			= nullptr;
-	std::vector<fPoint> path;
-
-	fPoint next_pos				= {0.f, 0.f};
-	
+	Obj_Tank* target = nullptr;
+	std::vector<iPoint> path;
+	fPoint next_pos = { 0.f, 0.f };
 	Circle range_pos;
+	Timer update_velocity_vec;
+	//teleport values ----------
+	float check_teleport_time	= 0.f;
+	uint teleport_enemies_max;
+
+
+	
+
+	
 
 	// ----------
 
