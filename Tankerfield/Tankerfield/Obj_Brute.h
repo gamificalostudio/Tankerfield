@@ -39,6 +39,8 @@ public:
 
 	void Movement(float &dt);
 
+	void Spawn();
+
 	//void DrawDebug(const Camera* camera) override;
 
 	//void OnTrigger(Collider* collider);

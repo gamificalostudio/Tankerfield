@@ -14,6 +14,7 @@ class Timer;
 class Obj_Tank;
 struct SpawnPoint;
 
+
 class Obj_TeslaTrooper : public Obj_Enemy 
 {
 public:
@@ -26,7 +27,19 @@ public:
 
 	void Movement(float &dt);
 
-	void GetPath();
+	void TeleportOut(float & dt);
+
+	void TeleportIn(float & dt);
+
+	void GetTeleportPoint();
+
+	void Spawn(float & dt);
+
+	void Idle();
+
+	int Move(float & dt);
+
+	virtual void GetPath();
 
 	//void DrawDebug(const Camera* camera) override;
 
@@ -38,10 +51,13 @@ public:
 
 	void OnTrigger(Collider* collider);*/
 
+
+
 private:
-	//inline bool IsOnGoal(fPoint goal);
-	
-	float check_teleport_time	= 0.f;
+
+	inline void UpdateVelocity();
+
+
 
 
 	Timer	teleport_timer;
@@ -59,6 +75,14 @@ private:
 	SDL_Texture * explosion_apper_tex			= nullptr;
 
 	SpawnPoint* teleport_spawnpoint = nullptr;
+
+	Timer update_velocity_vec;
+
+	//teleport values ----------
+	float check_teleport_time = 0.f;
+	uint teleport_enemies_max;
+
+	float squared_detection_range = 0.f;
 
 
 };

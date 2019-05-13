@@ -62,7 +62,7 @@ void Obj_Enemy::Attack()
 		if (curr_anim == &attack
 			&& curr_anim->Finished())
 		{
-			curr_anim = &walk;
+			curr_anim = &idle;//walk?
 			attack.Reset();
 		}
 	}
@@ -73,17 +73,14 @@ void Obj_Enemy::Movement(float &dt)
 	{
 	case ENEMY_STATE::IDLE:
 	{
-		path.clear();
-		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map, detection_range);
-		if (target != nullptr)
-		{
-			state = ENEMY_STATE::GET_PATH;
-		}
-		else
-		{
-			curr_anim = &idle;
-		}
+		Idle();
+	}
+	break;
+	case ENEMY_STATE::SPAWN:
+	{
+
+		Spawn(); //rewrite in every enemie. originally is empty.
+
 	}
 	break;
 	case ENEMY_STATE::GET_PATH:
@@ -95,56 +92,19 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case ENEMY_STATE::MOVE:
 	{
-		if (IsOnGoal(next_pos))
-		{
-			path.erase(path.begin());
-			state = ENEMY_STATE::RECHEAD_POINT;
-		}
-		pos_map += move_vect * speed * dt;
-		range_pos.center = pos_map;
-		curr_anim = &walk;
-
-		if (path_timer.ReadSec() >= check_path_time) 
-			state = ENEMY_STATE::GET_PATH;
+		int retflag = Move(dt);
+		if (retflag == 2) break;
 
 	}
 	break;
 	case ENEMY_STATE::RECHEAD_POINT:
 	{
-		move_vect.SetToZero();
-		if (path.size() > 0)
-		{
-			next_pos = (fPoint)(*path.begin());
-			move_vect = (fPoint)(next_pos)-pos_map;
-			move_vect.Normalize();
-
-			//Change sprite direction
-			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION; //brute don't have iso_compensation?
-			state = ENEMY_STATE::MOVE;
-		}
-		else
-			state = ENEMY_STATE::GET_PATH;
+		RecheadPoint();
 	}
 	break;
 	case  ENEMY_STATE::DEAD:
 	{
-		if (curr_anim != &death)
-		{
-			curr_anim = &death;
-			app->audio->PlayFx(sfx_death);
-			if (coll != nullptr)
-			{
-				coll->Destroy();
-				coll = nullptr;
-			}
-		}
-		else
-		{
-			if (death.Finished())
-			{
-				to_remove = true;
-			}
-		}
+		Dead();
 	}
 	break;
 	default:
@@ -152,6 +112,81 @@ void Obj_Enemy::Movement(float &dt)
 		break;
 	}
 
+}
+
+void Obj_Enemy::Spawn()
+{
+	curr_tex = tex;
+}
+
+void Obj_Enemy::RecheadPoint()
+{
+	move_vect.SetToZero();
+	if (path.size() > 0)
+	{
+		next_pos = (fPoint)(*path.begin());
+		move_vect = (fPoint)(next_pos)-pos_map;
+		move_vect.Normalize();
+
+		//Change sprite direction
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION; //brute don't have iso_compensation?
+		state = ENEMY_STATE::MOVE;
+	}
+	else
+		state = ENEMY_STATE::GET_PATH;
+}
+
+void Obj_Enemy::Dead()
+{
+	if (curr_anim != &death)
+	{
+		curr_anim = &death;
+		app->audio->PlayFx(sfx_death);
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+	}
+	else
+	{
+		if (death.Finished())
+		{
+			to_remove = true;
+		}
+	}
+}
+
+void Obj_Enemy::Idle()
+{
+	path.clear();
+	move_vect.SetToZero();
+	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+	if (target != nullptr)
+	{
+		state = ENEMY_STATE::GET_PATH;
+	}
+	else
+	{
+		curr_anim = &idle;
+	}
+}
+
+int Obj_Enemy::Move(float & dt)
+{
+	if (IsOnGoal(next_pos))
+	{
+		path.erase(path.begin());
+		state = ENEMY_STATE::RECHEAD_POINT;
+	}
+	pos_map += move_vect * speed * dt;
+	range_pos.center = pos_map;
+	curr_anim = &walk;
+
+	if (path_timer.ReadSec() >= check_path_time)
+		state = ENEMY_STATE::GET_PATH;
+
+	return 0;
 }
 
 void Obj_Enemy::GetPath()
@@ -168,7 +203,7 @@ void Obj_Enemy::GetPath()
 			std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
 			for (std::vector<iPoint>::iterator iter = aux.begin() + 1; iter != aux.end(); ++iter) //why
 			{
-				path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
+				path.push_back({ (int)((*iter).x + 0.5f),(int)((*iter).y + 0.5f) });
 			}
 
 			state = ENEMY_STATE::RECHEAD_POINT;
@@ -201,7 +236,7 @@ void Obj_Enemy::DrawDebug(const Camera* camera)
 {
 	if (path.size() >= 2)
 	{
-		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
 		{
 			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
 			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };

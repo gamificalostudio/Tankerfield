@@ -31,6 +31,16 @@ public:
 
 	void Movement(float &dt);
 
+	virtual void Spawn();
+
+	void RecheadPoint();
+
+	void Dead();
+
+	virtual void Idle();
+
+	virtual int Move(float & dt);
+
 	virtual void GetPath();
 
 	void OnTriggerEnter(Collider * collider);
@@ -69,7 +79,7 @@ protected:
 	Circle range_pos;
 
 	Obj_Tank* target = nullptr;
-	std::vector<fPoint> path;
+	std::vector<iPoint> path;
 
 	PerfTimer perf_timer;
 	Timer path_timer;

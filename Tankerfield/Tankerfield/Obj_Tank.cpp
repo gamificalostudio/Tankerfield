@@ -207,6 +207,8 @@ bool Obj_Tank::Start()
 	life = 90;
 	max_life = 100;
 
+	charged_shot_speed = 1.0f;
+
 	//- Tutorial
 	//-- Move
 	UI_InGameElementDef clue_def;
@@ -285,9 +287,20 @@ void Obj_Tank::CameraMovement(float dt)
 	camera_player->ShakeCamera(dt);
 }
 
-fPoint Obj_Tank::GetTurrPos()
+fPoint Obj_Tank::GetTurrPos() const
 {
 	return turr_pos;
+}
+
+Controller * Obj_Tank::GetController()
+{
+	if (controller == nullptr || *controller == nullptr)
+	{
+		LOG(" Controller not found");
+		return nullptr;
+	}
+
+	return *controller;
 }
 
 void Obj_Tank::Movement(float dt)
@@ -544,12 +557,19 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
-		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		
-		if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+		if (this->Alive())
 		{
-			Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-			SetPickUp(pick_up);
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
+			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+			{
+				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+				SetPickUp(pick_up);
+			}
+		}
+		else
+		{
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
 	}
 
@@ -608,17 +628,17 @@ void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 	weapon_info.time_between_bullets = time_between_bullets;
 }
 
-int Obj_Tank::GetLife()
+int Obj_Tank::GetLife() const
 {
 	return life;
 }
 
-int Obj_Tank::GetMaxLife()
+int Obj_Tank::GetMaxLife() const
 {
 	return max_life;
 }
 
-int Obj_Tank::GetTimeBetweenBullets()
+int Obj_Tank::GetTimeBetweenBullets() const
 {
 	return weapon_info.time_between_bullets;
 }
@@ -680,6 +700,7 @@ void Obj_Tank::ShootChargedWeapon()
 	{
 		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
+			this->curr_speed = charged_shot_speed;
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 		}
 	}
@@ -688,6 +709,7 @@ void Obj_Tank::ShootChargedWeapon()
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
+		this->curr_speed = speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
 		{
@@ -955,7 +977,7 @@ void Obj_Tank::StopTank()
 	}
 }
 
-bool Obj_Tank::Alive()
+bool Obj_Tank::Alive() const
 {
 	return life > 0;
 }
@@ -1000,7 +1022,7 @@ bool Obj_Tank::IsReady() const
 	return ready;
 }
 
-int Obj_Tank::GetTankNum()
+int Obj_Tank::GetTankNum() const
 {
 	return tank_num;
 }
