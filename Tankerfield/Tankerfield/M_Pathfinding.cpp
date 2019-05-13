@@ -213,7 +213,6 @@ bool PathNode::Search_horizontal(int hor_dir, int dist, PathList& list_to_fill, 
 	bool ret = false;
 	bool stop = false;
 
-	
 	uint distance_so_far = 0;
 	do
 	{
@@ -221,14 +220,11 @@ bool PathNode::Search_horizontal(int hor_dir, int dist, PathList& list_to_fill, 
 
 		iPoint new_node = (this->pos + iPoint(hor_dir*distance_so_far, 0));
 		
-		if (!app->pathfinding->CheckBoundaries(new_node))
+		if (!app->pathfinding->CheckBoundaries(new_node) || !app->pathfinding->IsWalkable(new_node))
 		{
 			return ret;
 		}
-		if (!app->pathfinding->IsWalkable(new_node))
-		{
-			return ret;
-		}
+
 		if (new_node == goal)
 		{
 			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
@@ -236,30 +232,75 @@ bool PathNode::Search_horizontal(int hor_dir, int dist, PathList& list_to_fill, 
 		}
 
 		iPoint next_pos = { new_node.x + hor_dir, new_node.y };
-		if (!app->pathfinding->CheckBoundaries(next_pos))
+		if (!app->pathfinding->CheckBoundaries(next_pos) || !app->pathfinding->IsWalkable(next_pos))
 		{
 			return ret;
 		}
-		//if (!(new_node.x > 0 && new_node.x < app->pathfinding->width && new_node.y>0 && new_node.y < app->pathfinding->height) 
-		//	|| !app->pathfinding->IsWalkable(new_node)
-		//	|| !app->pathfinding->IsWalkable(next_pos))
-		//{
-		//	break;
-		//}
-		//
-		//if (!app->pathfinding->IsWalkable(new_node.x, new_node.y - 1) && app->pathfinding->IsWalkable(next_pos.x, new_node.y - 1))
-		//{
-		//	// add jump point
-		//}
-		//else if (!app->pathfinding->IsWalkable(new_node.x, new_node.y + 1) && app->pathfinding->IsWalkable(next_pos.x, new_node.y + 1))
-		//{
 
-		//}
-		//else {
+		if (!app->pathfinding->IsWalkable(new_node.x, new_node.y - 1) && app->pathfinding->IsWalkable(next_pos.x, new_node.y - 1))
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
+		else if (!app->pathfinding->IsWalkable(new_node.x, new_node.y + 1) && app->pathfinding->IsWalkable(next_pos.x, new_node.y + 1))
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
 
-		//}
 	} while (!stop);
 
+	return ret;
+}
+
+bool PathNode::Search_vertical(int ver_dir, int dist, PathList & list_to_fill, const iPoint & goal)
+{
+	bool ret = false;
+	bool stop = false;
+
+	uint distance_so_far = 0;
+	do
+	{
+		distance_so_far += 1;
+
+		iPoint new_node = (this->pos + iPoint(0, ver_dir*distance_so_far));
+
+		if (!app->pathfinding->CheckBoundaries(new_node) || !app->pathfinding->IsWalkable(new_node))
+		{
+			return ret;
+		}
+
+		if (new_node == goal)
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
+
+		iPoint next_pos = { new_node.x , new_node.y + ver_dir };
+		if (!app->pathfinding->CheckBoundaries(next_pos) || !app->pathfinding->IsWalkable(next_pos))
+		{
+			return ret;
+		}
+
+		if (!app->pathfinding->IsWalkable(new_node.x - 1, new_node.y ) && app->pathfinding->IsWalkable(next_pos.x - 1, new_node.y ))
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
+		else if (!app->pathfinding->IsWalkable(new_node.x + 1, new_node.y ) && app->pathfinding->IsWalkable(next_pos.x + 1, new_node.y))
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
+
+	} while (!stop);
+
+	return ret;
+}
+
+bool PathNode::Search_diagonal(int hor_dir, int vert_dir, PathList & list_to_fill)
+{
+	bool ret = false;
 	return ret;
 }
 

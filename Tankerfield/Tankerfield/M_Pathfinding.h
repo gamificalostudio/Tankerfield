@@ -32,6 +32,7 @@ struct PathNode
 	// return jumpPoints
 	bool Search_horizontal(int hor_dir, int dist, PathList& list_to_fill, const iPoint& goal);
 
+	bool Search_vertical(int hor_dir, int dist, PathList& list_to_fill, const iPoint& goal);
 
 	// Calculates this tile score
 	int Score() const;
