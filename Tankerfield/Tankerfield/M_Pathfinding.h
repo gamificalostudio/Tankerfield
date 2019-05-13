@@ -30,7 +30,7 @@ struct PathNode
 	//hor_dir -> Horizontal direction (+1 or -1). 
 	// dist -> Distance traveled so far. 
 	// return jumpPoints
-	bool Search_horizontal(int hor_dir, int dist, const PathList& list_to_fill, const iPoint& goal);
+	bool Search_horizontal(int hor_dir, int dist, PathList& list_to_fill, const iPoint& goal);
 
 
 	// Calculates this tile score
