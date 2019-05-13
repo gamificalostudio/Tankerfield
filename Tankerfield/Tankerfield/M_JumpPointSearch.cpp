@@ -162,10 +162,7 @@ void M_JumpPointSearch::DebugPathfinding()
 
 }
 
-void M_JumpPointSearch::Search_horizontal(const PathNode & start_node, const PathNode & self_node, int hor_dir, int dist, const PathList& list_to_fill)
-{
 
-}
 
 
 // To request all tiles involved in the last generated path
