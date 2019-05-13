@@ -64,9 +64,6 @@ public:
 	bool Alive();
 	fPoint GetTurrPos();
 
-	//- Input
-	Controller * GetController();
-
 private:
 	//- Movement
 	void Movement(float dt);

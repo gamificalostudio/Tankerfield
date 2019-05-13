@@ -290,17 +290,6 @@ fPoint Obj_Tank::GetTurrPos()
 	return turr_pos;
 }
 
-Controller * Obj_Tank::GetController()
-{
-	if (controller == nullptr || *controller == nullptr)
-	{
-		LOG(" Controller not found");
-		return nullptr;
-	}
-
-	return *controller;
-}
-
 void Obj_Tank::Movement(float dt)
 {
 	if (!tutorial_move_pressed)

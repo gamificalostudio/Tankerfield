@@ -2,16 +2,16 @@
 #include "M_MainMenu.h"
 #include "M_Render.h"
 #include "M_Textures.h"
-#include "M_MainMenu.h"
+#include "M_Fonts.h"
+#include "M_SceneManager.h"
+#include "M_Window.h"
+#include "M_Audio.h"
+#include "M_Scene.h"
 
 #include "UI_Image.h"
 #include "UI_Button.h"
-#include "M_Fonts.h"
 #include "UI_Label.h"
-#include "M_SceneManager.h"
-#include "M_Scene.h"
-#include "M_Window.h"
-#include "M_Audio.h"
+#include "UI_InteractiveGroup.h"
 
 bool M_MainMenu::Start()
 {
@@ -23,7 +23,7 @@ bool M_MainMenu::Start()
 	// Create UI Elements ====================================
 
 	fRect screen = app->win->GetWindowRect();
-
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 	// Main menu ------------------------------
 
 	logo_image = app->ui->CreateImage({ 151.f, 151.f }, UI_ImageDef({10, 710, 915, 260}));
@@ -44,6 +44,23 @@ bool M_MainMenu::Start()
 	menu_elements.push_back(version_label);
 
 	// Selection screen ------------------------
+	float element_side = 126;
+	UI_InteractiveGroupDef def;
+	def.columns = 5;
+	def.rows = 5;
+	float offset = def.columns * element_side * 0.5f;
+
+	UI_InteractiveGroup* selection_panel = app->ui->CreateIntearctiveGroup(screen_center, def);
+
+	for (int y = 0; y < def.rows; ++y)
+	{
+		for (int x = 0; x < def.columns; ++x)
+		{
+			selection_panel->SetElement(  app->ui->CreateImage(fPoint(screen_center.x - offset + x * element_side, screen_center.y - offset + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 })) ,  iPoint( x, y));
+		}
+	}
+
+	selection_panel->AddPlayer(1);
 
 
 	// Set values ==========================================

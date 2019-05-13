@@ -52,6 +52,11 @@ void UI_Element::SetParent(UI_Element * new_parent)
 		LOG("Failed SetParent, parent was nullptr");
 		return;
 	}
+
+	if (new_parent == element_parent)
+	{
+		return;
+	}
 	// Delete previous parent =====================
 	if (element_parent != nullptr)
 	{

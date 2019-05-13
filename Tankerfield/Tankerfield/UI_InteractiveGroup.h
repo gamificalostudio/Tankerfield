@@ -5,6 +5,7 @@
 #include "Point.h"
 
 struct Controller;
+class UI_Quad;
 
 struct UI_InteractiveGroupDef : public UI_ElementDef
 {
@@ -15,8 +16,10 @@ struct UI_InteractiveGroupDef : public UI_ElementDef
 
 struct PlayerFocus
 {
-	iPoint    focused_element = {0,0};
-	Obj_Tank* player = nullptr;
+	int player_id = 0;
+	iPoint    element_pos = {0,0};
+	Controller **controller = nullptr;
+	UI_Quad*  quad = nullptr;
 };
 
 class UI_InteractiveGroup : public UI_Element
@@ -30,16 +33,17 @@ public:
 	bool Update(float dt);
 
 public:
+	void AddPlayer( int player_id);
 
 	void SetElement( UI_Element* element, const iPoint position);
 
 private:
 
-	void PlayerInput( PlayerFocus * player_focus);
+	iPoint GetNearestElement(PlayerFocus * players, CONTROLLER_DIR dir);
 
-	UI_Element * GetNearestElement(PlayerFocus * player_focus, CONTROLLER_DIR dir);
+	bool ElementIsFocused(iPoint element_pos);
 
-	bool ElementIsFocused( UI_Element* element);
+	iPoint GetFirstAvailableElement();
 
 	UI_Element * GetElement(iPoint position);
 
@@ -47,9 +51,8 @@ private:
 
 	uint columns = 0u;
 	uint rows = 0u;
-	std::vector <UI_Element*>  group_elements;
-	std::vector <PlayerFocus*> player_focus;
-
+	UI_Element** group_elements = nullptr;
+	std::vector <PlayerFocus*> players;
 };
 
 

@@ -36,6 +36,7 @@ class UI_InGameElement;
 class UI_IG_Weapon;
 class UI_IG_Item;
 class UI_IG_Helper;
+class UI_InteractiveGroup;
 
 struct UI_ElementDef;
 struct UI_ButtonDef;
@@ -47,6 +48,7 @@ struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
 struct UI_InGameElementDef;
+struct UI_InteractiveGroupDef;
 
 enum class FocusState
 {
@@ -216,6 +218,8 @@ public:
 	UI_TextPanel * CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener* listener = nullptr);
 
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
+
+	UI_InteractiveGroup * CreateIntearctiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener* listener = nullptr);
 
 	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition);
 
