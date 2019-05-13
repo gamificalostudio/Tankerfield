@@ -23,7 +23,6 @@ private:
 	PerfTimer time;
 
 	Obj_Portal * portal1;
-	Obj_Portal * portal2;
 };
 
 #endif

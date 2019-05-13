@@ -9,12 +9,12 @@
 
 Obj_Portal::Obj_Portal(fPoint pos):Object(pos)
 {
-	pugi::xml_node explosion_node = app->config.child("object").child("portal");
+	pugi::xml_node portal_node = app->config.child("object").child("portal_TP");
 
-	anim.frames = app->anim_bank->LoadFrames(explosion_node.child("animations").child("portal"));
+	anim.frames = app->anim_bank->LoadFrames(portal_node.child("animations").child("portal"));
 	curr_anim = &anim;
 
-	tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
+	tex = app->tex->Load(portal_node.child("tex").attribute("path").as_string());
 	curr_tex = tex;
 
 	draw_offset.x = 20;

@@ -22,7 +22,7 @@ bool Item_InstantHelp::Update(float dt)
 bool Item_InstantHelp::Use()
 {
 	fPoint casterdir = caster->GetShotDir();
-	(Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + casterdir *3);
+	portal1=(Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + casterdir *3);
 
 	return true;
 }
