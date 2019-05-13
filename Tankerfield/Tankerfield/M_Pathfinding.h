@@ -34,6 +34,7 @@ struct PathNode
 
 	bool Search_vertical(int hor_dir, int dist, PathList& list_to_fill, const iPoint& goal);
 
+	bool Search_diagonal(int hor_dir, int vert_dir, PathList & list_to_fill, iPoint goal);
 	// Calculates this tile score
 	int Score() const;
 	// Calculate the F for a specific destination tile

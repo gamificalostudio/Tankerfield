@@ -208,7 +208,7 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	return list_to_fill.list.size();
 }
 
-bool PathNode::Search_horizontal(int hor_dir, int dist, PathList& list_to_fill, const iPoint& goal)
+bool PathNode::Search_horizontal(int hor_dir, PathList& list_to_fill, const iPoint& goal)
 {
 	bool ret = false;
 	bool stop = false;
@@ -253,7 +253,7 @@ bool PathNode::Search_horizontal(int hor_dir, int dist, PathList& list_to_fill, 
 	return ret;
 }
 
-bool PathNode::Search_vertical(int ver_dir, int dist, PathList & list_to_fill, const iPoint & goal)
+bool PathNode::Search_vertical(int ver_dir, PathList & list_to_fill, const iPoint & goal)
 {
 	bool ret = false;
 	bool stop = false;
@@ -298,9 +298,62 @@ bool PathNode::Search_vertical(int ver_dir, int dist, PathList & list_to_fill, c
 	return ret;
 }
 
-bool PathNode::Search_diagonal(int hor_dir, int vert_dir, PathList & list_to_fill)
+bool PathNode::Search_diagonal(int hor_dir, int vert_dir, PathList & list_to_fill, iPoint goal)
 {
 	bool ret = false;
+	bool stop = false;
+
+	uint distance_so_far = 0;
+	do
+	{
+		distance_so_far += 1;
+
+		iPoint new_node = (this->pos + iPoint(hor_dir*distance_so_far, vert_dir*distance_so_far));
+
+		if (!app->pathfinding->CheckBoundaries(new_node) || !app->pathfinding->IsWalkable(new_node))
+		{
+			return ret;
+		}
+
+		if (new_node == goal)
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
+
+		iPoint next_pos = { new_node.x + hor_dir, new_node.y + vert_dir };
+		if (!app->pathfinding->CheckBoundaries(next_pos) || !app->pathfinding->IsWalkable(next_pos))
+		{
+			return ret;
+		}
+
+		if (!app->pathfinding->IsWalkable(new_node.x - hor_dir, new_node.y) && app->pathfinding->IsWalkable(new_node.x - hor_dir, next_pos.y))
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
+		else if (!app->pathfinding->IsWalkable(new_node.x, new_node.y - vert_dir) && app->pathfinding->IsWalkable(next_pos.x, new_node.y - vert_dir))
+		{
+			list_to_fill.list.push_back(PathNode(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this));
+			return ret = true;
+		}
+		PathNode this_node(this->g + distance_so_far, goal.DistanceManhattan(new_node), new_node, this);
+		PathNode* this_node_pointer = nullptr;
+		if (this_node.Search_horizontal(hor_dir, list_to_fill, goal))
+		{
+			PathNode* just_added = &(*list_to_fill.list.end());
+			if(this_node_pointer==nullptr)
+				this_node_pointer = list_to_fill.list.push_back(this_node);
+			just_added->parent = &(*list_to_fill.list.end());
+		}
+
+		
+	} while (!stop);
+
+	return ret;
+
+
+
 	return ret;
 }
 
