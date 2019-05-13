@@ -342,9 +342,18 @@ bool PathNode::Search_diagonal(int hor_dir, int vert_dir, PathList & list_to_fil
 		if (this_node.Search_horizontal(hor_dir, list_to_fill, goal))
 		{
 			PathNode* just_added = &(*list_to_fill.list.end());
-			if(this_node_pointer==nullptr)
-				this_node_pointer = list_to_fill.list.push_back(this_node);
-			just_added->parent = &(*list_to_fill.list.end());
+			list_to_fill.list.push_back(this_node);
+			just_added->parent = this_node_pointer = &(*list_to_fill.list.end());
+		}
+		if (this_node.Search_vertical(vert_dir,list_to_fill,goal))
+		{
+			PathNode* just_added = &(*list_to_fill.list.end());
+			if (this_node_pointer == nullptr)
+			{
+				list_to_fill.list.push_back(this_node);
+				this_node_pointer = &(*list_to_fill.list.end());
+			}
+			just_added->parent = this_node_pointer;
 		}
 
 		
