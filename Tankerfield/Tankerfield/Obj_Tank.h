@@ -46,12 +46,12 @@ public:
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
-	int GetLife();
-	int GetMaxLife();
-	int GetTimeBetweenBullets();
+	int GetLife() const;
+	int GetMaxLife() const;
+	int GetTimeBetweenBullets() const;
 	fPoint GetShotDir() const;
 	bool IsReady() const;
-	int GetTankNum();
+	int GetTankNum() const;
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	bool GetShotAutomatically() const;
@@ -61,8 +61,8 @@ public:
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
-	bool Alive();
-	fPoint GetTurrPos();
+	bool Alive() const;
+	fPoint GetTurrPos() const;
 
 	//- Input
 	Controller * GetController();

@@ -287,7 +287,7 @@ void Obj_Tank::CameraMovement(float dt)
 	camera_player->ShakeCamera(dt);
 }
 
-fPoint Obj_Tank::GetTurrPos()
+fPoint Obj_Tank::GetTurrPos() const
 {
 	return turr_pos;
 }
@@ -559,10 +559,13 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		
-		if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+		if (this->Alive())
 		{
-			Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-			SetPickUp(pick_up);
+			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+			{
+				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+				SetPickUp(pick_up);
+			}
 		}
 	}
 
@@ -621,17 +624,17 @@ void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 	weapon_info.time_between_bullets = time_between_bullets;
 }
 
-int Obj_Tank::GetLife()
+int Obj_Tank::GetLife() const
 {
 	return life;
 }
 
-int Obj_Tank::GetMaxLife()
+int Obj_Tank::GetMaxLife() const
 {
 	return max_life;
 }
 
-int Obj_Tank::GetTimeBetweenBullets()
+int Obj_Tank::GetTimeBetweenBullets() const
 {
 	return weapon_info.time_between_bullets;
 }
@@ -970,7 +973,7 @@ void Obj_Tank::StopTank()
 	}
 }
 
-bool Obj_Tank::Alive()
+bool Obj_Tank::Alive() const
 {
 	return life > 0;
 }
@@ -1015,7 +1018,7 @@ bool Obj_Tank::IsReady() const
 	return ready;
 }
 
-int Obj_Tank::GetTankNum()
+int Obj_Tank::GetTankNum() const
 {
 	return tank_num;
 }
