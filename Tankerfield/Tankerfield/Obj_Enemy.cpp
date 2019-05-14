@@ -77,7 +77,7 @@ void Obj_Enemy::Movement(float &dt)
 	case ENEMY_STATE::SPAWN:
 	{
 
-		Spawn(); //rewrite in every enemie. originally is empty.
+		Spawn(dt); //rewrite in every enemie. originally is empty.
 
 	}
 	break;
@@ -100,6 +100,22 @@ void Obj_Enemy::Movement(float &dt)
 		RecheadPoint();
 	}
 	break;
+
+	case ENEMY_STATE::GET_TELEPORT_POINT:
+	{
+		GetTeleportPoint();
+	}
+	break;
+	case ENEMY_STATE::TELEPORT_IN:
+	{
+		TeleportIn(dt);
+	}
+	break;
+	case ENEMY_STATE::TELEPORT_OUT:
+	{
+		TeleportOut(dt);
+	}
+	break;
 	case  ENEMY_STATE::DEAD:
 	{
 		Dead();
@@ -112,22 +128,15 @@ void Obj_Enemy::Movement(float &dt)
 
 }
 
-void Obj_Enemy::Spawn()
-{
-	curr_tex = tex;
-}
-
 void Obj_Enemy::RecheadPoint()
 {
 	move_vect.SetToZero();
 	if (path.size() > 0)
 	{
 		next_pos = (fPoint)(*path.begin());
-		move_vect = (fPoint)(next_pos)-pos_map;
-		move_vect.Normalize();
-
-		//Change sprite direction
-		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION; //brute don't have iso_compensation?
+		next_pos += {0.5f, 0.5f};
+		UpdateVelocity();
+		update_velocity_vec.Start();
 		state = ENEMY_STATE::MOVE;
 	}
 	else
@@ -174,9 +183,19 @@ int Obj_Enemy::Move(float & dt)
 {
 	if (IsOnGoal(next_pos))
 	{
-		path.erase(path.begin());
+		if (path.size() > 0)
+			path.erase(path.begin());
+		else
+			state = ENEMY_STATE::GET_PATH;
+
 		state = ENEMY_STATE::RECHEAD_POINT;
 	}
+
+	if (update_velocity_vec.ReadSec() > 1)
+	{
+		UpdateVelocity();
+	}
+
 	pos_map += move_vect * speed * dt;
 	range_pos.center = pos_map;
 	curr_anim = &walk;
@@ -197,14 +216,14 @@ void Obj_Enemy::GetPath()
 
 		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 		{
+			path.clear();
+			path = *app->pathfinding->GetLastPath();
+			if (path.size() > 0)
+				path.erase(path.begin());
+			next_pos = (fPoint)(*path.begin());
+			UpdateVelocity();
 
-			std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
-			for (std::vector<iPoint>::iterator iter = aux.begin() + 1; iter != aux.end(); ++iter) //why
-			{
-				path.push_back({ (int)((*iter).x + 0.5f),(int)((*iter).y + 0.5f) });
-			}
-
-			state = ENEMY_STATE::RECHEAD_POINT;
+			state = ENEMY_STATE::MOVE;
 		}
 
 	}

@@ -83,14 +83,6 @@ Obj_Brute::~Obj_Brute()
 }
 
 
-bool Obj_Brute::Update(float dt)
-{
-	Movement(dt);
-	Obj_Enemy::Update(dt);
-
-	return true;
-}
-
 void Obj_Brute::ChangeTexture()
 {
 	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
@@ -99,18 +91,7 @@ void Obj_Brute::ChangeTexture()
 	}
 }
 
-void Obj_Brute::Movement(float &dt)
-{
-
-	if ((state != ENEMY_STATE::DEAD)
-		&& (state != ENEMY_STATE::SPAWN)
-		&& (path_timer.ReadSec() >= check_path_time))
-	{
-		state = ENEMY_STATE::GET_PATH;
-	}
-}
-
-void Obj_Brute::Spawn()
+void Obj_Brute::Spawn(const float& dt)
 {
 	if (curr_anim->Finished())
 	{

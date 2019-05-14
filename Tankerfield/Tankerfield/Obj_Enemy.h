@@ -29,19 +29,25 @@ public:
 
 	void Attack();
 
-	void Movement(float &dt);
+	virtual void Movement(float &dt);
 
-	virtual void Spawn();
+	virtual void Spawn(const float& dt) {};
 
 	void RecheadPoint();
 
 	void Dead();
 
-	virtual void Idle();
+	inline virtual void Idle();
 
-	virtual int Move(float & dt);
+	inline virtual int Move(float & dt);
 
-	virtual void GetPath();
+	inline virtual void GetPath();
+
+	inline virtual void GetTeleportPoint() {};
+
+	inline virtual void TeleportIn(float & dt) {};
+
+	inline virtual void TeleportOut(float & dt) {};
 
 	void OnTriggerEnter(Collider * collider);
 
@@ -63,6 +69,7 @@ protected:
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 
+	Timer update_velocity_vec;
 	Timer damaged_sprite_timer;
 	int damaged_sprite_time = 0;
 

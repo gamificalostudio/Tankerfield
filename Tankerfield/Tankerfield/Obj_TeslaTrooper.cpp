@@ -112,86 +112,7 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
 }
 
-bool Obj_TeslaTrooper::Update(float dt)
-{
-	Movement(dt);
-	Obj_Enemy::Update(dt);
-	
-	return true;
-}
 
-
-//void Obj_TeslaTrooper::Attack()
-//{
-//	if (  life > 0  && app->scene->stat_of_wave != WaveStat::NO_TYPE)
-//	{
-//		if (target != nullptr 
-//			&& target->coll->GetTag() == Collider::TAG::PLAYER
-//			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
-//			&& perf_timer.ReadMs() > (double)attack_frequency)
-//		{
-//			curr_anim = &attack;
-//			target->SetLife(target->GetLife() - attack_damage);
-//			perf_timer.Start();
-//			app->audio->PlayFx(sfx_attack);
-//		}
-//
-//		if (curr_anim == &attack
-//			&& curr_anim->Finished())
-//		{
-//			curr_anim = &walk;
-//			attack.Reset();
-//		}
-//	}
-//}
-
-
-void Obj_TeslaTrooper::Movement(float &dt)
-{
-	
-
-	switch (state)
-	{
-	/*case ENEMY_STATE::IDLE:
-	{
-		path.clear();
-		move_vect.SetToZero();
-		target = app->objectmanager->GetNearestTank(pos_map);
-		if (target != nullptr)
-		{
-			state = ENEMY_STATE::GET_PATH;
-		}
-		else
-		{
-			curr_anim = &idle;
-		}
-	}
-	break;*/
-	break;
-	case ENEMY_STATE::SPAWN:
-		Spawn(dt);
-	break;
-
-	case ENEMY_STATE::GET_TELEPORT_POINT:
-	{
-		GetTeleportPoint();
-	}
-	break;
-	case ENEMY_STATE::TELEPORT_IN:
-	{
-		TeleportIn(dt);		
-	}
-		break;
-	case ENEMY_STATE::TELEPORT_OUT:
-	{
-		TeleportOut(dt);
-	}
-	break;
-	}
-
-	
-
-}
 void Obj_TeslaTrooper::TeleportOut(float & dt)
 {
 	if (in_portal->Finished())
@@ -270,7 +191,7 @@ void Obj_TeslaTrooper::GetTeleportPoint()
 	}
 	teleport_timer.Start();
 }
-void Obj_TeslaTrooper::Spawn(float & dt)
+void Obj_TeslaTrooper::Spawn(const float & dt)
 {
 	{
 		spawn_anim.NextFrame(dt);
@@ -321,6 +242,7 @@ int Obj_TeslaTrooper::Move(float & dt)
 	{
 		UpdateVelocity();
 	}
+
 	pos_map += move_vect * speed * dt;
 	range_pos.center = pos_map;
 
@@ -441,14 +363,6 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 	
 	if (draw)
 	{
-		/*app->render->BlitScaled(
-			curr_tex,
-			pos_screen.x - draw_offset.x,
-			pos_screen.y - draw_offset.y,
-			camera,
-			&frame,
-			0.75f,
-			0.75f);*/
 		Obj_Enemy::Draw(dt, camera);
 	}
 	if (state == ENEMY_STATE::SPAWN)
@@ -466,69 +380,6 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 
 	return true;
 }
-
-//bool Obj_TeslaTrooper::IsOnGoal(fPoint goal)
-//{
-//	return range_pos.IsPointIn(goal);
-//}
-//
-//void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
-//{
-//	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
-//	{
-//		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
-//		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
-//		{
-//			life -= collider->damage;
-//
-//			damaged_sprite_timer.Start();
-//			curr_tex = tex_damaged;
-//
-//			if (life <= 0)
-//			{
-//				// DROP A PICK UP ITEM 
-//				app->pick_manager->PickUpFromEnemy(pos_map);
-//				state = TROOPER_STATE::DEAD;
-//			}
-//			else
-//			{
-//				app->audio->PlayFx(sfx_hit);
-//			}
-//
-//
-//			if (!obj->charged)
-//			{
-//				++obj->kill_counter;
-//				if (obj->kill_counter >= obj->kill_counter_max)
-//				{
-//					obj->to_remove = true;
-//
-//				}
-//			}
-//		}
-//
-//	}
-//}
-//
-//void Obj_TeslaTrooper::OnTrigger(Collider* collider)
-//{
-//	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
-//	{
-//		life -= collider->damage;
-//		damaged_sprite_timer.Start();
-//		curr_tex = tex_damaged;
-//
-//		if (life <= 0)
-//		{
-//			app->pick_manager->PickUpFromEnemy(pos_map);
-//			state = TROOPER_STATE::DEAD;
-//		}
-//		else
-//		{
-//			app->audio->PlayFx(sfx_hit);
-//		}
-//	}
-//}
 
 inline void Obj_TeslaTrooper::UpdateVelocity()
 {

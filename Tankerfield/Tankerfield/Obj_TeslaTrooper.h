@@ -21,35 +21,22 @@ public:
 	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
 
-	bool Update(float dt) override;
+	inline void TeleportOut(float & dt) override;
 
-	//void Attack();
+	inline void TeleportIn(float & dt) override;
 
-	void Movement(float &dt);
+	inline void GetTeleportPoint() override;
 
-	void TeleportOut(float & dt);
+	inline void Spawn(const float & dt) override;
 
-	void TeleportIn(float & dt);
+	inline void Idle() override;
 
-	void GetTeleportPoint();
-
-	void Spawn(float & dt);
-
-	void Idle();
-
-	int Move(float & dt);
+	inline int Move(float & dt);
 
 	virtual void GetPath();
 
-	//void DrawDebug(const Camera* camera) override;
-
 	bool Draw(float dt, Camera * camera) override;
 
-	/*bool Awake(pugi::xml_node&) { return true; };
-
-	void OnTriggerEnter(Collider * collider);
-
-	void OnTrigger(Collider* collider);*/
 
 
 
@@ -75,8 +62,6 @@ private:
 	SDL_Texture * explosion_apper_tex			= nullptr;
 
 	SpawnPoint* teleport_spawnpoint = nullptr;
-
-	Timer update_velocity_vec;
 
 	//teleport values ----------
 	float check_teleport_time = 0.f;

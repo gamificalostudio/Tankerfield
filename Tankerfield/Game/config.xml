@@ -184,7 +184,7 @@
     </tesla_trooper>
     <brute>
       <animations>
-        <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+        <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <frame x="0" y="0" w="134" h="96" />
           </dir>
@@ -210,7 +210,7 @@
             <frame x="938" y="0" w="134" h="96" />
           </dir>
         </idle>
-        <walk speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+        <walk speed="7.5" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <!--starts in frame number 8-->
             <frame x="1072" y="0" w="134" h="96" />
@@ -280,7 +280,7 @@
             <frame x="3350" y="96" w="134" h="96" />
           </dir>
         </walk>
-        <attack speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
+        <attack speed="7.5" rotation="counter-clockwise" first_dir_angle ="-90">
           <dir>
             <frame x="2144" y="576" w="134" h="96" />
             <frame x="2278" y="576" w="134" h="96" />
@@ -362,7 +362,7 @@
             <frame x="670" y="864" w="134" h="96" />
           </dir>
         </attack>
-        <death speed="7.5" rotation="counter-clockwise" first_dir_angle ="0" loop="false">
+        <death speed="7.5" rotation="counter-clockwise" first_dir_angle ="-90" loop="false">
           <dir>
             <frame x="3484" y="192" w="134" h="96" />
             <frame x="3618" y="192" w="134" h="96" />
@@ -398,7 +398,7 @@
             <frame x="3350" y="288" w="134" h="96" />
           </dir>
         </death>
-        <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="0" loop="false">
+        <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="-90" loop="false">
           <dir>
             <frame x="0" y="0" w="260" h="304" />
             <frame x="260" y="0" w="260" h="304" />
