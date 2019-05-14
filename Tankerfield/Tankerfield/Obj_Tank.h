@@ -100,6 +100,7 @@ private:
 	void InitWeapons();
 	void ShootBasic();
 	void ShootFlameThrower();
+	void ShootDoubleMissileCharged();
 	void ShootDoubleMissile();
 	void ShootHealingShot();
 	void ShootLaserShot();
