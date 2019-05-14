@@ -489,6 +489,11 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 				{
 					ret->pivot.y = property_node.attribute("value").as_float();
 				}
+
+				else if (name == "pivot")
+				{
+					ret->pivot.y = property_node.attribute("value").as_float();
+				}
 				
 			}
 			ret->SetTexture(ret->path, fPoint{mesure.x, mesure.y});
