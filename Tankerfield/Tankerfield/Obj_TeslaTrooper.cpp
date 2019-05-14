@@ -91,7 +91,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	attack_range		= tesla_trooper_node.child("attack_range").attribute("num").as_float();
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = tesla_trooper_node.child("attack_frequency").attribute("num").as_float();
-	life = pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
+	life = 200;// pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
 	
 	//teleport 
 	check_teleport_time = 10; //10s
@@ -473,6 +473,25 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 				}
 			}
 		}
+	}
+	
+	if (collider->GetTag() == Collider::TAG::ELECTRO_SHOT)
+	{
+		life -= collider->damage;
+
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
+
+		if (life <= 0)
+		{
+			// DROP A PICK UP ITEM 
+			app->pick_manager->PickUpFromEnemy(pos_map);
+			state = TROOPER_STATE::DEAD;
+		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}		
 	}
 }
 

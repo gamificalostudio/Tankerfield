@@ -3,7 +3,7 @@
 #include "App.h"
 #include "M_ObjManager.h"
 #include "Player_GUI.h"
-
+#include "M_Collision.h"
 //Bullets
 #include "Bullet_Missile.h"
 #include "Healing_Bullet.h"
@@ -18,6 +18,11 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot1_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
+	shot1_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
+
+	electro_shot_collider = app->collision->AddCollider(pos_map,3,3,Collider::TAG::ELECTRO_SHOT, 100, this);
+	electro_shot_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	electro_shot_collider->Disactivate();
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	quick_shot_time = 500.f;
@@ -25,6 +30,18 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
+}
+
+void Obj_Tank::UpdateWeaponsWithoutBullets()
+{
+	if (weapon_info.weapon == WEAPON::ELECTRO_SHOT)
+	{
+		//with the animation get frame?? only 1 frame
+		if (electro_shot_timer.ReadMs() >= weapon_info.bullet_life_ms && electro_shot_collider->GetIsActivated())
+		{
+			electro_shot_collider->Disactivate();
+		}
+	}
 }
 
 //if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
@@ -109,6 +126,23 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2_rumble_strength = 1.0f;
 		weapon_info.shot2_rumble_duration = 400;
 		break;
+	case WEAPON::ELECTRO_SHOT:
+		weapon_info.type = WEAPON_TYPE::CHARGED;
+		weapon_info.bullet_damage = 100 + level * 2;
+		weapon_info.bullet_healing = 0;
+		weapon_info.bullet_life_ms = 100;
+		weapon_info.bullet_speed = 0;
+		weapon_info.time_between_bullets = 1000;
+		weapon_info.basic_shot_trauma = 0.405f;
+		weapon_info.charged_shot_trauma = 0.57f;
+		weapon_info.shot1_rumble_strength = 0.92f;
+		weapon_info.shot1_rumble_duration = 250;
+		weapon_info.shot2_rumble_strength = 1.0f;
+		weapon_info.shot2_rumble_duration = 400;
+		electro_shot_collider->damage = weapon_info.bullet_damage;
+		//add with and height here?
+		break;
+	
 	}
 }
 
@@ -246,4 +280,11 @@ void Obj_Tank::ShootDoubleMissileCharged()
 		weapon_info.bullet_damage,
 		shot_dir,
 		bullet_angle);
+}
+
+void Obj_Tank::ShootElectroShot()
+{
+	electro_shot_collider->SetPosToObj();
+	electro_shot_collider->Activate();
+	electro_shot_timer.Start();
 }

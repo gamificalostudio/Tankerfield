@@ -31,6 +31,8 @@ public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 
+	void UpdateWeaponsWithoutBullets();
+
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
 
@@ -105,6 +107,7 @@ private:
 	void ShootHealingShot();
 	void ShootLaserShot();
 	void ShootLaserShotCharged();
+	void ShootElectroShot();
 
 	//- TankDeath
 	void ReviveTank(float dt);
@@ -187,6 +190,10 @@ private:
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
 	bool shot_automatically = false;
+
+	//Electro shot
+	Collider* electro_shot_collider			= nullptr;
+	PerfTimer electro_shot_timer;
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;

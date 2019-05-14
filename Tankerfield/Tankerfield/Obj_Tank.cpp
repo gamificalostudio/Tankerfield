@@ -274,8 +274,13 @@ bool Obj_Tank::Update(float dt)
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
+	
+
+	UpdateWeaponsWithoutBullets();
 	return true;
 }
+
+
 
 void Obj_Tank::CameraMovement(float dt)
 {

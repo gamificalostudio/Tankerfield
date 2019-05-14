@@ -27,6 +27,21 @@ void Collider::Destroy()
 	to_destroy = true;
 }
 
+void Collider::Disactivate()
+{
+	is_activated = false;
+}
+
+void Collider::Activate()
+{
+	is_activated = true;
+}
+
+bool Collider::GetIsActivated() const
+{
+	return is_activated;
+}
+
 bool Collider::CheckCollision(Collider*  coll) const
 {
 	return !(coll->position.x >= (position.x + width) || (coll->position.x + coll->width) <= position.x || coll->position.y >= (position.y + height) || (coll->position.y + coll->height) <= position.y);
@@ -60,6 +75,7 @@ M_Collision::M_Collision()
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET] = true;
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::FRIENDLY_BULLET] = true;
 	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::BULLET_LASER] = true;
+	matrix[(int)Collider::TAG::ENEMY][(int)Collider::TAG::ELECTRO_SHOT] = true;
 
 	matrix[(int)Collider::TAG::REWARD_ZONE][(int)Collider::TAG::PLAYER] = true;
 
@@ -242,7 +258,7 @@ bool M_Collision::Update(float dt)
 		{
 			collider_2 = (*itr_2);
 	
-			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false)
+			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false && collider_1->is_activated)
 			{
                  DoOnTrigger(collider_1, collider_2);
           /*       DoOnTrigger(collider_2, collider_1);*/
@@ -546,3 +562,5 @@ inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
 		}
 	}
 }
+
+

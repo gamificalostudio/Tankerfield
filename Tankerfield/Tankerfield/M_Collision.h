@@ -27,6 +27,7 @@ public:
 		BULLET,
 		FRIENDLY_BULLET,
 		BULLET_LASER,
+		ELECTRO_SHOT,
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
@@ -112,6 +113,12 @@ public:
 
 	void Destroy();
 
+	void Disactivate();
+
+	void Activate();
+
+	bool GetIsActivated() const;
+
 public:
 
 	float damage = 0.f;
@@ -133,6 +140,8 @@ private:
 	TAG tag = TAG::NONE;
 
 	std::list<Collider*> collisions_list;
+
+	bool is_activated = true; //only for sensors
 
 
 	// Body vars ===================================================
