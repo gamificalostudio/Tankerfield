@@ -99,7 +99,7 @@ bool M_MainMenu::Start()
 
 	
 	// Set values ==========================================
-	SetState(MENU_STATE::SELECTION);
+	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
 
 	return true;
@@ -199,19 +199,29 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
+
 		menu_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+
+		for (int i = 0; i < 4; ++i)
+		{
+			players[i].tank->active = false;
+		}
+
 		break;
+
 	case MENU_STATE::SELECTION:
+
 		menu_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 
 		for (int i = 0; i < 4; ++i)
 		{
-			players[i].tank
+			players[i].tank->active = true;
 		}
 
 		break;
+
 	case MENU_STATE::OPTIONS:
 		break;
 	}

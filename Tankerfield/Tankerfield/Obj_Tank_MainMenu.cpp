@@ -117,7 +117,6 @@ bool Obj_Tank_MainMenu::Draw(float dt, Camera * camera)
 		camera,
 		&rect, tank_scale, tank_scale);
 
-	//app->render->DrawQuadUI({ (int)pos_map.x - 3,  (int)pos_map.y - 3, 6, 6 }, camera, { 0, 255, 0, 255 });
 	return true;
 }
 
