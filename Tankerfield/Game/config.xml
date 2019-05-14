@@ -1278,7 +1278,7 @@
             <frame name="sprite6"  x="88" y="44"  w="44" h="44"></frame>
             <frame name="sprite7"  x="0"  y="88"  w="44" h="44"></frame>
             <frame name="sprite8"  x="44" y="88"  w="44" h="44"></frame>
-            <frame name="sprite9"  x="88" y="88"  w="44" h="44"></frame>
+            <frame nx="88" y="88"  w="44" h="44"></frame>
           </dir>
         </open>
         <close speed="10" rotation="counter-clockwise" first_dir_angle ="0">
@@ -1342,6 +1342,26 @@
         </explosion>
       </animations>
     </explosion>
+    <portal_TP>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/particles/portal.png"/>
+      <animations>
+        <portal speed="10" rotation="counter-clockwise" first_dir_angle ="0" loop ="true">
+          <dir>
+          <frame x="0" y="0" w="40" h="40"/>
+          <frame x="40" y="0" w="40" h="40"/>
+          <frame x="80" y="0" w="40" h="40"/>
+          <frame x="0" y="40" w="40" h="40"/>
+          <frame x="40" y="40" w="40" h="40"/>
+          <frame x="80" y="40" w="40" h="40"/>
+          <frame x="0" y="80" w="40" h="40"/>
+          <frame x="40" y="80" w="40" h="40"/>
+          <frame x="80" y="80" w="40" h="40"/>
+          </dir>
+        </portal>
+      </animations>
+    </portal_TP>
     <fire_dead_tank>
       <tex path="textures/objects/particles/fire_dead_tank.png"/>
       <animations>

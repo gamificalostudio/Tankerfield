@@ -54,6 +54,8 @@ public:
 	bool Draw(float dt, Camera* camera)override;
 
 protected:
+	inline void UpdateVelocity();
+
 	int life = 0;
 	float speed = 0.f;
 	SDL_Texture * tex = nullptr;

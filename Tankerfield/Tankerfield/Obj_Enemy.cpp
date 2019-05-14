@@ -230,6 +230,17 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 	return true;
 }
 
+inline void Obj_Enemy::UpdateVelocity()
+{
+	fPoint new_move_vec = (fPoint)(next_pos)-pos_map;
+	new_move_vec.Normalize();
+	if (new_move_vec != move_vect)
+	{
+		move_vect = new_move_vec;
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+	}
+}
+
 void Obj_Enemy::DrawDebug(const Camera* camera)
 {
 	if (path.size() >= 2)
