@@ -58,17 +58,22 @@ bool M_MainMenu::Start()
 
 	float element_side = 126;
 	UI_InteractiveGroupDef def;
-	def.columns = 5;
-	def.rows = 5;
+	def.columns = 4;
+	def.rows = 4;
 	float offset = def.columns * element_side * 0.5f;
 
 	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, def, this);
+
+	float color_value = 0.f;
+	float color_sum = 1.f / (def.columns * def.rows + 1);
 
 	for (int y = 0; y < def.rows; ++y)
 	{
 		for (int x = 0; x < def.columns; ++x)
 		{
 			UI_Element* element = app->ui->CreateImage(fPoint(screen_center.x - offset + x * element_side, screen_center.y - offset + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 }));
+			element->color_mod = GetColor(color_value);
+			color_value += color_sum;
 			selection_panel->SetElement(element, iPoint(x, y));
 			menu_elements.push_back(element);
 		}
@@ -99,6 +104,8 @@ bool M_MainMenu::Start()
 
 	
 	// Set values ==========================================
+
+
 	SetState(MENU_STATE::SELECTION);
 	SDL_ShowCursor(SDL_ENABLE);
 
@@ -148,20 +155,33 @@ bool M_MainMenu::PreUpdate()
 	{
 		SetState(MENU_STATE::SELECTION);
 	}
-	
-	if (players[0].controller == nullptr)
+
+	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		players[0].controller = app->input->GetAbleController();
-		players[0].tank->SetController(players[0].controller);
-		selection_panel->SetController(players[0].controller);
+		if (players[i].controller == nullptr)
+		{
+			players[i].controller = app->input->GetAbleController();
+			players[i].tank->SetController(players[i].controller);
+		}
 	}
-	
+
+	selection_panel->SetController(players[current_player].controller);
+	players[current_player].tank->SetColorMod(selection_panel->GetFocusedElement()->color_mod);
 
 	return true;
 }
 
 bool M_MainMenu::Update(float dt)
 {
+	color_percent += 0.3 * dt;
+	if (color_percent > 1.f)
+	{
+		color_percent -= 1.f;
+	}
+
+	SDL_Color color = GetColor(color_percent);
+	SDL_SetTextureColorMod(background_texture, color.r , color.g , color.b);
+
 	return true;
 }
 
@@ -182,7 +202,7 @@ bool M_MainMenu::PostUpdate(float dt)
 
 		app->render->DrawQuad((SDL_Rect)app->win->GetWindowRect(), 0, 0, 0, 180);
 
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			app->render->BlitScaled(app->ui->GetAtlas(), players[i].tank_pos.x - section.w * 0.5f * scale, players[i].tank_pos.y - section.h * 0.5f * scale + 8.f, camera, &section, scale, scale);
 		}
@@ -197,6 +217,28 @@ bool M_MainMenu::PostUpdate(float dt)
 
 bool M_MainMenu::Reset()
 {
+	return true;
+}
+
+bool M_MainMenu::OnHoverEnter(UI_Element * element)
+{
+	return true;
+}
+
+bool M_MainMenu::OnHoverRepeat(UI_Element * element)
+{
+	if (element == selection_panel)
+	{
+		if (app->input->GetMouseButton(1) == KEY_DOWN || (players[current_player].controller != nullptr && (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) )
+		{
+			current_player += 1;
+
+			if (current_player == MAX_PLAYERS)
+			{
+				current_player = 0;
+			}
+		}
+	}
 	return true;
 }
 
@@ -222,7 +264,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		menu_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			players[i].tank->active = false;
 		}
@@ -231,10 +273,11 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 	case MENU_STATE::SELECTION:
 
+		current_player = 0;
 		menu_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 
-		for (int i = 0; i < 4; ++i)
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			players[i].tank->active = true;
 		}
@@ -246,5 +289,34 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	}
 
 	menu_state = new_state;
+
+}
+
+SDL_Color M_MainMenu::GetColor(float value)
+{
+	if (value > 1.f)
+		value = 1.f;
+	else if (value < 0.f)
+		value = 0.f;
+
+	float array_pos = 6.f * value;
+	float int_part = 0;
+	float float_part = modf(array_pos, &int_part);
+
+	int   src = (int)int_part;
+	int   target = src + 1;
+
+	if (target > 5)
+	{
+		target = 0;
+	}
+
+	float r_value = lerp(R_Color[src], R_Color[target], float_part);
+	float g_value = lerp(G_Color[src], G_Color[target], float_part);
+	float b_value = lerp(B_Color[src], B_Color[target], float_part);
+
+	SDL_Color ret = { (uint)r_value,  (uint)g_value, (uint)b_value, 255u};
+
+	return ret;
 
 }

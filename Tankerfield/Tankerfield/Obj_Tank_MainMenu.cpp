@@ -97,6 +97,9 @@ void Obj_Tank_MainMenu::InputController(fPoint & input)
 
 bool Obj_Tank_MainMenu::Draw(float dt, Camera * camera)
 {
+	SDL_SetTextureColorMod(curr_tex, color_mod.r, color_mod.g, color_mod.b);
+	SDL_SetTextureColorMod(turr_tex, color_mod.r, color_mod.g, color_mod.b);
+
 	// Base =========================================
 	SDL_Rect rect = curr_anim->GetFrame(angle);
 
@@ -116,6 +119,9 @@ bool Obj_Tank_MainMenu::Draw(float dt, Camera * camera)
 		pos_map.y - draw_offset.y + 1.66f * tank_scale - rect.h * 0.5f * tank_scale,
 		camera,
 		&rect, tank_scale, tank_scale);
+
+	SDL_SetTextureColorMod(curr_tex, 255, 255, 255);
+	SDL_SetTextureColorMod(turr_tex, 255, 255, 255);
 
 	return true;
 }
@@ -189,6 +195,11 @@ void Obj_Tank_MainMenu::Rotate(float dt)
 
 	turr_angle = aux;
 
+}
+
+void Obj_Tank_MainMenu::SetColorMod(const SDL_Color new_color_mod)
+{
+	color_mod = new_color_mod;
 }
 
 void Obj_Tank_MainMenu::SetController(Controller** controller)

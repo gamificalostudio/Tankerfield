@@ -52,11 +52,16 @@ public:
 
 	bool Reset();
 
+	bool OnHoverEnter(UI_Element * element);
+
+	bool OnHoverRepeat(UI_Element * element);
+
 	bool OutClick(UI_Element * element);
 
 private:
 
 	void SetState(MENU_STATE new_state);
+	SDL_Color GetColor(float value);
 
 private:
 
@@ -83,6 +88,14 @@ private:
 	// Selection screen --------------------------------
 
 	Player_Selection     players[MAX_PLAYERS];
+	int                  current_player = 0;
+
+	float R_Color[6] = { 255.F , 255.F, 0    , 0    , 0    , 255.F };
+	float G_Color[6] = { 0     , 255.F, 255.F, 255.F, 0    , 0     };
+	float B_Color[6] = { 0     , 0    , 0    , 255.F, 255.F, 255.F };
+
+	float color_percent = 0.f;
+	std::vector<SDL_Color>  colors;
 	UI_InteractiveGroup* selection_panel = nullptr;
 
 	bool              exit_game = false;

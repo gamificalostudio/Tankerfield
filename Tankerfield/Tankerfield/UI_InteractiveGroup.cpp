@@ -63,9 +63,19 @@ bool UI_InteractiveGroup::Update(float dt)
 
 bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
 {
-
+	current_focus = GetPos(element);
 	focus_image->SetPos(element->position);
 	focus_image->SetParent(element);
+
+	listener->OnHoverEnter(this);
+
+	return true;
+}
+
+bool UI_InteractiveGroup::OnHoverRepeat(UI_Element * object)
+{
+	listener->OnHoverRepeat(this);
+
 	return true;
 }
 
@@ -147,4 +157,26 @@ iPoint UI_InteractiveGroup::GetFirstAvailableElement()
 UI_Element* UI_InteractiveGroup::GetElement(iPoint position)
 {
 	return group_elements[(position.y * columns ) + position.x];
+}
+
+UI_Element * UI_InteractiveGroup::GetFocusedElement()
+{
+	return GetElement(current_focus);
+}
+
+iPoint UI_InteractiveGroup::GetPos(UI_Element * element)
+{
+	for (int y = 0; y < rows; ++y)
+	{
+		for (int x = 0; x < columns; ++x)
+		{
+			if (group_elements[y * columns + x] == element)
+			{
+				return iPoint(x, y);
+			}
+		}
+	}
+
+	assert("Interactive Group : No avaliable elements");
+	return iPoint();
 }

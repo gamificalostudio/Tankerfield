@@ -26,13 +26,20 @@ public:
 
 	bool OnHoverEnter(UI_Element* object);
 
+	bool OnHoverRepeat(UI_Element* object);
+
 public:
+
 
 	void SetElement( UI_Element* element, const iPoint position);
 
 	void SetController(Controller ** controller);
 
 	UI_Element * GetElement(iPoint position);
+
+	UI_Element * GetFocusedElement();
+
+	iPoint GetPos(UI_Element* element);
 
 private:
 

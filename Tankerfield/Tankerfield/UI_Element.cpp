@@ -29,8 +29,10 @@ bool UI_Element::UpdateRelativePosition()
 bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_rect, app->ui->current_camera, (int)alpha);
 
+	SDL_SetTextureColorMod(app->ui->GetAtlas(), color_mod.r, color_mod.g, color_mod.b);
+	app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_rect, app->ui->current_camera, (int)alpha);
+	SDL_SetTextureColorMod(app->ui->GetAtlas(), 255, 255, 255);
 	return true;
 }
 

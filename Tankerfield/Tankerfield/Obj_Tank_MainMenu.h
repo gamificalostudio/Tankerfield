@@ -28,7 +28,7 @@ public:
 	bool CleanUp() override;
 
 public:
-
+	void SetColorMod( const SDL_Color color_mod);
 	void SetController(Controller ** controller);
 
 private:
@@ -57,13 +57,16 @@ private:
 	int dead_zone = 0;
 	Joystick gamepad_rotate;
 
-	//- Drawing
-	//-- Base
+	//- Drawing ================================
+
+	SDL_Color color_mod = { 255, 255, 255,255 };
+
+	// Base --------------
 	Animation rotate_base;
 	SDL_Texture * base_tex_blue = nullptr;
 	SDL_Texture * base_shadow_tex = nullptr;
 
-	//-- Turret
+	// Turr --------------
 	Animation rotate_turr;
 	SDL_Texture * turr_tex = nullptr;
 	SDL_Texture * turr_tex_blue = nullptr;

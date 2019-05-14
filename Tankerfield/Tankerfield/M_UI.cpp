@@ -373,7 +373,7 @@ void M_UI::FocusMouse()
 			(*item)->listener->OnHoverEnter((*item));
 			break;
 		case HoverState::REPEAT:
-			(*item)->listener->OnHoverEnter((*item));
+			(*item)->listener->OnHoverRepeat((*item));
 			break;
 		case HoverState::EXIT:
 			(*item)->listener->OnHoverExit((*item));
