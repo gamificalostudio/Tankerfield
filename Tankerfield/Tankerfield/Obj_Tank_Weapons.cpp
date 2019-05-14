@@ -30,6 +30,7 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
+	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets()
@@ -284,7 +285,15 @@ void Obj_Tank::ShootDoubleMissileCharged()
 
 void Obj_Tank::ShootElectroShot()
 {
+	float coll_w;
+	float coll_h;
+	electro_shot_collider->GetSize(coll_w, coll_h);
+	fPoint offset{ -coll_w*0.5f, -coll_h * 0.5f};
+	fPoint dir = GetShotDir() * fPoint{2,2};
+	//fPoint offset2{dir};
+	electro_shot_collider->SetObjOffset(offset + dir);
 	electro_shot_collider->SetPosToObj();
+	
 	electro_shot_collider->Activate();
 	electro_shot_timer.Start();
 }
