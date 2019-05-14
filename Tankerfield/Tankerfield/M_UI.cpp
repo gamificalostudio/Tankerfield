@@ -287,15 +287,15 @@ void M_UI::FocusMouse()
 		switch (click_state)
 		{
 		case FocusState::ENTER:
-			selected_element->listener->OnClick(selected_element);
+			selected_element->listener->ClickDown(selected_element);
 			break;
 		case FocusState::REPEAT:
-			selected_element->listener->RepeatClick(selected_element);
+			selected_element->listener->ClickRepeat(selected_element);
 			break;
 		case FocusState::EXIT:
 			if (selected_element->hover_state != HoverState::NONE)
 			{
-				selected_element->listener->OutClick(selected_element);
+				selected_element->listener->ClickUp(selected_element);
 			}
 			break;
 		}
@@ -370,13 +370,13 @@ void M_UI::FocusMouse()
 		switch ((*item)->hover_state)
 		{
 		case HoverState::ENTER:
-			(*item)->listener->OnHover((*item));
+			(*item)->listener->OnHoverEnter((*item));
 			break;
 		case HoverState::REPEAT:
-			(*item)->listener->OnHover((*item));
+			(*item)->listener->OnHoverEnter((*item));
 			break;
 		case HoverState::EXIT:
-			(*item)->listener->OutHover((*item));
+			(*item)->listener->OnHoverExit((*item));
 			break;
 		}
 	}

@@ -61,10 +61,23 @@ bool UI_InteractiveGroup::Update(float dt)
 	return true;
 }
 
+bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
+{
+
+	focus_image->SetPos(element->position);
+	focus_image->SetParent(element);
+	return true;
+}
+
 void UI_InteractiveGroup::SetElement(UI_Element* element, const iPoint position)
 {
 	group_elements[ (position.y * columns ) + position.x] = element;
 	element->SetParent(this);
+	element->SetListener(this);
+	element->section_width = element->sprite_rect.w;
+	element->section_height= element->sprite_rect.h;
+
+	app->ui->AddInteractiveElement(element);
 }
 
 void UI_InteractiveGroup::SetController(Controller ** controller)

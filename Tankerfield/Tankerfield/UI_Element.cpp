@@ -105,6 +105,11 @@ void UI_Element::SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float loops, flo
 	app->ui->AddFX(type, seconds, this, loops,init_value, target_value);
 }
 
+void UI_Element::SetListener(UI_Listener * new_listener)
+{
+	listener = new_listener;
+}
+
 void UI_Element::FinishFX()
 {
 	if (element_fx != nullptr)

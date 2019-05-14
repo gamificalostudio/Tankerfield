@@ -62,7 +62,7 @@ bool M_MainMenu::Start()
 	def.rows = 5;
 	float offset = def.columns * element_side * 0.5f;
 
-	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, def);
+	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, def, this);
 
 	for (int y = 0; y < def.rows; ++y)
 	{
@@ -99,7 +99,7 @@ bool M_MainMenu::Start()
 
 	
 	// Set values ==========================================
-	SetState(MENU_STATE::INIT_MENU);
+	SetState(MENU_STATE::SELECTION);
 	SDL_ShowCursor(SDL_ENABLE);
 
 	return true;

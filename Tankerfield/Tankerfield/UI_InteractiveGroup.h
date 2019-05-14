@@ -3,6 +3,7 @@
 
 #include "UI_Element.h"
 #include "Point.h"
+#include "M_UI.h"
 
 struct Controller;
 class UI_Quad;
@@ -13,7 +14,7 @@ struct UI_InteractiveGroupDef : public UI_ElementDef
 	uint rows = 0u;
 };
 
-class UI_InteractiveGroup : public UI_Element
+class UI_InteractiveGroup : public UI_Element , public UI_Listener
 {
 public:
 
@@ -22,6 +23,8 @@ public:
 	~UI_InteractiveGroup();
 
 	bool Update(float dt);
+
+	bool OnHoverEnter(UI_Element* object);
 
 public:
 
