@@ -71,6 +71,9 @@ protected:
 
 	float scale = 0.f;
 
+	float coll_w = 0.f;
+	float coll_h = 0.f;
+
 	uint sfx_attack = 0;
 	uint sfx_spawn = 0;
 	uint sfx_hit = 0;

@@ -23,8 +23,6 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.radius = 0.5f;
 
 	path_timer.Start();
-
-	app->audio->PlayFx(sfx_spawn);
 }
 
 bool Obj_Enemy::Update(float dt)

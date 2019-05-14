@@ -33,30 +33,18 @@ public:
 
 	void ChangeTexture();
 
-	//bool Draw(float dt, Camera * camera) override;
-
-	//void Attack();
-
 	void Movement(float &dt);
 
 	void Spawn();
 
-	//void DrawDebug(const Camera* camera) override;
-
-	//void OnTrigger(Collider* collider);
-
-	//void OnTriggerEnter(Collider* collider);
 
 private:
-	//inline bool IsOnGoal(fPoint goal);
+
 
 
 	// ----------
 	iPoint spawn_draw_offset	= { 0,0 };
 	iPoint normal_draw_offset	= { 0, 0 };
-
-	float coll_w = 0.f;
-	float coll_h = 0.f;
 
 	Animation spawn;
 	
