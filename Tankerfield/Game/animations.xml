@@ -22,7 +22,7 @@
   </explotions>
   <portal>
     <animations>
-      <appear speed="10" rotation="counter-clockwise" first_dir_angle ="0">
+      <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="0">
         <dir>
           <frame name="sprite1"  x="0"  y="0"   w="44" h="44"></frame>
           <frame name="sprite2"  x="44" y="0"   w="44" h="44"></frame>
@@ -40,7 +40,7 @@
           <frame name="sprite14" x="44" y="176" w="44" h="44"></frame>
           <frame name="sprite15" x="88" y="176" w="44" h="44"></frame>
         </dir>
-      </appear>
+      </spawn>
     </animations>
   </portal>
   <cycle-progress-bar speed="60" rotation="counter-clockwise" first_dir_angle ="0">
