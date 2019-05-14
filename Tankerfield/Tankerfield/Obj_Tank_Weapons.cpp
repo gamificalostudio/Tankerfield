@@ -231,6 +231,5 @@ void Obj_Tank::ShootOil()
 
 void Obj_Tank::ShootOilCharged()
 {
-	fPoint pool_offset = { 2.5,2.5 };
-	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, turr_pos + shot_dir-pool_offset);
+	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, turr_pos + shot_dir*2.5);
 }
