@@ -124,7 +124,10 @@ private:
 	// all map walkability values [0..255]
 	uchar* map = nullptr;
 	// we store the created path here
+	PathList open;
+	PathList close;
 	std::vector<iPoint> last_path;
+	
 
 	friend class PathNode;
 };

@@ -399,18 +399,25 @@ int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 	{
 		return ret = -1;
 	}
-	
-		PathList open;
-		PathList close;
+	open.list.clear();
+	close.list.clear();
 
-		PathNode origin_tile(0, origin.DistanceNoSqrt(destination), origin, nullptr);
-		open.list.push_back(origin_tile);
+	PathNode origin_tile(0, origin.DistanceNoSqrt(destination), origin, nullptr);
+	open.list.push_back(origin_tile);
 
 		while (open.list.size() > 0)
 		{
 			PathNode* current_node = (PathNode*)open.GetNodeLowestScore();
 			close.list.push_back(*current_node);
 
+			
+			if (current_node == nullptr)
+			{
+				current_node->Search_horizontal(1, open, destination);
+				current_node->Search_horizontal(-1, open, destination);
+				current_node->Search_vertical(1, open, destination);
+				current_node->Search_vertical(-1, open, destination);
+			}
 			// Important: back() returns a reference of the last element, and end() returns an iterator to the last element. Therefore, we use back().
 			if (current_node->pos == destination)
 			{
