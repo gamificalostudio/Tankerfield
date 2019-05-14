@@ -18,7 +18,7 @@ public:
 	void SetTexture(const char* path, fPoint rect_collider);
 
 public:
-	const char* path;
+	const char* path = "";
 private:
 
 	static SDL_Texture* texture;
