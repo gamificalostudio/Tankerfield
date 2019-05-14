@@ -43,6 +43,8 @@
 #include "Obj_CannonFire.h"
 #include "Obj_Item.h"
 #include "Obj_Portal.h"
+#include "Obj_Barrier.h"
+#include "Item_Barrier.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -297,8 +299,12 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::FIRE_DEAD;
 		break;
 	case ObjectType::PORTAL:
-		ret = new Obj_Portal(pos);
+		ret = DBG_NEW Obj_Portal(pos);
 		ret->type = ObjectType::PORTAL;
+		break;
+	case ObjectType::BARRIER:
+		ret = DBG_NEW Obj_Barrier(pos);
+		ret->type = ObjectType::BARRIER;
 		break;
 	case ObjectType::PICK_UP:
 		ret = DBG_NEW Obj_PickUp(pos);
@@ -337,6 +343,10 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 	case ItemType::INSTANT_HELP:
 		ret = DBG_NEW Item_InstantHelp(pos);
 		ret->type = ItemType::INSTANT_HELP;
+		break;
+	case ItemType::BARRIER_ITEM:
+		ret = DBG_NEW Item_Barrier(pos);
+		ret->type = ItemType::BARRIER_ITEM;
 		break;
 	}
 

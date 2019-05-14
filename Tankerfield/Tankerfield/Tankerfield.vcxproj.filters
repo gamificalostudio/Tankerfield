@@ -190,6 +190,12 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Item_Barrier.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Barrier.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -400,6 +406,12 @@
       <Filter>Objects\Items</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Portal.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_Barrier.h">
+      <Filter>Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Barrier.h">
       <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>

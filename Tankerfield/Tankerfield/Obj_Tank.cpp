@@ -236,7 +236,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::INSTANT_HELP);
+	SetItem(ItemType::BARRIER_ITEM);
 	time_between_portal_tp.Start();
 	return true;
 }

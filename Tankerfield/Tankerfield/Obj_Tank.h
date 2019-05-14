@@ -143,6 +143,7 @@ private:
 	float velocity_recoil_speed_max_charged = 0.f;
 	float charged_shot_speed				= 0.0f;
 	float lerp_factor_recoil				= 0.f;
+
 	Timer movement_timer;
 	PerfTimer time_between_portal_tp;
 
