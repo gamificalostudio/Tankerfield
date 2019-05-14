@@ -84,23 +84,23 @@ public:
 	void CalculateDrawVariables();//Avoids calculating variables multiple times during a single update. Only called on M_ObjManager::PostUpdate().
 
 public:
-
-	ObjectType type = ObjectType::NO_TYPE;
-	fPoint pos_map		= { 0.f, 0.f };			//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
-	fPoint pos_screen	= { 0.f, 0.f };			//The position in the screen. Is measured with pixels. Modifying this value wil have no effect because is overwritten in every frame. Use this instead of calling MapToScreenF.
-	fPoint velocity		= { 0.f, 0.f };
-	fPoint acceleration = { 0.f, 0.f };
-	bool to_remove = false;						//Set it to true if you want the object to be removed
-	ObjectInfo data;
-	Collider* coll = nullptr;
+	bool			active = true;
+	ObjectType		type = ObjectType::NO_TYPE;
+	fPoint			pos_map		= { 0.f, 0.f };			//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
+	fPoint			pos_screen	= { 0.f, 0.f };			//The position in the screen. Is measured with pixels. Modifying this value wil have no effect because is overwritten in every frame. Use this instead of calling MapToScreenF.
+	fPoint			velocity		= { 0.f, 0.f };
+	fPoint			acceleration = { 0.f, 0.f };
+	bool			to_remove = false;						//Set it to true if you want the object to be removed
+	ObjectInfo		data;
+	Collider*		coll = nullptr;
 
 public:
-	float angle				= 0.f;              //Direction that the object is facing
-	SDL_Texture * curr_tex	= nullptr;			//Points the current texture. Shouldn't allocate memory. Just assign the pointer to other textures already created. Used in Object::PostUpdate(float dt)
-	Animation * curr_anim	= nullptr;			//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created. Used in Object::PostUpdate(float dt) and for sprite sorting
-	iPoint draw_offset		= { 0, 0 };		//Change it to make the object not render from the top left in the position //Pixels to the center of the player. Used to center the player sprite. Used in Object::PostUpdate(float dt) and for sprite sorting
-	fPoint pivot			= { 0.f, 0.f };		//Offset from the position. Used for sprite sorting.
-	SDL_Rect frame			= { 0, 0, 0, 0 };	//A rect representing the sprite. Used for camera culling. Automatically set if you use curr_anim.
+	float			angle				= 0.f;              //Direction that the object is facing
+	SDL_Texture *	curr_tex	= nullptr;			//Points the current texture. Shouldn't allocate memory. Just assign the pointer to other textures already created. Used in Object::PostUpdate(float dt)
+	Animation *		curr_anim	= nullptr;			//Points the current animation. Shouldn't allocate memory. Just assign the pointer to other animations already created. Used in Object::PostUpdate(float dt) and for sprite sorting
+	iPoint			draw_offset		= { 0, 0 };		//Change it to make the object not render from the top left in the position //Pixels to the center of the player. Used to center the player sprite. Used in Object::PostUpdate(float dt) and for sprite sorting
+	fPoint			pivot			= { 0.f, 0.f };		//Offset from the position. Used for sprite sorting.
+	SDL_Rect		frame			= { 0, 0, 0, 0 };	//A rect representing the sprite. Used for camera culling. Automatically set if you use curr_anim.
 };
 
 #endif

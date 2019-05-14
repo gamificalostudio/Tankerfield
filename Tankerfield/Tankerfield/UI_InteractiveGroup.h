@@ -13,15 +13,6 @@ struct UI_InteractiveGroupDef : public UI_ElementDef
 	uint rows = 0u;
 };
 
-
-struct PlayerFocus
-{
-	int player_id = 0;
-	iPoint    element_pos = {0,0};
-	Controller **controller = nullptr;
-	UI_Quad*  quad = nullptr;
-};
-
 class UI_InteractiveGroup : public UI_Element
 {
 public:
@@ -33,26 +24,28 @@ public:
 	bool Update(float dt);
 
 public:
-	void AddPlayer( int player_id);
 
 	void SetElement( UI_Element* element, const iPoint position);
 
-private:
-
-	iPoint GetNearestElement(PlayerFocus * players, CONTROLLER_DIR dir);
-
-	bool ElementIsFocused(iPoint element_pos);
-
-	iPoint GetFirstAvailableElement();
+	void SetController(Controller ** controller);
 
 	UI_Element * GetElement(iPoint position);
 
 private:
 
+	iPoint GetNearestElement(const iPoint current_focus, const CONTROLLER_DIR dir);
+
+	iPoint GetFirstAvailableElement();
+
+private:
+
 	uint columns = 0u;
 	uint rows = 0u;
+
+	iPoint current_focus = { 0,0 };
+	UI_Image*  focus_image = nullptr;
+	Controller ** current_controller = nullptr;
 	UI_Element** group_elements = nullptr;
-	std::vector <PlayerFocus*> players;
 };
 
 
