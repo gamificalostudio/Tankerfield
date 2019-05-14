@@ -36,11 +36,13 @@
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
 #include "Item_HappyHour.h"
+#include "Item_InstantHelp.h"
 #include "Obj_PickUp.h"
 #include "Obj_RewardBox.h"
 #include "Camera.h"
 #include "Obj_CannonFire.h"
 #include "Obj_Item.h"
+#include "Obj_Portal.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -294,7 +296,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_Fire(pos);
 		ret->type = ObjectType::FIRE_DEAD;
 		break;
-
+	case ObjectType::PORTAL:
+		ret = new Obj_Portal(pos);
+		ret->type = ObjectType::PORTAL;
+		break;
 	case ObjectType::PICK_UP:
 		ret = DBG_NEW Obj_PickUp(pos);
 		ret->type = ObjectType::PICK_UP;
@@ -326,8 +331,12 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 		ret->type = ItemType::HEALTH_BAG;
 		break;
 	case ItemType::HAPPY_HOUR_ITEM:
-		ret = new Item_HappyHour(pos);
+		ret = DBG_NEW Item_HappyHour(pos);
 		ret->type = ItemType::HAPPY_HOUR_ITEM;
+		break;
+	case ItemType::INSTANT_HELP:
+		ret = DBG_NEW Item_InstantHelp(pos);
+		ret->type = ItemType::INSTANT_HELP;
 		break;
 	}
 

@@ -30,6 +30,8 @@
 #include "M_UI.h"
 #include "M_ObjManager.h"
 #include "Camera.h"
+#include "Item_InstantHelp.h"
+#include "Obj_Portal.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -234,7 +236,8 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HEALTH_BAG);
+	SetItem(ItemType::INSTANT_HELP);
+	time_between_portal_tp.Start();
 	return true;
 }
 
@@ -576,6 +579,22 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed < speed + road_buff)
 	{
 			curr_speed += road_buff;
+	}
+}
+
+void Obj_Tank::OnTriggerEnter(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::PORTAL)
+	{
+		if (time_between_portal_tp.ReadMs() > 2000) {
+			if (c1 == portal1->coll) {
+				pos_map = portal2->pos_map;
+			}
+			else if (c1 == portal2->coll) {
+				pos_map = portal1->pos_map;
+			}
+			time_between_portal_tp.Start();
+		}
 	}
 }
 
@@ -1044,3 +1063,9 @@ fPoint Obj_Tank::GetShotDir() const
 	return shot_dir;
 }
 
+void Obj_Tank::CreatePortals()
+{
+	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
+
+	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
+}
