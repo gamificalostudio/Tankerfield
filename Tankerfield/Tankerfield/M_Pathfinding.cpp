@@ -418,6 +418,10 @@ int M_Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
 				current_node->Search_vertical(1, open, destination);
 				current_node->Search_vertical(-1, open, destination);
 			}
+			else
+			{
+
+			}
 			// Important: back() returns a reference of the last element, and end() returns an iterator to the last element. Therefore, we use back().
 			if (current_node->pos == destination)
 			{
