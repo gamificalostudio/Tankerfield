@@ -22,7 +22,7 @@ void Obj_Tank::InitWeapons()
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
-	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
 }
@@ -197,4 +197,53 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
+}
+
+void Obj_Tank::ShootDoubleMissileCharged()
+{
+	fPoint double_missiles_offset = shot_dir;
+	double_missiles_offset.RotateDegree(90);
+	float missiles_offset = 0.2f;
+
+	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
+	left_missile->SetPlayer(this);
+
+	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
+	right_missile->SetPlayer(this);
+
+	Bullet_Missile * left_missile2 = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset*3-shot_dir*1.5);
+	left_missile2->SetPlayer(this);
+
+	Bullet_Missile * right_missile2 = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset*3-shot_dir*1.5);
+	right_missile2->SetPlayer(this);
+
+	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
+
+	left_missile->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		bullet_angle);
+
+	right_missile->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		bullet_angle);
+
+	left_missile2->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		bullet_angle);
+
+	right_missile2->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		bullet_angle);
 }

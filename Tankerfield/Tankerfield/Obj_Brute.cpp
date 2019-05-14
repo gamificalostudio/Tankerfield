@@ -1,7 +1,7 @@
 #include <list>
 #include <assert.h>
 #include <vector>
-#include <tgmath.h>
+//#include <tgmath.h>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml\src\pugixml.hpp"
@@ -36,7 +36,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	pugi::xml_node brute_node = app->config.child("object").child("brute");
 
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white.png");
+	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
