@@ -170,7 +170,7 @@ void Obj_Tank_MainMenu::Rotate(float dt)
 	}
 	else
 	{
-		target_angle += 40.f * dt;
+		target_angle += 55.f * dt;
 		if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;

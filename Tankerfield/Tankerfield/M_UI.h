@@ -126,17 +126,17 @@ public:
 	UI_Listener()
 	{}
 
-	virtual bool OnHover(UI_Element* object) { return true; }
+	virtual bool OnHoverEnter(UI_Element* object) { return true; }
 
-	virtual bool RepeatHover(UI_Element* object) { return true; }
+	virtual bool OnHoverRepeat(UI_Element* object) { return true; }
 
-	virtual bool OutHover(UI_Element* object) { return true; }
+	virtual bool OnHoverExit(UI_Element* object) { return true; }
 
-	virtual bool OnClick(UI_Element* object) { return true; }
+	virtual bool ClickDown(UI_Element* object) { return true; }
 
-	virtual bool RepeatClick(UI_Element* object) { return true; }
+	virtual bool ClickRepeat(UI_Element* object) { return true; }
 
-	virtual bool OutClick(UI_Element* object) { return true; }
+	virtual bool ClickUp(UI_Element* object) { return true; }
 };
 
 class UI_Fade_FX

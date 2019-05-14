@@ -138,9 +138,17 @@ bool M_MainMenu::PreUpdate()
 	{
 		return false;
 	}
+
+	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
+	{
+		SetState(MENU_STATE::INIT_MENU);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
+	{
+		SetState(MENU_STATE::SELECTION);
+	}
 	
-
-
 	if (players[0].controller == nullptr)
 	{
 		players[0].controller = app->input->GetAbleController();
@@ -163,15 +171,26 @@ bool M_MainMenu::PostUpdate(float dt)
 
 	SDL_RenderCopy(app->render->renderer, background_texture, NULL, &(SDL_Rect)app->win->GetWindowRect());
 
-	// Blit platforms ===================================
-
 	float scale = 2.f;
 	SDL_Rect section = { 256, 400, 160, 96 };
-	for (int i = 0; i < 4; ++i)
+
+	switch (menu_state)
 	{
-		app->render->BlitScaled(app->ui->GetAtlas(), players[i].tank_pos.x - section.w * 0.5f * scale, players[i].tank_pos.y - section.h * 0.5f * scale + 8.f, camera, &section, scale, scale);
+	case MENU_STATE::INIT_MENU:
+		break;
+	case MENU_STATE::SELECTION:
+
+		app->render->DrawQuad((SDL_Rect)app->win->GetWindowRect(), 0, 0, 0, 180);
+
+		for (int i = 0; i < 4; ++i)
+		{
+			app->render->BlitScaled(app->ui->GetAtlas(), players[i].tank_pos.x - section.w * 0.5f * scale, players[i].tank_pos.y - section.h * 0.5f * scale + 8.f, camera, &section, scale, scale);
+		}
+
+		break;
+	case MENU_STATE::OPTIONS:
+		break;
 	}
-	
 	return true;
 }
 
@@ -225,4 +244,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	case MENU_STATE::OPTIONS:
 		break;
 	}
+
+	menu_state = new_state;
+
 }
