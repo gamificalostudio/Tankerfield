@@ -47,6 +47,10 @@ void Obj_Tank::UpdateWeaponsWithoutBullets()
 		{
 			electro_shot_collider->Disactivate();
 		}
+		else if (electro_shot_timer.ReadMs() >= weapon_info.bullet_life_ms && electro_shot_collider_charged->GetIsActivated())
+		{
+			electro_shot_collider_charged->Disactivate();
+		}
 	}
 }
 
