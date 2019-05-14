@@ -476,7 +476,7 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 	}
 }
 
-void Obj_TeslaTrooper::OnTrigger(Collider* collider)
+void Obj_TeslaTrooper::OnTrigger(Collider* collider, float dt)
 {
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{

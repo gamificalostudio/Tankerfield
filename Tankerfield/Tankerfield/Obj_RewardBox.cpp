@@ -41,7 +41,7 @@ Obj_RewardBox::~Obj_RewardBox()
 
 
 
-void Obj_RewardBox::OnTrigger(Collider * collider)
+void Obj_RewardBox::OnTrigger(Collider * collider, float dt)
 {
 	if (collider->GetTag() == Collider::TAG::BULLET || collider->GetTag() == Collider::TAG::FRIENDLY_BULLET || collider->GetTag() == Collider::TAG::BULLET_LASER)
 	{

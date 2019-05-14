@@ -45,6 +45,7 @@ enum class ItemType
 	NO_TYPE = -1,
 	HEALTH_BAG ,
 	HAPPY_HOUR_ITEM,
+	HEALING_AREA,
 	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
 };
 

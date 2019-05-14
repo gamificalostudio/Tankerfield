@@ -14,7 +14,7 @@ Bullet_Missile::~Bullet_Missile()
 {
 }
 
-void Bullet_Missile::OnTrigger(Collider * collider_1)
+void Bullet_Missile::OnTrigger(Collider * collider_1, float dt)
 {
 	if (player != nullptr)
 	{

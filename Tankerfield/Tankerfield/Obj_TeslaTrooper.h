@@ -44,7 +44,7 @@ public:
 
 	void OnTriggerEnter(Collider * collider);
 
-	void OnTrigger(Collider* collider);
+	void OnTrigger(Collider* collider, float dt);
 
 
 
@@ -144,7 +144,7 @@ public:
 	{
 
 	}
-	void OnTrigger(Collider* c1)
+	void OnTrigger(Collider* c1, float dt)
 	{
 		if (c1->GetTag() == Collider::TAG::PLAYER)
 		{

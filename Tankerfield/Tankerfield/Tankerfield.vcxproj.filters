@@ -184,6 +184,9 @@
     <ClCompile Include="UI_InteractiveGroup.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Item_HealingArea.cpp">
+      <Filter>Objects\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -389,6 +392,9 @@
     </ClInclude>
     <ClInclude Include="UI_InteractiveGroup.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_HealingArea.h">
+      <Filter>Objects\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

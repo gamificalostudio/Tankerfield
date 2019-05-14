@@ -130,6 +130,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
+    <ClCompile Include="Item_HealingArea.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="Item_HappyHour.h" />
+    <ClInclude Include="Item_HealingArea.h" />
     <ClInclude Include="M_AnimationBank.h" />
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />

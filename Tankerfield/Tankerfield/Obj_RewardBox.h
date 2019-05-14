@@ -32,7 +32,7 @@ public:
 
 	//bool Draw(float dt, Camera* camera) override;
 
-	void OnTrigger(Collider * collider);
+	void OnTrigger(Collider * collider, float dt);
 
 	void GetDamage(float damage);
 

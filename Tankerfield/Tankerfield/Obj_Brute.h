@@ -37,7 +37,7 @@ public:
 
 	void DrawDebug(const Camera* camera) override;
 
-	void OnTrigger(Collider* collider);
+	void OnTrigger(Collider* collider, float dt);
 
 	void OnTriggerEnter(Collider* collider);
 

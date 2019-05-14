@@ -36,17 +36,17 @@ public:
 
 	bool CleanUp() override;
 
-	void OnTrigger(Collider* c1);
+	void OnTrigger(Collider* c1, float dt);
 	void OnTriggerExit(Collider* c1);
 
 public:
 	//- Logic
-	void SetLife(int life);
+	void SetLife(float life);
 	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
-	int GetLife() const;
+	float GetLife() const;
 	int GetMaxLife() const;
 	int GetTimeBetweenBullets() const;
 	fPoint GetShotDir() const;
@@ -114,7 +114,7 @@ private:
 
 private:
 	//- Logic
-	int life								= 0;
+	float life								= 0.f;
 	int max_life							= 0;
 	int tank_num							= 0;//The number of tank. 0 is the first one.
 

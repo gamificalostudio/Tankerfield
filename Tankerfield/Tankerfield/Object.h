@@ -73,7 +73,7 @@ public:
 
 	virtual void OnTriggerEnter(Collider * collider) {}
 
-	virtual void OnTrigger(Collider * collider) {}
+	virtual void OnTrigger(Collider * collider, float dt) {}
 
 	virtual void OnTriggerExit(Collider * collider) {}
 

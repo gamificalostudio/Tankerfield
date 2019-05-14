@@ -1826,6 +1826,13 @@
         </rotate>
       </animations>
     </happy_hour>
+    <healing_area>
+      <collider_width value="8"/>       <!--tiles-->
+      <collider_height value="8"/>      <!--tiles-->
+      <heal_by_second value="20"/>
+      <time_of_life value="6"/>         <!--seconds-->
+
+    </healing_area>
   </items>
 
 </config>

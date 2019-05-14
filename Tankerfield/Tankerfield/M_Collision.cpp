@@ -79,7 +79,7 @@ M_Collision::M_Collision()
 	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::PICK_UP] = true;
 	matrix[(int)Collider::TAG::GOD][(int)Collider::TAG::ROAD] = true;
 
-
+	matrix[(int)Collider::TAG::HEALING_AREA][(int)Collider::TAG::PLAYER] = true;
 
 }
 
@@ -170,7 +170,7 @@ bool M_Collision::Update(float dt)
 
 			if (collider_1->CheckCollision(collider_2)  &&  collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
-				DoOnTrigger(collider_1, collider_2);
+				DoOnTrigger(collider_1, collider_2,dt );
 				/*DoOnTrigger(collider_2, collider_1);*/
 				
 
@@ -213,7 +213,7 @@ bool M_Collision::Update(float dt)
 
 			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
-				DoOnTrigger(collider_1, collider_2);
+				DoOnTrigger(collider_1, collider_2, dt);
 		/*		DoOnTrigger(collider_2, collider_1);*/
 
 				SolveOverlapDS(collider_2, collider_1);
@@ -244,7 +244,7 @@ bool M_Collision::Update(float dt)
 	
 			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
-                 DoOnTrigger(collider_1, collider_2);
+                 DoOnTrigger(collider_1, collider_2, dt);
           /*       DoOnTrigger(collider_2, collider_1);*/
 			}
 			else
@@ -490,14 +490,14 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 	c2->object->pos_map = c2->position - c2->obj_offset;
 }
 
-inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
+inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2, float dt)
 {
 	
 	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
 	{
 		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
-			c1->object->OnTrigger(c2);
+			c1->object->OnTrigger(c2, dt);
 		}
 	}
 	else
@@ -516,7 +516,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	{
 		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
-			c1->object->OnTrigger(c2);
+			c1->object->OnTrigger(c2, dt);
 		}
 	}
 	else

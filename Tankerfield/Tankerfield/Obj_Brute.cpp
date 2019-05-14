@@ -292,7 +292,7 @@ void Obj_Brute::OnTriggerEnter(Collider * collider)
 	}
 }
 
-void Obj_Brute::OnTrigger(Collider* collider)
+void Obj_Brute::OnTrigger(Collider* collider, float dt)
 {
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{

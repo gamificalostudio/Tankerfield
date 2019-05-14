@@ -204,8 +204,9 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	life = 90;
 	max_life = 100;
+	life = max_life;
+	
 
 	charged_shot_speed = 1.0f;
 
@@ -234,7 +235,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HEALTH_BAG);
+	SetItem(ItemType::HEALING_AREA);
 	return true;
 }
 
@@ -535,7 +536,7 @@ bool Obj_Tank::CleanUp()
 
 
 
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTrigger(Collider * c1, float dt)
 {
 	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
 	{
@@ -591,7 +592,7 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 		}
 }
 
-void Obj_Tank::SetLife(int life)
+void Obj_Tank::SetLife(float life)
 {
 
 	if (life > GetMaxLife())
@@ -628,7 +629,7 @@ void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 	weapon_info.time_between_bullets = time_between_bullets;
 }
 
-int Obj_Tank::GetLife() const
+float Obj_Tank::GetLife() const
 {
 	return life;
 }

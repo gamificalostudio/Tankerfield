@@ -34,6 +34,7 @@ public:
 		REWARD_BOX,
 		PLAYER,
 		ROAD,
+		HEALING_AREA,
 		MAX
 	};
 
@@ -169,7 +170,7 @@ public:
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
 
-	inline void DoOnTrigger(Collider* c1, Collider *c2);
+	inline void DoOnTrigger(Collider* c1, Collider *c2, float dt);
 
 	inline void DoOnTriggerExit(Collider* c1, Collider *c2);
 

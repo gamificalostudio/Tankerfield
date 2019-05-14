@@ -41,6 +41,7 @@
 #include "Camera.h"
 #include "Obj_CannonFire.h"
 #include "Obj_Item.h"
+#include "Item_HealingArea.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -328,6 +329,10 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 	case ItemType::HAPPY_HOUR_ITEM:
 		ret = new Item_HappyHour(pos);
 		ret->type = ItemType::HAPPY_HOUR_ITEM;
+		break;
+	case ItemType::HEALING_AREA:
+		ret = new Item_HealingArea(pos);
+		ret->type = ItemType::HEALING_AREA;
 		break;
 	}
 

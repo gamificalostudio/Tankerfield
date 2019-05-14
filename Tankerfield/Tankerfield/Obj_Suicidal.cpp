@@ -292,7 +292,7 @@ void Obj_Suicidal::OnTriggerEnter(Collider * collider)
 	}
 }
 
-void Obj_Suicidal::OnTrigger(Collider* collider)
+void Obj_Suicidal::OnTrigger(Collider* collider, float dt)
 {
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
