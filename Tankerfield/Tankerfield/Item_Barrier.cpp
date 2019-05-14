@@ -19,6 +19,7 @@ bool Item_Barrier::Update(float dt)
 
 bool Item_Barrier::Use()
 {
-	app->objectmanager->CreateObject(ObjectType::BARRIER, pos_map+caster->GetShotDir()*3);
+	fPoint caster_dir = caster->GetShotDir();
+	app->objectmanager->CreateObject(ObjectType::BARRIER, pos_map+caster_dir*2-caster_dir.RotateDegree(90)*1.5);
 	return true;
 }

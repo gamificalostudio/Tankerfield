@@ -209,6 +209,9 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	case ItemType::INSTANT_HELP:
 		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP];
 		break;
+	case ItemType::BARRIER_ITEM:
+		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::BARRIER_ITEM];
+		break;
 	default:
 		img_def.sprite_section = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG];
 		break;
