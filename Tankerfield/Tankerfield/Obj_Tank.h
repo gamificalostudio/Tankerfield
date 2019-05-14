@@ -109,6 +109,8 @@ private:
 	void ShootLaserShotCharged();
 	void ShootElectroShot();
 
+	void ShootElectroShotCharged();
+
 	//- TankDeath
 	void ReviveTank(float dt);
 	void StopTank();
@@ -193,7 +195,9 @@ private:
 
 	//Electro shot
 	Collider* electro_shot_collider			= nullptr;
+	Collider* electro_shot_collider_charged	= nullptr;
 	PerfTimer electro_shot_timer;
+
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;

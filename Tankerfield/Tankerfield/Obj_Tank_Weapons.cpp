@@ -24,13 +24,18 @@ void Obj_Tank::InitWeapons()
 	electro_shot_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);
 	electro_shot_collider->Disactivate();
 
+	electro_shot_collider_charged = app->collision->AddCollider(pos_map, 6, 6, Collider::TAG::ELECTRO_SHOT, 100, this);
+	electro_shot_collider_charged->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	electro_shot_collider_charged->Disactivate();
+
+
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
-	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
+	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets()
@@ -290,10 +295,27 @@ void Obj_Tank::ShootElectroShot()
 	electro_shot_collider->GetSize(coll_w, coll_h);
 	fPoint offset{ -coll_w*0.5f, -coll_h * 0.5f};
 	fPoint dir = GetShotDir() * fPoint{2,2};
-	//fPoint offset2{dir};
+
 	electro_shot_collider->SetObjOffset(offset + dir);
 	electro_shot_collider->SetPosToObj();
 	
 	electro_shot_collider->Activate();
 	electro_shot_timer.Start();
 }
+
+void Obj_Tank::ShootElectroShotCharged()
+{
+	float coll_w;
+	float coll_h;
+	electro_shot_collider_charged->GetSize(coll_w, coll_h);
+	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
+	fPoint dir = GetShotDir() * fPoint {coll_w*0.5f, coll_h * 0.5f};
+
+	electro_shot_collider_charged->SetObjOffset(offset + dir);
+	electro_shot_collider_charged->SetPosToObj();
+
+	electro_shot_collider_charged->Activate();
+	electro_shot_timer.Start();
+}
+
+
