@@ -4,6 +4,8 @@
 #include "Obj_Item.h"
 #include "PerfTimer.h"
 #include "Obj_Portal.h"
+#include "Object.h"
+#include "Obj_Tank.h"
 
 struct SDL_Texture;
 
@@ -21,8 +23,6 @@ private:
 	Animation anim;
 
 	PerfTimer time;
-
-	Obj_Portal * portal1;
 };
 
 #endif
