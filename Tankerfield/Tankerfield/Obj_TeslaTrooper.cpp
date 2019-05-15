@@ -36,7 +36,7 @@
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
-	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla");
+	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());

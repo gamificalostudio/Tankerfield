@@ -61,15 +61,23 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	time_round_check_frequency = config.child("time_round_check_frequency").attribute("value").as_float();
 
-	// Wave System setup
-	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	
+	//MUSIC
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
 
 	finish_wave_sound_string = config.child("sounds").child("finish_wave_shot").attribute("sound").as_string();
 	wind_sound_string = config.child("sounds").child("wind_sound").attribute("sound").as_string();
 
 	srand(time(NULL));
+
+	// Wave System setup
+	pugi::xml_node subround_node = config.child("subrounds").child("subround");
+	for (uint i = 0; i < MAX_SUBROUNDS; ++i)
+	{
+		percentage_enemies_subround[i] = subround_node.attribute("percent").as_float(0);
+		time_between_rounds[i] = subround_node.attribute("time").as_int(0);
+		subround_node = subround_node.next_sibling("subround");
+	}
 
 	return ret;
 }
@@ -121,6 +129,8 @@ bool M_Scene::Start()
 			//app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
 		}
 	}
+
+
 
 	general_hud = DBG_NEW General_HUD();
 
@@ -229,17 +239,19 @@ bool M_Scene::Update(float dt)
 		else
 			label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
 	}
+
 	switch (stat_of_wave)
 	{
 	case WaveStat::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
 		++subround;
-		if (subround > max_subrounds)
+		if (subround > MAX_SUBROUNDS)
 		{
-			subround = 1;
+			subround = 0;
 			++round;
 		}
+
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
@@ -268,7 +280,7 @@ bool M_Scene::Update(float dt)
 		break;
 	}
 	case WaveStat::OUT_WAVE:
-		if (timer_between_waves.ReadMs() >= time_between_rounds || AllPlayersReady())
+		if (timer_between_waves.ReadSec() >= time_between_rounds[subround] || AllPlayersReady())
 		{
 			stat_of_wave = WaveStat::ENTER_IN_WAVE;
 		}
@@ -359,7 +371,9 @@ bool M_Scene::CleanUp()
 	{
 			(*i)->gui = nullptr;
 	}
-	
+
+	if(label_number_of_enemies!=nullptr)
+		label_number_of_enemies->Destroy();
 
 	return true;
 }
@@ -457,6 +471,8 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
 	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
+	 
+
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)
@@ -486,21 +502,14 @@ void M_Scene::CreateEnemyWave()
 
 void M_Scene::NewWave()
 {
-	if (round == 1)
+	Tesla_trooper_units = 10 * round * 4;
+	Tesla_trooper_units *= percentage_enemies_subround[subround];
+
+	if (round >= 3)
 	{
-		Tesla_trooper_units = 100 + (round - 1) * 4 * 6;/*the * 4 is because is coop */
-		Brute_units = (round - 5) * 3;
+		Brute_units += round - 2;
 	}
-	else if (round >1 && round <= 5)
-	{
-		Tesla_trooper_units = 300 + (round - 1) * 4 * 6;/*the * 4 is because is coop */
-		Brute_units = (round -1) * 5;
-	}
-	else 
-	{
-		Tesla_trooper_units = (round * 18 + round * 14) * 6;
-		Brute_units = round * 2;
-	}
+
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
 	general_hud->SetRoundNumber(round);
