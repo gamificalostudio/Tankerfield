@@ -1,5 +1,7 @@
 #include <assert.h>
 
+#include "M_UI.h"
+#include "UI_Label.h"
 #include "Obj_Enemy.h"
 #include "M_Collision.h"
 #include "Bullet_Laser.h"
@@ -160,6 +162,7 @@ void Obj_Enemy::Dead()
 		if (death.Finished())
 		{
 			to_remove = true;
+			
 		}
 	}
 }
@@ -246,6 +249,12 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 		scale);
 	
 
+	return true;
+}
+
+bool Obj_Enemy::CleanUp()
+{
+	app->scene->ReduceNumEnemies();
 	return true;
 }
 

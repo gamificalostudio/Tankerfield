@@ -59,6 +59,8 @@ public:
 
 	bool Draw(float dt, Camera* camera)override;
 
+	bool CleanUp() override;
+
 protected:
 	inline void UpdateVelocity();
 

@@ -16,6 +16,7 @@ class RewardZone;
 class Object;
 class Player_GUI;
 class General_HUD;
+class UI_Label;
 
 enum class WaveStat
 {
@@ -35,16 +36,24 @@ class M_Scene : public Module
 private:
 	Controller** control1			= nullptr;
 
+	uint subround = 1;
+
+	uint max_subrounds = 3;
+
+	int number_of_enemies = 0;
+
 public:
 	int current_level				= 0;
 
 	General_HUD * general_hud		= nullptr;
 
 	uint round		= 0;
-	std::list<Object*> enemies_in_wave;
+
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
 	PerfTimer timer_between_waves;
+
+	UI_Label* label_number_of_enemies = nullptr;
 
 public:
 
@@ -78,12 +87,15 @@ public:
 
 	void DebugPathfinding();
 
+	void ReduceNumEnemies();
+
 private:
 	void CreateEnemyWave();
 
 	void NewWave();
 
 	bool AllPlayersReady() const;
+
 
 public:
 	SDL_Texture* path_tex = nullptr;
