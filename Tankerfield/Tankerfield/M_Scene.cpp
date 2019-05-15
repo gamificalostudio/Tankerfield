@@ -370,7 +370,9 @@ bool M_Scene::CleanUp()
 	{
 			(*i)->gui = nullptr;
 	}
-	
+
+	if(label_number_of_enemies!=nullptr)
+		label_number_of_enemies->Destroy();
 
 	return true;
 }
