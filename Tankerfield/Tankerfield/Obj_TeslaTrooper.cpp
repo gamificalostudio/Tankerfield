@@ -123,9 +123,10 @@ void Obj_TeslaTrooper::TeleportOut(float & dt)
 		angle = -90;
 		draw = true;
 	}
-
 	if (in_portal != nullptr)
+	{
 		in_portal->NextFrame(dt);
+	}
 }
 void Obj_TeslaTrooper::TeleportIn(float & dt)
 {
@@ -144,7 +145,6 @@ void Obj_TeslaTrooper::TeleportIn(float & dt)
 			state = ENEMY_STATE::TELEPORT_OUT;
 			teleport_timer.Start();
 			angle = 90;
-
 		}
 	}
 }
@@ -193,17 +193,15 @@ void Obj_TeslaTrooper::GetTeleportPoint()
 }
 void Obj_TeslaTrooper::Spawn(const float & dt)
 {
+	spawn_anim.NextFrame(dt);
+	if ((int)spawn_anim.current_frame >= 6)
 	{
-		spawn_anim.NextFrame(dt);
-		if ((int)spawn_anim.current_frame >= 6)
-		{
-			draw = true;
-		}
-		if (spawn_anim.Finished())
-		{
-			spawn_anim.Reset();
-			state = ENEMY_STATE::GET_PATH;
-		}
+		draw = true;
+	}
+	if (spawn_anim.Finished())
+	{
+		spawn_anim.Reset();
+		state = ENEMY_STATE::GET_PATH;
 	}
 }
 void Obj_TeslaTrooper::Idle()
@@ -221,7 +219,9 @@ int Obj_TeslaTrooper::Move(float & dt)
 	{
 		update_velocity_vec.Start();
 		if (path.size() > 0)
+		{
 			path.erase(path.begin());
+		}
 
 		if (path.size() > 0)
 		{
@@ -229,7 +229,6 @@ int Obj_TeslaTrooper::Move(float & dt)
 			next_pos += {0.5f, 0.5f};
 			UpdateVelocity();
 		}
-
 		else
 		{
 			state = ENEMY_STATE::GET_PATH;
@@ -295,21 +294,19 @@ void Obj_TeslaTrooper::GetPath()
 
 	if (target != nullptr)
 	{
-		if (pos_map.DistanceNoSqrt(target->pos_map) <= squared_detection_range)
+		if (pos_map.DistanceNoSqrt(target->pos_map) <= squared_detection_range
+			&& app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 		{
-			if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
-			{
-				path.clear();
-				path = *app->pathfinding->GetLastPath();
-				if (path.size() > 0)
-					path.erase(path.begin());
+			path.clear();
+			path = *app->pathfinding->GetLastPath();
+			if (path.size() > 0)
+				path.erase(path.begin());
 
-				next_pos = (fPoint)(*path.begin());
-				UpdateVelocity();
+			next_pos = (fPoint)(*path.begin());
+			UpdateVelocity();
 
-				state = ENEMY_STATE::MOVE;
-				curr_anim = &walk;
-			}
+			state = ENEMY_STATE::MOVE;
+			curr_anim = &walk;
 		}
 		else
 		{

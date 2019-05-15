@@ -53,8 +53,8 @@ https://github.com/AitorVelez
 - F3: Show pathfinding lines
 - F4: Show / hide tank crosshairs
 - F5: Reset level
-- F7: Activete/ Desactivate god Mode
-- F9: show colliders
+- F7: Activate/ Deactivate God Mode
+- F9: Show colliders
 
 
 

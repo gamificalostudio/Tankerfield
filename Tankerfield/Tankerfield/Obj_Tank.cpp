@@ -273,7 +273,6 @@ bool Obj_Tank::Update(float dt)
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
 	Shoot();
 	Item();
-	StopTank();
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
@@ -617,11 +616,11 @@ void Obj_Tank::SetLife(int life)
 	{
 		this->life = GetMaxLife();
 	}
-
 	else if (life <= 0 && this->life != 0)
 	{
 		this->life = 0;
 		app->audio->PlayFx(die_sfx);
+		StopTank();
 	}
 	else
 	{
@@ -983,17 +982,14 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::StopTank()
 {
-	if (life <= 0)
+	if (!fire_dead)
 	{
-		if (!fire_dead)
-		{
-			fire_dead = true;
-			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
-			dead_fire->tank = this;
-		}
-		this->SetWeapon(WEAPON::BASIC, 0);
-		this->SetItem(ItemType::NO_TYPE);
+		fire_dead = true;
+		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+		dead_fire->tank = this;
 	}
+	this->SetWeapon(WEAPON::BASIC, 1);
+	this->SetItem(ItemType::NO_TYPE);
 }
 
 bool Obj_Tank::Alive() const
