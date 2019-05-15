@@ -18,6 +18,7 @@
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Suicidal.h"
 #include "Obj_Brute.h"
+#include "Obj_RocketLauncher.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
@@ -245,6 +246,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Obj_Suicidal(pos);
 		ret->type = ObjectType::SUICIDAL;
 		enemies.push_back(ret);
+		break;
+	case ObjectType::ROCKETLAUNCHER:
+		ret = DBG_NEW Obj_RocketLauncher(pos);
+		ret->type = ObjectType::ROCKETLAUNCHER;
 		break;
 	case ObjectType::TANK:
 		ret = DBG_NEW Obj_Tank(pos);
