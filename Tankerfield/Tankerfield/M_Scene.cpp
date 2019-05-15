@@ -2,8 +2,11 @@
 #include <ctime>
 #include <string>
 
+#include "Brofiler/Brofiler.h"
+
 #include "Defs.h"
 #include "Log.h"
+
 #include "App.h"
 #include "M_UI.h"
 #include "M_Fonts.h"
@@ -19,14 +22,17 @@
 #include "M_ObjManager.h"
 #include "M_Collision.h"
 #include "M_MainMenu.h"
+#include "M_PickManager.h"
+#include "M_RewardZoneManager.h"
+
+#include "UI_Label.h"
+
 #include "Point.h"
-#include "Brofiler/Brofiler.h"
 #include "Rect.h"
 #include "Object.h"
-#include "M_PickManager.h"
 #include "PerfTimer.h"
 #include "Obj_Tank.h"
-#include "M_RewardZoneManager.h"
+
 #include "General_HUD.h"
 #include "Player_GUI.h"
 
@@ -76,7 +82,7 @@ bool M_Scene::Start()
 	// Load Fxs
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
-	
+
 
 
 	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
@@ -111,11 +117,11 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
-		
+
 			//app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
 		}
 	}
-	
+
 	general_hud = DBG_NEW General_HUD();
 
 	round = 0u;
@@ -123,6 +129,8 @@ bool M_Scene::Start()
 	game_over = false;
 
 
+	UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
+	label_number_of_enemies = app->ui->CreateLabel({ 0,0 }, info_label, nullptr);
 
 	return true;
 }
@@ -425,6 +433,7 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies_killed = 0;
 	number_of_enemies_created += Tesla_trooper_units;
 	number_of_enemies_created += Brute_units;
+	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies_created));
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)

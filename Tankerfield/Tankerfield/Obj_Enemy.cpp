@@ -1,5 +1,7 @@
 #include <assert.h>
 
+#include "M_UI.h"
+#include "UI_Label.h"
 #include "Obj_Enemy.h"
 #include "M_Collision.h"
 #include "Bullet_Laser.h"
@@ -253,6 +255,7 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->number_of_enemies_killed += 1;
+	app->scene->label_number_of_enemies->SetText("number of enemies:" + std::to_string(app->scene->number_of_enemies_created- app->scene->number_of_enemies_killed));
 	return true;
 }
 

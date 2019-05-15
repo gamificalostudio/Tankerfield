@@ -16,6 +16,7 @@ class RewardZone;
 class Object;
 class Player_GUI;
 class General_HUD;
+class UI_Label;
 
 enum class WaveStat
 {
@@ -51,6 +52,8 @@ public:
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
 	PerfTimer timer_between_waves;
+
+	UI_Label* label_number_of_enemies = nullptr;
 
 public:
 
