@@ -146,6 +146,13 @@
 
   <scene>
     <rounds_to_win value="10"/>
+    
+    <subrounds>
+      <subround percent="0.4"/>
+      <subround percent="0.6"/>
+      <subround percent="1.0"/>
+    </subrounds>
+    
     <time_round_check_frequency value="2"/>
     
     <time_between_rounds value="5000"/>
