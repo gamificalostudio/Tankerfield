@@ -23,6 +23,27 @@
   
   <animations_bank>animations.xml</animations_bank>
 
+    <scene>
+      <rounds_to_win value="10"/>
+    
+      <subrounds>
+        <subround percent="0.4" time ="2"/>
+        <subround percent="0.6" time="3"/>
+        <subround percent="1.0" time="5"/>
+      </subrounds>
+    
+      <time_round_check_frequency value="2"/>
+  
+      <music>
+        <main_music music ="audio/Music/indeep.ogg"/>
+      </music>
+    
+      <sounds>
+        <finish_wave_shot sound ="audio/Fx/Scene/finish_wave_sound.wav"/>
+        <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
+      </sounds>
+  </scene>
+  
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
@@ -144,28 +165,7 @@
       </levels>
   </map>
 
-  <scene>
-    <rounds_to_win value="10"/>
-    
-    <subrounds>
-      <subround percent="0.4"/>
-      <subround percent="0.6"/>
-      <subround percent="1.0"/>
-    </subrounds>
-    
-    <time_round_check_frequency value="2"/>
-    
-    <time_between_rounds value="5000"/>
-  
-    <music>
-      <main_music music ="audio/Music/indeep.ogg"/>
-    </music>
-    
-    <sounds>
-      <finish_wave_shot sound ="audio/Fx/Scene/finish_wave_sound.wav"/>
-      <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
-    </sounds>
-  </scene>
+
 
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>

@@ -61,9 +61,8 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	time_round_check_frequency = config.child("time_round_check_frequency").attribute("value").as_float();
 
-	// Wave System setup
-	time_between_rounds = config.child("time_between_rounds").attribute("value").as_int();
 	
+	//MUSIC
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
 
 	finish_wave_sound_string = config.child("sounds").child("finish_wave_shot").attribute("sound").as_string();
@@ -71,10 +70,12 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	srand(time(NULL));
 
+	// Wave System setup
 	pugi::xml_node subround_node = config.child("subrounds").child("subround");
 	for (uint i = 0; i < MAX_SUBROUNDS; ++i)
 	{
 		percentage_enemies_subround[i] = subround_node.attribute("percent").as_float(0);
+		time_between_rounds[i] = subround_node.attribute("time").as_int(0);
 		subround_node = subround_node.next_sibling("subround");
 	}
 
@@ -279,7 +280,7 @@ bool M_Scene::Update(float dt)
 		break;
 	}
 	case WaveStat::OUT_WAVE:
-		if (timer_between_waves.ReadMs() >= time_between_rounds || AllPlayersReady())
+		if (timer_between_waves.ReadSec() >= time_between_rounds[subround] || AllPlayersReady())
 		{
 			stat_of_wave = WaveStat::ENTER_IN_WAVE;
 		}
