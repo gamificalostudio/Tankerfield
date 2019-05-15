@@ -488,7 +488,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 				{
 					ret->pivot.y = property_node.attribute("value").as_float(0);
 				}
-				else if (name == "has_collider" && property_node.attribute("value").as_bool(true))
+				else if (name == "has_collider" && property_node.attribute("value").as_bool(false))
 				{
 					ret->SetCollider(building_rect);
 				}
