@@ -67,7 +67,10 @@ protected:
 
 	inline virtual void Burn(const float& dt);
 
-	inline void GenereRandomNextPos();
+	bool CleanUp() override;
+
+protected:
+
 
 	int life = 0;
 	float speed = 0.f;

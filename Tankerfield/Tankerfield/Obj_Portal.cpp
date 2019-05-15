@@ -32,10 +32,10 @@ Obj_Portal::~Obj_Portal()
 
 bool Obj_Portal::Update(float dt)
 {
-	if (time.ReadMs() >= 10000)
+	if (time.ReadMs() >= 10000 && coll != nullptr)
 	{
 		to_remove = true;
-		coll->to_destroy = true;
+		coll->Destroy();
 		coll = nullptr;
 	}
 

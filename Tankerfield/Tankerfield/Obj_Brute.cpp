@@ -40,11 +40,12 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
-	idle.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("idle"));
-	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
-	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
-	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
-	spawn.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("spawn"));
+	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
+	idle.frames = app->anim_bank->LoadFrames(animation_node.child("idle"));
+	walk.frames = app->anim_bank->LoadFrames(animation_node.child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(animation_node.child("attack"));
+	death.frames = app->anim_bank->LoadFrames(animation_node.child("death"));
+	spawn.frames = app->anim_bank->LoadFrames(animation_node.child("spawn"));
 	curr_anim = &spawn;
 
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);

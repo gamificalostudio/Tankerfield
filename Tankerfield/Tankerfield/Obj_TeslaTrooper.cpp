@@ -36,7 +36,7 @@
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
-	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla");
+	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
@@ -256,38 +256,6 @@ int Obj_TeslaTrooper::Move(float & dt)
 
 void Obj_TeslaTrooper::GetPath()
 {
-	//path.clear();
-	//move_vect.SetToZero();
-	//target = app->objectmanager->GetNearestTank(pos_map);
-	//if (target != nullptr)
-	//{
-
-	//	if (this->pos_map.DistanceManhattan(target->pos_map) <= detection_range)  //why
-	//	{
-	//		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
-	//		{
-
-	//			std::vector<iPoint> aux = *app->pathfinding->GetLastPath();
-	//			for (std::vector<iPoint>::iterator iter = aux.begin() + 1; iter != aux.end(); ++iter) //why
-	//			{
-	//				path.push_back({ (*iter).x + 0.5f,(*iter).y + 0.5f });
-	//			}
-
-	//			state = ENEMY_STATE::RECHEAD_POINT;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if (teleport_timer.ReadSec() >= check_teleport_time)
-	//			state = ENEMY_STATE::GET_TELEPORT_POINT;
-	//		else
-	//			state = ENEMY_STATE::GET_PATH;
-	//	}
-	//}
-	//else
-	//{
-	//	state = ENEMY_STATE::IDLE;
-	//}
 	curr_anim = &idle;
 	move_vect.SetToZero();
 	target = app->objectmanager->GetNearestTank(pos_map);
@@ -310,7 +278,7 @@ void Obj_TeslaTrooper::GetPath()
 		}
 		else
 		{
-			if (teleport_timer.ReadSec() >= check_teleport_time && path.size() > 0)
+			if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
 			{
 				state = ENEMY_STATE::GET_TELEPORT_POINT;
 				curr_anim = &idle;

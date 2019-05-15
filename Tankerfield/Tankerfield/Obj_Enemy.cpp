@@ -1,5 +1,7 @@
 #include <assert.h>
 
+#include "M_UI.h"
+#include "UI_Label.h"
 #include "Obj_Enemy.h"
 #include "M_Collision.h"
 #include "Bullet_Laser.h"
@@ -169,6 +171,7 @@ void Obj_Enemy::Dead()
 		if (death.Finished())
 		{
 			to_remove = true;
+			
 		}
 	}
 }
@@ -268,6 +271,12 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 	return true;
 }
 
+bool Obj_Enemy::CleanUp()
+{
+	app->scene->ReduceNumEnemies();
+	return true;
+}
+
 inline void Obj_Enemy::UpdateVelocity()
 {
 	fPoint new_move_vec = (fPoint)(next_pos)-pos_map;
@@ -343,9 +352,6 @@ inline void Obj_Enemy::Burn(const float& dt)
 
 }
 
-inline void Obj_Enemy::GenereRandomNextPos()
-{
-}
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider)
 {
