@@ -35,8 +35,6 @@ public:
 
 private:
 
-	void PlayerInput( PlayerFocus * player_focus);
-
 	UI_Element * GetNearestElement(PlayerFocus * player_focus, CONTROLLER_DIR dir);
 
 	bool ElementIsFocused( UI_Element* element);
