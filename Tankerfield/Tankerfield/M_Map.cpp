@@ -460,10 +460,14 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		if (object_group->name == "Buildings")
 		{
 			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x ),  (float)(object_group->objects[i].pos.y ) };
-			fRect mesure = { 0.f, 0.f, (float)object_group->objects[i].w, (float)object_group->objects[i].h};
+			fRect building_rect = {
+				object_group->objects[i].pos.x,
+				object_group->objects[i].pos.y,
+				object_group->objects[i].w,
+				object_group->objects[i].h
+			};
 
-			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, pos);
+			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, building_rect.pos);
 
 			for (pugi::xml_node property_node = obj_node.child("properties").child("property"); property_node!=NULL; property_node = property_node.next_sibling("property"))
 			{
@@ -484,10 +488,13 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 				{
 					ret->pivot.y = property_node.attribute("value").as_float(0);
 				}
+				else if (name == "has_collider" && property_node.attribute("value").as_bool(true))
+				{
+					ret->SetCollider(building_rect);
+				}
 				
 			}
 			ret->SetTexture(ret->path);
-			ret->SetCollider(mesure);
 		}
 
 		/* Reward Zones locations */

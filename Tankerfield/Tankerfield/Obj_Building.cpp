@@ -36,7 +36,7 @@ void Obj_Building::SetTexture(const char* path)
 
 void Obj_Building::SetCollider(const fRect & collider_rect)
 {
-	coll = app->collision->AddCollider(pos_map, collider_rect.w, collider_rect.h, Collider::TAG::WALL, 0.f, this);
+	coll = app->collision->AddCollider(collider_rect.pos, collider_rect.w, collider_rect.h, Collider::TAG::WALL, 0.f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
 }
 
