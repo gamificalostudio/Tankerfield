@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="left-up" width="200" height="300" tilewidth="60" tileheight="30" infinite="0" nextobjectid="1735">
+<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="left-up" width="200" height="300" tilewidth="60" tileheight="30" infinite="0" nextobjectid="1912">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
@@ -146040,35 +146040,35 @@
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
@@ -151040,35 +151040,35 @@
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
-   <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
+   <tile/>
    <tile gid="483"/>
    <tile gid="483"/>
    <tile gid="483"/>
@@ -240153,11 +240153,11 @@
    <tile/>
   </data>
  </layer>
- <objectgroup name="Colliders" visible="0">
+ <objectgroup name="Colliders">
   <object id="55" type="WATER" x="3780.67" y="4982" width="1080" height="999.667"/>
   <object id="323" type="WATER" x="2280" y="1230" width="780" height="390"/>
   <object id="327" type="WATER" x="3300" y="270" width="2700" height="420"/>
-  <object id="328" type="WATER" x="3420" y="2400" width="360" height="1380"/>
+  <object id="328" type="WATER" x="3420" y="2370" width="360" height="1410"/>
   <object id="329" type="WATER" x="4270.5" y="1860" width="229.5" height="720"/>
   <object id="330" type="WATER" x="3750" y="1500" width="210.997" height="660"/>
   <object id="331" type="WATER" x="4290" y="1710" width="210" height="60"/>
@@ -240217,13 +240217,19 @@
   <object id="494" type="ROAD" x="3540" y="1410" width="90" height="750"/>
   <object id="495" type="ROAD" x="1410" y="1140" width="1980" height="90"/>
   <object id="496" type="ROAD" x="1320" y="60" width="90" height="4920"/>
-  <object id="497" type="ROAD" x="2190" y="4530" width="2640" height="90"/>
-  <object id="499" type="ROAD" x="2190" y="4620" width="90" height="360"/>
-  <object id="500" type="ROAD" x="2400" y="2940" width="90" height="1590"/>
+  <object id="497" type="ROAD" x="2490" y="4530" width="2340" height="90"/>
+  <object id="499" type="ROAD" x="2190" y="4530" width="90" height="450"/>
   <object id="501" type="ROAD" x="1410" y="3780" width="990" height="90"/>
   <object id="502" type="ROAD" x="2490" y="3780" width="1500" height="90"/>
+  <object id="1735" type="ROAD" x="1410" y="4890" width="780" height="90"/>
+  <object id="1736" type="ROAD" x="1830" y="4140" width="570" height="90"/>
+  <object id="1737" type="ROAD" x="1740" y="3930" width="90" height="450"/>
+  <object id="1738" type="ROAD" x="1620" y="3930" width="120" height="90"/>
+  <object id="1739" type="ROAD" x="1530" y="3930" width="90" height="630"/>
+  <object id="1740" type="ROAD" x="1410" y="4470" width="120" height="90"/>
+  <object id="1741" type="ROAD" x="2280" y="4530" width="120" height="90"/>
  </objectgroup>
- <objectgroup name="Buildings">
+ <objectgroup name="Buildings" visible="0">
   <object id="211" name="camsc" x="3630" y="1830" width="93.3333" height="94">
    <properties>
     <property name="offset_x" type="int" value="108"/>
@@ -240264,7 +240270,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="250" name="canewy" x="4748.17" y="4459.67" width="77" height="126">
+  <object id="250" name="canewy" x="4590" y="4680" width="77" height="126">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240272,7 +240278,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="251" name="canewy" x="4750.83" y="4603.67" width="77" height="126">
+  <object id="251" name="canewy" x="4740" y="4680" width="77" height="126">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240312,7 +240318,7 @@
     <property name="pivot_y" type="float" value="275"/>
    </properties>
   </object>
-  <object id="256" name="cagas" x="3810" y="4410" width="91" height="92.75">
+  <object id="256" name="cagas" x="3840" y="4650" width="91" height="92.75">
    <properties>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="30"/>
@@ -240336,7 +240342,7 @@
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="259" name="cafarm" x="3960" y="4380" width="49.5" height="62.1667">
+  <object id="259" name="cafarm" x="4050" y="4680" width="49.5" height="62.1667">
    <properties>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240344,7 +240350,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="260" name="cafarm" x="4020" y="4380" width="49.5" height="62.1667">
+  <object id="260" name="cafarm" x="4110" y="4680" width="49.5" height="62.1667">
    <properties>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240352,7 +240358,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="261" name="cafarm" x="4080" y="4380" width="49.5" height="62.1667">
+  <object id="261" name="cafarm" x="4170" y="4680" width="49.5" height="62.1667">
    <properties>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240360,7 +240366,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="262" name="caeur3" x="3990" y="3990" width="125.75" height="91.25">
+  <object id="262" name="caeur3" x="3960" y="4140" width="125.75" height="91.25">
    <properties>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240368,7 +240374,7 @@
     <property name="pivot_y" type="float" value="47"/>
    </properties>
   </object>
-  <object id="263" name="caeur3" x="4020" y="3660" width="125.75" height="91.25">
+  <object id="263" name="caeur3" x="4140" y="3720" width="125.75" height="91.25">
    <properties>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240376,7 +240382,7 @@
     <property name="pivot_y" type="float" value="47"/>
    </properties>
   </object>
-  <object id="264" name="caarmy" x="4353.25" y="3677.17" width="71.5" height="47.6667">
+  <object id="264" name="caarmy" x="4350" y="3540" width="71.5" height="47.6667">
    <properties>
     <property name="offset_x" type="int" value="30"/>
     <property name="offset_y" type="int" value="15"/>
@@ -240384,39 +240390,7 @@
     <property name="pivot_y" type="float" value="19"/>
    </properties>
   </object>
-  <object id="265" name="caarmy" x="4230.75" y="3817.67" width="71.5" height="47.6667">
-   <properties>
-    <property name="offset_x" type="int" value="30"/>
-    <property name="offset_y" type="int" value="15"/>
-    <property name="path" value="Maps/Buildings/caarmy.png"/>
-    <property name="pivot_y" type="float" value="19"/>
-   </properties>
-  </object>
-  <object id="266" name="caarmy" x="4348.25" y="3798.17" width="71.5" height="47.6667">
-   <properties>
-    <property name="offset_x" type="int" value="30"/>
-    <property name="offset_y" type="int" value="15"/>
-    <property name="path" value="Maps/Buildings/caarmy.png"/>
-    <property name="pivot_y" type="float" value="19"/>
-   </properties>
-  </object>
-  <object id="267" name="caarmy" x="4237.25" y="3887.17" width="71.5" height="47.6667">
-   <properties>
-    <property name="offset_x" type="int" value="30"/>
-    <property name="offset_y" type="int" value="15"/>
-    <property name="path" value="Maps/Buildings/caarmy.png"/>
-    <property name="pivot_y" type="float" value="19"/>
-   </properties>
-  </object>
-  <object id="268" name="caarmy" x="4331.25" y="4037.17" width="71.5" height="47.6667">
-   <properties>
-    <property name="offset_x" type="int" value="30"/>
-    <property name="offset_y" type="int" value="15"/>
-    <property name="path" value="Maps/Buildings/caarmy.png"/>
-    <property name="pivot_y" type="float" value="19"/>
-   </properties>
-  </object>
-  <object id="269" name="caeur" x="4020" y="3780" width="39.75" height="36.75">
+  <object id="269" name="caeur" x="4140" y="3870" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240424,7 +240398,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="270" name="caeur" x="4230" y="4290" width="39.75" height="36.75">
+  <object id="270" name="caeur" x="4320" y="4320" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240432,7 +240406,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="271" name="caeur" x="4260" y="4230" width="39.75" height="36.75">
+  <object id="271" name="caeur" x="4350" y="4260" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240440,7 +240414,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="272" name="caeur" x="4350" y="4290" width="39.75" height="36.75">
+  <object id="272" name="caeur" x="4440" y="4320" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240456,7 +240430,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="274" name="cats" x="4290" y="4380" width="60.6667" height="32.4167">
+  <object id="274" name="cats" x="4380" y="4410" width="60.6667" height="32.4167">
    <properties>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240464,7 +240438,7 @@
     <property name="pivot_y" type="float" value="18"/>
    </properties>
   </object>
-  <object id="275" name="cats" x="4380" y="4380" width="60.6667" height="35.1667">
+  <object id="275" name="cats" x="4470" y="4410" width="60.6667" height="35.1667">
    <properties>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240472,7 +240446,7 @@
     <property name="pivot_y" type="float" value="18"/>
    </properties>
   </object>
-  <object id="276" name="cahse3" x="4200" y="4380" width="77.25" height="62.25">
+  <object id="276" name="cahse3" x="4290" y="4410" width="77.25" height="62.25">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240488,7 +240462,7 @@
     <property name="pivot_y" type="float" value="29"/>
    </properties>
   </object>
-  <object id="278" name="cahse3" x="4560" y="3840" width="77.25" height="62.25">
+  <object id="278" name="cahse3" x="4740" y="3540" width="77.25" height="62.25">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240512,7 +240486,7 @@
     <property name="pivot_y" type="float" value="34"/>
    </properties>
   </object>
-  <object id="281" name="cahse2" x="4620" y="3720" width="64" height="93.75">
+  <object id="281" name="cahse2" x="4470" y="3510" width="64" height="93.75">
    <properties>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240520,7 +240494,7 @@
     <property name="pivot_y" type="float" value="34"/>
    </properties>
   </object>
-  <object id="282" name="caeur2" x="4320" y="4230" width="39.75" height="36.75">
+  <object id="282" name="caeur2" x="4410" y="4260" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240528,7 +240502,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="283" name="caeur2" x="4290" y="4290" width="39.75" height="36.75">
+  <object id="283" name="caeur2" x="4380" y="4320" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240536,7 +240510,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="284" name="caeur2" x="3990" y="4110" width="39.75" height="36.75">
+  <object id="284" name="caeur2" x="3960" y="4260" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240544,7 +240518,7 @@
     <property name="v" type="float" value="13"/>
    </properties>
   </object>
-  <object id="285" name="caeur2" x="4080" y="3780" width="39.75" height="36.75">
+  <object id="285" name="caeur2" x="4200" y="3870" width="39.75" height="36.75">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240560,7 +240534,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="287" name="cahse" x="4050" y="4110" width="62.25" height="62.75">
+  <object id="287" name="cahse" x="4020" y="4260" width="62.25" height="62.75">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240576,7 +240550,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="289" name="caarmy2" x="4283.25" y="4044.25" width="30.5" height="30.5">
+  <object id="292" name="caarmy2" x="4500" y="3720" width="30.5" height="30.5">
    <properties>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="0"/>
@@ -240584,55 +240558,7 @@
     <property name="pivot_y" type="float" value="10"/>
    </properties>
   </object>
-  <object id="290" name="caarmy2" x="4377.75" y="3989.75" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy2.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="291" name="caarmy2" x="4341.75" y="3745.75" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy2.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="292" name="caarmy2" x="4271.25" y="3720.25" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy2.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="293" name="caarmy3" x="4329.25" y="3856.25" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy3.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="294" name="caarmy3" x="4327.75" y="3911.75" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy3.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="295" name="caarmy3" x="4313.25" y="3974.25" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy3.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="296" name="caarmy3" x="4248.25" y="3763.25" width="30.5" height="30.5">
+  <object id="296" name="caarmy3" x="4440" y="3660" width="30.5" height="30.5">
    <properties>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="0"/>
@@ -240640,31 +240566,7 @@
     <property name="v" type="float" value="10"/>
    </properties>
   </object>
-  <object id="297" name="caarmy4" x="4381.25" y="3908.25" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy4.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="298" name="caarmy4" x="4252.75" y="3962.75" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy4.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="299" name="caarmy4" x="4300.25" y="3781.25" width="30.5" height="30.5">
-   <properties>
-    <property name="offset_x" type="int" value="20"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/caarmy4.png"/>
-    <property name="pivot_y" type="float" value="10"/>
-   </properties>
-  </object>
-  <object id="300" name="caarmy4" x="4302.75" y="3684.75" width="30.5" height="30.5">
+  <object id="300" name="caarmy4" x="4500" y="3660" width="30.5" height="30.5">
    <properties>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="0"/>
@@ -242578,1181 +242480,1160 @@
     <property name="pivot" type="float" value="75"/>
    </properties>
   </object>
-  <object id="1566" name="FenceRight" x="1288.58" y="5099.75" width="32" height="6">
+  <object id="1646" name="FenceLeft" x="1260" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1567" name="FenceRight" x="1318.58" y="5099.75" width="32" height="6">
+  <object id="1727" name="FenceRight" x="2490" y="3869.75" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
-   </properties>
-  </object>
-  <object id="1568" name="FenceRight" x="1348.58" y="5099.75" width="32" height="6">
-   <properties>
-    <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
-   </properties>
-  </object>
-  <object id="1569" name="FenceRight" x="1378.58" y="5099.75" width="32" height="6">
-   <properties>
-    <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
-   </properties>
-  </object>
-  <object id="1570" name="FenceRight" x="1408.58" y="5099.75" width="32" height="6">
-   <properties>
-    <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
-   </properties>
-  </object>
-  <object id="1571" name="FenceRight" x="1438.58" y="5099.75" width="32" height="6">
-   <properties>
-    <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1572" name="FenceRight" x="1468.58" y="5099.75" width="32" height="6">
+  <object id="1742" name="FenceRight" x="2490" y="3900" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1573" name="FenceRight" x="1498.58" y="5099.75" width="32" height="6">
+  <object id="1743" name="FenceRight" x="2490" y="3930" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1574" name="FenceRight" x="1678.58" y="5099.75" width="32" height="6">
+  <object id="1744" name="FenceRight" x="2490" y="3960" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1575" name="FenceRight" x="1648.58" y="5099.75" width="32" height="6">
+  <object id="1745" name="FenceRight" x="2490" y="3990" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1576" name="FenceRight" x="1738.58" y="5099.75" width="32" height="6">
+  <object id="1746" name="FenceRight" x="2490" y="4020" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1577" name="FenceRight" x="1708.58" y="5099.75" width="32" height="6">
+  <object id="1747" name="FenceRight" x="2490" y="4050" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1578" name="FenceRight" x="1528.58" y="5099.75" width="32" height="6">
+  <object id="1748" name="FenceRight" x="2490" y="4080" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1579" name="FenceRight" x="1618.58" y="5099.75" width="32" height="6">
+  <object id="1749" name="FenceRight" x="2490" y="4110" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1580" name="FenceRight" x="1588.58" y="5099.75" width="32" height="6">
+  <object id="1750" name="FenceRight" x="2490" y="4140" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1581" name="FenceRight" x="1558.58" y="5099.75" width="32" height="6">
+  <object id="1751" name="FenceRight" x="2490" y="4170" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1582" name="FenceRight" x="1918.58" y="5099.75" width="32" height="6">
+  <object id="1752" name="FenceRight" x="2490" y="4200" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1583" name="FenceRight" x="1888.58" y="5099.75" width="32" height="6">
+  <object id="1753" name="FenceRight" x="2490" y="4230" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1584" name="FenceRight" x="2158.58" y="5099.75" width="32" height="6">
+  <object id="1754" name="FenceRight" x="2490" y="4260" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1585" name="FenceRight" x="1978.58" y="5099.75" width="32" height="6">
+  <object id="1755" name="FenceRight" x="2490" y="4290" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1586" name="FenceRight" x="2188.58" y="5099.75" width="32" height="6">
+  <object id="1756" name="FenceRight" x="2490" y="4320" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1587" name="FenceRight" x="1948.58" y="5099.75" width="32" height="6">
+  <object id="1759" name="FenceRight" x="2490" y="4350" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1588" name="FenceRight" x="2098.58" y="5099.75" width="32" height="6">
+  <object id="1760" name="FenceRight" x="2490" y="4380" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1589" name="FenceRight" x="2038.58" y="5099.75" width="32" height="6">
+  <object id="1761" name="FenceRight" x="2490" y="4410" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1590" name="FenceRight" x="2218.58" y="5099.75" width="32" height="6">
+  <object id="1762" name="FenceRight" x="2490" y="4440" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1591" name="FenceRight" x="1768.58" y="5099.75" width="32" height="6">
+  <object id="1763" name="FenceRight" x="2490" y="4470" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1592" name="FenceRight" x="2008.58" y="5099.75" width="32" height="6">
+  <object id="1764" name="FenceRight" x="2490" y="4500" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1593" name="FenceRight" x="2068.58" y="5099.75" width="32" height="6">
+  <object id="1765" name="FenceRight" x="2490" y="4620" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1594" name="FenceRight" x="1858.58" y="5099.75" width="32" height="6">
+  <object id="1766" name="FenceRight" x="2490" y="4650" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1595" name="FenceRight" x="2128.58" y="5099.75" width="32" height="6">
+  <object id="1767" name="FenceRight" x="2490" y="4680" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1596" name="FenceRight" x="1828.58" y="5099.75" width="32" height="6">
+  <object id="1768" name="FenceRight" x="2490" y="4710" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1597" name="FenceRight" x="1798.58" y="5099.75" width="32" height="6">
+  <object id="1769" name="FenceRight" x="2490" y="4740" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1598" name="FenceRight" x="2308.58" y="5099.75" width="32" height="6">
+  <object id="1770" name="FenceRight" x="2490" y="4770" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1599" name="FenceRight" x="2248.58" y="5099.75" width="32" height="6">
+  <object id="1771" name="FenceRight" x="2490" y="4800" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1600" name="FenceRight" x="2368.58" y="5099.75" width="32" height="6">
+  <object id="1772" name="FenceRight" x="2490" y="4830" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1601" name="FenceRight" x="2278.58" y="5099.75" width="32" height="6">
+  <object id="1773" name="FenceRight" x="2490" y="4860" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1602" name="FenceRight" x="2398.58" y="5099.75" width="32" height="6">
+  <object id="1774" name="FenceRight" x="2490" y="4890" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1603" name="FenceRight" x="2338.58" y="5099.75" width="32" height="6">
+  <object id="1775" name="FenceRight" x="2490" y="4920" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1604" name="FenceRight" x="2488.58" y="5099.75" width="32" height="6">
+  <object id="1776" name="FenceRight" x="2490" y="4950" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1605" name="FenceRight" x="2428.58" y="5099.75" width="32" height="6">
+  <object id="1777" name="FenceRight" x="2490" y="4980" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1606" name="FenceRight" x="2458.58" y="5099.75" width="32" height="6">
+  <object id="1778" name="FenceRight" x="2490" y="5010" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1607" name="FenceRight" x="2158.58" y="3749.75" width="32" height="6">
+  <object id="1779" name="FenceRight" x="2490" y="5040" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1608" name="FenceRight" x="1948.58" y="3749.75" width="32" height="6">
+  <object id="1780" name="FenceRight" x="2490" y="5070" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1609" name="FenceRight" x="2008.58" y="3749.75" width="32" height="6">
+  <object id="1781" name="FenceRight" x="1200" y="5070" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1610" name="FenceRight" x="1588.58" y="3749.75" width="32" height="6">
+  <object id="1782" name="FenceRight" x="1200" y="5040" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1611" name="FenceRight" x="1888.58" y="3749.75" width="32" height="6">
+  <object id="1783" name="FenceRight" x="1200" y="5010" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1612" name="FenceRight" x="1768.58" y="3749.75" width="32" height="6">
+  <object id="1784" name="FenceRight" x="1200" y="4950" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1613" name="FenceRight" x="2068.58" y="3749.75" width="32" height="6">
+  <object id="1785" name="FenceRight" x="1200" y="4980" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1614" name="FenceRight" x="2338.58" y="3749.75" width="32" height="6">
+  <object id="1786" name="FenceRight" x="1200" y="4920" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1615" name="FenceRight" x="2548.58" y="3749.75" width="32" height="6">
+  <object id="1787" name="FenceRight" x="1200" y="4860" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1616" name="FenceRight" x="1618.58" y="3749.75" width="32" height="6">
+  <object id="1788" name="FenceRight" x="1200" y="4890" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1617" name="FenceRight" x="2038.58" y="3749.75" width="32" height="6">
+  <object id="1789" name="FenceRight" x="1200" y="4800" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1618" name="FenceRight" x="1528.58" y="3749.75" width="32" height="6">
+  <object id="1790" name="FenceRight" x="1200" y="4830" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1619" name="FenceRight" x="2248.58" y="3749.75" width="32" height="6">
+  <object id="1791" name="FenceRight" x="1200" y="4770" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1620" name="FenceRight" x="2608.58" y="3749.75" width="32" height="6">
+  <object id="1792" name="FenceRight" x="1200" y="4740" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1621" name="FenceRight" x="1918.58" y="3749.75" width="32" height="6">
+  <object id="1793" name="FenceRight" x="1200" y="4710" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1622" name="FenceRight" x="2368.58" y="3749.75" width="32" height="6">
+  <object id="1794" name="FenceRight" x="1200" y="4680" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1623" name="FenceRight" x="1858.58" y="3749.75" width="32" height="6">
+  <object id="1795" name="FenceRight" x="1200" y="4650" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1624" name="FenceRight" x="2278.58" y="3749.75" width="32" height="6">
+  <object id="1796" name="FenceRight" x="1200" y="4590" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1625" name="FenceRight" x="1738.58" y="3749.75" width="32" height="6">
+  <object id="1797" name="FenceRight" x="1200" y="4620" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1626" name="FenceRight" x="2128.58" y="3749.75" width="32" height="6">
+  <object id="1798" name="FenceRight" x="1200" y="4560" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1627" name="FenceRight" x="1678.58" y="3749.75" width="32" height="6">
+  <object id="1799" name="FenceRight" x="1200" y="4500" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1628" name="FenceRight" x="2578.58" y="3749.75" width="32" height="6">
+  <object id="1800" name="FenceRight" x="1200" y="4530" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1629" name="FenceRight" x="1648.58" y="3749.75" width="32" height="6">
+  <object id="1801" name="FenceRight" x="1200" y="4440" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1630" name="FenceRight" x="1408.58" y="3749.75" width="32" height="6">
+  <object id="1802" name="FenceRight" x="1200" y="4470" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1631" name="FenceRight" x="1978.58" y="3749.75" width="32" height="6">
+  <object id="1803" name="FenceRight" x="1200" y="4410" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1632" name="FenceRight" x="2098.58" y="3749.75" width="32" height="6">
+  <object id="1804" name="FenceRight" x="1200" y="4380" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1633" name="FenceRight" x="1558.58" y="3749.75" width="32" height="6">
+  <object id="1805" name="FenceRight" x="1200" y="4350" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1634" name="FenceRight" x="2218.58" y="3749.75" width="32" height="6">
+  <object id="1806" name="FenceRight" x="1200" y="4320" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1635" name="FenceRight" x="2188.58" y="3749.75" width="32" height="6">
+  <object id="1807" name="FenceRight" x="1200" y="4290" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1636" name="FenceRight" x="2308.58" y="3749.75" width="32" height="6">
+  <object id="1808" name="FenceRight" x="1200" y="4230" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1637" name="FenceRight" x="2518.58" y="3749.75" width="32" height="6">
+  <object id="1809" name="FenceRight" x="1200" y="4260" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1638" name="FenceRight" x="1468.58" y="3749.75" width="32" height="6">
+  <object id="1810" name="FenceRight" x="1200" y="4200" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1639" name="FenceRight" x="1798.58" y="3749.75" width="32" height="6">
+  <object id="1811" name="FenceRight" x="1200" y="4140" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1640" name="FenceRight" x="1498.58" y="3749.75" width="32" height="6">
+  <object id="1812" name="FenceRight" x="1200" y="4170" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1641" name="FenceRight" x="2488.58" y="3749.75" width="32" height="6">
+  <object id="1813" name="FenceRight" x="1200" y="4080" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1642" name="FenceRight" x="1828.58" y="3749.75" width="32" height="6">
+  <object id="1814" name="FenceRight" x="1200" y="4110" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1643" name="FenceRight" x="1708.58" y="3749.75" width="32" height="6">
+  <object id="1815" name="FenceRight" x="1200" y="4050" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1644" name="FenceRight" x="1438.58" y="3749.75" width="32" height="6">
+  <object id="1816" name="FenceRight" x="1200" y="4020" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1645" name="FenceRight" x="1288.58" y="3749.75" width="32" height="6">
+  <object id="1817" name="FenceRight" x="1200" y="3990" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1646" name="FenceRight" x="1258.58" y="3749.75" width="32" height="6">
+  <object id="1818" name="FenceRight" x="1200" y="3960" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="34"/>
-    <property name="path" value="Maps/Buildings/fence2.png"/>
+    <property name="offset_y" type="int" value="0"/>
+    <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1647" name="FenceRight" x="1228.58" y="5069.75" width="6" height="32">
+  <object id="1819" name="FenceRight" x="1200" y="3930" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1648" name="FenceRight" x="1228.58" y="5039.75" width="6" height="32">
+  <object id="1820" name="FenceRight" x="1200" y="3870" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1649" name="FenceRight" x="1228.58" y="5009.75" width="6" height="32">
+  <object id="1821" name="FenceRight" x="1200" y="3840" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1650" name="FenceRight" x="1228.58" y="5009.75" width="6" height="32">
+  <object id="1822" name="FenceRight" x="1200" y="3810" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1651" name="FenceRight" x="1228.58" y="4979.75" width="6" height="32">
+  <object id="1823" name="FenceRight" x="1200" y="3900" width="30" height="30.25">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
    </properties>
   </object>
-  <object id="1652" name="FenceRight" x="1228.58" y="4949.75" width="6" height="32">
+  <object id="1824" name="FenceLeft" x="1290" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1653" name="FenceRight" x="1228.58" y="4919.75" width="6" height="32">
+  <object id="1825" name="FenceLeft" x="1410" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1654" name="FenceRight" x="1228.58" y="4889.75" width="6" height="32">
+  <object id="1826" name="FenceLeft" x="1440" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1655" name="FenceRight" x="1228.58" y="4859.75" width="6" height="32">
+  <object id="1827" name="FenceLeft" x="1500" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1656" name="FenceRight" x="1228.58" y="4799.75" width="6" height="32">
+  <object id="1828" name="FenceLeft" x="1530" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1657" name="FenceRight" x="1228.58" y="4829.75" width="6" height="32">
+  <object id="1829" name="FenceLeft" x="1470" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1658" name="FenceRight" x="1228.58" y="4769.75" width="6" height="32">
+  <object id="1830" name="FenceLeft" x="1560" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1659" name="FenceRight" x="1228.58" y="4739.75" width="6" height="32">
+  <object id="1831" name="FenceLeft" x="1590" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1660" name="FenceRight" x="1228.58" y="4709.75" width="6" height="32">
+  <object id="1832" name="FenceLeft" x="1650" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1661" name="FenceRight" x="1228.58" y="4679.75" width="6" height="32">
+  <object id="1833" name="FenceLeft" x="1620" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1662" name="FenceRight" x="1228.58" y="4619.75" width="6" height="32">
+  <object id="1834" name="FenceLeft" x="1710" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1663" name="FenceRight" x="1228.58" y="4649.75" width="6" height="32">
+  <object id="1835" name="FenceLeft" x="1740" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1664" name="FenceRight" x="1228.58" y="4589.75" width="6" height="32">
+  <object id="1836" name="FenceLeft" x="1680" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1665" name="FenceRight" x="1228.58" y="4559.75" width="6" height="32">
+  <object id="1837" name="FenceLeft" x="1770" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1666" name="FenceRight" x="1228.58" y="4529.75" width="6" height="32">
+  <object id="1838" name="FenceLeft" x="1800" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1667" name="FenceRight" x="1228.58" y="4499.75" width="6" height="32">
+  <object id="1839" name="FenceLeft" x="1860" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1668" name="FenceRight" x="1228.58" y="4469.75" width="6" height="32">
+  <object id="1840" name="FenceLeft" x="1830" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1669" name="FenceRight" x="1228.58" y="4439.75" width="6" height="32">
+  <object id="1841" name="FenceLeft" x="1920" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1670" name="FenceRight" x="1228.58" y="4379.75" width="6" height="32">
+  <object id="1842" name="FenceLeft" x="1890" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1671" name="FenceRight" x="1228.58" y="4409.75" width="6" height="32">
+  <object id="1843" name="FenceLeft" x="1950" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1672" name="FenceRight" x="1228.58" y="4349.75" width="6" height="32">
+  <object id="1844" name="FenceLeft" x="2010" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1673" name="FenceRight" x="1228.58" y="4319.75" width="6" height="32">
+  <object id="1845" name="FenceLeft" x="2040" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1674" name="FenceRight" x="1228.58" y="4289.75" width="6" height="32">
+  <object id="1846" name="FenceLeft" x="1980" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1675" name="FenceRight" x="1228.58" y="4259.75" width="6" height="32">
+  <object id="1847" name="FenceLeft" x="2070" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1676" name="FenceRight" x="1228.58" y="4229.75" width="6" height="32">
+  <object id="1848" name="FenceLeft" x="2130" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1677" name="FenceRight" x="1228.58" y="4199.75" width="6" height="32">
+  <object id="1849" name="FenceLeft" x="2100" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1678" name="FenceRight" x="1228.58" y="4169.75" width="6" height="32">
+  <object id="1850" name="FenceLeft" x="2190" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1679" name="FenceRight" x="1228.58" y="4139.75" width="6" height="32">
+  <object id="1851" name="FenceLeft" x="2160" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1680" name="FenceRight" x="1228.58" y="4109.75" width="6" height="32">
+  <object id="1852" name="FenceLeft" x="2220" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1681" name="FenceRight" x="1228.58" y="4079.75" width="6" height="32">
+  <object id="1853" name="FenceLeft" x="2250" y="3720" width="30" height="30">
    <properties>
-    <property name="offset_x" type="int" value="34"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_x" type="int" value="0"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1682" name="FenceRight" x="1228.58" y="4049.75" width="6" height="32">
+  <object id="1854" name="FenceLeft" x="2310" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1683" name="FenceRight" x="1228.58" y="4019.75" width="6" height="32">
+  <object id="1855" name="FenceLeft" x="2280" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1684" name="FenceRight" x="1228.58" y="3989.75" width="6" height="32">
+  <object id="1856" name="FenceLeft" x="2340" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1685" name="FenceRight" x="1228.58" y="3959.75" width="6" height="32">
+  <object id="1857" name="FenceLeft" x="2370" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1686" name="FenceRight" x="1228.58" y="3929.75" width="6" height="32">
+  <object id="1858" name="FenceLeft" x="2490" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1687" name="FenceRight" x="1228.58" y="3899.75" width="6" height="32">
+  <object id="1859" name="FenceLeft" x="2550" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1688" name="FenceRight" x="1228.58" y="3869.75" width="6" height="32">
+  <object id="1860" name="FenceLeft" x="2520" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1689" name="FenceRight" x="1228.58" y="3839.75" width="6" height="32">
+  <object id="1861" name="FenceLeft" x="2580" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1690" name="FenceRight" x="1228.58" y="3809.75" width="6" height="32">
+  <object id="1862" name="FenceLeft" x="2610" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1691" name="FenceRight" x="2518.58" y="4139.75" width="6" height="32">
+  <object id="1863" name="FenceLeft" x="2640" y="3720" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1692" name="FenceRight" x="2518.58" y="3929.75" width="6" height="32">
+  <object id="1864" name="FenceLeft" x="1260" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1693" name="FenceRight" x="2518.58" y="4619.75" width="6" height="32">
+  <object id="1865" name="FenceLeft" x="1290" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1694" name="FenceRight" x="2518.58" y="4709.75" width="6" height="32">
+  <object id="1866" name="FenceLeft" x="1350" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1695" name="FenceRight" x="2518.58" y="4109.75" width="6" height="32">
+  <object id="1867" name="FenceLeft" x="1320" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1696" name="FenceRight" x="2518.58" y="4049.75" width="6" height="32">
+  <object id="1868" name="FenceLeft" x="1380" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1697" name="FenceRight" x="2518.58" y="4919.75" width="6" height="32">
+  <object id="1869" name="FenceLeft" x="1470" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1698" name="FenceRight" x="2518.58" y="5039.75" width="6" height="32">
+  <object id="1870" name="FenceLeft" x="1440" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1699" name="FenceRight" x="2518.58" y="5069.75" width="6" height="32">
+  <object id="1871" name="FenceLeft" x="1410" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1700" name="FenceRight" x="2518.58" y="4949.75" width="6" height="32">
+  <object id="1872" name="FenceLeft" x="1500" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1701" name="FenceRight" x="2518.58" y="4469.75" width="6" height="32">
+  <object id="1873" name="FenceLeft" x="1530" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1702" name="FenceRight" x="2518.58" y="5009.75" width="6" height="32">
+  <object id="1874" name="FenceLeft" x="1560" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1703" name="FenceRight" x="2518.58" y="4859.75" width="6" height="32">
+  <object id="1875" name="FenceLeft" x="1620" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1704" name="FenceRight" x="2518.58" y="4439.75" width="6" height="32">
+  <object id="1876" name="FenceLeft" x="1590" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1705" name="FenceRight" x="2518.58" y="3959.75" width="6" height="32">
+  <object id="1877" name="FenceLeft" x="1650" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1706" name="FenceRight" x="2518.58" y="4379.75" width="6" height="32">
+  <object id="1878" name="FenceLeft" x="2040" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1707" name="FenceRight" x="2518.58" y="4199.75" width="6" height="32">
+  <object id="1879" name="FenceLeft" x="1740" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1708" name="FenceRight" x="2518.58" y="4169.75" width="6" height="32">
+  <object id="1880" name="FenceLeft" x="1680" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1709" name="FenceRight" x="2518.58" y="4499.75" width="6" height="32">
+  <object id="1881" name="FenceLeft" x="1950" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1710" name="FenceRight" x="2518.58" y="4319.75" width="6" height="32">
+  <object id="1882" name="FenceLeft" x="1770" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1711" name="FenceRight" x="2518.58" y="4229.75" width="6" height="32">
+  <object id="1883" name="FenceLeft" x="1710" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1712" name="FenceRight" x="2518.58" y="3989.75" width="6" height="32">
+  <object id="1884" name="FenceLeft" x="2010" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1713" name="FenceRight" x="2518.58" y="4649.75" width="6" height="32">
+  <object id="1885" name="FenceLeft" x="1980" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1714" name="FenceRight" x="2518.58" y="4799.75" width="6" height="32">
+  <object id="1886" name="FenceLeft" x="1800" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1715" name="FenceRight" x="2518.58" y="5009.75" width="6" height="32">
+  <object id="1887" name="FenceLeft" x="1890" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1716" name="FenceRight" x="2518.58" y="4739.75" width="6" height="32">
+  <object id="1888" name="FenceLeft" x="1860" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1717" name="FenceRight" x="2518.58" y="4889.75" width="6" height="32">
+  <object id="1889" name="FenceLeft" x="1830" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1718" name="FenceRight" x="2518.58" y="4019.75" width="6" height="32">
+  <object id="1890" name="FenceLeft" x="1920" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1719" name="FenceRight" x="2518.58" y="4829.75" width="6" height="32">
+  <object id="1891" name="FenceLeft" x="2070" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1720" name="FenceRight" x="2518.58" y="4769.75" width="6" height="32">
+  <object id="1892" name="FenceLeft" x="2100" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1721" name="FenceRight" x="2518.58" y="4409.75" width="6" height="32">
+  <object id="1893" name="FenceLeft" x="2160" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1722" name="FenceRight" x="2518.58" y="4259.75" width="6" height="32">
+  <object id="1894" name="FenceLeft" x="2130" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1723" name="FenceRight" x="2518.58" y="4979.75" width="6" height="32">
+  <object id="1895" name="FenceLeft" x="2190" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1724" name="FenceRight" x="2518.58" y="4679.75" width="6" height="32">
+  <object id="1896" name="FenceLeft" x="2280" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1725" name="FenceRight" x="2518.58" y="4079.75" width="6" height="32">
+  <object id="1897" name="FenceLeft" x="2250" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1726" name="FenceRight" x="2518.58" y="3899.75" width="6" height="32">
+  <object id="1898" name="FenceLeft" x="2220" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1727" name="FenceRight" x="2518.58" y="3869.75" width="6" height="32">
+  <object id="1899" name="FenceLeft" x="2310" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1728" name="FenceRight" x="2518.58" y="4349.75" width="6" height="32">
+  <object id="1900" name="FenceLeft" x="2340" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1729" name="FenceRight" x="2518.58" y="4289.75" width="6" height="32">
+  <object id="1901" name="FenceLeft" x="2430" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1730" name="FenceRight" x="2638.58" y="3749.75" width="32" height="6">
+  <object id="1902" name="FenceLeft" x="2400" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1731" name="FenceRight" x="2518.58" y="3749.75" width="6" height="32">
+  <object id="1903" name="FenceLeft" x="2370" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
-    <property name="offset_y" type="int" value="0"/>
-    <property name="path" value="Maps/Buildings/fence1.png"/>
+    <property name="offset_y" type="int" value="34"/>
+    <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1732" type="ROAD" x="1408.58" y="4889.75" width="780" height="90"/>
-  <object id="1733" name="FenceRight" x="1258.58" y="5099.75" width="32" height="6">
+  <object id="1904" name="FenceLeft" x="2460" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1734" name="FenceRight" x="1228.58" y="5099.75" width="32" height="6">
+  <object id="1910" name="FenceLeft" x="1230" y="5070" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
+   </properties>
+  </object>
+  <object id="1911" name="canewy" x="3810" y="4320" width="77" height="126">
+   <properties>
+    <property name="offset_x" type="int" value="118"/>
+    <property name="offset_y" type="int" value="40"/>
+    <property name="path" value="Maps/Buildings/canewy.png"/>
+    <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
  </objectgroup>
@@ -303766,7 +303647,7 @@
  <objectgroup name="SpawnPoints">
   <object id="425" name="ENEMY" type="ENEMY" x="4208" y="3784"/>
   <object id="426" name="REWARD_ZONE" type="REWARD_ZONE" x="4550" y="4338"/>
-  <object id="427" name="REWARD_BOX" type="REWARD_BOX" x="4242" y="4286"/>
+  <object id="427" name="REWARD_BOX" type="REWARD_BOX" x="4332" y="4316"/>
   <object id="428" name="ENEMY" type="ENEMY" x="4572" y="2248"/>
   <object id="429" name="ENEMY" type="ENEMY" x="4223" y="2329"/>
   <object id="430" name="ENEMY" type="ENEMY" x="3512.67" y="2055.33"/>
@@ -303780,8 +303661,8 @@
  </objectgroup>
  <objectgroup name="Players">
   <object id="410" x="3930" y="3720" width="30" height="30"/>
-  <object id="411" x="3960" y="4200" width="30" height="30"/>
-  <object id="412" x="4470" y="4320" width="30" height="30"/>
-  <object id="413" x="4470" y="3780" width="30" height="30"/>
+  <object id="411" x="3960" y="4020" width="30" height="30"/>
+  <object id="412" x="4440" y="4110" width="30" height="30"/>
+  <object id="413" x="4440" y="3900" width="30" height="30"/>
  </objectgroup>
 </map>
