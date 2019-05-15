@@ -21,7 +21,7 @@ rows(definition.rows), columns(definition.columns), quad_width(definition.quad_w
 
 bool UI_Table::Draw()
 {
-	iPoint pos = { position.x - x_offset,  position.y - y_offset };
+	iPoint pos = {(int) position.x - x_offset,  (int)position.y - y_offset };
 	iPoint pos_mod = { 0,0 };
 	for (int y = 0; y < rows; ++y)
 	{
@@ -30,7 +30,7 @@ bool UI_Table::Draw()
 		pos.y += quad_height;
 	}
 
-	pos = { position.x - x_offset,  position.y - y_offset };
+	pos = { (int)position.x - x_offset, (int)position.y - y_offset };
 
 	for (int x = 0; x < columns; ++x)
 	{
