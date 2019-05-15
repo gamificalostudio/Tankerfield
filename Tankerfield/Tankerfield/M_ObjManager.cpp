@@ -250,6 +250,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::ROCKETLAUNCHER:
 		ret = DBG_NEW Obj_RocketLauncher(pos);
 		ret->type = ObjectType::ROCKETLAUNCHER;
+		enemies.push_back(ret);
 		break;
 	case ObjectType::TANK:
 		ret = DBG_NEW Obj_Tank(pos);
