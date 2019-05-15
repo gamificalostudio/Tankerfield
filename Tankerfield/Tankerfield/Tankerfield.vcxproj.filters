@@ -46,9 +46,6 @@
     <ClCompile Include="M_Map.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_TeslaTrooper.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Button.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -145,9 +142,6 @@
     <ClCompile Include="Obj_RewardBox.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Brute.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
@@ -178,11 +172,20 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Suicidal.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="UI_InteractiveGroup.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Brute.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Suicidal.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_TeslaTrooper.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Enemy.cpp">
+      <Filter>Objects\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,9 +202,6 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="UI_Button.h">
@@ -348,9 +348,6 @@
     <ClInclude Include="Obj_RewardBox.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Brute.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Item_HappyHour.h">
       <Filter>Objects\Items</Filter>
     </ClInclude>
@@ -384,11 +381,20 @@
     <ClInclude Include="Camera.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Suicidal.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="UI_InteractiveGroup.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Brute.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Suicidal.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_TeslaTrooper.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Enemy.h">
+      <Filter>Objects\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -424,6 +430,9 @@
     </Filter>
     <Filter Include="Objects\Items">
       <UniqueIdentifier>{aba53b5b-7250-4552-868c-ec6f3b202d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Enemies">
+      <UniqueIdentifier>{78773875-c945-4330-9ab7-419bcaf2f794}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

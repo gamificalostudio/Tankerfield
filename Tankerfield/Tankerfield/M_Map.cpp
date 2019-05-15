@@ -468,9 +468,9 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 
 			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, pos);
 
-			for (pugi::xml_node property_node = obj_node.child("properties").child("property"); property_node; property_node = property_node.next_sibling("property"))
+			for (pugi::xml_node property_node = obj_node.child("properties").child("property"); property_node!=NULL; property_node = property_node.next_sibling("property"))
 			{
-				std::string name = (property_node.attribute("name").as_string());
+				std::string name = (property_node.attribute("name").as_string(""));
 				if (name == "offset_x")
 				{
 					ret->draw_offset.x = property_node.attribute("value").as_int(0);
@@ -482,12 +482,12 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 								
 				else if (name == "path")
 				{
-					ret->path = property_node.attribute("value").as_string();
+					ret->path = property_node.attribute("value").as_string("no_path");
 				}	
 
 				else if (name == "pivot_y")
 				{
-					ret->pivot.y = property_node.attribute("value").as_float();
+					ret->pivot.y = property_node.attribute("value").as_float(0);
 				}
 				
 			}

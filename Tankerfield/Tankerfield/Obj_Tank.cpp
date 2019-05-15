@@ -30,6 +30,8 @@
 #include "M_UI.h"
 #include "M_ObjManager.h"
 #include "Camera.h"
+#include "Item_InstantHelp.h"
+#include "Obj_Portal.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -235,6 +237,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 	SetItem(ItemType::HEALTH_BAG);
+	time_between_portal_tp.Start();
 	return true;
 }
 
@@ -270,7 +273,6 @@ bool Obj_Tank::Update(float dt)
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
 	Shoot();
 	Item();
-	StopTank();
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
@@ -584,6 +586,22 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	}
 }
 
+void Obj_Tank::OnTriggerEnter(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::PORTAL)
+	{
+		if (time_between_portal_tp.ReadMs() > 2000) {
+			if (c1 == portal1->coll) {
+				pos_map = portal2->pos_map;
+			}
+			else if (c1 == portal2->coll) {
+				pos_map = portal1->pos_map;
+			}
+			time_between_portal_tp.Start();
+		}
+	}
+}
+
 void Obj_Tank::OnTriggerExit(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
@@ -603,11 +621,11 @@ void Obj_Tank::SetLife(int life)
 	{
 		this->life = GetMaxLife();
 	}
-
 	else if (life <= 0 && this->life != 0)
 	{
 		this->life = 0;
 		app->audio->PlayFx(die_sfx);
+		StopTank();
 	}
 	else
 	{
@@ -969,17 +987,14 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::StopTank()
 {
-	if (life <= 0)
+	if (!fire_dead)
 	{
-		if (!fire_dead)
-		{
-			fire_dead = true;
-			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
-			dead_fire->tank = this;
-		}
-		this->SetWeapon(WEAPON::BASIC, 0);
-		this->SetItem(ItemType::NO_TYPE);
+		fire_dead = true;
+		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+		dead_fire->tank = this;
 	}
+	this->SetWeapon(WEAPON::BASIC, 1);
+	this->SetItem(ItemType::NO_TYPE);
 }
 
 bool Obj_Tank::Alive() const
@@ -1049,3 +1064,9 @@ fPoint Obj_Tank::GetShotDir() const
 	return shot_dir;
 }
 
+void Obj_Tank::CreatePortals()
+{
+	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
+
+	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
+}

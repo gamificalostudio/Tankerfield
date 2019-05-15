@@ -6,6 +6,7 @@
 #include "M_Input.h"
 #include "Obj_Item.h"
 #include "Timer.h"
+#include "Obj_Portal.h"
 
 struct Controller;
 struct SDL_Texture;
@@ -39,6 +40,7 @@ public:
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);
+	void OnTriggerEnter(Collider* c1);
 	void OnTriggerExit(Collider* c1);
 
 public:
@@ -58,6 +60,9 @@ public:
 	void ShotAutormaticallyDisactivate();
 	bool GetShotAutomatically() const;
 	std::vector<Object*>* GetEnemiesHitted();
+
+	void CreatePortals();
+
 
 public:
 
@@ -144,11 +149,10 @@ private:
 	float velocity_recoil_decay				= 0.f;
 	float velocity_recoil_speed_max			= 0.f;
 	float velocity_recoil_speed_max_charged = 0.f;
+	float charged_shot_speed				= 0.0f;
 	float lerp_factor_recoil				= 0.f;
 	Timer movement_timer;
-	
-	float charged_shot_speed = 0.0f;
-
+	PerfTimer time_between_portal_tp;
 
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
@@ -263,6 +267,10 @@ public:
 
 	//- GUI
 	Player_GUI*  gui = nullptr;
+
+public:
+	Obj_Portal * portal1;
+	Obj_Portal * portal2;
 };
 
 #endif

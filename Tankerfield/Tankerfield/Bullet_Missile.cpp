@@ -10,17 +10,13 @@ Bullet_Missile::Bullet_Missile(fPoint pos) : Obj_Bullet(pos)
 {
 }
 
-Bullet_Missile::~Bullet_Missile()
-{
-}
-
 void Bullet_Missile::OnTrigger(Collider * collider_1)
 {
 	if (player != nullptr)
 	{
 		Obj_Explosion* explosion_obj = (Obj_Explosion*)app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
+		explosion_obj->SetExplosionDamage(explosion_damage);
 	}
-
 	to_remove = true;
 }
 

@@ -156,7 +156,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.bullet_damage = 0;
+		weapon_info.bullet_damage = 0;//NOTE: Double missile deals damage with the explosion, not with the bullet. To modify it, go to Obj_Tank::ShotDoubleMissile() and change float explosion_damage
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
@@ -229,31 +229,33 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootDoubleMissile()
 {
+	float explosion_damage = weapon_info.level_weapon * 1000;
+
 	fPoint double_missiles_offset = shot_dir;
 	double_missiles_offset.RotateDegree(90);
 	float missiles_offset = 0.2f;
-
-	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
-	left_missile->SetPlayer(this);
-
-	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
-	right_missile->SetPlayer(this);
-
 	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
+	Bullet_Missile * missile_ptr = nullptr;
 
-	left_missile->SetBulletProperties(
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
+	missile_ptr->SetPlayer(this);
+	missile_ptr->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
 		bullet_angle);
+	missile_ptr->explosion_damage = explosion_damage;
 
-	right_missile->SetBulletProperties(
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
+	missile_ptr->SetPlayer(this);
+	missile_ptr->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
 		bullet_angle);
+	missile_ptr->explosion_damage = explosion_damage;
 }
 
 void Obj_Tank::ShootHealingShot()
