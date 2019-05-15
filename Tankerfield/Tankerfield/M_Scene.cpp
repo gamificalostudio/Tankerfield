@@ -214,23 +214,6 @@ bool M_Scene::Update(float dt)
 		draw_debug = !draw_debug;
 
 
-
-
-	/* Check if a round is over. It is only checked after x time. */
-	//accumulated_time += dt * 1000.0f;
-	//if (accumulated_time >= (float)check_complete_round)
-	//{
-	//	perform_objects_check = true;
-	//}
-
-	//if (perform_objects_check)
-	//{
-	//	
-
-	//	accumulated_time = 0.0f;
-	//	perform_objects_check = false;
-	//}
-
 	switch (stat_of_wave)
 	{
 	case WaveStat::ENTER_IN_WAVE:
@@ -246,20 +229,7 @@ bool M_Scene::Update(float dt)
 	}
 	case WaveStat::IN_WAVE:
 	{
-		for (std::list<Object*>::iterator iterator = enemies_in_wave.begin(); iterator != enemies_in_wave.end();)
-		{
-			if ((*iterator)->to_remove)
-			{
-				iterator = enemies_in_wave.erase(iterator);
-			}
-				
-			else
-			{
-				++iterator;
-			}
-		}
-		
-		if (enemies_in_wave.size() == 0)
+		if (number_of_enemies_killed>=number_of_enemies_created)
 		{
 			stat_of_wave = WaveStat::EXIT_OF_WAVE;
 		}
@@ -451,32 +421,35 @@ void M_Scene::DebugPathfinding()
 
 void M_Scene::CreateEnemyWave()
 {
+	number_of_enemies_created = 0;
+	number_of_enemies_killed = 0;
+	number_of_enemies_created += Tesla_trooper_units;
+	number_of_enemies_created += Brute_units;
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_TeslaTrooper* ret = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
 
-			enemies_in_wave.push_back(ret);
+			
 		}
 	
 	}
-	if (Brute_units > 0)
-	{
-		for (int i = 0; i < Brute_units; i++)
-		{
-			if (app->map->data.spawners_position_enemy.size() != 0)
-			{
-				uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-				fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-				Obj_Brute* ret = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
 
-				enemies_in_wave.push_back(ret);
-			}
+	for (int i = 0; i < Brute_units; i++)
+	{
+		if (app->map->data.spawners_position_enemy.size() != 0)
+		{
+			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+			app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+
+			number_of_enemies_created += 1;
 		}
 	}
+
 
 }
 

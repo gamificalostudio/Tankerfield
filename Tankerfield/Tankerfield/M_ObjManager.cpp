@@ -102,13 +102,9 @@ bool M_ObjManager::Update(float dt)
 
 			if ((*iterator)->to_remove)
 			{
-				//When we remove an element from the list, the other elements shift 1 space to our position
-				//So we don't need increment the iterator to go to the next one
-				//if ((*iterator)->type == ObjectType::TANK)
-				//{
-				//	Obj_Tank* aux = (Obj_Tank*)(*iterator);
-				//	obj_tanks.remove((Obj_Tank*)(*iterator));
-				//}
+			
+				(*iterator)->CleanUp();
+
 				if ((*iterator)->type == ObjectType::TESLA_TROOPER
 					|| (*iterator)->type == ObjectType::BRUTE)
 				{

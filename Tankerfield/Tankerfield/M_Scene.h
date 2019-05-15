@@ -40,8 +40,14 @@ public:
 
 	General_HUD * general_hud		= nullptr;
 
-	uint round		= 0;
+
 	std::list<Object*> enemies_in_wave;
+
+	uint round		= 0;
+	uint subround	= 1;
+	uint max_subrounds = 3;
+	uint number_of_enemies_created = 0;
+	uint number_of_enemies_killed = 0;
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
 	PerfTimer timer_between_waves;

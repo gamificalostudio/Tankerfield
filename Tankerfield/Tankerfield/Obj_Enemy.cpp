@@ -160,6 +160,7 @@ void Obj_Enemy::Dead()
 		if (death.Finished())
 		{
 			to_remove = true;
+			
 		}
 	}
 }
@@ -246,6 +247,12 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 		scale);
 	
 
+	return true;
+}
+
+bool Obj_Enemy::CleanUp()
+{
+	app->scene->number_of_enemies_killed += 1;
 	return true;
 }
 
