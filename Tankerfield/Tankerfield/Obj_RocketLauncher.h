@@ -30,8 +30,6 @@ public:
 	
 	void Spawn(const float& dt) override;
 
-	virtual void GetPath();
-
 private:
 	iPoint spawn_draw_offset = { 0, 0 };
 	iPoint normal_draw_offset = { 0, 0 };
