@@ -256,11 +256,11 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::BULLET_MISSILE;
 		break;
 	case ObjectType::BULLET_LASER:
-		ret = new Laser_Bullet(pos);
+		ret = DBG_NEW Laser_Bullet(pos);
 		ret->type = ObjectType::BULLET_LASER;
 		break;
 	case ObjectType::HEALING_BULLET:
-		ret = new Healing_Bullet(pos);
+		ret = DBG_NEW Healing_Bullet(pos);
 		ret->type = ObjectType::HEALING_BULLET;
 		break;
 	case ObjectType::STATIC:
@@ -272,7 +272,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::REWARD_ZONE;
 		break;
 	case ObjectType::BRUTE:
-		ret = new Obj_Brute(pos);
+		ret = DBG_NEW Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
 		enemies.push_back(ret);
 		break;
@@ -285,15 +285,15 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::CANNON_FIRE;
 		break;
 	case ObjectType::HEALING_ANIMATION:
-		ret = new Obj_Healing_Animation(pos);
+		ret = DBG_NEW Obj_Healing_Animation(pos);
 		ret->type = ObjectType::HEALING_ANIMATION;
 		break;
 	case ObjectType::FIRE_DEAD:
-		ret = new Obj_Fire(pos);
+		ret = DBG_NEW Obj_Fire(pos);
 		ret->type = ObjectType::FIRE_DEAD;
 		break;
 	case ObjectType::PORTAL:
-		ret = new Obj_Portal(pos);
+		ret = DBG_NEW Obj_Portal(pos);
 		ret->type = ObjectType::PORTAL;
 		break;
 	case ObjectType::PICK_UP:
@@ -301,7 +301,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::PICK_UP;
 		break;
 	case ObjectType::REWARD_BOX:
-		ret = new Obj_RewardBox(pos);
+		ret = DBG_NEW Obj_RewardBox(pos);
 		ret->type = ObjectType::REWARD_BOX;
 		break;
 	}
