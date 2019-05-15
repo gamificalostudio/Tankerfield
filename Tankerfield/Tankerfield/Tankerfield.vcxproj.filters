@@ -189,7 +189,7 @@
     </ClCompile>
     <ClCompile Include="Item_InstantHelp.cpp" />
     <ClCompile Include="Obj_Portal.cpp" />
-    <ClCompile Include="LeaderBoard.cpp">
+    <ClCompile Include="UI_Table.cpp">
       <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -403,7 +403,7 @@
     </ClInclude>
     <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="Obj_Portal.h" />
-    <ClInclude Include="LeaderBoard.h">
+    <ClInclude Include="UI_Table.h">
       <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>

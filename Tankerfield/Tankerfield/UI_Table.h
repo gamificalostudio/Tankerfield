@@ -9,6 +9,9 @@ struct UI_TableDef: public UI_ElementDef
 {
 	int rows = 0;
 	int columns = 0;
+	int quad_width = 0;
+	int	quad_height = 0;
+	int line_width = 0;
 };
 
 class UI_Table: public UI_Element
@@ -29,8 +32,16 @@ private:
 
 	int rows = 0;
 	int columns = 0;
+	int line_width = 0;
+	int quad_width = 0;
+	int quad_height = 0;
 
-	int* columns_width = nullptr;
+	int x_offset =		0;
+	int y_offset =		0;
+		
+	int total_width =	0;
+	int total_height =	0;
+
 	std::vector< UI_Element* > elements_list;
 
 };
