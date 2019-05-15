@@ -12,7 +12,7 @@
 void Obj_Tank::InitWeapons()
 {
 	//Basic weapon starting properties
-	SetWeapon(WEAPON::BASIC, 1u);
+	SetWeapon(WEAPON::ELECTRO_SHOT, 1u);
 
 	shot1_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot1_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;

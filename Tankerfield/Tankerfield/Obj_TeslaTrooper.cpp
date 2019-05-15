@@ -35,8 +35,8 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
-	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
+	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("enemies").child("tesla_trooper");
+	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("enemies").child("tesla").child("animations");
 
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
@@ -193,6 +193,7 @@ void Obj_TeslaTrooper::GetTeleportPoint()
 }
 void Obj_TeslaTrooper::Spawn(const float & dt)
 {
+
 	spawn_anim.NextFrame(dt);
 	if ((int)spawn_anim.current_frame >= 6)
 	{

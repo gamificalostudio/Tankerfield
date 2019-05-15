@@ -33,14 +33,14 @@
 
 Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("brute");
+	pugi::xml_node brute_node = app->config.child("object").child("enemies").child("brute");
 
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
-	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
+	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("enemies").child("brute").child("animation");
 	idle.frames = app->anim_bank->LoadFrames(animation_node.child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(animation_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(animation_node.child("attack"));

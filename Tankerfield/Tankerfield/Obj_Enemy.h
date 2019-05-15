@@ -16,6 +16,7 @@ enum class ENEMY_STATE
 	TELEPORT_IN,
 	TELEPORT_OUT,
 	DEAD,
+	STUNNED,
 };
 
 class Obj_Enemy : public Object
@@ -36,6 +37,8 @@ public:
 	void RecheadPoint();
 
 	void Dead();
+
+	void ElectroDead();
 
 	inline virtual void Idle();
 
@@ -68,8 +71,13 @@ protected:
 	float speed = 0.f;
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
+	SDL_Texture * tex_electro_dead = nullptr;
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
+	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
+	Animation* anim_saved;
+	SDL_Texture* tex_saved = nullptr;
+	bool is_electro_dead = false;
 
 	Timer update_velocity_vec;
 	Timer damaged_sprite_timer;
@@ -79,6 +87,8 @@ protected:
 	Animation walk;
 	Animation attack;
 	Animation death;
+
+	Animation electro_dead;
 
 	float scale = 0.f;
 

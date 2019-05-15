@@ -11,11 +11,18 @@
 #include "M_Render.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
+#include "M_AnimationBank.h"
 
 
 
 Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 {
+	pugi::xml_node enemie_node = app->config.child("object").child("enemies");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("enemies");
+
+	tex_electro_dead = app->tex->Load(enemie_node.child("tex_electro_dead").child_value());
+	electro_dead.frames = app->anim_bank->LoadFrames(anim_node.child("electro_dead"));
+
 	damaged_sprite_time = 150;
 	//colision si se puede desactivar
 
@@ -38,7 +45,8 @@ bool Obj_Enemy::Update(float dt)
 
 void Obj_Enemy::ChangeTexture()
 {
-	if (damaged_sprite_timer.Read() > damaged_sprite_time)
+	
+	if (damaged_sprite_timer.Read() > damaged_sprite_time && curr_tex != tex && state != ENEMY_STATE::STUNNED && state != ENEMY_STATE::DEAD)
 	{
 		curr_tex = tex;
 	}
@@ -120,13 +128,36 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case  ENEMY_STATE::DEAD:
 	{
-		Dead();
+		if (!is_electro_dead)
+		{
+			Dead();
+		}
+		else
+		{
+			ElectroDead();
+		}
+	}
+	break;
+	case ENEMY_STATE::STUNNED:
+	{
+		
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		if ((int)electro_dead.current_frame >= 4)
+		{
+			electro_dead.Reset();
+			state = state_saved;
+			curr_tex = tex;
+			curr_anim = anim_saved;
+		}
 	}
 	break;
 	default:
 		assert(true && "The enemy have no state");
 		break;
 	}
+
+	curr_anim = curr_anim;
 
 }
 
@@ -162,7 +193,30 @@ void Obj_Enemy::Dead()
 		if (death.Finished())
 		{
 			to_remove = true;
-			
+
+		}
+	}
+}
+
+void Obj_Enemy::ElectroDead()
+{
+	if (curr_anim != &electro_dead)
+	{
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		app->audio->PlayFx(sfx_death);
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+	}
+	else
+	{
+		if (electro_dead.Finished())
+		{
+			to_remove = true;
+
 		}
 	}
 }
@@ -330,17 +384,23 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
-			curr_tex = tex_damaged;
+			/*curr_tex = tex_damaged;*/
 
 			if (life <= 0)
 			{
 				// DROP A PICK UP ITEM 
 				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = ENEMY_STATE::DEAD;
+				is_electro_dead = true;
+				
 			}
 			else
 			{
 				app->audio->PlayFx(sfx_hit);
+				state_saved = state;
+				state = ENEMY_STATE::STUNNED;
+				//tex_saved = 
+				anim_saved = curr_anim;
 			}
 		}
 	}

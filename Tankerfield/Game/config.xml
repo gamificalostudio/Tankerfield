@@ -177,21 +177,24 @@
       <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
-    
-    <tesla_trooper>
-      <teleport_max_enemies num="100"/>
-      <speed num="3"/>
-      <attack_damage num="5"/>
-      <attack_range num="1.5"/>
-      <attack_frequency num="3000"/>
-      <base_life num="5"/>
-      <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
-      <tex_damaged_path>"textures/Objects/enemies/shk-sheet-white-1.png"</tex_damaged_path>
-      <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
-    </tesla_trooper>
-    <brute>
-     
-    </brute>
+    <enemies>
+      <tex_electro_dead>textures/Objects/enemies/electro_dead.png</tex_electro_dead>
+      <tesla_trooper>
+        <teleport_max_enemies num="100"/>
+        <speed num="3"/>
+        <attack_damage num="5"/>
+        <attack_range num="1.5"/>
+        <attack_frequency num="3000"/>
+        <base_life num="5"/>
+        <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
+        <tex_damaged_path>"textures/Objects/enemies/shk-sheet-white-1.png"</tex_damaged_path>
+        <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
+      </tesla_trooper>
+      <brute>
+
+      </brute>
+    </enemies>
+   
     <tank>
       <speed value ="1"/>
       <recoil>
