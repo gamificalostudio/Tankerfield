@@ -1,6 +1,8 @@
 #ifndef __M_SCENE_H__
 #define __M_SCENE_H__
 
+#define MAX_SUBROUNDS 3
+
 #include <vector>
 
 #include "SDL/include/SDL_rect.h"
@@ -36,11 +38,11 @@ class M_Scene : public Module
 private:
 	Controller** control1			= nullptr;
 
-	uint subround = 1;
-
-	uint max_subrounds = 3;
+	uint subround = 0;
 
 	int number_of_enemies = 0;
+
+	float percentage_enemies_subround[MAX_SUBROUNDS]={0.4f,0.6f,0.8f};
 
 public:
 	int current_level				= 0;
@@ -122,8 +124,8 @@ private:
 
 	/* Wave System */
 	int time_between_rounds			= 0;
-	int Tesla_trooper_units			= 0;
-	int Brute_units					= 0;
+	uint Tesla_trooper_units			= 0;
+	uint Brute_units					= 0;
 
 	// Fx and Music
 	const char* finish_wave_sound_string;
