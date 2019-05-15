@@ -182,6 +182,14 @@
       <tex_damaged_path>"textures/Objects/enemies/shk-sheet-white-1.png"</tex_damaged_path>
       <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
     </tesla_trooper>
+    <rocket_launcher>
+      <speed num="2"/>
+      <attack_damage num="15"/>
+      <attack_range num="5"/>
+      <attack_frequency num="2000"/>
+      <base_life num="3"/>
+      <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
+    </rocket_launcher>
     <brute>
       <animations>
         <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="-90">
