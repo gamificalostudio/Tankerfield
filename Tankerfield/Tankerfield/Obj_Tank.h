@@ -67,9 +67,6 @@ public:
 	bool Alive() const;
 	fPoint GetTurrPos() const;
 
-	//- Input
-	Controller * GetController();
-
 private:
 	//- Movement
 	void Movement(float dt);

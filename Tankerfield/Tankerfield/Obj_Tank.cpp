@@ -206,8 +206,8 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	life = 90;
 	max_life = 100;
+	SetLife(100);
 
 	charged_shot_speed = 1.0f;
 
@@ -292,17 +292,6 @@ void Obj_Tank::CameraMovement(float dt)
 fPoint Obj_Tank::GetTurrPos() const
 {
 	return turr_pos;
-}
-
-Controller * Obj_Tank::GetController()
-{
-	if (controller == nullptr || *controller == nullptr)
-	{
-		LOG(" Controller not found");
-		return nullptr;
-	}
-
-	return *controller;
 }
 
 void Obj_Tank::Movement(float dt)

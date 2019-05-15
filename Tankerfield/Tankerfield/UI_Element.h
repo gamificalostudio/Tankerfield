@@ -106,6 +106,8 @@ public:
 
 	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float loops = -1.F, float init_value = -1.F, float target_value = -1.F);
 
+	void SetListener(UI_Listener* new_listener);
+
 	void FinishFX();
 
 	fRect GetSection();
@@ -119,6 +121,7 @@ public:
 	bool UpdateRelativePosition();
 
 public:
+
 	fPoint                position = { 0.f, 0.f };
 	SDL_Rect              sprite_rect = { 0, 0, 0, 0};
 	float                 section_width = 0.f;
@@ -129,6 +132,7 @@ public:
 	Camera*               single_camera = nullptr;
 	Camera*               not_in_camera = nullptr;
 	float                 alpha = 255.f;
+	SDL_Color             color_mod = { 255, 255, 255, 255 };
 
 protected:
 

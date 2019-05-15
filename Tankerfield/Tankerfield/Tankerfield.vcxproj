@@ -145,6 +145,7 @@
     <ClCompile Include="Obj_Portal.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
     <ClCompile Include="Obj_Suicidal.cpp" />
+    <ClCompile Include="Obj_Tank_MainMenu.cpp" />
     <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="Obj_Portal.h" />
     <ClInclude Include="Obj_RewardBox.h" />
     <ClInclude Include="Obj_Suicidal.h" />
+    <ClInclude Include="Obj_Tank_MainMenu.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />

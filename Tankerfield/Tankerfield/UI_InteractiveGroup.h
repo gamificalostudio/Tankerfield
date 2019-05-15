@@ -3,8 +3,10 @@
 
 #include "UI_Element.h"
 #include "Point.h"
+#include "M_UI.h"
 
 struct Controller;
+class UI_Quad;
 
 struct UI_InteractiveGroupDef : public UI_ElementDef
 {
@@ -12,14 +14,7 @@ struct UI_InteractiveGroupDef : public UI_ElementDef
 	uint rows = 0u;
 };
 
-
-struct PlayerFocus
-{
-	iPoint    focused_element = {0,0};
-	Obj_Tank* player = nullptr;
-};
-
-class UI_InteractiveGroup : public UI_Element
+class UI_InteractiveGroup : public UI_Element , public UI_Listener
 {
 public:
 
@@ -29,25 +24,38 @@ public:
 
 	bool Update(float dt);
 
+	bool OnHoverEnter(UI_Element* object);
+
+	bool OnHoverRepeat(UI_Element* object);
+
 public:
+
 
 	void SetElement( UI_Element* element, const iPoint position);
 
-private:
-
-	UI_Element * GetNearestElement(PlayerFocus * player_focus, CONTROLLER_DIR dir);
-
-	bool ElementIsFocused( UI_Element* element);
+	void SetController(Controller ** controller);
 
 	UI_Element * GetElement(iPoint position);
+
+	UI_Element * GetFocusedElement();
+
+	iPoint GetPos(UI_Element* element);
+
+private:
+
+	iPoint GetNearestElement(const iPoint current_focus, const CONTROLLER_DIR dir);
+
+	iPoint GetFirstAvailableElement();
 
 private:
 
 	uint columns = 0u;
 	uint rows = 0u;
-	std::vector <UI_Element*>  group_elements;
-	std::vector <PlayerFocus*> player_focus;
 
+	iPoint current_focus = { 0,0 };
+	UI_Image*  focus_image = nullptr;
+	Controller ** current_controller = nullptr;
+	UI_Element** group_elements = nullptr;
 };
 
 

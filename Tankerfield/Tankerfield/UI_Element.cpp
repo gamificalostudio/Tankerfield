@@ -29,8 +29,10 @@ bool UI_Element::UpdateRelativePosition()
 bool UI_Element::Draw()
 {
 	SDL_Rect draw_rect = GetDrawRect();
-	app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_rect, app->ui->current_camera, (int)alpha);
 
+	SDL_SetTextureColorMod(app->ui->GetAtlas(), color_mod.r, color_mod.g, color_mod.b);
+	app->render->BlitUI(app->ui->GetAtlas(), (float)draw_rect.x, (float)draw_rect.y, &sprite_rect, app->ui->current_camera, (int)alpha);
+	SDL_SetTextureColorMod(app->ui->GetAtlas(), 255, 255, 255);
 	return true;
 }
 
@@ -50,6 +52,11 @@ void UI_Element::SetParent(UI_Element * new_parent)
 	if (new_parent == nullptr)
 	{
 		LOG("Failed SetParent, parent was nullptr");
+		return;
+	}
+
+	if (new_parent == element_parent)
+	{
 		return;
 	}
 	// Delete previous parent =====================
@@ -98,6 +105,11 @@ void UI_Element::SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y)
 void UI_Element::SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float loops, float init_value, float target_value)
 {
 	app->ui->AddFX(type, seconds, this, loops,init_value, target_value);
+}
+
+void UI_Element::SetListener(UI_Listener * new_listener)
+{
+	listener = new_listener;
 }
 
 void UI_Element::FinishFX()
