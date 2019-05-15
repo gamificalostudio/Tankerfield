@@ -240154,7 +240154,7 @@
   </data>
  </layer>
  <objectgroup name="Colliders">
-  <object id="55" type="WATER" x="3780.67" y="4982" width="1080" height="999.667"/>
+  <object id="55" type="WATER" x="3780.67" y="4980" width="1080" height="1001.67"/>
   <object id="323" type="WATER" x="2280" y="1230" width="780" height="390"/>
   <object id="327" type="WATER" x="3300" y="270" width="2700" height="420"/>
   <object id="328" type="WATER" x="3420" y="2370" width="360" height="1410"/>
@@ -240180,11 +240180,11 @@
   <object id="385" type="WATER" x="3780" y="2580" width="780" height="930"/>
   <object id="415" type="WATER" x="4800" y="1290" width="90" height="30"/>
   <object id="421" type="WATER" x="3750" y="1020" width="480" height="30"/>
-  <object id="442" type="WATER" x="3781.33" y="4915.33" width="459.333" height="64.667"/>
-  <object id="443" type="WATER" x="4475.67" y="4893.67" width="385.333" height="89.3337"/>
-  <object id="444" type="WATER" x="3777" y="4869" width="232" height="47.3337"/>
-  <object id="445" type="WATER" x="3775.33" y="4807" width="191.333" height="69.3337"/>
-  <object id="446" type="WATER" x="3773.67" y="4738.67" width="89.333" height="69.3337"/>
+  <object id="442" type="WATER" x="3780" y="4920" width="450" height="60"/>
+  <object id="443" type="WATER" x="4470" y="4890" width="391.003" height="90"/>
+  <object id="444" type="WATER" x="3780" y="4860" width="240" height="60"/>
+  <object id="445" type="WATER" x="3780" y="4800" width="180" height="60"/>
+  <object id="446" type="WATER" x="3780" y="4740" width="90" height="60"/>
   <object id="453" type="ROAD" x="4740" y="3600" width="90" height="930"/>
   <object id="456" type="ROAD" x="4650" y="3600" width="90" height="90"/>
   <object id="457" type="ROAD" x="4560" y="2460" width="90" height="1230"/>
@@ -240230,7 +240230,7 @@
   <object id="1912" type="WATER" x="2280" y="870" width="780" height="270"/>
  </objectgroup>
  <objectgroup name="Buildings">
-  <object id="211" name="camsc" x="3630" y="1830" width="93.3333" height="94">
+  <object id="211" name="camsc" x="3630" y="1830" width="90" height="90">
    <properties>
     <property name="offset_x" type="int" value="108"/>
     <property name="offset_y" type="int" value="55"/>
@@ -240238,7 +240238,7 @@
     <property name="pivot_y" type="float" value="40"/>
    </properties>
   </object>
-  <object id="212" name="camsc" x="3990" y="1290" width="93.3333" height="94">
+  <object id="212" name="camsc" x="3990" y="1290" width="90" height="90">
    <properties>
     <property name="offset_x" type="int" value="108"/>
     <property name="offset_y" type="int" value="55"/>
@@ -240246,7 +240246,7 @@
     <property name="pivot_y" type="float" value="40"/>
    </properties>
   </object>
-  <object id="245" name="canewy" x="3810" y="3540" width="77" height="126">
+  <object id="245" name="canewy" x="3810" y="3540" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240254,7 +240254,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="248" name="canewy" x="3810" y="3990" width="77" height="126">
+  <object id="248" name="canewy" x="3810" y="3990" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240262,7 +240262,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="249" name="canewy" x="3810" y="4140" width="77" height="126">
+  <object id="249" name="canewy" x="3810" y="4140" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240270,7 +240270,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="250" name="canewy" x="4590" y="4680" width="77" height="126">
+  <object id="250" name="canewy" x="4590" y="4680" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240278,7 +240278,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="251" name="canewy" x="4740" y="4680" width="77" height="126">
+  <object id="251" name="canewy" x="4740" y="4680" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240286,7 +240286,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="252" name="canewy2" x="3900" y="3540" width="120.5" height="75">
+  <object id="252" name="canewy2" x="3900" y="3510" width="120.5" height="90">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="45"/>
@@ -240294,7 +240294,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="253" name="canewy2" x="4050" y="3540" width="120.5" height="75">
+  <object id="253" name="canewy2" x="4050" y="3510" width="120.5" height="90">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="45"/>
@@ -240302,7 +240302,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="254" name="canewy2" x="4200" y="3540" width="120.5" height="75">
+  <object id="254" name="canewy2" x="4200" y="3510" width="120.5" height="90">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="45"/>
@@ -240310,7 +240310,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="255" name="naha" x="3330" y="1080" width="55.75" height="55.5">
+  <object id="255" name="naha" x="3330" y="1080" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="33"/>
     <property name="offset_y" type="int" value="123"/>
@@ -240318,7 +240318,7 @@
     <property name="pivot_y" type="float" value="275"/>
    </properties>
   </object>
-  <object id="256" name="cagas" x="3840" y="4650" width="91" height="92.75">
+  <object id="256" name="cagas" x="3840" y="4650" width="91" height="90">
    <properties>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="30"/>
@@ -240326,7 +240326,7 @@
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="257" name="cagas" x="3090" y="1020" width="91" height="92.75">
+  <object id="257" name="cagas" x="3090" y="1020" width="91" height="90">
    <properties>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="30"/>
@@ -240334,7 +240334,7 @@
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="258" name="cagas" x="4530" y="2340" width="91" height="92.75">
+  <object id="258" name="cagas" x="4530" y="2340" width="90" height="90">
    <properties>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="30"/>
@@ -240342,7 +240342,7 @@
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="259" name="cafarm" x="4050" y="4680" width="49.5" height="62.1667">
+  <object id="259" name="cafarm" x="4050" y="4680" width="30" height="60">
    <properties>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240350,7 +240350,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="260" name="cafarm" x="4110" y="4680" width="49.5" height="62.1667">
+  <object id="260" name="cafarm" x="4110" y="4680" width="30" height="60">
    <properties>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240358,7 +240358,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="261" name="cafarm" x="4170" y="4680" width="49.5" height="62.1667">
+  <object id="261" name="cafarm" x="4170" y="4680" width="30" height="60">
    <properties>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240366,7 +240366,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="262" name="caeur3" x="3960" y="4140" width="125.75" height="91.25">
+  <object id="262" name="caeur3" x="3960" y="4140" width="120" height="90">
    <properties>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240382,7 +240382,7 @@
     <property name="pivot_y" type="float" value="47"/>
    </properties>
   </object>
-  <object id="264" name="caarmy" x="4350" y="3540" width="71.5" height="47.6667">
+  <object id="264" name="caarmy" x="4350" y="3540" width="60" height="30">
    <properties>
     <property name="offset_x" type="int" value="30"/>
     <property name="offset_y" type="int" value="15"/>
@@ -240398,7 +240398,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="270" name="caeur" x="4320" y="4320" width="39.75" height="36.75">
+  <object id="270" name="caeur" x="4320" y="4320" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240406,7 +240406,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="271" name="caeur" x="4350" y="4260" width="39.75" height="36.75">
+  <object id="271" name="caeur" x="4350" y="4260" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240414,7 +240414,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="272" name="caeur" x="4440" y="4320" width="39.75" height="36.75">
+  <object id="272" name="caeur" x="4440" y="4320" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240422,7 +240422,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="273" name="caeur" x="4650" y="4110" width="39.75" height="36.75">
+  <object id="273" name="caeur" x="4650" y="4110" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
@@ -240430,7 +240430,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="274" name="cats" x="4380" y="4410" width="60.6667" height="32.4167">
+  <object id="274" name="cats" x="4380" y="4410" width="60.6667" height="30">
    <properties>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240438,7 +240438,7 @@
     <property name="pivot_y" type="float" value="18"/>
    </properties>
   </object>
-  <object id="275" name="cats" x="4470" y="4410" width="60.6667" height="35.1667">
+  <object id="275" name="cats" x="4470" y="4410" width="60" height="30">
    <properties>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="40"/>
@@ -240446,7 +240446,7 @@
     <property name="pivot_y" type="float" value="18"/>
    </properties>
   </object>
-  <object id="276" name="cahse3" x="4290" y="4410" width="77.25" height="62.25">
+  <object id="276" name="cahse3" x="4290" y="4410" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240454,7 +240454,7 @@
     <property name="pivot_y" type="float" value="29"/>
    </properties>
   </object>
-  <object id="277" name="cahse3" x="4590" y="4170" width="77.25" height="62.25">
+  <object id="277" name="cahse3" x="4590" y="4170" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240462,7 +240462,7 @@
     <property name="pivot_y" type="float" value="29"/>
    </properties>
   </object>
-  <object id="278" name="cahse3" x="4740" y="3540" width="77.25" height="62.25">
+  <object id="278" name="cahse3" x="4740" y="3540" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240470,7 +240470,7 @@
     <property name="pivot_y" type="float" value="29"/>
    </properties>
   </object>
-  <object id="279" name="cahse2" x="4590" y="4260" width="64" height="93.75">
+  <object id="279" name="cahse2" x="4590" y="4260" width="60" height="90">
    <properties>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240478,7 +240478,7 @@
     <property name="pivot_y" type="float" value="34"/>
    </properties>
   </object>
-  <object id="280" name="cahse2" x="4560" y="4050" width="64" height="93.75">
+  <object id="280" name="cahse2" x="4560" y="4050" width="60" height="90">
    <properties>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240486,7 +240486,7 @@
     <property name="pivot_y" type="float" value="34"/>
    </properties>
   </object>
-  <object id="281" name="cahse2" x="4470" y="3510" width="64" height="93.75">
+  <object id="281" name="cahse2" x="4470" y="3510" width="60" height="90">
    <properties>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240494,7 +240494,7 @@
     <property name="pivot_y" type="float" value="34"/>
    </properties>
   </object>
-  <object id="282" name="caeur2" x="4410" y="4260" width="39.75" height="36.75">
+  <object id="282" name="caeur2" x="4410" y="4260" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240502,7 +240502,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="283" name="caeur2" x="4380" y="4320" width="39.75" height="36.75">
+  <object id="283" name="caeur2" x="4380" y="4320" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240510,7 +240510,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="284" name="caeur2" x="3960" y="4260" width="39.75" height="36.75">
+  <object id="284" name="caeur2" x="3960" y="4260" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240526,7 +240526,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="286" name="caeur2" x="4650" y="3930" width="39.75" height="36.75">
+  <object id="286" name="caeur2" x="4650" y="3930" width="30" height="30">
    <properties>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
@@ -240534,7 +240534,7 @@
     <property name="pivot_y" type="float" value="13"/>
    </properties>
   </object>
-  <object id="287" name="cahse" x="4020" y="4260" width="62.25" height="62.75">
+  <object id="287" name="cahse" x="4020" y="4260" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240542,7 +240542,7 @@
     <property name="pivot_y" type="float" value="30"/>
    </properties>
   </object>
-  <object id="288" name="cahse" x="4560" y="3960" width="62.25" height="62.75">
+  <object id="288" name="cahse" x="4560" y="3960" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
@@ -240574,7 +240574,7 @@
     <property name="pivot_y" type="float" value="10"/>
    </properties>
   </object>
-  <object id="301" name="cgrus" x="3570" y="930" width="125.25" height="91.25">
+  <object id="301" name="cgrus" x="3570" y="930" width="120" height="90">
    <properties>
     <property name="offset_x" type="int" value="76"/>
     <property name="offset_y" type="int" value="150"/>
@@ -240582,7 +240582,7 @@
     <property name="pivot_y" type="float" value="50"/>
    </properties>
   </object>
-  <object id="302" name="carus" x="3090" y="1380" width="122" height="122">
+  <object id="302" name="carus" x="3090" y="1380" width="120" height="120">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="45"/>
@@ -240590,7 +240590,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="303" name="carus" x="3420" y="900" width="122" height="122">
+  <object id="303" name="carus" x="3420" y="900" width="120" height="120">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="45"/>
@@ -240598,7 +240598,7 @@
     <property name="v" type="float" value="54"/>
    </properties>
   </object>
-  <object id="304" name="carus4" x="3360" y="1380" width="109.5" height="105">
+  <object id="304" name="carus4" x="3360" y="1380" width="120" height="90">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="85"/>
@@ -240606,7 +240606,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="305" name="carus4" x="3120" y="900" width="109.5" height="105">
+  <object id="305" name="carus4" x="3120" y="900" width="120" height="90">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="85"/>
@@ -240614,7 +240614,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="306" name="carus4" x="4530" y="1290" width="109.5" height="105">
+  <object id="306" name="carus4" x="4530" y="1290" width="90" height="90">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="85"/>
@@ -240622,7 +240622,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="307" name="carus5" x="3240" y="1380" width="109.5" height="105">
+  <object id="307" name="carus5" x="3240" y="1380" width="90" height="90">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="90"/>
@@ -240630,7 +240630,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="308" name="carus5" x="4020" y="1740" width="109.5" height="105">
+  <object id="308" name="carus5" x="4020" y="1740" width="90" height="90">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="90"/>
@@ -240638,7 +240638,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="309" name="carus5" x="3630" y="1230" width="109.5" height="105">
+  <object id="309" name="carus5" x="3630" y="1230" width="120" height="90">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="90"/>
@@ -240646,7 +240646,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="310" name="catexs" x="3210" y="1020" width="61" height="92.1667">
+  <object id="310" name="catexs" x="3210" y="1020" width="61" height="90">
    <properties>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240654,7 +240654,7 @@
     <property name="pivot_y" type="float" value="34"/>
    </properties>
   </object>
-  <object id="311" name="catexs" x="3330" y="900" width="61" height="92.1667">
+  <object id="311" name="catexs" x="3330" y="900" width="61" height="90">
    <properties>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240670,7 +240670,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="313" name="catexs" x="4080" y="2280" width="61" height="92.1667">
+  <object id="313" name="catexs" x="4080" y="2280" width="60" height="90">
    <properties>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240678,7 +240678,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="314" name="catexs" x="3450" y="1860" width="61" height="92.1667">
+  <object id="314" name="catexs" x="3450" y="1860" width="61" height="90">
    <properties>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
@@ -240686,7 +240686,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="315" name="cawash" x="3630" y="1980" width="97.75" height="124.5">
+  <object id="315" name="cawash" x="3630" y="1980" width="90" height="120">
    <properties>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
@@ -240694,7 +240694,7 @@
     <property name="pivot_y" type="float" value="50"/>
    </properties>
   </object>
-  <object id="316" name="cawash" x="4022" y="1860" width="97.75" height="124.5">
+  <object id="316" name="cawash" x="4020" y="1860" width="90" height="120">
    <properties>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
@@ -240702,7 +240702,7 @@
     <property name="pivot_y" type="float" value="50"/>
    </properties>
   </object>
-  <object id="317" name="cawash" x="4050" y="2400" width="97.75" height="124.5">
+  <object id="317" name="cawash" x="4050" y="2400" width="90" height="120">
    <properties>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
@@ -240710,7 +240710,7 @@
     <property name="pivot_y" type="float" value="50"/>
    </properties>
   </object>
-  <object id="318" name="cawash" x="4050" y="1140" width="97.75" height="120">
+  <object id="318" name="cawash" x="4050" y="1140" width="90" height="120">
    <properties>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
@@ -240718,7 +240718,7 @@
     <property name="pivot_y" type="float" value="50"/>
    </properties>
   </object>
-  <object id="319" name="carus" x="4020" y="2010" width="122" height="122">
+  <object id="319" name="carus" x="4020" y="2010" width="120" height="120">
    <properties>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="45"/>
@@ -240726,7 +240726,7 @@
     <property name="pivot_y" type="float" value="54"/>
    </properties>
   </object>
-  <object id="320" name="caind" x="2896.88" y="284.125" width="172.25" height="113.75">
+  <object id="320" name="caind" x="2940" y="300" width="120" height="120">
    <properties>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="80"/>
@@ -240734,7 +240734,7 @@
     <property name="pivot_y" type="float" value="64"/>
    </properties>
   </object>
-  <object id="321" name="caind" x="3099.38" y="287.625" width="172.25" height="113.75">
+  <object id="321" name="caind" x="3120" y="300" width="120" height="120">
    <properties>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="80"/>
@@ -240742,7 +240742,7 @@
     <property name="pivot_y" type="float" value="64"/>
    </properties>
   </object>
-  <object id="322" name="caind" x="2696.38" y="282.625" width="172.25" height="113.75">
+  <object id="322" name="caind" x="2730" y="300" width="120" height="120">
    <properties>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="80"/>
@@ -243628,7 +243628,7 @@
     <property name="path" value="Maps/Buildings/fence2.png"/>
    </properties>
   </object>
-  <object id="1911" name="canewy" x="3810" y="4320" width="77" height="126">
+  <object id="1911" name="canewy" x="3810" y="4320" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
