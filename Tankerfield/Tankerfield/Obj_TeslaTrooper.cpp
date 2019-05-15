@@ -460,7 +460,7 @@ void Obj_TeslaTrooper::OnTrigger(Collider* collider)
 
 	else if (collider->GetTag() != Collider::TAG::ENEMY)
 	{
-		LOG("yeep");
+	/*	LOG("yeep");*/
 	}
 
 

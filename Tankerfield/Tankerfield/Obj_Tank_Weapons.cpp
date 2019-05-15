@@ -3,6 +3,7 @@
 #include "App.h"
 #include "M_ObjManager.h"
 #include "Player_GUI.h"
+#include "Log.h"
 
 //Bullets
 #include "Bullet_Missile.h"
@@ -219,7 +220,7 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ShootOil()
 {
-	Bullet_Oil * bullet = (Bullet_Oil*)app->objectmanager->CreateObject(ObjectType::BULLET_OIL, turr_pos+shot_dir);
+	Bullet_Oil * bullet = (Bullet_Oil*)app->objectmanager->CreateObject(ObjectType::BULLET_OIL, turr_pos + shot_dir);
 
 	bullet->SetBulletProperties(
 		weapon_info.bullet_speed,
@@ -231,5 +232,8 @@ void Obj_Tank::ShootOil()
 
 void Obj_Tank::ShootOilCharged()
 {
-	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, turr_pos + shot_dir*2.5);
+	fPoint pool_pos = turr_pos + shot_dir * 2.5F ;
+	pool_pos -= fPoint(2.5f, 2.5f);
+	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, pool_pos);
+
 }
