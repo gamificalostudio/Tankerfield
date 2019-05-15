@@ -583,18 +583,6 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::PORTAL)
-	{
-		if (time_between_portal_tp.ReadMs() > 2000) {
-			if (c1 == portal1->coll) {
-				pos_map = portal2->pos_map;
-			}
-			else if (c1 == portal2->coll) {
-				pos_map = portal1->pos_map;
-			}
-			time_between_portal_tp.Start();
-		}
-	}
 }
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
@@ -1059,9 +1047,3 @@ fPoint Obj_Tank::GetShotDir() const
 	return shot_dir;
 }
 
-void Obj_Tank::CreatePortals()
-{
-	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
-
-	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
-}

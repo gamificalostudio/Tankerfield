@@ -18,11 +18,16 @@ public:
 
 	bool Use() override;
 
+	void OnTriggerEnter(Collider* collider);
+
 private:
 	SDL_Texture * tex = nullptr;
 	Animation anim;
 
 	PerfTimer time;
+
+	Obj_Portal* portal1;
+	Obj_Portal* portal2;
 };
 
 #endif

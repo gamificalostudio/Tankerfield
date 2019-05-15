@@ -57,7 +57,6 @@ public:
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	bool GetShotAutomatically() const;
-	void CreatePortals();
 
 public:
 
@@ -249,10 +248,6 @@ public:
 
 	//- GUI
 	Player_GUI*  gui = nullptr;
-
-public:
-	Obj_Portal * portal1;
-	Obj_Portal * portal2;
 };
 
 #endif
