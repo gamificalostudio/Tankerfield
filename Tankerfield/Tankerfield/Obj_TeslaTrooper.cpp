@@ -477,21 +477,27 @@ void Obj_TeslaTrooper::OnTriggerEnter(Collider * collider)
 	
 	if (collider->GetTag() == Collider::TAG::ELECTRO_SHOT)
 	{
-		life -= collider->damage;
+		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
 
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
+		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
 		{
-			// DROP A PICK UP ITEM 
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = TROOPER_STATE::DEAD;
+			player->GetEnemiesHitted()->push_back(this);
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			curr_tex = tex_damaged;
+
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = TROOPER_STATE::DEAD;
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+			}
 		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}		
 	}
 }
 

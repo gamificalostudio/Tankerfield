@@ -354,6 +354,7 @@ void Obj_Tank::ShootDoubleMissileCharged()
 
 void Obj_Tank::ShootElectroShot()
 {
+	enemies_hitted.clear();
 	float coll_w_init;
 	float coll_h_init;
 	(*electric_shot_colliders_vector.begin())->GetSize(coll_w_init, coll_h_init);
@@ -410,6 +411,11 @@ void Obj_Tank::ShootElectroShotCharged()
 		(*iter)->Activate();
 	}
 	electro_shot_timer.Start();
+}
+
+std::vector<Object*>* Obj_Tank::GetEnemiesHitted() 
+{
+	return &enemies_hitted;
 }
 
 

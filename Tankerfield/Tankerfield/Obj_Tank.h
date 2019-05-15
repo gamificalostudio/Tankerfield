@@ -57,6 +57,7 @@ public:
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	bool GetShotAutomatically() const;
+	std::vector<Object*>* GetEnemiesHitted();
 
 public:
 
@@ -199,6 +200,8 @@ private:
 	std::vector<Collider*> electric_shot_colliders_vector;
 
 	std::vector<Collider*> electric_shot_colliders_charged_vector;
+
+	std::vector<Object*> enemies_hitted;
 
 
 	//- Items
