@@ -67,5 +67,5 @@ Obj_RocketLauncher::~Obj_RocketLauncher()
 
 void Obj_RocketLauncher::Spawn(const float& dt)
 {
-	
+	state = ENEMY_STATE::GET_PATH;
 }

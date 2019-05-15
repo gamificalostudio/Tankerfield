@@ -350,6 +350,182 @@
     </death>
   </tesla>
   <rocketlauncher>
-    
+    <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+       <dir>
+	        <frame x="0" y="0" width="98" height="94"/>
+       </dir>
+       <dir>
+	        <frame x="98" y="0" width="98" height="94"/>
+       </dir>
+       <dir>
+	        <frame x="196" y="0" width="98" height="94"/>
+       </dir>
+       <dir>
+	        <frame x="294" y="0" width="98" height="94"/>
+       </dir>
+       <dir>
+	        <frame x="392" y="0" width="98" height="94"/>
+       </dir>
+       <dir>
+	        <frame x="490" y="0" width="98" height="94"/>
+       </dir>
+       <dir>
+	        <frame x="588" y="0" width="98" height="94"/>
+       </dir>
+       <dir>
+	        <frame x="686" y="0" width="98" height="94"/>
+       </dir>
+    </idle>
+    <walk speed="10" rotation="counter-clockwise" first_dir_angle="-90">
+      <dir>
+        <frame x ="784" y="0" width="98" height="94"/>
+        <frame x="882" y="0" width="98" height="94"/>
+        <frame x="0" y="94" width="98" height="94"/>
+        <frame x="98" y="94" width="98" height="94"/>
+        <frame x="196" y="94" width="98" height="94"/>
+        <frame x="294" y="94" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="392" y="94" width="98" height="94"/>
+        <frame x="490" y="94" width="98" height="94"/>
+        <frame x="588" y="94" width="98" height="94"/>
+        <frame x="686" y="94" width="98" height="94"/>
+        <frame x="784" y="94" width="98" height="94"/>
+        <frame x="882" y="94" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="0" y="188" width="98" height="94"/>
+        <frame x="98" y="188" width="98" height="94"/>
+        <frame x="196" y="188" width="98" height="94"/>
+        <frame x="294" y="188" width="98" height="94"/>
+        <frame x="392" y="188" width="98" height="94"/>
+        <frame x="490" y="188" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="588" y="188" width="98" height="94"/>
+        <frame x="686" y="188" width="98" height="94"/>
+        <frame x="784" y="188" width="98" height="94"/>
+        <frame x="882" y="188" width="98" height="94"/>
+        <frame x="0" y="282" width="98" height="94"/>
+        <frame x="98" y="282" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="196" y="282" width="98" height="94"/>
+        <frame x="294" y="282" width="98" height="94"/>
+        <frame x="392" y="282" width="98" height="94"/>
+        <frame x="490" y="282" width="98" height="94"/>
+        <frame x="588" y="282" width="98" height="94"/>
+        <frame x="686" y="282" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="784" y="282" width="98" height="94"/>
+        <frame x="882" y="282" width="98" height="94"/>
+        <frame x="0" y="376" width="98" height="94"/>
+        <frame x="98" y="376" width="98" height="94"/>
+        <frame x="196" y="376" width="98" height="94"/>
+        <frame x="294" y="376" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="392" y="376" width="98" height="94"/>
+        <frame x="490" y="376" width="98" height="94"/>
+        <frame x="588" y="376" width="98" height="94"/>
+        <frame x="686" y="376" width="98" height="94"/>
+        <frame x="784" y="376" width="98" height="94"/>
+        <frame x="882" y="376" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="0" y="470" width="98" height="94"/>
+        <frame x="98" y="470" width="98" height="94"/>
+        <frame x="196" y="470" width="98" height="94"/>
+        <frame x="294" y="470" width="98" height="94"/>
+        <frame x="392" y="470" width="98" height="94"/>
+        <frame x="490" y="470" width="98" height="94"/>
+      </dir>
+    </walk>
+    <attack speed="10" rotation="counter-clockwise" first_dir_angle="-90">
+      <dir>
+        <frame x="588" y="1034" width="98" height="94"/>
+        <frame x="686" y="1034" width="98" height="94"/>
+        <frame x="784" y="1034" width="98" height="94"/>
+        <frame x="882" y="1034" width="98" height="94"/>
+        <frame x="0" y="1128" width="98" height="94"/>
+        <frame x="98" y="1128" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="196" y="1128" width="98" height="94"/>
+        <frame x="294" y="1128" width="98" height="94"/>
+        <frame x="392" y="1128" width="98" height="94"/>
+        <frame x="490" y="1128" width="98" height="94"/>
+        <frame x="588" y="1128" width="98" height="94"/>
+        <frame x="686" y="1128" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="784" y="1128" width="98" height="94"/>
+        <frame x="882" y="1128" width="98" height="94"/>
+        <frame x="0" y="1222" width="98" height="94"/>
+        <frame x="98" y="1222" width="98" height="94"/>
+        <frame x="196" y="1222" width="98" height="94"/>
+        <frame x="294" y="1222" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="392" y="1222" width="98" height="94"/>
+        <frame x="490" y="1222" width="98" height="94"/>
+        <frame x="588" y="1222" width="98" height="94"/>
+        <frame x="686" y="1222" width="98" height="94"/>
+        <frame x="784" y="1222" width="98" height="94"/>
+        <frame x="882" y="1222" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="0" y="1316" width="98" height="94"/>
+        <frame x="98" y="1316" width="98" height="94"/>
+        <frame x="196" y="1316" width="98" height="94"/>
+        <frame x="294" y="1316" width="98" height="94"/>
+        <frame x="392" y="1316" width="98" height="94"/>
+        <frame x="490" y="1316" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="588" y="1316" width="98" height="94"/>
+        <frame x="686" y="1316" width="98" height="94"/>
+        <frame x="784" y="1316" width="98" height="94"/>
+        <frame x="882" y="1316" width="98" height="94"/>
+        <frame x="0" y="1410" width="98" height="94"/>
+        <frame x="98" y="1410" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="196" y="1410" width="98" height="94"/>
+        <frame x="294" y="1410" width="98" height="94"/>
+        <frame x="392" y="1410" width="98" height="94"/>
+        <frame x="490" y="1410" width="98" height="94"/>
+        <frame x="588" y="1410" width="98" height="94"/>
+        <frame x="686" y="1410" width="98" height="94"/>
+      </dir>
+      <dir>
+        <frame x="784" y="1410" width="98" height="94"/>
+        <frame x="882" y="1410" width="98" height="94"/>
+        <frame x="0" y="1504" width="98" height="94"/>
+        <frame x="98" y="1504" width="98" height="94"/>
+        <frame x="196" y="1504" width="98" height="94"/>
+        <frame x="294" y="1504" width="98" height="94"/>
+      </dir>
+    </attack>
+    <death speed="10" rotation="counter-clockwise" first_dir_angle="-90">
+      <dir>
+        <frame x="98" y="940" width="98" height="94"/>
+        <frame x="196" y="940" width="98" height="94"/>
+        <frame x="294" y="940" width="98" height="94"/>
+        <frame x="392" y="940" width="98" height="94"/>
+        <frame x="490" y="940" width="98" height="94"/>
+        <frame x="588" y="940" width="98" height="94"/>
+        <frame x="686" y="940" width="98" height="94"/>
+        <frame x="784" y="940" width="98" height="94"/>
+        <frame x="882" y="940" width="98" height="94"/>
+        <frame x="0" y="1034" width="98" height="94"/>
+        <frame x="98" y="1034" width="98" height="94"/>
+        <frame x="196" y="1034" width="98" height="94"/>
+        <frame x="294" y="1034" width="98" height="94"/>
+        <frame x="392" y="1034" width="98" height="94"/>
+        <frame x="490" y="1034" width="98" height="94"/>
+      </dir>
+    </death>
   </rocketlauncher>
 </animations>
