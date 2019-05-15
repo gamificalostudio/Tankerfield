@@ -383,10 +383,12 @@ void Obj_Tank::ShootElectroShot()
 		(*iter)->Activate();
 	}
 	electro_shot_timer.Start();
+	is_electro_shot_charged = false;
 }
 
 void Obj_Tank::ShootElectroShotCharged()
 {
+	enemies_hitted.clear();
 	float coll_w_init;
 	float coll_h_init;
 	(*electric_shot_colliders_charged_vector.begin())->GetSize(coll_w_init, coll_h_init);
@@ -413,6 +415,12 @@ void Obj_Tank::ShootElectroShotCharged()
 		(*iter)->Activate();
 	}
 	electro_shot_timer.Start();
+	is_electro_shot_charged = true;
+}
+
+bool Obj_Tank::GetIsElectroShotCharged() const
+{
+	return is_electro_shot_charged;
 }
 
 std::vector<Object*>* Obj_Tank::GetEnemiesHitted() 

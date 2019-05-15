@@ -60,6 +60,7 @@ public:
 	void ShotAutormaticallyDisactivate();
 	bool GetShotAutomatically() const;
 	std::vector<Object*>* GetEnemiesHitted();
+	bool GetIsElectroShotCharged() const;
 
 	void CreatePortals();
 
@@ -116,6 +117,8 @@ private:
 	void ShootElectroShot();
 
 	void ShootElectroShotCharged();
+
+	
 
 	//- TankDeath
 	void ReviveTank(float dt);
@@ -200,6 +203,7 @@ private:
 
 	//Electro shot
 	PerfTimer electro_shot_timer;
+	bool is_electro_shot_charged = false;
 
 	std::vector<Collider*> electric_shot_colliders_vector;
 

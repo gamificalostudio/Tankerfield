@@ -23,6 +23,8 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	tex_electro_dead = app->tex->Load(enemie_node.child("tex_electro_dead").child_value());
 	electro_dead.frames = app->anim_bank->LoadFrames(anim_node.child("electro_dead"));
 
+	electocuted = app->audio->LoadFx("audio/Fx/entities/enemies/electrocuted.wav",25);
+
 	damaged_sprite_time = 150;
 	//colision si se puede desactivar
 
@@ -30,6 +32,8 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
+
+	times_to_repeat_animation = 3u;
 
 	path_timer.Start();
 }
@@ -46,7 +50,11 @@ bool Obj_Enemy::Update(float dt)
 void Obj_Enemy::ChangeTexture()
 {
 	
-	if (damaged_sprite_timer.Read() > damaged_sprite_time && curr_tex != tex && state != ENEMY_STATE::STUNNED && state != ENEMY_STATE::DEAD)
+	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
+		curr_tex != tex && 
+		state != ENEMY_STATE::STUNNED &&
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		state != ENEMY_STATE::DEAD)
 	{
 		curr_tex = tex;
 	}
@@ -146,11 +154,25 @@ void Obj_Enemy::Movement(float &dt)
 		if ((int)electro_dead.current_frame >= 4)
 		{
 			electro_dead.Reset();
-			state = state_saved;
-			curr_tex = tex;
-			curr_anim = anim_saved;
+
+			if (stun_charged && times_animation_repeated >= times_to_repeat_animation || !stun_charged)
+			{
+				times_animation_repeated = 0u;
+				state = state_saved;
+				curr_tex = tex;
+				curr_anim = anim_saved;
+				app->audio->PauseFx(channel_electrocuted, 1);
+			}
+			else
+			{
+				++times_animation_repeated;
+				app->audio->PauseFx(channel_electrocuted);
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				
+			}
 		}
 	}
+	break;
 	break;
 	default:
 		assert(true && "The enemy have no state");
@@ -216,6 +238,7 @@ void Obj_Enemy::ElectroDead()
 		if (electro_dead.Finished())
 		{
 			to_remove = true;
+			app->audio->PauseFx(channel_electrocuted);
 
 		}
 	}
@@ -389,6 +412,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			if (life <= 0)
 			{
 				// DROP A PICK UP ITEM 
+				channel_electrocuted = app->audio->PlayFx(electocuted);
 				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = ENEMY_STATE::DEAD;
 				is_electro_dead = true;
@@ -397,10 +421,22 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			else
 			{
 				app->audio->PlayFx(sfx_hit);
+				channel_electrocuted = app->audio->PlayFx(electocuted);
 				state_saved = state;
-				state = ENEMY_STATE::STUNNED;
+				
 				//tex_saved = 
 				anim_saved = curr_anim;
+			
+				state = ENEMY_STATE::STUNNED;
+				if (player->GetIsElectroShotCharged())
+				{
+					stun_charged = true;
+				}
+				else
+				{
+					stun_charged = false;
+				}
+
 			}
 		}
 	}

@@ -17,6 +17,7 @@ enum class ENEMY_STATE
 	TELEPORT_OUT,
 	DEAD,
 	STUNNED,
+	STUNNED_CHARGED,
 };
 
 class Obj_Enemy : public Object
@@ -118,6 +119,13 @@ protected:
 	float check_path_time = 0.f;
 	fPoint next_pos = { 0.f, 0.f };
 	float detection_range = 0.0f;
+
+	uint times_to_repeat_animation = 0u;
+	uint times_animation_repeated = 0u;
+	bool stun_charged = false;
+
+	uint electocuted;
+	uint channel_electrocuted;
 };
 
 #endif
