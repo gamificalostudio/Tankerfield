@@ -31,8 +31,6 @@
 #include "Obj_Bullet.h"
 
 
-
-
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");

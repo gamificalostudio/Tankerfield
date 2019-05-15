@@ -188,7 +188,7 @@
       <attack_range num="5"/>
       <attack_frequency num="2000"/>
       <base_life num="3"/>
-      <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
+      <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
     </rocket_launcher>
     <brute>
       <animations>

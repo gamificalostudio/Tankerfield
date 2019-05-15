@@ -56,7 +56,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = rocket_launcher_node.child("attack_frequency").attribute("num").as_float();
 	life = pow(rocket_launcher_node.child("base_life").attribute("num").as_float(), app->scene->round);
-
+	
 	check_path_time = 2.0f;
 }
 
