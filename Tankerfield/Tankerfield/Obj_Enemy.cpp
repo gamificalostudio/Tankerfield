@@ -121,6 +121,11 @@ void Obj_Enemy::Movement(float &dt)
 		Dead();
 	}
 	break;
+	case ENEMY_STATE::BURN:
+	{
+
+	}
+		break;
 	default:
 		assert(true && "The enemy have no state");
 		break;
@@ -191,6 +196,8 @@ int Obj_Enemy::Move(float & dt)
 		state = ENEMY_STATE::RECHEAD_POINT;
 	}
 
+	
+
 	if (update_velocity_vec.ReadSec() > 1)
 	{
 		UpdateVelocity();
@@ -205,6 +212,8 @@ int Obj_Enemy::Move(float & dt)
 
 	return 0;
 }
+
+
 
 void Obj_Enemy::GetPath()
 {
@@ -272,6 +281,29 @@ void Obj_Enemy::DrawDebug(const Camera* camera)
 		}
 	}
 
+}
+
+inline void Obj_Enemy::Burn(const float& dt)
+{
+	if (burn_fist_enter || range_pos.IsPointIn(pos_map))
+	{
+		GenereRandomNextPos();
+	}
+	else
+	{
+		if (update_velocity_vec.ReadSec() > 1)
+		{
+			UpdateVelocity();
+		}
+
+		pos_map += move_vect * speed * dt;
+		range_pos.center = pos_map;
+	}
+
+}
+
+inline void Obj_Enemy::GenereRandomNextPos()
+{
 }
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider)

@@ -15,6 +15,7 @@ enum class ENEMY_STATE
 	GET_TELEPORT_POINT,
 	TELEPORT_IN,
 	TELEPORT_OUT,
+	BURN,
 	DEAD,
 };
 
@@ -48,6 +49,10 @@ public:
 	inline virtual void TeleportIn(float & dt) {};
 
 	inline virtual void TeleportOut(float & dt) {};
+
+	inline virtual void Burn(const float& dt);
+
+	inline void GenereRandomNextPos();
 
 	void OnTriggerEnter(Collider * collider);
 
@@ -106,6 +111,8 @@ protected:
 	float check_path_time = 0.f;
 	fPoint next_pos = { 0.f, 0.f };
 	float detection_range = 0.0f;
+
+	bool burn_fist_enter = true;
 };
 
 #endif
