@@ -83,6 +83,11 @@ void UI_Element::SetState(ELEMENT_STATE new_state)
 	state = new_state;
 }
 
+ELEMENT_STATE UI_Element::GetState()
+{
+	return state;
+}
+
 void UI_Element::SetStateToBranch(ELEMENT_STATE new_state)
 {
 	app->ui->SetStateToBranch(new_state, this);

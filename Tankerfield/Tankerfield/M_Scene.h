@@ -36,19 +36,19 @@ class M_Scene : public Module
 private:
 	Controller** control1			= nullptr;
 
+	uint subround = 1;
+
+	uint max_subrounds = 3;
+
+	int number_of_enemies = 0;
+
 public:
 	int current_level				= 0;
 
 	General_HUD * general_hud		= nullptr;
 
-
-	std::list<Object*> enemies_in_wave;
-
 	uint round		= 0;
-	uint subround	= 1;
-	uint max_subrounds = 3;
-	uint number_of_enemies_created = 0;
-	uint number_of_enemies_killed = 0;
+
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
 	PerfTimer timer_between_waves;
@@ -87,12 +87,15 @@ public:
 
 	void DebugPathfinding();
 
+	void ReduceNumEnemies();
+
 private:
 	void CreateEnemyWave();
 
 	void NewWave();
 
 	bool AllPlayersReady() const;
+
 
 public:
 	SDL_Texture* path_tex = nullptr;

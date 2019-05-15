@@ -130,7 +130,8 @@ bool M_Scene::Start()
 
 
 	UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
-	label_number_of_enemies = app->ui->CreateLabel({ 0,0 }, info_label, nullptr);
+	label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
+	label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
 	return true;
 }
@@ -221,13 +222,24 @@ bool M_Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-
+	if (app->input->GetKey(SDL_SCANCODE_F10)== KeyState::KEY_DOWN)
+	{
+		if (label_number_of_enemies->GetState() == ELEMENT_STATE::VISIBLE)
+			label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+		else
+			label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
+	}
 	switch (stat_of_wave)
 	{
 	case WaveStat::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
-		++round;
+		++subround;
+		if (subround > max_subrounds)
+		{
+			subround = 1;
+			++round;
+		}
 		NewWave();
 		stat_of_wave = WaveStat::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
@@ -237,7 +249,7 @@ bool M_Scene::Update(float dt)
 	}
 	case WaveStat::IN_WAVE:
 	{
-		if (number_of_enemies_killed>=number_of_enemies_created)
+		if (number_of_enemies<=0)
 		{
 			stat_of_wave = WaveStat::EXIT_OF_WAVE;
 		}
@@ -427,13 +439,24 @@ void M_Scene::DebugPathfinding()
 	}
 }
 
+void M_Scene::ReduceNumEnemies()
+{
+	number_of_enemies -= 1;
+	if (number_of_enemies < 0)
+	{
+		number_of_enemies = 0;
+	}
+	if (label_number_of_enemies != nullptr)
+		label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
+
+}
+
 void M_Scene::CreateEnemyWave()
 {
-	number_of_enemies_created = 0;
-	number_of_enemies_killed = 0;
-	number_of_enemies_created += Tesla_trooper_units;
-	number_of_enemies_created += Brute_units;
-	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies_created));
+	number_of_enemies = 0;
+	number_of_enemies += Tesla_trooper_units;
+	number_of_enemies += Brute_units;
+	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)
@@ -455,7 +478,6 @@ void M_Scene::CreateEnemyWave()
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
 			app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
 
-			number_of_enemies_created += 1;
 		}
 	}
 
