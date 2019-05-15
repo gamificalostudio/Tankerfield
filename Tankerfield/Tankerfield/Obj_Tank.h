@@ -194,9 +194,11 @@ private:
 	bool shot_automatically = false;
 
 	//Electro shot
-	Collider* electro_shot_collider			= nullptr;
-	Collider* electro_shot_collider_charged	= nullptr;
 	PerfTimer electro_shot_timer;
+
+	std::vector<Collider*> electric_shot_colliders_vector;
+
+	std::vector<Collider*> electric_shot_colliders_charged_vector;
 
 
 	//- Items

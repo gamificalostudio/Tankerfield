@@ -20,13 +20,38 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
 	shot1_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
 
-	electro_shot_collider = app->collision->AddCollider(pos_map,3,3,Collider::TAG::ELECTRO_SHOT, 100, this);
-	electro_shot_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-	electro_shot_collider->Disactivate();
+	pugi::xml_node electro_shot_node = app->config.child("object").child("tank").child("electro_shot");
 
-	electro_shot_collider_charged = app->collision->AddCollider(pos_map, 6, 6, Collider::TAG::ELECTRO_SHOT, 100, this);
-	electro_shot_collider_charged->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-	electro_shot_collider_charged->Disactivate();
+	float coll_size_init = electro_shot_node.child("collider_size").attribute("value").as_float();
+
+	//Basic electro shot colliders
+	for (uint i = 1; i <= 3/*num max of colliders*/; ++i)
+	{
+		float coll_size = coll_size_init * i;
+		Collider* electro_shot_collider = nullptr;
+
+		electro_shot_collider = app->collision->AddCollider(pos_map, coll_size, coll_size, Collider::TAG::ELECTRO_SHOT, 100, this);
+		electro_shot_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		electro_shot_collider->Disactivate();
+
+		electric_shot_colliders_vector.push_back(electro_shot_collider);
+	}
+
+	coll_size_init *= 2.f;
+
+	//charged electro shot colliders
+	for (uint i = 1; i <= 3/*num max of colliders*/; ++i)
+	{
+		float coll_size = coll_size_init * i;
+		Collider* electro_shot_collider_charged = nullptr;
+
+		electro_shot_collider_charged = app->collision->AddCollider(pos_map, coll_size, coll_size, Collider::TAG::ELECTRO_SHOT, 100, this);
+		electro_shot_collider_charged->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		electro_shot_collider_charged->Disactivate();
+
+		electric_shot_colliders_charged_vector.push_back(electro_shot_collider_charged);
+	}
+
 
 
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
@@ -43,15 +68,50 @@ void Obj_Tank::UpdateWeaponsWithoutBullets()
 	if (weapon_info.weapon == WEAPON::ELECTRO_SHOT)
 	{
 		//with the animation get frame?? only 1 frame
-		if (electro_shot_timer.ReadMs() >= weapon_info.bullet_life_ms && electro_shot_collider->GetIsActivated())
+		if (electro_shot_timer.ReadMs() >= weapon_info.bullet_life_ms && (*electric_shot_colliders_vector.begin())->GetIsActivated())
 		{
-			electro_shot_collider->Disactivate();
+			for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
+			{
+				(*iter)->Disactivate();
+			}
 		}
-		else if (electro_shot_timer.ReadMs() >= weapon_info.bullet_life_ms && electro_shot_collider_charged->GetIsActivated())
+		else if (electro_shot_timer.ReadMs() >= weapon_info.bullet_life_ms && (*electric_shot_colliders_charged_vector.begin())->GetIsActivated())
 		{
-			electro_shot_collider_charged->Disactivate();
+			for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
+			{
+				(*iter)->Disactivate();
+			}
 		}
 	}
+	//test:
+
+	//float coll_w_init;
+	//float coll_h_init;
+	//(*electric_shot_colliders_vector.begin())->GetSize(coll_w_init, coll_h_init);
+	//fPoint increment{ coll_w_init, coll_h_init};
+	//fPoint distance{0,0};
+	//
+
+	//for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
+	//{
+	//	float coll_w;
+	//	float coll_h;
+	//	(*iter)->GetSize(coll_w, coll_h);
+	//	//fPoint increment{ coll_w*0.5f, coll_h*0.5f };  alternative
+
+	//	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
+
+	//	distance += increment;
+
+	//	fPoint dir_distance = GetShotDir() * distance;
+
+
+	//	(*iter)->SetObjOffset(offset + dir_distance);
+	//	(*iter)->SetPosToObj();
+
+	//	//(*iter)->Activate();
+	//}
+
 }
 
 //if (controller != nullptr) { (*controller)->PlayRumble(0.92f, 250); }
@@ -149,7 +209,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1_rumble_duration = 250;
 		weapon_info.shot2_rumble_strength = 1.0f;
 		weapon_info.shot2_rumble_duration = 400;
-		electro_shot_collider->damage = weapon_info.bullet_damage;
+		//electro_shot_collider->damage = weapon_info.bullet_damage;
 		//add with and height here?
 		break;
 	
@@ -294,31 +354,61 @@ void Obj_Tank::ShootDoubleMissileCharged()
 
 void Obj_Tank::ShootElectroShot()
 {
-	float coll_w;
-	float coll_h;
-	electro_shot_collider->GetSize(coll_w, coll_h);
-	fPoint offset{ -coll_w*0.5f, -coll_h * 0.5f};
-	fPoint dir = GetShotDir() * fPoint{2,2};
-
-	electro_shot_collider->SetObjOffset(offset + dir);
-	electro_shot_collider->SetPosToObj();
+	float coll_w_init;
+	float coll_h_init;
+	(*electric_shot_colliders_vector.begin())->GetSize(coll_w_init, coll_h_init);
+	fPoint distance{1.f, 1.f};
+	fPoint increment{ coll_w_init, coll_h_init };
 	
-	electro_shot_collider->Activate();
+	for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin();iter != electric_shot_colliders_vector.end(); ++iter)
+	{
+		float coll_w;
+		float coll_h;
+		(*iter)->GetSize(coll_w, coll_h);
+		
+
+		fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
+		
+		
+
+		fPoint dir_distance = GetShotDir() * distance;
+		distance += increment;
+
+		(*iter)->SetObjOffset(offset + dir_distance);
+		(*iter)->SetPosToObj();
+
+		(*iter)->Activate();
+	}
 	electro_shot_timer.Start();
 }
 
 void Obj_Tank::ShootElectroShotCharged()
 {
-	float coll_w;
-	float coll_h;
-	electro_shot_collider_charged->GetSize(coll_w, coll_h);
-	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
-	fPoint dir = GetShotDir() * fPoint {coll_w*0.5f, coll_h * 0.5f};
+	float coll_w_init;
+	float coll_h_init;
+	(*electric_shot_colliders_charged_vector.begin())->GetSize(coll_w_init, coll_h_init);
+	fPoint distance{1.f, 1.f};
+	fPoint increment{ coll_w_init, coll_h_init };
 
-	electro_shot_collider_charged->SetObjOffset(offset + dir);
-	electro_shot_collider_charged->SetPosToObj();
+	for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
+	{
+		float coll_w;
+		float coll_h;
+		(*iter)->GetSize(coll_w, coll_h);
 
-	electro_shot_collider_charged->Activate();
+
+		fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
+
+		
+
+		fPoint dir_distance = GetShotDir() * distance;
+		distance += increment;
+
+		(*iter)->SetObjOffset(offset + dir_distance);
+		(*iter)->SetPosToObj();
+
+		(*iter)->Activate();
+	}
 	electro_shot_timer.Start();
 }
 
