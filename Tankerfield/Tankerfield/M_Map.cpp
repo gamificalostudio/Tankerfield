@@ -227,7 +227,7 @@ bool M_Map::Unload()
 
 	for (std::list<TileSet*>::iterator iter = data.tilesets.begin(); iter != data.tilesets.end(); ++iter)
 	{
-		if ((*iter != nullptr))
+		if (*iter != nullptr)
 		{
 			delete (*iter);
 			(*iter) = nullptr;
@@ -237,7 +237,7 @@ bool M_Map::Unload()
 
 	for (std::list<MapLayer*>::iterator iter = data.map_layers.begin(); iter != data.map_layers.end(); ++iter)
 	{
-		if ((*iter != nullptr))
+		if (*iter != nullptr)
 		{
 			delete (*iter);
 			(*iter) = nullptr;
@@ -247,7 +247,7 @@ bool M_Map::Unload()
 
 	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_box.begin(); iter != data.spawners_position_reward_box.end(); ++iter)
 	{
-		if ((*iter != nullptr))
+		if (*iter != nullptr)
 		{
 			delete (*iter);
 		}
@@ -256,7 +256,7 @@ bool M_Map::Unload()
 
 	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_zone.begin(); iter != data.spawners_position_reward_zone.end(); ++iter)
 	{
-		if ((*iter != nullptr))
+		if (*iter != nullptr)
 		{
 			delete (*iter);
 		}
@@ -265,7 +265,7 @@ bool M_Map::Unload()
 
 	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_enemy.begin(); iter != data.spawners_position_enemy.end(); ++iter)
 	{
-		if ((*iter != nullptr))
+		if (*iter != nullptr)
 		{
 			delete (*iter);
 		}
@@ -288,7 +288,7 @@ bool M_Map::Unload()
 	{
 		for (std::list<Collider*>::iterator iter = data.colliders_list.begin(); iter != data.colliders_list.end(); ++iter)
 		{
-			if ((*iter != nullptr))
+			if (*iter != nullptr)
 			{
 				(*iter)->Destroy();
 				(*iter) = nullptr;
@@ -459,14 +459,15 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		//	Buildings
 		if (object_group->name == "Buildings")
 		{
-				
-			
 			// To ortogonal tile pos-----------------
-			fPoint pos = { (float)(object_group->objects[i].pos.x ),  (float)(object_group->objects[i].pos.y ) };
-			fPoint mesure = { (float)object_group->objects[i].w, (float)object_group->objects[i].h};
-			
+			fRect building_rect = {
+				object_group->objects[i].pos.x,
+				object_group->objects[i].pos.y,
+				object_group->objects[i].w,
+				object_group->objects[i].h
+			};
 
-			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, pos);
+			Obj_Building* ret = (Obj_Building*)app->objectmanager->CreateObject(ObjectType::STATIC, building_rect.pos);
 
 			for (pugi::xml_node property_node = obj_node.child("properties").child("property"); property_node!=NULL; property_node = property_node.next_sibling("property"))
 			{
@@ -478,21 +479,22 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 				else if (name == "offset_y")
 				{
 					ret->draw_offset.y = property_node.attribute("value").as_int(0);
-				}
-								
+				}			
 				else if (name == "path")
 				{
 					ret->path = property_node.attribute("value").as_string("no_path");
 				}	
-
 				else if (name == "pivot_y")
 				{
 					ret->pivot.y = property_node.attribute("value").as_float(0);
 				}
+				else if (name == "has_collider" && property_node.attribute("value").as_bool(false))
+				{
+					ret->SetCollider(building_rect);
+				}
 				
 			}
-			ret->SetTexture(ret->path, fPoint{mesure.x, mesure.y});
-
+			ret->SetTexture(ret->path);
 		}
 
 		/* Reward Zones locations */
