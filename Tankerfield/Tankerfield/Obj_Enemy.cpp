@@ -217,6 +217,7 @@ int Obj_Enemy::Move(float & dt)
 	if (path_timer.ReadSec() >= check_path_time)
 		state = ENEMY_STATE::GET_PATH;
 
+	UpdatePos(dt);
 	return 0;
 }
 
@@ -261,12 +262,6 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 		scale,
 		scale);
 
-	if (state == ENEMY_STATE::BURN)
-	{
-		fire3.NextFrame(dt);
-		SDL_Rect fire_frame = fire3.GetFrame(0);
-		app->render->Blit(fire_tex, pos_screen.x- fire_frame.w*0.5f, pos_screen.y - draw_offset.y, camera, &fire_frame);
-	}
 	
 
 	return true;

@@ -31,8 +31,6 @@
 #include "Obj_Bullet.h"
 
 
-
-
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
@@ -43,7 +41,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
-	curr_tex = burn_texture;
+	curr_tex = tex;
 
 
 	//ANIMATIONS =============================================
@@ -79,7 +77,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	squared_detection_range = detection_range * detection_range;
 	coll_w = 0.5f;
 	coll_h = 0.5f;
-	coll				= app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY,0.f, this);
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY ,0.0f, this);
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
@@ -254,8 +252,6 @@ int Obj_TeslaTrooper::Move(float & dt)
 	return retflag;
 	
 }
-
-
 
 void Obj_TeslaTrooper::GetPath()
 {

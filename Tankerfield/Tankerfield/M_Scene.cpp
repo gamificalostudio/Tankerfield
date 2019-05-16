@@ -38,7 +38,9 @@
 
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
+#include "Obj_RocketLauncher.h"
 #include "Object.h"
+#include "Obj_RewardBox.h"
 
 
 M_Scene::M_Scene() : Module()
@@ -94,7 +96,7 @@ bool M_Scene::Start()
 
 
 	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
-// Load the first level of the list on first game start -------------------------
+	// Load the first level of the list on first game start -------------------------
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
@@ -125,11 +127,14 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
-
-			//app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
 		}
 	}
-
+	for (uint i = 0; i < 4; ++i)
+	{
+		Obj_RewardBox* box = app->pick_manager->CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{ 2.f, -2.f });
+		box->SetTypeBox(PICKUP_TYPE::WEAPON);
+	}
+	//app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, app->objectmanager->obj_tanks[0]->pos_map);
 
 
 	general_hud = DBG_NEW General_HUD();
@@ -435,8 +440,9 @@ void M_Scene::DebugPathfinding()
 					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
 						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
-					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
+						app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
 					}
+
 					SDL_RenderSetClipRect(app->render->renderer, nullptr);
 				}
 			}

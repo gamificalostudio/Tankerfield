@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
     <RootNamespace>Tankerfield</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -143,6 +143,7 @@
     <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_Portal.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
+    <ClCompile Include="Obj_RocketLauncher.cpp" />
     <ClCompile Include="Obj_Suicidal.cpp" />
     <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Obj_Fire.h" />
     <ClInclude Include="Obj_Portal.h" />
     <ClInclude Include="Obj_RewardBox.h" />
+    <ClInclude Include="Obj_RocketLauncher.h" />
     <ClInclude Include="Obj_Suicidal.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
@@ -265,7 +267,9 @@
     <ClInclude Include="WeaponInfo.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\animations.xml" />
+    <Xml Include="..\Game\animations.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Game\config.xml">
       <SubType>Designer</SubType>
     </Xml>

@@ -110,7 +110,7 @@ void Obj_Brute::Burn(const float& dt)
 {
 	if (burn_fist_enter)
 	{
-		fire_damage = life / 3;
+		fire_damage = life / 5;
 		curr_anim = &walk;
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
@@ -143,4 +143,24 @@ void Obj_Brute::Burn(const float& dt)
 	{
 		UpdatePos(dt);
 	}
+	fire3.NextFrame(dt);
+}
+
+bool Obj_Brute::Draw(float dt, Camera * camera)
+{
+	app->render->BlitScaled(
+		curr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&frame,
+		scale,
+		scale);
+
+	if (state == ENEMY_STATE::BURN)
+	{
+		SDL_Rect fire_frame = fire3.GetFrame(0);
+		app->render->Blit(fire_tex, pos_screen.x - fire_frame.w*0.5f, pos_screen.y, camera, &fire_frame);
+	}
+	return true;
 }

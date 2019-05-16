@@ -34,6 +34,8 @@ public:
 
 	inline void Burn(const float & dt);
 
+	bool Draw(float dt, Camera* cam) override;
+
 
 private:
 
