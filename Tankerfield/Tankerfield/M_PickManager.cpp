@@ -32,11 +32,7 @@ bool M_PickManager::Start()
 {
 	bool ret = true;
 
-	for (uint i = 0; i < 4; ++i)
-	{
-		Obj_RewardBox* box = CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{2.f, -2.f});
-		box->SetTypeBox(PICKUP_TYPE::WEAPON);
-	}
+	
 	return ret;
 }
 
