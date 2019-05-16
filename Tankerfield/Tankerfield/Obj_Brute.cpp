@@ -96,8 +96,7 @@ void Obj_Brute::Spawn(const float& dt)
 	if (curr_anim->Finished())
 	{
 		curr_tex = tex;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
-		coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 		draw_offset = normal_draw_offset;
 		curr_anim = &walk;

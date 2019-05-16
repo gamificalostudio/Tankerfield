@@ -186,8 +186,7 @@ bool Obj_Tank::Start()
 
 	float coll_w = 0.8f;
 	float coll_h = 0.8f;
-	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::PLAYER,0.f,this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::PLAYER, BODY_TYPE::DYNAMIC, 0.f,this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	cannon_height = 11.f;
@@ -255,13 +254,13 @@ bool Obj_Tank::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
-		if (coll->GetTag() == Collider::TAG::PLAYER)
+		if (coll->GetTag() == TAG::PLAYER)
 		{
-			coll->SetTag(Collider::TAG::GOD);
+			coll->SetTag(TAG::GOD);
 		}
 		else
 		{
-			coll->SetTag(Collider::TAG::PLAYER);
+			coll->SetTag(TAG::PLAYER);
 		}
 	}
 	return true;
@@ -528,7 +527,7 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
+	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
 		if (bullet->tank_parent != this) // he does not heal himself
@@ -546,7 +545,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	if (c1->GetTag() == TAG::PICK_UP)
 	{
 		if (this->Alive())
 		{
@@ -564,7 +563,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed < speed + road_buff)
+	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
 	{
 			curr_speed += road_buff;
 	}
@@ -572,7 +571,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::PORTAL)
+	if (c1->GetTag() == TAG::PORTAL)
 	{
 		if (time_between_portal_tp.ReadMs() > 2000) {
 			if (c1 == portal1->coll) {
@@ -588,11 +587,11 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	if (c1->GetTag() == TAG::PICK_UP)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
-	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed >= speed + road_buff)
+	if (c1->GetTag() == TAG::ROAD && curr_speed >= speed + road_buff)
 		{
 			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
 		}

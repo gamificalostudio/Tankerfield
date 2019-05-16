@@ -17,8 +17,8 @@
 
 Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 {
-	coll = app->collision->AddCollider(pos, 1, 1, Collider::TAG::PICK_UP, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	coll = app->collision->AddCollider(pos, 1, 1, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll->is_sensor = true;
 	type_of_pick_up = RandomPickUp();
 
 	frame.w = 1;

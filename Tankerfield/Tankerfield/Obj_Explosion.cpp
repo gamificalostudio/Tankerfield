@@ -39,11 +39,13 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 		pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
 		coll_w,
 		coll_h,
-		Collider::TAG::BULLET,
+		TAG::BULLET,
+		BODY_TYPE::DYNAMIC,
 		0,
 		nullptr);
 
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	coll->is_sensor = true;
+
 	coll->SetObjOffset(fPoint(coll_w*0.5f, coll_h*0.5f));
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
