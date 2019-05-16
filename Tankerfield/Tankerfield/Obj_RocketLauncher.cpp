@@ -60,6 +60,12 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	check_path_time = 2.0f;
 
 	scale = 0.75f;
+
+	coll_w = 0.5f;
+	coll_h = 0.5f;
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
+	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.0f });
 }
 
 Obj_RocketLauncher::~Obj_RocketLauncher()
@@ -74,5 +80,24 @@ void Obj_RocketLauncher::Spawn(const float& dt)
 
 void Obj_RocketLauncher::Attack()
 {
-	return;
+	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
+	{
+		if (target != nullptr
+			&& target->coll->GetTag() == Collider::TAG::PLAYER
+			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+			&& perf_timer.ReadMs() > (double)attack_frequency)
+		{
+			curr_anim = &attack;
+			target->SetLife(target->GetLife() - attack_damage);
+			perf_timer.Start();
+			app->audio->PlayFx(sfx_attack);
+		}
+
+		if (curr_anim == &attack
+			&& curr_anim->Finished())
+		{
+			curr_anim = &idle;
+			attack.Reset();
+		}
+	}
 }

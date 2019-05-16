@@ -726,7 +726,7 @@
         <frame x="490" y="470" w="98" h="94"/>
       </dir>
     </walk>
-    <attack speed="10" rotation="counter-clockwise" first_dir_angle="-90">
+    <attack speed="10" rotation="counter-clockwise" first_dir_angle="-90" loop="false">
       <dir>
         <frame x="588" y="1034" w="98" h="94"/>
         <frame x="686" y="1034" w="98" h="94"/>

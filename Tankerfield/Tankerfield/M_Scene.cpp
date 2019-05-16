@@ -129,7 +129,7 @@ bool M_Scene::Start()
 		}
 	}
 
-	//app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, app->objectmanager->obj_tanks[0]->pos_map);
+	app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, app->objectmanager->obj_tanks[0]->pos_map);
 
 
 	general_hud = DBG_NEW General_HUD();
