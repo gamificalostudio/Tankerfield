@@ -283,6 +283,7 @@ public:
 	Obj_Portal * portal2;
 
 	bool draw_electro_shot = false;
+	fPoint player_enemy_distance_point;
 };
 
 #endif

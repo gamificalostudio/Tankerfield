@@ -12,6 +12,7 @@
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
 #include "M_AnimationBank.h"
+#include "M_Map.h"
 
 
 
@@ -409,7 +410,8 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 			damaged_sprite_timer.Start();
 			/*curr_tex = tex_damaged;*/
-
+			float player_enemy_distance = player->pos_map.DistanceTo(this->pos_map);
+			player->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
 			if (life <= 0)
 			{
 				// DROP A PICK UP ITEM 
