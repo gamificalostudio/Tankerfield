@@ -44,7 +44,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	burn_texture = app->tex->Load(anim_node.child("burn").attribute("texture").as_string());
-	curr_tex = burn_texture;
+	curr_tex = tex;
 
 
 	//ANIMATIONS =============================================
@@ -73,8 +73,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
 	app->audio->PlayFx(sfx_spawn);
-	draw = true;
-	state				= ENEMY_STATE::BURN; //enemy
+	draw = false;
+	state				= ENEMY_STATE::SPAWN; //enemy
 
 	speed				= tesla_trooper_node.child("speed").attribute("num").as_float();
 
