@@ -186,8 +186,8 @@
       <attack_frequency num="3000"/>
       <base_life num="5"/>
       <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
-      <tex_damaged_path>"textures/Objects/enemies/shk-sheet-white-1.png"</tex_damaged_path>
-      <tex_oiled_path>"textures/Objects/enemies/shk-sheet_oiled.png"</tex_oiled_path>
+      <tex_damaged_path>textures/Objects/enemies/shk-sheet-white-1.png</tex_damaged_path>
+      <tex_oiled_path>textures/Objects/enemies/shk-sheet_oiled.png</tex_oiled_path>
       <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
     </tesla_trooper>
     <brute>
