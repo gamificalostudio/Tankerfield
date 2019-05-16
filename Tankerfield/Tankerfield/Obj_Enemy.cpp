@@ -32,12 +32,7 @@ bool Obj_Enemy::Update(float dt)
 	Movement(dt);
 	Attack();
 	ChangeTexture();
-
-	if ((oiled==true)&&(oiled_timer.Read() >= 5000))
-	{
-		oiled = false;
-		speed = original_speed;
-	}
+	Oiled();
 
 	return true;
 }
@@ -361,8 +356,6 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 		oiled_timer.Start();
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-		
-		speed = original_speed / 2;
 
 		if (life <= 0)
 		{
@@ -374,9 +367,30 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 			app->audio->PlayFx(sfx_hit);
 		}
 	}
+
+	else if (collider->GetTag() == Collider::TAG::OIL_POOL)
+	{
+		oiled = true;
+		oiled_timer.Start();
+	}
 }
 
 bool Obj_Enemy::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
+}
+
+
+void Obj_Enemy::Oiled()
+{
+	if (oiled == true)
+	{
+		speed = original_speed / 2;
+	}
+
+	if (oiled_timer.Read() >= 5000)
+	{
+		oiled = false;
+		speed = original_speed;
+	}
 }

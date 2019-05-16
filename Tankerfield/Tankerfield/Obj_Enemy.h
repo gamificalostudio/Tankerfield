@@ -61,6 +61,8 @@ public:
 
 	bool CleanUp() override;
 
+	void Oiled();
+
 protected:
 	inline void UpdateVelocity();
 
