@@ -29,6 +29,7 @@ public:
 	~Obj_RocketLauncher();
 	
 	void Spawn(const float& dt) override;
+	void Attack() override;
 
 private:
 	iPoint spawn_draw_offset = { 0, 0 };
