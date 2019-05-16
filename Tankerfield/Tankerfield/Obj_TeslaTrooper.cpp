@@ -68,10 +68,15 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;
 	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
-	
 	float coll_w = 0.5f;
 	float coll_h = 0.5f;
 	coll				= app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY,0.f, this);
+
+	squared_detection_range = detection_range * detection_range;
+	coll_w = 0.5f;
+	coll_h = 0.5f;
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY ,0.0f, this);
+
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 	draw_offset			= { 24, 28 };
