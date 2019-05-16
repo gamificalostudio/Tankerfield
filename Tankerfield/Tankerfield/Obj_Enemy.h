@@ -76,6 +76,7 @@ protected:
 	float speed = 0.f;
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
+	SDL_Texture* burn_texture = nullptr;
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 
@@ -87,6 +88,7 @@ protected:
 	Animation walk;
 	Animation attack;
 	Animation death;
+	Animation burn;
 
 	float scale = 0.f;
 
@@ -122,7 +124,8 @@ protected:
 	Timer timer_change_direction;
 	Animation fire3;
 	SDL_Texture* fire_tex = nullptr;
-	float max_fire_time = 0.5f;
+	float max_time_change_direction = 0.5f;
+	float fire_damage = 0;
 
 };
 

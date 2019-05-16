@@ -38,10 +38,12 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
 	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
+	//TEXTURES=============================================
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
-	curr_tex = tex;
+	burn_texture = app->tex->Load(anim_node.child("burn").attribute("texture").as_string());
+	curr_tex = burn_texture;
 
 	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 
@@ -50,7 +52,10 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	walk.frames		= app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames	= app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames	= app->anim_bank->LoadFrames(anim_node.child("death"));
+	burn.frames	= app->anim_bank->LoadFrames(anim_node.child("burn"));
 	curr_anim = &idle;
+
+	
 
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
@@ -66,14 +71,12 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/hit.wav", 25);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
-	//app->audio->PlayFx(sfx_spawn);
-	draw = false;
+	app->audio->PlayFx(sfx_spawn);
+	draw = true;
+	state				= ENEMY_STATE::BURN; //enemy
 
-	//Things
-	state				= ENEMY_STATE::SPAWN; //enemy
 	speed				= tesla_trooper_node.child("speed").attribute("num").as_float();
-	/*range_pos.center	= pos_map;
-	range_pos.radius	= 0.5f;*/
+
 	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
 	squared_detection_range = detection_range * detection_range;
 	coll_w = 0.5f;

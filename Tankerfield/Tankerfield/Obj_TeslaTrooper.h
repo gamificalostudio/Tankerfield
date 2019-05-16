@@ -57,6 +57,7 @@ private:
 
 	bool draw = true;
 	Animation* in_portal				= nullptr;
+	
 
 	SDL_Texture * portal_tex			= nullptr;
 	SDL_Texture * explosion_apper_tex			= nullptr;

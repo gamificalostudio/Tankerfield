@@ -310,7 +310,14 @@ void Obj_Enemy::DrawDebug(const Camera* camera)
 
 inline void Obj_Enemy::Burn(const float& dt)
 {
-	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_fire_time)
+	if (burn_fist_enter)
+	{
+		fire_damage = life / 3;
+		curr_anim = &burn;
+		if (burn_texture != nullptr)
+			curr_tex = burn_texture;
+	}
+	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
 	{
 		
 		int max_rand = 101;
@@ -324,11 +331,17 @@ inline void Obj_Enemy::Burn(const float& dt)
 
 		timer_change_direction.Start();
 
-		max_fire_time = (rand() % max_rand)*one_divided_by_100;
-		max_fire_time += 0.5f;
+		max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
+		max_time_change_direction += 0.5f;
 
 		if(burn_fist_enter)
 			burn_fist_enter = false;
+
+	/*	life -= fire_damage;
+		if (life <= 0)
+		{
+			state = ENEMY_STATE::DEAD;
+		}*/
 	}
 	else
 	{

@@ -102,6 +102,6 @@ void Obj_Brute::Spawn(const float& dt)
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 		draw_offset = normal_draw_offset;
 		curr_anim = &walk;
-		state = ENEMY_STATE::GET_PATH;
+		state = ENEMY_STATE::BURN;
 	}
 }
