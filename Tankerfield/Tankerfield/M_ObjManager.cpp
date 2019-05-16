@@ -210,9 +210,9 @@ bool M_ObjManager::Reset()
 {
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
+		(*iterator)->CleanUp();
 		if ((*iterator)->coll != nullptr)
 		{
-			(*iterator)->CleanUp();
 			(*iterator)->coll->Destroy();
 			(*iterator)->coll = nullptr;
 		}
@@ -272,10 +272,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::STATIC:
 		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
-		break;
-	case ObjectType::REWARD_ZONE:
-		ret = DBG_NEW Reward_Zone(pos);
-		ret->type = ObjectType::REWARD_ZONE;
 		break;
 	case ObjectType::BRUTE:
 		ret = DBG_NEW Obj_Brute(pos);

@@ -36,19 +36,22 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
 	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
+	//TEXTURES =============================================
+	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	curr_tex = tex;
 
-	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 
-	//Loading animations ------------------------------------------------------------------------------------------------------------------------
+	//ANIMATIONS =============================================
 	idle.frames		= app->anim_bank->LoadFrames(anim_node.child("idle"));
 	walk.frames		= app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames	= app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames	= app->anim_bank->LoadFrames(anim_node.child("death"));
 	curr_anim = &idle;
+
+	
 
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
@@ -64,14 +67,12 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/hit.wav", 25);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
-	//app->audio->PlayFx(sfx_spawn);
+	app->audio->PlayFx(sfx_spawn);
 	draw = false;
-
-	//Things
 	state				= ENEMY_STATE::SPAWN; //enemy
+
 	speed				= tesla_trooper_node.child("speed").attribute("num").as_float();
-	/*range_pos.center	= pos_map;
-	range_pos.radius	= 0.5f;*/
+
 	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
 	squared_detection_range = detection_range * detection_range;
 	coll_w = 0.5f;
@@ -295,19 +296,6 @@ void Obj_TeslaTrooper::GetPath()
 	}
 }
 
-//void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
-//{
-//	if (path.size() >= 2)
-//	{
-//		for (std::vector<fPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
-//		{
-//			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
-//			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-//			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
-//		}
-//	}
-//
-//}
 
 bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 {
@@ -325,7 +313,14 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 	
 	if (draw)
 	{
-		Obj_Enemy::Draw(dt, camera);
+		app->render->BlitScaled(
+			curr_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&frame,
+			scale,
+			scale);
 	}
 	if (state == ENEMY_STATE::SPAWN)
 	{

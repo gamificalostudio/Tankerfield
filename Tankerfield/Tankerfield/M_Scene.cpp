@@ -144,9 +144,9 @@ bool M_Scene::Start()
 	game_over = false;
 
 
-	UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
-	label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
-	label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
+	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
+	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
 	return true;
 }
@@ -237,13 +237,13 @@ bool M_Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-	if (app->input->GetKey(SDL_SCANCODE_F10)== KeyState::KEY_DOWN)
-	{
-		if (label_number_of_enemies->GetState() == ELEMENT_STATE::VISIBLE)
-			label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
-		else
-			label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
-	}
+	//if (app->input->GetKey(SDL_SCANCODE_F10)== KeyState::KEY_DOWN)
+	//{
+	//	if (label_number_of_enemies->GetState() == ELEMENT_STATE::VISIBLE)
+	//		label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+	//	else
+	//		label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
+	//}
 
 	switch (stat_of_wave)
 	{
@@ -377,9 +377,6 @@ bool M_Scene::CleanUp()
 			(*i)->gui = nullptr;
 	}
 
-	if(label_number_of_enemies!=nullptr)
-		label_number_of_enemies->Destroy();
-
 	return true;
 }
 
@@ -466,8 +463,8 @@ void M_Scene::ReduceNumEnemies()
 	{
 		number_of_enemies = 0;
 	}
-	if (label_number_of_enemies != nullptr)
-		label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
+	//if (label_number_of_enemies != nullptr)
+	//	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
 
 }
 
@@ -476,7 +473,7 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies = 0;
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
-	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
+	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
 	 
 
 	for (int i = 0; i < Tesla_trooper_units; i++)

@@ -32,6 +32,10 @@ public:
 
 	void Spawn(const float& dt) override;
 
+	inline void Burn(const float & dt);
+
+	bool Draw(float dt, Camera* cam) override;
+
 
 private:
 
