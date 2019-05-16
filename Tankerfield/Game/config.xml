@@ -192,7 +192,7 @@
     <rocket_launcher>
       <speed num="2"/>
       <attack_damage num="15"/>
-      <attack_range num="5"/>
+      <attack_range num="3"/>
       <attack_frequency num="2000"/>
       <base_life num="3"/>
       <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
