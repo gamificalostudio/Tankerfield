@@ -266,6 +266,43 @@ void M_Render::BlitScaled(SDL_Texture* texture, const int screen_x, const int sc
 		ret = false;
 	}
 }
+
+void M_Render::BlitScaledAndRotated(SDL_Texture* texture, const int screen_x, const int screen_y, Camera* current_camera, const SDL_Rect* section, float scale_w, float scale_h, SDL_Point pivot, float angle) const
+{
+	bool ret = true;
+	uint scale = app->win->GetScale();
+
+	SDL_Rect rect_in_screen;
+	SDL_Rect spritesheet_rect{ 0,0,0,0 };
+
+	//Transform the rect in the word to the rect in screen =======================
+	rect_in_screen.x = -current_camera->rect.x + screen_x * scale;
+	rect_in_screen.y = -current_camera->rect.y + screen_y * scale;
+
+	if (section != NULL)
+	{
+		spritesheet_rect = *section;
+		rect_in_screen.w = section->w * scale * scale_w;
+		rect_in_screen.h = section->h * scale * scale_h;
+	}
+	else
+	{
+		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
+		spritesheet_rect.w = rect_in_screen.w;
+		spritesheet_rect.h = rect_in_screen.h;
+	}
+	//Move the rect_in_screen to their correct screen =========================== 	
+	rect_in_screen.x += current_camera->screen_section.x;
+	rect_in_screen.y += current_camera->screen_section.y;
+
+	//Print the rect_in_screen ============================================
+	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, &pivot, SDL_RendererFlip::SDL_FLIP_NONE))
+	{
+		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+}
+
 void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section,  Camera* camera, const int alpha) const
 {
 	if (alpha == 0.f)

@@ -40,6 +40,7 @@
 #include "Obj_Brute.h"
 #include "Obj_RocketLauncher.h"
 #include "Object.h"
+#include "Obj_RewardBox.h"
 
 
 M_Scene::M_Scene() : Module()
@@ -128,7 +129,11 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 		}
 	}
-
+	for (uint i = 0; i < 4; ++i)
+	{
+		Obj_RewardBox* box = app->pick_manager->CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{ 2.f, -2.f });
+		box->SetTypeBox(PICKUP_TYPE::WEAPON);
+	}
 	//app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, app->objectmanager->obj_tanks[0]->pos_map);
 
 
