@@ -68,8 +68,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
 	app->audio->PlayFx(sfx_spawn);
-	draw = true;
-	state				= ENEMY_STATE::BURN; //enemy
+	draw = false;
+	state				= ENEMY_STATE::SPAWN; //enemy
 
 	speed				= tesla_trooper_node.child("speed").attribute("num").as_float();
 
