@@ -356,7 +356,7 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 
 	else if (collider->GetTag() == Collider::TAG::BULLET_OIL)
 	{
-		/*life -= collider->damage;*/
+		life -= collider->damage;
 		oiled = true;
 		oiled_timer.Start();
 		damaged_sprite_timer.Start();
