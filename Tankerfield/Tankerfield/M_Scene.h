@@ -49,7 +49,7 @@ public:
 
 	General_HUD * general_hud		= nullptr;
 
-	uint round		= 1;
+	uint round		= 0;
 
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
