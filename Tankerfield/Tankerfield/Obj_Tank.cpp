@@ -30,6 +30,8 @@
 #include "M_UI.h"
 #include "M_ObjManager.h"
 #include "Camera.h"
+#include "Item_InstantHelp.h"
+#include "Obj_Portal.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -207,6 +209,8 @@ bool Obj_Tank::Start()
 	life = 90;
 	max_life = 100;
 
+	charged_shot_speed = 1.0f;
+
 	//- Tutorial
 	//-- Move
 	UI_InGameElementDef clue_def;
@@ -232,7 +236,8 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ObjectType::HEALTH_BAG);
+	SetItem(ItemType::HEALTH_BAG);
+	time_between_portal_tp.Start();
 	return true;
 }
 
@@ -268,7 +273,6 @@ bool Obj_Tank::Update(float dt)
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
 	Shoot();
 	Item();
-	StopTank();
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
@@ -285,9 +289,20 @@ void Obj_Tank::CameraMovement(float dt)
 	camera_player->ShakeCamera(dt);
 }
 
-fPoint Obj_Tank::GetTurrPos()
+fPoint Obj_Tank::GetTurrPos() const
 {
 	return turr_pos;
+}
+
+Controller * Obj_Tank::GetController()
+{
+	if (controller == nullptr || *controller == nullptr)
+	{
+		LOG(" Controller not found");
+		return nullptr;
+	}
+
+	return *controller;
 }
 
 void Obj_Tank::Movement(float dt)
@@ -356,7 +371,9 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 {
 	if (this->life != 0) {
 		//if the player shot
-		if (ReleaseShot() && shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+		if ((ReleaseShot()
+			|| GetShotAutomatically())
+			&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 		{
 			//- Basic shot
 			if (charged_shot_timer.ReadMs() < charge_time)
@@ -364,6 +381,13 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 				//set the max velocity in a basic shot
 				velocity_recoil_curr_speed = velocity_recoil_speed_max;
 			}
+
+			//Item Happy hour activated
+			else if (GetShotAutomatically())
+			{
+				velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+			}
+
 			//- Charged shot
 			else
 			{
@@ -393,6 +417,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		velocity += velocity_recoil_final_lerp;
 	}
 }
+
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
@@ -534,18 +559,41 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 	if (c1->GetTag() == Collider::TAG::PICK_UP)
 	{
-		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		
-		if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+		if (this->Alive())
 		{
-			Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-			SetPickUp(pick_up);
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
+			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+			{
+				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+				SetPickUp(pick_up);
+			}
+		}
+		else
+		{
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
 	}
 
 	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed < speed + road_buff)
 	{
 			curr_speed += road_buff;
+	}
+}
+
+void Obj_Tank::OnTriggerEnter(Collider * c1)
+{
+	if (c1->GetTag() == Collider::TAG::PORTAL)
+	{
+		if (time_between_portal_tp.ReadMs() > 2000) {
+			if (c1 == portal1->coll) {
+				pos_map = portal2->pos_map;
+			}
+			else if (c1 == portal2->coll) {
+				pos_map = portal1->pos_map;
+			}
+			time_between_portal_tp.Start();
+		}
 	}
 }
 
@@ -568,11 +616,11 @@ void Obj_Tank::SetLife(int life)
 	{
 		this->life = GetMaxLife();
 	}
-
 	else if (life <= 0 && this->life != 0)
 	{
 		this->life = 0;
 		app->audio->PlayFx(die_sfx);
+		StopTank();
 	}
 	else
 	{
@@ -582,7 +630,7 @@ void Obj_Tank::SetLife(int life)
 	gui->SetLifeBar(this->life);
 }
 
-void Obj_Tank::SetItem(ObjectType type) 
+void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
 	gui->SetItemIcon(type);
@@ -598,17 +646,17 @@ void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 	weapon_info.time_between_bullets = time_between_bullets;
 }
 
-int Obj_Tank::GetLife()
+int Obj_Tank::GetLife() const
 {
 	return life;
 }
 
-int Obj_Tank::GetMaxLife()
+int Obj_Tank::GetMaxLife() const
 {
 	return max_life;
 }
 
-int Obj_Tank::GetTimeBetweenBullets()
+int Obj_Tank::GetTimeBetweenBullets() const
 {
 	return weapon_info.time_between_bullets;
 }
@@ -670,13 +718,16 @@ void Obj_Tank::ShootChargedWeapon()
 	{
 		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
+			this->curr_speed = charged_shot_speed;
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 		}
 	}
 
-	if (ReleaseShot()
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
 	{
+		this->curr_speed = speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
 		{
@@ -716,7 +767,8 @@ void Obj_Tank::ShootSustainedWeapon()
 	}
 
 	//- Quick shot
-	if (ReleaseShot()
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets
 		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
 	{
@@ -795,6 +847,21 @@ bool Obj_Tank::ReleaseShot()
 	{
 		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_UP;
 	}
+}
+
+void Obj_Tank::ShotAutormaticallyActivate()
+{
+	shot_automatically = true;
+}
+
+void Obj_Tank::ShotAutormaticallyDisactivate()
+{
+	shot_automatically = false;
+}
+
+bool Obj_Tank::GetShotAutomatically() const
+{
+	return shot_automatically;
 }
 
 //Select the input method depending on the last input pressed
@@ -915,35 +982,32 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::StopTank()
 {
-	if (life <= 0)
+	if (!fire_dead)
 	{
-		if (!fire_dead)
-		{
-			fire_dead = true;
-			Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
-			dead_fire->tank = this;
-		}
-		this->SetWeapon(WEAPON::BASIC, 0);
-		this->SetItem(ObjectType::NO_TYPE);
+		fire_dead = true;
+		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+		dead_fire->tank = this;
 	}
+	this->SetWeapon(WEAPON::BASIC, 1);
+	this->SetItem(ItemType::NO_TYPE);
 }
 
-bool Obj_Tank::Alive()
+bool Obj_Tank::Alive() const
 {
 	return life > 0;
 }
 
 void Obj_Tank::Item()
 {
-	if(item != ObjectType::NO_TYPE
+	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
 			|| (controller != nullptr
 				&& (*controller)->GetButtonState(gamepad_item) == KEY_DOWN)))
 	{
-		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateObject(item, pos_map);
+		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);
 		new_item->caster = this;
 		new_item->Use();
-		item = ObjectType::NO_TYPE;
+		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
 	}
 }
@@ -973,7 +1037,7 @@ bool Obj_Tank::IsReady() const
 	return ready;
 }
 
-int Obj_Tank::GetTankNum()
+int Obj_Tank::GetTankNum() const
 {
 	return tank_num;
 }
@@ -995,3 +1059,9 @@ fPoint Obj_Tank::GetShotDir() const
 	return shot_dir;
 }
 
+void Obj_Tank::CreatePortals()
+{
+	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
+
+	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
+}

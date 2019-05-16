@@ -3,7 +3,6 @@
 
 #include "Point.h"
 #include "Animation.h"
-#include "Module.h"
 #include <list>
 #include <string>
 #include "Rect.h"
@@ -99,6 +98,8 @@ public:
 
 	void SetState(ELEMENT_STATE new_state);
 
+	ELEMENT_STATE GetState();
+
 	void SetStateToBranch(ELEMENT_STATE new_state);
 
 	//ELEMENT_STATE GetState();
@@ -121,10 +122,9 @@ public:
 
 public:
 	fPoint                position = { 0.f, 0.f };
-	SDL_Rect              sprite_section = { 0, 0, 0, 0};
+	SDL_Rect              sprite_rect = { 0, 0, 0, 0};
 	float                 section_width = 0.f;
 	float                 section_height = 0.f;
-	fPoint                section_offset = { 0.f, 0.f };
 	fPoint                screen_offset = { 0.f, 0.f };
 	bool			      is_draggable = false;
 	bool                  is_in_game = false;
@@ -136,6 +136,7 @@ protected:
 
 	// Vars =============================================
 
+	fPoint                section_offset = { 0.f, 0.f };
 	fPoint                relative_position = { 0.f, 0.f };
 	Pivot                 pivot;
 	bool                  to_destroy = false;
@@ -150,7 +151,7 @@ protected:
 
 	// Hierarchy =========================================
 
-	UI_Element           * parent_element = nullptr;
+	UI_Element           * element_parent = nullptr;
 	list<UI_Element*>      element_sons;
 
 	friend class M_UI;

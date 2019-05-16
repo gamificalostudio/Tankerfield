@@ -25,7 +25,6 @@ void Collider::SetPosToObj()
 void Collider::Destroy()
 {
 	to_destroy = true;
-	tag = TAG::NONE;
 }
 
 bool Collider::CheckCollision(Collider*  coll) const
@@ -51,7 +50,7 @@ M_Collision::M_Collision()
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::FRIENDLY_BULLET] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::PICK_UP] = true;
 	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::ROAD] = true;
-	
+	matrix[(int)Collider::TAG::PLAYER][(int)Collider::TAG::PORTAL] = true;
 
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::WALL] = true;
 	matrix[(int)Collider::TAG::BULLET][(int)Collider::TAG::ENEMY] = true;
@@ -128,53 +127,33 @@ bool M_Collision::Update(float dt)
 	std::list<Collider*> merged_colliders;
 
 	std::list<Collider*>::iterator iterator;
+
 	Collider* collider_1 = nullptr;
 	Collider* collider_2 = nullptr;
 
+	// Destroy Colliders =============================================
+
+	DestroyColliders();
+
+
 	// Fill body types lists & Destroy colliders =====================
 
-	iterator = colliders.begin();
-
-	while (iterator != colliders.end())
+	for (std::list<Collider*>::iterator itr = colliders.begin(); itr != colliders.end(); ++itr)
 	{
-		if ((*iterator)->to_destroy == true)
-		{
-			// Destroy from current colliders on collision ==============
-
-			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
-			{
-				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
-
-				if (to_destroy != (*itr)->collisions_list.end())
-				{
-					(*itr)->collisions_list.erase(to_destroy);
-				}
-			}
-
-			// Destroy ==================================================
-
-			RELEASE(*iterator);
-			iterator = colliders.erase(iterator);
-
-			continue;
-		}
-
-		switch ((*iterator)->body_type)
+		switch ((*itr)->body_type)
 		{
 		case Collider::BODY_TYPE::STATIC:
-			static_colliders.push_back(*iterator);
-			merged_colliders.push_back(*iterator);
+			static_colliders.push_back(*itr);
+			merged_colliders.push_back(*itr);
 			break;
 		case Collider::BODY_TYPE::DYNAMIC:
-			dynamic_colliders.push_back(*iterator);
-			merged_colliders.push_back(*iterator);
+			dynamic_colliders.push_back(*itr);
+			merged_colliders.push_back(*itr);
 			break;
 		case Collider::BODY_TYPE::SENSOR:
-			sensor_colliders.push_back(*iterator);
+			sensor_colliders.push_back(*itr);
 			break;
 		}
-
-		++iterator;
 	}
 
 	// Dynamic VS Dynamic ========================================
@@ -189,16 +168,11 @@ bool M_Collision::Update(float dt)
 		{
 			collider_2 = *itr_2;
 
-			if (collider_1->CheckCollision(collider_2))
+			if (collider_1->CheckCollision(collider_2)  &&  collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
-				{
-					DoOnTrigger(collider_1, collider_2);
-				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
-				{
-					DoOnTrigger(collider_2, collider_1);
-				}
+				DoOnTrigger(collider_1, collider_2);
+				/*DoOnTrigger(collider_2, collider_1);*/
+				
 
 				if ((int)collider_1->tag > (int)collider_2->tag)
 				{
@@ -212,7 +186,6 @@ bool M_Collision::Update(float dt)
 				{
 					SolveOverlapDD(collider_1, collider_2);
 				}
-
 			}
 			else
 			{
@@ -238,16 +211,10 @@ bool M_Collision::Update(float dt)
 		{
 			collider_2 = (*itr_2);
 
-			if (collider_1->CheckCollision(collider_2))
+			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
-				{
-					DoOnTrigger(collider_1, collider_2);
-				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
-				{
-					DoOnTrigger(collider_2, collider_1);
-				}
+				DoOnTrigger(collider_1, collider_2);
+		/*		DoOnTrigger(collider_2, collider_1);*/
 
 				SolveOverlapDS(collider_2, collider_1);
 			}
@@ -274,22 +241,11 @@ bool M_Collision::Update(float dt)
 		for (std::list<Collider*>::iterator itr_2 = merged_colliders.begin(); itr_2 != merged_colliders.end(); ++itr_2)
 		{
 			collider_2 = (*itr_2);
-
-			if (collider_1 == collider_2)
-			{
-				continue;
-			}
 	
-			if (collider_1->CheckCollision(collider_2))
+			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
-				if (matrix[(int)collider_1->tag][(int)collider_2->tag])
-				{
-					DoOnTrigger(collider_1, collider_2);
-				}
-				if (matrix[(int)collider_2->tag][(int)collider_1->tag])
-				{
-					DoOnTrigger(collider_2, collider_1);
-				}
+                 DoOnTrigger(collider_1, collider_2);
+          /*       DoOnTrigger(collider_2, collider_1);*/
 			}
 			else
 			{
@@ -351,9 +307,80 @@ bool M_Collision::PostUpdate(float dt)
 	return true;
 }
 
+void M_Collision::DestroyColliders()
+{
+	std::list<Collider*>::iterator iterator = colliders.begin();;
+
+	while (iterator != colliders.end())
+	{
+		if ((*iterator)->to_destroy == true)
+		{
+			//switch ((*iterator)->tag)
+			//{
+			//case Collider::TAG::BULLET:
+			//	LOG("Destroyed Bullet Collider");
+			//	break;
+			//case Collider::TAG::BULLET_LASER:
+			//	LOG("Destroyed Bullet Laser Collider");
+			//	break;
+			//case Collider::TAG::ENEMY:
+			//	LOG("Destroyed Enemy Collider");
+			//	break;
+			//case Collider::TAG::FRIENDLY_BULLET:
+			//	LOG("Destroyed Friendly Bullet Collider");
+			//	break;
+			//case Collider::TAG::GOD:
+			//	LOG("Destroyed God Collider");
+			//	break;
+			//case Collider::TAG::PICK_UP:
+			//	LOG("Destroyed PickUp Collider");
+			//	break;
+			//case Collider::TAG::PLAYER:
+			//	LOG("Destroyed Player Collider");
+			//	break;
+			//case Collider::TAG::REWARD_BOX:
+			//	LOG("Destroyed Reward Box Collider");
+			//	break;
+			//case Collider::TAG::REWARD_ZONE:
+			//	LOG("Destroyed Reward Zone Collider");
+			//	break;
+			//case Collider::TAG::ROAD:
+			//	LOG("Destroyed Road Collider");
+			//	break;
+			//case Collider::TAG::WATER:
+			//	LOG("Destroyed Water Collider");
+			//	break;
+			//case Collider::TAG::NONE:
+			//	LOG("Destroyed None Collider");
+			//	break;
+			//}
+
+			// Destroy from current colliders on collision ==============
+
+			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
+			{
+				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
+
+				if (to_destroy != (*itr)->collisions_list.end())
+				{
+					(*itr)->collisions_list.erase(to_destroy);
+				}
+			}
+
+			// Destroy ==================================================
+
+			RELEASE(*iterator);
+			iterator = colliders.erase(iterator);
+
+			continue;
+		}
+		++iterator;
+	}
+}
+
 Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage, Object* object)
 {
-	Collider* collider = DBG_NEW Collider(pos, width, height, damage, type, object);
+	Collider* collider = new Collider(pos, width, height, damage, type, object);
 	colliders.push_back(collider);
 	return  collider;
 }
@@ -361,7 +388,7 @@ Collider * M_Collision::AddCollider(fPoint pos, float width, float height, Colli
 Collider * M_Collision::AddCollider(float x, float y, float width, float height, Collider::TAG type, float damage, Object * object)
 {
 	fPoint pos(x, y);
-	Collider* collider = DBG_NEW Collider(pos, width, height, damage, type, object);
+	Collider* collider = new Collider(pos, width, height, damage, type, object);
 	colliders.push_back(collider);
 	return  collider;
 }
@@ -468,7 +495,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	
 	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
 	{
-		if (c1->object != nullptr) 
+		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
 			c1->object->OnTrigger(c2);
 		}
@@ -477,11 +504,32 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	{
 		c1->collisions_list.push_back(c2);
 
-		if (c1->object != nullptr)
+		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
 			c1->object->OnTriggerEnter(c2);
 		}
 	}
+
+	std::swap(c1, c2);
+
+	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
+	{
+		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
+		{
+			c1->object->OnTrigger(c2);
+		}
+	}
+	else
+	{
+		c1->collisions_list.push_back(c2);
+
+		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
+		{
+			c1->object->OnTriggerEnter(c2);
+		}
+	}
+
+
 }
 
 inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)

@@ -1,6 +1,8 @@
 #ifndef __M_SCENE_H__
 #define __M_SCENE_H__
 
+#define MAX_SUBROUNDS 3
+
 #include <vector>
 
 #include "SDL/include/SDL_rect.h"
@@ -16,6 +18,7 @@ class RewardZone;
 class Object;
 class Player_GUI;
 class General_HUD;
+class UI_Label;
 
 enum class WaveStat
 {
@@ -35,16 +38,24 @@ class M_Scene : public Module
 private:
 	Controller** control1			= nullptr;
 
+	
+	int number_of_enemies = 0;
+
+
+
+
 public:
 	int current_level				= 0;
 
 	General_HUD * general_hud		= nullptr;
 
 	uint round		= 0;
-	std::list<Object*> enemies_in_wave;
+
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
-	PerfTimer timer_between_waves;
+	Timer timer_between_waves;
+
+	UI_Label* label_number_of_enemies = nullptr;
 
 public:
 
@@ -78,12 +89,15 @@ public:
 
 	void DebugPathfinding();
 
+	void ReduceNumEnemies();
+
 private:
 	void CreateEnemyWave();
 
 	void NewWave();
 
 	bool AllPlayersReady() const;
+
 
 public:
 	SDL_Texture* path_tex = nullptr;
@@ -109,9 +123,18 @@ private:
 	bool perform_round_check = false;
 
 	/* Wave System */
-	int time_between_rounds			= 0;
-	int Tesla_trooper_units			= 0;
-	int Brute_units					= 0;
+	int time_between_rounds[MAX_SUBROUNDS] = { 0,0,0 };
+
+	uint Tesla_trooper_units			= 0;
+
+	uint Brute_units					= 0;
+
+	float percentage_enemies_subround[MAX_SUBROUNDS] = { 0.f,0.f,0.f };
+
+	float wait_time[MAX_SUBROUNDS] = { 0.f,0.f,0.f };
+
+	uint subround = 0;
+
 
 	// Fx and Music
 	const char* finish_wave_sound_string;
@@ -129,7 +152,6 @@ private:
 	/* Reward Zones */
 	RewardZone* reward_zone_01 = nullptr;
 	RewardZone* reward_zone_02 = nullptr;
-
 };
 
 #endif // __j1SCENE_H__

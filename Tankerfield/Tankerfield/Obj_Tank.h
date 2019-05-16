@@ -6,6 +6,7 @@
 #include "M_Input.h"
 #include "Obj_Item.h"
 #include "Timer.h"
+#include "Obj_Portal.h"
 
 struct Controller;
 struct SDL_Texture;
@@ -37,29 +38,37 @@ public:
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);
+	void OnTriggerEnter(Collider* c1);
 	void OnTriggerExit(Collider* c1);
 
 public:
 	//- Logic
 	void SetLife(int life);
-	void SetItem(ObjectType Type);
+	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
-	int GetLife();
-	int GetMaxLife();
-	int GetTimeBetweenBullets();
+	int GetLife() const;
+	int GetMaxLife() const;
+	int GetTimeBetweenBullets() const;
 	fPoint GetShotDir() const;
 	bool IsReady() const;
-	int GetTankNum();
+	int GetTankNum() const;
+	void ShotAutormaticallyActivate();
+	void ShotAutormaticallyDisactivate();
+	bool GetShotAutomatically() const;
+	void CreatePortals();
 
 public:
 
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
-	bool Alive();
-	fPoint GetTurrPos();
+	bool Alive() const;
+	fPoint GetTurrPos() const;
+
+	//- Input
+	Controller * GetController();
 
 private:
 	//- Movement
@@ -82,16 +91,19 @@ private:
 	bool HoldShot();
 	bool ReleaseShot();
 
+
 	//- Input
 	void SelectInputMethod();
 	void InputReadyKeyboard();
 	bool PressInteract();
 	bool ReleaseInteract();
+	
 
 	//- Weapons methods
 	void InitWeapons();
 	void ShootBasic();
 	void ShootFlameThrower();
+	void ShootDoubleMissileCharged();
 	void ShootDoubleMissile();
 	void ShootHealingShot();
 	void ShootLaserShot();
@@ -129,10 +141,10 @@ private:
 	float velocity_recoil_decay				= 0.f;
 	float velocity_recoil_speed_max			= 0.f;
 	float velocity_recoil_speed_max_charged = 0.f;
+	float charged_shot_speed				= 0.0f;
 	float lerp_factor_recoil				= 0.f;
 	Timer movement_timer;
-	
-
+	PerfTimer time_between_portal_tp;
 
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
@@ -163,7 +175,7 @@ private:
 	uint revive_sfx							= 0u;
 
 	//-- Basic shoot
-	uint shot_type							= (uint)WEAPON::DOUBLE_MISSILE;
+	uint shot_type							= (uint)WEAPON::LASER_SHOT;
 
 	//-- Shoot
 	WeaponInfo weapon_info;					//Information about the varaibles of the current weapons. Overriden every time you get a new weapon.
@@ -176,9 +188,10 @@ private:
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
+	bool shot_automatically = false;
 
 	//- Items
-	ObjectType item							= ObjectType::NO_TYPE;
+	ItemType item							= ItemType::NO_TYPE;
 	UI_IG_Helper * tutorial_pick_up			= nullptr;
 
 	//- Input
@@ -236,6 +249,10 @@ public:
 
 	//- GUI
 	Player_GUI*  gui = nullptr;
+
+public:
+	Obj_Portal * portal1;
+	Obj_Portal * portal2;
 };
 
 #endif

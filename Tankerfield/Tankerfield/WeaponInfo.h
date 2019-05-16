@@ -39,9 +39,10 @@ public:
 	int level_weapon				= 0;
 	int    bullet_damage			= 0;
 	float  bullet_speed				= 0.f;
-	float  bullet_life_ms			= 0.f;
-	float  time_between_bullets		= 0.f;
-	int		bullet_healing			= 0;
+	float bullet_life_ms			= 0.f;
+	float time_between_bullets		= 0.f;
+	int bullet_healing				= 0;
+	int explosion_damage			= 0;
 
 	//Screen shake
 	float basic_shot_trauma			= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake

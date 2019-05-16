@@ -5,7 +5,7 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="2" />  
+    <mode value ="1" />  
 
   </app>
 	
@@ -14,7 +14,7 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1080" scale="1"/>
+    <resolution width="1920" height="1000" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -23,6 +23,27 @@
   
   <animations_bank>animations.xml</animations_bank>
 
+    <scene>
+      <rounds_to_win value="10"/>
+    
+      <subrounds>
+        <subround percent="0.4" time ="2"/>
+        <subround percent="0.6" time="3"/>
+        <subround percent="1.0" time="5"/>
+      </subrounds>
+    
+      <time_round_check_frequency value="2"/>
+  
+      <music>
+        <main_music music ="audio/Music/indeep.ogg"/>
+      </music>
+    
+      <sounds>
+        <finish_wave_shot sound ="audio/Fx/Scene/finish_wave_sound.wav"/>
+        <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
+      </sounds>
+  </scene>
+  
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
@@ -144,21 +165,7 @@
       </levels>
   </map>
 
-  <scene>
-    <rounds_to_win value="10"/>
-    <time_round_check_frequency value="2"/>
-    
-    <time_between_rounds value="5000"/>
-  
-    <music>
-      <main_music music ="audio/Music/indeep.ogg"/>
-    </music>
-    
-    <sounds>
-      <finish_wave_shot sound ="audio/Fx/Scene/finish_wave_sound.wav"/>
-      <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
-    </sounds>
-  </scene>
+
 
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
@@ -170,465 +177,28 @@
       <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
+    
     <tesla_trooper>
-      <animations>
-        <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
-          <dir>
-              <frame x="594"  y="152" width="66" height="76"/>
-              <frame x="660"  y="152" width="66" height="76" />
-              <frame x="726"  y="152" width="66" height="76" />
-              <frame x="792"  y="152" width="66" height="76" />
-              <frame x="858"  y="152" width="66" height="76" />
-              <frame x="924"  y="152" width="66" height="76" />
-              <frame x="990"  y="152" width="66" height="76" />
-              <frame x="1056" y="152" width="66" height="76"/>
-              <frame x="1122" y="152" width="66" height="76"/>
-              <frame x="1188" y="152" width="66" height="76"/>
-              <frame x="1254" y="152" width="66" height="76"/>
-              <frame x="1320" y="152" width="66" height="76"/>
-              <frame x="1386" y="152" width="66" height="76"/>
-              <frame x="1452" y="152" width="66" height="76"/>
-              <frame x="1518" y="152" width="66" height="76"/>
-          </dir>
-        </idle>
-        <walk speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
-          <dir>
-            <!--starts in frame number 8-->
-            <frame x= "528" y= "0" w="66" h="76" />
-            <frame x= "594" y= "0" w="66" h="76" />
-            <frame x= "660" y= "0" w="66" h="76" />
-            <frame x= "726" y= "0" w="66" h="76" />
-            <frame x= "792" y= "0" w="66" h="76" />
-            <frame x= "858" y= "0" w="66" h="76" />
-          </dir>
-          <dir>
-            <!--starts in frame number 14-->
-            <frame x= "924" y= "0" w="66" h="76" />
-            <frame x= "990" y= "0" w="66" h="76" />
-            <frame x="1056" y= "0" w="66" h="76" />
-            <frame x="1122" y= "0" w="66" h="76" />
-            <frame x="1188" y= "0" w="66" h="76" />
-            <frame x="1254" y= "0" w="66" h="76" />
-          </dir>
-          <dir>
-            <!--starts in frame number 20-->
-            <frame x="1320" y= "0" w="66" h="76" />
-            <frame x="1386" y= "0" w="66" h="76" />
-            <frame x="1452" y= "0" w="66" h="76" />
-            <frame x="1518" y= "0" w="66" h="76" />
-            <frame x="1584" y= "0" w="66" h="76" />
-            <frame x="1650" y= "0" w="66" h="76" />
-          </dir>
-          <dir>
-            <!--starts in frame number 26-->
-            <frame x="1716" y= "0" w="66" h="76" />
-            <frame x="1782" y= "0" w="66" h="76" />
-            <frame x="1848" y= "0" w="66" h="76" />
-            <frame x="1914" y= "0" w="66" h="76" />
-            <frame x="1980" y= "0" w="66" h="76" />
-            <frame x=   "0" y="76" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x=  "66" y="76" w="66" h="76" />
-            <frame x= "132" y="76" w="66" h="76" />
-            <frame x= "198" y="76" w="66" h="76" />
-            <frame x= "264" y="76" w="66" h="76" />
-            <frame x= "330" y="76" w="66" h="76" />
-            <frame x= "396" y="76" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "462" y="76" w="66" h="76" />
-            <frame x= "528" y="76" w="66" h="76" />
-            <frame x= "594" y="76" w="66" h="76" />
-            <frame x= "660" y="76" w="66" h="76" />
-            <frame x= "726" y="76" w="66" h="76" />
-            <frame x= "792" y="76" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "858" y="76" w="66" h="76" />
-            <frame x= "924" y="76" w="66" h="76" />
-            <frame x= "990" y="76" w="66" h="76" />
-            <frame x="1056" y="76" w="66" h="76" />
-            <frame x="1122" y="76" w="66" h="76" />
-            <frame x= "924" y="76" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x="1188" y="76" w="66" h="76" />
-            <frame x="1254" y="76" w="66" h="76" />
-            <frame x="1320" y="76" w="66" h="76" />
-            <frame x="1386" y="76" w="66" h="76" />
-            <frame x="1452" y="76" w="66" h="76" />
-            <frame x="1518" y="76" w="66" h="76" />
-          </dir>
-        </walk>
-        <attack speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
-          <dir>
-            <frame x= "594" y= "380" w="66" h="76" />
-            <frame x= "660" y= "380" w="66" h="76" />
-            <frame x= "726" y= "380" w="66" h="76" />
-            <frame x= "792" y= "380" w="66" h="76" />
-            <frame x= "858" y= "380" w="66" h="76" />
-            <frame x= "924" y= "380" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "990" y= "380" w="66" h="76" />
-            <frame x= "1056" y= "380" w="66" h="76" />
-            <frame x= "1122" y= "380" w="66" h="76" />
-            <frame x= "1188" y= "380" w="66" h="76" />
-            <frame x= "1254" y= "380" w="66" h="76" />
-            <frame x= "1320" y= "380" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "1386" y= "380" w="66" h="76" />
-            <frame x= "1452" y= "380" w="66" h="76" />
-            <frame x= "1518" y= "380" w="66" h="76" />
-            <frame x= "1584" y= "380" w="66" h="76" />
-            <frame x= "1650" y= "380" w="66" h="76" />
-            <frame x= "1716" y= "380" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "1782" y= "380" w="66" h="76" />
-            <frame x= "1848" y= "380" w="66" h="76" />
-            <frame x= "1914" y= "380" w="66" h="76" />
-            <frame x= "1980" y= "380" w="66" h="76" />
-            <frame x= "0" y= "456" w="66" h="76" />
-            <frame x= "1980" y= "380" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "66" y= "456" w="66" h="76" />
-            <frame x= "132" y= "456" w="66" h="76" />
-            <frame x= "198" y= "456" w="66" h="76" />
-            <frame x= "264" y= "456" w="66" h="76" />
-            <frame x= "330" y= "456" w="66" h="76" />
-            <frame x= "396" y= "456" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "462" y= "456" w="66" h="76" />
-            <frame x= "528" y= "456" w="66" h="76" />
-            <frame x= "594" y= "456" w="66" h="76" />
-            <frame x= "660" y= "456" w="66" h="76" />
-            <frame x= "726" y= "456" w="66" h="76" />
-            <frame x= "792" y= "456" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "858" y= "456" w="66" h="76" />
-            <frame x= "924" y= "456" w="66" h="76" />
-            <frame x= "990" y= "456" w="66" h="76" />
-            <frame x= "1056" y= "456" w="66" h="76" />
-            <frame x= "1122" y= "456" w="66" h="76" />
-            <frame x= "1188" y= "456" w="66" h="76" />
-          </dir>
-          <dir>
-            <frame x= "1254" y= "456" w="66" h="76" />
-            <frame x= "1320" y= "456" w="66" h="76" />
-            <frame x= "1386" y= "456" w="66" h="76" />
-            <frame x= "1452" y= "456" w="66" h="76" />
-            <frame x= "1518" y= "456" w="66" h="76" />
-            <frame x= "1584" y= "456" w="66" h="76" />
-          </dir>
-        </attack>
-        <death speed="10" loop =" false" rotation="counter-clockwise">
-          <dir>
-            <frame x="660"  y="304" w="66" h="76"/>
-            <frame x="726"  y="304" w="66" h="76"/>
-            <frame x="792"  y="304" w="66" h="76"/>
-            <frame x="858"  y="304" w="66" h="76"/>
-            <frame x="924"  y="304" w="66" h="76"/>
-            <frame x="990"  y="304" w="66" h="76"/>
-            <frame x="1056" y="304" w="66" h="76"/>
-            <frame x="1122" y="304" w="66" h="76"/>
-            <frame x="1188" y="304" w="66" h="76"/>
-            <frame x="1254" y="304" w="66" h="76"/>
-            <frame x="1320" y="304" w="66" h="76"/>
-            <frame x="1386" y="304" w="66" h="76"/>
-            <frame x="1452" y="304" w="66" h="76"/>
-            <frame x="1518" y="304" w="66" h="76"/>
-            <frame x="1584" y="304" w="66" h="76"/>
-          </dir>
-        </death>
-      </animations>
+      <teleport_max_enemies num="100"/>
+      <speed num="3"/>
+      <attack_damage num="5"/>
+      <attack_range num="1.5"/>
+      <attack_frequency num="3000"/>
+      <base_life num="5"/>
+      <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
+      <tex_damaged_path>"textures/Objects/enemies/shk-sheet-white-1.png"</tex_damaged_path>
+      <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
     </tesla_trooper>
+    <rocket_launcher>
+      <speed num="2"/>
+      <attack_damage num="15"/>
+      <attack_range num="5"/>
+      <attack_frequency num="2000"/>
+      <base_life num="3"/>
+      <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
+    </rocket_launcher>
     <brute>
-      <animations>
-        <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
-          <dir>
-            <frame x="0" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="134" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="268" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="402" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="536" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="670" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="804" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="938" y="0" w="134" h="96" />
-          </dir>
-        </idle>
-        <walk speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
-          <dir>
-            <!--starts in frame number 8-->
-            <frame x="1072" y="0" w="134" h="96" />
-            <frame x="1206" y="0" w="134" h="96" />
-            <frame x="1340" y="0" w="134" h="96" />
-            <frame x="1474" y="0" w="134" h="96" />
-            <frame x="1608" y="0" w="134" h="96" />
-            <frame x="1742" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <!--starts in frame number 14-->
-            <frame x="1876" y="0" w="134" h="96" />
-            <frame x="2010" y="0" w="134" h="96" />
-            <frame x="2144" y="0" w="134" h="96" />
-            <frame x="2278" y="0" w="134" h="96" />
-            <frame x="2412" y="0" w="134" h="96" />
-            <frame x="2546" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <!--starts in frame number 20-->
-            <frame x="2680" y="0" w="134" h="96" />
-            <frame x="2814" y="0" w="134" h="96" />
-            <frame x="2948" y="0" w="134" h="96" />
-            <frame x="3082" y="0" w="134" h="96" />
-            <frame x="3216" y="0" w="134" h="96" />
-            <frame x="3350" y="0" w="134" h="96" />
-          </dir>
-          <dir>
-            <!--starts in frame number 26-->
-            <frame x="3484" y="0" w="134" h="96" />
-            <frame x="3618" y="0" w="134" h="96" />
-            <frame x="3752" y="0" w="134" h="96" />
-            <frame x="3886" y="0" w="134" h="96" />
-            <frame x="0" y="96" w="134" h="96" />
-            <frame x="134" y="96" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="268" y="96" w="134" h="96" />
-            <frame x="402" y="96" w="134" h="96" />
-            <frame x="536" y="96" w="134" h="96" />
-            <frame x="670" y="96" w="134" h="96" />
-            <frame x="804" y="96" w="134" h="96" />
-            <frame x="938" y="96" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="1072" y="96" w="134" h="96" />
-            <frame x="1206" y="96" w="134" h="96" />
-            <frame x="1340" y="96" w="134" h="96" />
-            <frame x="1474" y="96" w="134" h="96" />
-            <frame x="1608" y="96" w="134" h="96" />
-            <frame x="1742" y="96" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="1876" y="96" w="134" h="96" />
-            <frame x="2010" y="96" w="134" h="96" />
-            <frame x="2144" y="96" w="134" h="96" />
-            <frame x="2278" y="96" w="134" h="96" />
-            <frame x="2412" y="96" w="134" h="96" />
-            <frame x="2546" y="96" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="2680" y="96" w="134" h="96" />
-            <frame x="2814" y="96" w="134" h="96" />
-            <frame x="2948" y="96" w="134" h="96" />
-            <frame x="3082" y="96" w="134" h="96" />
-            <frame x="3216" y="96" w="134" h="96" />
-            <frame x="3350" y="96" w="134" h="96" />
-          </dir>
-        </walk>
-        <attack speed="7.5" rotation="counter-clockwise" first_dir_angle ="0">
-          <dir>
-            <frame x="2144" y="576" w="134" h="96" />
-            <frame x="2278" y="576" w="134" h="96" />
-            <frame x="2412" y="576" w="134" h="96" />
-            <frame x="2546" y="576" w="134" h="96" />
-            <frame x="2680" y="576" w="134" h="96" />
-            <frame x="2814" y="576" w="134" h="96" />
-            <frame x="2948" y="576" w="134" h="96" />
-            <frame x="3350" y="576" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="3484" y="576" w="134" h="96" />
-            <frame x="3618" y="576" w="134" h="96" />
-            <frame x="3752" y="576" w="134" h="96" />
-            <frame x="3886" y="576" w="134" h="96" />
-            <frame x="0" y="672" w="134" h="96" />
-            <frame x="134" y="672" w="134" h="96" />
-            <frame x="268" y="672" w="134" h="96" />
-            <frame x="670" y="672" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="804" y="672" w="134" h="96" />
-            <frame x="938" y="672" w="134" h="96" />
-            <frame x="1072" y="672" w="134" h="96" />
-            <frame x="1206" y="672" w="134" h="96" />
-            <frame x="1340" y="672" w="134" h="96" />
-            <frame x="1474" y="672" w="134" h="96" />
-            <frame x="1608" y="672" w="134" h="96" />
-            <frame x="2010" y="672" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="2144" y="672" w="134" h="96" />
-            <frame x="2278" y="672" w="134" h="96" />
-            <frame x="2412" y="672" w="134" h="96" />
-            <frame x="2546" y="672" w="134" h="96" />
-            <frame x="2680" y="672" w="134" h="96" />
-            <frame x="2814" y="672" w="134" h="96" />
-            <frame x="2948" y="672" w="134" h="96" />
-            <frame x="3350" y="672" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="3484" y="672" w="134" h="96" />
-            <frame x="3618" y="672" w="134" h="96" />
-            <frame x="3752" y="672" w="134" h="96" />
-            <frame x="3886" y="672" w="134" h="96" />
-            <frame x="0" y="768" w="134" h="96" />
-            <frame x="134" y="768" w="134" h="96" />
-            <frame x="268" y="768" w="134" h="96" />
-            <frame x="670" y="768" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="804" y="768" w="134" h="96" />
-            <frame x="938" y="768" w="134" h="96" />
-            <frame x="1072" y="768" w="134" h="96" />
-            <frame x="1206" y="768" w="134" h="96" />
-            <frame x="1340" y="768" w="134" h="96" />
-            <frame x="1474" y="768" w="134" h="96" />
-            <frame x="1608" y="768" w="134" h="96" />
-            <frame x="2010" y="768" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="2144" y="768" w="134" h="96" />
-            <frame x="2278" y="768" w="134" h="96" />
-            <frame x="2412" y="768" w="134" h="96" />
-            <frame x="2546" y="768" w="134" h="96" />
-            <frame x="2680" y="768" w="134" h="96" />
-            <frame x="2814" y="768" w="134" h="96" />
-            <frame x="2948" y="768" w="134" h="96" />
-            <frame x="3350" y="768" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="3484" y="768" w="134" h="96" />
-            <frame x="3618" y="768" w="134" h="96" />
-            <frame x="3752" y="768" w="134" h="96" />
-            <frame x="3886" y="768" w="134" h="96" />
-            <frame x="0" y="864" w="134" h="96" />
-            <frame x="134" y="864" w="134" h="96" />
-            <frame x="268" y="864" w="134" h="96" />
-            <frame x="670" y="864" w="134" h="96" />
-          </dir>
-        </attack>
-        <death speed="7.5" rotation="counter-clockwise" first_dir_angle ="0" loop="false">
-          <dir>
-            <frame x="3484" y="192" w="134" h="96" />
-            <frame x="3618" y="192" w="134" h="96" />
-            <frame x="3752" y="192" w="134" h="96" />
-            <frame x="3886" y="192" w="134" h="96" />
-            <frame x="0" y="288" w="134" h="96" />
-            <frame x="134" y="288" w="134" h="96" />
-            <frame x="268" y="288" w="134" h="96" />
-            <frame x="402" y="288" w="134" h="96" />
-            <frame x="536" y="288" w="134" h="96" />
-            <frame x="670" y="288" w="134" h="96" />
-            <frame x="804" y="288" w="134" h="96" />
-            <frame x="938" y="288" w="134" h="96" />
-            <frame x="1072" y="288" w="134" h="96" />
-            <frame x="1206" y="288" w="134" h="96" />
-            <frame x="1340" y="288" w="134" h="96" />
-          </dir>
-          <dir>
-            <frame x="1474" y="288" w="134" h="96" />
-            <frame x="1608" y="288" w="134" h="96" />
-            <frame x="1742" y="288" w="134" h="96" />
-            <frame x="1876" y="288" w="134" h="96" />
-            <frame x="2010" y="288" w="134" h="96" />
-            <frame x="2144" y="288" w="134" h="96" />
-            <frame x="2278" y="288" w="134" h="96" />
-            <frame x="2412" y="288" w="134" h="96" />
-            <frame x="2546" y="288" w="134" h="96" />
-            <frame x="2680" y="288" w="134" h="96" />
-            <frame x="2814" y="288" w="134" h="96" />
-            <frame x="2948" y="288" w="134" h="96" />
-            <frame x="3082" y="288" w="134" h="96" />
-            <frame x="3216" y="288" w="134" h="96" />
-            <frame x="3350" y="288" w="134" h="96" />
-          </dir>
-        </death>
-        <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="0" loop="false">
-          <dir>
-            <frame x="0" y="0" w="260" h="304" />
-            <frame x="260" y="0" w="260" h="304" />
-            <frame x="520" y="0" w="260" h="304" />
-            <frame x="0" y="304" w="260" h="304" />
-            <frame x="260" y="304" w="260" h="304" />
-            <frame x="520" y="304" w="260" h="304" />
-            <frame x="0" y="608" w="260" h="304" />
-            <frame x="260" y="608" w="260" h="304" />
-            <frame x="520" y="608" w="260" h="304" />
-            <frame x="0" y="912" w="260" h="304" />
-            <frame x="260" y="912" w="260" h="304" />
-            <frame x="520" y="912" w="260" h="304" />
-            <frame x="0" y="1216" w="260" h="304" />
-            <frame x="260" y="1216" w="260" h="304" />
-            <frame x="520" y="1216" w="260" h="304" />
-            <frame x="0" y="1520" w="260" h="304" />
-            <frame x="260" y="1520" w="260" h="304" />
-            <frame x="520" y="1520" w="260" h="304" />
-            <frame x="0" y="1824" w="260" h="304" />
-            <frame x="260" y="1824" w="260" h="304" />
-            <frame x="520" y="1824" w="260" h="304" />
-            <frame x="0" y="2128" w="260" h="304" />
-            <frame x="260" y="2128" w="260" h="304" />
-            <frame x="520" y="2128" w="260" h="304" />
-            <frame x="0" y="2432" w="260" h="304" />
-            <frame x="260" y="2432" w="260" h="304" />
-            <frame x="520" y="2432" w="260" h="304" />
-            <frame x="0" y="2736" w="260" h="304" />
-            <frame x="260" y="2736" w="260" h="304" />
-            <frame x="520" y="2736" w="260" h="304" />
-            <frame x="0" y="3040" w="260" h="304" />
-            <frame x="260" y="3040" w="260" h="304" />
-            <frame x="520" y="3040" w="260" h="304" />
-            <frame x="0" y="3344" w="260" h="304" />
-            <frame x="260" y="3344" w="260" h="304" />
-            <frame x="520" y="3344" w="260" h="304" />
-            <frame x="0" y="3648" w="260" h="304" />
-            <frame x="260" y="3648" w="260" h="304" />
-            <frame x="520" y="3648" w="260" h="304" />
-            <frame x="0" y="3952" w="260" h="304" />
-            <frame x="260" y="3952" w="260" h="304" />
-            <frame x="520" y="3952" w="260" h="304" />
-            <frame x="0" y="4256" w="260" h="304" />
-            <frame x="260" y="4256" w="260" h="304" />
-            <frame x="520" y="4256" w="260" h="304" />
-            <frame x="0" y="4560" w="260" h="304" />
-            <frame x="260" y="4560" w="260" h="304" />
-            <frame x="520" y="4560" w="260" h="304" />
-            <frame x="0" y="4864" w="260" h="304" />
-            <frame x="260" y="4864" w="260" h="304" />
-            <frame x="520" y="4864" w="260" h="304" />
-            <frame x="0" y="5168" w="260" h="304" />
-            <frame x="260" y="5168" w="260" h="304" />
-            <frame x="520" y="5168" w="260" h="304" />
-            <frame x="0" y="5472" w="260" h="304" />
-            <frame x="260" y="5472" w="260" h="304" />
-            <frame x="520" y="5472" w="260" h="304" />
-            <frame x="0" y="5776" w="260" h="304" />
-            <frame x="260" y="5776" w="260" h="304" />
-            <frame x="520" y="5776" w="260" h="304" />
-          </dir>
-        </spawn>
-      </animations>
+     
     </brute>
     <tank>
       <speed value ="1"/>
@@ -1444,7 +1014,7 @@
             <frame name="sprite6"  x="88" y="44"  w="44" h="44"></frame>
             <frame name="sprite7"  x="0"  y="88"  w="44" h="44"></frame>
             <frame name="sprite8"  x="44" y="88"  w="44" h="44"></frame>
-            <frame name="sprite9"  x="88" y="88"  w="44" h="44"></frame>
+            <frame nx="88" y="88"  w="44" h="44"></frame>
           </dir>
         </open>
         <close speed="10" rotation="counter-clockwise" first_dir_angle ="0">
@@ -1508,6 +1078,26 @@
         </explosion>
       </animations>
     </explosion>
+    <portal_TP>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/particles/portal.png"/>
+      <animations>
+        <portal speed="10" rotation="counter-clockwise" first_dir_angle ="0" loop ="true">
+          <dir>
+          <frame x="0" y="0" w="40" h="40"/>
+          <frame x="40" y="0" w="40" h="40"/>
+          <frame x="80" y="0" w="40" h="40"/>
+          <frame x="0" y="40" w="40" h="40"/>
+          <frame x="40" y="40" w="40" h="40"/>
+          <frame x="80" y="40" w="40" h="40"/>
+          <frame x="0" y="80" w="40" h="40"/>
+          <frame x="40" y="80" w="40" h="40"/>
+          <frame x="80" y="80" w="40" h="40"/>
+          </dir>
+        </portal>
+      </animations>
+    </portal_TP>
     <fire_dead_tank>
       <tex path="textures/objects/particles/fire_dead_tank.png"/>
       <animations>

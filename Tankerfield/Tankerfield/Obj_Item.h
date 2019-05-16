@@ -15,6 +15,7 @@ public:
 
 public:
 	Obj_Tank * caster = nullptr;
+	ItemType type = ItemType::NO_TYPE;
 };
 
 #endif
