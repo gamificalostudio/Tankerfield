@@ -134,7 +134,7 @@ bool M_Scene::Start()
 
 	general_hud = DBG_NEW General_HUD();
 
-	round = 0u;
+	round = 1u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
