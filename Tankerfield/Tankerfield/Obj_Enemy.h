@@ -28,7 +28,7 @@ public:
 
 	virtual void ChangeTexture();
 
-	void Attack();
+	virtual void Attack();
 
 	void OnTriggerEnter(Collider * collider);
 

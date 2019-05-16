@@ -548,7 +548,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + weapon_info.bullet_healing);
+				SetLife(GetLife() + bullet->tank_parent->weapon_info.bullet_healing);
 			}
 		}
 		else
