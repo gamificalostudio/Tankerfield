@@ -22,6 +22,7 @@
 #include "UI_Button.h"
 #include "UI_Slider.h"
 #include "UI_Checkbox.h"
+#include "UI_Table.h"
 #include "UI_TextPanel.h"
 #include "UI_InteractiveGroup.h"
 #include "UI_InGameElement.h"
@@ -834,6 +835,14 @@ UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_L
 UI_InteractiveGroup * M_UI::CreateIntearctiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener * listener)
 {
 	UI_InteractiveGroup* object = DBG_NEW UI_InteractiveGroup(position, definition, listener);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
+	return object;
+}
+
+UI_Table * M_UI::CreateTable(const fPoint position, const UI_TableDef definition,  int * widths, int * heights,  UI_Listener * listener)
+{
+	UI_Table* object = DBG_NEW UI_Table(position, definition, widths, heights, listener);
 	object->SetParent(main_ui_element);
 	elements_list.push_back(object);
 	return object;

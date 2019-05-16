@@ -81,6 +81,13 @@ bool UI_InteractiveGroup::OnHoverRepeat(UI_Element * object)
 
 void UI_InteractiveGroup::SetElement(UI_Element* element, const iPoint position)
 {
+
+	if (element == nullptr || position.x >= columns || position.y >= rows)
+	{
+		LOG("Imposible Set Element");
+		return;
+	}
+
 	group_elements[ (position.y * columns ) + position.x] = element;
 	element->SetParent(this);
 	element->SetListener(this);

@@ -11,6 +11,7 @@
 #include "UI_Image.h"
 #include "UI_Button.h"
 #include "UI_Label.h"
+#include "UI_Table.h"
 #include "UI_InteractiveGroup.h"
 
 #include "Obj_Tank_MainMenu.h"
@@ -108,6 +109,26 @@ bool M_MainMenu::Start()
 
 	SetState(MENU_STATE::SELECTION);
 	SDL_ShowCursor(SDL_ENABLE);
+
+	//TODO TEST DELETE
+
+	UI_TableDef table_def;
+	table_def.columns = 3;
+	table_def.rows = 11;
+	table_def.line_width = 2;
+
+	int widths[3] = { 100, 300 , 300 };
+	int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
+
+	UI_Table* table = app->ui->CreateTable(screen_center, table_def, widths, heights);
+	UI_Element* rank = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef( "Rank", app->font->label_font_24));
+	table->AssortElementToTable(rank, iPoint(0, 0));
+
+	for (int i = 1 ; i < 11; ++i)
+	{
+		UI_Element* number = app->ui->CreateLabel( fPoint(0.f, 0.f), UI_LabelDef( std::to_string(i), app->font->label_font_24));
+		table->AssortElementToTable(number, iPoint(0, i));
+	}
 
 	return true;
 }

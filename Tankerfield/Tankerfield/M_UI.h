@@ -32,6 +32,7 @@ class UI_Slider;
 class UI_Label;
 class UI_Checkbox;
 class UI_TextPanel;
+class UI_Table;
 class UI_InGameElement;
 class UI_IG_Weapon;
 class UI_IG_Item;
@@ -47,6 +48,7 @@ struct UI_ImageDef;
 struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
+struct UI_TableDef;
 struct UI_InGameElementDef;
 struct UI_InteractiveGroupDef;
 
@@ -218,6 +220,8 @@ public:
 	UI_TextPanel * CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener* listener = nullptr);
 
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
+
+	UI_Table * CreateTable(const fPoint position, const UI_TableDef definition, int * widths, int * heights, UI_Listener * listener = nullptr);
 
 	UI_InteractiveGroup * CreateIntearctiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener* listener = nullptr);
 
