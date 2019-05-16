@@ -43,7 +43,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
-	burn_texture = app->tex->Load(anim_node.child("burn").attribute("texture").as_string());
 	curr_tex = burn_texture;
 
 
@@ -52,8 +51,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	walk.frames		= app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames	= app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames	= app->anim_bank->LoadFrames(anim_node.child("death"));
-	burn.frames	= app->anim_bank->LoadFrames(anim_node.child("burn"));
-	dying_burn.frames= app->anim_bank->LoadFrames(anim_node.child("dying_burn"));
 	curr_anim = &idle;
 
 	
@@ -258,51 +255,7 @@ int Obj_TeslaTrooper::Move(float & dt)
 	
 }
 
-inline void Obj_TeslaTrooper::Burn(const float & dt)
-{
-	if (burn_fist_enter)
-	{
-		curr_anim = &burn;
-		fire_damage = life / 3;
-		if (burn_texture != nullptr)
-			curr_tex = burn_texture;
-	}
-	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
-	{
-		if (life > 0)
-		{
-			int max_rand = 101;
-			int max_rand_double = max_rand * 2;
-			float one_divided_by_100 = 0.01f;
 
-			move_vect = { ((rand() % max_rand_double) - max_rand)* one_divided_by_100 ,((rand() % max_rand_double) - max_rand)*one_divided_by_100 };
-			move_vect.Normalize();
-
-			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
-
-			timer_change_direction.Start();
-
-			max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
-			max_time_change_direction += 0.5f;
-			life -= fire_damage;
-		}
-		else
-		{
-			curr_anim = &dying_burn;
-		}
-
-		if (burn_fist_enter)
-			burn_fist_enter = false;
-	}
-
-	if(life > 0)
-		UpdatePos(dt);
-	else if (curr_anim == &dying_burn && curr_anim->Finished())
-	{
-		CleanUp();
-	}
-
-}
 
 void Obj_TeslaTrooper::GetPath()
 {

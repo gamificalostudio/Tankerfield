@@ -33,7 +33,6 @@ public:
 
 	inline int Move(float & dt);
 
-	inline virtual void Burn(const float& dt);
 
 	inline virtual void GetPath();
 
@@ -56,7 +55,7 @@ private:
 	Animation portal_animation;
 	Animation portal_close_anim;
 	Animation spawn_anim;
-	Animation dying_burn;
+	
 
 	bool draw = true;
 	Animation* in_portal				= nullptr;

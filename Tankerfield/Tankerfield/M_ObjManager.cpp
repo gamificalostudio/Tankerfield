@@ -267,10 +267,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
 		break;
-	case ObjectType::REWARD_ZONE:
-		ret = DBG_NEW Reward_Zone(pos);
-		ret->type = ObjectType::REWARD_ZONE;
-		break;
 	case ObjectType::BRUTE:
 		ret = DBG_NEW Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;

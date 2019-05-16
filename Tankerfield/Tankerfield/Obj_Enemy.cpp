@@ -272,6 +272,15 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 	return true;
 }
 
+bool Obj_Enemy::Start()
+{
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+	return true;
+}
+
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->ReduceNumEnemies();
@@ -315,58 +324,49 @@ void Obj_Enemy::DrawDebug(const Camera* camera)
 
 }
 
-inline void Obj_Enemy::Burn(const float& dt)
+inline void Obj_Enemy::Burn(const float & dt)
 {
 	if (burn_fist_enter)
 	{
+		curr_anim = &burn;
 		fire_damage = life / 3;
-		curr_anim = &walk;
+		if (burn_texture != nullptr)
+			curr_tex = burn_texture;
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
 	{
-		
-		int max_rand = 101;
-		int max_rand_double = max_rand*2;
-		float one_divided_by_100 = 0.01f;
-
-		move_vect = { ((rand() % max_rand_double) - max_rand)* one_divided_by_100 ,((rand() % max_rand_double) - max_rand)*one_divided_by_100 };
-		move_vect.Normalize();
-
-		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
-
-		timer_change_direction.Start();
-
-		max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
-		max_time_change_direction += 0.5f;
-
-		if(burn_fist_enter)
-			burn_fist_enter = false;
-
-		life -= fire_damage;
-		if (life <= 0)
+		if (life > 0)
 		{
-			state = ENEMY_STATE::DEAD;
+			int max_rand = 101;
+			int max_rand_double = max_rand * 2;
+			float one_divided_by_100 = 0.01f;
+
+			move_vect = { ((rand() % max_rand_double) - max_rand)* one_divided_by_100 ,((rand() % max_rand_double) - max_rand)*one_divided_by_100 };
+			move_vect.Normalize();
+
+			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+
+			timer_change_direction.Start();
+
+			max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
+			max_time_change_direction += 0.5f;
+			life -= fire_damage;
 		}
+		else
+		{
+			curr_anim = &dying_burn;
+		}
+
+		if (burn_fist_enter)
+			burn_fist_enter = false;
 	}
-	else
-	{
+
+	if (life > 0)
 		UpdatePos(dt);
+	else if (curr_anim == &dying_burn && curr_anim->Finished())
+	{
+		CleanUp();
 	}
-
-	//if (burn_fist_enter || range_pos.IsPointIn(pos_map))
-	//{
-	//	GenereRandomNextPos();
-	//}
-	//else
-	//{
-	//	if (update_velocity_vec.ReadSec() > 1)
-	//	{
-	//		UpdateVelocity();
-	//	}
-
-	//	pos_map += move_vect * speed * dt;
-	//	range_pos.center = pos_map;
-	//}
 
 }
 

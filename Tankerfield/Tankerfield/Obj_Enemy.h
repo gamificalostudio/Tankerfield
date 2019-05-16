@@ -40,6 +40,8 @@ public:
 
 	virtual bool Draw(float dt, Camera* camera)override;
 
+	virtual  bool Start() override;
+
 protected:
 	inline void UpdateVelocity();
 
@@ -92,6 +94,7 @@ protected:
 	Animation attack;
 	Animation death;
 	Animation burn;
+	Animation dying_burn;
 
 	float scale = 0.f;
 
