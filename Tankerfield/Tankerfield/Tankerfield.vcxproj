@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -131,7 +131,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
-    <ClCompile Include="Item_InstantHelp.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
@@ -140,12 +139,9 @@
     <ClCompile Include="M_RewardZoneManager.cpp" />
     <ClCompile Include="Obj_Brute.cpp" />
     <ClCompile Include="Obj_CannonFire.cpp" />
-    <ClCompile Include="Obj_Enemy.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
-    <ClCompile Include="Obj_Portal.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
-    <ClCompile Include="Obj_RocketLauncher.cpp" />
     <ClCompile Include="Obj_Suicidal.cpp" />
     <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
@@ -178,7 +174,6 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="M_Window.cpp" />
     <ClCompile Include="UI_InGameElement.cpp" />
-    <ClCompile Include="UI_InteractiveGroup.cpp" />
     <ClCompile Include="UI_Label.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="M_UI.cpp" />
@@ -201,7 +196,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="Item_HappyHour.h" />
-    <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="M_AnimationBank.h" />
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
@@ -211,12 +205,9 @@
     <ClInclude Include="M_RewardZoneManager.h" />
     <ClInclude Include="Obj_Brute.h" />
     <ClInclude Include="Obj_CannonFire.h" />
-    <ClInclude Include="Obj_Enemy.h" />
     <ClInclude Include="Obj_Fire.h" />
     <ClInclude Include="Obj_FlamethrowerFlame.h" />
-    <ClInclude Include="Obj_Portal.h" />
     <ClInclude Include="Obj_RewardBox.h" />
-    <ClInclude Include="Obj_RocketLauncher.h" />
     <ClInclude Include="Obj_Suicidal.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
@@ -251,7 +242,6 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="M_Window.h" />
     <ClInclude Include="UI_InGameElement.h" />
-    <ClInclude Include="UI_InteractiveGroup.h" />
     <ClInclude Include="UI_Label.h" />
     <ClInclude Include="M_UI.h" />
     <ClInclude Include="Object.h" />
