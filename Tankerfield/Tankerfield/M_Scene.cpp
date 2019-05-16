@@ -32,6 +32,7 @@
 
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
+#include "Obj_RocketLauncher.h"
 #include "Object.h"
 
 
@@ -112,7 +113,7 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 		
-			app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, (*players_layer)->objects[0].pos + fPoint(2, 2));
+			app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, (*players_layer)->objects[0].pos);
 		}
 	}
 	

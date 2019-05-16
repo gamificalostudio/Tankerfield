@@ -44,11 +44,11 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 
 	curr_anim = &idle;
 	
-	state = ENEMY_STATE::SPAWN;
+	state = ENEMY_STATE::IDLE;
 	detection_range = 7.0f;
 
-	spawn_draw_offset = { 0, 0 };
-	normal_draw_offset = { 0, 0 };
+	spawn_draw_offset = { 49, 47 };
+	normal_draw_offset = { 49, 47 };
 	draw_offset = spawn_draw_offset;
 
 	attack_damage = rocket_launcher_node.child("attack_damage").attribute("num").as_float();
@@ -58,6 +58,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	life = pow(rocket_launcher_node.child("base_life").attribute("num").as_float(), app->scene->round);
 	
 	check_path_time = 2.0f;
+
+	scale = 0.75f;
 }
 
 Obj_RocketLauncher::~Obj_RocketLauncher()
