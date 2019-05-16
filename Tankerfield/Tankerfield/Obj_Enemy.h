@@ -68,12 +68,16 @@ protected:
 	float speed = 0.f;
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
+	SDL_Texture * oiled_tex = nullptr;
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 
 	Timer update_velocity_vec;
 	Timer damaged_sprite_timer;
+	Timer oiled_timer;
 	int damaged_sprite_time = 0;
+
+	bool oiled = false;
 
 	Animation idle;
 	Animation walk;

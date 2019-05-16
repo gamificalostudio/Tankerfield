@@ -33,14 +33,25 @@ bool Obj_Enemy::Update(float dt)
 	Attack();
 	ChangeTexture();
 
+	if ((oiled==true)&&(oiled_timer.Read() >= 5000))
+	{
+		oiled = false;
+	}
+
 	return true;
 }
 
 void Obj_Enemy::ChangeTexture()
 {
-	if (damaged_sprite_timer.Read() > damaged_sprite_time)
+	if ((damaged_sprite_timer.Read() > damaged_sprite_time) && (oiled==false)&&(curr_tex!=tex))
 	{
 		curr_tex = tex;
+	}
+
+	if ((damaged_sprite_timer.Read() > damaged_sprite_time) && (oiled==true))
+	{
+		curr_tex = oiled_tex;
+		oiled_timer.Start();
 	}
 }
 
@@ -326,6 +337,25 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
+
+		if (life <= 0)
+		{
+			app->pick_manager->PickUpFromEnemy(pos_map);
+			state = ENEMY_STATE::DEAD;
+		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
+	}
+
+	else if (collider->GetTag() == Collider::TAG::BULLET_OIL)
+	{
+		life -= collider->damage;
+		oiled = true;
+		oiled_timer.Start();
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
 

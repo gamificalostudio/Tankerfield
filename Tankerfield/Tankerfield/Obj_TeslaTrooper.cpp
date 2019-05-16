@@ -40,6 +40,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
+	oiled_tex	= app->tex->Load(tesla_trooper_node.child("tex_oiled_path").child_value());
 	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	curr_tex = tex;
 

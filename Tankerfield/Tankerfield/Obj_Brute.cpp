@@ -37,6 +37,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
+	oiled_tex = app->tex->Load("textures/Objects/enemies/brute-sheet_oiled.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
