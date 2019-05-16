@@ -286,10 +286,7 @@ inline void Obj_TeslaTrooper::Burn(const float & dt)
 			max_time_change_direction += 0.5f;
 			life -= fire_damage;
 		}
-		else
-		{
-			curr_anim = &dying_burn;
-		}
+		
 
 		if (burn_fist_enter)
 			burn_fist_enter = false;
@@ -297,10 +294,17 @@ inline void Obj_TeslaTrooper::Burn(const float & dt)
 
 	if(life > 0)
 		UpdatePos(dt);
-	else if (curr_anim == &dying_burn && curr_anim->Finished())
+	else
 	{
-		CleanUp();
+		if(curr_anim != &dying_burn)
+			curr_anim = &dying_burn;
+		
+		if ( curr_anim->Finished())
+		{
+			CleanUp();
+		}
 	}
+	
 
 }
 
