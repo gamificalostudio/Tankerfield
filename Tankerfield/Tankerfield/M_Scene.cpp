@@ -116,7 +116,7 @@ bool M_Scene::Start()
 		}
 	}
 	
-	general_hud = DBG_NEW General_HUD();
+	general_hud = DBG_NEW General_GUI();
 
 	round = 0u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;

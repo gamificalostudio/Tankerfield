@@ -13,10 +13,6 @@
 #include "UI_Label.h"
 #include "UI_InteractiveGroup.h"
 
-#include "UI_Table.h"
-#include "UI_InputText.h"
-
-
 #include "Obj_Tank_MainMenu.h"
 
 bool M_MainMenu::Start()
@@ -31,6 +27,7 @@ bool M_MainMenu::Start()
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 	camera = app->render->CreateCamera( iPoint(0,0), (SDL_Rect)screen);
+
 	// Main menu ------------------------------
 	menu_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
 
@@ -113,33 +110,6 @@ bool M_MainMenu::Start()
 	SetState(MENU_STATE::SELECTION);
 	SDL_ShowCursor(SDL_ENABLE);
 
-	//TODO TEST DELETE
-
-	UI_TableDef table_def;
-	table_def.columns = 3;
-	table_def.rows = 11;
-	table_def.line_width = 2;
-
-	int widths[3] = { 100, 300 , 300 };
-	int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
-
-	UI_Table* table = app->ui->CreateTable(screen_center, table_def, widths, heights);
-	UI_Element* rank = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef( "Rank", app->font->label_font_24));
-	table->AssortElementToTable(rank, iPoint(0, 0));
-
-	for (int i = 1 ; i < 11; ++i)
-	{
-		UI_Element* number = app->ui->CreateLabel( fPoint(0.f, 0.f), UI_LabelDef( std::to_string(i), app->font->label_font_24));
-		table->AssortElementToTable(number, iPoint(0, i));
-	}
-
-	// ===========================================
-
-	UI_InputTextDef input_def;
-	input_def.font = app->font->label_font_24;
-	input_def.max_characters = 10;
-	app->ui->CreateInputText(fPoint(40, 40), input_def);
-
 	return true;
 }
 
@@ -147,6 +117,7 @@ bool M_MainMenu::CleanUp()
 {
 	app->tex->UnLoad(background_texture);
 	app->audio->PauseMusic(2);
+	app->render->DestroyCamera(camera);
 
 	if (app->on_clean_up == false)
 	{
@@ -204,14 +175,14 @@ bool M_MainMenu::PreUpdate()
 
 bool M_MainMenu::Update(float dt)
 {
-	color_percent += 0.3 * dt;
-	if (color_percent > 1.f)
-	{
-		color_percent -= 1.f;
-	}
+	//color_percent += 0.3 * dt;
+	//if (color_percent > 1.f)
+	//{
+	//	color_percent -= 1.f;
+	//}
 
-	SDL_Color color = GetColor(color_percent);
-	SDL_SetTextureColorMod(background_texture, color.r , color.g , color.b);
+	//SDL_Color color = GetColor(color_percent);
+	//SDL_SetTextureColorMod(background_texture, color.r , color.g , color.b);
 
 	return true;
 }
@@ -273,7 +244,7 @@ bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 	return true;
 }
 
-bool M_MainMenu::OutClick(UI_Element * element)
+bool M_MainMenu::ClickDown(UI_Element * element)
 {
 	if (element == multi_player_button)
 	{

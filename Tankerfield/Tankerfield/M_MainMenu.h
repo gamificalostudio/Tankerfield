@@ -56,7 +56,7 @@ public:
 
 	bool OnHoverRepeat(UI_Element * element);
 
-	bool OutClick(UI_Element * element);
+	bool ClickDown(UI_Element * element);
 
 private:
 
