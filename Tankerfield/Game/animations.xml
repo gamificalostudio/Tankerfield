@@ -396,20 +396,20 @@
           <frame name="sprite48" x="468" y="204" w="52" h="102"></frame>
         </dir>
         <dir>
-          <frame name="sprite96" x="0" y="510" w="52" h="102"></frame>
-          <frame name="sprite97" x="52" y="510" w="52" h="102"></frame>
-          <frame name="sprite98" x="104" y="510" w="52" h="102"></frame>
-          <frame name="sprite99" x="156" y="510" w="52" h="102"></frame>
-          <frame name="sprite100" x="208" y="510" w="52" h="102"></frame>
-          <frame name="sprite101" x="260" y="510" w="52" h="102"></frame>
+          <frame name="sprite49" x="520" y="204" w="52" h="102"></frame>
+          <frame name="sprite50" x="572" y="204" w="52" h="102"></frame>
+          <frame name="sprite51" x="624" y="204" w="52" h="102"></frame>
+          <frame name="sprite52" x="676" y="204" w="52" h="102"></frame>
+          <frame name="sprite53" x="728" y="204" w="52" h="102"></frame>
+          <frame name="sprite54" x="780" y="204" w="52" h="102"></frame>
         </dir>
         <dir>
-          <frame name="sprite102" x="312" y="510" w="52" h="102"></frame>
-          <frame name="sprite103" x="364" y="510" w="52" h="102"></frame>
-          <frame name="sprite104" x="416" y="510" w="52" h="102"></frame>
-          <frame name="sprite105" x="468" y="510" w="52" h="102"></frame>
-          <frame name="sprite106" x="520" y="510" w="52" h="102"></frame>
-          <frame name="sprite107" x="572" y="510" w="52" h="102"></frame>
+          <frame name="sprite55" x="832" y="204" w="52" h="102"></frame>
+          <frame name="sprite56" x="884" y="204" w="52" h="102"></frame>
+          <frame name="sprite57" x="936" y="204" w="52" h="102"></frame>
+          <frame name="sprite58" x="0" y="306" w="52" h="102"></frame>
+          <frame name="sprite59" x="52" y="306" w="52" h="102"></frame>
+          <frame name="sprite60" x="104" y="306" w="52" h="102"></frame>
         </dir>
       </burn>
       <dying_burn speed="10" loop =" false" rotation="counter-clockwise">
