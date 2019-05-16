@@ -3,6 +3,7 @@
 
 #include "Object.h"
 #include "Obj_Tank.h"
+#include "Obj_PickUp.h"
 
 class SDL_Texture;
 class SpawnPoint;
@@ -19,6 +20,8 @@ private:
 	SDL_Texture* texture;
 	SDL_Rect shadow_frame;
 	iPoint draw_shadow_offset;
+
+	PICKUP_TYPE type = PICKUP_TYPE::NO_TYPE;
 
 
 public:
@@ -39,6 +42,8 @@ public:
 	bool DrawShadow(Camera* camera);
 
 	void Dead();
+
+	void SetTypeBox(PICKUP_TYPE type = PICKUP_TYPE::NO_TYPE);
 };
 
 #endif // !__OBJ_REWARDBOX_H__
