@@ -72,7 +72,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 0;
-		weapon_info.explosion_damage = level * 2;
+		weapon_info.explosion_damage = level * 100;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
