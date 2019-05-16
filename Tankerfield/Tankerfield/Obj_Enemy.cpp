@@ -279,11 +279,7 @@ bool Obj_Enemy::Start()
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->ReduceNumEnemies();
-	if (coll != nullptr)
-	{
-		coll->Destroy();
-		coll = nullptr;
-	}
+
 	to_remove = true;
 	return true;
 }
@@ -327,6 +323,8 @@ inline void Obj_Enemy::Burn(const float & dt)
 		fire_damage = life / 3;
 		if (burn_texture != nullptr)
 			curr_tex = burn_texture;
+
+	
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
 	{
@@ -350,6 +348,12 @@ inline void Obj_Enemy::Burn(const float & dt)
 		else
 		{
 			curr_anim = &dying_burn;
+			if (coll != nullptr)
+			{
+				coll->Destroy();
+				coll = nullptr;
+			}
+			
 		}
 
 		if (burn_fist_enter)

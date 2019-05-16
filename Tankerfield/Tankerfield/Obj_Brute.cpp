@@ -112,6 +112,7 @@ void Obj_Brute::Burn(const float& dt)
 	{
 		fire_damage = life / 5;
 		curr_anim = &walk;
+		
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
 	{
