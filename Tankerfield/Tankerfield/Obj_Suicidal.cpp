@@ -80,3 +80,28 @@ void Obj_Suicidal::Spawn(const float& dt)
 {
 	state = ENEMY_STATE::GET_PATH;
 }
+
+void Obj_Suicidal::Attack()
+{
+	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
+	{
+		if (target != nullptr
+			&& target->coll->GetTag() == Collider::TAG::PLAYER
+			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+			&& perf_timer.ReadMs() > (double)attack_frequency)
+		{
+			curr_anim = &attack;
+			target->SetLife(target->GetLife() - attack_damage);
+			perf_timer.Start();
+			app->audio->PlayFx(sfx_attack);
+			state = ENEMY_STATE::DEAD;
+		}
+
+		if (curr_anim == &attack
+			&& curr_anim->Finished())
+		{
+			curr_anim = &idle;
+			attack.Reset();
+		}
+	}
+}

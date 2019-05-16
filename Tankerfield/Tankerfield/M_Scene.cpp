@@ -135,7 +135,7 @@ bool M_Scene::Start()
 		box->SetTypeBox(PICKUP_TYPE::WEAPON);
 	}
 	
-	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
+	app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
 
 	general_hud = DBG_NEW General_HUD();
 
