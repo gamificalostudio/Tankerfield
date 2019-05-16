@@ -42,6 +42,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::BASIC:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 25 + level * 2;
+		weapon_info.explosion_damage = 0;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
@@ -56,6 +57,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
 		weapon_info.bullet_damage = 50 + level * 2;
+		weapon_info.explosion_damage = 0;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
@@ -69,7 +71,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.bullet_damage = 0;//NOTE: Double missile deals damage with the explosion, not with the bullet. To modify it, go to Obj_Tank::ShotDoubleMissile() and change float explosion_damage
+		weapon_info.bullet_damage = 0;
+		weapon_info.explosion_damage = level * 100;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
@@ -84,6 +87,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::HEALING_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 25 + level;
+		weapon_info.explosion_damage = 0;
 		weapon_info.bullet_healing = 5 + level;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
@@ -98,6 +102,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.bullet_damage = 10 + level * 2;
+		weapon_info.explosion_damage = 0;
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 20;
@@ -125,8 +130,6 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootDoubleMissile()
 {
-	float explosion_damage = weapon_info.level_weapon * 1000;
-
 	fPoint double_missiles_offset = shot_dir;
 	double_missiles_offset.RotateDegree(90);
 	float missiles_offset = 0.2f;
@@ -141,7 +144,7 @@ void Obj_Tank::ShootDoubleMissile()
 		weapon_info.bullet_damage,
 		shot_dir,
 		bullet_angle);
-	missile_ptr->explosion_damage = explosion_damage;
+	missile_ptr->explosion_damage = weapon_info.explosion_damage;
 
 	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
 	missile_ptr->SetPlayer(this);
@@ -151,7 +154,7 @@ void Obj_Tank::ShootDoubleMissile()
 		weapon_info.bullet_damage,
 		shot_dir,
 		bullet_angle);
-	missile_ptr->explosion_damage = explosion_damage;
+	missile_ptr->explosion_damage = weapon_info.explosion_damage;
 }
 
 void Obj_Tank::ShootHealingShot()
