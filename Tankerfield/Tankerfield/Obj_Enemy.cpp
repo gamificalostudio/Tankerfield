@@ -360,7 +360,7 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
 		
-		speed = speed / 2;
+		speed = original_speed / 2;
 
 		if (life <= 0)
 		{
