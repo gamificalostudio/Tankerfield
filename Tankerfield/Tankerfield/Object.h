@@ -91,6 +91,7 @@ public:
 	fPoint			velocity		= { 0.f, 0.f };
 	fPoint			acceleration = { 0.f, 0.f };
 	bool			to_remove = false;						//Set it to true if you want the object to be removed
+	bool            is_isometric = true;
 	ObjectInfo		data;
 	Collider*		coll = nullptr;
 

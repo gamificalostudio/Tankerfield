@@ -79,6 +79,7 @@ bool Obj_Tank_MainMenu::Start()
 bool Obj_Tank_MainMenu::Update(float dt)
 {
 	Rotate(dt);
+	pos_screen = pos_map;
 	return true;
 }
 

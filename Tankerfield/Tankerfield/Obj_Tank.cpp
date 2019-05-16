@@ -441,7 +441,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	app->render->Blit(
 		curr_tex,
 		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
+		pos_screen.y - draw_offset.y - 1.66f,
 		camera,
 		&curr_anim->GetFrame(angle));
 

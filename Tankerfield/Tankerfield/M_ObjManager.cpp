@@ -154,6 +154,7 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
+
 	std::vector<Object*> draw_objects;
 
 	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
