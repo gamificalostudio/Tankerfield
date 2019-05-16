@@ -197,6 +197,14 @@
       <base_life num="3"/>
       <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
     </rocket_launcher>
+    <suicidal>
+      <speed num="5.5"/>
+      <attack_damage num="0"/>
+      <attack_range num="1"/>
+      <attack_frequency num="1000"/>
+      <base_life num="3"/>
+      <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
+    </suicidal>
     <brute>
      
     </brute>

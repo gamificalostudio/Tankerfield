@@ -98,7 +98,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	//Timers ----------------
 	check_path_time = 2.f; // 10s
 
-
 	damaged_sprite_time = 150;
 
 	scale = 0.75f;
