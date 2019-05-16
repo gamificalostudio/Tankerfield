@@ -44,16 +44,18 @@ bool Obj_Enemy::Update(float dt)
 
 void Obj_Enemy::ChangeTexture()
 {
-	if ((damaged_sprite_timer.Read() > damaged_sprite_time) && (oiled==false)&&(curr_tex!=tex))
+	if ((damaged_sprite_timer.Read() > damaged_sprite_time))
 	{
-		curr_tex = tex;
+		if (oiled == false) 
+		{
+			curr_tex = tex;
+		}
+		else
+		{
+			curr_tex = oiled_tex;
+		}
 	}
 
-	if ((damaged_sprite_timer.Read() > damaged_sprite_time) && (oiled==true))
-	{
-		curr_tex = oiled_tex;
-		oiled_timer.Start();
-	}
 }
 
 void Obj_Enemy::Attack()
