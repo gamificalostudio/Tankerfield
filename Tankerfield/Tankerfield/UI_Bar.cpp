@@ -54,7 +54,7 @@ bool UI_Bar::Draw()
 
 	// Draw sprite 
 	SDL_Rect draw_pos = GetDrawRect();
-	app->render->BlitUI(app->ui->GetAtlas(), draw_pos.x, draw_pos.y, &sprite_rect, app->ui->current_camera, alpha);
+	app->render->BlitUI(app->ui->GetAtlas(), draw_pos.x, draw_pos.y, &sprite_section, app->ui->current_camera, alpha);
 
 	return true;
 }

@@ -87,12 +87,12 @@ bool M_UI::Awake(pugi::xml_node& config)
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_BASIC] =          { 700,595,44 ,44 };
 
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,545 ,40 ,40 };
-	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 585,545 ,40 ,40 };
-	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 630,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 545,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,545 ,40 ,40 };
 
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,650 ,47 ,47 };
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 550,650 ,47 ,47 };
-	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 645,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,650 ,47 ,47 };
 
 	return ret;
 }
@@ -101,7 +101,7 @@ bool M_UI::Awake(pugi::xml_node& config)
 bool M_UI::Start()
 {
 	// Assets ========================================
-
+	btw_focus_timer.Start();
 	atlas = app->tex->Load("textures/ui/atlas.png");
 
 	if (main_in_game_element == nullptr)
@@ -191,6 +191,14 @@ bool M_UI::Reset()
 	return true;
 }
 
+Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
+{
+	Player_GUI* player_gui = DBG_NEW Player_GUI(player);
+	player->SetGui(player_gui);
+	players_guis.push_back(player_gui);
+	return player_gui;
+}
+
 bool M_UI::PreUpdate()
 {
 	BROFILER_CATEGORY("M_UI_Preupdate", Profiler::Color::Brown);
@@ -201,10 +209,6 @@ bool M_UI::PreUpdate()
 		debug = !debug;
 	}
 
-	int x = 0, y = 0;
-	app->input->GetMousePosition(x,y);
-	mouse_position = fPoint( x,y );
-
 	return true;
 }
 
@@ -212,9 +216,53 @@ bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
 
+	int x_mouse = 0, y_mouse = 0;
+	fPoint last_mouse_position = mouse_position;
+	app->input->GetMousePosition(x_mouse, y_mouse);
+	mouse_position = { (float)x_mouse ,(float)y_mouse };
+
+
 	UpdateElements(dt);
 
-	FocusMouse();
+	if (interactive_elements.size() < 0)
+	{
+		return true;
+	}
+
+	UI_INPUT_TYPE new_type = UI_INPUT_TYPE::NO_TYPE;
+
+	if ( input_type != UI_INPUT_TYPE::MOUSE && mouse_position != last_mouse_position)
+	{
+		new_type = UI_INPUT_TYPE::MOUSE;
+	}
+	else if (input_type != UI_INPUT_TYPE::CONTROLLER && app->input->controllers.size() > 0 && (*app->input->controllers.begin())->GetJoystick(Joystick::LEFT) != iPoint(0.f, 0.f))
+	{
+		new_type = UI_INPUT_TYPE::CONTROLLER;
+	}
+
+	if (new_type != UI_INPUT_TYPE::NO_TYPE)
+	{
+		input_type = new_type;
+		selected_element = nullptr;
+	}
+
+	switch (input_type)
+	{
+	case UI_INPUT_TYPE::CONTROLLER:
+		FocusController();
+
+	if (selected_element != nullptr && (*app->input->controllers.begin())->GetButtonState(SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		{
+			if (selected_element->listener != nullptr)
+			{
+				selected_element->listener->OutClick(selected_element);
+			}
+		}
+
+		break;
+	case UI_INPUT_TYPE::MOUSE:
+		FocusMouse();
+	}
 
 	return true;
 }
@@ -258,6 +306,8 @@ bool M_UI::PostUpdate(float dt)
 
 void M_UI::FocusMouse()
 {
+	fRect section;
+
 	// Click States ============================================
 
 	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
@@ -320,11 +370,9 @@ void M_UI::FocusMouse()
 
 	// Hover States ============================================
 
-	fRect section;
-
 	for (list<UI_Element*>::iterator item = interactive_elements.begin(); item != interactive_elements.end(); ++item)
 	{
-		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f)
+		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f || (*item)->is_interactive == false)
 		{
 			continue;
 		}
@@ -381,6 +429,68 @@ void M_UI::FocusMouse()
 	}
 }
 
+void M_UI::FocusController()
+{
+	Controller* controller = (*app->input->controllers.begin());
+	fPoint joy_stick_dir = (fPoint)controller->GetJoystick(Joystick::LEFT);
+
+	if (abs(joy_stick_dir.x) < UI_DEAD_ZONE || abs(joy_stick_dir.y) < UI_DEAD_ZONE)
+	{
+		return;
+	}
+
+	float angle = atan2(joy_stick_dir.y, joy_stick_dir.x) * RADTODEG;
+
+	CONTROLLER_DIR dir = CONTROLLER_DIR::NO_DIR;
+
+	if (able_axis == FOCUS_AXIS::Y)
+	{
+
+		if (angle > 0)
+		{
+			dir = CONTROLLER_DIR::DOWN;
+		}
+		else 
+		{
+			dir = CONTROLLER_DIR::UP;
+		}
+	}
+	else
+	{
+		if (angle == 0)
+		{
+			dir = CONTROLLER_DIR::NO_DIR;
+		}
+		else if (angle <= 45.f && angle > -45)
+		{
+			dir = CONTROLLER_DIR::RIGHT;
+		}
+		else if (angle > 45 && angle <= 135)
+		{
+			dir = CONTROLLER_DIR::DOWN;
+
+		}
+		else if ((angle > 135 && angle <= 180) || angle >= -180 && angle <= -135)
+		{
+			dir = CONTROLLER_DIR::LEFT;
+		}
+		else if (angle > -135 && angle <= -45)
+		{
+			dir = CONTROLLER_DIR::UP;
+		}
+	}
+	
+
+	if (selected_element == nullptr && dir != CONTROLLER_DIR::NO_DIR && interactive_elements.size()>0)
+	{
+		selected_element = (*interactive_elements.begin());
+	}
+	else if (selected_element != nullptr && btw_focus_timer.Read() > BTW_FOCUS_TIME && dir != CONTROLLER_DIR::NO_DIR)
+	{
+		selected_element = GetNearestElement(selected_element, dir);
+	}
+}
+
 void M_UI::UpdateElements(float dt)
 {
 	// Update FX ===================================================
@@ -410,14 +520,14 @@ void M_UI::UpdateElements(float dt)
 	{
 		if ((*element)->to_destroy == true)
 		{
-			UI_Element* parent = (*element)->element_parent;
+			UI_Element* parent = (*element)->parent_element;
 			std::list<UI_Element*> * sons_list = (*element)->GetSons();
 
 			// Merge its sons to its parent
 
 			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
 			{
-				(*son)->element_parent = parent;
+				(*son)->parent_element = parent;
 				parent->element_sons.push_back((*son));
 			}
 
@@ -436,7 +546,7 @@ void M_UI::UpdateElements(float dt)
 			++element;
 		}
 
-		UpdateHerarchyPositions(main_in_game_element, fPoint(0, 0));
+		UpdateGuiPositions(main_in_game_element, fPoint(0, 0));
 
 	}
 
@@ -446,14 +556,14 @@ void M_UI::UpdateElements(float dt)
 	{
 		if ((*element)->to_destroy == true)
 		{
-			UI_Element* parent = (*element)->element_parent;
+			UI_Element* parent = (*element)->parent_element;
 			std::list<UI_Element*> * sons_list = (*element)->GetSons();
 
 			// Merge its sons to its parent
 
 			for (list < UI_Element*> ::iterator son = sons_list->begin(); son != sons_list->end(); ++son)
 			{
-				(*son)->element_parent = parent;
+				(*son)->parent_element = parent;
 				parent->element_sons.push_back((*son));
 			}
 
@@ -489,18 +599,9 @@ void M_UI::UpdateElements(float dt)
 		}
 	}
 
-	UpdateHerarchyPositions(main_ui_element, fPoint(0, 0));
+	UpdateGuiPositions(main_ui_element, fPoint(0, 0));
 
 }
-
-Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
-{
-	Player_GUI* player_gui = DBG_NEW Player_GUI(player);
-	player->SetGui(player_gui);
-	players_guis.push_back(player_gui);
-	return player_gui;
-}
-
 
  SDL_Texture* M_UI::GetAtlas() const 
 {
@@ -512,12 +613,17 @@ Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
 	 return click_state;
  }
 
-UI_Element * M_UI::GetFocusedElement()
+UI_Element * M_UI::GetSelectedElement()
 {
 	return selected_element;
 }
 
-UI_INPUT_TYPE M_UI::GetInputType()
+UI_Element * M_UI::GetScreen()
+{
+	return main_ui_element;
+}
+
+UI_INPUT_TYPE M_UI::GetInputType() const
 {
 	return input_type;
 }
@@ -544,7 +650,7 @@ bool M_UI::SelectClickedObject()
 
 	for (list<UI_Element*>::iterator item = interactive_elements.begin(); item != interactive_elements.end(); ++item)
 	{
-		if ((*item)->hover_state != HoverState::NONE  && (*item)->state == ELEMENT_STATE::VISIBLE)
+		if ((*item)->hover_state != HoverState::NONE  && (*item)->state == ELEMENT_STATE::VISIBLE && (*item)->is_interactive == true)
 		{
 			clicked_objects.push_back((*item));
 		}
@@ -559,7 +665,7 @@ bool M_UI::SelectClickedObject()
 		for ( list<UI_Element*>::iterator item = clicked_objects.begin(); item != clicked_objects.end() ; ++item)
 		{
 			int count = 0;
-			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->element_parent)
+			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->parent_element)
 			{
 				++count;
 			}
@@ -628,7 +734,7 @@ void M_UI::DrawUI(UI_Element * object)
 	}
 }
 
-void M_UI::UpdateHerarchyPositions(UI_Element * object, fPoint cumulated_position)
+void M_UI::UpdateGuiPositions(UI_Element * object, fPoint cumulated_position)
 {
 	if (object == nullptr)
 	{
@@ -640,7 +746,7 @@ void M_UI::UpdateHerarchyPositions(UI_Element * object, fPoint cumulated_positio
 
 	for (list<UI_Element*>::iterator item = object->element_sons.begin() ; item != object->element_sons.end(); ++item)
 	{
-		UpdateHerarchyPositions((*item), cumulated_position);
+		UpdateGuiPositions((*item), cumulated_position);
 	}
 }
 
@@ -936,4 +1042,97 @@ void UI_Fade_FX::Destroy()
 	finished = true;
 }
 
+UI_Element* M_UI::GetNearestElement(UI_Element* element, CONTROLLER_DIR dir)
+{
+	UI_Element* nearest_element = nullptr;
+	float nearest_dis = 0;
 
+	for (std::list<UI_Element*>::iterator iter = interactive_elements.begin(); iter != interactive_elements.end(); ++iter)
+	{
+		if (element == (*iter))
+		{
+			continue;
+		}
+
+		switch (dir)
+		{
+		case CONTROLLER_DIR::UP:
+
+			if ((*iter)->position.y < element->position.y)
+			{
+				if (nearest_dis == 0)
+				{
+					nearest_element = (*iter);
+					nearest_dis = element->position.y - (*iter)->position.y;
+				}
+				else if (nearest_dis > element->position.y - (*iter)->position.y)
+				{
+					nearest_element = (*iter);
+					nearest_dis = element->position.y - (*iter)->position.y;
+				}
+			}
+			break;
+
+		case CONTROLLER_DIR::DOWN:
+
+			if ((*iter)->position.y > element->position.y)
+			{
+				if (nearest_dis == 0)
+				{
+					nearest_element = (*iter);
+					nearest_dis = (*iter)->position.y - element->position.y;
+				}
+				else if (nearest_dis > (*iter)->position.y - element->position.y)
+				{
+					nearest_element = (*iter);
+					nearest_dis = (*iter)->position.y - element->position.y;
+				}
+			}
+			break;
+
+		case CONTROLLER_DIR::RIGHT:
+
+			if ((*iter)->position.x > element->position.x)
+			{
+				if (nearest_dis == 0)
+				{
+					nearest_element = (*iter);
+					nearest_dis = element->position.x - (*iter)->position.x;
+				}
+				else if (nearest_dis > element->position.x - (*iter)->position.x)
+				{
+					nearest_element = (*iter);
+					nearest_dis = element->position.x - (*iter)->position.x;
+				}
+			}
+			break;
+
+		case CONTROLLER_DIR::LEFT:
+
+			if ((*iter)->position.x < element->position.x)
+			{
+				if (nearest_dis == 0)
+				{
+					nearest_element = (*iter);
+					nearest_dis = element->position.x - (*iter)->position.x;
+				}
+				else if (nearest_dis > element->position.x - (*iter)->position.x)
+				{
+					nearest_element = (*iter);
+					nearest_dis = element->position.x - (*iter)->position.x;
+				}
+			}
+			break;
+		}
+	}
+
+	if (nearest_element == nullptr)
+	{
+		return element;
+	}
+	else
+	{
+		btw_focus_timer.Start();
+		return nearest_element;
+	}
+}

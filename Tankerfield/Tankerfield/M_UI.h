@@ -227,28 +227,32 @@ public:
 
 	// Object functions ----------------------------------------------------------
 
-	UI_Element*  GetFocusedElement();
+	UI_Element*  GetSelectedElement();
 
-	UI_INPUT_TYPE GetInputType();
+	UI_Element* GetScreen();
+
+	UI_INPUT_TYPE GetInputType() const;
 
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
 
 private:
 
-	void AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float loops, const float init_value, const float target_value);
-
-	bool SelectClickedObject();
-
 	void UpdateElements(float dt);
-
-	void UpdateHerarchyPositions(UI_Element* object, fPoint cumulated_position);
 
 	void FocusMouse();
 
-	void DrawUI(UI_Element* object);
+	void FocusController();
 
+	UI_Element* GetNearestElement(UI_Element * element, CONTROLLER_DIR dir);
 
+	bool SelectClickedObject();
+
+	void DrawUI(UI_Element* object); // Recursive function to draw gui as a tree
+
+	void UpdateGuiPositions(UI_Element* object, fPoint cumulated_position);
+
+	void AddFX( UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float loops ,const float init_value, const float target_value);
 
 private:
 
@@ -280,6 +284,8 @@ private:
 
 	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
 
+	Timer btw_focus_timer;
+
 public:
 
 	Player_GUI* current_gui = nullptr;
@@ -289,6 +295,8 @@ public:
 	fPoint		mouse_position;
 
 	fPoint		mouse_offset;
+
+	FOCUS_AXIS  able_axis = FOCUS_AXIS::BOTH;
 
 	// Assets --------------------------------------------
 

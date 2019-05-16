@@ -77,20 +77,13 @@ PICKUP_TYPE Obj_PickUp::RandomPickUp() const
 
 WEAPON Obj_PickUp::RandomWeapon() 
 {
-	if (app->scene->round != 0)
-	{
-		level_of_weapon = app->scene->round;
-	}
-	else
-	{
-		level_of_weapon = 1;
-	}
+	level_of_weapon = app->scene->round;
 	return (WEAPON)(rand() % ((uint)WEAPON::MAX_WEAPONS - 1)+1 /*The plus 1 is because the basic shoot is the number 0, and it can't be created, and the -1 is because the max weapon include the basic bullet*/);
 }
 
-ItemType Obj_PickUp::RandomItem() const
+ObjectType Obj_PickUp::RandomItem() const
 {
-	return (ItemType)(rand() % (uint)ItemType::MAX_ITEMS);
+	return (ObjectType)(rand() % (uint)ObjectType::MAX_ITEMS);
 }
 
 void Obj_PickUp::DeletePickUp()
@@ -100,11 +93,4 @@ void Obj_PickUp::DeletePickUp()
 		in_game_element->Destroy();
 	}
 	to_remove = true;
-
-	if (coll != nullptr)
-	{
-		coll->Destroy();
-		coll = nullptr;
-	}
-
 }

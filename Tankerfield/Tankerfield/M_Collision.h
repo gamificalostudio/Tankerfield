@@ -28,7 +28,6 @@ public:
 		FRIENDLY_BULLET,
 		BULLET_LASER,
 		BULLET_FLAMETHROWER,
-		PORTAL,
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
@@ -102,7 +101,7 @@ public:
 		return tag;
 	}
 
-	void SetTag(TAG new_tag)
+	void SetTag(const TAG new_tag)
 	{
 		tag = new_tag;
 	}
@@ -174,10 +173,6 @@ public:
 	inline void DoOnTrigger(Collider* c1, Collider *c2);
 
 	inline void DoOnTriggerExit(Collider* c1, Collider *c2);
-
-private:
-
-	void DestroyColliders();
 
 private:
 

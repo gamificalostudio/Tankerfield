@@ -19,7 +19,6 @@ class M_UI;
 enum class CONTROLLER_BUTTON;
 enum class WEAPON;
 enum class ObjectType;
-enum class ItemType;
 
 class Player_GUI
 {
@@ -43,7 +42,7 @@ public:
 
 	void SetWeaponIcon(WEAPON weapon_type);
 
-	void SetItemIcon(ItemType type);
+	void SetItemIcon(ObjectType type);
 
 	void Fade_GUI(bool fade_on);
 

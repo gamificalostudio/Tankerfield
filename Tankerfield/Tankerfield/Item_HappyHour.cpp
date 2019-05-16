@@ -20,7 +20,6 @@ bool Item_HappyHour::Update(float dt)
 	if (time.ReadMs()>=5000)
 	{
 		caster->SetTimeBetweenBullets(original_time_between_bullets);
-		caster->ShotAutormaticallyDisactivate();
 		to_remove = true;
 	}
 
@@ -36,9 +35,8 @@ bool Item_HappyHour::Use()
 	if (caster != nullptr)
 	{
 		original_time_between_bullets=caster->GetTimeBetweenBullets();
-		happy_time_between_bullets=caster->GetTimeBetweenBullets() * 0.25f;
+		happy_time_between_bullets=caster->GetTimeBetweenBullets() / 4;
 		caster->SetTimeBetweenBullets(happy_time_between_bullets);
-		caster->ShotAutormaticallyActivate();
 	}
 
 	anim.frames = app->anim_bank->LoadFrames(happy_hour_node.child("animations").child("rotate"));

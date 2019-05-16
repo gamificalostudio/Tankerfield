@@ -12,11 +12,22 @@ class Bullet_Missile : public Obj_Bullet
 public:
 
 	Bullet_Missile(fPoint pos);
+	~Bullet_Missile();
 
+public:
+
+	//Add functions that are overriden
 	void OnTrigger(Collider* collider_1);
 
 public:
-	int explosion_damage = 0;
+
+	Collider* explosion = nullptr;
+
+private:
+
+	int explosion_t;
+
+	PerfTimer explosion_time;
 };
 
 #endif

@@ -15,7 +15,7 @@ UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Li
 	SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	section_width = definition.idle_rect.w;
 	section_height = definition.idle_rect.h;
-	sprite_rect = definition.idle_rect;
+	sprite_section = definition.idle_rect;
 }
 
 
@@ -34,13 +34,13 @@ bool UI_Button::Draw()
 
 	if (app->ui->GetInputType() == UI_INPUT_TYPE::MOUSE)
 	{
-		if (app->ui->GetFocusedElement() == this && state != FocusState::NONE &&  state != FocusState::EXIT)
+		if (app->ui->GetSelectedElement() == this && state != FocusState::NONE &&  state != FocusState::EXIT)
 		{
-			sprite_rect = definition.pushed_rect;
+			sprite_section = definition.pushed_rect;
 		}
 		else
 		{
-			sprite_rect = definition.idle_rect;
+			sprite_section = definition.idle_rect;
 		}
 
 		if (hover_state == HoverState::REPEAT)
@@ -55,10 +55,10 @@ bool UI_Button::Draw()
 	else if (app->ui->GetInputType() == UI_INPUT_TYPE::CONTROLLER)
 	{
 	
-		sprite_rect = definition.idle_rect;
+		sprite_section = definition.idle_rect;
 
 
-		if (app->ui->GetFocusedElement() == this)
+		if (app->ui->GetSelectedElement() == this)
 		{
 			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
 		}
@@ -71,7 +71,7 @@ bool UI_Button::Draw()
 
 	SDL_Rect draw_rect = GetDrawRect();
 
-	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_rect, app->ui->current_camera, (int)alpha);
+	app->render->BlitUI(app->ui->GetAtlas(), draw_rect.x, draw_rect.y, &sprite_section, app->ui->current_camera, (int)alpha);
 
 
 	return true;
@@ -94,7 +94,7 @@ bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 
 bool UI_Button::PreUpdate()
 {
-	if (hover_state == HoverState::ENTER && app->ui->GetFocusedElement() != this)
+	if (hover_state == HoverState::ENTER && app->ui->GetSelectedElement() != this)
 	{
 		// TODO 1: Add SFX  
 	}

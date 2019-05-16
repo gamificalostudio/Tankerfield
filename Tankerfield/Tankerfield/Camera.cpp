@@ -4,7 +4,7 @@
 
 Camera::Camera()
 {
-	max_shake_offset = 15.f;
+	max_shake_offset = 30.f;
 	trauma_decay = 0.9f;
 	random_generator.seed(random_device());
 	aim_distance = 2.5f;
