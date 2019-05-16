@@ -351,7 +351,6 @@
       </death>
     </animations>
   </tesla>
-<<<<<<< HEAD
   <brute>
     <animation>
       <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="-90">
@@ -634,7 +633,6 @@
       </spawn>
     </animation>
   </brute>
-=======
   <rocketlauncher>
     <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
        <dir>
@@ -814,5 +812,4 @@
       </dir>
     </death>
   </rocketlauncher>
->>>>>>> rocketlauncher
 </animations>
