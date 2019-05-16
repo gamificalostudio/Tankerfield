@@ -432,8 +432,9 @@ void M_Scene::DebugPathfinding()
 					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
 						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
-					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
+						app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
 					}
+
 					SDL_RenderSetClipRect(app->render->renderer, nullptr);
 				}
 			}

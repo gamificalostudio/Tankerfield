@@ -47,8 +47,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	state = ENEMY_STATE::IDLE;
 	detection_range = 7.0f;
 
-	spawn_draw_offset = { 49, 47 };
-	normal_draw_offset = { 49, 47 };
+	spawn_draw_offset = { 49, 50 };
+	normal_draw_offset = { 49, 50 };
 	draw_offset = spawn_draw_offset;
 
 	attack_damage = rocket_launcher_node.child("attack_damage").attribute("num").as_float();
