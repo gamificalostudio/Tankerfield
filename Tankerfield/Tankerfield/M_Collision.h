@@ -29,6 +29,7 @@ public:
 		BULLET_LASER,
 		PORTAL,
 		ENEMY,
+		ENTITY,
 		GOD,
 		REWARD_ZONE,
 		PICK_UP,

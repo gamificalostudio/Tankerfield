@@ -46,9 +46,10 @@ private:
 	iPoint normal_draw_offset	= { 0, 0 };
 
 	Animation spawn;
+	Animation fire3;
 	
 	SDL_Texture * spawn_tex = nullptr;
-
+	SDL_Texture* fire_tex = nullptr;
 
 };
 

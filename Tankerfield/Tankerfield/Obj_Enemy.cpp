@@ -25,8 +25,7 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 
-	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
-	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
+	
 	path_timer.Start();
 }
 
