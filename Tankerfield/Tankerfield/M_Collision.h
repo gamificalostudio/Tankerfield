@@ -54,12 +54,13 @@ public:
 		MAX
 	};
 
-	Collider(const fPoint pos,const  float width, const  float height, const float damage, const TAG tag, BODY_TYPE body ,Object* object = nullptr) :
+	Collider(const fPoint pos, const  float width, const  float height, const float damage, const TAG tag, BODY_TYPE body, Object* object = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
 		damage(damage),
 		tag(tag),
+		body_type(body),
 		object(object)
 	{}
 
