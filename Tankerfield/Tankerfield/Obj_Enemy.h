@@ -27,7 +27,7 @@ public:
 
 	virtual void ChangeTexture();
 
-	void Attack();
+	virtual void Attack();
 
 	virtual void Movement(float &dt);
 
