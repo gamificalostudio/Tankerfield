@@ -278,7 +278,7 @@ bool Obj_Tank::Update(float dt)
 	InputReadyKeyboard();
 	
 
-	UpdateWeaponsWithoutBullets();
+	UpdateWeaponsWithoutBullets(dt);
 	return true;
 }
 
@@ -480,6 +480,19 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
+
+	// Electro_shot
+	if (draw_electro_shot)
+	{
+		
+		app->render->Blit(
+			tex_electro_shot,
+			pos_screen.x - electro_offset.x,
+			pos_screen.y - electro_offset.y,
+			camera,
+			&anim_electro_shot.GetFrame(0));
+	}
+
 
 	return true;
 }

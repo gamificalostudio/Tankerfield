@@ -400,6 +400,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	if (collider->GetTag() == Collider::TAG::ELECTRO_SHOT)
 	{
 		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+		player->draw_electro_shot = true;
 
 		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
 		{
@@ -436,7 +437,6 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 				{
 					stun_charged = false;
 				}
-
 			}
 		}
 	}

@@ -4,10 +4,15 @@
 #include "M_ObjManager.h"
 #include "Player_GUI.h"
 #include "M_Collision.h"
+#include "M_AnimationBank.h"
+#include "M_Textures.h"
+#include "M_Map.h"
+
 //Bullets
 #include "Bullet_Missile.h"
 #include "Healing_Bullet.h"
 #include "Bullet_Laser.h"
+
 
 void Obj_Tank::InitWeapons()
 {
@@ -20,7 +25,14 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
 	shot1_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
 
+	//Electro_shot--
 	pugi::xml_node electro_shot_node = app->config.child("object").child("tank").child("electro_shot");
+
+	tex_electro_shot = app->tex->Load(electro_shot_node.child("tex_electro_shot").text().as_string());
+	anim_electro_shot.frames = app->anim_bank->LoadFrames(electro_shot_node.child("animations").child("anim_electro_shot"));
+
+	
+	
 
 	float coll_size_init = electro_shot_node.child("collider_size").attribute("value").as_float();
 
@@ -63,7 +75,7 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
 }
 
-void Obj_Tank::UpdateWeaponsWithoutBullets()
+void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 {
 	if (weapon_info.weapon == WEAPON::ELECTRO_SHOT)
 	{
@@ -80,6 +92,25 @@ void Obj_Tank::UpdateWeaponsWithoutBullets()
 			for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
 			{
 				(*iter)->Disactivate();
+			}
+		}
+
+		if (draw_electro_shot)
+		{
+			electro_offset = { 0.f,0.f };
+			electro_offset.x = anim_electro_shot.GetFrame(0).w * 0.5f;
+		//	electro_offset.y = 30;
+			fPoint dir = GetShotDir();// * fPoint { 2, 2 };
+			fPoint dir_screen = app->map->MapToScreenF(dir);
+			electro_offset -= dir_screen;
+			if (!anim_electro_shot.Finished())
+			{
+				anim_electro_shot.NextFrame(dt);
+			}
+			else
+			{
+				anim_electro_shot.Reset();
+				//draw_electro_shot = false;
 			}
 		}
 	}

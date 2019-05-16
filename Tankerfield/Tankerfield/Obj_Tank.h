@@ -32,7 +32,7 @@ public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 
-	void UpdateWeaponsWithoutBullets();
+	void UpdateWeaponsWithoutBullets(float dt);
 
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
@@ -211,6 +211,12 @@ private:
 
 	std::vector<Object*> enemies_hitted;
 
+	Animation anim_electro_shot;
+	SDL_Texture* tex_electro_shot = nullptr;
+	fPoint electro_offset{ 0.f,0.f };
+	
+
+
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
@@ -275,6 +281,8 @@ public:
 public:
 	Obj_Portal * portal1;
 	Obj_Portal * portal2;
+
+	bool draw_electro_shot = false;
 };
 
 #endif
