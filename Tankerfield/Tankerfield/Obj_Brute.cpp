@@ -89,7 +89,14 @@ void Obj_Brute::ChangeTexture()
 {
 	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
 	{
-		curr_tex = tex;
+		if (oiled == false)
+		{
+			curr_tex = tex;
+		}
+		else
+		{
+			curr_tex = oiled_tex;
+		}
 	}
 }
 
