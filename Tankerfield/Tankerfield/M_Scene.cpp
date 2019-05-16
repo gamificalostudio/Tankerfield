@@ -38,6 +38,7 @@
 
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
+#include "Obj_RocketLauncher.h"
 #include "Object.h"
 
 
@@ -126,7 +127,7 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 
-			//app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
+			//app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, (*players_layer)->objects[0].pos);
 		}
 	}
 
@@ -134,7 +135,7 @@ bool M_Scene::Start()
 
 	general_hud = DBG_NEW General_HUD();
 
-	round = 0u;
+	round = 1u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
@@ -435,8 +436,9 @@ void M_Scene::DebugPathfinding()
 					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
 						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
-					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
+						app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
 					}
+
 					SDL_RenderSetClipRect(app->render->renderer, nullptr);
 				}
 			}

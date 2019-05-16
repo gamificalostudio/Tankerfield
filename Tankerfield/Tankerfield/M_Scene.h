@@ -49,7 +49,7 @@ public:
 
 	General_HUD * general_hud		= nullptr;
 
-	uint round		= 1;
+	uint round		= 0;
 
 	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
 
@@ -152,7 +152,6 @@ private:
 	/* Reward Zones */
 	RewardZone* reward_zone_01 = nullptr;
 	RewardZone* reward_zone_02 = nullptr;
-
 };
 
 #endif // __j1SCENE_H__
