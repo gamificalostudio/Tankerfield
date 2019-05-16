@@ -209,9 +209,9 @@ bool M_ObjManager::Reset()
 {
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
+		(*iterator)->CleanUp();
 		if ((*iterator)->coll != nullptr)
 		{
-			(*iterator)->CleanUp();
 			(*iterator)->coll->Destroy();
 			(*iterator)->coll = nullptr;
 		}

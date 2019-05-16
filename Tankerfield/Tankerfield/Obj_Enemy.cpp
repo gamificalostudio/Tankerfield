@@ -34,7 +34,8 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	ChangeTexture();
+	if(in_white)
+		ChangeTexture();
 
 	return true;
 }
@@ -43,7 +44,7 @@ void Obj_Enemy::ChangeTexture()
 {
 	if (damaged_sprite_timer.Read() > damaged_sprite_time)
 	{
-		curr_tex = tex;
+		curr_tex = last_texture;
 	}
 }
 
@@ -274,6 +275,12 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->ReduceNumEnemies();
+	if (coll != nullptr)
+	{
+		coll->Destroy();
+		coll = nullptr;
+	}
+	to_remove = true;
 	return true;
 }
 
@@ -313,9 +320,7 @@ inline void Obj_Enemy::Burn(const float& dt)
 	if (burn_fist_enter)
 	{
 		fire_damage = life / 3;
-		curr_anim = &burn;
-		if (burn_texture != nullptr)
-			curr_tex = burn_texture;
+		curr_anim = &walk;
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
 	{
@@ -337,11 +342,11 @@ inline void Obj_Enemy::Burn(const float& dt)
 		if(burn_fist_enter)
 			burn_fist_enter = false;
 
-	/*	life -= fire_damage;
+		life -= fire_damage;
 		if (life <= 0)
 		{
 			state = ENEMY_STATE::DEAD;
-		}*/
+		}
 	}
 	else
 	{
@@ -376,7 +381,9 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
+			last_texture = curr_tex;
 			curr_tex = tex_damaged;
+			in_white = true;
 
 			if (life <= 0)
 			{

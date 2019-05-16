@@ -33,7 +33,9 @@ public:
 
 	inline int Move(float & dt);
 
-	virtual void GetPath();
+	inline virtual void Burn(const float& dt);
+
+	inline virtual void GetPath();
 
 	bool Draw(float dt, Camera * camera) override;
 
@@ -54,6 +56,7 @@ private:
 	Animation portal_animation;
 	Animation portal_close_anim;
 	Animation spawn_anim;
+	Animation dying_burn;
 
 	bool draw = true;
 	Animation* in_portal				= nullptr;

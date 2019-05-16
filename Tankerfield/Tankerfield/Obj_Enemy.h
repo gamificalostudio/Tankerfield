@@ -38,7 +38,7 @@ public:
 
 	void DrawDebug(const Camera* camera)override;
 
-	bool Draw(float dt, Camera* camera)override;
+	virtual bool Draw(float dt, Camera* camera)override;
 
 protected:
 	inline void UpdateVelocity();
@@ -77,6 +77,9 @@ protected:
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture* burn_texture = nullptr;
+	SDL_Texture* fire_tex = nullptr;
+	SDL_Texture* last_texture = nullptr;
+	bool in_white = false;
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 
@@ -123,7 +126,7 @@ protected:
 	bool burn_fist_enter = true;
 	Timer timer_change_direction;
 	Animation fire3;
-	SDL_Texture* fire_tex = nullptr;
+
 	float max_time_change_direction = 0.5f;
 	float fire_damage = 0;
 
