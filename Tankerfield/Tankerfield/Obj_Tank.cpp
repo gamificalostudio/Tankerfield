@@ -236,7 +236,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HEALTH_BAG);
+	SetItem(ItemType::INSTANT_HELP);
 	time_between_portal_tp.Start();
 	return true;
 }
@@ -585,12 +585,12 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
 	if (c1->GetTag() == Collider::TAG::PORTAL)
 	{
-		if (time_between_portal_tp.ReadMs() > 2000) {
+		if (time_between_portal_tp.ReadMs() > 1000) {
 			if (c1 == portal1->coll) {
-				pos_map = portal2->pos_map;
+				this->pos_map = portal2->pos_map;
 			}
 			else if (c1 == portal2->coll) {
-				pos_map = portal1->pos_map;
+				this->pos_map = portal1->pos_map;
 			}
 			time_between_portal_tp.Start();
 		}
