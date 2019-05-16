@@ -72,7 +72,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 	//Things
 	state				= ENEMY_STATE::SPAWN; //enemy
-	speed				= tesla_trooper_node.child("speed").attribute("num").as_float();
+	original_speed=speed= tesla_trooper_node.child("speed").attribute("num").as_float();
 	/*range_pos.center	= pos_map;
 	range_pos.radius	= 0.5f;*/
 	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3

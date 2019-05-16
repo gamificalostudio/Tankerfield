@@ -66,6 +66,7 @@ protected:
 
 	int life = 0;
 	float speed = 0.f;
+	float original_speed = 0.f;
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * oiled_tex = nullptr;

@@ -36,6 +36,7 @@ bool Obj_Enemy::Update(float dt)
 	if ((oiled==true)&&(oiled_timer.Read() >= 5000))
 	{
 		oiled = false;
+		speed = original_speed;
 	}
 
 	return true;
@@ -358,6 +359,8 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 		oiled_timer.Start();
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
+		
+		speed = speed / 2;
 
 		if (life <= 0)
 		{

@@ -55,7 +55,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
 	state = ENEMY_STATE::SPAWN; 
-	speed = 1.5f;
+	original_speed=speed = 1.5f;
 	detection_range = 10.0f; //change?
 
 
