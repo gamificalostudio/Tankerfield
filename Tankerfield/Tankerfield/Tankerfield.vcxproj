@@ -131,6 +131,7 @@
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
+    <ClCompile Include="UI_InputText.cpp" />
     <ClCompile Include="UI_Table.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
     <ClCompile Include="Bullet_Basic.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
+    <ClInclude Include="UI_InputText.h" />
     <ClInclude Include="UI_Table.h" />
     <ClInclude Include="M_AnimationBank.h" />
     <ClInclude Include="Bullet_Basic.h" />

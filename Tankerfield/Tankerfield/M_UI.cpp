@@ -28,6 +28,7 @@
 #include "UI_InGameElement.h"
 #include "UI_Bar.h"
 #include "UI_Quad.h"
+#include "UI_InputText.h"
 
 #include <vector>
 
@@ -835,6 +836,14 @@ UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_L
 UI_InteractiveGroup * M_UI::CreateIntearctiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener * listener)
 {
 	UI_InteractiveGroup* object = DBG_NEW UI_InteractiveGroup(position, definition, listener);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
+	return object;
+}
+
+UI_InputText * M_UI::CreateInputText(const fPoint position, const UI_InputTextDef definition, UI_Listener * listener)
+{
+	UI_InputText* object = DBG_NEW UI_InputText(position, definition, listener);
 	object->SetParent(main_ui_element);
 	elements_list.push_back(object);
 	return object;

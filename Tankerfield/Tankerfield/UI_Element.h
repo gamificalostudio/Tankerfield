@@ -100,7 +100,7 @@ public:
 
 	void SetStateToBranch(ELEMENT_STATE new_state);
 
-	//ELEMENT_STATE GetState();
+	ELEMENT_STATE GetState();
 
 	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
 

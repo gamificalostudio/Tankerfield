@@ -95,6 +95,11 @@ void UI_Element::SetStateToBranch(ELEMENT_STATE new_state)
 	app->ui->SetStateToBranch(new_state, this);
 }
 
+ELEMENT_STATE UI_Element::GetState()
+{
+	return state;
+}
+
 void UI_Element::SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y)
 {
 	pivot.pos_x = x;

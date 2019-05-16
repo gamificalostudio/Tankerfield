@@ -11,8 +11,11 @@
 #include "UI_Image.h"
 #include "UI_Button.h"
 #include "UI_Label.h"
-#include "UI_Table.h"
 #include "UI_InteractiveGroup.h"
+
+#include "UI_Table.h"
+#include "UI_InputText.h"
+
 
 #include "Obj_Tank_MainMenu.h"
 
@@ -129,6 +132,13 @@ bool M_MainMenu::Start()
 		UI_Element* number = app->ui->CreateLabel( fPoint(0.f, 0.f), UI_LabelDef( std::to_string(i), app->font->label_font_24));
 		table->AssortElementToTable(number, iPoint(0, i));
 	}
+
+	// ===========================================
+
+	UI_InputTextDef input_def;
+	input_def.font = app->font->label_font_24;
+	input_def.max_characters = 10;
+	app->ui->CreateInputText(fPoint(40, 40), input_def);
 
 	return true;
 }

@@ -195,6 +195,9 @@
     <ClCompile Include="Obj_Tank_MainMenu.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="UI_InputText.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -411,6 +414,9 @@
     </ClInclude>
     <ClInclude Include="Obj_Tank_MainMenu.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_InputText.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
