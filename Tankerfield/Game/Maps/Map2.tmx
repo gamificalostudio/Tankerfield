@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="isometric" renderorder="left-up" width="200" height="200" tilewidth="60" tileheight="30" nextobjectid="2055">
+<map version="1.0" orientation="isometric" renderorder="left-up" width="200" height="200" tilewidth="60" tileheight="30" nextobjectid="2071">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
@@ -163638,7 +163638,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="1914" name="caair" x="1890" y="4260" width="91" height="90">
+  <object id="1914" name="caair" x="1620" y="4200" width="91" height="90">
    <properties>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="75"/>
@@ -163646,7 +163646,7 @@
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="1915" name="caair" x="1740" y="4410" width="91" height="90">
+  <object id="1915" name="caair" x="1620" y="4050" width="91" height="90">
    <properties>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="75"/>
@@ -163748,22 +163748,14 @@
   <object id="1932" name="cabunk" x="2580" y="4890" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
-    <property name="offset_y" type="int" value="45"/>
+    <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cabunk.png"/>
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
   <object id="1934" name="caind" x="2250" y="3990" width="120" height="120">
    <properties>
-    <property name="offset_x" type="int" value="80"/>
-    <property name="offset_y" type="int" value="80"/>
-    <property name="path" value="Maps/Buildings/caind.png"/>
-    <property name="pivot_y" type="float" value="64"/>
-   </properties>
-  </object>
-  <object id="1935" name="caind" x="1170" y="4800" width="120" height="120">
-   <properties>
-    <property name="offset_x" type="int" value="80"/>
+    <property name="offset_x" type="int" value="110"/>
     <property name="offset_y" type="int" value="80"/>
     <property name="path" value="Maps/Buildings/caind.png"/>
     <property name="pivot_y" type="float" value="64"/>
@@ -163772,7 +163764,7 @@
   <object id="1936" name="cabunk" x="2580" y="4770" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
-    <property name="offset_y" type="int" value="45"/>
+    <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cabunk.png"/>
     <property name="pivot_y" type="float" value="35"/>
    </properties>
@@ -163780,7 +163772,7 @@
   <object id="1939" name="cabunk" x="2580" y="4260" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
-    <property name="offset_y" type="int" value="45"/>
+    <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cabunk.png"/>
     <property name="pivot_y" type="float" value="35"/>
    </properties>
@@ -163788,7 +163780,7 @@
   <object id="1940" name="cabunk" x="2580" y="4110" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
-    <property name="offset_y" type="int" value="45"/>
+    <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cabunk.png"/>
     <property name="pivot_y" type="float" value="35"/>
    </properties>
@@ -163819,32 +163811,16 @@
   </object>
   <object id="1944" name="caindL" x="2250" y="4260" width="120" height="120">
    <properties>
-    <property name="offset_x" type="int" value="40"/>
-    <property name="offset_y" type="int" value="40"/>
+    <property name="offset_x" type="int" value="115"/>
+    <property name="offset_y" type="int" value="80"/>
     <property name="path" value="Maps/Buildings/caindL.png"/>
     <property name="pivot_y" type="float" value="64"/>
    </properties>
   </object>
-  <object id="1945" name="camex" x="1920" y="4470" width="91" height="90">
+  <object id="1945" name="camex" x="1650" y="4350" width="60" height="60">
    <properties>
-    <property name="offset_x" type="int" value="90"/>
-    <property name="offset_y" type="int" value="75"/>
-    <property name="path" value="Maps/Buildings/camex.png"/>
-    <property name="pivot_y" type="float" value="45"/>
-   </properties>
-  </object>
-  <object id="1946" name="camex" x="1620" y="4020" width="91" height="90">
-   <properties>
-    <property name="offset_x" type="int" value="90"/>
-    <property name="offset_y" type="int" value="75"/>
-    <property name="path" value="Maps/Buildings/camex.png"/>
-    <property name="pivot_y" type="float" value="45"/>
-   </properties>
-  </object>
-  <object id="1947" name="camex" x="1440" y="4770" width="91" height="90">
-   <properties>
-    <property name="offset_x" type="int" value="90"/>
-    <property name="offset_y" type="int" value="75"/>
+    <property name="offset_x" type="int" value="50"/>
+    <property name="offset_y" type="int" value="110"/>
     <property name="path" value="Maps/Buildings/camex.png"/>
     <property name="pivot_y" type="float" value="45"/>
    </properties>
@@ -163857,7 +163833,7 @@
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="1951" name="canewyGreen" x="2040" y="4710" width="60" height="120">
+  <object id="1951" name="canewyGreen" x="1980" y="4740" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -163865,7 +163841,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="1952" name="canewyGreen" x="1920" y="4710" width="60" height="120">
+  <object id="1952" name="canewyGreen" x="1860" y="4740" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -163873,7 +163849,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="1953" name="canewyGreen" x="1800" y="4710" width="60" height="120">
+  <object id="1953" name="canewyGreen" x="1740" y="4740" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -163881,7 +163857,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="1954" name="canewyGreen" x="1680" y="4710" width="60" height="120">
+  <object id="1954" name="canewyGreen" x="1620" y="4740" width="60" height="120">
    <properties>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
@@ -163892,7 +163868,7 @@
   <object id="1955" name="cabunk" x="2580" y="5010" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
-    <property name="offset_y" type="int" value="45"/>
+    <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cabunk.png"/>
     <property name="pivot_y" type="float" value="35"/>
    </properties>
@@ -163900,7 +163876,7 @@
   <object id="1956" name="cabunk" x="2580" y="3990" width="60" height="60">
    <properties>
     <property name="offset_x" type="int" value="60"/>
-    <property name="offset_y" type="int" value="45"/>
+    <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cabunk.png"/>
     <property name="pivot_y" type="float" value="35"/>
    </properties>
@@ -163913,18 +163889,114 @@
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="1962" name="catexs" x="4530" y="1920" width="150" height="150">
+  <object id="2053" type="WATER" x="4500" y="4860" width="30" height="30"/>
+  <object id="2054" type="WATER" x="4530" y="4830" width="330" height="30"/>
+  <object id="2057" name="caindL" x="1440" y="4740" width="120" height="120">
    <properties>
-    <property name="offset_x" type="int" value="85"/>
-    <property name="offset_y" type="int" value="30"/>
-    <property name="path" value="Maps/Buildings/cawash.png"/>
+    <property name="offset_x" type="int" value="115"/>
+    <property name="offset_y" type="int" value="80"/>
+    <property name="path" value="Maps/Buildings/caindL.png"/>
+    <property name="pivot_y" type="float" value="64"/>
+   </properties>
+  </object>
+  <object id="2058" name="caind" x="1170" y="4800" width="120" height="120">
+   <properties>
+    <property name="offset_x" type="int" value="110"/>
+    <property name="offset_y" type="int" value="80"/>
+    <property name="path" value="Maps/Buildings/caind.png"/>
+    <property name="pivot_y" type="float" value="64"/>
+   </properties>
+  </object>
+  <object id="2059" name="cats" x="2340" y="4950" width="121" height="90">
+   <properties>
+    <property name="offset_x" type="int" value="70"/>
+    <property name="offset_y" type="int" value="55"/>
+    <property name="path" value="Maps/Buildings/cats2.png"/>
     <property name="pivot_y" type="float" value="45"/>
    </properties>
   </object>
-  <object id="2053" type="WATER" x="4500" y="4860" width="30" height="30"/>
-  <object id="2054" type="WATER" x="4530" y="4830" width="330" height="30"/>
+  <object id="2060" name="cats" x="2340" y="4830" width="121" height="90">
+   <properties>
+    <property name="offset_x" type="int" value="70"/>
+    <property name="offset_y" type="int" value="55"/>
+    <property name="path" value="Maps/Buildings/cats2.png"/>
+    <property name="pivot_y" type="float" value="45"/>
+   </properties>
+  </object>
+  <object id="2061" name="caairL" x="1890" y="4020" width="91" height="90">
+   <properties>
+    <property name="offset_x" type="int" value="90"/>
+    <property name="offset_y" type="int" value="75"/>
+    <property name="path" value="Maps/Buildings/caairL.png"/>
+    <property name="pivot_y" type="float" value="45"/>
+   </properties>
+  </object>
+  <object id="2062" name="caair" x="2070" y="4500" width="91" height="90">
+   <properties>
+    <property name="offset_x" type="int" value="90"/>
+    <property name="offset_y" type="int" value="75"/>
+    <property name="path" value="Maps/Buildings/caair.png"/>
+    <property name="pivot_y" type="float" value="45"/>
+   </properties>
+  </object>
+  <object id="2063" name="caair" x="2070" y="4620" width="91" height="90">
+   <properties>
+    <property name="offset_x" type="int" value="90"/>
+    <property name="offset_y" type="int" value="75"/>
+    <property name="path" value="Maps/Buildings/caair.png"/>
+    <property name="pivot_y" type="float" value="45"/>
+   </properties>
+  </object>
+  <object id="2064" name="caair" x="2070" y="4740" width="91" height="90">
+   <properties>
+    <property name="offset_x" type="int" value="90"/>
+    <property name="offset_y" type="int" value="75"/>
+    <property name="path" value="Maps/Buildings/caair.png"/>
+    <property name="pivot_y" type="float" value="45"/>
+   </properties>
+  </object>
+  <object id="2066" name="catex2" x="4560" y="1950" width="120" height="120">
+   <properties>
+    <property name="offset_x" type="int" value="115"/>
+    <property name="offset_y" type="int" value="80"/>
+    <property name="path" value="Maps/Buildings/catexs2.png"/>
+    <property name="pivot_y" type="float" value="64"/>
+   </properties>
+  </object>
+  <object id="2067" name="catex2" x="4560" y="2130" width="120" height="120">
+   <properties>
+    <property name="offset_x" type="int" value="115"/>
+    <property name="offset_y" type="int" value="80"/>
+    <property name="path" value="Maps/Buildings/catexs2.png"/>
+    <property name="pivot_y" type="float" value="64"/>
+   </properties>
+  </object>
+  <object id="2068" name="carus2L" x="1860" y="4260" width="150" height="60">
+   <properties>
+    <property name="offset_x" type="int" value="50"/>
+    <property name="offset_y" type="int" value="93"/>
+    <property name="path" value="Maps/Buildings/carus2L.png"/>
+    <property name="pivot_y" type="float" value="55"/>
+   </properties>
+  </object>
+  <object id="2069" name="carus2L" x="2040" y="4260" width="150" height="60">
+   <properties>
+    <property name="offset_x" type="int" value="50"/>
+    <property name="offset_y" type="int" value="93"/>
+    <property name="path" value="Maps/Buildings/carus2L.png"/>
+    <property name="pivot_y" type="float" value="60"/>
+   </properties>
+  </object>
+  <object id="2070" name="camex" x="2310" y="4650" width="60" height="60">
+   <properties>
+    <property name="offset_x" type="int" value="50"/>
+    <property name="offset_y" type="int" value="110"/>
+    <property name="path" value="Maps/Buildings/camex.png"/>
+    <property name="pivot_y" type="float" value="45"/>
+   </properties>
+  </object>
  </objectgroup>
- <layer name="Navigation" width="200" height="200">
+ <layer name="Navigation" width="200" height="200" visible="0">
   <properties>
    <property name="Navigation" type="int" value="1"/>
   </properties>
@@ -203947,7 +204019,7 @@
   <object id="451" name="REWARD_BOX" type="REWARD_BOX" x="3362" y="1278"/>
  </objectgroup>
  <objectgroup name="Players">
-  <object id="410" x="4710" y="2040" width="30" height="30"/>
+  <object id="410" x="2100" y="4380" width="30" height="30"/>
   <object id="411" x="3960" y="4020" width="30" height="30"/>
   <object id="412" x="4440" y="4110" width="30" height="30"/>
   <object id="413" x="4440" y="3900" width="30" height="30"/>
