@@ -89,12 +89,12 @@ bool M_UI::Awake(pugi::xml_node& config)
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_OIL] =			   { 750,595,44 ,44 };
 
 	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,545 ,40 ,40 };
-	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 545,545 ,40 ,40 };
-	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 585,545 ,40 ,40 };
+	icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 630,545 ,40 ,40 };
 
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HEALTH_BAG] = { 500,650 ,47 ,47 };
 	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR] = { 550,650 ,47 ,47 };
-	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 390,650 ,47 ,47 };
+	icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP] = { 645,650 ,47 ,47 };
 
 	return ret;
 }

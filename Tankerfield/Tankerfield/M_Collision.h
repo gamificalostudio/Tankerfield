@@ -28,6 +28,7 @@ public:
 		FRIENDLY_BULLET,
 		BULLET_LASER,
 		BULLET_OIL,
+		PORTAL,
 		ENEMY,
 		GOD,
 		REWARD_ZONE,
@@ -174,6 +175,10 @@ public:
 	inline void DoOnTrigger(Collider* c1, Collider *c2);
 
 	inline void DoOnTriggerExit(Collider* c1, Collider *c2);
+
+private:
+
+	void DestroyColliders();
 
 private:
 

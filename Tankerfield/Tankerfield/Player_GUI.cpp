@@ -277,6 +277,9 @@ void Player_GUI::SetItemIcon(ItemType type)
 	case ItemType::HAPPY_HOUR_ITEM:
 		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_HAPPY_HOUR];
 		break;
+	case ItemType::INSTANT_HELP:
+		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP];
+		break;
 	case ItemType::NO_TYPE:
 		item_icon->SetState(ELEMENT_STATE::HIDDEN);
 		break;

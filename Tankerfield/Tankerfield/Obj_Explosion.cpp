@@ -32,23 +32,21 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	draw_offset.x = 99;
 	draw_offset.y = 75;
 
-	coll_w = 5.f;
-	coll_h = 5.f;
+	float coll_w = 5.f;
+	float coll_h = 5.f;
 
 	coll = app->collision->AddCollider(
-		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
+		pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
 		coll_w,
 		coll_h,
 		Collider::TAG::BULLET,
-		200 + app->scene->round * 100,
-		this);
+		0,
+		nullptr);
+
 	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	coll->SetObjOffset(fPoint(coll_w*0.5f, coll_h*0.5f));
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
-}
-
-Obj_Explosion::~Obj_Explosion()
-{
 }
 
 bool Obj_Explosion::Update(float dt)
@@ -65,18 +63,15 @@ bool Obj_Explosion::Update(float dt)
 	return true;
 }
 
-
-
-//void Obj_Explosion::SetExplosionDamage(WeaponInfo info)
-//{
-//	if (coll != nullptr)
-//	{
-//		coll->damage = original_damage * info.level_weapon;
-//		// TODO HARCODE 
-//		if (coll->damage == 0)
-//		{
-//			coll->damage = original_damage;
-//		}
-//	}
-//	
-//}
+void Obj_Explosion::SetExplosionDamage(float damage)
+{
+	if (coll != nullptr)
+	{
+		coll->damage = damage;
+	}
+	else
+	{
+		LOG("Collider not found. Explosion damage will be 0.");
+	}
+	
+}

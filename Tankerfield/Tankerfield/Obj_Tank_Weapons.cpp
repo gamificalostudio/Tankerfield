@@ -26,7 +26,7 @@ void Obj_Tank::InitWeapons()
 	charge_time = 3000.f; // Same for all bullets (player gets used to it)
 	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
-	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
+	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
 	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
@@ -74,7 +74,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.bullet_damage = 0;
+		weapon_info.bullet_damage = 0;//NOTE: Double missile deals damage with the explosion, not with the bullet. To modify it, go to Obj_Tank::ShotDoubleMissile() and change float explosion_damage
 		weapon_info.bullet_healing = 0;
 		weapon_info.bullet_life_ms = 2000;
 		weapon_info.bullet_speed = 10;
@@ -144,6 +144,37 @@ void Obj_Tank::ShootBasic()
 
 void Obj_Tank::ShootDoubleMissile()
 {
+	float explosion_damage = weapon_info.level_weapon * 1000;
+
+	fPoint double_missiles_offset = shot_dir;
+	double_missiles_offset.RotateDegree(90);
+	float missiles_offset = 0.2f;
+	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
+	Bullet_Missile * missile_ptr = nullptr;
+
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
+	missile_ptr->SetPlayer(this);
+	missile_ptr->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		bullet_angle);
+	missile_ptr->explosion_damage = explosion_damage;
+
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
+	missile_ptr->SetPlayer(this);
+	missile_ptr->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		bullet_angle);
+	missile_ptr->explosion_damage = explosion_damage;
+}
+
+void Obj_Tank::ShootDoubleMissileCharged()
+{
 	fPoint double_missiles_offset = shot_dir;
 	double_missiles_offset.RotateDegree(90);
 	float missiles_offset = 0.2f;
@@ -154,6 +185,12 @@ void Obj_Tank::ShootDoubleMissile()
 	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
 	right_missile->SetPlayer(this);
 
+	Bullet_Missile * left_missile2 = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
+	left_missile2->SetPlayer(this);
+
+	Bullet_Missile * right_missile2 = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
+	right_missile2->SetPlayer(this);
+
 	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
 
 	left_missile->SetBulletProperties(
@@ -161,14 +198,28 @@ void Obj_Tank::ShootDoubleMissile()
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		bullet_angle);
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
 	right_missile->SetBulletProperties(
 		weapon_info.bullet_speed,
 		weapon_info.bullet_life_ms,
 		weapon_info.bullet_damage,
 		shot_dir,
-		bullet_angle);
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	left_missile2->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	right_missile2->SetBulletProperties(
+		weapon_info.bullet_speed,
+		weapon_info.bullet_life_ms,
+		weapon_info.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 }
 
 void Obj_Tank::ShootHealingShot()
@@ -218,6 +269,8 @@ void Obj_Tank::ShootFlameThrower()
 {
 }
 
+
+
 void Obj_Tank::ShootOil()
 {
 	Bullet_Oil * bullet = (Bullet_Oil*)app->objectmanager->CreateObject(ObjectType::BULLET_OIL, turr_pos + shot_dir);
@@ -232,7 +285,7 @@ void Obj_Tank::ShootOil()
 
 void Obj_Tank::ShootOilCharged()
 {
-	fPoint pool_pos = turr_pos + shot_dir * 2.5F ;
+	fPoint pool_pos = turr_pos + shot_dir * 2.5F;
 	pool_pos -= fPoint(2.5f, 2.5f);
 	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, pool_pos);
 

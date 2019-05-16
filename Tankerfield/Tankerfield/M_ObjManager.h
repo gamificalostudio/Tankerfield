@@ -20,6 +20,7 @@ enum class ObjectType
 	REWARD_BOX,
 	PICK_UP,
 	OIL_POOL,
+	PORTAL,
 
 	//ENEMIES
 	TESLA_TROOPER,
@@ -47,6 +48,7 @@ enum class ItemType
 	NO_TYPE = -1,
 	HEALTH_BAG ,
 	HAPPY_HOUR_ITEM,
+	INSTANT_HELP,
 	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
 };
 

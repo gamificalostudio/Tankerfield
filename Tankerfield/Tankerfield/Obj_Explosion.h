@@ -14,38 +14,18 @@ class Timer;
 class Obj_Explosion : public Object
 {
 public:
-
 	Obj_Explosion(fPoint pos);
-	~Obj_Explosion();
 
 	bool Update(float dt) override;
 
-	//void SetExplosionDamage(WeaponInfo info);
-
-	bool Awake(pugi::xml_node&) { return true; };
+	void SetExplosionDamage(float damage);
 
 private:
-
 	bool death = false;
-
 	int frame_explosion = 0;
-	int damage = 0;
-	int original_damage = 200;
-	int level = 0;
 
-	float speed = 0.f;
-	float time = 0.f;
-
-	Circle range_pos;
-	
-	WeaponInfo weapon_info;
-
-	// ---
 	Animation anim;
 	SDL_Texture * tex = nullptr;
-
-	float coll_w = 0.f;
-	float coll_h = 0.f;
 };
 
 #endif

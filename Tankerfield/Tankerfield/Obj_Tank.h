@@ -6,6 +6,7 @@
 #include "M_Input.h"
 #include "Obj_Item.h"
 #include "Timer.h"
+#include "Obj_Portal.h"
 
 struct Controller;
 struct SDL_Texture;
@@ -37,6 +38,7 @@ public:
 	bool CleanUp() override;
 
 	void OnTrigger(Collider* c1);
+	void OnTriggerEnter(Collider* c1);
 	void OnTriggerExit(Collider* c1);
 
 public:
@@ -46,23 +48,27 @@ public:
 	void SetWeapon(WEAPON type, uint level);
 	WeaponInfo GetWeaponInfo() const;
 	void SetTimeBetweenBullets(int time_between_bullets);
-	int GetLife();
-	int GetMaxLife();
-	int GetTimeBetweenBullets();
+	int GetLife() const;
+	int GetMaxLife() const;
+	int GetTimeBetweenBullets() const;
 	fPoint GetShotDir() const;
 	bool IsReady() const;
-	int GetTankNum();
+	int GetTankNum() const;
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	bool GetShotAutomatically() const;
+	void CreatePortals();
 
 public:
 
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
-	bool Alive();
-	fPoint GetTurrPos();
+	bool Alive() const;
+	fPoint GetTurrPos() const;
+
+	//- Input
+	Controller * GetController();
 
 private:
 	//- Movement
@@ -91,11 +97,13 @@ private:
 	void InputReadyKeyboard();
 	bool PressInteract();
 	bool ReleaseInteract();
+	
 
 	//- Weapons methods
 	void InitWeapons();
 	void ShootBasic();
 	void ShootFlameThrower();
+	void ShootDoubleMissileCharged();
 	void ShootDoubleMissile();
 	void ShootHealingShot();
 	void ShootLaserShot();
@@ -135,10 +143,10 @@ private:
 	float velocity_recoil_decay				= 0.f;
 	float velocity_recoil_speed_max			= 0.f;
 	float velocity_recoil_speed_max_charged = 0.f;
+	float charged_shot_speed				= 0.0f;
 	float lerp_factor_recoil				= 0.f;
 	Timer movement_timer;
-	
-
+	PerfTimer time_between_portal_tp;
 
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
@@ -243,6 +251,10 @@ public:
 
 	//- GUI
 	Player_GUI*  gui = nullptr;
+
+public:
+	Obj_Portal * portal1;
+	Obj_Portal * portal2;
 };
 
 #endif

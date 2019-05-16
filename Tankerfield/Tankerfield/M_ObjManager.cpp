@@ -38,11 +38,13 @@
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
 #include "Item_HappyHour.h"
+#include "Item_InstantHelp.h"
 #include "Obj_PickUp.h"
 #include "Obj_RewardBox.h"
 #include "Camera.h"
 #include "Obj_CannonFire.h"
 #include "Obj_Item.h"
+#include "Obj_Portal.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -102,13 +104,9 @@ bool M_ObjManager::Update(float dt)
 
 			if ((*iterator)->to_remove)
 			{
-				//When we remove an element from the list, the other elements shift 1 space to our position
-				//So we don't need increment the iterator to go to the next one
-				//if ((*iterator)->type == ObjectType::TANK)
-				//{
-				//	Obj_Tank* aux = (Obj_Tank*)(*iterator);
-				//	obj_tanks.remove((Obj_Tank*)(*iterator));
-				//}
+			
+				(*iterator)->CleanUp();
+
 				if ((*iterator)->type == ObjectType::TESLA_TROOPER
 					|| (*iterator)->type == ObjectType::BRUTE)
 				{
@@ -191,7 +189,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 		  if (app->scene->draw_debug) {
 			  (*item)->DrawDebug((*item_cam));
-			  DrawDebug((*item), (*item_cam));
+			 // DrawDebug((*item), (*item_cam));
 		  }
 		}
 		draw_objects.clear();
@@ -260,7 +258,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::BULLET_MISSILE;
 		break;
 	case ObjectType::BULLET_LASER:
-		ret = new Laser_Bullet(pos);
+		ret = DBG_NEW Laser_Bullet(pos);
 		ret->type = ObjectType::BULLET_LASER;
 		break;
 	case ObjectType::HEALING_BULLET:
@@ -284,7 +282,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::OIL_POOL;
 		break;
 	case ObjectType::BRUTE:
-		ret = new Obj_Brute(pos);
+		ret = DBG_NEW Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
 		enemies.push_back(ret);
 		break;
@@ -297,20 +295,23 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::CANNON_FIRE;
 		break;
 	case ObjectType::HEALING_ANIMATION:
-		ret = new Obj_Healing_Animation(pos);
+		ret = DBG_NEW Obj_Healing_Animation(pos);
 		ret->type = ObjectType::HEALING_ANIMATION;
 		break;
 	case ObjectType::FIRE_DEAD:
-		ret = new Obj_Fire(pos);
+		ret = DBG_NEW Obj_Fire(pos);
 		ret->type = ObjectType::FIRE_DEAD;
 		break;
-
+	case ObjectType::PORTAL:
+		ret = DBG_NEW Obj_Portal(pos);
+		ret->type = ObjectType::PORTAL;
+		break;
 	case ObjectType::PICK_UP:
 		ret = DBG_NEW Obj_PickUp(pos);
 		ret->type = ObjectType::PICK_UP;
 		break;
 	case ObjectType::REWARD_BOX:
-		ret = new Obj_RewardBox(pos);
+		ret = DBG_NEW Obj_RewardBox(pos);
 		ret->type = ObjectType::REWARD_BOX;
 		break;
 	}
@@ -336,8 +337,12 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 		ret->type = ItemType::HEALTH_BAG;
 		break;
 	case ItemType::HAPPY_HOUR_ITEM:
-		ret = new Item_HappyHour(pos);
+		ret = DBG_NEW Item_HappyHour(pos);
 		ret->type = ItemType::HAPPY_HOUR_ITEM;
+		break;
+	case ItemType::INSTANT_HELP:
+		ret = DBG_NEW Item_InstantHelp(pos);
+		ret->type = ItemType::INSTANT_HELP;
 		break;
 	}
 

@@ -98,6 +98,8 @@ public:
 
 	void SetState(ELEMENT_STATE new_state);
 
+	ELEMENT_STATE GetState();
+
 	void SetStateToBranch(ELEMENT_STATE new_state);
 
 	//ELEMENT_STATE GetState();
