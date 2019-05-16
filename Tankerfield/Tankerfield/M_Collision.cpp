@@ -135,7 +135,6 @@ bool M_Collision::Update(float dt)
 
 	DestroyColliders();
 
-
 	// Fill body types lists & Destroy colliders =====================
 
 	for (std::list<Collider*>::iterator itr = colliders.begin(); itr != colliders.end(); ++itr)
@@ -245,7 +244,7 @@ bool M_Collision::Update(float dt)
 			if (collider_1->CheckCollision(collider_2) && collider_1->to_destroy == false && collider_2->to_destroy == false)
 			{
                  DoOnTrigger(collider_1, collider_2);
-          /*       DoOnTrigger(collider_2, collider_1);*/
+
 			}
 			else
 			{
