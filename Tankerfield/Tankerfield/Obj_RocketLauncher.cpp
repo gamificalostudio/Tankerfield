@@ -45,7 +45,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	curr_anim = &idle;
 	
 	state = ENEMY_STATE::IDLE;
-	detection_range = 7.0f;
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 
 	speed = 1.5f;
 
