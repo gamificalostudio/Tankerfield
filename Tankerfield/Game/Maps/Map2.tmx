@@ -205517,7 +205517,7 @@
   <object id="451" name="REWARD_BOX" type="REWARD_BOX" x="3362" y="1278"/>
  </objectgroup>
  <objectgroup id="9" name="Players">
-  <object id="410" x="4830" y="2400" width="30" height="30"/>
+  <object id="410" x="3420" y="1290" width="30" height="30"/>
   <object id="411" x="3960" y="4020" width="30" height="30"/>
   <object id="412" x="4440" y="4110" width="30" height="30"/>
   <object id="413" x="4440" y="3900" width="30" height="30"/>

@@ -232,6 +232,26 @@ bool Obj_Tank::Start()
 
 	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
+
+
+	//Flamethrower
+
+
+
+	coll_flame = app->collision->AddCollider(
+		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
+		flame_coll_w,
+		flame_coll_h,
+		TAG::BULLET,
+		BODY_TYPE::DYNAMIC,
+		50.f,
+		this);
+
+	coll_flame->is_sensor = true;
+	coll_flame->ActiveOnTrigger(false);
+
+
+
 	return true;
 }
 

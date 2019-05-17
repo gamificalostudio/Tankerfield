@@ -205,6 +205,10 @@
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="ElectroShotAnimation.cpp" />
+    <ClCompile Include="Obj_FlamethrowerFlame.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Obj_Building.h">
@@ -431,6 +435,10 @@
     </ClInclude>
     <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectroShotAnimation.h" />
+    <ClInclude Include="Obj_FlamethrowerFlame.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
