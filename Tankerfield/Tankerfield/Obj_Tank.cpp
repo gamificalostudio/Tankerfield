@@ -458,6 +458,21 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 	SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
 
+	// Shot ==============================================
+
+	if (show_crosshairs && camera == camera_player)
+	{
+		float line_length = 5.f;
+		//1-- Set a position in the isometric space
+		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
+		//2-- Transform that poin to screen coordinates
+		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+		app->render->DrawLineSplitScreen(
+			pos_screen.x, pos_screen.y - cannon_height,
+			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
+	}
+
+
 	// Turret common ======================================
 
 	app->render->BlitScaled(
@@ -484,28 +499,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 
 	SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
 
-	// Shot ==============================================
-
-	if (show_crosshairs && camera == camera_player)
-	{
-		float line_length = 5.f;
-		//1-- Set a position in the isometric space
-		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
-		//2-- Transform that poin to screen coordinates
-		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
-		app->render->DrawLineSplitScreen(
-			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
-	}
-
-
-	// Turret =======================================
-	app->render->Blit(
-		turr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&rotate_turr.GetFrame(turr_angle));
 
 	return true;
 }
