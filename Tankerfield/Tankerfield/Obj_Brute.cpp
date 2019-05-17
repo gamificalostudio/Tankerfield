@@ -33,7 +33,7 @@
 
 Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("brute");
+	pugi::xml_node brute_node = app->config.child("object").child("enemies").child("brute");
 
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
@@ -60,6 +60,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 	spawn_draw_offset = { 260, 274 };
 	normal_draw_offset = { 132, 75 };
+	electrocuted_draw_offset = { 60,28 };
 	draw_offset = spawn_draw_offset;
 
 	angle = 180;//REMOVE
@@ -86,7 +87,12 @@ Obj_Brute::~Obj_Brute()
 
 void Obj_Brute::ChangeTexture()
 {
-	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
+	if (spawn.Finished() &&
+		damaged_sprite_timer.Read() > damaged_sprite_time &&
+		curr_tex != tex &&
+		state != ENEMY_STATE::STUNNED &&
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		state != ENEMY_STATE::DEAD)
 	{
 		curr_tex = tex;
 	}

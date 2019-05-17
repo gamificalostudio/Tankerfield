@@ -205,6 +205,11 @@
     <ClCompile Include="Player_GUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Item_InstantHelp.cpp" />
+    <ClCompile Include="Obj_Portal.cpp" />
+    <ClCompile Include="ElectroShotAnimation.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Obj_Brute.h">
@@ -431,6 +436,11 @@
     </ClInclude>
     <ClInclude Include="Circle.h">
       <Filter>Tools\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_InstantHelp.h" />
+    <ClInclude Include="Obj_Portal.h" />
+    <ClInclude Include="ElectroShotAnimation.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

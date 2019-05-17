@@ -23,6 +23,7 @@ enum class TAG : int
 	BULLET,
 	FRIENDLY_BULLET,
 	BULLET_LASER,
+	ELECTRO_SHOT,
 	PORTAL,
 	ENEMY,
 	GOD,
@@ -43,6 +44,16 @@ enum class BODY_TYPE
 class Collider
 {
 public:
+
+	enum class ON_TRIGGER_STATE
+	{
+		NONE,
+		ENTER,
+		STAY,
+		EXIT
+	};
+
+
 
 	enum class OVERLAP_DIR : int
 	{
@@ -103,6 +114,9 @@ public:
 
 	void Destroy();
 
+
+	bool GetIsActivated() const;
+
 public:
 
 	float damage = 0.f;
@@ -128,6 +142,9 @@ private:
 	TAG tag = TAG::NONE;
 
 	std::list<Collider*> collisions_list;
+
+
+
 
 	Object * object = nullptr;
 

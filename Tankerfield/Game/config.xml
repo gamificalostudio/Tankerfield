@@ -178,17 +178,27 @@
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
 
-    <tesla_trooper>
-      <teleport_max_enemies num="100"/>
-      <speed num="3"/>
-      <attack_damage num="5"/>
-      <attack_range num="1.5"/>
-      <attack_frequency num="3000"/>
-      <base_life num="5"/>
-      <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
-      <tex_damaged_path>"textures/Objects/enemies/shk-sheet-white-1.png"</tex_damaged_path>
-      <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
-    </tesla_trooper>
+    <enemies>
+      <tex_electro_dead>textures/Objects/enemies/electro_dead.png</tex_electro_dead>
+      <tesla_trooper>
+        <teleport_max_enemies num="100"/>
+        <speed num="3"/>
+        <attack_damage num="5"/>
+        <attack_range num="1.5"/>
+        <attack_frequency num="3000"/>
+        <base_life num="5"/>
+        <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
+        <tex_damaged_path>"textures/Objects/enemies/shk-sheet-white-1.png"</tex_damaged_path>
+        <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
+      </tesla_trooper>
+      <brute>
+
+      </brute>
+    </enemies>
+
+
+
+    <!--pasar al nodo enemies-->
     <rocket_launcher>
       <speed num="2"/>
       <attack_damage num="15"/>
@@ -205,9 +215,8 @@
       <base_life num="3"/>
       <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
     </suicidal>
-    <brute>
 
-    </brute>
+
     <tank>
       <speed value ="1"/>
       <recoil>
@@ -215,6 +224,23 @@
         <velocity_recoil_speed_max value="25"/>
         <velocity_recoil_speed_max_charged value="50"/>
       </recoil>
+
+      <electro_shot>
+        <collider_size value="1"/> <!--Width and height in tiles-->
+        <electro_shot_animation>
+          <tex_electro_shot>textures/objects/bullets/tex_electro_shot2.png</tex_electro_shot>
+          <animations>
+            <anim_electro_shot speed="5" rotation="counter-clockwise" first_dir_angle ="-90">
+              <dir>
+                <frame x="0"   y="0" w="108" h="187"/>
+                <frame x="108" y="0" w="108" h="187"/>
+                <frame x="216" y="0" w="108" h="187"/>
+              </dir>
+            </anim_electro_shot>
+          </animations>
+        </electro_shot_animation>
+      </electro_shot>
+      
       <time_between_bullets value ="100"/>
       <spritesheets>
         <base_orange>textures/objects/tank/base - orange.png</base_orange>

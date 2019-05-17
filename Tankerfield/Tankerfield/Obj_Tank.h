@@ -32,6 +32,8 @@ public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 
+	void UpdateWeaponsWithoutBullets(float dt);
+
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
 
@@ -57,7 +59,11 @@ public:
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	bool GetShotAutomatically() const;
+	std::vector<Object*>* GetEnemiesHitted();
+	bool GetIsElectroShotCharged() const;
+
 	void CreatePortals();
+
 
 public:
 
@@ -103,6 +109,11 @@ private:
 	void ShootHealingShot();
 	void ShootLaserShot();
 	void ShootLaserShotCharged();
+	void ShootElectroShot();
+
+	void ShootElectroShotCharged();
+
+	
 
 	//- TankDeath
 	void ReviveTank(float dt);
@@ -184,6 +195,19 @@ private:
 	bool show_crosshairs					= false;
 	bool shot_automatically					= false;
 
+	//Electro shot
+	PerfTimer electro_shot_timer;
+	bool is_electro_shot_charged = false;
+
+	std::vector<Collider*> electric_shot_colliders_vector;
+
+	std::vector<Collider*> electric_shot_colliders_charged_vector;
+
+	std::vector<Object*> enemies_hitted;
+	
+
+
+
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
 	UI_IG_Helper * tutorial_pick_up			= nullptr;
@@ -249,6 +273,7 @@ public:
 public:
 	Obj_Portal * portal1;
 	Obj_Portal * portal2;
+	bool hit_no_enemie = false;
 };
 
 #endif

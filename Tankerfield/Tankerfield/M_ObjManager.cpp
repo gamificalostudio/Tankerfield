@@ -40,7 +40,9 @@
 #include "Obj_CannonFire.h"
 #include "Obj_Item.h"
 #include "Obj_Portal.h"
+#include "ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
+
 
 M_ObjManager::M_ObjManager()
 {
@@ -318,8 +320,13 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_Tank_MainMenu(pos);
 		ret->type = ObjectType::REWARD_BOX;
 		break;
+	case ObjectType::ELECTRO_SHOT_ANIMATION:
+		ret = new Eletro_Shot_Animation(pos);
+		ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
+		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");
+
 	}
 	
   

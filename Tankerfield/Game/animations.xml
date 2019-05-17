@@ -166,6 +166,26 @@
     </dir>
     
   </cycle-progress-bar>
+
+    <electro_dead speed ="10" loop="false" rotation="counter-clockwise" first_dir_angle="-90">
+      <dir>
+        <frame x="0"   y="0" w="60" h="56"/>
+        <frame x="60"  y="0" w="60" h="56"/>
+        <frame x="120" y="0" w="60" h="56"/>
+        <frame x="180" y="0" w="60" h="56"/>
+        <frame x="240" y="0" w="60" h="56"/>
+        <frame x="300" y="0" w="60" h="56"/>
+        <frame x="360" y="0" w="60" h="56"/>
+        <frame x="420" y="0" w="60" h="56"/>
+        <frame x="480" y="0" w="60" h="56"/>
+        <frame x="540" y="0" w="60" h="56"/>
+        <frame x="600" y="0" w="60" h="56"/>
+        <frame x="660" y="0" w="60" h="56"/>
+        <frame x="720" y="0" w="60" h="56"/>
+        <frame x="780" y="0" w="60" h="56"/>
+      </dir>
+    </electro_dead>
+  
   <tesla>
     <animations>
       <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
@@ -1181,4 +1201,5 @@
       </dir>
     </death>
   </suicidal>
+
 </animations>

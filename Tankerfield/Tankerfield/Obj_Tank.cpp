@@ -280,8 +280,13 @@ bool Obj_Tank::Update(float dt)
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
+	
+
+	UpdateWeaponsWithoutBullets(dt);
 	return true;
 }
+
+
 
 void Obj_Tank::CameraMovement(float dt)
 {
@@ -470,6 +475,15 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 			pos_screen.x, pos_screen.y - cannon_height,
 			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
+
+
+	// Turret =======================================
+	app->render->Blit(
+		turr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&rotate_turr.GetFrame(turr_angle));
 
 	return true;
 }

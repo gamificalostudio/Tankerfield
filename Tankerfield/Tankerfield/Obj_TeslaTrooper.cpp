@@ -33,8 +33,10 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
-	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("tesla").child("animations");
+
+	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("enemies").child("tesla_trooper");
+	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
+
 
 	//TEXTURES =============================================
 	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
@@ -80,13 +82,17 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
-	draw_offset = { 24, 28 };
+	draw_offset			= { 24, 28 };
+	normal_draw_offset = { 24, 28 };
+	electrocuted_draw_offset = { 24, 28 };
+
 
 	//parameters-------------------------------------------
 	attack_damage = tesla_trooper_node.child("attack_damage").attribute("num").as_float();
 	attack_range = tesla_trooper_node.child("attack_range").attribute("num").as_float();
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = tesla_trooper_node.child("attack_frequency").attribute("num").as_float();
+
 	life = pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
 
 	//teleport 
@@ -190,6 +196,7 @@ void Obj_TeslaTrooper::GetTeleportPoint()
 }
 void Obj_TeslaTrooper::Spawn(const float & dt)
 {
+
 	spawn_anim.NextFrame(dt);
 	if ((int)spawn_anim.current_frame >= 6)
 	{

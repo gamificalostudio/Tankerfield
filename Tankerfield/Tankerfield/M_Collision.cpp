@@ -39,6 +39,12 @@ void Collider::Destroy()
 	to_destroy = true;
 }
 
+
+bool Collider::GetIsActivated() const
+{
+	return active_on_trigger;
+}
+
 bool Collider::CheckCollision(Collider*  coll) const
 {
 	return !(coll->position.x >= (position.x + width) || (coll->position.x + coll->width) <= position.x || coll->position.y >= (position.y + height) || (coll->position.y + coll->height) <= position.y);
@@ -64,14 +70,15 @@ M_Collision::M_Collision()
 	matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
 	matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
 
-	matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
-	matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
-	matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
-
 
 	matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
 	matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
 	matrix[(int)TAG::ENEMY][(int)TAG::BULLET_LASER] = true;
+	matrix[(int)TAG::ENEMY][(int)TAG::ELECTRO_SHOT] = true;
+
+	matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
+	matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
+	matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
 
 	matrix[(int)TAG::REWARD_ZONE][(int)TAG::PLAYER] = true;
 
@@ -254,6 +261,7 @@ bool M_Collision::Update(float dt)
 			on_collision = collider_1->CheckCollision(collider_2);
 
 			// Solve Overlap  ==================================================================
+
 
 			if (on_collision && collider_2->is_sensor == false)
 			{
@@ -558,3 +566,5 @@ inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
 		}
 	}
 }
+
+
