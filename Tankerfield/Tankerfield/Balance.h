@@ -19,7 +19,7 @@ struct TeslaTrooperInfo
 	int attack_damage			= 0;
 	float attack_range			= 0.f;
 	uint attack_frequency		= 0;
-	int teleport_max_enemy_num	= 0;
+	int teleport_max_enemies	= 0;
 };
 
 struct BruteInfo

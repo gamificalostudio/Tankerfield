@@ -496,7 +496,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	tesla_trooper_info.attack_damage			= tesla_trooper_node.child("attack_damage").attribute("num").as_int();
 	tesla_trooper_info.attack_range				= tesla_trooper_node.child("attack_range").attribute("num").as_float();
 	tesla_trooper_info.attack_frequency			= tesla_trooper_node.child("attack_frequency").attribute("num").as_uint();
-	tesla_trooper_info.teleport_max_enemy_num	= tesla_trooper_node.child("teleport_max_enemy_num").attribute("num").as_int();
+	tesla_trooper_info.teleport_max_enemies		= tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_int();
 
 	//BRUTE
 	pugi::xml_node brute_node = balance_node.child("enemies").child("brute");
@@ -505,7 +505,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	brute_info.speed							= brute_node.child("speed").attribute("num").as_float();
 
 	//ROCKET LAUNCHER
-	pugi::xml_node rocket_launcher_node = balance_node.child("enemies").child("brute");
+	pugi::xml_node rocket_launcher_node = balance_node.child("enemies").child("rocket_launcher");
 	rocket_launcher_info.attack_damage			= rocket_launcher_node.child("attack_damage").attribute("num").as_int();
 	rocket_launcher_info.attack_frequency		= rocket_launcher_node.child("attack_frequency").attribute("num").as_float();
 	rocket_launcher_info.attack_range			= rocket_launcher_node.child("attack_range").attribute("num").as_float();
