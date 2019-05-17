@@ -373,9 +373,10 @@ bool M_Scene::CleanUp()
 	RELEASE(general_hud);
 
 	general_hud = nullptr;
+
 	for (std::vector<Obj_Tank*>::iterator i = app->objectmanager->obj_tanks.begin(); i != app->objectmanager->obj_tanks.end() ; ++i)
 	{
-			(*i)->gui = nullptr;
+		(*i)->gui = nullptr;
 	}
 
 	return true;

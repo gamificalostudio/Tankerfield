@@ -125,25 +125,6 @@ bool M_MainMenu::CleanUp()
 		players[i].tank = nullptr;
 	}
 
-	if (app->on_clean_up == false)
-	{
-		for (std::list<UI_Element*>::iterator iter = menu_elements.begin(); iter != menu_elements.end(); ++iter)
-		{
-			(*iter)->Destroy();
-		}
-
-		selection_panel->Destroy();
-		menu_peg->Destroy();
-	}
-
-	menu_elements.clear();
-
-	logo_image = nullptr;
-	single_player_button = nullptr;
-	multi_player_button = nullptr;
-	exit_button = nullptr;
-	version_label = nullptr;
-
 	return true;
 }
 
@@ -219,6 +200,7 @@ bool M_MainMenu::PostUpdate(float dt)
 
 bool M_MainMenu::Reset()
 {
+	app->ui->Reset();
 	return true;
 }
 

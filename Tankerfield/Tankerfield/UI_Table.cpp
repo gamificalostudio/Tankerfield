@@ -56,7 +56,7 @@ bool UI_Table::Draw()
 	for (int y = 0; y <= rows; ++y)
 	{
 		pos_mod = pos - iPoint(line_width, line_width);
-		app->render->DrawQuad({ pos_mod.x, pos_mod.y, total_width, line_width*2 }, 255, 255,255, 255, true, false);
+		app->render->DrawQuad({ pos_mod.x, pos_mod.y, total_width, line_width*2 }, 255, 255,255, alpha, true, false);
 
 		if (y != rows)
 		{
@@ -70,7 +70,7 @@ bool UI_Table::Draw()
 	for (int x = 0; x <= columns; ++x)
 	{
 		pos_mod = pos - iPoint(line_width, line_width);
-		app->render->DrawQuad({ pos_mod.x, pos_mod.y, line_width * 2,  total_height}, 255, 255, 255, 255, true, false);
+		app->render->DrawQuad({ pos_mod.x, pos_mod.y, line_width * 2,  total_height}, 255, 255, 255, alpha, true, false);
 
 		if (x != columns)
 		{
