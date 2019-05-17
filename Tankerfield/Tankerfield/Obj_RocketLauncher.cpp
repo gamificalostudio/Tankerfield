@@ -47,17 +47,17 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	state = ENEMY_STATE::IDLE;
 	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 
-	speed = 1.5f;
+	speed = app->objectmanager->rocket_launcher_info.speed;
 
 	spawn_draw_offset = { 49, 50 };
 	normal_draw_offset = { 49, 50 };
 	draw_offset = spawn_draw_offset;
 
-	attack_damage = rocket_launcher_node.child("attack_damage").attribute("num").as_float();
-	attack_range = rocket_launcher_node.child("attack_range").attribute("num").as_float();
+	attack_damage = app->objectmanager->rocket_launcher_info.attack_damage;
+	attack_range = app->objectmanager->rocket_launcher_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
-	attack_frequency = rocket_launcher_node.child("attack_frequency").attribute("num").as_float();
-	life = pow(rocket_launcher_node.child("base_life").attribute("num").as_float(), app->scene->round);
+	attack_frequency = app->objectmanager->rocket_launcher_info.attack_frequency;
+	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, app->scene->round);
 	
 	check_path_time = 2.0f;
 

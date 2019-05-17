@@ -35,10 +35,12 @@
     </brute>
 
     <rocket_launcher>
-      <speed num="2"/>
+      <speed num="1.5"/>
       <attack_damage num="15"/>
       <attack_range num="3"/>
       <attack_frequency num="2000"/>
+      <life_multiplier num ="700"/>
+      <life_exponential_base num="1.5"/>
     </rocket_launcher>
 
     <suicidal>

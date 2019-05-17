@@ -514,6 +514,8 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	rocket_launcher_info.attack_frequency		= rocket_launcher_node.child("attack_frequency").attribute("num").as_float();
 	rocket_launcher_info.attack_range			= rocket_launcher_node.child("attack_range").attribute("num").as_float();
 	rocket_launcher_info.speed					= rocket_launcher_node.child("speed").attribute("num").as_float();
+	rocket_launcher_info.life_multiplier		= rocket_launcher_node.child("life_multiplier").attribute("num").as_float();
+	rocket_launcher_info.life_exponential_base	= rocket_launcher_node.child("life_exponential_base").attribute("num").as_float();
 
 	//SUICIDAL
 	pugi::xml_node suicidal_node = balance_node.child("enemies").child("suicidal");
