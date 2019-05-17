@@ -11,18 +11,26 @@ class SpawnPoint;
 class Obj_RewardBox : public Object
 {
 private:
-	uint life							= 0u;
-	uint max_life						= 0u;
+	PICKUP_TYPE type = PICKUP_TYPE::NO_TYPE;
 
+	//SOUND ===================================
 	const char* reward_box_dead_sound_string;
 	uint reward_box_dead_sound_int	= 0u;
 
+	//IMAGE ==================================
 	SDL_Texture* texture;
-	SDL_Rect shadow_frame;
 	iPoint draw_shadow_offset;
+	SDL_Rect shadow_frame	= { 0, 0, 0, 0 };
+	SDL_Rect frame_white	= { 0, 0, 0, 0 };
+	SDL_Rect* curr_frame	= nullptr;
+	
+	//LOGIC ==================================
+	uint hits_taken = 0;
+	uint max_hits = 3;
 
-	PICKUP_TYPE type = PICKUP_TYPE::NO_TYPE;
-
+	bool is_white;
+	Timer timer_white;
+	float max_time_in_white = 0.2;
 
 public:
 	SpawnPoint* my_spawn_point			= nullptr;
@@ -33,13 +41,13 @@ public:
 
 	~Obj_RewardBox();
 
-	//bool Draw(float dt, Camera* camera) override;
+	bool Update(float dt) override;
 
 	void OnTrigger(Collider * collider);
 
-	void GetDamage(float damage);
+	bool Draw(float dt, Camera * camera) override;
 
-	bool DrawShadow(Camera* camera);
+	bool DrawShadow(Camera* camera, float dt) override;
 
 	void Dead();
 
