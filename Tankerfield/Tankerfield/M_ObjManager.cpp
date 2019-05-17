@@ -318,6 +318,8 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_Tank_MainMenu(pos);
 		ret->type = ObjectType::REWARD_BOX;
 		break;
+	default:
+		LOG("Object could not be created. Type not detected correctly or hasn't a case.");
 	}
 	
   

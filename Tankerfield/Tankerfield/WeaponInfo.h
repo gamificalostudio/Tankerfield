@@ -38,6 +38,7 @@ struct ShotInfo
 	float rumble_strength			= 0.f;
 	Uint32 rumble_duration			= 0u;
 	float trauma					= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake
+	ObjectType smoke_particle		= ObjectType::NO_TYPE;
 };
 
 //Class which ONLY holds information about the weapons.

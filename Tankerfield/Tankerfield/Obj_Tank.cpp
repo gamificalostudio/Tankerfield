@@ -732,6 +732,7 @@ void Obj_Tank::ShootChargedWeapon()
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot1.trauma);
 			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
 		//- Charged shot
 		else
@@ -740,8 +741,8 @@ void Obj_Tank::ShootChargedWeapon()
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
+			app->objectmanager->CreateObject(weapon_info.shot2.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
-		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
 	}
@@ -771,6 +772,7 @@ void Obj_Tank::ShootSustainedWeapon()
 	{
 		(this->*shot1_function[(uint)weapon_info.weapon])();
 		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+		app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
 	}
 }
