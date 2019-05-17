@@ -1,0 +1,19 @@
+<balance>
+  <tank>
+    <life value =""/>
+    <speed value =""/>
+  </tank>
+  <weapons>
+  </weapons>
+  <tesla_trooper>
+    
+  </tesla_trooper>
+  <box>
+    <spawn_rate>
+      
+    </spawn_rate>
+  </box>
+  <rounds>
+    
+  </rounds>
+</balance>

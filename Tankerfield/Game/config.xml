@@ -22,6 +22,7 @@
   </window>
 
   <animations_bank>animations.xml</animations_bank>
+  <object_manager>balance.xml</object_manager>
 
     <scene>
       <rounds_to_win value="10"/>

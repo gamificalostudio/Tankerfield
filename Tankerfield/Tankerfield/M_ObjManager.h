@@ -102,9 +102,11 @@ public:
 	 }
 
 public:
+	pugi::xml_node balance_xml_node;
 	std::vector<Obj_Tank*> obj_tanks;
 
 private:
+	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
 };

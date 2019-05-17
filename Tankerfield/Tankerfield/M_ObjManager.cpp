@@ -66,6 +66,18 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 			(*iterator)->Awake(config);
 	}
 
+	//Open balance.xml
+	std::string path = config.child_value();
+	pugi::xml_parse_result result = balance_xml_doc.load_file(path.c_str());
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
+	}
+	else
+	{
+		balance_xml_node = balance_xml_doc.child("balance");
+	}
+
 	return ret;
 }
 
