@@ -54,9 +54,9 @@ bool Obj_Enemy::Update(float dt)
 		ChangeTexture();
 	}
 
+	if (life_collider != nullptr)
+		life_collider->SetPosToObj();
 
-	//if (life_collider != nullptr)
-	//	life_collider->SetPosToObj();
 	return true;
 }
 
@@ -84,7 +84,7 @@ void Obj_Enemy::Attack()
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
 			curr_anim = &attack;
-			target->SetLife(target->GetLife() - attack_damage);
+			target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
 		}
@@ -232,6 +232,11 @@ void Obj_Enemy::Dead()
 		{
 			coll->Destroy();
 			coll = nullptr;
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->Destroy();
+			life_collider = nullptr;
 		}
 	}
 	else

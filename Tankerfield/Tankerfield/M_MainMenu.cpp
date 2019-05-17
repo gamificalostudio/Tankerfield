@@ -174,22 +174,16 @@ bool M_MainMenu::PreUpdate()
 		}
 	}
 
-	selection_panel->SetController(players[current_player].controller);
-	players[current_player].tank->SetColor(selection_panel->GetFocusedElement()->color_mod);
-
 	return true;
 }
 
 bool M_MainMenu::Update(float dt)
 {
-	//color_percent += 0.3 * dt;
-	//if (color_percent > 1.f)
-	//{
-	//	color_percent -= 1.f;
-	//}
-
-	//SDL_Color color = GetColor(color_percent);
-	//SDL_SetTextureColorMod(background_texture, color.r , color.g , color.b);
+	if (selection_finished == false)
+	{
+		selection_panel->SetController(players[current_player].controller);
+		players[current_player].tank->SetColor(selection_panel->GetFocusedElement()->color_mod);
+	}
 
 	return true;
 }
@@ -236,26 +230,28 @@ bool M_MainMenu::OnHoverEnter(UI_Element * element)
 
 bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 {
-	if (element == selection_panel)
+	if (element == selection_panel && selection_finished == false)
 	{
 		if (app->input->GetMouseButton(1) == KEY_DOWN || (players[current_player].controller != nullptr && (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) )
 		{
+			app->scene->tank_colors[current_player] = selection_panel->GetFocusedElement()->color_mod;
 			current_player += 1;
-
+			
 			if (current_player == MAX_PLAYERS)
 			{
-				current_player = 0;
+				app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
+				selection_finished = true;
 			}
 		}
 	}
 	return true;
 }
 
-bool M_MainMenu::ClickDown(UI_Element * element)
+bool M_MainMenu::ClickUp(UI_Element * element)
 {
 	if (element == multi_player_button)
 	{
-		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
+		SetState(MENU_STATE::SELECTION);
 	}
 	else if (element == exit_button)
 	{

@@ -157,17 +157,12 @@
 
     </animations>
   </ui>
-
   <map>
     <folder>Maps/</folder>
     <levels>
       <level name="Map2.tmx"/>
     </levels>
-
   </map>
-
-
-
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
     <percentage_spawn_reward_box value="80"/>
@@ -184,7 +179,7 @@
         <teleport_max_enemies num="100"/>
         <speed num="3"/>
         <attack_damage num="5"/>
-        <attack_range num="1.5"/>
+        <attack_range num="1.0"/>
         <attack_frequency num="3000"/>
         <base_life num="5"/>
         <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
@@ -246,10 +241,12 @@
         <base_color>textures/objects/tank/base_color.png</base_color>
         <base_common>textures/objects/tank/base_common.png</base_common>
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
+        <base_damaged>textures/objects/tank/white_base.png</base_damaged>
 
         <turret_color>textures/objects/tank/turret_color.png</turret_color>
         <turret_common>textures/objects/tank/turret_common.png</turret_common>
         <turret_shadow>textures/objects/tank/turret_shadow.png</turret_shadow>
+        <turret_damaged>textures/objects/tank/white_tur.png</turret_damaged>
 
         <cycle_bar_tex>textures/objects/tank/circle-loading-bar.png</cycle_bar_tex>
         

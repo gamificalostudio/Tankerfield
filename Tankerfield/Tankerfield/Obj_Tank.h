@@ -46,6 +46,7 @@ public:
 public:
 	//- Logic
 	void SetLife(int life);
+	void ReduceLife(int damage);
 	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	void SetColor(const SDL_Color new_color);
@@ -207,7 +208,19 @@ private:
 	std::vector<Object*> enemies_hitted;
 	
 
+	
 
+	//Flamethrower shot
+
+public:
+
+	float flame_coll_w = 2.f;
+	float flame_coll_h = 2.f;
+
+private:
+
+	Timer flame_release_time;
+	Collider* coll_flame = nullptr;
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
@@ -238,8 +251,11 @@ private:
 	short int gamepad_shoot_last_frame				= 0;
 
 	// Drawing =============================================
-
 	SDL_Color tank_color = { 255, 255, 255, 255 };
+	bool damaged = false;
+	SDL_Texture* tur_damaged_tex = nullptr;
+	SDL_Texture* base_damaged_tex = nullptr;
+	Timer damaged_timer;
 
 	// Base----------------------
 	Animation rotate_base;

@@ -28,6 +28,7 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
 	shot1_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOil;
 	shot1_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
+	shot1_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 
 	//Electro_shot--
 	pugi::xml_node electro_shot_node = app->config.child("object").child("tank").child("electro_shot");
@@ -72,6 +73,7 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
 	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
 	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
+	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -104,35 +106,16 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 		}
 
 	}
-	//test:
 
-	//float coll_w_init;
-	//float coll_h_init;
-	//(*electric_shot_colliders_vector.begin())->GetSize(coll_w_init, coll_h_init);
-	//fPoint increment{ coll_w_init, coll_h_init};
-	//fPoint distance{0,0};
-	//
+	if (weapon_info.weapon == WEAPON::FLAMETHROWER)
+	{
+		//with the animation get frame?? only 1 frame
+		if (flame_release_time.ReadSec() >= 1.f && coll_flame->GetIsActivated())
+		{
+				coll_flame->ActiveOnTrigger(false);
+		}
 
-	//for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
-	//{
-	//	float coll_w;
-	//	float coll_h;
-	//	(*iter)->GetSize(coll_w, coll_h);
-	//	//fPoint increment{ coll_w*0.5f, coll_h*0.5f };  alternative
-
-	//	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
-
-	//	distance += increment;
-
-	//	fPoint dir_distance = GetShotDir() * distance;
-
-
-	//	(*iter)->SetObjOffset(offset + dir_distance);
-	//	(*iter)->SetPosToObj();
-
-	//	//(*iter)->Activate();
-	//}
-
+	}
 }
 
 void Obj_Tank::SetWeapon(WEAPON type, uint level)
@@ -403,7 +386,35 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
+	flame_release_time.Start();
 
+	if(coll_flame->GetIsActivated() == false)
+	{
+		coll_flame->ActiveOnTrigger(true);
+	}
+
+	float coll_w_init;
+	float coll_h_init;
+
+	fPoint distance{ 1.f, 1.f };
+	fPoint increment{ coll_w_init, coll_h_init };
+
+	float coll_w;
+	float coll_h;
+	coll_flame->GetSize(coll_w, coll_h);
+
+
+	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
+
+
+
+	fPoint dir_distance = GetShotDir() * distance;
+	distance += increment;
+
+	coll_flame->SetObjOffset(offset + dir_distance);
+	coll_flame->SetPosToObj();
+
+	coll_flame->ActiveOnTrigger(true);
 }
 
 void Obj_Tank::ShootOil()
@@ -449,7 +460,7 @@ void Obj_Tank::ShootElectroShot()
 
 		fPoint dir_distance = GetShotDir() * distance;
 		distance += increment;
-
+		
 		(*iter)->SetObjOffset(offset + dir_distance);
 		(*iter)->SetPosToObj();
 
