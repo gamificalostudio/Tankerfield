@@ -233,6 +233,7 @@ private:
 	SDL_Texture * turr_tex_blue					= nullptr;
 	SDL_Texture * turr_shadow_tex				= nullptr;
 	iPoint turr_draw_offset						= { 0,0 };
+	float turr_scale							= 1.f;
 
 	//-- Revive
 	SDL_Texture * cycle_bar_tex = nullptr;

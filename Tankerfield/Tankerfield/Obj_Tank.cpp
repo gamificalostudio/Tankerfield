@@ -201,10 +201,8 @@ bool Obj_Tank::Start()
 	draw_offset.x = 46;
 	draw_offset.y = 46;
 
-	//THIS
 	turr_draw_offset.x = 59;
 	turr_draw_offset.y = 50;
-	//THIS
 
 	base_angle_lerp_factor = 11.25f;
 	shot_angle_lerp_factor = 11.25f;
@@ -215,6 +213,8 @@ bool Obj_Tank::Start()
 	max_life = 100;
 
 	charged_shot_speed = 1.0f;
+
+	turr_scale = 1.2f;
 
 	//- Tutorial
 	//-- Move
@@ -462,7 +462,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
-	float turr_scale = 1.2f;
 	app->render->BlitScaled(
 		turr_tex,
 		pos_screen.x - turr_draw_offset.x,
@@ -528,12 +527,14 @@ bool Obj_Tank::DrawShadow(Camera * camera, float dt)
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
-	//app->render->Blit(
-	//	turr_shadow_tex,
-	//	pos_screen.x - draw_offset.x,
-	//	pos_screen.y - draw_offset.y,
-	//	camera,
-	//	&rotate_turr.GetFrame(turr_angle));
+	app->render->BlitScaled(
+		turr_shadow_tex,
+		pos_screen.x - turr_draw_offset.x,
+		pos_screen.y - turr_draw_offset.y,
+		camera,
+		&rotate_turr.GetFrame(turr_angle),
+		turr_scale,
+		turr_scale);
 
 	return true;
 }

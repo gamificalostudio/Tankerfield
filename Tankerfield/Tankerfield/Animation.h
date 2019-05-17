@@ -126,7 +126,7 @@ public:
 
 	SDL_Rect & GetFrame(float angle)
 	{
-		uint ind = GetRotatedIndex(angle);
+		uint ind = GetDirectionIndex(angle);
 		return frames->rects[ind][(uint)current_frame];
 	}
 
@@ -153,8 +153,9 @@ public:
 
 private:
 
-	//angle should be in degrees
-	uint GetRotatedIndex(float angle)
+	//Checks which animation direction is nearest to the specified angle
+	//and returns that direction's index
+	uint GetDirectionIndex(float angle)
 	{
 		//Avoid all the calculations if it only has one frame
 		if (frames->max_dirs == 1u)
