@@ -116,8 +116,8 @@ bool Obj_Tank_MainMenu::Draw(float dt, Camera * camera)
 
 	app->render->BlitScaled(
 		turr_tex,
-		pos_map.x - draw_offset.x - 1.66f* tank_scale - rect.w * 0.5f * tank_scale,
-		pos_map.y - draw_offset.y + 1.66f * tank_scale - rect.h * 0.5f * tank_scale,
+		pos_map.x - draw_offset.x - 3.5f * tank_scale - rect.w * 0.5f * tank_scale,
+		pos_map.y - draw_offset.y + 3.5f * tank_scale - rect.h * 0.5f * tank_scale,
 		camera,
 		&rect, tank_scale, tank_scale);
 
@@ -144,8 +144,8 @@ bool Obj_Tank_MainMenu::DrawShadow(Camera * camera, float dt)
 
 	app->render->BlitScaled(
 		turr_shadow_tex,
-		pos_map.x - draw_offset.x - 1.66f * tank_scale - rect.w * 0.5f * tank_scale,
-		pos_map.y - draw_offset.y + 1.66f * tank_scale - rect.h * 0.5f * tank_scale,
+		pos_map.x - draw_offset.x - 4 * tank_scale - rect.w * 0.5f * tank_scale,
+		pos_map.y - draw_offset.y + 3 * tank_scale - rect.h * 0.5f * tank_scale,
 		camera,
 		&rect, tank_scale, tank_scale);
 
