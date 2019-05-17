@@ -206,9 +206,13 @@ bool M_Collision::Update(float dt)
 
 			if (on_collision && collider_1->is_sensor == false && collider_2->is_sensor == false)
 			{
-				if ((int)collider_1->tag >= (int)collider_2->tag)
+				if ((int)collider_1->tag > (int)collider_2->tag)
 				{
 					SolveOverlapDS(collider_2, collider_1);
+				}
+				else if ((int)collider_1->tag < (int)collider_2->tag)
+				{
+					SolveOverlapDS(collider_1, collider_2);
 				}
 				else
 				{
