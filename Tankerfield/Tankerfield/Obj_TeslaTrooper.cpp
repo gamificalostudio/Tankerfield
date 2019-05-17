@@ -33,25 +33,25 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("tesla_trooper");
-	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
+	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
 	//TEXTURES =============================================
 	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
-	tex			= app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
+	tex = app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
-	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
+	portal_tex = app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	curr_tex = tex;
 
 
 	//ANIMATIONS =============================================
-	idle.frames		= app->anim_bank->LoadFrames(anim_node.child("idle"));
-	walk.frames		= app->anim_bank->LoadFrames(anim_node.child("walk"));
-	attack.frames	= app->anim_bank->LoadFrames(anim_node.child("attack"));
-	death.frames	= app->anim_bank->LoadFrames(anim_node.child("death"));
+	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
+	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
+	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 	curr_anim = &idle;
 
-	
+
 
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
@@ -63,34 +63,32 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
-	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav",20);
+	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav", 20);
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/hit.wav", 25);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
 	app->audio->PlayFx(sfx_spawn);
 	draw = false;
-	state				= ENEMY_STATE::SPAWN; //enemy
+	state = ENEMY_STATE::SPAWN; //enemy
 
-	speed				= tesla_trooper_node.child("speed").attribute("num").as_float();
+	speed = tesla_trooper_node.child("speed").attribute("num").as_float();
 
-	detection_range		= ((*app->render->cameras.begin())->screen_section.w/app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
 	squared_detection_range = detection_range * detection_range;
 	coll_w = 0.5f;
 	coll_h = 0.5f;
-
-	coll				= app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
-
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
-	draw_offset			= { 24, 28 };
+	draw_offset = { 24, 28 };
 
 	//parameters-------------------------------------------
-	attack_damage		= tesla_trooper_node.child("attack_damage").attribute("num").as_float();
-	attack_range		= tesla_trooper_node.child("attack_range").attribute("num").as_float();
+	attack_damage = tesla_trooper_node.child("attack_damage").attribute("num").as_float();
+	attack_range = tesla_trooper_node.child("attack_range").attribute("num").as_float();
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = tesla_trooper_node.child("attack_frequency").attribute("num").as_float();
 	life = pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
-	
+
 	//teleport 
 	check_teleport_time = 10; //10s
 	teleport_timer.Start();
@@ -250,7 +248,7 @@ int Obj_TeslaTrooper::Move(float & dt)
 		curr_anim = &idle;
 	}
 	return retflag;
-	
+
 }
 
 void Obj_TeslaTrooper::GetPath()
@@ -307,11 +305,11 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 		app->render->Blit(
 			portal_tex,
 			pos_screen.x - portal_frame.w * 0.5f,
-			pos_screen.y- portal_frame.h,
+			pos_screen.y - portal_frame.h,
 			camera,
 			&portal_frame);
 	}
-	
+
 	if (draw)
 	{
 		app->render->BlitScaled(
