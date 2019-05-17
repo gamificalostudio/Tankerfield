@@ -91,7 +91,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->tesla_trooper_info.attack_frequency;
 
-	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round);
+	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
 
 	//teleport 
 	check_teleport_time = 10; //10s

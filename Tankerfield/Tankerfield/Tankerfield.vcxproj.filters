@@ -446,7 +446,7 @@
       <Filter>Tools\Animations</Filter>
     </Xml>
     <Xml Include="..\Game\balance.xml">
-      <Filter>Tools</Filter>
+      <Filter>Tools\Balance</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>

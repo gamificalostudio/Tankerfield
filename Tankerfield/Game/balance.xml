@@ -8,6 +8,41 @@
   
   <!--Weapons-->
   <weapons>
+
+    <basic_weapon>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </basic_weapon>
+
+    <double_missile>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </double_missile>
+
+    <healing_shot>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </healing_shot>
+
+    <laser>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </laser>
+
+    <electro_shot>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </electro_shot>
+
+    <flamethrower>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </flamethrower>
+
+    <oil_weapon>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </oil_weapon>
     
   </weapons>
   
@@ -40,7 +75,7 @@
       <attack_range num="3"/>
       <attack_frequency num="2000"/>
       <life_multiplier num ="700"/>
-      <life_exponential_base num="1.5"/>
+      <life_exponential_base num="1.55"/>
     </rocket_launcher>
 
     <suicidal>
@@ -49,7 +84,7 @@
       <attack_range num="1"/>
       <attack_frequency num="1000"/>
       <life_multiplier num ="50"/>
-      <life_exponential_base num="1.5"/>
+      <life_exponential_base num="1.55"/>
     </suicidal>
     
   </enemies>

@@ -488,6 +488,8 @@ bool M_ObjManager::SortByYPos(Object * obj1, Object * obj2)
 
 void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 {
+	//ENEMIES
+
 	//TESLA_TROOPER
 	pugi::xml_node tesla_trooper_node = balance_node.child("enemies").child("tesla_trooper");
 	tesla_trooper_info.life_multiplier			= tesla_trooper_node.child("life_multiplier").attribute("num").as_float();
@@ -525,4 +527,42 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	suicidal_info.speed							= suicidal_node.child("speed").attribute("num").as_float();
 	suicidal_info.life_multiplier				= suicidal_node.child("life_multiplier").attribute("num").as_float();
 	suicidal_info.life_exponential_base			= suicidal_node.child("life_exponential_base").attribute("num").as_float();
+
+	//WEAPONS
+
+	//Basic weapon
+	pugi::xml_node basic_weapon_node = balance_node.child("weapons").child("basic_weapon");
+	basic_weapon_info.damage_multiplier			= basic_weapon_node.child("damage_multiplier").attribute("num").as_float();
+	basic_weapon_info.damage_exponential_base	= basic_weapon_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Double missile
+	pugi::xml_node double_missile_node = balance_node.child("weapons").child("double_missile");
+	double_missile_info.damage_multiplier = double_missile_node.child("damage_multiplier").attribute("num").as_float();
+	double_missile_info.damage_exponential_base = double_missile_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Healing shot
+	pugi::xml_node healing_shot_node = balance_node.child("weapons").child("healing_shot");
+	healing_shot_info.damage_multiplier = healing_shot_node.child("damage_multiplier").attribute("num").as_float();
+	healing_shot_info.damage_exponential_base = healing_shot_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Laser
+	pugi::xml_node laser_node = balance_node.child("weapons").child("laser");
+	laser_info.damage_multiplier = laser_node.child("damage_multiplier").attribute("num").as_float();
+	laser_info.damage_exponential_base = laser_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Electro shot
+	pugi::xml_node electro_shot_node = balance_node.child("weapons").child("electro_shot");
+	electro_shot_info.damage_multiplier = electro_shot_node.child("damage_multiplier").attribute("num").as_float();
+	electro_shot_info.damage_exponential_base = electro_shot_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Flamethrower
+	pugi::xml_node flamethrower_node = balance_node.child("weapons").child("flamethrower");
+	flamethrower_info.damage_multiplier = flamethrower_node.child("damage_multiplier").attribute("num").as_float();
+	flamethrower_info.damage_exponential_base = flamethrower_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Oil weapon
+	pugi::xml_node oil_weapon_node = balance_node.child("weapons").child("oil_weapon");
+	oil_weapon_info.damage_multiplier = oil_weapon_node.child("damage_multiplier").attribute("num").as_float();
+	oil_weapon_info.damage_exponential_base = oil_weapon_node.child("damage_exponential_base").attribute("num").as_float();
+
 }

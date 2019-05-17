@@ -77,7 +77,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
-	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round);
+	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round - 1);
 
 	scale = 2.f;
 	app->audio->PlayFx(sfx_spawn);

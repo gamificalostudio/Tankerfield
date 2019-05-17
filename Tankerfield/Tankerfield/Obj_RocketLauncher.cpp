@@ -57,7 +57,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	attack_range = app->objectmanager->rocket_launcher_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->rocket_launcher_info.attack_frequency;
-	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, app->scene->round);
+	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, app->scene->round - 1);
 	
 	check_path_time = 2.0f;
 
