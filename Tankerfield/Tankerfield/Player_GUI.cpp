@@ -248,6 +248,9 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 	case WEAPON::HEALING_SHOT:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
 		break;
+	case WEAPON::ELECTRO_SHOT:
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_ELECTRO_SHOT];
+		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;

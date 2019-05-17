@@ -40,20 +40,23 @@ bool Obj_Tank_MainMenu::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	//Textures-------------------------------------------------
-	//-- Base
-	base_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("base_blue").text().as_string());
+	// Textures ================================================
+
+	// Base -------------------------
+	base_color_tex = app->tex->Load(tank_node.child("spritesheets").child("base_color").text().as_string());
+	base_common_tex = app->tex->Load(tank_node.child("spritesheets").child("base_common").text().as_string());
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	//-- Turr
-	std::string aux = tank_node.child("spritesheets").child("turr_orange").text().as_string();
-	turr_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("turr_blue").text().as_string());
-	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
+	// Turret ------------------------
+	turret_color_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_color").text().as_string());
+	turret_common_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_common").text().as_string());
+	turret_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_shadow").text().as_string());
 
-	curr_tex = base_tex_blue;
-	turr_tex = turr_tex_blue;
+	SDL_SetTextureBlendMode(turret_shadow_tex, SDL_BLENDMODE_MOD);
+
+	// ==========================================================
 
 	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
 	curr_anim = &rotate_base;
@@ -98,31 +101,55 @@ void Obj_Tank_MainMenu::InputController(fPoint & input)
 
 bool Obj_Tank_MainMenu::Draw(float dt, Camera * camera)
 {
-	SDL_SetTextureColorMod(curr_tex, color_mod.r, color_mod.g, color_mod.b);
-	SDL_SetTextureColorMod(turr_tex, color_mod.r, color_mod.g, color_mod.b);
 
-	// Base =========================================
+	// Base common =========================================
+
 	SDL_Rect rect = curr_anim->GetFrame(angle);
 
 	app->render->BlitScaled(
-		curr_tex,
+		base_common_tex,
 		pos_map.x - draw_offset.x - rect.w * 0.5f * tank_scale,
 		pos_map.y - draw_offset.y - rect.h * 0.5f * tank_scale,
 		camera,
 		&rect, tank_scale, tank_scale);
 
-	// Turret =======================================
-	rect = rotate_turr.GetFrame(turr_angle);
+	// Base color =========================================
+
+	SDL_SetTextureColorMod(base_color_tex, tank_color.r, tank_color.g, tank_color.b);
 
 	app->render->BlitScaled(
-		turr_tex,
-		pos_map.x - draw_offset.x - 1.66f* tank_scale - rect.w * 0.5f * tank_scale,
-		pos_map.y - draw_offset.y + 1.66f * tank_scale - rect.h * 0.5f * tank_scale,
+		base_color_tex,
+		pos_map.x - draw_offset.x - rect.w * 0.5f * tank_scale,
+		pos_map.y - draw_offset.y - rect.h * 0.5f * tank_scale,
 		camera,
 		&rect, tank_scale, tank_scale);
 
-	SDL_SetTextureColorMod(curr_tex, 255, 255, 255);
-	SDL_SetTextureColorMod(turr_tex, 255, 255, 255);
+	SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
+
+	// Turret common ======================================
+
+	rect = rotate_turr.GetFrame(turr_angle);
+
+	app->render->BlitScaled(
+		turret_common_tex,
+		pos_map.x - draw_offset.x - 3.5f * tank_scale - rect.w * 0.5f * tank_scale,
+		pos_map.y - draw_offset.y + 3.5f * tank_scale - rect.h * 0.5f * tank_scale,
+		camera,
+		&rect, tank_scale, tank_scale);
+
+	// Turret color =======================================
+
+	SDL_SetTextureColorMod(turret_color_tex, tank_color.r, tank_color.g, tank_color.b);
+
+	app->render->BlitScaled(
+		turret_color_tex,
+		pos_map.x - draw_offset.x - 3.5f * tank_scale - rect.w * 0.5f * tank_scale,
+		pos_map.y - draw_offset.y + 3.5f * tank_scale - rect.h * 0.5f * tank_scale,
+		camera,
+		&rect, tank_scale, tank_scale);
+
+	SDL_SetTextureColorMod(turret_color_tex, 255, 255, 255);
+
 
 	return true;
 }
@@ -143,9 +170,9 @@ bool Obj_Tank_MainMenu::DrawShadow(Camera * camera, float dt)
 	rect = rotate_turr.GetFrame(turr_angle);
 
 	app->render->BlitScaled(
-		turr_shadow_tex,
-		pos_map.x - draw_offset.x - 1.66f * tank_scale - rect.w * 0.5f * tank_scale,
-		pos_map.y - draw_offset.y + 1.66f * tank_scale - rect.h * 0.5f * tank_scale,
+		turret_shadow_tex,
+		pos_map.x - draw_offset.x - 3.5f * tank_scale - rect.w * 0.5f * tank_scale,
+		pos_map.y - draw_offset.y + 3.5f * tank_scale - rect.h * 0.5f * tank_scale,
 		camera,
 		&rect, tank_scale, tank_scale);
 
@@ -198,9 +225,9 @@ void Obj_Tank_MainMenu::Rotate(float dt)
 
 }
 
-void Obj_Tank_MainMenu::SetColorMod(const SDL_Color new_color_mod)
+void Obj_Tank_MainMenu::SetColor(const SDL_Color new_color)
 {
-	color_mod = new_color_mod;
+	tank_color = new_color;
 }
 
 void Obj_Tank_MainMenu::SetController(Controller** controller)

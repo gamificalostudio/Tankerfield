@@ -1,16 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Obj_Brute.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_Building.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Obj_CannonFire.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Enemy.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Explosion.cpp">
@@ -34,12 +28,6 @@
     <ClCompile Include="Obj_RewardBox.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_RocketLauncher.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Suicidal.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_Tank.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -47,9 +35,6 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Tank_Weapons.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
@@ -205,23 +190,27 @@
     <ClCompile Include="Player_GUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Item_InstantHelp.cpp" />
-    <ClCompile Include="Obj_Portal.cpp" />
-    <ClCompile Include="ElectroShotAnimation.cpp">
-      <Filter>Objects\Bullets</Filter>
+    <ClCompile Include="Obj_Brute.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Enemy.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_RocketLauncher.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Suicidal.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_TeslaTrooper.cpp">
+      <Filter>Objects\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Obj_Brute.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_Building.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Obj_CannonFire.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Enemy.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Explosion.h">
@@ -245,19 +234,10 @@
     <ClInclude Include="Obj_RewardBox.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_RocketLauncher.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Suicidal.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_Tank.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Tank_MainMenu.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
@@ -437,10 +417,20 @@
     <ClInclude Include="Circle.h">
       <Filter>Tools\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="Item_InstantHelp.h" />
-    <ClInclude Include="Obj_Portal.h" />
-    <ClInclude Include="ElectroShotAnimation.h">
-      <Filter>Objects\Bullets</Filter>
+    <ClInclude Include="Obj_Brute.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Enemy.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_RocketLauncher.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Suicidal.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_TeslaTrooper.h">
+      <Filter>Objects\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +477,9 @@
     </Filter>
     <Filter Include="Tools\Geometry">
       <UniqueIdentifier>{6e682b8d-4a98-4114-b7bc-fd571d567eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Enemies">
+      <UniqueIdentifier>{03833ef9-4050-4efc-963c-7ae318029f4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
