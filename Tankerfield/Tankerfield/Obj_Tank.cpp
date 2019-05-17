@@ -87,14 +87,14 @@ bool Obj_Tank::Start()
 	base_color_tex = app->tex->Load(tank_node.child("spritesheets").child("base_color").text().as_string());
 	base_common_tex = app->tex->Load(tank_node.child("spritesheets").child("base_common").text().as_string());
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
-
+	base_damaged_tex = app->tex->Load(tank_node.child("spritesheets").child("base_damaged").text().as_string());
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
 	// Turret ------------------------
 	turret_color_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_color").text().as_string());
 	turret_common_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_common").text().as_string());
 	turret_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_shadow").text().as_string());
-
+	tur_damaged_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_damaged").text().as_string());
 	SDL_SetTextureBlendMode(turret_shadow_tex, SDL_BLENDMODE_MOD);
 
 	// Revive ------------------------ 
@@ -456,28 +456,83 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
-	// Base common ========================================
 
-	app->render->Blit(
-		base_common_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&curr_anim->GetFrame(angle));
 
-	// Base color =========================================
+	if (!damaged)
+	{
+		// Base common ========================================
+		app->render->Blit(
+			base_common_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&curr_anim->GetFrame(angle));
 
-	SDL_SetTextureColorMod(base_color_tex,tank_color.r, tank_color.g, tank_color.b);
+		// Base color =========================================
 
-	app->render->Blit(
-		base_color_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&curr_anim->GetFrame(angle));
+		SDL_SetTextureColorMod(base_color_tex, tank_color.r, tank_color.g, tank_color.b);
 
-	SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
+		app->render->Blit(
+			base_color_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&curr_anim->GetFrame(angle));
 
+		SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
+
+
+		// Turret common ======================================
+
+		app->render->BlitScaled(
+			turret_common_tex,
+			pos_screen.x - turr_draw_offset.x,
+			pos_screen.y - turr_draw_offset.y,
+			camera,
+			&rotate_turr.GetFrame(turr_angle),
+			turr_scale,
+			turr_scale);
+
+		// Turret color =======================================
+
+		SDL_SetTextureColorMod(turret_color_tex, tank_color.r, tank_color.g, tank_color.b);
+
+		app->render->BlitScaled(
+			turret_color_tex,
+			pos_screen.x - turr_draw_offset.x,
+			pos_screen.y - turr_draw_offset.y,
+			camera,
+			&rotate_turr.GetFrame(turr_angle),
+			turr_scale,
+			turr_scale);
+
+		SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
+	}
+	else
+	{
+		// Base damaged ========================================
+		app->render->Blit(
+			base_damaged_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&curr_anim->GetFrame(angle));
+
+		// Turret common ======================================
+		app->render->BlitScaled(
+			tur_damaged_tex,
+			pos_screen.x - turr_draw_offset.x,
+			pos_screen.y - turr_draw_offset.y,
+			camera,
+			&rotate_turr.GetFrame(turr_angle),
+			turr_scale,
+			turr_scale);
+		if (damaged_timer.ReadSec() >= 0.4f)
+		{
+			damaged = false;
+		}
+
+	}
 	// Shot ==============================================
 
 	if (show_crosshairs && camera == camera_player)
@@ -493,31 +548,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	}
 
 
-	// Turret common ======================================
 
-	app->render->BlitScaled(
-		turret_common_tex,
-		pos_screen.x - turr_draw_offset.x,
-		pos_screen.y - turr_draw_offset.y,
-		camera,
-		&rotate_turr.GetFrame(turr_angle),
-		turr_scale,
-		turr_scale);
-
-	// Turret color =======================================
-
-	SDL_SetTextureColorMod(turret_color_tex, tank_color.r, tank_color.g, tank_color.b);
-
-	app->render->BlitScaled(
-		turret_color_tex,
-		pos_screen.x - turr_draw_offset.x,
-		pos_screen.y - turr_draw_offset.y,
-		camera,
-		&rotate_turr.GetFrame(turr_angle),
-		turr_scale,
-		turr_scale);
-
-	SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
+	
 
 
 	return true;
@@ -674,6 +706,14 @@ void Obj_Tank::SetLife(int life)
 	}
 
 	gui->SetLifeBar(this->life);
+}
+
+void Obj_Tank::ReduceLife(int damage)
+{
+	life -= damage;
+	SetLife(life);
+	damaged_timer.Start();
+	damaged = true;
 }
 
 void Obj_Tank::SetItem(ItemType type)
