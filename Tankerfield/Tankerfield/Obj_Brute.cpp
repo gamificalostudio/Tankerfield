@@ -35,18 +35,21 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node brute_node = app->config.child("object").child("enemies").child("brute");
 
+	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
 	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
+	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
 	idle.frames = app->anim_bank->LoadFrames(animation_node.child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(animation_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(animation_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(animation_node.child("death"));
 	spawn.frames = app->anim_bank->LoadFrames(animation_node.child("spawn"));
 	curr_anim = &spawn;
+
 
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
@@ -70,8 +73,8 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
   
-	coll_w = 1.f;
-	coll_h = 1.f;
+	coll_w = 0.5f;
+	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
 	life = 1;//750* (log(app->scene->round)+2);
@@ -104,6 +107,9 @@ void Obj_Brute::Spawn(const float& dt)
 		curr_tex = tex;
 		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
+		//life_collider = app->collision->AddCollider(pos_map, 2, 2, Collider::TAG::ENEMY, 0.f, this);
+		//life_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		//life_collider->SetObjOffset(fPoint(1.f, 1.f));
 		draw_offset = normal_draw_offset;
 		curr_anim = &walk;
 		state = ENEMY_STATE::GET_PATH;

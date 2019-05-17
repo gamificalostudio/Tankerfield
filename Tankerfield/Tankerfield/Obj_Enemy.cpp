@@ -38,9 +38,6 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 
 	times_to_repeat_animation = 3u;
 
-	
-	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
-	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 
 	path_timer.Start();
 }
@@ -49,9 +46,12 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	if(in_white)
+	if (in_white)
+	{
 		ChangeTexture();
-
+	}
+	//if (life_collider != nullptr)
+	//	life_collider->SetPosToObj();
 	return true;
 }
 
@@ -64,7 +64,9 @@ void Obj_Enemy::ChangeTexture()
 		state != ENEMY_STATE::STUNNED_CHARGED)
 	{
 		curr_tex = last_texture;
+		in_white = false;
 	}
+	
 }
 
 void Obj_Enemy::Attack()
@@ -572,7 +574,7 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-
+		in_white = true;
 		if (life <= 0)
 		{
 			app->pick_manager->PickUpFromEnemy(pos_map);
