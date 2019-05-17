@@ -73,23 +73,24 @@ void Obj_Enemy::Attack()
 {
 	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
-		if (target != nullptr
-			&& target->coll->GetTag() == TAG::PLAYER
-			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
-			&& perf_timer.ReadMs() > (double)attack_frequency)
-		{
-			curr_anim = &attack;
-			target->ReduceLife(attack_damage);
-			perf_timer.Start();
-			app->audio->PlayFx(sfx_attack);
-		}
-
 		if (curr_anim == &attack
 			&& curr_anim->Finished())
 		{
 			curr_anim = &idle;//walk?
 			attack.Reset();
 		}
+		else if (target != nullptr
+				&& pos_map.DistanceNoSqrt(target->pos_map) <= attack_range_squared
+				&& perf_timer.ReadMs() > (double)attack_frequency)
+			{
+				curr_anim = &attack;
+				target->ReduceLife(attack_damage);
+				perf_timer.Start();
+				app->audio->PlayFx(sfx_attack);
+			}
+	
+
+		
 	}
 }
 void Obj_Enemy::Movement(float &dt)
@@ -198,7 +199,6 @@ void Obj_Enemy::Movement(float &dt)
 		break;
 	}
 
-	curr_anim = curr_anim;
 
 }
 
@@ -273,6 +273,7 @@ void Obj_Enemy::Idle()
 {
 	path.clear();
 	move_vect.SetToZero();
+	
 	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 	if (target != nullptr)
 	{
@@ -303,8 +304,8 @@ int Obj_Enemy::Move(float & dt)
 		UpdateVelocity();
 	}
 
-
-	curr_anim = &walk;
+	if (curr_anim != &attack)
+		curr_anim = &walk;
 
 	if (path_timer.ReadSec() >= check_path_time)
 		state = ENEMY_STATE::GET_PATH;

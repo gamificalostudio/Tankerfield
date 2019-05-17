@@ -59,7 +59,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	state = ENEMY_STATE::SPAWN; 
 	speed = 1.5f;
 	detection_range = 10.0f; //change?
-
+	range_pos.radius = 1.f;
 
 	spawn_draw_offset = { 260, 274 };
 	normal_draw_offset = { 132, 75 };
@@ -69,7 +69,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	angle = 180;//REMOVE
 
 	attack_damage = 10;
-	attack_range = 1;
+	attack_range = 1.5f;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
   
@@ -174,4 +174,26 @@ bool Obj_Brute::Draw(float dt, Camera * camera)
 		app->render->Blit(fire_tex, pos_screen.x - fire_frame.w*0.5f, pos_screen.y, camera, &fire_frame);
 	}
 	return true;
+}
+
+void Obj_Brute::Attack()
+{
+	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
+	{
+		if (curr_anim == &attack
+			&& curr_anim->Finished())
+		{
+			target->ReduceLife(attack_damage);
+			curr_anim = &idle;//walk?
+			attack.Reset();
+		}
+		else if (target != nullptr
+			&& pos_map.DistanceNoSqrt(target->pos_map) <= attack_range_squared
+			&& perf_timer.ReadMs() > (double)attack_frequency)
+		{
+			curr_anim = &attack;
+			perf_timer.Start();
+			app->audio->PlayFx(sfx_attack);
+		}
+	}
 }
