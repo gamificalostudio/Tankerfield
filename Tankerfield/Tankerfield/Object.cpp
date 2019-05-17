@@ -47,23 +47,6 @@ bool Object::Draw(float dt, Camera * camera)
 
 	return true;
 }
-//SDL_Rect * Object::GetRect()
-//{
-//	fPoint screen_pos = app->map->MapToScreenF(pos_map);
-
-//	SDL_Rect rect = curr_anim->GetFrame(angle);
-//	rect.x = screen_pos.x - draw_offset.x;
-//	rect.y = screen_pos.y - draw_offset.y;
-
-//	return &rect;
-//}
-
-//void Object::Draw() {
-//	if (current_animation != nullptr)
-//		app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y, &current_animation->frames[current_animation->GetNumCurrentFrame()], 1.0F, true);
-//	else
-//		app->render->Blit(data.tileset.texture, pos_map.x, pos_map.y);
-//}
 
 void Object::SetDamage(float damage)
 {
