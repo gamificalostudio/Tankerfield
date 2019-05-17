@@ -70,7 +70,7 @@ bool UI_Checkbox::OutClick(UI_Element * object)
 
 		if (listener != nullptr)
 		{
-			listener->OutClick(this);
+			listener->ClickUp(this);
 		}
 	}
 	return true;

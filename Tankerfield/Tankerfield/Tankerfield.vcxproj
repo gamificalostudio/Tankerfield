@@ -132,6 +132,8 @@
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
+    <ClCompile Include="UI_InputText.cpp" />
+    <ClCompile Include="UI_Table.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
     <ClCompile Include="Bullet_Basic.cpp" />
     <ClCompile Include="Bullet_Missile.cpp" />
@@ -144,7 +146,9 @@
     <ClCompile Include="Obj_Fire.cpp" />
     <ClCompile Include="Obj_Portal.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
+    <ClCompile Include="Obj_RocketLauncher.cpp" />
     <ClCompile Include="Obj_Suicidal.cpp" />
+    <ClCompile Include="Obj_Tank_MainMenu.cpp" />
     <ClCompile Include="Obj_Tank_Weapons.cpp" />
     <ClCompile Include="Player_GUI.cpp" />
     <ClCompile Include="Item_HealthBag.cpp" />
@@ -200,6 +204,8 @@
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
+    <ClInclude Include="UI_InputText.h" />
+    <ClInclude Include="UI_Table.h" />
     <ClInclude Include="M_AnimationBank.h" />
     <ClInclude Include="Bullet_Basic.h" />
     <ClInclude Include="Bullet_Missile.h" />
@@ -213,7 +219,9 @@
     <ClInclude Include="Obj_Fire.h" />
     <ClInclude Include="Obj_Portal.h" />
     <ClInclude Include="Obj_RewardBox.h" />
+    <ClInclude Include="Obj_RocketLauncher.h" />
     <ClInclude Include="Obj_Suicidal.h" />
+    <ClInclude Include="Obj_Tank_MainMenu.h" />
     <ClInclude Include="Player_GUI.h" />
     <ClInclude Include="Item_HealthBag.h" />
     <ClInclude Include="MathUtils.h" />
@@ -267,7 +275,9 @@
     <ClInclude Include="WeaponInfo.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\animations.xml" />
+    <Xml Include="..\Game\animations.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Game\config.xml">
       <SubType>Designer</SubType>
     </Xml>

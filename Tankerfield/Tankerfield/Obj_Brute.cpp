@@ -40,7 +40,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
-	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("enemies").child("brute").child("animation");
+	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
 	idle.frames = app->anim_bank->LoadFrames(animation_node.child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(animation_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(animation_node.child("attack"));
@@ -103,11 +103,70 @@ void Obj_Brute::Spawn(const float& dt)
 	if (curr_anim->Finished())
 	{
 		curr_tex = tex;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
-		coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 		draw_offset = normal_draw_offset;
 		curr_anim = &walk;
 		state = ENEMY_STATE::GET_PATH;
 	}
+}
+
+void Obj_Brute::Burn(const float& dt)
+{
+	if (burn_fist_enter)
+	{
+		fire_damage = life / 5;
+		curr_anim = &walk;
+		
+	}
+	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
+	{
+
+		int max_rand = 101;
+		int max_rand_double = max_rand * 2;
+		float one_divided_by_100 = 0.01f;
+
+		move_vect = { ((rand() % max_rand_double) - max_rand)* one_divided_by_100 ,((rand() % max_rand_double) - max_rand)*one_divided_by_100 };
+		move_vect.Normalize();
+
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+
+		timer_change_direction.Start();
+
+		max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
+		max_time_change_direction += 0.5f;
+
+		if (burn_fist_enter)
+			burn_fist_enter = false;
+
+		life -= fire_damage;
+		if (life <= 0)
+		{
+			state = ENEMY_STATE::DEAD;
+		}
+	}
+	else
+	{
+		UpdatePos(dt);
+	}
+	fire3.NextFrame(dt);
+}
+
+bool Obj_Brute::Draw(float dt, Camera * camera)
+{
+	app->render->BlitScaled(
+		curr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&frame,
+		scale,
+		scale);
+
+	if (state == ENEMY_STATE::BURN)
+	{
+		SDL_Rect fire_frame = fire3.GetFrame(0);
+		app->render->Blit(fire_tex, pos_screen.x - fire_frame.w*0.5f, pos_screen.y, camera, &fire_frame);
+	}
+	return true;
 }

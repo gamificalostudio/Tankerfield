@@ -38,7 +38,9 @@
 
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
+#include "Obj_RocketLauncher.h"
 #include "Object.h"
+#include "Obj_RewardBox.h"
 
 
 M_Scene::M_Scene() : Module()
@@ -94,7 +96,7 @@ bool M_Scene::Start()
 
 
 	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
-// Load the first level of the list on first game start -------------------------
+	// Load the first level of the list on first game start -------------------------
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
 	std::advance(levelData, current_level);
 	app->map->Load((*levelData)->name.c_str());
@@ -125,23 +127,25 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[1] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[1].pos);
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
-
-			//app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
 		}
 	}
+	for (uint i = 0; i < 4; ++i)
+	{
+		Obj_RewardBox* box = app->pick_manager->CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{ 2.f, -2.f });
+		box->SetTypeBox(PICKUP_TYPE::WEAPON);
+	}
+	
+	general_hud = DBG_NEW General_GUI();
+	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
 
-
-
-	general_hud = DBG_NEW General_HUD();
-
-	round = 0u;
+	round = 1u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
 
-	UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
-	label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
-	label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
+	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
+	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
 	return true;
 }
@@ -232,13 +236,13 @@ bool M_Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-	if (app->input->GetKey(SDL_SCANCODE_F10)== KeyState::KEY_DOWN)
-	{
-		if (label_number_of_enemies->GetState() == ELEMENT_STATE::VISIBLE)
-			label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
-		else
-			label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
-	}
+	//if (app->input->GetKey(SDL_SCANCODE_F10)== KeyState::KEY_DOWN)
+	//{
+	//	if (label_number_of_enemies->GetState() == ELEMENT_STATE::VISIBLE)
+	//		label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+	//	else
+	//		label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
+	//}
 
 	switch (stat_of_wave)
 	{
@@ -372,9 +376,6 @@ bool M_Scene::CleanUp()
 			(*i)->gui = nullptr;
 	}
 
-	if(label_number_of_enemies!=nullptr)
-		label_number_of_enemies->Destroy();
-
 	return true;
 }
 
@@ -435,8 +436,9 @@ void M_Scene::DebugPathfinding()
 					for (item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
 					{
 						SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
-					app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
+						app->render->Blit(path_tex, pos.x + path_tex_offset.x, pos.y + path_tex_offset.y,(*item_cam));
 					}
+
 					SDL_RenderSetClipRect(app->render->renderer, nullptr);
 				}
 			}
@@ -460,8 +462,8 @@ void M_Scene::ReduceNumEnemies()
 	{
 		number_of_enemies = 0;
 	}
-	if (label_number_of_enemies != nullptr)
-		label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
+	//if (label_number_of_enemies != nullptr)
+	//	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
 
 }
 
@@ -470,7 +472,7 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies = 0;
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
-	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
+	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
 	 
 
 	for (int i = 0; i < Tesla_trooper_units; i++)

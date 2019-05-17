@@ -186,11 +186,10 @@ bool Obj_Tank::Start()
 
 	float coll_w = 0.8f;
 	float coll_h = 0.8f;
-	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::PLAYER,0.f,this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::PLAYER, BODY_TYPE::DYNAMIC, 0.f,this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
-	cannon_height = 11.f;
+	cannon_height = 16.f;
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -201,15 +200,20 @@ bool Obj_Tank::Start()
 	draw_offset.x = 46;
 	draw_offset.y = 46;
 
+	turr_draw_offset.x = 59;
+	turr_draw_offset.y = 50;
+
 	base_angle_lerp_factor = 11.25f;
 	shot_angle_lerp_factor = 11.25f;
 
 	shot_timer.Start();
 
-	life = 90;
 	max_life = 100;
+	SetLife(100);
 
 	charged_shot_speed = 1.0f;
+
+	turr_scale = 1.2f;
 
 	//- Tutorial
 	//-- Move
@@ -255,13 +259,13 @@ bool Obj_Tank::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
-		if (coll->GetTag() == Collider::TAG::PLAYER)
+		if (coll->GetTag() == TAG::PLAYER)
 		{
-			coll->SetTag(Collider::TAG::GOD);
+			coll->SetTag(TAG::GOD);
 		}
 		else
 		{
-			coll->SetTag(Collider::TAG::PLAYER);
+			coll->SetTag(TAG::PLAYER);
 		}
 	}
 	return true;
@@ -297,17 +301,6 @@ void Obj_Tank::CameraMovement(float dt)
 fPoint Obj_Tank::GetTurrPos() const
 {
 	return turr_pos;
-}
-
-Controller * Obj_Tank::GetController()
-{
-	if (controller == nullptr || *controller == nullptr)
-	{
-		LOG(" Controller not found");
-		return nullptr;
-	}
-
-	return *controller;
 }
 
 void Obj_Tank::Movement(float dt)
@@ -378,7 +371,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		//if the player shot
 		if ((ReleaseShot()
 			|| GetShotAutomatically())
-			&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+			&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 		{
 			//- Basic shot
 			if (charged_shot_timer.ReadMs() < charge_time)
@@ -457,9 +450,19 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	app->render->Blit(
 		curr_tex,
 		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
+		pos_screen.y - draw_offset.y - 1.66f,
 		camera,
 		&curr_anim->GetFrame(angle));
+
+	// Turret =======================================
+	app->render->BlitScaled(
+		turr_tex,
+		pos_screen.x - turr_draw_offset.x,
+		pos_screen.y - turr_draw_offset.y,
+		camera,
+		&rotate_turr.GetFrame(turr_angle),
+		turr_scale,
+		turr_scale);
 
 	if (show_crosshairs && camera == camera_player)
 	{
@@ -470,8 +473,9 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
 		app->render->DrawLineSplitScreen(
 			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 0, 0, 255, 123, camera);
+			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
+
 
 	// Turret =======================================
 	app->render->Blit(
@@ -480,8 +484,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		pos_screen.y - draw_offset.y,
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
-
-
 
 	return true;
 }
@@ -527,12 +529,14 @@ bool Obj_Tank::DrawShadow(Camera * camera, float dt)
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
-	app->render->Blit(
+	app->render->BlitScaled(
 		turr_shadow_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
+		pos_screen.x - turr_draw_offset.x,
+		pos_screen.y - turr_draw_offset.y,
 		camera,
-		&rotate_turr.GetFrame(turr_angle));
+		&rotate_turr.GetFrame(turr_angle),
+		turr_scale,
+		turr_scale);
 
 	return true;
 }
@@ -546,7 +550,7 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::FRIENDLY_BULLET)
+	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
 		if (bullet->tank_parent != this) // he does not heal himself
@@ -555,7 +559,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + weapon_info.bullet_healing);
+				SetLife(GetLife() + bullet->tank_parent->weapon_info.shot1.bullet_healing);
 			}
 		}
 		else
@@ -564,7 +568,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	if (c1->GetTag() == TAG::PICK_UP)
 	{
 		if (this->Alive())
 		{
@@ -582,7 +586,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed < speed + road_buff)
+	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
 	{
 			curr_speed += road_buff;
 	}
@@ -590,7 +594,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 
 void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::PORTAL)
+	if (c1->GetTag() == TAG::PORTAL)
 	{
 		if (time_between_portal_tp.ReadMs() > 2000) {
 			if (c1 == portal1->coll) {
@@ -606,11 +610,11 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
 {
-	if (c1->GetTag() == Collider::TAG::PICK_UP)
+	if (c1->GetTag() == TAG::PICK_UP)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
-	if (c1->GetTag() == Collider::TAG::ROAD && curr_speed >= speed + road_buff)
+	if (c1->GetTag() == TAG::ROAD && curr_speed >= speed + road_buff)
 		{
 			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
 		}
@@ -650,7 +654,7 @@ WeaponInfo Obj_Tank::GetWeaponInfo() const
 
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 {
-	weapon_info.time_between_bullets = time_between_bullets;
+	weapon_info.shot1.time_between_bullets = time_between_bullets;
 }
 
 int Obj_Tank::GetLife() const
@@ -665,7 +669,7 @@ int Obj_Tank::GetMaxLife() const
 
 int Obj_Tank::GetTimeBetweenBullets() const
 {
-	return weapon_info.time_between_bullets;
+	return weapon_info.shot1.time_between_bullets;
 }
 
 void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, fPoint & iso_dir)
@@ -732,7 +736,7 @@ void Obj_Tank::ShootChargedWeapon()
 
 	if ((ReleaseShot()
 		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
 		this->curr_speed = speed;
 		//- Basic shot
@@ -740,18 +744,19 @@ void Obj_Tank::ShootChargedWeapon()
 		{
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(weapon_info.basic_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
+			camera_player->AddTrauma(weapon_info.shot1.trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
 		//- Charged shot
 		else
 		{
 			(this->*shot2_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(weapon_info.charged_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
+			camera_player->AddTrauma(weapon_info.shot2.trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
+			app->objectmanager->CreateObject(weapon_info.shot2.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
-		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);
 	}
@@ -770,17 +775,18 @@ void Obj_Tank::ShootSustainedWeapon()
 	{
 		(this->*shot2_function[(uint)weapon_info.weapon])();
 		//TODO: Play wepon sfx
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
 	}
 
 	//- Quick shot
 	if ((ReleaseShot()
 		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
 		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
 	{
 		(this->*shot1_function[(uint)weapon_info.weapon])();
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+		app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
 	}
 }

@@ -17,10 +17,11 @@
 
 
 
+
 Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 {
 	pugi::xml_node enemie_node = app->config.child("object").child("enemies");
-	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("enemies");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node;
 
 	tex_electro_dead = app->tex->Load(enemie_node.child("tex_electro_dead").child_value());
 	electro_dead.frames = app->anim_bank->LoadFrames(anim_node.child("electro_dead"));
@@ -35,9 +36,11 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 
-
-
 	times_to_repeat_animation = 3u;
+
+
+	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
+	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 
 	path_timer.Start();
 }
@@ -46,7 +49,8 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	ChangeTexture();
+	if(in_white)
+		ChangeTexture();
 
 	return true;
 }
@@ -60,7 +64,7 @@ void Obj_Enemy::ChangeTexture()
 		state != ENEMY_STATE::STUNNED_CHARGED &&
 		state != ENEMY_STATE::DEAD)
 	{
-		curr_tex = tex;
+		curr_tex = last_texture;
 	}
 }
 
@@ -69,7 +73,7 @@ void Obj_Enemy::Attack()
 	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
 		if (target != nullptr
-			&& target->coll->GetTag() == Collider::TAG::PLAYER
+			&& target->coll->GetTag() == TAG::PLAYER
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
@@ -120,6 +124,7 @@ void Obj_Enemy::Movement(float &dt)
 	case ENEMY_STATE::RECHEAD_POINT:
 	{
 		RecheadPoint();
+
 	}
 	break;
 
@@ -179,7 +184,14 @@ void Obj_Enemy::Movement(float &dt)
 		}
 	}
 	break;
-	break;
+
+
+	case ENEMY_STATE::BURN:
+	{
+		Burn(dt);
+	}
+		break;
+
 	default:
 		assert(true && "The enemy have no state");
 		break;
@@ -278,20 +290,24 @@ int Obj_Enemy::Move(float & dt)
 		state = ENEMY_STATE::RECHEAD_POINT;
 	}
 
+	
+
 	if (update_velocity_vec.ReadSec() > 1)
 	{
 		UpdateVelocity();
 	}
 
-	pos_map += move_vect * speed * dt;
-	range_pos.center = pos_map;
+
 	curr_anim = &walk;
 
 	if (path_timer.ReadSec() >= check_path_time)
 		state = ENEMY_STATE::GET_PATH;
 
+	UpdatePos(dt);
 	return 0;
 }
+
+
 
 void Obj_Enemy::GetPath()
 {
@@ -331,14 +347,26 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 		&frame,
 		scale,
 		scale);
+
 	
 
+	return true;
+}
+
+bool Obj_Enemy::Start()
+{
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	return true;
 }
 
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->ReduceNumEnemies();
+
+	to_remove = true;
 	return true;
 }
 
@@ -351,6 +379,12 @@ inline void Obj_Enemy::UpdateVelocity()
 		move_vect = new_move_vec;
 		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
 	}
+}
+
+inline void Obj_Enemy::UpdatePos(const float& dt)
+{
+	pos_map += move_vect * speed * dt;
+	range_pos.center = pos_map;
 }
 
 void Obj_Enemy::DrawDebug(const Camera* camera)
@@ -367,9 +401,64 @@ void Obj_Enemy::DrawDebug(const Camera* camera)
 
 }
 
+inline void Obj_Enemy::Burn(const float & dt)
+{
+	if (burn_fist_enter)
+	{
+		curr_anim = &burn;
+		fire_damage = life / 3;
+		if (burn_texture != nullptr)
+			curr_tex = burn_texture;
+
+	
+	}
+	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
+	{
+		if (life > 0)
+		{
+			int max_rand = 101;
+			int max_rand_double = max_rand * 2;
+			float one_divided_by_100 = 0.01f;
+
+			move_vect = { ((rand() % max_rand_double) - max_rand)* one_divided_by_100 ,((rand() % max_rand_double) - max_rand)*one_divided_by_100 };
+			move_vect.Normalize();
+
+			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+
+			timer_change_direction.Start();
+
+			max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
+			max_time_change_direction += 0.5f;
+			life -= fire_damage;
+		}
+		else
+		{
+			curr_anim = &dying_burn;
+			if (coll != nullptr)
+			{
+				coll->Destroy();
+				coll = nullptr;
+			}
+			
+		}
+
+		if (burn_fist_enter)
+			burn_fist_enter = false;
+	}
+
+	if (life > 0)
+		UpdatePos(dt);
+	else if (curr_anim == &dying_burn && curr_anim->Finished())
+	{
+		CleanUp();
+	}
+
+}
+
+
 void Obj_Enemy::OnTriggerEnter(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	if (collider->GetTag() == TAG::BULLET_LASER)
 	{
 		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
 		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
@@ -377,7 +466,9 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
+			last_texture = curr_tex;
 			curr_tex = tex_damaged;
+			in_white = true;
 
 			if (life <= 0)
 			{
@@ -404,7 +495,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 	}
 
-	if (collider->GetTag() == Collider::TAG::ELECTRO_SHOT)
+	if (collider->GetTag() == TAG::ELECTRO_SHOT)
 	{
 		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
 		//player->draw_electro_shot = true;
@@ -459,7 +550,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 void Obj_Enemy::OnTrigger(Collider* collider)
 {
-	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
+	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
 		damaged_sprite_timer.Start();

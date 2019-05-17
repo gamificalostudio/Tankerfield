@@ -89,7 +89,7 @@ bool UI_Slider::RepeatClick(UI_Element * object)
 	{
 		if (listener != nullptr)
 		{
-			listener->RepeatClick(this);
+			listener->ClickRepeat(this);
 		}
 	}
 

@@ -148,6 +148,7 @@ private:
 	int			mouse_y = NULL;
 
 public:
+	std::string input_text;
 	std::vector<Controller*> controllers;
 	Controller** GetAbleController();
 };

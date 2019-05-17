@@ -23,7 +23,6 @@ public:
 	bool Start();
 
 public:
-	bool charged = false;
 	uint kill_counter = 0u;
 	uint kill_counter_max = 0u;
 
