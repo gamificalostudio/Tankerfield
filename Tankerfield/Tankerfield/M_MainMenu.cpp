@@ -208,7 +208,7 @@ bool M_MainMenu::PostUpdate(float dt)
 	case MENU_STATE::INIT_MENU:
 		break;
 	case MENU_STATE::SELECTION:
-		current_player = 0;
+
 		app->render->DrawQuad((SDL_Rect)app->win->GetWindowRect(), 0, 0, 0, 180);
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
