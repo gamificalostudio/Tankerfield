@@ -66,7 +66,7 @@ void Obj_Enemy::ChangeTexture()
 		curr_tex != tex && 
 		state != ENEMY_STATE::STUNNED &&
 		state != ENEMY_STATE::STUNNED_CHARGED &&
-		oiled==false,
+		!oiled &&
 		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
@@ -572,6 +572,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	}
 	else if (collider->GetTag() == TAG::BULLET_OIL)
 	{
+		
 		life -= collider->damage;
 		oiled = true;
 		oiled_timer.Start();
@@ -613,6 +614,7 @@ void Obj_Enemy::Oiled()
 			&& state != ENEMY_STATE::STUNNED_CHARGED )
 		{
 			curr_tex = oiled_tex;
+			in_white = true;
 		}
 		speed = original_speed*0.5f;
 	}

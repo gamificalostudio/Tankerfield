@@ -78,7 +78,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
-	life = 1;//750* (log(app->scene->round)+2);
+	life = 750* (log(app->scene->round)+2);
 
 	scale = 2.f;
 	app->audio->PlayFx(sfx_spawn);
@@ -96,7 +96,8 @@ void Obj_Brute::ChangeTexture()
 		curr_tex != tex &&
 		state != ENEMY_STATE::STUNNED &&
 		state != ENEMY_STATE::STUNNED_CHARGED &&
-		oiled == false)
+		oiled == false &&
+		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
 		in_white = false;
