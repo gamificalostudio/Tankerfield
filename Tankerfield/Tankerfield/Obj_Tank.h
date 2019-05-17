@@ -277,7 +277,7 @@ public:
 public:
 	Obj_Portal * portal1;
 	Obj_Portal * portal2;
-	
+	bool hit_no_enemie = false;
 };
 
 #endif

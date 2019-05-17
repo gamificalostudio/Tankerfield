@@ -35,7 +35,7 @@ bool Eletro_Shot_Animation::Update(float dt)
 	else
 	{
 		curr_anim->Reset();
-		//to_remove = true;
+		to_remove = true;
 	}
 
 	return true;

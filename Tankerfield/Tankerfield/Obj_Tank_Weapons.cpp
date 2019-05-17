@@ -12,6 +12,7 @@
 #include "Bullet_Missile.h"
 #include "Healing_Bullet.h"
 #include "Bullet_Laser.h"
+#include "ElectroShotAnimation.h"
 
 
 void Obj_Tank::InitWeapons()
@@ -87,6 +88,15 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 			{
 				(*iter)->Disactivate();
 			}
+		}
+
+		if (hit_no_enemie)
+		{
+			hit_no_enemie = false;
+			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, pos_map);
+			electro_anim->offset_dir_screen = app->map->MapToScreenF(GetShotDir());
+			electro_anim->distance = 50.f;
+			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(GetShotDir());
 		}
 
 	}
@@ -363,6 +373,7 @@ void Obj_Tank::ShootDoubleMissileCharged()
 
 void Obj_Tank::ShootElectroShot()
 {
+	hit_no_enemie = true;
 	enemies_hitted.clear();
 	float coll_w_init;
 	float coll_h_init;
@@ -395,6 +406,7 @@ void Obj_Tank::ShootElectroShot()
 
 void Obj_Tank::ShootElectroShotCharged()
 {
+	hit_no_enemie = true;
 	enemies_hitted.clear();
 	float coll_w_init;
 	float coll_h_init;

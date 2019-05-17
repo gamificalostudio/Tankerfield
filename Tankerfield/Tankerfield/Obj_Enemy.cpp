@@ -407,11 +407,14 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
 		{
 			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
-
+			
 			electro_anim->offset_dir_screen = app->map->MapToScreenF(player->GetShotDir());
-			electro_anim->distance = player->pos_screen.DistanceTo(this->pos_screen + app->map->MapToScreenF(fPoint{1,1}*player->GetShotDir()));
+			electro_anim->distance = player->pos_screen.DistanceTo(this->pos_screen + app->map->MapToScreenF(/*more distance para que no se quede el rayo al borde*/player->GetShotDir()));
 			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
+
 			player->GetEnemiesHitted()->push_back(this);
+			player->hit_no_enemie = false;
+
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
