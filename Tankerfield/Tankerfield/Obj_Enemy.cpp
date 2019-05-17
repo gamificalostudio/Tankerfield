@@ -46,27 +46,32 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
+	
+	Oiled();
+
 	if (in_white)
 	{
 		ChangeTexture();
 	}
+
 	if (life_collider != nullptr)
 		life_collider->SetPosToObj();
+
 	return true;
 }
 
 void Obj_Enemy::ChangeTexture()
 {
-	
 	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
 		curr_tex != tex && 
 		state != ENEMY_STATE::STUNNED &&
-		state != ENEMY_STATE::STUNNED_CHARGED)
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		!oiled &&
+		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
 		in_white = false;
 	}
-	
 }
 
 void Obj_Enemy::Attack()
@@ -248,6 +253,7 @@ void Obj_Enemy::ElectroDead()
 {
 	if (curr_anim != &electro_dead)
 	{
+		bool_electro_dead = true;
 		curr_tex = tex_electro_dead;
 		curr_anim = &electro_dead;
 		app->audio->PlayFx(sfx_death);
@@ -570,17 +576,15 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			app->audio->PlayFx(sfx_hit);
 		}
 	}
-}
-
-void Obj_Enemy::OnTrigger(Collider* collider)
-{
-	/*if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
+	else if (collider->GetTag() == TAG::BULLET_OIL)
 	{
-		in_white = true;
+		
 		life -= collider->damage;
+		oiled = true;
+		oiled_timer.Start();
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
-		in_white = true;
+
 		if (life <= 0)
 		{
 			app->pick_manager->PickUpFromEnemy(pos_map);
@@ -590,10 +594,40 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 		{
 			app->audio->PlayFx(sfx_hit);
 		}
-	}*/
+	}
+
+	else if (collider->GetTag() == TAG::OIL_POOL)
+	{
+		oiled = true;
+		oiled_timer.Start();
+	}
 }
+
 
 bool Obj_Enemy::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
+}
+
+
+void Obj_Enemy::Oiled()
+{
+	if (oiled == true)
+	{
+		if (damaged_sprite_timer.Read() > damaged_sprite_time && 
+			!bool_electro_dead
+			&& state != ENEMY_STATE::STUNNED
+			&& state != ENEMY_STATE::STUNNED_CHARGED )
+		{
+			curr_tex = oiled_tex;
+			in_white = true;
+		}
+		speed = original_speed*0.5f;
+	}
+
+	if (oiled_timer.Read() >= 5000)
+	{
+		oiled = false;
+		speed = original_speed;
+	}
 }

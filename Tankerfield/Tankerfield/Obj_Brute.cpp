@@ -38,6 +38,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
+	oiled_tex = app->tex->Load("textures/Objects/enemies/brute-sheet_oiled.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
@@ -57,7 +58,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
 	state = ENEMY_STATE::SPAWN; 
-	speed = 1.5f;
+	original_speed=speed = 1.5f;
 	detection_range = 10.0f; //change?
 	range_pos.radius = 1.f;
 
@@ -77,7 +78,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
-	life = 1;//750* (log(app->scene->round)+2);
+	life = 750* (log(app->scene->round)+2);
 
 	scale = 2.f;
 	app->audio->PlayFx(sfx_spawn);
@@ -94,9 +95,12 @@ void Obj_Brute::ChangeTexture()
 		damaged_sprite_timer.Read() > damaged_sprite_time &&
 		curr_tex != tex &&
 		state != ENEMY_STATE::STUNNED &&
-		state != ENEMY_STATE::STUNNED_CHARGED)
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		oiled == false &&
+		bool_electro_dead == false)
 	{
-		curr_tex = tex;
+		curr_tex = last_texture;
+		in_white = false;
 	}
 }
 
