@@ -80,6 +80,13 @@ protected:
 
 	int life = 0;
 	float speed = 0.f;
+
+	/* Attack properties */
+	float attack_frequency = 0.f;
+	float attack_range = 0.f;//Tile distance in which the enemy can attack
+	float attack_range_squared = 0.f;
+	int attack_damage = 0;
+
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * tex_electro_dead = nullptr;
@@ -88,8 +95,8 @@ protected:
 	iPoint electrocuted_draw_offset = { 0, 0 };
 
 	SDL_Texture* burn_texture = nullptr;
-	SDL_Texture* fire_tex = nullptr;
 	SDL_Texture* last_texture = nullptr;
+
 	bool in_white = false;
 
 
@@ -109,6 +116,7 @@ protected:
 	Animation death;
 	Animation burn;
 	Animation dying_burn;
+	
 
 	Animation electro_dead;
 
@@ -130,12 +138,6 @@ protected:
 	PerfTimer perf_timer;
 	Timer path_timer;
 
-	/* Attack properties */
-	float attack_frequency = 0.f;
-	float attack_range = 0.f;//Tile distance in which the enemy can attack
-	float attack_range_squared = 0.f;
-	int attack_damage = 0;
-
 	fPoint move_vect = { 0.0f, 0.0f };
 	float check_path_time = 0.f;
 	fPoint next_pos = { 0.f, 0.f };
@@ -152,10 +154,12 @@ protected:
 	// Burn state variables------
 	bool burn_fist_enter = true;
 	Timer timer_change_direction;
-	Animation fire3;
+	
 
 	float max_time_change_direction = 0.5f;
 	float fire_damage = 0;
+
+	//Collider* life_collider = nullptr;
 
 
 };

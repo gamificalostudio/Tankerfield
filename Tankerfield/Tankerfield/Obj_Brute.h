@@ -47,9 +47,10 @@ private:
 	
 
 	Animation spawn;
+	Animation fire3;
 	
 	SDL_Texture * spawn_tex = nullptr;
-
+	SDL_Texture* fire_tex = nullptr;
 
 };
 
