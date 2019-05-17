@@ -18,7 +18,7 @@ Eletro_Shot_Animation::Eletro_Shot_Animation(fPoint pos) :Object(pos)
 	draw_offset.x = curr_anim->GetFrame(0).w * 0.5f;
 	//	electro_offset.y = 30;
 	
-	draw_offset += (iPoint)offset_dir_screen;
+	
 
 }
 
