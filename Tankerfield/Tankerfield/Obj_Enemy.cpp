@@ -35,6 +35,8 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 
+
+
 	times_to_repeat_animation = 3u;
 
 	path_timer.Start();
@@ -153,6 +155,7 @@ void Obj_Enemy::Movement(float &dt)
 		
 		curr_tex = tex_electro_dead;
 		curr_anim = &electro_dead;
+		draw_offset = electrocuted_draw_offset;
 		if ((int)electro_dead.current_frame >= 4)
 		{
 			electro_dead.Reset();
@@ -164,6 +167,7 @@ void Obj_Enemy::Movement(float &dt)
 				curr_tex = tex;
 				curr_anim = anim_saved;
 				app->audio->PauseFx(channel_electrocuted, 1);
+				draw_offset = normal_draw_offset;
 			}
 			else
 			{
@@ -229,6 +233,7 @@ void Obj_Enemy::ElectroDead()
 		curr_tex = tex_electro_dead;
 		curr_anim = &electro_dead;
 		app->audio->PlayFx(sfx_death);
+		draw_offset = electrocuted_draw_offset;
 		if (coll != nullptr)
 		{
 			coll->Destroy();

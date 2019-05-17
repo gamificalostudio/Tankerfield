@@ -39,7 +39,8 @@ private:
 
 	// ----------
 	iPoint spawn_draw_offset	= { 0,0 };
-	iPoint normal_draw_offset	= { 0, 0 };
+	
+	
 
 	Animation spawn;
 	

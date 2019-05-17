@@ -74,6 +74,9 @@ protected:
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * tex_electro_dead = nullptr;
 
+	iPoint normal_draw_offset = { 0, 0 };
+	iPoint electrocuted_draw_offset = { 0, 0 };
+
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
 	Animation* anim_saved;

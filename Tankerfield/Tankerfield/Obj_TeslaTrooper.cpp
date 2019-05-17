@@ -83,6 +83,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	draw_offset			= { 24, 28 };
+	normal_draw_offset = { 24, 28 };
+	electrocuted_draw_offset = { 24, 28 };
 
 	//parameters-------------------------------------------
 	attack_damage		= tesla_trooper_node.child("attack_damage").attribute("num").as_float();
