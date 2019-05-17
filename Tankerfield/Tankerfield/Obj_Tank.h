@@ -211,9 +211,7 @@ private:
 
 	std::vector<Object*> enemies_hitted;
 
-	Animation anim_electro_shot;
-	SDL_Texture* tex_electro_shot = nullptr;
-	fPoint electro_offset{ 0.f,0.f };
+	//fPoint electro_offset{ 0.f,0.f };
 	
 
 
@@ -281,9 +279,7 @@ public:
 public:
 	Obj_Portal * portal1;
 	Obj_Portal * portal2;
-
-	bool draw_electro_shot = false;
-	fPoint player_enemy_distance_point;
+	
 };
 
 #endif

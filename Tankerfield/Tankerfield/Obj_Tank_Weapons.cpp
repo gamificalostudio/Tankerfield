@@ -28,12 +28,6 @@ void Obj_Tank::InitWeapons()
 	//Electro_shot--
 	pugi::xml_node electro_shot_node = app->config.child("object").child("tank").child("electro_shot");
 
-	tex_electro_shot = app->tex->Load(electro_shot_node.child("tex_electro_shot").text().as_string());
-	anim_electro_shot.frames = app->anim_bank->LoadFrames(electro_shot_node.child("animations").child("anim_electro_shot"));
-
-	
-	
-
 	float coll_size_init = electro_shot_node.child("collider_size").attribute("value").as_float();
 
 	//Basic electro shot colliders
@@ -95,24 +89,6 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 			}
 		}
 
-		if (draw_electro_shot)
-		{
-			electro_offset = { 0.f,0.f };
-			electro_offset.x = anim_electro_shot.GetFrame(0).w * 0.5f;
-		//	electro_offset.y = 30;
-			fPoint dir = GetShotDir();// * fPoint { 2, 2 };
-			fPoint dir_screen = app->map->MapToScreenF(dir);
-			electro_offset -= dir_screen;
-			if (!anim_electro_shot.Finished())
-			{
-				anim_electro_shot.NextFrame(dt);
-			}
-			else
-			{
-				anim_electro_shot.Reset();
-				//draw_electro_shot = false;
-			}
-		}
 	}
 	//test:
 

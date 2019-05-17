@@ -481,22 +481,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&rotate_turr.GetFrame(turr_angle));
 
-	// Electro_shot
-	if (draw_electro_shot)
-	{
-		
-		app->render->BlitScaledAndRotated(
-			tex_electro_shot,
-			pos_screen.x - electro_offset.x,
-			pos_screen.y - electro_offset.y,
-			camera,
-			&anim_electro_shot.GetFrame(0),
-			1,
-			1,
-			SDL_Point{ (int)(anim_electro_shot.GetFrame(0).w * 0.5f) , 0},
-			atan2(player_enemy_distance_point.y, player_enemy_distance_point.x) * RADTODEG - 2 *ISO_COMPENSATION
-		);
-	}
 
 
 	return true;

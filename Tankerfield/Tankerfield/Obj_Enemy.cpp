@@ -13,6 +13,7 @@
 #include "M_Pathfinding.h"
 #include "M_AnimationBank.h"
 #include "M_Map.h"
+#include "ElectroShotAnimation.h"
 
 
 
@@ -401,17 +402,22 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	if (collider->GetTag() == Collider::TAG::ELECTRO_SHOT)
 	{
 		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
-		player->draw_electro_shot = true;
-
+		//player->draw_electro_shot = true;
+		
 		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
 		{
+			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
+
+			electro_anim->offset_dir_screen = app->map->MapToScreenF(player->GetShotDir());
+
+
 			player->GetEnemiesHitted()->push_back(this);
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
 			/*curr_tex = tex_damaged;*/
-			float player_enemy_distance = player->pos_map.DistanceTo(this->pos_map);
-			player->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
+			//float player_enemy_distance = player->pos_map.DistanceTo(this->pos_map);
+			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
 			if (life <= 0)
 			{
 				// DROP A PICK UP ITEM 
@@ -427,7 +433,6 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 				channel_electrocuted = app->audio->PlayFx(electocuted);
 				state_saved = state;
 				
-				//tex_saved = 
 				anim_saved = curr_anim;
 			
 				state = ENEMY_STATE::STUNNED;

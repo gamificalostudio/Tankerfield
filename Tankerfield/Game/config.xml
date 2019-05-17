@@ -205,17 +205,18 @@
 
       <electro_shot>
         <collider_size value="1"/> <!--Width and height in tiles-->
-        <tex_electro_shot>textures/objects/bullets/tex_electro_shot.png</tex_electro_shot>
-        <animations>
-          <anim_electro_shot speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
-            <dir>
-              <frame x="0"   y="0" w="108" h="187"/>
-              <frame x="108" y="0" w="108" h="187"/>
-              <frame x="216" y="0" w="108" h="187"/>
-            </dir>
-          </anim_electro_shot>
-
-        </animations>
+        <electro_shot_animation>
+          <tex_electro_shot>textures/objects/bullets/tex_electro_shot.png</tex_electro_shot>
+          <animations>
+            <anim_electro_shot speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+              <dir>
+                <frame x="0"   y="0" w="108" h="187"/>
+                <frame x="108" y="0" w="108" h="187"/>
+                <frame x="216" y="0" w="108" h="187"/>
+              </dir>
+            </anim_electro_shot>
+          </animations>
+        </electro_shot_animation>
       </electro_shot>
       
       <time_between_bullets value ="100"/>
