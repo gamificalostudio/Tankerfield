@@ -34,8 +34,6 @@ public:
 
 	void OnTriggerEnter(Collider * collider);
 
-	void OnTrigger(Collider* collider);
-
 	inline bool IsOnGoal(fPoint goal); //const?
 
 	void DrawDebug(const Camera* camera)override;
