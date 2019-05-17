@@ -523,4 +523,6 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	suicidal_info.attack_frequency				= suicidal_node.child("attack_frequency").attribute("num").as_float();
 	suicidal_info.attack_range					= suicidal_node.child("attack_range").attribute("num").as_float();
 	suicidal_info.speed							= suicidal_node.child("speed").attribute("num").as_float();
+	suicidal_info.life_multiplier				= suicidal_node.child("life_multiplier").attribute("num").as_float();
+	suicidal_info.life_exponential_base			= suicidal_node.child("life_exponential_base").attribute("num").as_float();
 }

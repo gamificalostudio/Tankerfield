@@ -49,6 +49,8 @@ struct SuicidalInfo
 	int attack_damage			= 0;
 	float attack_range			= 0.f;
 	uint attack_frequency		= 0;
+	float life_multiplier		= 0.f;
+	float life_exponential_base	= 0.f;
 };
 
 

@@ -48,6 +48,8 @@
       <attack_damage num="75"/>
       <attack_range num="1"/>
       <attack_frequency num="1000"/>
+      <life_multiplier num ="50"/>
+      <life_exponential_base num="1.5"/>
     </suicidal>
     
   </enemies>
