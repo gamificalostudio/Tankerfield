@@ -12,11 +12,22 @@
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
 #include "M_AnimationBank.h"
+#include "M_Map.h"
+#include "ElectroShotAnimation.h"
+
 
 
 
 Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 {
+	pugi::xml_node enemie_node = app->config.child("object").child("enemies");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node;
+
+	tex_electro_dead = app->tex->Load(enemie_node.child("tex_electro_dead").child_value());
+	electro_dead.frames = app->anim_bank->LoadFrames(anim_node.child("electro_dead"));
+
+	electocuted = app->audio->LoadFx("audio/Fx/entities/enemies/electrocuted.wav",25);
+
 	damaged_sprite_time = 150;
 	//colision si se puede desactivar
 
@@ -25,8 +36,12 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
 
+	times_to_repeat_animation = 3u;
+
+
 	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
 	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
+
 	path_timer.Start();
 }
 
@@ -42,7 +57,12 @@ bool Obj_Enemy::Update(float dt)
 
 void Obj_Enemy::ChangeTexture()
 {
-	if (damaged_sprite_timer.Read() > damaged_sprite_time)
+	
+	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
+		curr_tex != tex && 
+		state != ENEMY_STATE::STUNNED &&
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		state != ENEMY_STATE::DEAD)
 	{
 		curr_tex = last_texture;
 	}
@@ -125,18 +145,59 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case  ENEMY_STATE::DEAD:
 	{
-		Dead();
+		if (!is_electro_dead)
+		{
+			Dead();
+		}
+		else
+		{
+			ElectroDead();
+		}
 	}
 	break;
+	case ENEMY_STATE::STUNNED:
+	{
+		
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		draw_offset = electrocuted_draw_offset;
+		if ((int)electro_dead.current_frame >= 4)
+		{
+			electro_dead.Reset();
+
+			if (stun_charged && times_animation_repeated >= times_to_repeat_animation || !stun_charged)
+			{
+				times_animation_repeated = 0u;
+				state = state_saved;
+				curr_tex = tex;
+				curr_anim = anim_saved;
+				app->audio->PauseFx(channel_electrocuted, 1);
+				draw_offset = normal_draw_offset;
+			}
+			else
+			{
+				++times_animation_repeated;
+				app->audio->PauseFx(channel_electrocuted);
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				
+			}
+		}
+	}
+	break;
+
+
 	case ENEMY_STATE::BURN:
 	{
 		Burn(dt);
 	}
 		break;
+
 	default:
 		assert(true && "The enemy have no state");
 		break;
 	}
+
+	curr_anim = curr_anim;
 
 }
 
@@ -172,7 +233,32 @@ void Obj_Enemy::Dead()
 		if (death.Finished())
 		{
 			to_remove = true;
-			
+
+		}
+	}
+}
+
+void Obj_Enemy::ElectroDead()
+{
+	if (curr_anim != &electro_dead)
+	{
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		app->audio->PlayFx(sfx_death);
+		draw_offset = electrocuted_draw_offset;
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+	}
+	else
+	{
+		if (electro_dead.Finished())
+		{
+			to_remove = true;
+			app->audio->PauseFx(channel_electrocuted);
+
 		}
 	}
 }
@@ -407,6 +493,58 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			}
 		}
 
+	}
+
+	if (collider->GetTag() == TAG::ELECTRO_SHOT)
+	{
+		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+		//player->draw_electro_shot = true;
+		
+		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
+		{
+			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
+			
+			electro_anim->offset_dir_screen = app->map->MapToScreenF(player->GetShotDir());
+			electro_anim->distance = player->pos_screen.DistanceTo(this->pos_screen + app->map->MapToScreenF(/*more distance para que no se quede el rayo al borde*/player->GetShotDir()));
+			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
+
+			player->GetEnemiesHitted()->push_back(this);
+			player->hit_no_enemie = false;
+
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			/*curr_tex = tex_damaged;*/
+			//float player_enemy_distance = player->pos_map.DistanceTo(this->pos_map);
+			
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = ENEMY_STATE::DEAD;
+				is_electro_dead = true;
+				
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				state_saved = state;
+				
+				anim_saved = curr_anim;
+			
+				state = ENEMY_STATE::STUNNED;
+				if (player->GetIsElectroShotCharged())
+				{
+					stun_charged = true;
+				}
+				else
+				{
+					stun_charged = false;
+				}
+			}
+		}
 	}
 }
 

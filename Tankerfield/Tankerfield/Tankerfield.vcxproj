@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="Bullet_Laser.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ElectroShotAnimation.cpp" />
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Bullet_Laser.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ElectroShotAnimation.h" />
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
