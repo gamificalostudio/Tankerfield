@@ -351,6 +351,194 @@
       </death>
     </animations>
   </tesla>
+  <burn>
+      <animations>
+        <burn  speed="10" rotation="counter-clockwise" first_dir_angle ="-90" texture="textures/Objects/enemies/teslaTrooper/flameguy.png">
+          <dir>
+            <frame name="sprite1" x="0" y="0" w="52" h="102"></frame>
+            <frame name="sprite2" x="52" y="0" w="52" h="102"></frame>
+            <frame name="sprite3" x="104" y="0" w="52" h="102"></frame>
+            <frame name="sprite4" x="156" y="0" w="52" h="102"></frame>
+            <frame name="sprite5" x="208" y="0" w="52" h="102"></frame>
+            <frame name="sprite6" x="260" y="0" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite7" x="312" y="0" w="52" h="102"></frame>
+            <frame name="sprite8" x="364" y="0" w="52" h="102"></frame>
+            <frame name="sprite9" x="416" y="0" w="52" h="102"></frame>
+            <frame name="sprite10" x="468" y="0" w="52" h="102"></frame>
+            <frame name="sprite11" x="520" y="0" w="52" h="102"></frame>
+            <frame name="sprite12" x="572" y="0" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite13" x="624" y="0" w="52" h="102"></frame>
+            <frame name="sprite14" x="676" y="0" w="52" h="102"></frame>
+            <frame name="sprite15" x="728" y="0" w="52" h="102"></frame>
+            <frame name="sprite16" x="780" y="0" w="52" h="102"></frame>
+            <frame name="sprite17" x="832" y="0" w="52" h="102"></frame>
+            <frame name="sprite18" x="884" y="0" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite19" x="936" y="0" w="52" h="102"></frame>
+            <frame name="sprite20" x="0" y="102" w="52" h="102"></frame>
+            <frame name="sprite21" x="52" y="102" w="52" h="102"></frame>
+            <frame name="sprite22" x="104" y="102" w="52" h="102"></frame>
+            <frame name="sprite23" x="156" y="102" w="52" h="102"></frame>
+            <frame name="sprite24" x="208" y="102" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite25" x="260" y="102" w="52" h="102"></frame>
+            <frame name="sprite26" x="312" y="102" w="52" h="102"></frame>
+            <frame name="sprite27" x="364" y="102" w="52" h="102"></frame>
+            <frame name="sprite28" x="416" y="102" w="52" h="102"></frame>
+            <frame name="sprite29" x="468" y="102" w="52" h="102"></frame>
+            <frame name="sprite30" x="520" y="102" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite31" x="572" y="102" w="52" h="102"></frame>
+            <frame name="sprite32" x="624" y="102" w="52" h="102"></frame>
+            <frame name="sprite33" x="676" y="102" w="52" h="102"></frame>
+            <frame name="sprite34" x="728" y="102" w="52" h="102"></frame>
+            <frame name="sprite35" x="780" y="102" w="52" h="102"></frame>
+            <frame name="sprite36" x="832" y="102" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite37" x="884" y="102" w="52" h="102"></frame>
+            <frame name="sprite38" x="936" y="102" w="52" h="102"></frame>
+            <frame name="sprite39" x="0" y="204" w="52" h="102"></frame>
+            <frame name="sprite40" x="52" y="204" w="52" h="102"></frame>
+            <frame name="sprite41" x="104" y="204" w="52" h="102"></frame>
+            <frame name="sprite42" x="156" y="204" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite43" x="208" y="204" w="52" h="102"></frame>
+            <frame name="sprite44" x="260" y="204" w="52" h="102"></frame>
+            <frame name="sprite45" x="312" y="204" w="52" h="102"></frame>
+            <frame name="sprite46" x="364" y="204" w="52" h="102"></frame>
+            <frame name="sprite47" x="416" y="204" w="52" h="102"></frame>
+            <frame name="sprite48" x="468" y="204" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite49" x="520" y="204" w="52" h="102"></frame>
+            <frame name="sprite50" x="572" y="204" w="52" h="102"></frame>
+            <frame name="sprite51" x="624" y="204" w="52" h="102"></frame>
+            <frame name="sprite52" x="676" y="204" w="52" h="102"></frame>
+            <frame name="sprite53" x="728" y="204" w="52" h="102"></frame>
+            <frame name="sprite54" x="780" y="204" w="52" h="102"></frame>
+          </dir>
+          <dir>
+            <frame name="sprite55" x="832" y="204" w="52" h="102"></frame>
+            <frame name="sprite56" x="884" y="204" w="52" h="102"></frame>
+            <frame name="sprite57" x="936" y="204" w="52" h="102"></frame>
+            <frame name="sprite58" x="0" y="306" w="52" h="102"></frame>
+            <frame name="sprite59" x="52" y="306" w="52" h="102"></frame>
+            <frame name="sprite60" x="104" y="306" w="52" h="102"></frame>
+          </dir>
+        </burn>
+        <dying_burn speed="10" loop =" false" rotation="counter-clockwise">
+          <dir>
+            <frame name="sprite50"  x="572" y="204" w="52" h="102"></frame>
+            <frame name="sprite51"  x="624" y="204" w="52" h="102"></frame>
+            <frame name="sprite52"  x="676" y="204" w="52" h="102"></frame>
+            <frame name="sprite53"  x="728" y="204" w="52" h="102"></frame>
+            <frame name="sprite54"  x="780" y="204" w="52" h="102"></frame>
+            <frame name="sprite55"  x="832" y="204" w="52" h="102"></frame>
+            <frame name="sprite56"  x="884" y="204" w="52" h="102"></frame>
+            <frame name="sprite57"  x="936" y="204" w="52" h="102"></frame>
+            <frame name="sprite58"  x="0"   y="306" w="52" h="102"></frame>
+            <frame name="sprite59"  x="52"  y="306" w="52" h="102"></frame>
+            <frame name="sprite60"  x="104" y="306" w="52" h="102"></frame>
+            <frame name="sprite61"  x="156" y="306" w="52" h="102"></frame>
+            <frame name="sprite62"  x="208" y="306" w="52" h="102"></frame>
+            <frame name="sprite63"  x="260" y="306" w="52" h="102"></frame>
+            <frame name="sprite64"  x="312" y="306" w="52" h="102"></frame>
+            <frame name="sprite65"  x="364" y="306" w="52" h="102"></frame>
+            <frame name="sprite66"  x="416" y="306" w="52" h="102"></frame>
+            <frame name="sprite67"  x="468" y="306" w="52" h="102"></frame>
+            <frame name="sprite68"  x="520" y="306" w="52" h="102"></frame>
+            <frame name="sprite69"  x="572" y="306" w="52" h="102"></frame>
+            <frame name="sprite70"  x="624" y="306" w="52" h="102"></frame>
+            <frame name="sprite71"  x="676" y="306" w="52" h="102"></frame>
+            <frame name="sprite72"  x="728" y="306" w="52" h="102"></frame>
+            <frame name="sprite73"  x="780" y="306" w="52" h="102"></frame>
+            <frame name="sprite74"  x="832" y="306" w="52" h="102"></frame>
+            <frame name="sprite75"  x="884" y="306" w="52" h="102"></frame>
+            <frame name="sprite76"  x="936" y="306" w="52" h="102"></frame>
+            <frame name="sprite77"  x="0"   y="408" w="52" h="102"></frame>
+            <frame name="sprite78"  x="52"  y="408" w="52" h="102"></frame>
+            <frame name="sprite79"  x="104" y="408" w="52" h="102"></frame>
+            <frame name="sprite80"  x="156" y="408" w="52" h="102"></frame>
+            <frame name="sprite81"  x="208" y="408" w="52" h="102"></frame>
+            <frame name="sprite82"  x="260" y="408" w="52" h="102"></frame>
+            <frame name="sprite83"  x="312" y="408" w="52" h="102"></frame>
+            <frame name="sprite84"  x="364" y="408" w="52" h="102"></frame>
+            <frame name="sprite85"  x="416" y="408" w="52" h="102"></frame>
+            <frame name="sprite86"  x="468" y="408" w="52" h="102"></frame>
+            <frame name="sprite87"  x="520" y="408" w="52" h="102"></frame>
+            <frame name="sprite88"  x="572" y="408" w="52" h="102"></frame>
+            <frame name="sprite89"  x="624" y="408" w="52" h="102"></frame>
+            <frame name="sprite90"  x="676" y="408" w="52" h="102"></frame>
+            <frame name="sprite91"  x="728" y="408" w="52" h="102"></frame>
+            <frame name="sprite92"  x="780" y="408" w="52" h="102"></frame>
+            <frame name="sprite93"  x="832" y="408" w="52" h="102"></frame>
+            <frame name="sprite94"  x="884" y="408" w="52" h="102"></frame>
+            <frame name="sprite95"  x="936" y="408" w="52" h="102"></frame>
+            <frame name="sprite96"  x="0"   y="510" w="52" h="102"></frame>
+            <frame name="sprite97"  x="52"  y="510" w="52" h="102"></frame>
+            <frame name="sprite98"  x="104" y="510" w="52" h="102"></frame>
+            <frame name="sprite99"  x="156" y="510" w="52" h="102"></frame>
+            <frame name="sprite100" x="208" y="510" w="52" h="102"></frame>
+            <frame name="sprite101" x="260" y="510" w="52" h="102"></frame>
+            <frame name="sprite102" x="312" y="510" w="52" h="102"></frame>
+            <frame name="sprite103" x="364" y="510" w="52" h="102"></frame>
+            <frame name="sprite104" x="416" y="510" w="52" h="102"></frame>
+            <frame name="sprite105" x="468" y="510" w="52" h="102"></frame>
+            <frame name="sprite106" x="520" y="510" w="52" h="102"></frame>
+            <frame name="sprite107" x="572" y="510" w="52" h="102"></frame>
+          </dir>
+        </dying_burn>
+      </animations>
+ 
+  </burn>
+  <fires>
+    <animations>
+      <fire3 speed="10" rotation="counter-clockwise" first_dir_angle ="-90" texture="textures/Objects/particles/fire03.png">
+        <dir>
+          <frame x="0"   y="0" w="30" h="50"></frame>
+          <frame x="30"  y="0" w="30" h="50"></frame>
+          <frame x="60"  y="0" w="30" h="50"></frame>
+          <frame x="90"  y="0" w="30" h="50"></frame>
+          <frame x="120" y="0" w="30" h="50"></frame>
+          <frame x="150" y="0" w="30" h="50"></frame>
+          <frame x="180" y="0" w="30" h="50"></frame>
+          <frame x="210" y="0" w="30" h="50"></frame>
+          <frame x="240" y="0" w="30" h="50"></frame>
+          <frame x="270" y="0" w="30" h="50"></frame>
+          <frame x="300" y="0" w="30" h="50"></frame>
+          <frame x="330" y="0" w="30" h="50"></frame>
+          <frame x="360" y="0" w="30" h="50"></frame>
+          <frame x="390" y="0" w="30" h="50"></frame>
+          <frame x="420" y="0" w="30" h="50"></frame>
+          <frame x="450" y="0" w="30" h="50"></frame>
+          <frame x="480" y="0" w="30" h="50"></frame>
+          <frame x="510" y="0" w="30" h="50"></frame>
+          <frame x="540" y="0" w="30" h="50"></frame>
+          <frame x="570" y="0" w="30" h="50"></frame>
+          <frame x="600" y="0" w="30" h="50"></frame>
+          <frame x="630" y="0" w="30" h="50"></frame>
+          <frame x="660" y="0" w="30" h="50"></frame>
+          <frame x="690" y="0" w="30" h="50"></frame>
+          <frame x="720" y="0" w="30" h="50"></frame>
+          <frame x="750" y="0" w="30" h="50"></frame>
+          <frame x="780" y="0" w="30" h="50"></frame>
+          <frame x="810" y="0" w="30" h="50"></frame>
+          <frame x="840" y="0" w="30" h="50"></frame>
+          <frame x="870" y="0" w="30" h="50"></frame>
+        </dir>
+      </fire3>
+    </animations>
+  </fires>
+
   <brute>
     <animation>
       <idle  speed="7.5" rotation="counter-clockwise" first_dir_angle ="-90">
@@ -633,6 +821,7 @@
       </spawn>
     </animation>
   </brute>
+
   <rocketlauncher>
     <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
        <dir>
@@ -812,4 +1001,184 @@
       </dir>
     </death>
   </rocketlauncher>
+  <suicidal>
+    <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+      <dir>
+	        <frame x="0" y="0" w="66" h="72"/>
+       </dir>
+       <dir>
+	        <frame x="66" y="0" w="66" h="72"/>
+       </dir>
+       <dir>
+	        <frame x="132" y="0" w="66" h="72"/>
+       </dir>
+       <dir>
+	        <frame x="198" y="0" w="66" h="72"/>
+       </dir>
+       <dir>
+	        <frame x="264" y="0" w="66" h="72"/>
+       </dir>
+       <dir>
+	        <frame x="330" y="0" w="66" h="72"/>
+       </dir>
+       <dir>
+	        <frame x="396" y="0" w="66" h="72"/>
+       </dir>
+       <dir>
+	        <frame x="462" y="0" w="66" h="72"/>
+       </dir>
+    </idle>
+    <walk speed="10" rotation="counter-clockwise" first_dir_angle="-90">
+      <dir>
+        <frame x="924" y="576" w="66" h="72"/>
+        <frame x="0" y="648" w="66" h="72"/>
+        <frame x="66" y="648" w="66" h="72"/>
+        <frame x="132" y="648" w="66" h="72"/>
+        <frame x="198" y="648" w="66" h="72"/>
+        <frame x="264" y="648" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="330" y="648" w="66" h="72"/>
+        <frame x="396" y="648" w="66" h="72"/>
+        <frame x="462" y="648" w="66" h="72"/>
+        <frame x="528" y="648" w="66" h="72"/>
+        <frame x="594" y="648" w="66" h="72"/>
+        <frame x="660" y="648" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="726" y="648" w="66" h="72"/>
+        <frame x="792" y="648" w="66" h="72"/>
+        <frame x="858" y="648" w="66" h="72"/>
+        <frame x="924" y="648" w="66" h="72"/>
+        <frame x="0" y="720" w="66" h="72"/>
+        <frame x="66" y="720" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="132" y="720" w="66" h="72"/>
+        <frame x="198" y="720" w="66" h="72"/>
+        <frame x="264" y="720" w="66" h="72"/>
+        <frame x="330" y="720" w="66" h="72"/>
+        <frame x="396" y="720" w="66" h="72"/>
+        <frame x="462" y="720" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="528" y="720" w="66" h="72"/>
+        <frame x="594" y="720" w="66" h="72"/>
+        <frame x="660" y="720" w="66" h="72"/>
+        <frame x="726" y="720" w="66" h="72"/>
+        <frame x="792" y="720" w="66" h="72"/>
+        <frame x="858" y="720" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="924" y="720" w="66" h="72"/>
+        <frame x="0" y="792" w="66" h="72"/>
+        <frame x="66" y="792" w="66" h="72"/>
+        <frame x="132" y="792" w="66" h="72"/>
+        <frame x="198" y="792" w="66" h="72"/>
+        <frame x="264" y="792" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="330" y="792" w="66" h="72"/>
+        <frame x="396" y="792" w="66" h="72"/>
+        <frame x="462" y="792" w="66" h="72"/>
+        <frame x="528" y="792" w="66" h="72"/>
+        <frame x="594" y="792" w="66" h="72"/>
+        <frame x="660" y="792" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="726" y="792" w="66" h="72"/>
+        <frame x="792" y="792" w="66" h="72"/>
+        <frame x="858" y="792" w="66" h="72"/>
+        <frame x="924" y="792" w="66" h="72"/>
+        <frame x="0" y="864" w="66" h="72"/>
+        <frame x="66" y="864" w="66" h="72"/>
+      </dir>
+    </walk>
+    <attack speed="10" rotation="counter-clockwise" first_dir_angle="-90" loop="false">
+      <dir>
+        <frame x="726" y="360" w="66" h="72"/>
+        <frame x="792" y="360" w="66" h="72"/>
+        <frame x="858" y="360" w="66" h="72"/>
+        <frame x="924" y="360" w="66" h="72"/>
+        <frame x="0" y="432" w="66" h="72"/>
+        <frame x="66" y="432" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="132" y="432" w="66" h="72"/>
+        <frame x="198" y="432" w="66" h="72"/>
+        <frame x="264" y="432" w="66" h="72"/>
+        <frame x="330" y="432" w="66" h="72"/>
+        <frame x="396" y="432" w="66" h="72"/>
+        <frame x="462" y="432" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="528" y="432" w="66" h="72"/>
+        <frame x="594" y="432" w="66" h="72"/>
+        <frame x="660" y="432" w="66" h="72"/>
+        <frame x="726" y="432" w="66" h="72"/>
+        <frame x="792" y="432" w="66" h="72"/>
+        <frame x="858" y="432" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="924" y="432" w="66" h="72"/>
+        <frame x="0" y="504" w="66" h="72"/>
+        <frame x="66" y="504" w="66" h="72"/>
+        <frame x="132" y="504" w="66" h="72"/>
+        <frame x="198" y="504" w="66" h="72"/>
+        <frame x="264" y="504" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="330" y="504" w="66" h="72"/>
+        <frame x="396" y="504" w="66" h="72"/>
+        <frame x="462" y="504" w="66" h="72"/>
+        <frame x="528" y="504" w="66" h="72"/>
+        <frame x="594" y="504" w="66" h="72"/>
+        <frame x="660" y="504" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="726" y="504" w="66" h="72"/>
+        <frame x="792" y="504" w="66" h="72"/>
+        <frame x="858" y="504" w="66" h="72"/>
+        <frame x="924" y="504" w="66" h="72"/>
+        <frame x="0" y="576" w="66" h="72"/>
+        <frame x="66" y="576" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="132" y="576" w="66" h="72"/>
+        <frame x="198" y="576" w="66" h="72"/>
+        <frame x="264" y="576" w="66" h="72"/>
+        <frame x="330" y="576" w="66" h="72"/>
+        <frame x="396" y="576" w="66" h="72"/>
+        <frame x="462" y="576" w="66" h="72"/>
+      </dir>
+      <dir>
+        <frame x="528" y="576" w="66" h="72"/>
+        <frame x="594" y="576" w="66" h="72"/>
+        <frame x="660" y="576" w="66" h="72"/>
+        <frame x="726" y="576" w="66" h="72"/>
+        <frame x="792" y="576" w="66" h="72"/>
+        <frame x="858" y="576" w="66" h="72"/>
+      </dir>
+    </attack>
+    <death speed="10" loop =" false" rotation="counter-clockwise">
+      <dir>
+        <frame x="660" y="288" w="66" h="72"/>
+        <frame x="726" y="288" w="66" h="72"/>
+        <frame x="792" y="288" w="66" h="72"/>
+        <frame x="858" y="288" w="66" h="72"/>
+        <frame x="924" y="288" w="66" h="72"/>
+        <frame x="0" y="360" w="66" h="72"/>
+        <frame x="66" y="360" w="66" h="72"/>
+        <frame x="132" y="360" w="66" h="72"/>
+        <frame x="198" y="360" w="66" h="72"/>
+        <frame x="264" y="360" w="66" h="72"/>
+        <frame x="330" y="360" w="66" h="72"/>
+        <frame x="396" y="360" w="66" h="72"/>
+        <frame x="462" y="360" w="66" h="72"/>
+        <frame x="528" y="360" w="66" h="72"/>
+        <frame x="594" y="360" w="66" h="72"/>
+        <frame x="660" y="360" w="66" h="72"/>
+      </dir>
+    </death>
+  </suicidal>
 </animations>

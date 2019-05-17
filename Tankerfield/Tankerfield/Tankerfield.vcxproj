@@ -267,7 +267,9 @@
     <ClInclude Include="WeaponInfo.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\animations.xml" />
+    <Xml Include="..\Game\animations.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="..\Game\config.xml">
       <SubType>Designer</SubType>
     </Xml>
