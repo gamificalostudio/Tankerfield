@@ -105,11 +105,11 @@ void Obj_Brute::Spawn(const float& dt)
 	if (curr_anim->Finished())
 	{
 		curr_tex = tex;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::NONE, BODY_TYPE::DYNAMIC, 0.f, this);
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
-		//life_collider = app->collision->AddCollider(pos_map, 2, 2, Collider::TAG::ENEMY, 0.f, this);
-		//life_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);
-		//life_collider->SetObjOffset(fPoint(1.f, 1.f));
+		life_collider = app->collision->AddCollider(pos_map, 2, 2, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		life_collider->is_sensor = true;
+		life_collider->SetObjOffset(fPoint(-1.f, -1.f));
 		draw_offset = normal_draw_offset;
 		curr_anim = &walk;
 		state = ENEMY_STATE::GET_PATH;
