@@ -16,6 +16,10 @@ class RewardZone;
 class Object;
 class Player_GUI;
 class General_HUD;
+class General_GUI;
+class UI_Label;
+
+
 
 enum class WaveStat
 {
@@ -34,11 +38,13 @@ class M_Scene : public Module
 {
 private:
 	Controller** control1			= nullptr;
+	int number_of_enemies = 0;
 
 public:
+
 	int current_level				= 0;
 
-	General_HUD * general_hud		= nullptr;
+	General_GUI * general_hud		= nullptr;
 
 	uint round		= 0;
 	std::list<Object*> enemies_in_wave;

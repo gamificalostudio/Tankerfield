@@ -33,19 +33,24 @@
 
 Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("brute");
+	pugi::xml_node brute_node = app->config.child("object").child("enemies").child("brute");
 
+	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
-	idle.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("idle"));
-	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
-	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
-	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
-	spawn.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("spawn"));
+
+	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
+	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
+	idle.frames = app->anim_bank->LoadFrames(animation_node.child("idle"));
+	walk.frames = app->anim_bank->LoadFrames(animation_node.child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(animation_node.child("attack"));
+	death.frames = app->anim_bank->LoadFrames(animation_node.child("death"));
+	spawn.frames = app->anim_bank->LoadFrames(animation_node.child("spawn"));
 	curr_anim = &spawn;
+
 
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
@@ -63,6 +68,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 
 	spawn_draw_offset = { 260, 274 };
 	normal_draw_offset = { 132, 75 };
+	electrocuted_draw_offset = { 60,28 };
 	draw_offset = spawn_draw_offset;
 
 	angle = 180;//REMOVE
@@ -73,11 +79,16 @@ Obj_Brute::Obj_Brute(fPoint pos) : Object(pos)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = 3000.0f;
   
-	coll_w = 1.f;
-	coll_h = 1.f;
+	coll_w = 0.5f;
+	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
-	life = 750* (log(app->scene->round)+2);
+
+	life = 1;//750* (log(app->scene->round)+2);
+
+	scale = 2.f;
+	app->audio->PlayFx(sfx_spawn);
+
 }
 
 Obj_Brute::~Obj_Brute()
@@ -87,9 +98,14 @@ Obj_Brute::~Obj_Brute()
 
 bool Obj_Brute::Update(float dt)
 {
+
 	Movement(dt);
 	Attack();
-	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
+	if (spawn.Finished() &&
+		damaged_sprite_timer.Read() > damaged_sprite_time &&
+		curr_tex != tex &&
+		state != ENEMY_STATE::STUNNED &&
+		state != ENEMY_STATE::STUNNED_CHARGED)
 	{
 		curr_tex = tex;
 	}
@@ -111,6 +127,13 @@ void Obj_Brute::Attack()
 
 	if (curr_anim == &attack&&curr_anim->Finished())
 	{
+		curr_tex = tex;
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
+		//life_collider = app->collision->AddCollider(pos_map, 2, 2, Collider::TAG::ENEMY, 0.f, this);
+		//life_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		//life_collider->SetObjOffset(fPoint(1.f, 1.f));
+		draw_offset = normal_draw_offset;
 		curr_anim = &walk;
 		attack.Reset();
 	}
@@ -314,4 +337,64 @@ void Obj_Brute::OnTrigger(Collider* collider)
 		}
 
 	}
+}
+
+void Obj_Brute::Burn(const float& dt)
+{
+	if (burn_fist_enter)
+	{
+		fire_damage = life / 5;
+		curr_anim = &walk;
+		
+	}
+	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
+	{
+
+		int max_rand = 101;
+		int max_rand_double = max_rand * 2;
+		float one_divided_by_100 = 0.01f;
+
+		move_vect = { ((rand() % max_rand_double) - max_rand)* one_divided_by_100 ,((rand() % max_rand_double) - max_rand)*one_divided_by_100 };
+		move_vect.Normalize();
+
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+
+		timer_change_direction.Start();
+
+		max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
+		max_time_change_direction += 0.5f;
+
+		if (burn_fist_enter)
+			burn_fist_enter = false;
+
+		life -= fire_damage;
+		if (life <= 0)
+		{
+			state = ENEMY_STATE::DEAD;
+		}
+	}
+	else
+	{
+		UpdatePos(dt);
+	}
+	fire3.NextFrame(dt);
+}
+
+bool Obj_Brute::Draw(float dt, Camera * camera)
+{
+	app->render->BlitScaled(
+		curr_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&frame,
+		scale,
+		scale);
+
+	if (state == ENEMY_STATE::BURN)
+	{
+		SDL_Rect fire_frame = fire3.GetFrame(0);
+		app->render->Blit(fire_tex, pos_screen.x - fire_frame.w*0.5f, pos_screen.y, camera, &fire_frame);
+	}
+	return true;
 }

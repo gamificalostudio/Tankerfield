@@ -56,7 +56,24 @@ bool Obj_Explosion::Update(float dt)
 	if (curr_anim != nullptr
 		&& curr_anim->Finished())
 	{
+
 		to_remove = true;
+
+		float coll_w = 5.f;
+		float coll_h = 5.f;
+
+		coll = app->collision->AddCollider(
+			pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
+			coll_w,
+			coll_h,
+			TAG::BULLET,
+			BODY_TYPE::DYNAMIC,
+			explosion_damage,
+			nullptr);
+
+		coll->is_sensor = true;
+		coll->SetObjOffset(fPoint(coll_w*0.5f, coll_h*0.5f));
+
 	}
 	if (frame_explosion == 2)
 	{

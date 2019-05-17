@@ -33,6 +33,7 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 {
+
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("tesla_trooper");
 
 	tex = app->tex->Load("textures/Objects/enemies/shk-sheet.png");
@@ -47,6 +48,30 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	walk.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("attack"));
 	death.frames = app->anim_bank->LoadFrames(tesla_trooper_node.child("animations").child("death"));
+
+
+	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("enemies").child("tesla_trooper");
+	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
+
+
+	//TEXTURES =============================================
+	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
+	tex = app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
+	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
+	portal_tex = app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
+	curr_tex = tex;
+	last_texture = tex;
+
+
+	//ANIMATIONS =============================================
+	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
+	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
+	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
+	curr_anim = &idle;
+
+
+
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
@@ -55,12 +80,16 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	appear_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("appear"));
 
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/laser-tesla-trooper.wav");
-	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav",20);
+	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/siroon.wav", 20);
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/hit.wav", 25);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
 	app->audio->PlayFx(sfx_spawn);
 	draw = false;
+	state = ENEMY_STATE::SPAWN; //enemy
+
+	speed = tesla_trooper_node.child("speed").attribute("num").as_float();
+
 
 	//Things
 	state				= TROOPER_STATE::APPEAR;
@@ -78,10 +107,21 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY ,0.0f, this);
 
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
+	squared_detection_range = detection_range * detection_range;
+	coll_w = 0.5f;
+	coll_h = 0.5f;
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
+
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 	draw_offset			= { 24, 28 };
+	normal_draw_offset = { 24, 28 };
+	electrocuted_draw_offset = { 24, 28 };
+
 
 	//parameters-------------------------------------------
+
 	attack_damage		= 5;
 	attack_range		= 1.5f;
 	attack_range_squared = attack_range * attack_range;
@@ -92,6 +132,22 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Object (pos)
 	teleport_timer.Start();
 	check_path_time = 1.f; // 1s
 	path_timer.Start();
+	attack_damage = tesla_trooper_node.child("attack_damage").attribute("num").as_float();
+	attack_range = tesla_trooper_node.child("attack_range").attribute("num").as_float();
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = tesla_trooper_node.child("attack_frequency").attribute("num").as_float();
+
+	life = pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
+
+	//teleport 
+	check_teleport_time = 10; //10s
+	teleport_timer.Start();
+
+	teleport_enemies_max = tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_uint();
+
+	//Timers ----------------
+	check_path_time = 2.f; // 10s
+
 
 	damaged_sprite_time = 150;
 }
@@ -222,6 +278,27 @@ void Obj_TeslaTrooper::Movement(float &dt)
 	}
 	break;
 	case TROOPER_STATE::RECHEAD_POINT:
+
+	teleport_timer.Start();
+}
+void Obj_TeslaTrooper::Spawn(const float & dt)
+{
+
+	spawn_anim.NextFrame(dt);
+	if ((int)spawn_anim.current_frame >= 6)
+	{
+		draw = true;
+	}
+	if (spawn_anim.Finished())
+	{
+		spawn_anim.Reset();
+		state = ENEMY_STATE::GET_PATH;
+	}
+}
+void Obj_TeslaTrooper::Idle()
+{
+	if (path_timer.ReadSec() > check_path_time)
+
 	{
 		move_vect.SetToZero();
 		if (path.size() > 0)
@@ -315,6 +392,15 @@ void Obj_TeslaTrooper::Movement(float &dt)
 				draw = true;
 			}
 
+	return retflag;
+
+}
+
+void Obj_TeslaTrooper::GetPath()
+{
+	curr_anim = &idle;
+	move_vect.SetToZero();
+	target = app->objectmanager->GetNearestTank(pos_map);
 		if (in_portal != nullptr)
 			in_portal->NextFrame(dt);
 	}
@@ -361,6 +447,7 @@ void Obj_TeslaTrooper::DrawDebug(const Camera* camera)
 
 }
 
+
 bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 {
 	if (state == TROOPER_STATE::TELEPORT_IN && in_portal != nullptr)
@@ -369,11 +456,11 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 		app->render->Blit(
 			portal_tex,
 			pos_screen.x - portal_frame.w * 0.5f,
-			pos_screen.y- portal_frame.h,
+			pos_screen.y - portal_frame.h,
 			camera,
 			&portal_frame);
 	}
-	
+
 	if (draw)
 	{
 		app->render->BlitScaled(
@@ -382,8 +469,9 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			pos_screen.y - draw_offset.y,
 			camera,
 			&frame,
-			0.75f,
-			0.75f);
+			scale,
+			scale);
+
 	}
 	if (state == TROOPER_STATE::APPEAR)
 	{

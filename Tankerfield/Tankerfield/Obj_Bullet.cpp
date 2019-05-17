@@ -29,9 +29,11 @@ bool Obj_Bullet::Start()
 
 	float coll_w = 0.5f;
 	float coll_h = 0.5f;
-	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::BULLET,0.f,this);
+	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::BULLET , BODY_TYPE::DYNAMIC ,0.f,this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
-  
+	coll->is_sensor = true;
+
+
 	return true;
 }
 

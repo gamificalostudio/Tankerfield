@@ -40,10 +40,10 @@ public:
 
 	// Draw & Blit
 	void BlitUI(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section = nullptr, Camera* current_camera = nullptr, const int alpha =  255) const;
-	
+
 	void Blit(SDL_Texture* texture, int screen_x, int screen_y, Camera* camera, const SDL_Rect* section = NULL) const;
 	void BlitScaled(SDL_Texture* texture, int screen_x, int screen_y, Camera* camera, const SDL_Rect* section = NULL, float scale_w = 1.f, float scale_h = 1.f) const;
-
+	void BlitScaledAndRotated(SDL_Texture* texture, const int screen_x, const int screen_y, Camera* current_camera, const SDL_Rect* section, float scale_w = 1.f, float scale_h = 1.f, SDL_Point pivot= {0,0}, float angle = 0.f) const;
 
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 
@@ -64,6 +64,7 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 	Camera* CreateCamera(Obj_Tank * tank);
+	Camera * CreateCamera(iPoint init_pos, SDL_Rect section);
 	void DestroyCamera(Camera * camera);
 
 public:

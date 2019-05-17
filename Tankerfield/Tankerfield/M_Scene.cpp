@@ -33,6 +33,7 @@
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
 #include "Object.h"
+#include "Obj_RewardBox.h"
 
 
 M_Scene::M_Scene() : Module()
@@ -116,14 +117,23 @@ bool M_Scene::Start()
 			app->objectmanager->CreateObject(ObjectType::SUICIDAL, (*players_layer)->objects[0].pos);
 		}
 	}
+	for (uint i = 0; i < 4; ++i)
+	{
+		Obj_RewardBox* box = app->pick_manager->CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{ 2.f, -2.f });
+		box->SetTypeBox(PICKUP_TYPE::WEAPON);
+	}
 	
-	general_hud = DBG_NEW General_HUD();
+	general_hud = DBG_NEW General_GUI();
+	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
+
 
 	round = 0u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;
 	game_over = false;
 
-
+	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
+	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
+	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
 	return true;
 }
@@ -214,9 +224,6 @@ bool M_Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-
-
-
 	/* Check if a round is over. It is only checked after x time. */
 	//accumulated_time += dt * 1000.0f;
 	//if (accumulated_time >= (float)check_complete_round)
@@ -230,6 +237,12 @@ bool M_Scene::Update(float dt)
 
 	//	accumulated_time = 0.0f;
 	//	perform_objects_check = false;
+	//if (app->input->GetKey(SDL_SCANCODE_F10)== KeyState::KEY_DOWN)
+	//{
+	//	if (label_number_of_enemies->GetState() == ELEMENT_STATE::VISIBLE)
+	//		label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+	//	else
+	//		label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
 	//}
 
 	switch (stat_of_wave)
@@ -370,8 +383,6 @@ bool M_Scene::CleanUp()
 	{
 			(*i)->gui = nullptr;
 	}
-	
-
 	return true;
 }
 
@@ -450,8 +461,25 @@ void M_Scene::DebugPathfinding()
 	}
 }
 
+void M_Scene::ReduceNumEnemies()
+{
+	number_of_enemies -= 1;
+	if (number_of_enemies < 0)
+	{
+		number_of_enemies = 0;
+	}
+	//if (label_number_of_enemies != nullptr)
+	//	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
+
+}
+
 void M_Scene::CreateEnemyWave()
 {
+	number_of_enemies = 0;
+	number_of_enemies += Tesla_trooper_units;
+	number_of_enemies += Brute_units;
+	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
+	 
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)

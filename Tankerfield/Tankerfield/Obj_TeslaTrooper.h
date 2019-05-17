@@ -43,7 +43,7 @@ public:
 
 	bool Awake(pugi::xml_node&) { return true; };
 
-	void OnTriggerEnter(Collider * collider);
+	inline virtual void GetPath();
 
 	void OnTrigger(Collider* collider);
 
@@ -90,10 +90,15 @@ private:
 	Animation portal_close_anim;
 	Animation appear_anim;
 
-	bool draw = true;
-	Animation* in_portal				= nullptr;
 	SDL_Texture * tex					= nullptr;
 	SDL_Texture * tex_damaged			= nullptr;
+	Animation spawn_anim;
+	
+
+	bool draw = true;
+	Animation* in_portal				= nullptr;
+	
+
 	SDL_Texture * portal_tex			= nullptr;
 	SDL_Texture * explosion_apper_tex			= nullptr;
 
@@ -123,8 +128,9 @@ public:
 
 	bool Start()
 	{
-		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, 0.f,this);
-		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		coll = app->collision->AddCollider(pos_map, 3, 3, TAG::REWARD_ZONE, BODY_TYPE::DYNAMIC , 0.f,this);
+		coll->is_sensor = true;
+
 		return true;
 	}
 
@@ -134,7 +140,7 @@ public:
 	}
 	void OnTrigger(Collider* c1)
 	{
-		if (c1->GetTag() == Collider::TAG::PLAYER)
+		if (c1->GetTag() == TAG::PLAYER)
 		{
 			/*LOG("REWARD ZONE");*/
 		}

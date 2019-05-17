@@ -34,7 +34,10 @@ bool Laser_Bullet::Start()
 
 	draw_offset = { 35, 14 };
 
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET_LASER, 0.f, this);
+	coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_LASER, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll->is_sensor = true;
+
+
 	coll->SetObjOffset({ -0.25f, -0.25f });
 	if (!charged)
 	{

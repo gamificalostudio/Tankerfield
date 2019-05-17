@@ -31,6 +31,8 @@ public:
 	bool PreUpdate() override;
 	bool Update(float dt) override;
 
+	void UpdateWeaponsWithoutBullets(float dt);
+
 	bool Draw(float dt, Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
 
@@ -44,22 +46,37 @@ public:
 	void SetLife(int life);
 	void SetItem(ObjectType Type);
 	void SetWeapon(WEAPON type, uint level);
-	WeaponInfo GetWeaponInfo() const;
+	void SetColor(const SDL_Color new_color);
 	void SetTimeBetweenBullets(int time_between_bullets);
-	int GetLife();
-	int GetMaxLife();
-	int GetTimeBetweenBullets();
+	int GetLife() const;
+	int GetMaxLife() const;
+	int GetTimeBetweenBullets() const;
+	int GetTankNum() const;
+	bool GetShotAutomatically() const;
+	bool GetIsElectroShotCharged() const;
 	fPoint GetShotDir() const;
+	WeaponInfo GetWeaponInfo() const;
+
 	bool IsReady() const;
+
 	int GetTankNum();
+
+	void ShotAutormaticallyActivate();
+	void ShotAutormaticallyDisactivate();
+	std::vector<Object*>* GetEnemiesHitted();
+
+	void CreatePortals();
+
 
 public:
 
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
-	bool Alive();
-	fPoint GetTurrPos();
+
+	bool Alive() const;
+	fPoint GetTurrPos() const;
+
 
 private:
 	//- Movement
@@ -96,6 +113,11 @@ private:
 	void ShootHealingShot();
 	void ShootLaserShot();
 	void ShootLaserShotCharged();
+	void ShootElectroShot();
+
+	void ShootElectroShotCharged();
+
+	
 
 	//- TankDeath
 	void ReviveTank(float dt);
@@ -143,7 +165,6 @@ private:
 	int tutorial_move_time					= 0;//The time the tutorial move image will appear on screen (ms)
 	bool tutorial_move_pressed				= false;
 
-
 	//- Shooting
 	fPoint turr_pos							= { 0.f, 0.f };//The position of the turret in the map
 	float turr_angle						= 0.f;
@@ -177,6 +198,19 @@ private:
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
 
+	bool shot_automatically					= false;
+
+	//Electro shot
+	PerfTimer electro_shot_timer;
+	bool is_electro_shot_charged = false;
+
+	std::vector<Collider*> electric_shot_colliders_vector;
+
+	std::vector<Collider*> electric_shot_colliders_charged_vector;
+
+	std::vector<Object*> enemies_hitted;
+	
+
 	//- Items
 	ObjectType item							= ObjectType::NO_TYPE;
 	UI_IG_Helper * tutorial_pick_up			= nullptr;
@@ -205,25 +239,25 @@ private:
 	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;
 	short int gamepad_shoot_last_frame				= 0;
 
-	//- Drawing
-	//-- Base
+	// Drawing =============================================
+
+	SDL_Color tank_color = { 255, 255, 255, 255 };
+
+	// Base----------------------
 	Animation rotate_base;
-	SDL_Texture * base_tex_orange			= nullptr;
-	SDL_Texture * base_tex_green			= nullptr;
-	SDL_Texture * base_tex_pink				= nullptr;
-	SDL_Texture * base_tex_blue				= nullptr;
+	SDL_Texture * base_color_tex			= nullptr;
+	SDL_Texture * base_common_tex			= nullptr;
 	SDL_Texture * base_shadow_tex			= nullptr;
-
-	//-- Turret
+	// Turret -------------------
 	Animation rotate_turr;
-	SDL_Texture * turr_tex						= nullptr;
-	SDL_Texture * turr_tex_orange				= nullptr;
-	SDL_Texture * turr_tex_green				= nullptr;
-	SDL_Texture * turr_tex_pink					= nullptr;
-	SDL_Texture * turr_tex_blue					= nullptr;
-	SDL_Texture * turr_shadow_tex				= nullptr;
+	SDL_Texture * turret_color_tex			= nullptr;
+	SDL_Texture * turret_common_tex			= nullptr;
+	SDL_Texture * turret_shadow_tex			= nullptr;
 
-	//-- Revive
+	iPoint turr_draw_offset						= { 0,0 };
+	float turr_scale							= 1.f;
+
+	// Revive -----------------
 	SDL_Texture * cycle_bar_tex = nullptr;
 	Animation cycle_bar_anim;
 	bool draw_revive_cycle_bar = false;
@@ -236,6 +270,12 @@ public:
 
 	//- GUI
 	Player_GUI*  gui = nullptr;
+
+public:
+	Obj_Portal * portal1;
+	Obj_Portal * portal2;
+	bool hit_no_enemie = false;
+
 };
 
 #endif

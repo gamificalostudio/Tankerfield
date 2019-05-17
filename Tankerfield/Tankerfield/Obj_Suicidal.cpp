@@ -33,59 +33,48 @@
 
 Obj_Suicidal::Obj_Suicidal(fPoint pos) : Object(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("brute");
+	pugi::xml_node suicidal_node = app->config.child("object").child("suicidal");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("suicidal");
 
-	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
-	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white.png");
-	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
-	curr_tex = spawn_tex;
 
-	idle.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("idle"));
-	walk.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("walk"));
-	attack.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("attack"));
-	death.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("death"));
-	spawn.frames = app->anim_bank->LoadFrames(brute_node.child("animations").child("spawn"));
-	curr_anim = &spawn;
+	tex = app->tex->Load(suicidal_node.child("tex_path").child_value());
+	curr_tex = tex;
 
-	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
-	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
-	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
-	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
-	app->audio->PlayFx(sfx_spawn);
+	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
+	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
+	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
+	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 
-	state = SUICIDAL_STATE::SPAWN;
-	speed = 7.5f;
-	detection_range = 10.0f;
-	range_pos.center = pos_map;
-	range_pos.radius = 0.5f;
-	check_path_time = 1.f;
+	state = ENEMY_STATE::SPAWN;
+	speed = suicidal_node.child("speed").attribute("num").as_float();
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width) * 1.33f;
 
-	spawn_draw_offset = { 260, 274 };
-	normal_draw_offset = { 132, 75 };
-	draw_offset = spawn_draw_offset;
+	normal_draw_offset = { 33, 50 };
+	draw_offset = normal_draw_offset;
 
-	angle = 180;//REMOVE
 
-	timer.Start();
-	attack_damage = INT_MAX; // We don't really need a value for attack damage, as the suicidal will one shot the target.
-	attack_range = 1;
+	coll_w = 0.5f;
+	coll_h = 0.5f;
+
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
+	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.5f });
+
+	attack_damage = suicidal_node.child("attack_damage").attribute("num").as_float();
+	attack_range = suicidal_node.child("attack_range").attribute("num").as_float();
+
 	attack_range_squared = attack_range * attack_range;
-	attack_frequency = 3000.0f;
+	attack_frequency = suicidal_node.child("attack_frequency").attribute("num").as_float();
+	life = pow(suicidal_node.child("base_life").attribute("num").as_float(), app->scene->round);
 
-	coll_w = 1.f;
-	coll_h = 1.f;
+	check_path_time = 2.0f;
 
-	damaged_sprite_time = 150;
-	life = 750 * (log(app->scene->round) + 2);
+	curr_anim = &idle;
+
+	scale = 0.75f;
 }
 
 Obj_Suicidal::~Obj_Suicidal()
-{
-
-}
-
-bool Obj_Suicidal::Update(float dt)
 {
 	Movement(dt);
 	Attack();
@@ -114,10 +103,9 @@ void Obj_Suicidal::Attack()
 		curr_anim = &walk;
 		attack.Reset();
 	}
-
 }
 
-void Obj_Suicidal::Movement(float &dt)
+void Obj_Suicidal::Spawn(const float& dt)
 {
 	if ((state != SUICIDAL_STATE::DEAD)
 		&& (state != SUICIDAL_STATE::SPAWN)
@@ -258,6 +246,30 @@ void Obj_Suicidal::DrawDebug(const Camera* camera)
 			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
 			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
 			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
+	state = ENEMY_STATE::GET_PATH;
+}
+
+void Obj_Suicidal::Attack()
+{
+	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
+	{
+		if (target != nullptr
+			&& target->coll->GetTag() == TAG::PLAYER
+			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+			&& perf_timer.ReadMs() > (double)attack_frequency)
+		{
+			curr_anim = &attack;
+			target->SetLife(target->GetLife() - attack_damage);
+			perf_timer.Start();
+			app->audio->PlayFx(sfx_attack);
+			state = ENEMY_STATE::DEAD;
+		}
+
+		if (curr_anim == &attack
+			&& curr_anim->Finished())
+		{
+			curr_anim = &idle;
+			attack.Reset();
 		}
 	}
 
@@ -315,3 +327,4 @@ void Obj_Suicidal::OnTrigger(Collider* collider)
 
 	}
 }
+

@@ -7,13 +7,13 @@ class UI_Button;
 class UI_Label;
 class UI_Quad;
 
-class General_HUD
+class General_GUI
 {
 public:
 
-	General_HUD();
+	General_GUI();
 
-	~General_HUD();
+	~General_GUI();
 
 	void FadeGeneralHUD(bool fade_on);
 

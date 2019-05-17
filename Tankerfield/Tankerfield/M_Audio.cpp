@@ -141,7 +141,7 @@ bool M_Audio::PlayMusic(const char* path, float fade_time)
 		}
 	}
 
-	LOG("Successfully playing %s", path);
+	//LOG("Successfully playing %s", path);
 	return ret;
 }
 
@@ -191,6 +191,10 @@ int M_Audio::PlayFx
 	{
 		std::list<Mix_Chunk*>::const_iterator item = std::next(fx.begin(), id - 1);
 		ret = Mix_PlayChannel(-1, *item, repeat);
+		if (ret == -1)
+		{
+			LOG("Fx is not reproducing");
+		}
 	}
 
 	return ret;

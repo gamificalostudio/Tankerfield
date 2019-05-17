@@ -39,7 +39,14 @@ public:
 
 	void OnTrigger(Collider* collider);
 
+
 	void OnTriggerEnter(Collider* collider);
+
+	inline void Burn(const float & dt);
+
+	bool Draw(float dt, Camera* cam) override;
+
+
 
 private:
 	inline bool IsOnGoal(fPoint goal);
@@ -61,7 +68,8 @@ private:
 
 	// ----------
 	iPoint spawn_draw_offset	= { 0,0 };
-	iPoint normal_draw_offset	= { 0, 0 };
+	
+	
 
 	/* Attack properties */
 	float attack_frequency = 0.f;
@@ -78,9 +86,10 @@ private:
 	Animation attack;
 	Animation death;
 	Animation spawn;
+
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
-	SDL_Texture * spawn_tex = nullptr;
+	
 	Timer damaged_sprite_timer;
 	int damaged_sprite_time = 0;
 	bool to_hit = true;
@@ -89,6 +98,13 @@ private:
 	uint sfx_death = 0;
 	uint sfx_attack = 0;
 	uint sfx_spawn = 0;
+
+	Animation fire3;
+	
+	SDL_Texture * spawn_tex = nullptr;
+	SDL_Texture* fire_tex = nullptr;
+
+
 };
 
 #endif

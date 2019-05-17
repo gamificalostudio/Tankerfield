@@ -1,20 +1,23 @@
-
 #include <string>
+#include <algorithm>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
 
 #include "Log.h"
-
 #include "App.h"
 #include "M_Render.h"
 #include "M_ObjManager.h"
 #include "M_Textures.h"
-#include "Object.h"
 #include "M_Audio.h"
 #include "M_Window.h"
 #include "M_Scene.h"
+#include "M_Map.h"
+
+#include "Camera.h"
+
+#include "Object.h"
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Suicidal.h"
 #include "Obj_Brute.h"
@@ -22,6 +25,7 @@
 #include "PugiXml/src/pugixml.hpp"
 #include <string>
 #include <algorithm>
+#include "Obj_RocketLauncher.h"
 #include "Obj_Tank.h"
 #include "Obj_Building.h"
 #include "Bullet_Basic.h"
@@ -31,16 +35,18 @@
 #include "Obj_Explosion.h"
 #include "Obj_HealingAnimation.h"
 #include "Obj_Fire.h"
-#include "M_Map.h"
-#include "Brofiler/Brofiler.h"
 #include "Obj_Item.h"
 #include "Item_HealthBag.h"
 #include "Item_HappyHour.h"
 #include "Obj_PickUp.h"
 #include "Obj_RewardBox.h"
-#include "Camera.h"
 #include "Obj_CannonFire.h"
 #include "Obj_FlameThrowerFlame.h"
+#include "Obj_Item.h"
+#include "Obj_Portal.h"
+#include "ElectroShotAnimation.h"
+#include "Obj_Tank_MainMenu.h"
+
 
 M_ObjManager::M_ObjManager()
 {
@@ -80,7 +86,7 @@ bool M_ObjManager::PreUpdate()
 
 	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
 	{
-		if ((*iterator) != nullptr)
+		if ((*iterator) != nullptr && (*iterator)->active == true)
 		{
 			(*iterator)->PreUpdate();
 		}
@@ -94,9 +100,12 @@ bool M_ObjManager::Update(float dt)
 
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
-		if ((*iterator) != nullptr)
+		if ((*iterator) != nullptr )
 		{
-			(*iterator)->Update(dt);
+			if ((*iterator)->active == true)
+			{
+				(*iterator)->Update(dt);
+			}
 
 			if ((*iterator)->to_remove)
 			{
@@ -152,11 +161,12 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
+
 	std::vector<Object*> draw_objects;
 
 	for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 	{
-		if (*item != nullptr)
+		if ( (*item) != nullptr && (*item)->active == true)
 		{
 			(*item)->CalculateDrawVariables();
 		}
@@ -168,7 +178,7 @@ bool M_ObjManager::PostUpdate(float dt)
 
 		for (std::list<Object*>::iterator item = objects.begin(); item != objects.end(); ++item)
 		{
-			if (app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
+			if ((*item)->active == true && app->render->IsOnCamera((*item)->pos_screen.x - (*item)->draw_offset.x, (*item)->pos_screen.y - (*item)->draw_offset.y, (*item)->frame.w, (*item)->frame.h, (*item_cam)))
 			{
 				draw_objects.push_back(*item);
 			}
@@ -179,19 +189,27 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-		  (*item)->DrawShadow((*item_cam), dt);
+			if ((*item) != nullptr && (*item)->active == true)
+			{
+				(*item)->DrawShadow((*item_cam), dt);
+			}
 		}
 
 		//Draw the objects above the shadows
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-		  (*item)->Draw(dt, (*item_cam));
+			if ((*item) != nullptr && (*item)->active == true)
+			{
+				(*item)->Draw(dt, (*item_cam));
 
-		  if (app->scene->draw_debug) {
-			  (*item)->DrawDebug((*item_cam));
-			  DrawDebug((*item), (*item_cam));
-		  }
+
+				if (app->scene->draw_debug)
+				{
+					(*item)->DrawDebug((*item_cam));
+				}
+			}
 		}
+
 		draw_objects.clear();
     }
 	SDL_RenderSetClipRect(app->render->renderer, nullptr);
@@ -211,9 +229,9 @@ bool M_ObjManager::Reset()
 {
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
+		(*iterator)->CleanUp();
 		if ((*iterator)->coll != nullptr)
 		{
-			(*iterator)->CleanUp();
 			(*iterator)->coll->Destroy();
 			(*iterator)->coll = nullptr;
 		}
@@ -269,10 +287,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
 		break;
-	case ObjectType::REWARD_ZONE:
-		ret = DBG_NEW Reward_Zone(pos);
-		ret->type = ObjectType::REWARD_ZONE;
-		break;
 	case ObjectType::BRUTE:
 		ret = new Obj_Brute(pos);
 		ret->type = ObjectType::BRUTE;
@@ -314,6 +328,17 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = new Obj_RewardBox(pos);
 		ret->type = ObjectType::REWARD_BOX;
 		break;
+	case ObjectType::TANK_MAIN_MENU:
+		ret = new Obj_Tank_MainMenu(pos);
+		ret->type = ObjectType::REWARD_BOX;
+		break;
+	case ObjectType::ELECTRO_SHOT_ANIMATION:
+		ret = new Eletro_Shot_Animation(pos);
+		ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
+		break;
+	default:
+		LOG("Object could not be created. Type not detected correctly or hasn't a case.");
+
 	}
 	
   

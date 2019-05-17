@@ -90,6 +90,13 @@ private:
 	uint sfx_death = 0;
 	uint sfx_attack = 0;
 	uint sfx_spawn = 0;
+	void Spawn(const float& dt) override;
+	void Attack() override;
+
+private:
+	iPoint spawn_draw_offset = { 0,0 };
+	iPoint normal_draw_offset = { 0, 0 };
+
 };
 
 #endif /* __OBJ_SUICIDAL_H__ */

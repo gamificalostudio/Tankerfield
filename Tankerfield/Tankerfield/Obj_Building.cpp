@@ -30,11 +30,13 @@ void Obj_Building::SetTexture(const char* path, fPoint rect_collider)
 	curr_tex = texture;
 	frame.x = 0;
 	frame.y = 0;
-	
+
 	SDL_QueryTexture(texture, NULL, NULL, &frame.w, &frame.h);
 
-	coll = app->collision->AddCollider(pos_map, rect_collider.x, rect_collider.y, Collider::TAG::WALL, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
-	
+}
+void Obj_Building::SetCollider(const fRect & collider_rect)
+{
+	coll = app->collision->AddCollider(collider_rect.pos, collider_rect.w, collider_rect.h, TAG::WALL, BODY_TYPE::STATIC, 0.f, this);
+
 }
 

@@ -10,6 +10,7 @@ enum class WEAPON {
 	DOUBLE_MISSILE,
 	HEALING_SHOT,
 	LASER_SHOT,
+	ELECTRO_SHOT,
 	FLAMETHROWER,
 	MAX_WEAPONS,// must be in the last position of the weapons that work. Needed from the creation of pickUps
 	
@@ -25,6 +26,22 @@ enum class WEAPON {
 enum class WEAPON_TYPE {
 	CHARGED,
 	SUSTAINED
+};
+
+struct ShotInfo
+{
+	int bullet_damage				= 0;
+	int bullet_healing				= 0;
+	int explosion_damage			= 0;
+	float bullet_speed				= 0.f;
+	float bullet_life_ms			= 0.f;
+	float time_between_bullets		= 0.f;
+	uint sfx						= 0u;
+	uint recoil						= 0u;
+	float rumble_strength			= 0.f;
+	Uint32 rumble_duration			= 0u;
+	float trauma					= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake
+	ObjectType smoke_particle		= ObjectType::NO_TYPE;
 };
 
 //Class which ONLY holds information about the weapons.
@@ -52,9 +69,8 @@ public:
 	float shot1_rumble_strength		= 0.f;
 	Uint32 shot1_rumble_duration	= 0u;
 
-	//Shot 2 (charged shot on charged weapons and sustained shot on sustained weapons)
-	float shot2_rumble_strength	= 0.f;
-	Uint32 shot2_rumble_duration	= 0u;
+	ShotInfo shot1;//Basic shot on charged weapons and quick shot on sustained weapons
+	ShotInfo shot2;//Charged shot on charged weapons and sustained shot on sustained weapons
 };
 
 #endif

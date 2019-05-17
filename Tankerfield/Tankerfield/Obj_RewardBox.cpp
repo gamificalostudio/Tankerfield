@@ -31,8 +31,7 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 
 	life = 1;
 
-	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , Collider::TAG::REWARD_BOX, 0.f, this);//width and height hardcoded
-	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
+	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);//width and height hardcoded
 }
 
 Obj_RewardBox::~Obj_RewardBox()
@@ -43,7 +42,7 @@ Obj_RewardBox::~Obj_RewardBox()
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET || collider->GetTag() == Collider::TAG::FRIENDLY_BULLET || collider->GetTag() == Collider::TAG::BULLET_LASER)
+	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER)
 	{
 		GetDamage(collider->damage);
 	}
