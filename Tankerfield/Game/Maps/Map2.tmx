@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="isometric" renderorder="left-up" width="200" height="300" tilewidth="60" tileheight="30" infinite="0" nextobjectid="1913">
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="left-up" width="200" height="300" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="1913">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
@@ -137,7 +137,7 @@
   <tileoffset x="-104" y="3"/>
   <image source="Roads and paths separated/Roads_waterr148x91.png" width="450" height="279"/>
  </tileset>
- <layer name="Ground" width="200" height="300">
+ <layer id="1" name="Ground" width="200" height="300">
   <data>
    <tile/>
    <tile/>
@@ -60141,7 +60141,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Ciudad" width="200" height="300">
+ <layer id="2" name="Ciudad" width="200" height="300">
   <data>
    <tile/>
    <tile/>
@@ -120145,7 +120145,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Puentes" width="200" height="300">
+ <layer id="3" name="Puentes" width="200" height="300">
   <data>
    <tile/>
    <tile/>
@@ -180149,7 +180149,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="CliffsUpAndCorrections" width="200" height="300">
+ <layer id="4" name="CliffsUpAndCorrections" width="200" height="300">
   <data>
    <tile/>
    <tile/>
@@ -240153,7 +240153,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup name="Colliders">
+ <objectgroup id="5" name="Colliders">
   <object id="55" type="WATER" x="3780.67" y="4982" width="1080" height="999.667"/>
   <object id="323" type="WATER" x="2280" y="1230" width="780" height="390"/>
   <object id="327" type="WATER" x="3300" y="270" width="2700" height="420"/>
@@ -240229,9 +240229,10 @@
   <object id="1741" type="ROAD" x="2280" y="4530" width="120" height="90"/>
   <object id="1912" type="WATER" x="2280" y="870" width="780" height="270"/>
  </objectgroup>
- <objectgroup name="Buildings">
+ <objectgroup id="6" name="Buildings">
   <object id="211" name="camsc" x="3630" y="1830" width="93.3333" height="94">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="108"/>
     <property name="offset_y" type="int" value="55"/>
     <property name="path" value="Maps/Buildings/camsc.png"/>
@@ -240240,6 +240241,7 @@
   </object>
   <object id="212" name="camsc" x="3990" y="1290" width="93.3333" height="94">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="108"/>
     <property name="offset_y" type="int" value="55"/>
     <property name="path" value="Maps/Buildings/camsc.png"/>
@@ -240248,6 +240250,7 @@
   </object>
   <object id="245" name="canewy" x="3810" y="3540" width="77" height="126">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/canewy.png"/>
@@ -240256,6 +240259,7 @@
   </object>
   <object id="248" name="canewy" x="3810" y="3990" width="77" height="126">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/canewy.png"/>
@@ -240264,6 +240268,7 @@
   </object>
   <object id="249" name="canewy" x="3810" y="4140" width="77" height="126">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/canewy.png"/>
@@ -240272,6 +240277,7 @@
   </object>
   <object id="250" name="canewy" x="4590" y="4680" width="77" height="126">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/canewy.png"/>
@@ -240280,6 +240286,7 @@
   </object>
   <object id="251" name="canewy" x="4740" y="4680" width="77" height="126">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/canewy.png"/>
@@ -240288,6 +240295,7 @@
   </object>
   <object id="252" name="canewy2" x="3900" y="3540" width="120.5" height="75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="45"/>
     <property name="path" value="Maps/Buildings/canewy2.png"/>
@@ -240296,6 +240304,7 @@
   </object>
   <object id="253" name="canewy2" x="4050" y="3540" width="120.5" height="75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="45"/>
     <property name="path" value="Maps/Buildings/canewy2.png"/>
@@ -240304,6 +240313,7 @@
   </object>
   <object id="254" name="canewy2" x="4200" y="3540" width="120.5" height="75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="45"/>
     <property name="path" value="Maps/Buildings/canewy2.png"/>
@@ -240312,6 +240322,7 @@
   </object>
   <object id="255" name="naha" x="3330" y="1080" width="55.75" height="55.5">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="33"/>
     <property name="offset_y" type="int" value="123"/>
     <property name="path" value="Maps/Buildings/naha.png"/>
@@ -240320,6 +240331,7 @@
   </object>
   <object id="256" name="cagas" x="3840" y="4650" width="91" height="92.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="30"/>
     <property name="path" value="Maps/Buildings/cagas.png"/>
@@ -240328,6 +240340,7 @@
   </object>
   <object id="257" name="cagas" x="3090" y="1020" width="91" height="92.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="30"/>
     <property name="path" value="Maps/Buildings/cagas.png"/>
@@ -240336,6 +240349,7 @@
   </object>
   <object id="258" name="cagas" x="4530" y="2340" width="91" height="92.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="30"/>
     <property name="path" value="Maps/Buildings/cagas.png"/>
@@ -240344,6 +240358,7 @@
   </object>
   <object id="259" name="cafarm" x="4050" y="4680" width="49.5" height="62.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cafarm.png"/>
@@ -240352,6 +240367,7 @@
   </object>
   <object id="260" name="cafarm" x="4110" y="4680" width="49.5" height="62.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cafarm.png"/>
@@ -240360,6 +240376,7 @@
   </object>
   <object id="261" name="cafarm" x="4170" y="4680" width="49.5" height="62.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="62"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/cafarm.png"/>
@@ -240368,6 +240385,7 @@
   </object>
   <object id="262" name="caeur3" x="3960" y="4140" width="125.75" height="91.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/caeur03.png"/>
@@ -240376,6 +240394,7 @@
   </object>
   <object id="263" name="caeur3" x="4140" y="3720" width="125.75" height="91.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="85"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/caeur03.png"/>
@@ -240384,6 +240403,7 @@
   </object>
   <object id="264" name="caarmy" x="4350" y="3540" width="71.5" height="47.6667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="30"/>
     <property name="offset_y" type="int" value="15"/>
     <property name="path" value="Maps/Buildings/caarmy.png"/>
@@ -240392,6 +240412,7 @@
   </object>
   <object id="269" name="caeur" x="4140" y="3870" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
     <property name="path" value="Maps/Buildings/caeur.png"/>
@@ -240400,6 +240421,7 @@
   </object>
   <object id="270" name="caeur" x="4320" y="4320" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
     <property name="path" value="Maps/Buildings/caeur.png"/>
@@ -240408,6 +240430,7 @@
   </object>
   <object id="271" name="caeur" x="4350" y="4260" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
     <property name="path" value="Maps/Buildings/caeur.png"/>
@@ -240416,6 +240439,7 @@
   </object>
   <object id="272" name="caeur" x="4440" y="4320" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
     <property name="path" value="Maps/Buildings/caeur.png"/>
@@ -240424,6 +240448,7 @@
   </object>
   <object id="273" name="caeur" x="4650" y="4110" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="32"/>
     <property name="offset_y" type="int" value="33"/>
     <property name="path" value="Maps/Buildings/caeur.png"/>
@@ -240432,6 +240457,7 @@
   </object>
   <object id="274" name="cats" x="4380" y="4410" width="60.6667" height="32.4167">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/cats.png"/>
@@ -240440,6 +240466,7 @@
   </object>
   <object id="275" name="cats" x="4470" y="4410" width="60.6667" height="35.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/cats.png"/>
@@ -240448,6 +240475,7 @@
   </object>
   <object id="276" name="cahse3" x="4290" y="4410" width="77.25" height="62.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse3.png"/>
@@ -240456,6 +240484,7 @@
   </object>
   <object id="277" name="cahse3" x="4590" y="4170" width="77.25" height="62.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse3.png"/>
@@ -240464,6 +240493,7 @@
   </object>
   <object id="278" name="cahse3" x="4740" y="3540" width="77.25" height="62.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse3.png"/>
@@ -240472,6 +240502,7 @@
   </object>
   <object id="279" name="cahse2" x="4590" y="4260" width="64" height="93.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse2.png"/>
@@ -240480,6 +240511,7 @@
   </object>
   <object id="280" name="cahse2" x="4560" y="4050" width="64" height="93.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse2.png"/>
@@ -240488,6 +240520,7 @@
   </object>
   <object id="281" name="cahse2" x="4470" y="3510" width="64" height="93.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="90"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse2.png"/>
@@ -240496,6 +240529,7 @@
   </object>
   <object id="282" name="caeur2" x="4410" y="4260" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
     <property name="path" value="Maps/Buildings/caeur02.png"/>
@@ -240504,6 +240538,7 @@
   </object>
   <object id="283" name="caeur2" x="4380" y="4320" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
     <property name="path" value="Maps/Buildings/caeur02.png"/>
@@ -240512,6 +240547,7 @@
   </object>
   <object id="284" name="caeur2" x="3960" y="4260" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
     <property name="path" value="Maps/Buildings/caeur02.png"/>
@@ -240520,6 +240556,7 @@
   </object>
   <object id="285" name="caeur2" x="4200" y="3870" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
     <property name="path" value="Maps/Buildings/caeur02.png"/>
@@ -240528,6 +240565,7 @@
   </object>
   <object id="286" name="caeur2" x="4650" y="3930" width="39.75" height="36.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="37"/>
     <property name="offset_y" type="int" value="42"/>
     <property name="path" value="Maps/Buildings/caeur02.png"/>
@@ -240536,6 +240574,7 @@
   </object>
   <object id="287" name="cahse" x="4020" y="4260" width="62.25" height="62.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse.png"/>
@@ -240544,6 +240583,7 @@
   </object>
   <object id="288" name="cahse" x="4560" y="3960" width="62.25" height="62.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
     <property name="offset_y" type="int" value="60"/>
     <property name="path" value="Maps/Buildings/cahse.png"/>
@@ -240552,6 +240592,7 @@
   </object>
   <object id="292" name="caarmy2" x="4500" y="3720" width="30.5" height="30.5">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/caarmy2.png"/>
@@ -240560,6 +240601,7 @@
   </object>
   <object id="296" name="caarmy3" x="4440" y="3660" width="30.5" height="30.5">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/caarmy3.png"/>
@@ -240568,6 +240610,7 @@
   </object>
   <object id="300" name="caarmy4" x="4500" y="3660" width="30.5" height="30.5">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="20"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/caarmy4.png"/>
@@ -240576,6 +240619,7 @@
   </object>
   <object id="301" name="cgrus" x="3570" y="930" width="125.25" height="91.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="76"/>
     <property name="offset_y" type="int" value="150"/>
     <property name="path" value="Maps/Buildings/cgrus.png"/>
@@ -240584,6 +240628,7 @@
   </object>
   <object id="302" name="carus" x="3090" y="1380" width="122" height="122">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="45"/>
     <property name="path" value="Maps/Buildings/carus.png"/>
@@ -240592,6 +240637,7 @@
   </object>
   <object id="303" name="carus" x="3420" y="900" width="122" height="122">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="45"/>
     <property name="path" value="Maps/Buildings/carus.png"/>
@@ -240600,6 +240646,7 @@
   </object>
   <object id="304" name="carus4" x="3360" y="1380" width="109.5" height="105">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="85"/>
     <property name="path" value="Maps/Buildings/carus4.png"/>
@@ -240608,6 +240655,7 @@
   </object>
   <object id="305" name="carus4" x="3120" y="900" width="109.5" height="105">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="85"/>
     <property name="path" value="Maps/Buildings/carus4.png"/>
@@ -240616,6 +240664,7 @@
   </object>
   <object id="306" name="carus4" x="4530" y="1290" width="109.5" height="105">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="85"/>
     <property name="path" value="Maps/Buildings/carus4.png"/>
@@ -240624,6 +240673,7 @@
   </object>
   <object id="307" name="carus5" x="3240" y="1380" width="109.5" height="105">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="90"/>
     <property name="path" value="Maps/Buildings/carus5.png"/>
@@ -240632,6 +240682,7 @@
   </object>
   <object id="308" name="carus5" x="4020" y="1740" width="109.5" height="105">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="90"/>
     <property name="path" value="Maps/Buildings/carus5.png"/>
@@ -240640,6 +240691,7 @@
   </object>
   <object id="309" name="carus5" x="3630" y="1230" width="109.5" height="105">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="90"/>
     <property name="path" value="Maps/Buildings/carus5.png"/>
@@ -240648,6 +240700,7 @@
   </object>
   <object id="310" name="catexs" x="3210" y="1020" width="61" height="92.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/catexs.png"/>
@@ -240656,6 +240709,7 @@
   </object>
   <object id="311" name="catexs" x="3330" y="900" width="61" height="92.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/catexs.png"/>
@@ -240664,6 +240718,7 @@
   </object>
   <object id="312" name="catexs" x="4140" y="1290" width="61" height="90.0867">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/catexs.png"/>
@@ -240672,6 +240727,7 @@
   </object>
   <object id="313" name="catexs" x="4080" y="2280" width="61" height="92.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/catexs.png"/>
@@ -240680,6 +240736,7 @@
   </object>
   <object id="314" name="catexs" x="3450" y="1860" width="61" height="92.1667">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="75"/>
     <property name="offset_y" type="int" value="35"/>
     <property name="path" value="Maps/Buildings/catexs.png"/>
@@ -240688,6 +240745,7 @@
   </object>
   <object id="315" name="cawash" x="3630" y="1980" width="97.75" height="124.5">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
     <property name="path" value="Maps/Buildings/cawash.png"/>
@@ -240696,6 +240754,7 @@
   </object>
   <object id="316" name="cawash" x="4022" y="1860" width="97.75" height="124.5">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
     <property name="path" value="Maps/Buildings/cawash.png"/>
@@ -240704,6 +240763,7 @@
   </object>
   <object id="317" name="cawash" x="4050" y="2400" width="97.75" height="124.5">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
     <property name="path" value="Maps/Buildings/cawash.png"/>
@@ -240712,6 +240772,7 @@
   </object>
   <object id="318" name="cawash" x="4050" y="1140" width="97.75" height="120">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="120"/>
     <property name="offset_y" type="int" value="75"/>
     <property name="path" value="Maps/Buildings/cawash.png"/>
@@ -240720,6 +240781,7 @@
   </object>
   <object id="319" name="carus" x="4020" y="2010" width="122" height="122">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="104"/>
     <property name="offset_y" type="int" value="45"/>
     <property name="path" value="Maps/Buildings/carus.png"/>
@@ -240728,6 +240790,7 @@
   </object>
   <object id="320" name="caind" x="2896.88" y="284.125" width="172.25" height="113.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="80"/>
     <property name="path" value="Maps/Buildings/caind.png"/>
@@ -240736,6 +240799,7 @@
   </object>
   <object id="321" name="caind" x="3099.38" y="287.625" width="172.25" height="113.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="80"/>
     <property name="path" value="Maps/Buildings/caind.png"/>
@@ -240744,6 +240808,7 @@
   </object>
   <object id="322" name="caind" x="2696.38" y="282.625" width="172.25" height="113.75">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="80"/>
     <property name="offset_y" type="int" value="80"/>
     <property name="path" value="Maps/Buildings/caind.png"/>
@@ -240752,6 +240817,7 @@
   </object>
   <object id="1010" name="tree2" x="1530" y="1830" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240760,6 +240826,7 @@
   </object>
   <object id="1011" name="tree1" x="2160" y="2370" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240768,6 +240835,7 @@
   </object>
   <object id="1012" name="tree1" x="1860" y="1380" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240776,6 +240844,7 @@
   </object>
   <object id="1013" name="tree1" x="1530" y="210" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240784,6 +240853,7 @@
   </object>
   <object id="1014" name="tree1" x="2490" y="1950" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240792,6 +240862,7 @@
   </object>
   <object id="1015" name="tree1" x="1650" y="2430" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240800,6 +240871,7 @@
   </object>
   <object id="1016" name="tree2" x="1920" y="2100" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240808,6 +240880,7 @@
   </object>
   <object id="1017" name="tree2" x="1560" y="720" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240816,6 +240889,7 @@
   </object>
   <object id="1018" name="tree1" x="1860" y="690" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240824,6 +240898,7 @@
   </object>
   <object id="1019" name="tree2" x="1920" y="2610" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240832,6 +240907,7 @@
   </object>
   <object id="1020" name="tree2" x="1440" y="1620" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240840,6 +240916,7 @@
   </object>
   <object id="1021" name="tree1" x="2040" y="930" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240848,6 +240925,7 @@
   </object>
   <object id="1022" name="tree2" x="2010" y="420" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240856,6 +240934,7 @@
   </object>
   <object id="1023" name="tree2" x="2040" y="1950" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240864,6 +240943,7 @@
   </object>
   <object id="1024" name="tree1" x="1530" y="1950" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240872,6 +240952,7 @@
   </object>
   <object id="1025" name="tree2" x="1800" y="1110" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240880,6 +240961,7 @@
   </object>
   <object id="1026" name="tree1" x="2370" y="1860" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240888,6 +240970,7 @@
   </object>
   <object id="1027" name="tree1" x="1530" y="2070" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240896,6 +240979,7 @@
   </object>
   <object id="1028" name="tree1" x="2550" y="2520" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240904,6 +240988,7 @@
   </object>
   <object id="1029" name="tree1" x="1620" y="360" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240912,6 +240997,7 @@
   </object>
   <object id="1030" name="tree1" x="1710" y="2820" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240920,6 +241006,7 @@
   </object>
   <object id="1031" name="tree1" x="2100" y="2010" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240928,6 +241015,7 @@
   </object>
   <object id="1032" name="tree2" x="1800" y="1350" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240936,6 +241024,7 @@
   </object>
   <object id="1033" name="tree1" x="1500" y="2670" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240944,6 +241033,7 @@
   </object>
   <object id="1034" name="tree1" x="1920" y="2400" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240952,6 +241042,7 @@
   </object>
   <object id="1035" name="tree1" x="1980" y="300" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240960,6 +241051,7 @@
   </object>
   <object id="1036" name="tree2" x="2610" y="2430" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -240968,6 +241060,7 @@
   </object>
   <object id="1037" name="tree1" x="2250" y="1770" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240976,6 +241069,7 @@
   </object>
   <object id="1038" name="tree1" x="2610" y="2850" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240984,6 +241078,7 @@
   </object>
   <object id="1039" name="tree1" x="2340" y="2100" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -240992,6 +241087,7 @@
   </object>
   <object id="1040" name="tree2" x="2580" y="1920" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241000,6 +241096,7 @@
   </object>
   <object id="1041" name="tree1" x="2010" y="990" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241008,6 +241105,7 @@
   </object>
   <object id="1042" name="tree1" x="1770" y="1290" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241016,6 +241114,7 @@
   </object>
   <object id="1043" name="tree1" x="2610" y="2730" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241024,6 +241123,7 @@
   </object>
   <object id="1044" name="tree1" x="1860" y="2550" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241032,6 +241132,7 @@
   </object>
   <object id="1045" name="tree1" x="1560" y="570" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241040,6 +241141,7 @@
   </object>
   <object id="1046" name="tree1" x="2610" y="1980" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241048,6 +241150,7 @@
   </object>
   <object id="1047" name="tree2" x="1920" y="270" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241056,6 +241159,7 @@
   </object>
   <object id="1048" name="tree1" x="1590" y="1320" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241064,6 +241168,7 @@
   </object>
   <object id="1049" name="tree1" x="2220" y="2490" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241072,6 +241177,7 @@
   </object>
   <object id="1050" name="tree2" x="2580" y="2790" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241080,6 +241186,7 @@
   </object>
   <object id="1051" name="tree1" x="2550" y="1800" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241088,6 +241195,7 @@
   </object>
   <object id="1052" name="tree2" x="1620" y="240" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241096,15 +241204,21 @@
   </object>
   <object id="1053" name="tree2" x="2280" y="2340" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
     <property name="pivot" type="float" value="75"/>
    </properties>
   </object>
-  <object id="1054" name="tree1" x="1440" y="1050" width="60" height="60"/>
+  <object id="1054" name="tree1" x="1440" y="1050" width="60" height="60">
+   <properties>
+    <property name="has_collider" type="bool" value="true"/>
+   </properties>
+  </object>
   <object id="1055" name="tree1" x="2430" y="1830" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241113,6 +241227,7 @@
   </object>
   <object id="1056" name="tree1" x="2130" y="1290" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241121,6 +241236,7 @@
   </object>
   <object id="1057" name="tree2" x="1980" y="2670" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241129,6 +241245,7 @@
   </object>
   <object id="1058" name="tree2" x="1590" y="480" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241137,6 +241254,7 @@
   </object>
   <object id="1059" name="tree1" x="2010" y="2730" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241145,6 +241263,7 @@
   </object>
   <object id="1060" name="tree1" x="1920" y="1890" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241153,6 +241272,7 @@
   </object>
   <object id="1061" name="tree2" x="2340" y="1980" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241161,6 +241281,7 @@
   </object>
   <object id="1062" name="tree2" x="1440" y="990" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241169,6 +241290,7 @@
   </object>
   <object id="1063" name="tree1" x="1980" y="1440" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241177,6 +241299,7 @@
   </object>
   <object id="1064" name="tree1" x="2040" y="2310" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241185,6 +241308,7 @@
   </object>
   <object id="1065" name="tree2" x="1860" y="1710" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241193,6 +241317,7 @@
   </object>
   <object id="1066" name="tree2" x="1710" y="2430" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241201,6 +241326,7 @@
   </object>
   <object id="1067" name="tree1" x="2010" y="1260" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241209,6 +241335,7 @@
   </object>
   <object id="1068" name="tree2" x="1800" y="2310" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241217,6 +241344,7 @@
   </object>
   <object id="1069" name="tree1" x="2220" y="300" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241225,6 +241353,7 @@
   </object>
   <object id="1070" name="tree2" x="1470" y="1860" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241233,6 +241362,7 @@
   </object>
   <object id="1071" name="tree2" x="1620" y="720" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241241,6 +241371,7 @@
   </object>
   <object id="1072" name="tree1" x="2280" y="2670" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241249,6 +241380,7 @@
   </object>
   <object id="1073" name="tree1" x="2520" y="2070" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241257,6 +241389,7 @@
   </object>
   <object id="1074" name="tree2" x="2580" y="2040" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241265,6 +241398,7 @@
   </object>
   <object id="1075" name="tree1" x="1650" y="990" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241273,6 +241407,7 @@
   </object>
   <object id="1076" name="tree1" x="1740" y="1740" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241281,6 +241416,7 @@
   </object>
   <object id="1077" name="tree1" x="1860" y="2040" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241289,6 +241425,7 @@
   </object>
   <object id="1078" name="tree2" x="2160" y="300" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241297,6 +241434,7 @@
   </object>
   <object id="1079" name="tree2" x="1740" y="2490" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241305,6 +241443,7 @@
   </object>
   <object id="1080" name="tree1" x="2220" y="1650" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241313,6 +241452,7 @@
   </object>
   <object id="1081" name="tree2" x="1920" y="690" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241321,6 +241461,7 @@
   </object>
   <object id="1082" name="tree1" x="1860" y="2370" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241329,6 +241470,7 @@
   </object>
   <object id="1083" name="tree2" x="1590" y="2850" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241337,6 +241479,7 @@
   </object>
   <object id="1084" name="tree2" x="2520" y="2700" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241345,6 +241488,7 @@
   </object>
   <object id="1085" name="tree2" x="1500" y="2280" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241353,6 +241497,7 @@
   </object>
   <object id="1086" name="tree2" x="2400" y="1650" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241361,6 +241506,7 @@
   </object>
   <object id="1087" name="tree2" x="1530" y="510" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241369,6 +241515,7 @@
   </object>
   <object id="1088" name="tree2" x="2280" y="1650" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241377,6 +241524,7 @@
   </object>
   <object id="1089" name="tree1" x="1530" y="270" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241385,6 +241533,7 @@
   </object>
   <object id="1090" name="tree2" x="2040" y="1470" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241393,6 +241542,7 @@
   </object>
   <object id="1091" name="tree2" x="1890" y="1830" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241401,6 +241551,7 @@
   </object>
   <object id="1092" name="tree1" x="1530" y="1710" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241409,6 +241560,7 @@
   </object>
   <object id="1093" name="tree1" x="1590" y="420" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241417,6 +241569,7 @@
   </object>
   <object id="1094" name="tree2" x="1920" y="2310" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241425,6 +241578,7 @@
   </object>
   <object id="1095" name="tree2" x="2520" y="2400" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241433,6 +241587,7 @@
   </object>
   <object id="1096" name="tree1" x="2070" y="450" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241441,6 +241596,7 @@
   </object>
   <object id="1097" name="tree1" x="1500" y="1410" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241449,6 +241605,7 @@
   </object>
   <object id="1098" name="tree2" x="2220" y="2550" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241457,6 +241614,7 @@
   </object>
   <object id="1099" name="tree2" x="2160" y="1620" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241465,6 +241623,7 @@
   </object>
   <object id="1100" name="tree2" x="2010" y="750" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241473,6 +241632,7 @@
   </object>
   <object id="1101" name="tree1" x="1800" y="1920" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241481,6 +241641,7 @@
   </object>
   <object id="1102" name="tree2" x="2190" y="2430" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241489,6 +241650,7 @@
   </object>
   <object id="1103" name="tree1" x="2580" y="2370" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241497,6 +241659,7 @@
   </object>
   <object id="1104" name="tree1" x="1440" y="1980" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241505,6 +241668,7 @@
   </object>
   <object id="1105" name="tree1" x="2040" y="2460" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241513,6 +241677,7 @@
   </object>
   <object id="1106" name="tree1" x="2010" y="1710" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241521,6 +241686,7 @@
   </object>
   <object id="1107" name="tree1" x="1530" y="90" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241529,6 +241695,7 @@
   </object>
   <object id="1108" name="tree2" x="1620" y="1380" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241537,6 +241704,7 @@
   </object>
   <object id="1109" name="tree1" x="1650" y="2850" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241545,6 +241713,7 @@
   </object>
   <object id="1110" name="tree2" x="2100" y="2100" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241553,6 +241722,7 @@
   </object>
   <object id="1111" name="tree2" x="2130" y="960" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241561,6 +241731,7 @@
   </object>
   <object id="1112" name="tree1" x="1440" y="2340" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241569,6 +241740,7 @@
   </object>
   <object id="1113" name="tree2" x="2130" y="2580" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241577,6 +241749,7 @@
   </object>
   <object id="1114" name="tree1" x="1440" y="1800" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241585,6 +241758,7 @@
   </object>
   <object id="1115" name="tree2" x="2190" y="450" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241593,6 +241767,7 @@
   </object>
   <object id="1116" name="tree1" x="1860" y="1770" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241601,6 +241776,7 @@
   </object>
   <object id="1117" name="tree1" x="1860" y="1110" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241609,6 +241785,7 @@
   </object>
   <object id="1118" name="tree2" x="1530" y="1440" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241617,6 +241794,7 @@
   </object>
   <object id="1119" name="tree1" x="1830" y="1650" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241625,6 +241803,7 @@
   </object>
   <object id="1120" name="tree2" x="1530" y="1770" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241633,6 +241812,7 @@
   </object>
   <object id="1121" name="tree2" x="1980" y="1050" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241641,6 +241821,7 @@
   </object>
   <object id="1122" name="tree1" x="2520" y="2760" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241649,6 +241830,7 @@
   </object>
   <object id="1123" name="tree1" x="1500" y="1590" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241657,6 +241839,7 @@
   </object>
   <object id="1124" name="tree2" x="1530" y="330" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241665,6 +241848,7 @@
   </object>
   <object id="1125" name="tree1" x="2010" y="870" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241673,6 +241857,7 @@
   </object>
   <object id="1126" name="tree1" x="1620" y="180" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241681,6 +241866,7 @@
   </object>
   <object id="1127" name="tree2" x="1830" y="1260" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241689,6 +241875,7 @@
   </object>
   <object id="1128" name="tree2" x="2160" y="2700" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241697,6 +241884,7 @@
   </object>
   <object id="1129" name="tree1" x="1470" y="2610" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241705,6 +241893,7 @@
   </object>
   <object id="1130" name="tree1" x="2160" y="2040" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241713,6 +241902,7 @@
   </object>
   <object id="1131" name="tree1" x="2610" y="2490" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241721,6 +241911,7 @@
   </object>
   <object id="1132" name="tree1" x="2340" y="2040" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241729,6 +241920,7 @@
   </object>
   <object id="1133" name="tree2" x="1470" y="1680" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241737,6 +241929,7 @@
   </object>
   <object id="1134" name="tree2" x="2190" y="1350" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241745,6 +241938,7 @@
   </object>
   <object id="1135" name="tree2" x="2250" y="2280" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241753,6 +241947,7 @@
   </object>
   <object id="1136" name="tree2" x="2130" y="480" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241761,6 +241956,7 @@
   </object>
   <object id="1137" name="tree1" x="1530" y="2850" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241769,6 +241965,7 @@
   </object>
   <object id="1138" name="tree2" x="1770" y="1800" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241777,6 +241974,7 @@
   </object>
   <object id="1139" name="tree2" x="1770" y="1050" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241785,6 +241983,7 @@
   </object>
   <object id="1140" name="tree2" x="1980" y="1770" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241793,6 +241992,7 @@
   </object>
   <object id="1141" name="tree2" x="1620" y="540" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241801,6 +242001,7 @@
   </object>
   <object id="1142" name="tree2" x="1560" y="150" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241809,6 +242010,7 @@
   </object>
   <object id="1143" name="tree2" x="2460" y="1890" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241817,6 +242019,7 @@
   </object>
   <object id="1144" name="tree2" x="1500" y="2790" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241825,6 +242028,7 @@
   </object>
   <object id="1145" name="tree2" x="1800" y="1860" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241833,6 +242037,7 @@
   </object>
   <object id="1146" name="tree1" x="2100" y="270" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241841,6 +242046,7 @@
   </object>
   <object id="1147" name="tree1" x="2190" y="1740" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241849,6 +242055,7 @@
   </object>
   <object id="1148" name="tree1" x="1530" y="450" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241857,6 +242064,7 @@
   </object>
   <object id="1149" name="tree1" x="2190" y="2760" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241865,6 +242073,7 @@
   </object>
   <object id="1150" name="tree2" x="1500" y="2730" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241873,6 +242082,7 @@
   </object>
   <object id="1151" name="tree1" x="2100" y="1650" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241881,6 +242091,7 @@
   </object>
   <object id="1152" name="tree2" x="1740" y="720" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241889,6 +242100,7 @@
   </object>
   <object id="1153" name="tree1" x="1800" y="720" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241897,6 +242109,7 @@
   </object>
   <object id="1154" name="tree2" x="1890" y="2820" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241905,6 +242118,7 @@
   </object>
   <object id="1155" name="tree2" x="1770" y="1680" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241913,6 +242127,7 @@
   </object>
   <object id="1156" name="tree1" x="1950" y="390" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241921,6 +242136,7 @@
   </object>
   <object id="1157" name="tree2" x="2610" y="2610" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241929,6 +242145,7 @@
   </object>
   <object id="1158" name="tree1" x="1890" y="1290" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241937,6 +242154,7 @@
   </object>
   <object id="1159" name="tree2" x="2520" y="1740" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241945,6 +242163,7 @@
   </object>
   <object id="1160" name="tree2" x="2070" y="1290" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241953,6 +242172,7 @@
   </object>
   <object id="1161" name="tree2" x="2100" y="2310" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241961,6 +242181,7 @@
   </object>
   <object id="1162" name="tree2" x="2040" y="300" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241969,6 +242190,7 @@
   </object>
   <object id="1163" name="tree1" x="1530" y="1890" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -241977,6 +242199,7 @@
   </object>
   <object id="1164" name="tree2" x="2550" y="2460" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241985,6 +242208,7 @@
   </object>
   <object id="1165" name="tree2" x="2160" y="1020" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -241993,6 +242217,7 @@
   </object>
   <object id="1166" name="tree2" x="1590" y="300" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242001,6 +242226,7 @@
   </object>
   <object id="1167" name="tree2" x="2550" y="1860" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242009,6 +242235,7 @@
   </object>
   <object id="1168" name="tree2" x="2250" y="2610" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242017,6 +242244,7 @@
   </object>
   <object id="1169" name="tree2" x="1590" y="930" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242025,6 +242253,7 @@
   </object>
   <object id="1170" name="tree2" x="1530" y="1470" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242033,6 +242262,7 @@
   </object>
   <object id="1171" name="tree1" x="1800" y="2490" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242041,6 +242271,7 @@
   </object>
   <object id="1172" name="tree1" x="1860" y="2280" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242049,6 +242280,7 @@
   </object>
   <object id="1173" name="tree2" x="1530" y="390" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242057,6 +242289,7 @@
   </object>
   <object id="1174" name="tree1" x="2520" y="2580" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242065,6 +242298,7 @@
   </object>
   <object id="1175" name="tree2" x="1950" y="1710" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242073,6 +242307,7 @@
   </object>
   <object id="1176" name="tree1" x="1500" y="810" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242081,6 +242316,7 @@
   </object>
   <object id="1177" name="tree2" x="2130" y="1710" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242089,6 +242325,7 @@
   </object>
   <object id="1178" name="tree2" x="1530" y="2490" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242097,6 +242334,7 @@
   </object>
   <object id="1179" name="tree2" x="1770" y="2820" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242105,6 +242343,7 @@
   </object>
   <object id="1180" name="tree1" x="1980" y="2100" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242113,6 +242352,7 @@
   </object>
   <object id="1181" name="tree1" x="1710" y="1050" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242121,15 +242361,21 @@
   </object>
   <object id="1182" name="tree1" x="1620" y="1440" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
     <property name="pivot" type="float" value="75"/>
    </properties>
   </object>
-  <object id="1183" name="tree1" x="1500" y="1050" width="60" height="60"/>
+  <object id="1183" name="tree1" x="1500" y="1050" width="60" height="60">
+   <properties>
+    <property name="has_collider" type="bool" value="true"/>
+   </properties>
+  </object>
   <object id="1184" name="tree2" x="1920" y="1080" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242138,6 +242384,7 @@
   </object>
   <object id="1185" name="tree2" x="2100" y="1440" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242146,6 +242393,7 @@
   </object>
   <object id="1186" name="tree2" x="1500" y="2010" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242154,6 +242402,7 @@
   </object>
   <object id="1187" name="tree2" x="1980" y="2460" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242162,6 +242411,7 @@
   </object>
   <object id="1188" name="tree1" x="2160" y="1410" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242170,6 +242420,7 @@
   </object>
   <object id="1189" name="tree2" x="2550" y="2640" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242178,6 +242429,7 @@
   </object>
   <object id="1190" name="tree2" x="2220" y="2100" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242186,6 +242438,7 @@
   </object>
   <object id="1191" name="tree2" x="2280" y="360" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242194,6 +242447,7 @@
   </object>
   <object id="1192" name="tree2" x="1530" y="1350" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242202,6 +242456,7 @@
   </object>
   <object id="1193" name="tree2" x="1590" y="2460" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242210,6 +242465,7 @@
   </object>
   <object id="1194" name="tree2" x="2310" y="1800" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242218,6 +242474,7 @@
   </object>
   <object id="1195" name="tree2" x="1530" y="870" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242226,6 +242483,7 @@
   </object>
   <object id="1196" name="tree2" x="2610" y="2550" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242234,6 +242492,7 @@
   </object>
   <object id="1197" name="tree2" x="2250" y="2730" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242242,6 +242501,7 @@
   </object>
   <object id="1198" name="tree1" x="2340" y="1650" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242250,6 +242510,7 @@
   </object>
   <object id="1199" name="tree1" x="2010" y="2790" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242258,6 +242519,7 @@
   </object>
   <object id="1200" name="tree2" x="1530" y="1650" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242266,6 +242528,7 @@
   </object>
   <object id="1201" name="tree1" x="2310" y="2280" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242274,6 +242537,7 @@
   </object>
   <object id="1202" name="tree2" x="2010" y="810" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242282,6 +242546,7 @@
   </object>
   <object id="1203" name="tree1" x="1860" y="300" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242290,6 +242555,7 @@
   </object>
   <object id="1204" name="tree1" x="2160" y="2640" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242298,6 +242564,7 @@
   </object>
   <object id="1205" name="tree2" x="2490" y="2010" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242306,6 +242573,7 @@
   </object>
   <object id="1206" name="tree1" x="1830" y="2850" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242314,6 +242582,7 @@
   </object>
   <object id="1207" name="tree2" x="1830" y="1980" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242322,6 +242591,7 @@
   </object>
   <object id="1208" name="tree1" x="2100" y="2520" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242330,6 +242600,7 @@
   </object>
   <object id="1209" name="tree1" x="1440" y="2280" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242338,6 +242609,7 @@
   </object>
   <object id="1210" name="tree1" x="1470" y="1740" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242346,6 +242618,7 @@
   </object>
   <object id="1211" name="tree1" x="1980" y="690" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242354,6 +242627,7 @@
   </object>
   <object id="1212" name="tree1" x="2160" y="2130" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242362,6 +242636,7 @@
   </object>
   <object id="1213" name="tree2" x="1920" y="1410" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242370,6 +242645,7 @@
   </object>
   <object id="1214" name="tree2" x="1890" y="360" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242378,6 +242654,7 @@
   </object>
   <object id="1215" name="tree1" x="1500" y="750" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242386,6 +242663,7 @@
   </object>
   <object id="1216" name="tree1" x="1980" y="1950" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242394,6 +242672,7 @@
   </object>
   <object id="1217" name="tree2" x="1440" y="1920" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242402,6 +242681,7 @@
   </object>
   <object id="1218" name="tree1" x="1680" y="690" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242410,6 +242690,7 @@
   </object>
   <object id="1219" name="tree1" x="1980" y="2280" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242418,6 +242699,7 @@
   </object>
   <object id="1220" name="tree1" x="2250" y="420" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242426,6 +242708,7 @@
   </object>
   <object id="1221" name="tree2" x="1950" y="1290" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242434,6 +242717,7 @@
   </object>
   <object id="1222" name="tree2" x="1950" y="2820" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees2.png"/>
@@ -242442,6 +242726,7 @@
   </object>
   <object id="1223" name="tree1" x="2460" y="1680" width="60" height="60" rotation="-360">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242450,6 +242735,7 @@
   </object>
   <object id="1224" name="tree1" x="1500" y="2550" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242458,6 +242744,7 @@
   </object>
   <object id="1225" name="tree1" x="2190" y="960" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242466,6 +242753,7 @@
   </object>
   <object id="1226" name="tree1" x="2040" y="2130" width="60" height="60" rotation="-180">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242474,6 +242762,7 @@
   </object>
   <object id="1227" name="tree1" x="2610" y="2670" width="60" height="60">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/Trees1.png"/>
@@ -242482,6 +242771,7 @@
   </object>
   <object id="1646" name="FenceLeft" x="1260" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -242489,6 +242779,7 @@
   </object>
   <object id="1727" name="FenceRight" x="2490" y="3869.75" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242496,6 +242787,7 @@
   </object>
   <object id="1742" name="FenceRight" x="2490" y="3900" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242503,6 +242795,7 @@
   </object>
   <object id="1743" name="FenceRight" x="2490" y="3930" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242510,6 +242803,7 @@
   </object>
   <object id="1744" name="FenceRight" x="2490" y="3960" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242517,6 +242811,7 @@
   </object>
   <object id="1745" name="FenceRight" x="2490" y="3990" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242524,6 +242819,7 @@
   </object>
   <object id="1746" name="FenceRight" x="2490" y="4020" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242531,6 +242827,7 @@
   </object>
   <object id="1747" name="FenceRight" x="2490" y="4050" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242538,6 +242835,7 @@
   </object>
   <object id="1748" name="FenceRight" x="2490" y="4080" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242545,6 +242843,7 @@
   </object>
   <object id="1749" name="FenceRight" x="2490" y="4110" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242552,6 +242851,7 @@
   </object>
   <object id="1750" name="FenceRight" x="2490" y="4140" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242559,6 +242859,7 @@
   </object>
   <object id="1751" name="FenceRight" x="2490" y="4170" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242566,6 +242867,7 @@
   </object>
   <object id="1752" name="FenceRight" x="2490" y="4200" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242573,6 +242875,7 @@
   </object>
   <object id="1753" name="FenceRight" x="2490" y="4230" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242580,6 +242883,7 @@
   </object>
   <object id="1754" name="FenceRight" x="2490" y="4260" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242587,6 +242891,7 @@
   </object>
   <object id="1755" name="FenceRight" x="2490" y="4290" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242594,6 +242899,7 @@
   </object>
   <object id="1756" name="FenceRight" x="2490" y="4320" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242601,6 +242907,7 @@
   </object>
   <object id="1759" name="FenceRight" x="2490" y="4350" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242608,6 +242915,7 @@
   </object>
   <object id="1760" name="FenceRight" x="2490" y="4380" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242615,6 +242923,7 @@
   </object>
   <object id="1761" name="FenceRight" x="2490" y="4410" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242622,6 +242931,7 @@
   </object>
   <object id="1762" name="FenceRight" x="2490" y="4440" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242629,6 +242939,7 @@
   </object>
   <object id="1763" name="FenceRight" x="2490" y="4470" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242636,6 +242947,7 @@
   </object>
   <object id="1764" name="FenceRight" x="2490" y="4500" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242643,6 +242955,7 @@
   </object>
   <object id="1765" name="FenceRight" x="2490" y="4620" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242650,6 +242963,7 @@
   </object>
   <object id="1766" name="FenceRight" x="2490" y="4650" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242657,6 +242971,7 @@
   </object>
   <object id="1767" name="FenceRight" x="2490" y="4680" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242664,6 +242979,7 @@
   </object>
   <object id="1768" name="FenceRight" x="2490" y="4710" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242671,6 +242987,7 @@
   </object>
   <object id="1769" name="FenceRight" x="2490" y="4740" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242678,6 +242995,7 @@
   </object>
   <object id="1770" name="FenceRight" x="2490" y="4770" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242685,6 +243003,7 @@
   </object>
   <object id="1771" name="FenceRight" x="2490" y="4800" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242692,6 +243011,7 @@
   </object>
   <object id="1772" name="FenceRight" x="2490" y="4830" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242699,6 +243019,7 @@
   </object>
   <object id="1773" name="FenceRight" x="2490" y="4860" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242706,6 +243027,7 @@
   </object>
   <object id="1774" name="FenceRight" x="2490" y="4890" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242713,6 +243035,7 @@
   </object>
   <object id="1775" name="FenceRight" x="2490" y="4920" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242720,6 +243043,7 @@
   </object>
   <object id="1776" name="FenceRight" x="2490" y="4950" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242727,6 +243051,7 @@
   </object>
   <object id="1777" name="FenceRight" x="2490" y="4980" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242734,6 +243059,7 @@
   </object>
   <object id="1778" name="FenceRight" x="2490" y="5010" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242741,6 +243067,7 @@
   </object>
   <object id="1779" name="FenceRight" x="2490" y="5040" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242748,6 +243075,7 @@
   </object>
   <object id="1780" name="FenceRight" x="2490" y="5070" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242755,6 +243083,7 @@
   </object>
   <object id="1781" name="FenceRight" x="1200" y="5070" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242762,6 +243091,7 @@
   </object>
   <object id="1782" name="FenceRight" x="1200" y="5040" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242769,6 +243099,7 @@
   </object>
   <object id="1783" name="FenceRight" x="1200" y="5010" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242776,6 +243107,7 @@
   </object>
   <object id="1784" name="FenceRight" x="1200" y="4950" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242783,6 +243115,7 @@
   </object>
   <object id="1785" name="FenceRight" x="1200" y="4980" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242790,6 +243123,7 @@
   </object>
   <object id="1786" name="FenceRight" x="1200" y="4920" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242797,6 +243131,7 @@
   </object>
   <object id="1787" name="FenceRight" x="1200" y="4860" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242804,6 +243139,7 @@
   </object>
   <object id="1788" name="FenceRight" x="1200" y="4890" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242811,6 +243147,7 @@
   </object>
   <object id="1789" name="FenceRight" x="1200" y="4800" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242818,6 +243155,7 @@
   </object>
   <object id="1790" name="FenceRight" x="1200" y="4830" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242825,6 +243163,7 @@
   </object>
   <object id="1791" name="FenceRight" x="1200" y="4770" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242832,6 +243171,7 @@
   </object>
   <object id="1792" name="FenceRight" x="1200" y="4740" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242839,6 +243179,7 @@
   </object>
   <object id="1793" name="FenceRight" x="1200" y="4710" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242846,6 +243187,7 @@
   </object>
   <object id="1794" name="FenceRight" x="1200" y="4680" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242853,6 +243195,7 @@
   </object>
   <object id="1795" name="FenceRight" x="1200" y="4650" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242860,6 +243203,7 @@
   </object>
   <object id="1796" name="FenceRight" x="1200" y="4590" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242867,6 +243211,7 @@
   </object>
   <object id="1797" name="FenceRight" x="1200" y="4620" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242874,6 +243219,7 @@
   </object>
   <object id="1798" name="FenceRight" x="1200" y="4560" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242881,6 +243227,7 @@
   </object>
   <object id="1799" name="FenceRight" x="1200" y="4500" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242888,6 +243235,7 @@
   </object>
   <object id="1800" name="FenceRight" x="1200" y="4530" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242895,6 +243243,7 @@
   </object>
   <object id="1801" name="FenceRight" x="1200" y="4440" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242902,6 +243251,7 @@
   </object>
   <object id="1802" name="FenceRight" x="1200" y="4470" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242909,6 +243259,7 @@
   </object>
   <object id="1803" name="FenceRight" x="1200" y="4410" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242916,6 +243267,7 @@
   </object>
   <object id="1804" name="FenceRight" x="1200" y="4380" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242923,6 +243275,7 @@
   </object>
   <object id="1805" name="FenceRight" x="1200" y="4350" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242930,6 +243283,7 @@
   </object>
   <object id="1806" name="FenceRight" x="1200" y="4320" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242937,6 +243291,7 @@
   </object>
   <object id="1807" name="FenceRight" x="1200" y="4290" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242944,6 +243299,7 @@
   </object>
   <object id="1808" name="FenceRight" x="1200" y="4230" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242951,6 +243307,7 @@
   </object>
   <object id="1809" name="FenceRight" x="1200" y="4260" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242958,6 +243315,7 @@
   </object>
   <object id="1810" name="FenceRight" x="1200" y="4200" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242965,6 +243323,7 @@
   </object>
   <object id="1811" name="FenceRight" x="1200" y="4140" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242972,6 +243331,7 @@
   </object>
   <object id="1812" name="FenceRight" x="1200" y="4170" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242979,6 +243339,7 @@
   </object>
   <object id="1813" name="FenceRight" x="1200" y="4080" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242986,6 +243347,7 @@
   </object>
   <object id="1814" name="FenceRight" x="1200" y="4110" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -242993,6 +243355,7 @@
   </object>
   <object id="1815" name="FenceRight" x="1200" y="4050" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243000,6 +243363,7 @@
   </object>
   <object id="1816" name="FenceRight" x="1200" y="4020" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243007,6 +243371,7 @@
   </object>
   <object id="1817" name="FenceRight" x="1200" y="3990" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243014,6 +243379,7 @@
   </object>
   <object id="1818" name="FenceRight" x="1200" y="3960" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243021,6 +243387,7 @@
   </object>
   <object id="1819" name="FenceRight" x="1200" y="3930" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243028,6 +243395,7 @@
   </object>
   <object id="1820" name="FenceRight" x="1200" y="3870" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243035,6 +243403,7 @@
   </object>
   <object id="1821" name="FenceRight" x="1200" y="3840" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243042,6 +243411,7 @@
   </object>
   <object id="1822" name="FenceRight" x="1200" y="3810" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243049,6 +243419,7 @@
   </object>
   <object id="1823" name="FenceRight" x="1200" y="3900" width="30" height="30.25">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="0"/>
     <property name="path" value="Maps/Buildings/fence1.png"/>
@@ -243056,6 +243427,7 @@
   </object>
   <object id="1824" name="FenceLeft" x="1290" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243063,6 +243435,7 @@
   </object>
   <object id="1825" name="FenceLeft" x="1410" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243070,6 +243443,7 @@
   </object>
   <object id="1826" name="FenceLeft" x="1440" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243077,6 +243451,7 @@
   </object>
   <object id="1827" name="FenceLeft" x="1500" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243084,6 +243459,7 @@
   </object>
   <object id="1828" name="FenceLeft" x="1530" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243091,6 +243467,7 @@
   </object>
   <object id="1829" name="FenceLeft" x="1470" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243098,6 +243475,7 @@
   </object>
   <object id="1830" name="FenceLeft" x="1560" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243105,6 +243483,7 @@
   </object>
   <object id="1831" name="FenceLeft" x="1590" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243112,6 +243491,7 @@
   </object>
   <object id="1832" name="FenceLeft" x="1650" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243119,6 +243499,7 @@
   </object>
   <object id="1833" name="FenceLeft" x="1620" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243126,6 +243507,7 @@
   </object>
   <object id="1834" name="FenceLeft" x="1710" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243133,6 +243515,7 @@
   </object>
   <object id="1835" name="FenceLeft" x="1740" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243140,6 +243523,7 @@
   </object>
   <object id="1836" name="FenceLeft" x="1680" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243147,6 +243531,7 @@
   </object>
   <object id="1837" name="FenceLeft" x="1770" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243154,6 +243539,7 @@
   </object>
   <object id="1838" name="FenceLeft" x="1800" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243161,6 +243547,7 @@
   </object>
   <object id="1839" name="FenceLeft" x="1860" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243168,6 +243555,7 @@
   </object>
   <object id="1840" name="FenceLeft" x="1830" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243175,6 +243563,7 @@
   </object>
   <object id="1841" name="FenceLeft" x="1920" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243182,6 +243571,7 @@
   </object>
   <object id="1842" name="FenceLeft" x="1890" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243189,6 +243579,7 @@
   </object>
   <object id="1843" name="FenceLeft" x="1950" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243196,6 +243587,7 @@
   </object>
   <object id="1844" name="FenceLeft" x="2010" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243203,6 +243595,7 @@
   </object>
   <object id="1845" name="FenceLeft" x="2040" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243210,6 +243603,7 @@
   </object>
   <object id="1846" name="FenceLeft" x="1980" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243217,6 +243611,7 @@
   </object>
   <object id="1847" name="FenceLeft" x="2070" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243224,6 +243619,7 @@
   </object>
   <object id="1848" name="FenceLeft" x="2130" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243231,6 +243627,7 @@
   </object>
   <object id="1849" name="FenceLeft" x="2100" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243238,6 +243635,7 @@
   </object>
   <object id="1850" name="FenceLeft" x="2190" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243245,6 +243643,7 @@
   </object>
   <object id="1851" name="FenceLeft" x="2160" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243252,6 +243651,7 @@
   </object>
   <object id="1852" name="FenceLeft" x="2220" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243259,6 +243659,7 @@
   </object>
   <object id="1853" name="FenceLeft" x="2250" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243266,6 +243667,7 @@
   </object>
   <object id="1854" name="FenceLeft" x="2310" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243273,6 +243675,7 @@
   </object>
   <object id="1855" name="FenceLeft" x="2280" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243280,6 +243683,7 @@
   </object>
   <object id="1856" name="FenceLeft" x="2340" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243287,6 +243691,7 @@
   </object>
   <object id="1857" name="FenceLeft" x="2370" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243294,6 +243699,7 @@
   </object>
   <object id="1858" name="FenceLeft" x="2490" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243301,6 +243707,7 @@
   </object>
   <object id="1859" name="FenceLeft" x="2550" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243308,6 +243715,7 @@
   </object>
   <object id="1860" name="FenceLeft" x="2520" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243315,6 +243723,7 @@
   </object>
   <object id="1861" name="FenceLeft" x="2580" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243322,6 +243731,7 @@
   </object>
   <object id="1862" name="FenceLeft" x="2610" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243329,6 +243739,7 @@
   </object>
   <object id="1863" name="FenceLeft" x="2640" y="3720" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243336,6 +243747,7 @@
   </object>
   <object id="1864" name="FenceLeft" x="1260" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243343,6 +243755,7 @@
   </object>
   <object id="1865" name="FenceLeft" x="1290" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243350,6 +243763,7 @@
   </object>
   <object id="1866" name="FenceLeft" x="1350" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243357,6 +243771,7 @@
   </object>
   <object id="1867" name="FenceLeft" x="1320" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243364,6 +243779,7 @@
   </object>
   <object id="1868" name="FenceLeft" x="1380" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243371,6 +243787,7 @@
   </object>
   <object id="1869" name="FenceLeft" x="1470" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243378,6 +243795,7 @@
   </object>
   <object id="1870" name="FenceLeft" x="1440" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243385,6 +243803,7 @@
   </object>
   <object id="1871" name="FenceLeft" x="1410" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243392,6 +243811,7 @@
   </object>
   <object id="1872" name="FenceLeft" x="1500" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243399,6 +243819,7 @@
   </object>
   <object id="1873" name="FenceLeft" x="1530" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243406,6 +243827,7 @@
   </object>
   <object id="1874" name="FenceLeft" x="1560" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243413,6 +243835,7 @@
   </object>
   <object id="1875" name="FenceLeft" x="1620" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243420,6 +243843,7 @@
   </object>
   <object id="1876" name="FenceLeft" x="1590" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243427,6 +243851,7 @@
   </object>
   <object id="1877" name="FenceLeft" x="1650" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243434,6 +243859,7 @@
   </object>
   <object id="1878" name="FenceLeft" x="2040" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243441,6 +243867,7 @@
   </object>
   <object id="1879" name="FenceLeft" x="1740" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243448,6 +243875,7 @@
   </object>
   <object id="1880" name="FenceLeft" x="1680" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243455,6 +243883,7 @@
   </object>
   <object id="1881" name="FenceLeft" x="1950" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243462,6 +243891,7 @@
   </object>
   <object id="1882" name="FenceLeft" x="1770" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243469,6 +243899,7 @@
   </object>
   <object id="1883" name="FenceLeft" x="1710" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243476,6 +243907,7 @@
   </object>
   <object id="1884" name="FenceLeft" x="2010" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243483,6 +243915,7 @@
   </object>
   <object id="1885" name="FenceLeft" x="1980" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243490,6 +243923,7 @@
   </object>
   <object id="1886" name="FenceLeft" x="1800" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243497,6 +243931,7 @@
   </object>
   <object id="1887" name="FenceLeft" x="1890" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243504,6 +243939,7 @@
   </object>
   <object id="1888" name="FenceLeft" x="1860" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243511,6 +243947,7 @@
   </object>
   <object id="1889" name="FenceLeft" x="1830" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243518,6 +243955,7 @@
   </object>
   <object id="1890" name="FenceLeft" x="1920" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243525,6 +243963,7 @@
   </object>
   <object id="1891" name="FenceLeft" x="2070" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243532,6 +243971,7 @@
   </object>
   <object id="1892" name="FenceLeft" x="2100" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243539,6 +243979,7 @@
   </object>
   <object id="1893" name="FenceLeft" x="2160" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243546,6 +243987,7 @@
   </object>
   <object id="1894" name="FenceLeft" x="2130" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243553,6 +243995,7 @@
   </object>
   <object id="1895" name="FenceLeft" x="2190" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243560,6 +244003,7 @@
   </object>
   <object id="1896" name="FenceLeft" x="2280" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243567,6 +244011,7 @@
   </object>
   <object id="1897" name="FenceLeft" x="2250" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243574,6 +244019,7 @@
   </object>
   <object id="1898" name="FenceLeft" x="2220" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243581,6 +244027,7 @@
   </object>
   <object id="1899" name="FenceLeft" x="2310" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243588,6 +244035,7 @@
   </object>
   <object id="1900" name="FenceLeft" x="2340" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243595,6 +244043,7 @@
   </object>
   <object id="1901" name="FenceLeft" x="2430" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243602,6 +244051,7 @@
   </object>
   <object id="1902" name="FenceLeft" x="2400" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243609,6 +244059,7 @@
   </object>
   <object id="1903" name="FenceLeft" x="2370" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243616,6 +244067,7 @@
   </object>
   <object id="1904" name="FenceLeft" x="2460" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243623,6 +244075,7 @@
   </object>
   <object id="1910" name="FenceLeft" x="1230" y="5070" width="30" height="30">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="0"/>
     <property name="offset_y" type="int" value="34"/>
     <property name="path" value="Maps/Buildings/fence2.png"/>
@@ -243630,6 +244083,7 @@
   </object>
   <object id="1911" name="canewy" x="3810" y="4320" width="77" height="126">
    <properties>
+    <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="118"/>
     <property name="offset_y" type="int" value="40"/>
     <property name="path" value="Maps/Buildings/canewy.png"/>
@@ -243637,7 +244091,7 @@
    </properties>
   </object>
  </objectgroup>
- <layer name="Navigation" width="200" height="300" visible="0">
+ <layer id="7" name="Navigation" width="200" height="300" visible="0">
   <properties>
    <property name="Navigation" type="int" value="1"/>
   </properties>
@@ -303644,7 +304098,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup name="SpawnPoints" visible="0">
+ <objectgroup id="8" name="SpawnPoints">
   <object id="425" name="ENEMY" type="ENEMY" x="4208" y="3784"/>
   <object id="426" name="REWARD_ZONE" type="REWARD_ZONE" x="4550" y="4338"/>
   <object id="427" name="REWARD_BOX" type="REWARD_BOX" x="4332" y="4316"/>
@@ -303659,7 +304113,7 @@
   <object id="450" name="REWARD_BOX" type="REWARD_BOX" x="4656" y="1384"/>
   <object id="451" name="REWARD_BOX" type="REWARD_BOX" x="3362" y="1278"/>
  </objectgroup>
- <objectgroup name="Players">
+ <objectgroup id="9" name="Players">
   <object id="410" x="3930" y="3720" width="30" height="30"/>
   <object id="411" x="3960" y="4020" width="30" height="30"/>
   <object id="412" x="4440" y="4110" width="30" height="30"/>

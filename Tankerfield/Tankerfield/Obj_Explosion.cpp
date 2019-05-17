@@ -32,48 +32,50 @@ Obj_Explosion::Obj_Explosion(fPoint pos):Object(pos)
 	draw_offset.x = 99;
 	draw_offset.y = 75;
 
-	float coll_w = 5.f;
-	float coll_h = 5.f;
-
-	coll = app->collision->AddCollider(
-		pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
-		coll_w,
-		coll_h,
-		TAG::BULLET,
-		BODY_TYPE::DYNAMIC,
-		0,
-		nullptr);
-
-	coll->is_sensor = true;
-
-	coll->SetObjOffset(fPoint(coll_w*0.5f, coll_h*0.5f));
+	frame_damage = 0;
 
 	app->audio->PlayFx(app->audio->GetExplosionFx());
 }
 
 bool Obj_Explosion::Update(float dt)
 {
+	//Create a collider during one frame which deals damage equivalent to int explosion_damage
+	if (frame_num == frame_damage)
+	{
+		float coll_w = 5.f;
+		float coll_h = 5.f;
+
+		coll = app->collision->AddCollider(
+			pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
+			coll_w,
+			coll_h,
+			TAG::BULLET,
+			BODY_TYPE::DYNAMIC,
+			explosion_damage,
+			nullptr);
+
+		coll->is_sensor = true;
+		coll->SetObjOffset(fPoint(coll_w*0.5f, coll_h*0.5f));
+
+	}
+	else if (frame_num == frame_damage + 1)
+	{
+		
+		coll->to_destroy = true;
+		coll = nullptr;
+	}
+	frame_num++;
+
+	//Delete this object when the animation has finished
 	if (curr_anim != nullptr
 		&& curr_anim->Finished())
 	{
 		to_remove = true;
-		coll->to_destroy = true;
-		coll = nullptr;
 	}
-+
-	frame_explosion++;
 	return true;
 }
 
 void Obj_Explosion::SetExplosionDamage(float damage)
 {
-	if (coll != nullptr)
-	{
-		coll->damage = damage;
-	}
-	else
-	{
-		LOG("Collider not found. Explosion damage will be 0.");
-	}
-	
+	explosion_damage = damage;
 }

@@ -15,6 +15,7 @@ enum class ENEMY_STATE
 	GET_TELEPORT_POINT,
 	TELEPORT_IN,
 	TELEPORT_OUT,
+	BURN,
 	DEAD,
 };
 
@@ -27,15 +28,32 @@ public:
 
 	virtual void ChangeTexture();
 
-	void Attack();
+	virtual void Attack();
 
-	virtual void Movement(float &dt);
+	void OnTriggerEnter(Collider * collider);
+
+	void OnTrigger(Collider* collider);
+
+	inline bool IsOnGoal(fPoint goal); //const?
+
+	void DrawDebug(const Camera* camera)override;
+
+	virtual bool Draw(float dt, Camera* camera)override;
+
+	virtual  bool Start() override;
+
+protected:
+	inline void UpdateVelocity();
+
+	inline void UpdatePos(const float& dt);
+
+	inline virtual void Movement(float &dt);
 
 	virtual void Spawn(const float& dt) {};
 
-	void RecheadPoint();
+	inline void RecheadPoint();
 
-	void Dead();
+	inline void Dead();
 
 	inline virtual void Idle();
 
@@ -49,23 +67,21 @@ public:
 
 	inline virtual void TeleportOut(float & dt) {};
 
-	void OnTriggerEnter(Collider * collider);
+	inline virtual void Burn(const float& dt);
 
-	void OnTrigger(Collider* collider);
-
-	inline bool IsOnGoal(fPoint goal); //const?
-
-	void DrawDebug(const Camera* camera)override;
-
-	bool Draw(float dt, Camera* camera)override;
+	bool CleanUp() override;
 
 protected:
-	inline void UpdateVelocity();
+
 
 	int life = 0;
 	float speed = 0.f;
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
+	SDL_Texture* burn_texture = nullptr;
+	SDL_Texture* fire_tex = nullptr;
+	SDL_Texture* last_texture = nullptr;
+	bool in_white = false;
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 
@@ -77,6 +93,8 @@ protected:
 	Animation walk;
 	Animation attack;
 	Animation death;
+	Animation burn;
+	Animation dying_burn;
 
 	float scale = 0.f;
 
@@ -106,6 +124,15 @@ protected:
 	float check_path_time = 0.f;
 	fPoint next_pos = { 0.f, 0.f };
 	float detection_range = 0.0f;
+
+	// Burn state variables------
+	bool burn_fist_enter = true;
+	Timer timer_change_direction;
+	Animation fire3;
+
+	float max_time_change_direction = 0.5f;
+	float fire_damage = 0;
+
 };
 
 #endif

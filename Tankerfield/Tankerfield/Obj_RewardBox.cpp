@@ -86,35 +86,46 @@ void Obj_RewardBox::GetDamage(float damage)
 void Obj_RewardBox::Dead()
 {
 	uint probability = rand() % 100;
-
-	if (probability < 15)
+	if (type == PICKUP_TYPE::NO_TYPE)
 	{
-		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
+		if (probability < 15)
+		{
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
+		}
+
+		else if (probability < 25)
+		{
+			fPoint offset{ 0.5f,0 };
+			app->pick_manager->CreatePickUp(pos_map - offset, PICKUP_TYPE::ITEM);
+			app->pick_manager->CreatePickUp(pos_map + offset, PICKUP_TYPE::ITEM);
+		}
+
+		else if (probability < 75)
+		{
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
+		}
+
+		else if (probability < 100)
+		{
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
+		}
+
+		if (my_spawn_point != nullptr)
+		{
+			my_spawn_point->occupied = false;
+		}
 	}
-
-	else if (probability < 25)
+	else
 	{
-		fPoint offset{ 0.5f,0 };
-		app->pick_manager->CreatePickUp(pos_map - offset, PICKUP_TYPE::ITEM);
-		app->pick_manager->CreatePickUp(pos_map + offset, PICKUP_TYPE::ITEM);
-	}
-
-	else if (probability < 75)
-	{
-		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
-	}
-
-	else if (probability < 100)
-	{
-		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
-	}
-
-	if (my_spawn_point != nullptr)
-	{
-		my_spawn_point->occupied = false;
+		app->pick_manager->CreatePickUp(pos_map, type);
 	}
 	to_remove = true;
 
 	app->audio->PlayFx(reward_box_dead_sound_int);
+}
+
+void Obj_RewardBox::SetTypeBox(PICKUP_TYPE type)
+{
+	this->type = type;
 }
 

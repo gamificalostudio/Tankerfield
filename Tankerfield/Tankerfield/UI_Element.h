@@ -98,9 +98,9 @@ public:
 
 	void SetState(ELEMENT_STATE new_state);
 
-	void SetStateToBranch(ELEMENT_STATE new_state);
-
 	ELEMENT_STATE GetState();
+
+	void SetStateToBranch(ELEMENT_STATE new_state);
 
 	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
 

@@ -24,16 +24,21 @@ Obj_Building::~Obj_Building()
 }
 
 
-void Obj_Building::SetTexture(const char* path, fPoint rect_collider)
+void Obj_Building::SetTexture(const char* path)
 {
 	texture = app->tex->Load(path);
 	curr_tex = texture;
 	frame.x = 0;
 	frame.y = 0;
 	
-	SDL_QueryTexture(texture, NULL, NULL, &frame.w, &frame.h);
+	SDL_QueryTexture(texture, NULL, NULL, &frame.w, &frame.h);//Set the frame w & h to do sprite sorting correctly
+}
 
-	coll = app->collision->AddCollider(pos_map, rect_collider.x, rect_collider.y, TAG::WALL, BODY_TYPE::STATIC, 0.f, this);
+
+void Obj_Building::SetCollider(const fRect & collider_rect)
+{
+	coll = app->collision->AddCollider(collider_rect.pos, collider_rect.w, collider_rect.h, TAG::WALL, BODY_TYPE::STATIC, 0.f, this);
 	coll->ActiveOnTrigger(false);
+
 }
 

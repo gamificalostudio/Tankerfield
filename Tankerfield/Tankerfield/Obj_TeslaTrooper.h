@@ -33,7 +33,8 @@ public:
 
 	inline int Move(float & dt);
 
-	virtual void GetPath();
+
+	inline virtual void GetPath();
 
 	bool Draw(float dt, Camera * camera) override;
 
@@ -54,9 +55,11 @@ private:
 	Animation portal_animation;
 	Animation portal_close_anim;
 	Animation spawn_anim;
+	
 
 	bool draw = true;
 	Animation* in_portal				= nullptr;
+	
 
 	SDL_Texture * portal_tex			= nullptr;
 	SDL_Texture * explosion_apper_tex			= nullptr;

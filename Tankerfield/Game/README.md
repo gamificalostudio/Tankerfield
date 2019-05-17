@@ -55,6 +55,7 @@ https://github.com/AitorVelez
 - F5: Reset level
 - F7: Activate/ Deactivate God Mode
 - F9: Show colliders
+- F10: Show information on screen
 
 
 
