@@ -25,6 +25,7 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot1_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
 	shot1_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
+	shot1_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 
 	//Electro_shot--
 	pugi::xml_node electro_shot_node = app->config.child("object").child("tank").child("electro_shot");
@@ -68,6 +69,7 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
 	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
+	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -384,6 +386,11 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
+	if(collFlame->GetIsActivated() == false)
+	{
+		collFlame->ActiveOnTrigger(true);
+	}
+
 
 }
 

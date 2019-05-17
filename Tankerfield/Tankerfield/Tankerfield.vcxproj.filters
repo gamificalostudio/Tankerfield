@@ -205,6 +205,7 @@
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="ElectroShotAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Obj_Building.h">
@@ -432,6 +433,7 @@
     <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="ElectroShotAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml">

@@ -208,7 +208,7 @@ private:
 	std::vector<Object*> enemies_hitted;
 	
 
-
+	Collider* collFlame = nullptr;
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
