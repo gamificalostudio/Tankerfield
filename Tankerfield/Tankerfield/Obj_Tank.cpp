@@ -247,9 +247,11 @@ bool Obj_Tank::Start()
 		BODY_TYPE::DYNAMIC,
 		50.f,
 		this);
-	
+
 	coll_flame->is_sensor = true;
 	coll_flame->ActiveOnTrigger(false);
+
+
 
 	return true;
 }

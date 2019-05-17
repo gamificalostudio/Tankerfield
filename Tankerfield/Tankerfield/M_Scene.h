@@ -38,10 +38,11 @@ class M_Scene : public Module
 {
 private:
 
-	Controller** control1			= nullptr;
 	int number_of_enemies = 0;
 
 public:
+
+	SDL_Color tank_colors[4];
 
 	int current_level				= 0;
 
