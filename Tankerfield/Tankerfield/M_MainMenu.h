@@ -98,7 +98,7 @@ private:
 	std::vector<SDL_Color>  colors;
 	UI_InteractiveGroup* selection_panel = nullptr;
 
-	bool              selection_finished = false;
+	bool              selection_able = false;
 	bool              exit_game = false;
 };
 

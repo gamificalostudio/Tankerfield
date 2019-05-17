@@ -107,7 +107,6 @@ bool M_MainMenu::Start()
 	
 	// Set values ==========================================
 
-
 	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
 
@@ -179,7 +178,7 @@ bool M_MainMenu::PreUpdate()
 
 bool M_MainMenu::Update(float dt)
 {
-	if (selection_finished == false)
+	if (selection_able == true)
 	{
 		selection_panel->SetController(players[current_player].controller);
 		players[current_player].tank->SetColor(selection_panel->GetFocusedElement()->color_mod);
@@ -230,7 +229,7 @@ bool M_MainMenu::OnHoverEnter(UI_Element * element)
 
 bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 {
-	if (element == selection_panel && selection_finished == false)
+	if (element == selection_panel && selection_able == true)
 	{
 		if (app->input->GetMouseButton(1) == KEY_DOWN || (players[current_player].controller != nullptr && (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) )
 		{
@@ -240,7 +239,7 @@ bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 			if (current_player == MAX_PLAYERS)
 			{
 				app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
-				selection_finished = true;
+				selection_able = false;
 			}
 		}
 	}
@@ -265,7 +264,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
-
+		selection_able = false;
 		menu_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
@@ -277,7 +276,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 
 	case MENU_STATE::SELECTION:
-
+		selection_able = true;
 		current_player = 0;
 		menu_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);

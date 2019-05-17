@@ -239,7 +239,7 @@ void General_GUI::FadeGameOverScreen(bool fade_on, int rounds_survived)
 
 	background->SetFX(type, 2.F);
 	game_word->SetFX(type, 2.F);
-	over_word->SetFX(type, 2.F);
+	over_word->SetFX(type, 2.F); 
 }
 
 void General_GUI::FadeWinScreen(bool fade_on)
