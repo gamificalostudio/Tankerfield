@@ -27,7 +27,11 @@
     <brute>
       <life_multiplier num = "1500"/><!--Acts as initial life. Divided by 100 is the number of hits the enemy has to take with a weapon of the same level to die.-->
       <life_exponential_base num ="1.55"/>
-      <speed num = "1"/>
+      <detection_range num="10"/>
+      <speed num = "1.5"/>
+      <attack_damage num="10"/>
+      <attack_range num="1"/>
+      <attack_frequency num="3000"/>
     </brute>
 
     <rocket_launcher>

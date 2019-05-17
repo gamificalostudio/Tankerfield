@@ -57,8 +57,8 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
 	state = ENEMY_STATE::SPAWN; 
-	speed = 1.5f;
-	detection_range = 10.0f; //change?
+	speed = app->objectmanager->brute_info.speed;
+	detection_range = app->objectmanager->brute_info.detection_range;
 
 
 	spawn_draw_offset = { 260, 274 };
@@ -68,16 +68,16 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 	angle = 180;//REMOVE
 
-	attack_damage = 10;
-	attack_range = 1;
+	attack_damage = app->objectmanager->brute_info.attack_damage;
+	attack_range = app->objectmanager->brute_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
-	attack_frequency = 3000.0f;
+	attack_frequency = app->objectmanager->brute_info.attack_frequency;
   
 	coll_w = 0.5f;
 	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
-	life = 1;//750* (log(app->scene->round)+2);
+	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round);
 
 	scale = 2.f;
 	app->audio->PlayFx(sfx_spawn);

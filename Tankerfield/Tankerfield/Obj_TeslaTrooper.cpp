@@ -73,7 +73,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 	speed = app->objectmanager->tesla_trooper_info.speed;
 
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 are 4/3
 	squared_detection_range = detection_range * detection_range;
 	coll_w = 0.5f;
 	coll_h = 0.5f;

@@ -503,6 +503,10 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	brute_info.life_multiplier					= brute_node.child("life_multiplier").attribute("num").as_float();
 	brute_info.life_exponential_base			= brute_node.child("life_exponential_base").attribute("num").as_float();
 	brute_info.speed							= brute_node.child("speed").attribute("num").as_float();
+	brute_info.detection_range					= brute_node.child("detection_range").attribute("num").as_float();
+	brute_info.attack_damage					= brute_node.child("attack_damage").attribute("num").as_int();
+	brute_info.attack_range						= brute_node.child("attack_range").attribute("num").as_float();
+	brute_info.attack_frequency					= brute_node.child("attack_frequency").attribute("num").as_float();
 
 	//ROCKET LAUNCHER
 	pugi::xml_node rocket_launcher_node = balance_node.child("enemies").child("rocket_launcher");
