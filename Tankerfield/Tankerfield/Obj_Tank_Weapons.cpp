@@ -13,6 +13,7 @@
 #include "Healing_Bullet.h"
 #include "Bullet_Laser.h"
 #include "ElectroShotAnimation.h"
+#include "Obj_FlamethrowerFlame.h"
 
 
 void Obj_Tank::InitWeapons()
@@ -105,7 +106,6 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 
 	if (weapon_info.weapon == WEAPON::FLAMETHROWER)
 	{
-		//with the animation get frame?? only 1 frame
 		if (flame_release_time.ReadSec() >= 1.f && coll_flame->GetIsActivated())
 		{
 				coll_flame->ActiveOnTrigger(false);
@@ -142,7 +142,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
-		weapon_info.shot1.bullet_damage = 50 + level * 2;
+		weapon_info.shot1.bullet_damage = 25 + level * 2;
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
@@ -156,6 +156,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.recoil = 0;
+		weapon_info.shot2.recoil = 0;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -367,6 +369,8 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
+	Obj_FlamethrowerFlame* flame_anim = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_SHOT_ANIMATION,pos_map);
+
 	flame_release_time.Start();
 
 	if(coll_flame->GetIsActivated() == false)

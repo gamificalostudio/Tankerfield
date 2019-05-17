@@ -109,7 +109,10 @@ bool M_ObjManager::Update(float dt)
 				(*iterator)->CleanUp();
 
 				if ((*iterator)->type == ObjectType::TESLA_TROOPER
-					|| (*iterator)->type == ObjectType::BRUTE)
+					|| (*iterator)->type == ObjectType::BRUTE 
+					|| (*iterator)->type == ObjectType::SUICIDAL
+					|| (*iterator)->type == ObjectType::ROCKETLAUNCHER)
+			
 				{
 					enemies.remove((*iterator));
 				}
@@ -317,12 +320,16 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::REWARD_BOX;
 		break;
 	case ObjectType::TANK_MAIN_MENU:
-		ret = new Obj_Tank_MainMenu(pos);
+		ret = DBG_NEW Obj_Tank_MainMenu(pos);
 		ret->type = ObjectType::REWARD_BOX;
 		break;
 	case ObjectType::ELECTRO_SHOT_ANIMATION:
-		ret = new Eletro_Shot_Animation(pos);
+		ret = DBG_NEW Eletro_Shot_Animation(pos);
 		ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
+		break;
+	case ObjectType::FLAMETHROWER_SHOT_ANIMATION:
+		ret = DBG_NEW Eletro_Shot_Animation(pos);
+		ret->type = ObjectType::FLAMETHROWER_SHOT_ANIMATION;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");

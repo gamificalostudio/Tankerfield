@@ -28,8 +28,8 @@ Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) :Object(pos)
 	tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
 	curr_tex = tex;
 
-	draw_offset.x = 99;
-	draw_offset.y = 75;
+	draw_offset.x = 0;
+	draw_offset.y = 0;
 
 }
 
