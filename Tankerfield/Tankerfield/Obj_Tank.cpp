@@ -190,7 +190,7 @@ bool Obj_Tank::Start()
 	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
-	cannon_height = 11.f;
+	cannon_height = 16.f;
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
@@ -201,6 +201,9 @@ bool Obj_Tank::Start()
 	draw_offset.x = 46;
 	draw_offset.y = 46;
 
+	turr_draw_offset.x = 59;
+	turr_draw_offset.y = 50;
+
 	base_angle_lerp_factor = 11.25f;
 	shot_angle_lerp_factor = 11.25f;
 
@@ -210,6 +213,8 @@ bool Obj_Tank::Start()
 	max_life = 100;
 
 	charged_shot_speed = 1.0f;
+
+	turr_scale = 1.2f;
 
 	//- Tutorial
 	//-- Move
@@ -456,6 +461,16 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		camera,
 		&curr_anim->GetFrame(angle));
 
+	// Turret =======================================
+	app->render->BlitScaled(
+		turr_tex,
+		pos_screen.x - turr_draw_offset.x,
+		pos_screen.y - turr_draw_offset.y,
+		camera,
+		&rotate_turr.GetFrame(turr_angle),
+		turr_scale,
+		turr_scale);
+
 	if (show_crosshairs && camera == camera_player)
 	{
 		float line_length = 5.f;
@@ -465,16 +480,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
 		app->render->DrawLineSplitScreen(
 			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 0, 0, 255, 123, camera);
+			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
-
-	// Turret =======================================
-	app->render->Blit(
-		turr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&rotate_turr.GetFrame(turr_angle));
 
 	return true;
 }
@@ -520,12 +527,14 @@ bool Obj_Tank::DrawShadow(Camera * camera, float dt)
 		&curr_anim->GetFrame(angle));
 
 	// Turret =======================================
-	app->render->Blit(
+	app->render->BlitScaled(
 		turr_shadow_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
+		pos_screen.x - turr_draw_offset.x,
+		pos_screen.y - turr_draw_offset.y,
 		camera,
-		&rotate_turr.GetFrame(turr_angle));
+		&rotate_turr.GetFrame(turr_angle),
+		turr_scale,
+		turr_scale);
 
 	return true;
 }
