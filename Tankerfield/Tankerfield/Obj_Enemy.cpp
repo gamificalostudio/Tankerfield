@@ -409,15 +409,15 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
 
 			electro_anim->offset_dir_screen = app->map->MapToScreenF(player->GetShotDir());
-
-
+			electro_anim->distance = player->pos_screen.DistanceTo(this->pos_screen + app->map->MapToScreenF(fPoint{1,1}*player->GetShotDir()));
+			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
 			player->GetEnemiesHitted()->push_back(this);
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
 			/*curr_tex = tex_damaged;*/
 			//float player_enemy_distance = player->pos_map.DistanceTo(this->pos_map);
-			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
+			
 			if (life <= 0)
 			{
 				// DROP A PICK UP ITEM 

@@ -21,6 +21,7 @@ public:
 	//Obj_Tank * tank = nullptr;
 	fPoint player_enemy_distance_point{0.f,0.f};
 	fPoint offset_dir_screen{ 0.f,0.f };
+	float distance = 0.f;
 
 private:
 	Animation anim;

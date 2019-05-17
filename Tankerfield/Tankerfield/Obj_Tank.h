@@ -210,8 +210,6 @@ private:
 	std::vector<Collider*> electric_shot_colliders_charged_vector;
 
 	std::vector<Object*> enemies_hitted;
-
-	//fPoint electro_offset{ 0.f,0.f };
 	
 
 

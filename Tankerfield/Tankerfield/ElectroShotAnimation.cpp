@@ -18,7 +18,7 @@ Eletro_Shot_Animation::Eletro_Shot_Animation(fPoint pos) :Object(pos)
 	draw_offset.x = curr_anim->GetFrame(0).w * 0.5f;
 	//	electro_offset.y = 30;
 	
-	draw_offset -= (iPoint)offset_dir_screen;
+	draw_offset += (iPoint)offset_dir_screen;
 
 }
 
@@ -35,7 +35,7 @@ bool Eletro_Shot_Animation::Update(float dt)
 	else
 	{
 		curr_anim->Reset();
-		to_remove = true;
+		//to_remove = true;
 	}
 
 	return true;
@@ -50,7 +50,7 @@ bool Eletro_Shot_Animation::Draw(float dt, Camera* camera)
 		camera,
 		&curr_anim->GetFrame(0),
 		1,
-		1,
+		distance / curr_anim->GetFrame(0).h,
 		SDL_Point{ (int)(curr_anim->GetFrame(0).w * 0.5f) , 0 },
 		atan2(player_enemy_distance_point.y, player_enemy_distance_point.x) * RADTODEG - 2 * ISO_COMPENSATION
 	);

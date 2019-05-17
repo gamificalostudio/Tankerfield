@@ -206,7 +206,7 @@
       <electro_shot>
         <collider_size value="1"/> <!--Width and height in tiles-->
         <electro_shot_animation>
-          <tex_electro_shot>textures/objects/bullets/tex_electro_shot.png</tex_electro_shot>
+          <tex_electro_shot>textures/objects/bullets/tex_electro_shot2.png</tex_electro_shot>
           <animations>
             <anim_electro_shot speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
               <dir>
