@@ -100,6 +100,8 @@ protected:
 
 	bool in_white = false;
 
+	bool bool_electro_dead = false;
+
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
 	Animation* anim_saved;

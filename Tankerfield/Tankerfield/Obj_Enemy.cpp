@@ -46,8 +46,14 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	ChangeTexture();
+	
 	Oiled();
+
+	if (in_white)
+	{
+		ChangeTexture();
+	}
+
 
 	//if (life_collider != nullptr)
 	//	life_collider->SetPosToObj();
@@ -60,7 +66,8 @@ void Obj_Enemy::ChangeTexture()
 		curr_tex != tex && 
 		state != ENEMY_STATE::STUNNED &&
 		state != ENEMY_STATE::STUNNED_CHARGED &&
-		oiled==false)
+		oiled==false,
+		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
 		in_white = false;
@@ -241,6 +248,7 @@ void Obj_Enemy::ElectroDead()
 {
 	if (curr_anim != &electro_dead)
 	{
+		bool_electro_dead = true;
 		curr_tex = tex_electro_dead;
 		curr_anim = &electro_dead;
 		app->audio->PlayFx(sfx_death);
@@ -599,7 +607,7 @@ void Obj_Enemy::Oiled()
 {
 	if (oiled == true)
 	{
-		if (damaged_sprite_timer.Read() > damaged_sprite_time) 
+		if (damaged_sprite_timer.Read() > damaged_sprite_time && !bool_electro_dead) 
 		{
 			curr_tex = oiled_tex;
 		}
