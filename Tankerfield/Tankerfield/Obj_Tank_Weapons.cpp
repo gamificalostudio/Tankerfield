@@ -118,6 +118,11 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	}
 }
 
+void Obj_Tank::SetColor(const SDL_Color new_color)
+{
+	tank_color = new_color;
+}
+
 void Obj_Tank::ShootBasic()
 {
 	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);

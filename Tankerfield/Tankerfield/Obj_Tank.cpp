@@ -81,25 +81,23 @@ bool Obj_Tank::Start()
 	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
 	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
 
-	//Textures-------------------------------------------------
-	//-- Base
-	base_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("base_orange").text().as_string());
-	base_tex_green = app->tex->Load(tank_node.child("spritesheets").child("base_green").text().as_string());
-	base_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("base_pink").text().as_string());
-	base_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("base_blue").text().as_string());
+	// Textures ================================================
 
+	// Base -------------------------
+	base_color_tex = app->tex->Load(tank_node.child("spritesheets").child("base_color").text().as_string());
+	base_common_tex = app->tex->Load(tank_node.child("spritesheets").child("base_common").text().as_string());
 	base_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("base_shadow").text().as_string());
+
 	SDL_SetTextureBlendMode(base_shadow_tex, SDL_BLENDMODE_MOD);
 
-	//-- Turr
-	std::string aux = tank_node.child("spritesheets").child("turr_orange").text().as_string();
-	turr_tex_orange = app->tex->Load(tank_node.child("spritesheets").child("turr_orange").text().as_string());
-	turr_tex_green = app->tex->Load(tank_node.child("spritesheets").child("turr_green").text().as_string());
-	turr_tex_pink = app->tex->Load(tank_node.child("spritesheets").child("turr_pink").text().as_string());
-	turr_tex_blue = app->tex->Load(tank_node.child("spritesheets").child("turr_blue").text().as_string());
-	turr_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turr_shadow").text().as_string());
-	SDL_SetTextureBlendMode(turr_shadow_tex, SDL_BLENDMODE_MOD);
-	//-- Revive 
+	// Turret ------------------------
+	turret_color_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_color").text().as_string());
+	turret_common_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_common").text().as_string());
+	turret_shadow_tex = app->tex->Load(tank_node.child("spritesheets").child("turret_shadow").text().as_string());
+
+	SDL_SetTextureBlendMode(turret_shadow_tex, SDL_BLENDMODE_MOD);
+
+	// Revive ------------------------ 
 	revive_range = 2.5f;
 	revive_range_squared = revive_range * revive_range;
 	revive_life = 100;
@@ -108,6 +106,7 @@ bool Obj_Tank::Start()
 	cycle_bar_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("cycle-progress-bar"));
 	cycle_bar_anim.frames->SetSpeed((float)cycle_bar_anim.frames->GetMaxFrames() / revive_time);
 
+	// ==========================================================
 
 	//sfx -------------------------------------------------------------------------------------------------------
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
@@ -123,8 +122,6 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
 		kb_ready	= SDL_SCANCODE_Z;
-		curr_tex = base_tex_green;
-		turr_tex = turr_tex_green;
 		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 1:
@@ -135,8 +132,6 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
 		kb_ready	= SDL_SCANCODE_V;
-		curr_tex = base_tex_blue;
-		turr_tex = turr_tex_blue;
 		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 2:
@@ -147,8 +142,6 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_U;
 		kb_interact = SDL_SCANCODE_O;
 		kb_ready	= SDL_SCANCODE_M;
-		curr_tex = base_tex_pink;
-		turr_tex = turr_tex_pink;
 		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 3:
@@ -159,12 +152,9 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_KP_7;
 		kb_interact	= SDL_SCANCODE_KP_9;
 		kb_ready	= SDL_SCANCODE_KP_2;
-		curr_tex = base_tex_orange;
-		turr_tex = turr_tex_orange;
 		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	default:
-		curr_tex = base_tex_orange;
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
@@ -441,23 +431,55 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
-	// Base =========================================
+	// Base common ========================================
+
 	app->render->Blit(
-		curr_tex,
+		base_common_tex,
 		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y - 1.66f,
+		pos_screen.y - draw_offset.y,
 		camera,
 		&curr_anim->GetFrame(angle));
 
-	// Turret =======================================
+	// Base color =========================================
+
+	SDL_SetTextureColorMod(base_color_tex,tank_color.r, tank_color.g, tank_color.b);
+
+	app->render->Blit(
+		base_color_tex,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
+		camera,
+		&curr_anim->GetFrame(angle));
+
+	SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
+
+	// Turret common ======================================
+
 	app->render->BlitScaled(
-		turr_tex,
+		turret_common_tex,
 		pos_screen.x - turr_draw_offset.x,
 		pos_screen.y - turr_draw_offset.y,
 		camera,
 		&rotate_turr.GetFrame(turr_angle),
 		turr_scale,
 		turr_scale);
+
+	// Turret color =======================================
+
+	SDL_SetTextureColorMod(turret_color_tex, tank_color.r, tank_color.g, tank_color.b);
+
+	app->render->BlitScaled(
+		turret_color_tex,
+		pos_screen.x - turr_draw_offset.x,
+		pos_screen.y - turr_draw_offset.y,
+		camera,
+		&rotate_turr.GetFrame(turr_angle),
+		turr_scale,
+		turr_scale);
+
+	SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
+
+	// Shot ==============================================
 
 	if (show_crosshairs && camera == camera_player)
 	{
@@ -516,7 +538,7 @@ bool Obj_Tank::DrawShadow(Camera * camera, float dt)
 
 	// Turret =======================================
 	app->render->BlitScaled(
-		turr_shadow_tex,
+		turret_shadow_tex,
 		pos_screen.x - turr_draw_offset.x,
 		pos_screen.y - turr_draw_offset.y,
 		camera,

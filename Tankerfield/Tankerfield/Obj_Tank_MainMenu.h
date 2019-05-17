@@ -28,7 +28,7 @@ public:
 	bool CleanUp() override;
 
 public:
-	void SetColorMod( const SDL_Color color_mod);
+	void SetColor( const SDL_Color color_mod);
 	void SetController(Controller ** controller);
 
 private:
@@ -59,20 +59,19 @@ private:
 
 	//- Drawing ================================
 
-	SDL_Color color_mod = { 255, 255, 255,255 };
+	SDL_Color tank_color = { 255, 255, 255, 255 };
 
-	// Base --------------
+	// Base----------------------
 	Animation rotate_base;
-	SDL_Texture * base_tex_blue = nullptr;
+	SDL_Texture * base_color_tex = nullptr;
+	SDL_Texture * base_common_tex = nullptr;
 	SDL_Texture * base_shadow_tex = nullptr;
-
-	// Turr --------------
+	// Turret -------------------
 	Animation rotate_turr;
-	SDL_Texture * turr_tex = nullptr;
-	SDL_Texture * turr_tex_blue = nullptr;
-	SDL_Texture * turr_shadow_tex = nullptr;
+	SDL_Texture * turret_color_tex = nullptr;
+	SDL_Texture * turret_common_tex = nullptr;
+	SDL_Texture * turret_shadow_tex = nullptr;
 
-public:
 
 };
 

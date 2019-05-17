@@ -46,17 +46,21 @@ public:
 	void SetLife(int life);
 	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
-	WeaponInfo GetWeaponInfo() const;
+	void SetColor(const SDL_Color new_color);
 	void SetTimeBetweenBullets(int time_between_bullets);
+
 	int GetLife() const;
 	int GetMaxLife() const;
 	int GetTimeBetweenBullets() const;
-	fPoint GetShotDir() const;
-	bool IsReady() const;
 	int GetTankNum() const;
+	bool GetShotAutomatically() const;
+	fPoint GetShotDir() const;
+	WeaponInfo GetWeaponInfo() const;
+
+	bool IsReady() const;
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
-	bool GetShotAutomatically() const;
+
 	void CreatePortals();
 
 public:
@@ -212,27 +216,25 @@ private:
 	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;
 	short int gamepad_shoot_last_frame				= 0;
 
-	//- Drawing
-	//-- Base
-	Animation rotate_base;
-	SDL_Texture * base_tex_orange			= nullptr;
-	SDL_Texture * base_tex_green			= nullptr;
-	SDL_Texture * base_tex_pink				= nullptr;
-	SDL_Texture * base_tex_blue				= nullptr;
-	SDL_Texture * base_shadow_tex			= nullptr;
+	// Drawing =============================================
 
-	//-- Turret
+	SDL_Color tank_color = { 255, 255, 255, 255 };
+
+	// Base----------------------
+	Animation rotate_base;
+	SDL_Texture * base_color_tex			= nullptr;
+	SDL_Texture * base_common_tex			= nullptr;
+	SDL_Texture * base_shadow_tex			= nullptr;
+	// Turret -------------------
 	Animation rotate_turr;
-	SDL_Texture * turr_tex						= nullptr;
-	SDL_Texture * turr_tex_orange				= nullptr;
-	SDL_Texture * turr_tex_green				= nullptr;
-	SDL_Texture * turr_tex_pink					= nullptr;
-	SDL_Texture * turr_tex_blue					= nullptr;
-	SDL_Texture * turr_shadow_tex				= nullptr;
+	SDL_Texture * turret_color_tex			= nullptr;
+	SDL_Texture * turret_common_tex			= nullptr;
+	SDL_Texture * turret_shadow_tex			= nullptr;
+
 	iPoint turr_draw_offset						= { 0,0 };
 	float turr_scale							= 1.f;
 
-	//-- Revive
+	// Revive -----------------
 	SDL_Texture * cycle_bar_tex = nullptr;
 	Animation cycle_bar_anim;
 	bool draw_revive_cycle_bar = false;

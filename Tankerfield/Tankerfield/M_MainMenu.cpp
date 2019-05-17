@@ -175,7 +175,7 @@ bool M_MainMenu::PreUpdate()
 	}
 
 	selection_panel->SetController(players[current_player].controller);
-	players[current_player].tank->SetColorMod(selection_panel->GetFocusedElement()->color_mod);
+	players[current_player].tank->SetColor(selection_panel->GetFocusedElement()->color_mod);
 
 	return true;
 }

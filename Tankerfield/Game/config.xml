@@ -217,20 +217,17 @@
       </recoil>
       <time_between_bullets value ="100"/>
       <spritesheets>
-        <base_orange>textures/objects/tank/base - orange.png</base_orange>
-        <base_green>textures/objects/tank/base - green.png</base_green>
-        <base_pink>textures/objects/tank/base - pink.png</base_pink>
-        <base_blue>textures/objects/tank/base - blue.png</base_blue>
+        
+        <base_color>textures/objects/tank/base_color.png</base_color>
+        <base_common>textures/objects/tank/base_common.png</base_common>
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
 
-        <turr>textures/objects/tank/new_tur1.png</turr>
-        <turr_orange>textures/objects/tank/new_tur1.png</turr_orange>
-        <turr_green>textures/objects/tank/new_tur1.png</turr_green>
-        <turr_pink>textures/objects/tank/new_tur1.png</turr_pink>
-        <turr_blue>textures/objects/tank/new_tur1.png</turr_blue>
-        <turr_shadow>textures/objects/tank/new_tur1_shadow.png</turr_shadow>
+        <turret_color>textures/objects/tank/turret_color.png</turret_color>
+        <turret_common>textures/objects/tank/turret_common.png</turret_common>
+        <turret_shadow>textures/objects/tank/turret_shadow.png</turret_shadow>
 
         <cycle_bar_tex>textures/objects/tank/circle-loading-bar.png</cycle_bar_tex>
+        
       </spritesheets>
       <sounds>
         <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
