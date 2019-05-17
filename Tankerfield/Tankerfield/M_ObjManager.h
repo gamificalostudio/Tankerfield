@@ -10,6 +10,7 @@
 
 #include "Module.h"
 #include "Point.h"
+#include "Balance.h"
 
 enum class ObjectType
 {
@@ -67,6 +68,8 @@ public:
 
 	bool Awake(pugi::xml_node& config) override;
 
+	void LoadBalanceVariables(pugi::xml_node & balance_node);
+
 	bool Start() override;
 
 	bool PreUpdate() override;
@@ -109,6 +112,11 @@ private:
 	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
+
+	TeslaTrooperInfo tesla_trooper_info;
+	BruteInfo brute_info;
+	RocketLauncherInfo rocket_launcher_info;
+	SuicidalInfo suicidal_info;
 };
 
 #endif
