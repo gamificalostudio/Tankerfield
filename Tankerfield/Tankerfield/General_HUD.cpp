@@ -58,32 +58,36 @@ General_GUI::General_GUI()
 
 	// LeaderBoard Screen ==========================================
 
-	//UI_TableDef table_def;
-	//table_def.columns = 3;
-	//table_def.rows = 11;
-	//table_def.line_width = 2;
+	UI_TableDef table_def;
+	table_def.columns = 3;
+	table_def.rows = 11;
+	table_def.line_width = 2;
 
-	//int widths[3] = { 100, 300 , 300 };
-	//int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
+	int widths[3] = { 100, 300 , 300 };
+	int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
 
-	//UI_Table* table = app->ui->CreateTable(screen_center, table_def, widths, heights);
-	//UI_Element* rank = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef("Rank", app->font->label_font_24));
-	//table->AssortElementToTable(rank, iPoint(0, 0));
+	leader_board_table = app->ui->CreateTable(screen_center, table_def, widths, heights);
+	leader_board_table->SetParent(background);
+	leader_board_table->alpha = 0;
 
-	//for (int i = 1; i < 11; ++i)
-	//{
-	//	UI_Element* number = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(std::to_string(i), app->font->label_font_24));
-	//	table->AssortElementToTable(number, iPoint(0, i));
-	//}
+	for (int i = 1; i < 11; ++i)
+	{
+		UI_Element* number = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(std::to_string(i), app->font->label_font_24));
+		number->SetParent(background);
+		number->alpha = 0;
+		leader_board_elements.push_back(number);
+		leader_board_table->AssortElementToTable(number, iPoint(0, i));
+	}
 
-	//// ===========================================
+	// ===========================================
 
 	//UI_InputTextDef input_def;
 	//input_def.font = app->font->label_font_24;
 	//input_def.max_characters = 10;
 	//app->ui->CreateInputText(screen_center, input_def);
 
-
+	//UI_Element* rank = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef("Rank", app->font->label_font_24));
+	//table->AssortElementToTable(rank, iPoint(0, 0));
 
 	// General HUD =================================================
 
@@ -151,6 +155,7 @@ void General_GUI::FadeGameOverScreen(bool fade_on, int rounds_survived)
 	if (fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_ON;
+		background->SetFX(type, 2.F);
 	}
 	else
 	{
@@ -171,10 +176,9 @@ void General_GUI::FadeGameOverScreen(bool fade_on, int rounds_survived)
 		}
 
 		you_survived->SetText(round_str);
-		you_survived->SetFX(type, 2.F);
 	}
 
-	background->SetFX(type, 2.F);
+	you_survived->SetFX(type, 2.F);
 	game_word->SetFX(type, 2.F);
 	over_word->SetFX(type, 2.F); 
 }
@@ -186,6 +190,7 @@ void General_GUI::FadeWinScreen(bool fade_on)
 	if (fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_ON;
+		background->SetFX(type, 2.F);
 	}
 	else
 	{
@@ -196,8 +201,28 @@ void General_GUI::FadeWinScreen(bool fade_on)
    
 	you_survived->SetText(round_str);
 	you_survived->SetFX(type, 2.F);
-    
-	background->SetFX(type, 2.F);
 	you_word->SetFX(type, 2.F);
 	survived_word->SetFX(type, 2.F);
+}
+
+void General_GUI::FadeLeaderBoardScreen(bool fade_on)
+{
+	UI_Fade_FX::FX_TYPE type;
+
+	if (fade_on)
+	{
+		type = UI_Fade_FX::FX_TYPE::FADE_ON;
+	}
+	else
+	{
+		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
+		background->SetFX(type, 2.F);
+	}
+	
+	leader_board_table->SetFX(type, 2.F);
+
+	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
+	{
+		(*iter)->SetFX(type, 2.F);
+	}
 }

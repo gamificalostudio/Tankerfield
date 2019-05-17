@@ -213,8 +213,9 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
 	{
-		game_state = GAME_STATE::GAME_WINNED;
+		game_state = GAME_STATE::GAME_WON;
 	}
+
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		int new_weapon = (int)app->objectmanager->obj_tanks[0]->GetWeaponInfo().weapon;
@@ -293,27 +294,55 @@ bool M_Scene::Update(float dt)
 		break;
 
 	case GAME_STATE::GAME_OVER:
-		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
-		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
-		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
-		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
+
+		for (int i = 0; i < MAX_PLAYERS; ++i) {
+			app->objectmanager->obj_tanks[i]->gui->Fade_GUI(false);
+		}
 		general_gui->FadeGeneralHUD(false);
 		general_gui->FadeGameOverScreen(true, round);
-		game_state = GAME_STATE::NO_TYPE;
+		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
 		break;
 
 	case GAME_STATE::GAME_WON:
-		
-		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
-		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
-		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
-		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
+
+		for (int i = 0; i < MAX_PLAYERS; ++i) {
+			app->objectmanager->obj_tanks[i]->gui->Fade_GUI(false);
+		}
+
 		general_gui->FadeGeneralHUD(false);
 		general_gui->FadeWinScreen(true);
-		game_state = GAME_STATE::NO_TYPE;
+		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
+
+		break;
+
+	case GAME_STATE::WAIT_PLAYER_INPUT_1:
+
+		for (int i = 0; i < MAX_PLAYERS; ++i) {
+
+			Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
+
+			if (controller != nullptr && (*controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			{
+				game_state = GAME_STATE::LEADER_BOARD;
+				break;
+			}
+		}
+
+		break;
+
+	case GAME_STATE::LEADER_BOARD:
+
+		general_gui->FadeGameOverScreen(false);
+		general_gui->FadeLeaderBoardScreen(true);
+		game_state = GAME_STATE::WAIT_PLAYER_INPUT_2;
+
+		break;
+
+	case GAME_STATE::WAIT_PLAYER_INPUT_2:
 
 		break;
 	}
+
 
 	if (!game_over
 		&& !app->objectmanager->obj_tanks[0]->Alive()
@@ -347,7 +376,7 @@ bool M_Scene::PostUpdate(float dt)
 		&& this->round >= rounds_to_win + 1
 		&& !win_game)
 	{
-		game_state = GAME_STATE::GAME_WINNED;
+		game_state = GAME_STATE::GAME_WON;
 		win_game = true;
 	}
 	return ret;

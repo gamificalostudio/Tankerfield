@@ -75,6 +75,8 @@ bool M_MainMenu::Start()
 		}
 	}
 
+	selection_panel->SetFocus( iPoint(0, 0) );
+
 	fPoint tank_offset = { 280.f, 280.f };
 
 	for (int i = 0; i < 4; ++i)
@@ -116,7 +118,6 @@ bool M_MainMenu::CleanUp()
 
 	for (int i = 0; i < 4; ++i)
 	{
-		players[i].tank->to_remove = true;
 		players[i].tank = nullptr;
 	}
 
@@ -195,6 +196,7 @@ bool M_MainMenu::PostUpdate(float dt)
 
 bool M_MainMenu::Reset()
 {
+	app->objectmanager->Reset();
 	app->ui->Reset();
 	return true;
 }

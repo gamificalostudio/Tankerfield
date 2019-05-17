@@ -30,6 +30,7 @@ public:
 
 public:
 
+	void SetFocus(iPoint point);
 
 	void SetElement( UI_Element* element, const iPoint position);
 
@@ -43,7 +44,7 @@ public:
 
 private:
 
-	iPoint GetNearestElement(const iPoint current_focus, const CONTROLLER_DIR dir);
+	iPoint GetNearestElement(const iPoint current_focus_pos, const CONTROLLER_DIR dir);
 
 	iPoint GetFirstAvailableElement();
 
@@ -52,7 +53,7 @@ private:
 	uint columns = 0u;
 	uint rows = 0u;
 
-	iPoint current_focus = { 0,0 };
+	iPoint current_focus_pos = { 0,0 };
 	UI_Image*  focus_image = nullptr;
 	Controller ** current_controller = nullptr;
 	UI_Element** group_elements = nullptr;
