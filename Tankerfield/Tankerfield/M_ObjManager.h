@@ -108,15 +108,15 @@ public:
 	pugi::xml_node balance_xml_node;
 	std::vector<Obj_Tank*> obj_tanks;
 
-private:
-	pugi::xml_document balance_xml_doc;
-	std::list<Object*> objects;
-	std::list<Object*> enemies;
-
 	TeslaTrooperInfo tesla_trooper_info;
 	BruteInfo brute_info;
 	RocketLauncherInfo rocket_launcher_info;
 	SuicidalInfo suicidal_info;
+
+private:
+	pugi::xml_document balance_xml_doc;
+	std::list<Object*> objects;
+	std::list<Object*> enemies;
 };
 
 #endif
