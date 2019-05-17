@@ -25,6 +25,21 @@ enum class WEAPON_TYPE {
 	SUSTAINED
 };
 
+struct ShotInfo
+{
+	int bullet_damage				= 0;
+	int bullet_healing				= 0;
+	int explosion_damage			= 0;
+	float bullet_speed				= 0.f;
+	float bullet_life_ms			= 0.f;
+	float time_between_bullets		= 0.f;
+	uint sfx						= 0u;
+	uint recoil						= 0u;
+	float rumble_strength			= 0.f;
+	Uint32 rumble_duration			= 0u;
+	float trauma					= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake
+};
+
 //Class which ONLY holds information about the weapons.
 //It doesn't have any functionality more than loading the properties
 class WeaponInfo
@@ -33,25 +48,9 @@ public:
 	WEAPON weapon					= WEAPON::BASIC;
 	WEAPON_TYPE type				= WEAPON_TYPE::CHARGED;
 	int level_weapon				= 0;
-	int    bullet_damage			= 0;
-	float  bullet_speed				= 0.f;
-	float bullet_life_ms			= 0.f;
-	float time_between_bullets		= 0.f;
-	int bullet_healing				= 0;
-	int explosion_damage			= 0;
 
-	//Screen shake
-	float basic_shot_trauma			= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake
-	float charged_shot_trauma		= 0.f;//The amount of trauma that it will create when you press use the charged shot, related to the screen shake
-
-	//Controller rumble
-	//Shot 1 (basic shot on charged weapons and quick shot on sustained weapons)
-	float shot1_rumble_strength		= 0.f;
-	Uint32 shot1_rumble_duration	= 0u;
-
-	//Shot 2 (charged shot on charged weapons and sustained shot on sustained weapons)
-	float shot2_rumble_strength	= 0.f;
-	Uint32 shot2_rumble_duration	= 0u;
+	ShotInfo shot1;//Basic shot on charged weapons and quick shot on sustained weapons
+	ShotInfo shot2;//Charged shot on charged weapons and sustained shot on sustained weapons
 };
 
 #endif

@@ -366,7 +366,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		//if the player shot
 		if ((ReleaseShot()
 			|| GetShotAutomatically())
-			&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+			&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 		{
 			//- Basic shot
 			if (charged_shot_timer.ReadMs() < charge_time)
@@ -545,7 +545,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + bullet->tank_parent->weapon_info.bullet_healing);
+				SetLife(GetLife() + bullet->tank_parent->weapon_info.shot1.bullet_healing);
 			}
 		}
 		else
@@ -640,7 +640,7 @@ WeaponInfo Obj_Tank::GetWeaponInfo() const
 
 void Obj_Tank::SetTimeBetweenBullets(int time_between_bullets)
 {
-	weapon_info.time_between_bullets = time_between_bullets;
+	weapon_info.shot1.time_between_bullets = time_between_bullets;
 }
 
 int Obj_Tank::GetLife() const
@@ -655,7 +655,7 @@ int Obj_Tank::GetMaxLife() const
 
 int Obj_Tank::GetTimeBetweenBullets() const
 {
-	return weapon_info.time_between_bullets;
+	return weapon_info.shot1.time_between_bullets;
 }
 
 void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, fPoint & iso_dir)
@@ -722,7 +722,7 @@ void Obj_Tank::ShootChargedWeapon()
 
 	if ((ReleaseShot()
 		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets)
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
 		this->curr_speed = speed;
 		//- Basic shot
@@ -730,16 +730,16 @@ void Obj_Tank::ShootChargedWeapon()
 		{
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(weapon_info.basic_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
+			camera_player->AddTrauma(weapon_info.shot1.trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
 		}
 		//- Charged shot
 		else
 		{
 			(this->*shot2_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
-			camera_player->AddTrauma(weapon_info.charged_shot_trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
+			camera_player->AddTrauma(weapon_info.shot2.trauma);
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
 		}
 		app->objectmanager->CreateObject(ObjectType::CANNON_FIRE, turr_pos + shot_dir * 1.2f);
 		shot_timer.Start();
@@ -760,17 +760,17 @@ void Obj_Tank::ShootSustainedWeapon()
 	{
 		(this->*shot2_function[(uint)weapon_info.weapon])();
 		//TODO: Play wepon sfx
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2_rumble_strength, weapon_info.shot2_rumble_duration); }
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
 	}
 
 	//- Quick shot
 	if ((ReleaseShot()
 		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.time_between_bullets
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
 		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
 	{
 		(this->*shot1_function[(uint)weapon_info.weapon])();
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1_rumble_strength, weapon_info.shot1_rumble_duration); }
+		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
 		shot_timer.Start();
 	}
 }
