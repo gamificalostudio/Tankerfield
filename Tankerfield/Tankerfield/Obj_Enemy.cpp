@@ -545,10 +545,6 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			}
 		}
 	}
-}
-
-void Obj_Enemy::OnTrigger(Collider* collider)
-{
 	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 	{
 		in_white = true;
@@ -566,6 +562,27 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 			app->audio->PlayFx(sfx_hit);
 		}
 	}
+}
+
+void Obj_Enemy::OnTrigger(Collider* collider)
+{
+	/*if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
+	{
+		in_white = true;
+		life -= collider->damage;
+		damaged_sprite_timer.Start();
+		curr_tex = tex_damaged;
+
+		if (life <= 0)
+		{
+			app->pick_manager->PickUpFromEnemy(pos_map);
+			state = ENEMY_STATE::DEAD;
+		}
+		else
+		{
+			app->audio->PlayFx(sfx_hit);
+		}
+	}*/
 }
 
 bool Obj_Enemy::IsOnGoal(fPoint goal)
