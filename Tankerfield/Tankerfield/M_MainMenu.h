@@ -73,7 +73,6 @@ private:
 
 	// Elements ================================================
 
-	std::list<UI_Element*> menu_elements;
 	Camera*			       camera = nullptr;
 
 	// Main screen --------------------------------

@@ -142,11 +142,11 @@ bool M_Scene::Start()
 		box->SetTypeBox(PICKUP_TYPE::WEAPON);
 	}
 	
-	general_hud = DBG_NEW General_GUI();
+	general_gui = DBG_NEW General_GUI();
 	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
 
 	round = 1u;
-	stat_of_wave = WaveStat::EXIT_OF_WAVE;
+	game_state = GAME_STATE::EXIT_OF_WAVE;
 	game_over = false;
 
 
@@ -185,7 +185,7 @@ bool M_Scene::PreUpdate()
 	}
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 	{
-		general_hud->SetRoundNumber(2);
+		general_gui->SetRoundNumber(2);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
@@ -209,11 +209,11 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
 	{
 		++this->round;
-		general_hud->SetRoundNumber(round);
+		general_gui->SetRoundNumber(round);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
 	{
-		stat_of_wave = WaveStat::WIN_GAME;
+		game_state = GAME_STATE::GAME_WINNED;
 	}
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
@@ -246,9 +246,9 @@ bool M_Scene::Update(float dt)
 	//		label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
 	//}
 
-	switch (stat_of_wave)
+	switch (game_state)
 	{
-	case WaveStat::ENTER_IN_WAVE:
+	case GAME_STATE::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
 		++subround;
@@ -259,21 +259,21 @@ bool M_Scene::Update(float dt)
 		}
 
 		NewWave();
-		stat_of_wave = WaveStat::IN_WAVE;
+		game_state = GAME_STATE::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
 		break;
 	}
-	case WaveStat::IN_WAVE:
+	case GAME_STATE::IN_WAVE:
 	{
 		if (number_of_enemies<=0)
 		{
-			stat_of_wave = WaveStat::EXIT_OF_WAVE;
+			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}
 		break;
 	}
-	case WaveStat::EXIT_OF_WAVE:
+	case GAME_STATE::EXIT_OF_WAVE:
 	{
 		//feedback here I guess(animation and souds)
 		timer_between_waves.Start();
@@ -281,36 +281,36 @@ bool M_Scene::Update(float dt)
 		finish_wave_sound_channel = app->audio->PlayFx(finish_wave_sound_uint);
 		wind_sound_channel = app->audio->PlayFx(wind_sound_uint);
 		
-		stat_of_wave = WaveStat::OUT_WAVE;
+		game_state = GAME_STATE::OUT_WAVE;
 
 		break;
 	}
-	case WaveStat::OUT_WAVE:
+	case GAME_STATE::OUT_WAVE:
 		if (timer_between_waves.ReadSec() >= time_between_rounds[subround] || AllPlayersReady())
 		{
-			stat_of_wave = WaveStat::ENTER_IN_WAVE;
+			game_state = GAME_STATE::ENTER_IN_WAVE;
 		}
 		break;
 
-	case WaveStat::GAME_OVER:
+	case GAME_STATE::GAME_OVER:
 		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
 		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
 		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
 		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
-		general_hud->FadeGeneralHUD(false);
-		general_hud->FadeGameOverScreen(true, round);
-		stat_of_wave = WaveStat::NO_TYPE;
+		general_gui->FadeGeneralHUD(false);
+		general_gui->FadeGameOverScreen(true, round);
+		game_state = GAME_STATE::NO_TYPE;
 		break;
 
-	case WaveStat::WIN_GAME:
+	case GAME_STATE::GAME_WON:
 		
 		app->objectmanager->obj_tanks[0]->gui->Fade_GUI(false);
 		app->objectmanager->obj_tanks[1]->gui->Fade_GUI(false);
 		app->objectmanager->obj_tanks[2]->gui->Fade_GUI(false);
 		app->objectmanager->obj_tanks[3]->gui->Fade_GUI(false);
-		general_hud->FadeGeneralHUD(false);
-		general_hud->FadeWinScreen(true);
-		stat_of_wave = WaveStat::NO_TYPE;
+		general_gui->FadeGeneralHUD(false);
+		general_gui->FadeWinScreen(true);
+		game_state = GAME_STATE::NO_TYPE;
 
 		break;
 	}
@@ -321,7 +321,7 @@ bool M_Scene::Update(float dt)
 		&& !app->objectmanager->obj_tanks[2]->Alive()
 		&& !app->objectmanager->obj_tanks[3]->Alive())
 	{
-		stat_of_wave = WaveStat::GAME_OVER;
+		game_state = GAME_STATE::GAME_OVER;
 		game_over = true;
 	}
 	
@@ -347,7 +347,7 @@ bool M_Scene::PostUpdate(float dt)
 		&& this->round >= rounds_to_win + 1
 		&& !win_game)
 	{
-		stat_of_wave = WaveStat::WIN_GAME;
+		game_state = GAME_STATE::GAME_WINNED;
 		win_game = true;
 	}
 	return ret;
@@ -370,9 +370,9 @@ bool M_Scene::CleanUp()
 	LOG("Freeing scene");
 	app->audio->PauseMusic(2.f);
 
-	RELEASE(general_hud);
+	RELEASE(general_gui);
 
-	general_hud = nullptr;
+	general_gui = nullptr;
 
 	for (std::vector<Obj_Tank*>::iterator i = app->objectmanager->obj_tanks.begin(); i != app->objectmanager->obj_tanks.end() ; ++i)
 	{
@@ -517,7 +517,7 @@ void M_Scene::NewWave()
 
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
-	general_hud->SetRoundNumber(round);
+	general_gui->SetRoundNumber(round);
 }
 
 bool M_Scene::AllPlayersReady() const

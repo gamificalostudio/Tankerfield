@@ -131,6 +131,7 @@ void General_GUI::FadeGeneralHUD(bool fade_on)
 
 	round_fx->alpha = 0;
 	round_fx->FinishFX();
+
 	round_number_label	->SetFX(type, 2.F);
 	round_element		->SetFX(type, 2.F);
 	left_tank_life		->SetFX(type, 2.F);
