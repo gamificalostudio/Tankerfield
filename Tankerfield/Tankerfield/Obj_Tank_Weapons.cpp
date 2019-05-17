@@ -373,7 +373,29 @@ void Obj_Tank::ShootFlameThrower()
 	{
 		coll_flame->ActiveOnTrigger(true);
 	}
-	
+
+	float coll_w_init;
+	float coll_h_init;
+
+	fPoint distance{ 1.f, 1.f };
+	fPoint increment{ coll_w_init, coll_h_init };
+
+	float coll_w;
+	float coll_h;
+	coll_flame->GetSize(coll_w, coll_h);
+
+
+	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
+
+
+
+	fPoint dir_distance = GetShotDir() * distance;
+	distance += increment;
+
+	coll_flame->SetObjOffset(offset + dir_distance);
+	coll_flame->SetPosToObj();
+
+	coll_flame->ActiveOnTrigger(true);
 }
 
 
@@ -400,7 +422,7 @@ void Obj_Tank::ShootElectroShot()
 
 		fPoint dir_distance = GetShotDir() * distance;
 		distance += increment;
-
+		
 		(*iter)->SetObjOffset(offset + dir_distance);
 		(*iter)->SetPosToObj();
 

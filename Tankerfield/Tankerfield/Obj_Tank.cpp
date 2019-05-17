@@ -236,8 +236,7 @@ bool Obj_Tank::Start()
 
 	//Flamethrower
 
-	float flame_coll_w = 2.f;
-	float flame_coll_h = 2.f;
+
 
 	coll_flame = app->collision->AddCollider(
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),

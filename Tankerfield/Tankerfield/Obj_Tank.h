@@ -212,6 +212,13 @@ private:
 
 	//Flamethrower shot
 
+public:
+
+	float flame_coll_w = 2.f;
+	float flame_coll_h = 2.f;
+
+private:
+
 	Timer flame_release_time;
 	Collider* coll_flame = nullptr;
 
