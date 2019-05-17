@@ -158,9 +158,9 @@
     </animations>
   </ui>
   <map>
-    <folder>Maps/test/</folder>
+    <folder>Maps/</folder>
     <levels>
-      <level name="test.tmx"/>
+      <level name="Map2.tmx"/>
     </levels>
   </map>
   <pick_manager>
