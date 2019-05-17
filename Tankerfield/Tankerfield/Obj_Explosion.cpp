@@ -60,7 +60,6 @@ bool Obj_Explosion::Update(float dt)
 	}
 	else if (frame_num == frame_damage + 1)
 	{
-		
 		coll->to_destroy = true;
 		coll = nullptr;
 	}

@@ -58,30 +58,30 @@ General_GUI::General_GUI()
 
 	// LeaderBoard Screen ==========================================
 
-	UI_TableDef table_def;
-	table_def.columns = 3;
-	table_def.rows = 11;
-	table_def.line_width = 2;
+	//UI_TableDef table_def;
+	//table_def.columns = 3;
+	//table_def.rows = 11;
+	//table_def.line_width = 2;
 
-	int widths[3] = { 100, 300 , 300 };
-	int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
+	//int widths[3] = { 100, 300 , 300 };
+	//int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
 
-	UI_Table* table = app->ui->CreateTable(screen_center, table_def, widths, heights);
-	UI_Element* rank = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef("Rank", app->font->label_font_24));
-	table->AssortElementToTable(rank, iPoint(0, 0));
+	//UI_Table* table = app->ui->CreateTable(screen_center, table_def, widths, heights);
+	//UI_Element* rank = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef("Rank", app->font->label_font_24));
+	//table->AssortElementToTable(rank, iPoint(0, 0));
 
-	for (int i = 1; i < 11; ++i)
-	{
-		UI_Element* number = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(std::to_string(i), app->font->label_font_24));
-		table->AssortElementToTable(number, iPoint(0, i));
-	}
+	//for (int i = 1; i < 11; ++i)
+	//{
+	//	UI_Element* number = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(std::to_string(i), app->font->label_font_24));
+	//	table->AssortElementToTable(number, iPoint(0, i));
+	//}
 
-	// ===========================================
+	//// ===========================================
 
-	UI_InputTextDef input_def;
-	input_def.font = app->font->label_font_24;
-	input_def.max_characters = 10;
-	app->ui->CreateInputText(screen_center, input_def);
+	//UI_InputTextDef input_def;
+	//input_def.font = app->font->label_font_24;
+	//input_def.max_characters = 10;
+	//app->ui->CreateInputText(screen_center, input_def);
 
 
 
