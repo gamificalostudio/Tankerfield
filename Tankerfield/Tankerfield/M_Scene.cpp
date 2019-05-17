@@ -112,6 +112,7 @@ bool M_Scene::Start()
 				break;
 			}
 		}
+
 		if (players_layer == app->map->data.object_layers.end() || (*players_layer)->size != 4)
 		{
 			//Create all tanks
@@ -128,6 +129,12 @@ bool M_Scene::Start()
 			app->objectmanager->obj_tanks[2] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[2].pos);
 			app->objectmanager->obj_tanks[3] = (Obj_Tank*)app->objectmanager->CreateObject(ObjectType::TANK, (*players_layer)->objects[3].pos);
 		}
+
+		app->objectmanager->obj_tanks[0]->SetColor(tank_colors[0]);
+		app->objectmanager->obj_tanks[1]->SetColor(tank_colors[1]);
+		app->objectmanager->obj_tanks[2]->SetColor(tank_colors[2]);
+		app->objectmanager->obj_tanks[3]->SetColor(tank_colors[3]);
+
 	}
 	for (uint i = 0; i < 4; ++i)
 	{
@@ -161,11 +168,6 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, this, 2.f, 2.f);
-	}
-
-	if (app->input->controllers.size())
-	{
-		control1 = &(*app->input->controllers.begin());
 	}
 
 	iPoint mouse_pos;
