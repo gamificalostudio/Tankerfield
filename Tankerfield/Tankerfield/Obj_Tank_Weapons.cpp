@@ -102,34 +102,7 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 		}
 
 	}
-	//test:
 
-	//float coll_w_init;
-	//float coll_h_init;
-	//(*electric_shot_colliders_vector.begin())->GetSize(coll_w_init, coll_h_init);
-	//fPoint increment{ coll_w_init, coll_h_init};
-	//fPoint distance{0,0};
-	//
-
-	//for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
-	//{
-	//	float coll_w;
-	//	float coll_h;
-	//	(*iter)->GetSize(coll_w, coll_h);
-	//	//fPoint increment{ coll_w*0.5f, coll_h*0.5f };  alternative
-
-	//	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
-
-	//	distance += increment;
-
-	//	fPoint dir_distance = GetShotDir() * distance;
-
-
-	//	(*iter)->SetObjOffset(offset + dir_distance);
-	//	(*iter)->SetPosToObj();
-
-	//	//(*iter)->Activate();
-	//}
 
 }
 
@@ -386,11 +359,11 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
-	if(collFlame->GetIsActivated() == false)
+	/*if(collFlame->GetIsActivated() == false)
 	{
 		collFlame->ActiveOnTrigger(true);
 	}
-
+*/
 
 }
 

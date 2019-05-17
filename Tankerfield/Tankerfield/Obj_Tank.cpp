@@ -248,7 +248,7 @@ bool Obj_Tank::Start()
 		0.f,
 		this);
 
-	collFlame->is_sensor == true;
+	collFlame->is_sensor = true;
 	collFlame->ActiveOnTrigger(false);
 
 	return true;
