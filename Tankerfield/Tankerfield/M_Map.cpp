@@ -510,20 +510,23 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 
 		if (object_group->name == "Colliders")
 		{
+			Collider* coll = nullptr;
 			// To ortogonal tile pos----------------
 			std::string type = obj_node.attribute("type").as_string("");
 			if (type == "WALL")
 			{
-				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WALL);
+				coll = app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, TAG::WALL, BODY_TYPE::STATIC);
+				coll->ActiveOnTrigger(false);
 			}
 			else if (type == "WATER")
 			{
-				app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::WATER);
+				coll =app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, TAG::WATER, BODY_TYPE::STATIC);
+				coll->ActiveOnTrigger(false);
 			}
 			else if (type == "ROAD")
 			{
-				Collider* coll = app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, Collider::TAG::ROAD);
-				coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+				coll = app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, TAG::ROAD, BODY_TYPE::DYNAMIC);
+				coll->is_sensor = true;
 			}
 		}
 

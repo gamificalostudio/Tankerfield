@@ -96,6 +96,15 @@ Camera* M_Render::CreateCamera(Obj_Tank * tank)
 	return camera_aux;
 }
 
+Camera* M_Render::CreateCamera(iPoint init_pos, SDL_Rect section)
+{
+	Camera* camera_aux = DBG_NEW Camera();
+	camera_aux->rect = { init_pos.x, init_pos.y, section.w, section.h };
+	camera_aux->screen_section = section;
+	cameras.push_back(camera_aux);
+	return camera_aux;
+}
+
 void M_Render::DestroyCamera(Camera * camera)
 {
 	for (std::vector<Camera*>::iterator iter = cameras.begin();
@@ -347,6 +356,7 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 	}
 
 }
+
 
 bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {

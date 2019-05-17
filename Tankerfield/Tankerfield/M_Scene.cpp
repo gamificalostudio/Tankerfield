@@ -134,10 +134,9 @@ bool M_Scene::Start()
 		Obj_RewardBox* box = app->pick_manager->CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{ 2.f, -2.f });
 		box->SetTypeBox(PICKUP_TYPE::WEAPON);
 	}
-	//app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, app->objectmanager->obj_tanks[0]->pos_map);
-
-
-	general_hud = DBG_NEW General_HUD();
+	
+	general_hud = DBG_NEW General_GUI();
+	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
 
 	round = 1u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;

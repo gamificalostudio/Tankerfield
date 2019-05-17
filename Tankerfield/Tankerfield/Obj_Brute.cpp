@@ -33,7 +33,7 @@
 
 Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("brute");
+	pugi::xml_node brute_node = app->config.child("object").child("enemies").child("brute");
 
 	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
@@ -63,6 +63,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 	spawn_draw_offset = { 260, 274 };
 	normal_draw_offset = { 132, 75 };
+	electrocuted_draw_offset = { 60,28 };
 	draw_offset = spawn_draw_offset;
 
 	angle = 180;//REMOVE
@@ -76,7 +77,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
-	life = 750* (log(app->scene->round)+2);
+	life = 1;//750* (log(app->scene->round)+2);
 
 	scale = 2.f;
 	app->audio->PlayFx(sfx_spawn);
@@ -89,7 +90,11 @@ Obj_Brute::~Obj_Brute()
 
 void Obj_Brute::ChangeTexture()
 {
-	if (spawn.Finished() && damaged_sprite_timer.Read() > damaged_sprite_time)
+	if (spawn.Finished() &&
+		damaged_sprite_timer.Read() > damaged_sprite_time &&
+		curr_tex != tex &&
+		state != ENEMY_STATE::STUNNED &&
+		state != ENEMY_STATE::STUNNED_CHARGED)
 	{
 		curr_tex = tex;
 	}
@@ -100,8 +105,7 @@ void Obj_Brute::Spawn(const float& dt)
 	if (curr_anim->Finished())
 	{
 		curr_tex = tex;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
-		coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
 		//life_collider = app->collision->AddCollider(pos_map, 2, 2, Collider::TAG::ENEMY, 0.f, this);
 		//life_collider->AddRigidBody(Collider::BODY_TYPE::SENSOR);

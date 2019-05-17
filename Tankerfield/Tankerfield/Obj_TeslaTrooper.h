@@ -90,8 +90,9 @@ public:
 
 	bool Start()
 	{
-		coll = app->collision->AddCollider(pos_map, 3, 3, Collider::TAG::REWARD_ZONE, 0.f,this);
-		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+		coll = app->collision->AddCollider(pos_map, 3, 3, TAG::REWARD_ZONE, BODY_TYPE::DYNAMIC , 0.f,this);
+		coll->is_sensor = true;
+
 		return true;
 	}
 
@@ -101,7 +102,7 @@ public:
 	}
 	void OnTrigger(Collider* c1)
 	{
-		if (c1->GetTag() == Collider::TAG::PLAYER)
+		if (c1->GetTag() == TAG::PLAYER)
 		{
 			/*LOG("REWARD ZONE");*/
 		}
