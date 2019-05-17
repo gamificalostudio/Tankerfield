@@ -157,17 +157,12 @@
 
     </animations>
   </ui>
-
   <map>
     <folder>Maps/test/</folder>
     <levels>
       <level name="test.tmx"/>
     </levels>
-
   </map>
-
-
-
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
     <percentage_spawn_reward_box value="80"/>

@@ -239,17 +239,17 @@ bool Obj_Tank::Start()
 	float flame_coll_w = 2.f;
 	float flame_coll_h = 2.f;
 
-	collFlame = app->collision->AddCollider(
+	coll_flame = app->collision->AddCollider(
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
 		flame_coll_w,
 		flame_coll_h,
 		TAG::BULLET,
 		BODY_TYPE::DYNAMIC,
-		0.f,
+		50.f,
 		this);
-
-	collFlame->is_sensor == true;
-	collFlame->ActiveOnTrigger(false);
+	
+	coll_flame->is_sensor = true;
+	coll_flame->ActiveOnTrigger(false);
 
 	return true;
 }

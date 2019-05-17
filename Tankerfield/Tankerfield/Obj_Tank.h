@@ -208,7 +208,12 @@ private:
 	std::vector<Object*> enemies_hitted;
 	
 
-	Collider* collFlame = nullptr;
+	
+
+	//Flamethrower shot
+
+	Timer flame_release_time;
+	Collider* coll_flame = nullptr;
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;

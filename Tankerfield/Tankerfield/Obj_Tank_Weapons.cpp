@@ -102,6 +102,18 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 		}
 
 	}
+
+	if (weapon_info.weapon == WEAPON::FLAMETHROWER)
+	{
+		//with the animation get frame?? only 1 frame
+		if (flame_release_time.ReadSec() >= 1.f && coll_flame->GetIsActivated())
+		{
+				coll_flame->ActiveOnTrigger(false);
+		}
+
+	}
+
+
 	//test:
 
 	//float coll_w_init;
@@ -386,10 +398,14 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
-	if(collFlame->GetIsActivated() == false)
+	flame_release_time.Start();
+
+	if(coll_flame->GetIsActivated() == false)
 	{
-		collFlame->ActiveOnTrigger(true);
+		coll_flame->ActiveOnTrigger(true);
 	}
+	
+	
 
 
 }
