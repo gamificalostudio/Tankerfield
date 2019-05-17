@@ -18,28 +18,12 @@ public:
 	Obj_Suicidal(fPoint pos);
 	~Obj_Suicidal();
 
-	bool Update(float dt) override;
-
-	void ChangeTexture();
-
-	void Movement(float &dt);
-
-	void Spawn();
-
+	void Spawn(const float& dt) override;
+	void Attack() override;
 
 private:
-
-
-
-	// ----------
 	iPoint spawn_draw_offset = { 0,0 };
 	iPoint normal_draw_offset = { 0, 0 };
-
-	Animation spawn;
-
-	SDL_Texture * spawn_tex = nullptr;
-
-
 };
 
 #endif /* __OBJ_SUICIDAL_H__ */

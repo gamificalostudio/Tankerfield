@@ -64,6 +64,7 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 	Camera* CreateCamera(Obj_Tank * tank);
+	Camera * CreateCamera(iPoint init_pos, SDL_Rect section);
 	void DestroyCamera(Camera * camera);
 
 public:

@@ -20,6 +20,7 @@ enum class ObjectType
 	REWARD_BOX,
 	PICK_UP,
 	PORTAL,
+	TANK_MAIN_MENU,
 
 	//ENEMIES
 	TESLA_TROOPER,

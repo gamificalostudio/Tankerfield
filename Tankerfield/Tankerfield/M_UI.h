@@ -32,10 +32,13 @@ class UI_Slider;
 class UI_Label;
 class UI_Checkbox;
 class UI_TextPanel;
+class UI_Table;
+class UI_InputText;
 class UI_InGameElement;
 class UI_IG_Weapon;
 class UI_IG_Item;
 class UI_IG_Helper;
+class UI_InteractiveGroup;
 
 struct UI_ElementDef;
 struct UI_ButtonDef;
@@ -43,10 +46,13 @@ struct UI_BarDef;
 struct UI_QuadDef;
 struct UI_LabelDef;
 struct UI_ImageDef;
+struct UI_InputTextDef;
 struct UI_SliderDef;
 struct UI_CheckboxDef;
 struct UI_TextPanelDef;
+struct UI_TableDef;
 struct UI_InGameElementDef;
+struct UI_InteractiveGroupDef;
 
 enum class FocusState
 {
@@ -124,17 +130,17 @@ public:
 	UI_Listener()
 	{}
 
-	virtual bool OnHover(UI_Element* object) { return true; }
+	virtual bool OnHoverEnter(UI_Element* object) { return true; }
 
-	virtual bool RepeatHover(UI_Element* object) { return true; }
+	virtual bool OnHoverRepeat(UI_Element* object) { return true; }
 
-	virtual bool OutHover(UI_Element* object) { return true; }
+	virtual bool OnHoverExit(UI_Element* object) { return true; }
 
-	virtual bool OnClick(UI_Element* object) { return true; }
+	virtual bool ClickDown(UI_Element* object) { return true; }
 
-	virtual bool RepeatClick(UI_Element* object) { return true; }
+	virtual bool ClickRepeat(UI_Element* object) { return true; }
 
-	virtual bool OutClick(UI_Element* object) { return true; }
+	virtual bool ClickUp(UI_Element* object) { return true; }
 };
 
 class UI_Fade_FX
@@ -216,6 +222,12 @@ public:
 	UI_TextPanel * CreateTextPanel(const fPoint position, const UI_TextPanelDef definition, UI_Listener* listener = nullptr);
 
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
+
+	UI_Table * CreateTable (const fPoint position, const UI_TableDef definition, int * widths, int * heights, UI_Listener * listener = nullptr);
+
+	UI_InteractiveGroup * CreateIntearctiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener* listener = nullptr);
+
+	UI_InputText* CreateInputText(const fPoint position, const UI_InputTextDef definition, UI_Listener* listener = nullptr);
 
 	UI_InGameElement * CreateInGameElement(const fPoint position, const UI_InGameElementDef definition);
 
