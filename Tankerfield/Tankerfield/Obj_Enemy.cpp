@@ -572,7 +572,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	}
 	else if (collider->GetTag() == TAG::BULLET_OIL)
 	{
-	/*	life -= collider->damage;*/
+		life -= collider->damage;
 		oiled = true;
 		oiled_timer.Start();
 		damaged_sprite_timer.Start();
@@ -607,7 +607,10 @@ void Obj_Enemy::Oiled()
 {
 	if (oiled == true)
 	{
-		if (damaged_sprite_timer.Read() > damaged_sprite_time && !bool_electro_dead) 
+		if (damaged_sprite_timer.Read() > damaged_sprite_time && 
+			!bool_electro_dead
+			&& state != ENEMY_STATE::STUNNED
+			&& state != ENEMY_STATE::STUNNED_CHARGED )
 		{
 			curr_tex = oiled_tex;
 		}
