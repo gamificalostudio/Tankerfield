@@ -49,13 +49,6 @@ void Obj_RewardBox::OnTrigger(Collider * collider)
 
 }
 
-//bool Obj_RewardBox::Draw(float dt, Camera * camera)
-//{
-//	app->render->DrawIsometricQuad(pos_map.x, pos_map.y, 2, 2, { 255,255,255,255 }, camera);
-//
-//	return true;
-//}
-
 bool Obj_RewardBox::DrawShadow(Camera * camera)
 {
 	app->render->Blit(

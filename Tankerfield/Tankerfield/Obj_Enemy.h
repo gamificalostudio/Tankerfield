@@ -159,7 +159,7 @@ protected:
 	float max_time_change_direction = 0.5f;
 	float fire_damage = 0;
 
-	//Collider* life_collider = nullptr;
+	Collider* life_collider = nullptr;
 
 
 };
