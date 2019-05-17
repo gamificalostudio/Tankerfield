@@ -33,20 +33,13 @@ public:
 
 	inline int Move(float & dt);
 
-
 	inline virtual void GetPath();
 
 	bool Draw(float dt, Camera * camera) override;
 
-
-
-
 private:
 
 	inline void UpdateVelocity();
-
-
-
 
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
@@ -55,22 +48,21 @@ private:
 	Animation portal_animation;
 	Animation portal_close_anim;
 	Animation spawn_anim;
-	
 
-	bool draw = true;
+	bool draw							= true;
 	Animation* in_portal				= nullptr;
 	
 
 	SDL_Texture * portal_tex			= nullptr;
-	SDL_Texture * explosion_apper_tex			= nullptr;
+	SDL_Texture * explosion_apper_tex	= nullptr;
 
-	SpawnPoint* teleport_spawnpoint = nullptr;
+	SpawnPoint* teleport_spawnpoint		= nullptr;
 
 	//teleport values ----------
-	float check_teleport_time = 0.f;
-	uint teleport_enemies_max;
+	float check_teleport_time			= 0.f;
+	uint teleport_enemies_max			= 0u;
 
-	float squared_detection_range = 0.f;
+	float squared_detection_range		= 0.f;
 
 
 };

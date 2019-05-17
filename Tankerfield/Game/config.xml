@@ -164,11 +164,8 @@
     <levels>
       <level name="Map2.tmx"/>
     </levels>
-
   </map>
-
-
-
+  
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
     <percentage_spawn_reward_box value="80"/>
@@ -183,41 +180,20 @@
     <enemies>
       <tex_electro_dead>textures/Objects/enemies/electro_dead.png</tex_electro_dead>
       <tesla_trooper>
-        <teleport_max_enemies num="100"/>
-        <speed num="3"/>
-        <attack_damage num="5"/>
-        <attack_range num="1.5"/>
-        <attack_frequency num="3000"/>
-        <base_life num="5"/>
         <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
         <tex_damaged_path>textures/Objects/enemies/shk-sheet-white-1.png</tex_damaged_path>
         <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
       </tesla_trooper>
-      <brute>
-
-      </brute>
     </enemies>
-
-
-
-    <!--pasar al nodo enemies-->
+    
+    <!--TOOD: Put in enemies node-->
     <rocket_launcher>
-      <speed num="2"/>
-      <attack_damage num="15"/>
-      <attack_range num="3"/>
-      <attack_frequency num="2000"/>
-      <base_life num="3"/>
       <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
     </rocket_launcher>
+    
     <suicidal>
-      <speed num="5.5"/>
-      <attack_damage num="75"/>
-      <attack_range num="1"/>
-      <attack_frequency num="1000"/>
-      <base_life num="3"/>
       <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
     </suicidal>
-
 
     <tank>
       <speed value ="1"/>

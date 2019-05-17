@@ -434,6 +434,9 @@
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="ElectroShotAnimation.h" />
+    <ClInclude Include="Balance.h">
+      <Filter>Tools\Balance</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\config.xml">
@@ -485,6 +488,9 @@
     </Filter>
     <Filter Include="Objects\Enemies">
       <UniqueIdentifier>{03833ef9-4050-4efc-963c-7ae318029f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Balance">
+      <UniqueIdentifier>{552bb5a0-2af5-4bc1-b61b-7751c5418ef7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -198,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Balance.h" />
     <ClInclude Include="Bullet_Laser.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ElectroShotAnimation.h" />
