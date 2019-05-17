@@ -88,13 +88,11 @@ private:
 	bool HoldShot();
 	bool ReleaseShot();
 
-
 	//- Input
 	void SelectInputMethod();
 	void InputReadyKeyboard();
 	bool PressInteract();
 	bool ReleaseInteract();
-	
 
 	//- Weapons methods
 	void InitWeapons();
@@ -152,7 +150,6 @@ private:
 	int tutorial_move_time					= 0;//The time the tutorial move image will appear on screen (ms)
 	bool tutorial_move_pressed				= false;
 
-
 	//- Shooting
 	fPoint turr_pos							= { 0.f, 0.f };//The position of the turret in the map
 	float turr_angle						= 0.f;
@@ -185,7 +182,7 @@ private:
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	bool show_crosshairs					= false;
-	bool shot_automatically = false;
+	bool shot_automatically					= false;
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
@@ -232,6 +229,8 @@ private:
 	SDL_Texture * turr_tex_pink					= nullptr;
 	SDL_Texture * turr_tex_blue					= nullptr;
 	SDL_Texture * turr_shadow_tex				= nullptr;
+	iPoint turr_draw_offset						= { 0,0 };
+	float turr_scale							= 1.f;
 
 	//-- Revive
 	SDL_Texture * cycle_bar_tex = nullptr;
