@@ -49,10 +49,6 @@ bool Obj_Enemy::Update(float dt)
 	ChangeTexture();
 	Oiled();
 
-	if (in_white)
-	{
-		ChangeTexture();
-	}
 	//if (life_collider != nullptr)
 	//	life_collider->SetPosToObj();
 	return true;
@@ -568,7 +564,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	}
 	else if (collider->GetTag() == TAG::BULLET_OIL)
 	{
-		life -= collider->damage;
+	/*	life -= collider->damage;*/
 		oiled = true;
 		oiled_timer.Start();
 		damaged_sprite_timer.Start();
@@ -603,8 +599,11 @@ void Obj_Enemy::Oiled()
 {
 	if (oiled == true)
 	{
-		speed = original_speed / 2;
-		curr_tex = oiled_tex;
+		if (damaged_sprite_timer.Read() > damaged_sprite_time) 
+		{
+			curr_tex = oiled_tex;
+		}
+		speed = original_speed*0.5f;
 	}
 
 	if (oiled_timer.Read() >= 5000)
