@@ -23,13 +23,13 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 
 	texture = app->tex->Load(reward_box_node.child("image_path").attribute("value").as_string());
 	curr_tex = texture;
-	frame = { 14, 21, 28,34 };
-	draw_offset = { 14,20 };
-
-	shadow_frame = { 89, 37, 30, 18 };
-	draw_shadow_offset = { 0, 5 };
-
-	life = 1;
+	
+	shadow_frame = { 56, 0, 30, 18 };
+	draw_shadow_offset = {-2 , -4 };
+	frame = { 0, 0, 28,34 };
+	frame_white = { 28,0,28,34 };
+	draw_offset = { -14,-20 };
+	curr_frame = &frame;
 
 	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);//width and height hardcoded
 }
@@ -38,43 +38,66 @@ Obj_RewardBox::~Obj_RewardBox()
 {
 }
 
+bool Obj_RewardBox::Update(float dt)
+{
+	if (is_white)
+	{
+		if (timer_white.ReadSec() >= max_time_in_white)
+		{
+			curr_frame = &frame;
+			is_white = false;
+		}
+	}
+	return true;
+}
+
 
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
 {
 	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER)
 	{
-		GetDamage(collider->damage);
+		
+		++hits_taken;
+		if (hits_taken > max_hits)
+		{
+			Dead();
+		}
+		else
+		{
+			is_white = true;
+			curr_frame = &frame_white;
+			timer_white.Start();
+		}
 	}
 
 }
 
-bool Obj_RewardBox::DrawShadow(Camera * camera)
+bool Obj_RewardBox::Draw(float dt, Camera * camera)
 {
-	app->render->Blit(
-		texture,
-		pos_screen.x,
-		pos_screen.y-draw_shadow_offset.y,
-		camera,
-		&shadow_frame
-	);
+	if (curr_frame != nullptr)
+		app->render->Blit(
+			curr_tex,
+			pos_screen.x + draw_offset.x,
+			pos_screen.y + draw_offset.y,
+			camera,
+			curr_frame);
 
 	return true;
 }
 
-
-void Obj_RewardBox::GetDamage(float damage)
+bool Obj_RewardBox::DrawShadow(Camera * camera, float dt)
 {
-	if (life - damage <= 0 && life != 0)
-	{
-		life = 0;
-		Dead();
-	}
-	else
-	{
-		life -= damage;
-	}
+	app->render->Blit(
+		curr_tex,
+		pos_screen.x + draw_shadow_offset.x,
+		pos_screen.y + draw_shadow_offset.y,
+		camera,
+		&shadow_frame);
+
+	return true;
 }
+
 
 void Obj_RewardBox::Dead()
 {
