@@ -50,8 +50,8 @@ bool Obj_Enemy::Update(float dt)
 	{
 		ChangeTexture();
 	}
-	//if (life_collider != nullptr)
-	//	life_collider->SetPosToObj();
+	if (life_collider != nullptr)
+		life_collider->SetPosToObj();
 	return true;
 }
 
@@ -227,6 +227,11 @@ void Obj_Enemy::Dead()
 		{
 			coll->Destroy();
 			coll = nullptr;
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->Destroy();
+			life_collider = nullptr;
 		}
 	}
 	else
