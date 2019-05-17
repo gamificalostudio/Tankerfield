@@ -79,7 +79,10 @@ void Object::SetDamage(float damage)
 
 void Object::CalculateDrawVariables()
 {
-	pos_screen = app->map->MapToScreenF(pos_map);
+	if (is_isometric == true)
+	{
+		pos_screen = app->map->MapToScreenF(pos_map);
+	}
 
 	if (curr_anim != nullptr) {
 		frame = curr_anim->GetFrame(angle);

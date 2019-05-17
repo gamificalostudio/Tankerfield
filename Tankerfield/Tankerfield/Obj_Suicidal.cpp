@@ -54,8 +54,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	coll_w = 0.5f;
 	coll_h = 0.5f;
 
-	coll = app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY, 0.0f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
 	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.5f });
 
 	attack_damage = suicidal_node.child("attack_damage").attribute("num").as_float();
@@ -86,7 +85,7 @@ void Obj_Suicidal::Attack()
 	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
 		if (target != nullptr
-			&& target->coll->GetTag() == Collider::TAG::PLAYER
+			&& target->coll->GetTag() == TAG::PLAYER
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
@@ -105,3 +104,4 @@ void Obj_Suicidal::Attack()
 		}
 	}
 }
+

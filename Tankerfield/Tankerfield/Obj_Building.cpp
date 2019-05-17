@@ -34,9 +34,9 @@ void Obj_Building::SetTexture(const char* path)
 	SDL_QueryTexture(texture, NULL, NULL, &frame.w, &frame.h);//Set the frame w & h to do sprite sorting correctly
 }
 
+
 void Obj_Building::SetCollider(const fRect & collider_rect)
 {
-	coll = app->collision->AddCollider(collider_rect.pos, collider_rect.w, collider_rect.h, Collider::TAG::WALL, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
+	coll = app->collision->AddCollider(collider_rect.pos, collider_rect.w, collider_rect.h, TAG::WALL, BODY_TYPE::STATIC, 0.f, this);
 }
 

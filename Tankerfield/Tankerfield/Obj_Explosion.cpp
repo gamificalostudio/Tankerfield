@@ -44,19 +44,22 @@ bool Obj_Explosion::Update(float dt)
 	{
 		float coll_w = 5.f;
 		float coll_h = 5.f;
+
 		coll = app->collision->AddCollider(
 			pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
 			coll_w,
 			coll_h,
-			Collider::TAG::BULLET,
+			TAG::BULLET,
+			BODY_TYPE::DYNAMIC,
 			explosion_damage,
 			nullptr);
-		coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+
+		coll->is_sensor = true;
 		coll->SetObjOffset(fPoint(coll_w*0.5f, coll_h*0.5f));
+
 	}
 	else if (frame_num == frame_damage + 1)
 	{
-		
 		coll->to_destroy = true;
 		coll = nullptr;
 	}

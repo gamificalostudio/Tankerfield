@@ -22,10 +22,13 @@
 #include "UI_Button.h"
 #include "UI_Slider.h"
 #include "UI_Checkbox.h"
+#include "UI_Table.h"
 #include "UI_TextPanel.h"
+#include "UI_InteractiveGroup.h"
 #include "UI_InGameElement.h"
 #include "UI_Bar.h"
 #include "UI_Quad.h"
+#include "UI_InputText.h"
 
 #include <vector>
 
@@ -286,15 +289,15 @@ void M_UI::FocusMouse()
 		switch (click_state)
 		{
 		case FocusState::ENTER:
-			selected_element->listener->OnClick(selected_element);
+			selected_element->listener->ClickDown(selected_element);
 			break;
 		case FocusState::REPEAT:
-			selected_element->listener->RepeatClick(selected_element);
+			selected_element->listener->ClickRepeat(selected_element);
 			break;
 		case FocusState::EXIT:
 			if (selected_element->hover_state != HoverState::NONE)
 			{
-				selected_element->listener->OutClick(selected_element);
+				selected_element->listener->ClickUp(selected_element);
 			}
 			break;
 		}
@@ -369,13 +372,13 @@ void M_UI::FocusMouse()
 		switch ((*item)->hover_state)
 		{
 		case HoverState::ENTER:
-			(*item)->listener->OnHover((*item));
+			(*item)->listener->OnHoverEnter((*item));
 			break;
 		case HoverState::REPEAT:
-			(*item)->listener->OnHover((*item));
+			(*item)->listener->OnHoverRepeat((*item));
 			break;
 		case HoverState::EXIT:
-			(*item)->listener->OutHover((*item));
+			(*item)->listener->OnHoverExit((*item));
 			break;
 		}
 	}
@@ -830,6 +833,29 @@ UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_L
 	return object;
 }
 
+UI_InteractiveGroup * M_UI::CreateIntearctiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener * listener)
+{
+	UI_InteractiveGroup* object = DBG_NEW UI_InteractiveGroup(position, definition, listener);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
+	return object;
+}
+
+UI_InputText * M_UI::CreateInputText(const fPoint position, const UI_InputTextDef definition, UI_Listener * listener)
+{
+	UI_InputText* object = DBG_NEW UI_InputText(position, definition, listener);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
+	return object;
+}
+
+UI_Table * M_UI::CreateTable(const fPoint position, const UI_TableDef definition,  int * widths, int * heights,  UI_Listener * listener)
+{
+	UI_Table* object = DBG_NEW UI_Table(position, definition, widths, heights, listener);
+	object->SetParent(main_ui_element);
+	elements_list.push_back(object);
+	return object;
+}
 
 UI_InGameElement*  M_UI::CreateInGameElement(const fPoint position, const UI_InGameElementDef definition)
 {

@@ -22,8 +22,8 @@ Obj_Portal::Obj_Portal(fPoint pos):Object(pos)
 
 	time.Start();
 
-	coll=app->collision->AddCollider(pos_map, 1, 1, Collider::TAG::PORTAL);
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	coll=app->collision->AddCollider(pos_map, 1, 1, TAG::PORTAL, BODY_TYPE::DYNAMIC );
+	coll->is_sensor = true;
 }
 
 Obj_Portal::~Obj_Portal()

@@ -135,9 +135,8 @@ bool M_Scene::Start()
 		box->SetTypeBox(PICKUP_TYPE::WEAPON);
 	}
 	
+	general_hud = DBG_NEW General_GUI();
 	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
-
-	general_hud = DBG_NEW General_HUD();
 
 	round = 1u;
 	stat_of_wave = WaveStat::EXIT_OF_WAVE;

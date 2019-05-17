@@ -53,7 +53,7 @@ void Obj_Enemy::Attack()
 	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
 		if (target != nullptr
-			&& target->coll->GetTag() == Collider::TAG::PLAYER
+			&& target->coll->GetTag() == TAG::PLAYER
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
@@ -372,7 +372,7 @@ inline void Obj_Enemy::Burn(const float & dt)
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	if (collider->GetTag() == TAG::BULLET_LASER)
 	{
 		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
 		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
@@ -412,7 +412,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 void Obj_Enemy::OnTrigger(Collider* collider)
 {
-	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
+	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 	{
 		life -= collider->damage;
 		damaged_sprite_timer.Start();

@@ -65,8 +65,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
-	coll = app->collision->AddCollider(pos, coll_w, coll_h, Collider::TAG::ENEMY, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::DYNAMIC);
+	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.0f });
 }
 
@@ -85,7 +84,7 @@ void Obj_RocketLauncher::Attack()
 	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
 		if (target != nullptr
-			&& target->coll->GetTag() == Collider::TAG::PLAYER
+			&& target->coll->GetTag() == TAG::PLAYER
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{

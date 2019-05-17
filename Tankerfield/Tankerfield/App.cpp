@@ -193,7 +193,7 @@ bool App::Start()
 			(*item)->enabled = true;
 			ret = (*item)->Start();
 		}
-		item++;
+		++item;
 	}
 	
 	startup_time.Start();

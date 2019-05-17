@@ -15,43 +15,34 @@
 class Object;
 class M_Collision;
 
+enum class TAG : int
+{
+	NONE = 0,
+	WALL,
+	WATER,
+	BULLET,
+	FRIENDLY_BULLET,
+	BULLET_LASER,
+	PORTAL,
+	ENEMY,
+	GOD,
+	REWARD_ZONE,
+	PICK_UP,
+	REWARD_BOX,
+	PLAYER,
+	ROAD,
+	MAX
+};
+
+enum class BODY_TYPE
+{
+	DYNAMIC,
+	STATIC
+};
 
 class Collider
 {
 public:
-	enum class TAG : int
-	{
-		NONE = 0,
-		WALL,
-		WATER,
-		BULLET,
-		FRIENDLY_BULLET,
-		BULLET_LASER,
-		PORTAL,
-		ENEMY,
-		GOD,
-		REWARD_ZONE,
-		PICK_UP,
-		REWARD_BOX,
-		PLAYER,
-		ROAD,
-		MAX
-	};
-
-	enum class ON_TRIGGER_STATE
-	{
-		NONE,
-		ENTER,
-		STAY,
-		EXIT
-	};
-
-	enum class BODY_TYPE
-	{
-		DYNAMIC,
-		STATIC,
-		SENSOR
-	};
 
 	enum class OVERLAP_DIR : int
 	{
@@ -63,12 +54,13 @@ public:
 		MAX
 	};
 
-	Collider(const fPoint pos,const  float width, const  float height, const float damage, const TAG tag, Object* object = nullptr) :
+	Collider(const fPoint pos, const  float width, const  float height, const float damage, const TAG tag, BODY_TYPE body, Object* object = nullptr) :
 		position(pos),
 		width(width),
 		height(height),
 		damage(damage),
 		tag(tag),
+		body_type(body),
 		object(object)
 	{}
 
@@ -89,12 +81,13 @@ public:
 		return object;
 	}
 
-	void GetSize(float & w, float & h) {
+	void GetSize(float & w, float & h) 
+	{
 		w = width;
 		h = height;
 	}
 
-	bool CheckCollision(Collider*  coll) const;
+	inline bool CheckCollision(Collider*  coll) const;
 
 	TAG GetTag() const
 	{
@@ -106,10 +99,7 @@ public:
 		tag = new_tag;
 	}
 
-	void AddRigidBody(const Collider::BODY_TYPE& new_body_type)
-	{
-		body_type = new_body_type;
-	}
+	void ActiveOnTrigger(bool value);
 
 	void Destroy();
 
@@ -119,6 +109,8 @@ public:
 
 	bool to_destroy = false;
   
+	bool is_sensor = false; // True = Avoid overlap resolve || Only in dynamic bodies
+
 private:
 
 	fPoint position = { 0.f , 0.f };
@@ -129,18 +121,19 @@ private:
 		
 	float height = 0.f;
 
-	Object * object = nullptr;
+	// Collision vars ==============================================
+
+	bool active_on_trigger = true;
 
 	TAG tag = TAG::NONE;
 
 	std::list<Collider*> collisions_list;
 
-
-	// Body vars ===================================================
-
-	BODY_TYPE body_type = BODY_TYPE::STATIC;
+	Object * object = nullptr;
 
 	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
+
+	BODY_TYPE body_type = BODY_TYPE::STATIC;
 
 	friend M_Collision;
 	friend M_ObjManager;
@@ -162,9 +155,9 @@ public:
 
 	bool Reset();
 
-	Collider* AddCollider(fPoint pos, float width, float height, Collider::TAG type, float damage=0.f, Object* object = nullptr);
+	Collider* AddCollider(fPoint pos, float width, float height, TAG tag, BODY_TYPE body ,float damage=0.f, Object* object = nullptr);
 
-	Collider* AddCollider(float x, float y, float width, float height, Collider::TAG type, float damage = 0.f, Object* object = nullptr);
+private:
 
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
@@ -174,17 +167,25 @@ public:
 
 	inline void DoOnTriggerExit(Collider* c1, Collider *c2);
 
-private:
-
 	void DestroyColliders();
 
 private:
 
-	std::list<Collider*> colliders;
+	std::list<Collider*> static_colliders;
 
-	bool matrix[(int)Collider::TAG::MAX][(int)Collider::TAG::MAX];
+	std::list<Collider*> dynamic_colliders;
+
+	std::list<Collider*> colliders_to_add;
+
+	std::map<Collider* ,bool> mod_on_trigger_colliders;
+
+	bool matrix[(int)TAG::MAX][(int)TAG::MAX];
+
+	bool is_updating = false;
 
 	bool debug = false;
+
+	friend Collider;
 };
 
 #endif // __j1Collision_H__

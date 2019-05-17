@@ -5,10 +5,10 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="0" />  
+    <mode value ="0" />
 
   </app>
-	
+
   <renderer>
     <vsync value="true"/>
   </renderer>
@@ -20,7 +20,7 @@
     <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
-  
+
   <animations_bank>animations.xml</animations_bank>
 
     <scene>
@@ -43,7 +43,7 @@
         <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
       </sounds>
   </scene>
-  
+
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
@@ -154,30 +154,30 @@
           <frame x= "295 " y= "235" w="25" h="25" />
         </dir>
       </orange_arrow>
-      
+
     </animations>
   </ui>
 
   <map>
-   <folder>Maps/</folder>
-      <levels>
-        <level name="Map2.tmx"/>
-      </levels>
+    <folder>Maps/</folder>
+    <levels>
+      <level name="Map2.tmx"/>
+    </levels>
   </map>
 
 
 
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
-    <percentage_spawn_reward_box value="80"/>   
+    <percentage_spawn_reward_box value="80"/>
   </pick_manager>
-  
+
   <object>
     <reward_box>
       <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
-    
+
     <tesla_trooper>
       <teleport_max_enemies num="100"/>
       <speed num="3"/>
@@ -206,7 +206,7 @@
       <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
     </suicidal>
     <brute>
-     
+
     </brute>
     <tank>
       <speed value ="1"/>
@@ -222,12 +222,14 @@
         <base_pink>textures/objects/tank/base - pink.png</base_pink>
         <base_blue>textures/objects/tank/base - blue.png</base_blue>
         <base_shadow>textures/objects/tank/base_shadow.png</base_shadow>
+
         <turr>textures/objects/tank/new_tur1.png</turr>
         <turr_orange>textures/objects/tank/new_tur1.png</turr_orange>
         <turr_green>textures/objects/tank/new_tur1.png</turr_green>
         <turr_pink>textures/objects/tank/new_tur1.png</turr_pink>
         <turr_blue>textures/objects/tank/new_tur1.png</turr_blue>
         <turr_shadow>textures/objects/tank/new_tur1_shadow.png</turr_shadow>
+
         <cycle_bar_tex>textures/objects/tank/circle-loading-bar.png</cycle_bar_tex>
       </spritesheets>
       <sounds>
@@ -528,16 +530,16 @@
       <animations>
         <cannon_fire speed ="30" loop ="false">
           <dir>
-              <frame num ="01" x="0"   y="0"   w="148" h="158"/>
-              <frame num ="02" x="148" y="0"   w="148" h="158"/>
-              <frame num ="03" x="296" y="0"   w="148" h="158"/>
-              <frame num ="04" x="444" y="0"   w="148" h="158"/>
-              <frame num ="05" x="592" y="0"   w="148" h="158"/>
-              <frame num ="06" x="740" y="0"   w="148" h="158"/>
-              <frame num ="07" x="0"   y="158" w="148" h="158"/>
-              <frame num ="08" x="148" y="158" w="148" h="158"/>
-              <frame num ="09" x="296" y="158" w="148" h="158"/>
-              <frame num ="10" x="444" y="158" w="148" h="158"/>
+            <frame num ="01" x="0"   y="0"   w="148" h="158"/>
+            <frame num ="02" x="148" y="0"   w="148" h="158"/>
+            <frame num ="03" x="296" y="0"   w="148" h="158"/>
+            <frame num ="04" x="444" y="0"   w="148" h="158"/>
+            <frame num ="05" x="592" y="0"   w="148" h="158"/>
+            <frame num ="06" x="740" y="0"   w="148" h="158"/>
+            <frame num ="07" x="0"   y="158" w="148" h="158"/>
+            <frame num ="08" x="148" y="158" w="148" h="158"/>
+            <frame num ="09" x="296" y="158" w="148" h="158"/>
+            <frame num ="10" x="444" y="158" w="148" h="158"/>
           </dir>
         </cannon_fire>
       </animations>
@@ -580,15 +582,15 @@
       <animations>
         <portal speed="10" rotation="counter-clockwise" first_dir_angle ="0" loop ="true">
           <dir>
-          <frame x="0" y="0" w="40" h="40"/>
-          <frame x="40" y="0" w="40" h="40"/>
-          <frame x="80" y="0" w="40" h="40"/>
-          <frame x="0" y="40" w="40" h="40"/>
-          <frame x="40" y="40" w="40" h="40"/>
-          <frame x="80" y="40" w="40" h="40"/>
-          <frame x="0" y="80" w="40" h="40"/>
-          <frame x="40" y="80" w="40" h="40"/>
-          <frame x="80" y="80" w="40" h="40"/>
+            <frame x="0" y="0" w="40" h="40"/>
+            <frame x="40" y="0" w="40" h="40"/>
+            <frame x="80" y="0" w="40" h="40"/>
+            <frame x="0" y="40" w="40" h="40"/>
+            <frame x="40" y="40" w="40" h="40"/>
+            <frame x="80" y="40" w="40" h="40"/>
+            <frame x="0" y="80" w="40" h="40"/>
+            <frame x="40" y="80" w="40" h="40"/>
+            <frame x="80" y="80" w="40" h="40"/>
           </dir>
         </portal>
       </animations>
