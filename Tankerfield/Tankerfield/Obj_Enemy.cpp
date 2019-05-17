@@ -60,31 +60,15 @@ bool Obj_Enemy::Update(float dt)
 
 void Obj_Enemy::ChangeTexture()
 {
-//<<<<<<< HEAD
-//	if ((damaged_sprite_timer.Read() > damaged_sprite_time))
-//	{
-//		if (oiled == false) 
-//		{
-//			curr_tex = tex;
-//		}
-//		else
-//		{
-//			curr_tex = oiled_tex;
-//		}
-//	}
-//
-//=======
-//	
-//	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
-//		curr_tex != tex && 
-//		state != ENEMY_STATE::STUNNED &&
-//		state != ENEMY_STATE::STUNNED_CHARGED)
-//	{
-//		curr_tex = last_texture;
-//		in_white = false;
-//	}
-//	
-//>>>>>>> development
+	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
+		curr_tex != tex && 
+		state != ENEMY_STATE::STUNNED &&
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		oiled==false)
+	{
+		curr_tex = last_texture;
+		in_white = false;
+	}
 }
 
 void Obj_Enemy::Attack()
@@ -620,6 +604,7 @@ void Obj_Enemy::Oiled()
 	if (oiled == true)
 	{
 		speed = original_speed / 2;
+		curr_tex = oiled_tex;
 	}
 
 	if (oiled_timer.Read() >= 5000)

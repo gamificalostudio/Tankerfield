@@ -360,55 +360,6 @@ void Obj_Tank::ShootDoubleMissileCharged()
 	missile_ptr->explosion_damage = weapon_info.shot1.explosion_damage;
 }
 
-void Obj_Tank::ShootDoubleMissileCharged()
-{
-	fPoint double_missiles_offset = shot_dir;
-	double_missiles_offset.RotateDegree(90);
-	float missiles_offset = 0.2f;
-
-	Bullet_Missile * left_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
-	left_missile->SetPlayer(this);
-
-	Bullet_Missile * right_missile = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
-	right_missile->SetPlayer(this);
-
-	Bullet_Missile * left_missile2 = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
-	left_missile2->SetPlayer(this);
-
-	Bullet_Missile * right_missile2 = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
-	right_missile2->SetPlayer(this);
-
-	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
-
-	left_missile->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-
-	right_missile->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-
-	left_missile2->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-
-	right_missile2->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-}
-
 void Obj_Tank::ShootHealingShot()
 {
 	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir);

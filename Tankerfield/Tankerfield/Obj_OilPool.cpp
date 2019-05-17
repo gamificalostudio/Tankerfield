@@ -6,8 +6,8 @@ Obj_OilPool::Obj_OilPool(fPoint pos) : Object(pos)
 {
 	time.Start();
 
-	coll=app->collision->AddCollider(pos_map, 5, 5, Collider::TAG::OIL_POOL);
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	coll=app->collision->AddCollider(pos_map, 5, 5, TAG::OIL_POOL, BODY_TYPE::DYNAMIC);
+	coll->is_sensor = true;
 }
 
 Obj_OilPool::~Obj_OilPool()

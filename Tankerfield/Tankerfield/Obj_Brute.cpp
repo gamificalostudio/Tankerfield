@@ -95,16 +95,11 @@ void Obj_Brute::ChangeTexture()
 		damaged_sprite_timer.Read() > damaged_sprite_time &&
 		curr_tex != tex &&
 		state != ENEMY_STATE::STUNNED &&
-		state != ENEMY_STATE::STUNNED_CHARGED)
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		oiled == false)
 	{
-		if (oiled == false)
-		{
-			curr_tex = tex;
-		}
-		else
-		{
-			curr_tex = oiled_tex;
-		}
+		curr_tex = last_texture;
+		in_white = false;
 	}
 }
 

@@ -86,16 +86,13 @@ protected:
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * oiled_tex = nullptr;
+	SDL_Texture * tex_electro_dead = nullptr;
 
 	/* Attack properties */
 	float attack_frequency = 0.f;
 	float attack_range = 0.f;//Tile distance in which the enemy can attack
 	float attack_range_squared = 0.f;
 	int attack_damage = 0;
-
-	SDL_Texture * tex = nullptr;
-	SDL_Texture * tex_damaged = nullptr;
-	SDL_Texture * tex_electro_dead = nullptr;
 
 	iPoint normal_draw_offset = { 0, 0 };
 	iPoint electrocuted_draw_offset = { 0, 0 };

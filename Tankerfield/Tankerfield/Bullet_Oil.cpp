@@ -24,8 +24,8 @@ bool Bullet_Oil::Start()
 
 	draw_offset = { 35, 14 };
 
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, Collider::TAG::BULLET_OIL, 0.f, this);
+	coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_OIL, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->SetObjOffset({ -0.25f, -0.25f });
-
+	coll->is_sensor = true;
 	return true;
 }

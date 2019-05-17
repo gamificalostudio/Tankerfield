@@ -112,7 +112,7 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_LASER];
 		break;
 	case WEAPON::OIL:
-		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_OIL];
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_OIL_SHOT];
 		break;
 	case WEAPON::BASIC:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_BASIC];
