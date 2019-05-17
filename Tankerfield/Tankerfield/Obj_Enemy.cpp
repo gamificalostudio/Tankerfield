@@ -38,7 +38,7 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 
 	times_to_repeat_animation = 3u;
 
-
+	
 	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
 	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 
@@ -61,8 +61,7 @@ void Obj_Enemy::ChangeTexture()
 	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
 		curr_tex != tex && 
 		state != ENEMY_STATE::STUNNED &&
-		state != ENEMY_STATE::STUNNED_CHARGED &&
-		state != ENEMY_STATE::DEAD)
+		state != ENEMY_STATE::STUNNED_CHARGED)
 	{
 		curr_tex = last_texture;
 	}
@@ -552,6 +551,7 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 {
 	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 	{
+		in_white = true;
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;

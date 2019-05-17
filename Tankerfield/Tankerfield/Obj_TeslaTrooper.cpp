@@ -44,6 +44,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	portal_tex = app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	curr_tex = tex;
+	last_texture = tex;
 
 
 	//ANIMATIONS =============================================
