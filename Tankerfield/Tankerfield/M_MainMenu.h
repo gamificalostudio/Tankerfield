@@ -56,7 +56,7 @@ public:
 
 	bool OnHoverRepeat(UI_Element * element);
 
-	bool ClickDown(UI_Element * element);
+	bool ClickUp(UI_Element * element);
 
 private:
 
@@ -98,6 +98,7 @@ private:
 	std::vector<SDL_Color>  colors;
 	UI_InteractiveGroup* selection_panel = nullptr;
 
+	bool              selection_finished = false;
 	bool              exit_game = false;
 };
 
