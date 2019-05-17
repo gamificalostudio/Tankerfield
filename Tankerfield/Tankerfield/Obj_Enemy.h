@@ -15,7 +15,10 @@ enum class ENEMY_STATE
 	GET_TELEPORT_POINT,
 	TELEPORT_IN,
 	TELEPORT_OUT,
+	BURN,
 	DEAD,
+	STUNNED,
+	STUNNED_CHARGED,
 };
 
 class Obj_Enemy : public Object
@@ -27,15 +30,34 @@ public:
 
 	virtual void ChangeTexture();
 
-	void Attack();
+	virtual void Attack();
 
-	virtual void Movement(float &dt);
+	void OnTriggerEnter(Collider * collider);
+
+	void OnTrigger(Collider* collider);
+
+	inline bool IsOnGoal(fPoint goal); //const?
+
+	void DrawDebug(const Camera* camera)override;
+
+	virtual bool Draw(float dt, Camera* camera)override;
+
+	virtual  bool Start() override;
+
+protected:
+	inline void UpdateVelocity();
+
+	inline void UpdatePos(const float& dt);
+
+	inline virtual void Movement(float &dt);
 
 	virtual void Spawn(const float& dt) {};
 
-	void RecheadPoint();
+	inline void RecheadPoint();
 
-	void Dead();
+	inline void Dead();
+
+	void ElectroDead();
 
 	inline virtual void Idle();
 
@@ -49,22 +71,14 @@ public:
 
 	inline virtual void TeleportOut(float & dt) {};
 
-	void OnTriggerEnter(Collider * collider);
-
-	void OnTrigger(Collider* collider);
-
-	inline bool IsOnGoal(fPoint goal); //const?
-
-	void DrawDebug(const Camera* camera)override;
-
-	bool Draw(float dt, Camera* camera)override;
+	inline virtual void Burn(const float& dt);
 
 	bool CleanUp() override;
 
 	void Oiled();
 
 protected:
-	inline void UpdateVelocity();
+
 
 	int life = 0;
 	float speed = 0.f;
@@ -73,7 +87,29 @@ protected:
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * oiled_tex = nullptr;
 
+	/* Attack properties */
+	float attack_frequency = 0.f;
+	float attack_range = 0.f;//Tile distance in which the enemy can attack
+	float attack_range_squared = 0.f;
+	int attack_damage = 0;
+
+	SDL_Texture * tex = nullptr;
+	SDL_Texture * tex_damaged = nullptr;
+	SDL_Texture * tex_electro_dead = nullptr;
+
+	iPoint normal_draw_offset = { 0, 0 };
+	iPoint electrocuted_draw_offset = { 0, 0 };
+
+	SDL_Texture* burn_texture = nullptr;
+	SDL_Texture* last_texture = nullptr;
+
+	bool in_white = false;
+
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
+	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
+	Animation* anim_saved;
+	SDL_Texture* tex_saved = nullptr;
+	bool is_electro_dead = false;
 
 	Timer update_velocity_vec;
 	Timer damaged_sprite_timer;
@@ -86,6 +122,11 @@ protected:
 	Animation walk;
 	Animation attack;
 	Animation death;
+	Animation burn;
+	Animation dying_burn;
+	
+
+	Animation electro_dead;
 
 	float scale = 0.f;
 
@@ -105,16 +146,30 @@ protected:
 	PerfTimer perf_timer;
 	Timer path_timer;
 
-	/* Attack properties */
-	float attack_frequency = 0.f;
-	float attack_range = 0.f;//Tile distance in which the enemy can attack
-	float attack_range_squared = 0.f;
-	int attack_damage = 0;
-
 	fPoint move_vect = { 0.0f, 0.0f };
 	float check_path_time = 0.f;
 	fPoint next_pos = { 0.f, 0.f };
 	float detection_range = 0.0f;
+
+
+	uint times_to_repeat_animation = 0u;
+	uint times_animation_repeated = 0u;
+	bool stun_charged = false;
+
+	uint electocuted;
+	uint channel_electrocuted;
+
+	// Burn state variables------
+	bool burn_fist_enter = true;
+	Timer timer_change_direction;
+	
+
+	float max_time_change_direction = 0.5f;
+	float fire_damage = 0;
+
+	//Collider* life_collider = nullptr;
+
+
 };
 
 #endif

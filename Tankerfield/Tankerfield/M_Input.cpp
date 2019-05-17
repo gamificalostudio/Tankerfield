@@ -84,6 +84,7 @@ bool M_Input::PreUpdate()
 	UpdateKeyboardState();
 	UpdateMouseState();
 
+
 	while(SDL_PollEvent(&event) != 0)
 	{
 		switch(event.type)
@@ -205,6 +206,11 @@ bool M_Input::PreUpdate()
 				}
 				break;
 			}
+			case SDL_TEXTINPUT:
+			{
+				input_text = (std::string)event.text.text;
+			}
+				
 		}
 	}
 

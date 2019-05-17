@@ -17,8 +17,8 @@
 
 Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 {
-	coll = app->collision->AddCollider(pos, 1, 1, Collider::TAG::PICK_UP, 0.f, this);
-	coll->AddRigidBody(Collider::BODY_TYPE::SENSOR);
+	coll = app->collision->AddCollider(pos, 1, 1, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll->is_sensor = true;
 	type_of_pick_up = RandomPickUp();
 
 	frame.w = 1;
@@ -77,7 +77,14 @@ PICKUP_TYPE Obj_PickUp::RandomPickUp() const
 
 WEAPON Obj_PickUp::RandomWeapon() 
 {
-	level_of_weapon = app->scene->round;
+	if (app->scene->round != 0)
+	{
+		level_of_weapon = app->scene->round;
+	}
+	else
+	{
+		level_of_weapon = 1;
+	}
 	return (WEAPON)(rand() % ((uint)WEAPON::MAX_WEAPONS - 1)+1 /*The plus 1 is because the basic shoot is the number 0, and it can't be created, and the -1 is because the max weapon include the basic bullet*/);
 }
 

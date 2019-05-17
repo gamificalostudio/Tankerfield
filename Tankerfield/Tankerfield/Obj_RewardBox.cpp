@@ -31,8 +31,7 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 
 	life = 1;
 
-	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , Collider::TAG::REWARD_BOX, 0.f, this);//width and height hardcoded
-	coll->AddRigidBody(Collider::BODY_TYPE::STATIC);
+	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);//width and height hardcoded
 }
 
 Obj_RewardBox::~Obj_RewardBox()
@@ -43,7 +42,7 @@ Obj_RewardBox::~Obj_RewardBox()
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET || collider->GetTag() == Collider::TAG::FRIENDLY_BULLET || collider->GetTag() == Collider::TAG::BULLET_LASER)
+	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER)
 	{
 		GetDamage(collider->damage);
 	}
@@ -87,35 +86,46 @@ void Obj_RewardBox::GetDamage(float damage)
 void Obj_RewardBox::Dead()
 {
 	uint probability = rand() % 100;
-
-	if (probability < 15)
+	if (type == PICKUP_TYPE::NO_TYPE)
 	{
-		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
+		if (probability < 15)
+		{
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
+		}
+
+		else if (probability < 25)
+		{
+			fPoint offset{ 0.5f,0 };
+			app->pick_manager->CreatePickUp(pos_map - offset, PICKUP_TYPE::ITEM);
+			app->pick_manager->CreatePickUp(pos_map + offset, PICKUP_TYPE::ITEM);
+		}
+
+		else if (probability < 75)
+		{
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
+		}
+
+		else if (probability < 100)
+		{
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
+		}
+
+		if (my_spawn_point != nullptr)
+		{
+			my_spawn_point->occupied = false;
+		}
 	}
-
-	else if (probability < 25)
+	else
 	{
-		fPoint offset{ 0.5f,0 };
-		app->pick_manager->CreatePickUp(pos_map - offset, PICKUP_TYPE::ITEM);
-		app->pick_manager->CreatePickUp(pos_map + offset, PICKUP_TYPE::ITEM);
-	}
-
-	else if (probability < 75)
-	{
-		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
-	}
-
-	else if (probability < 100)
-	{
-		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
-	}
-
-	if (my_spawn_point != nullptr)
-	{
-		my_spawn_point->occupied = false;
+		app->pick_manager->CreatePickUp(pos_map, type);
 	}
 	to_remove = true;
 
 	app->audio->PlayFx(reward_box_dead_sound_int);
+}
+
+void Obj_RewardBox::SetTypeBox(PICKUP_TYPE type)
+{
+	this->type = type;
 }
 

@@ -41,7 +41,7 @@ public:
 
 	void PauseMusic(int fade_out);
 
-	void PauseFx(unsigned int id, int fade_out);
+	void PauseFx(unsigned int id, int fade_out = 1);
 
 public:
 	uint GetExplosionFx();

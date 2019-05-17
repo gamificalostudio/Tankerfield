@@ -21,9 +21,9 @@ public:
 	void SetExplosionDamage(float damage);
 
 private:
-	bool death = false;
-	int frame_explosion = 0;
-
+	int frame_num = 0;
+	int frame_damage = 0;
+	int explosion_damage = 0;
 	Animation anim;
 	SDL_Texture * tex = nullptr;
 };

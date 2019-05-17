@@ -11,11 +11,23 @@
 #include "M_Render.h"
 #include "M_Scene.h"
 #include "M_Pathfinding.h"
+#include "M_AnimationBank.h"
+#include "M_Map.h"
+#include "ElectroShotAnimation.h"
+
 
 
 
 Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 {
+	pugi::xml_node enemie_node = app->config.child("object").child("enemies");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node;
+
+	tex_electro_dead = app->tex->Load(enemie_node.child("tex_electro_dead").child_value());
+	electro_dead.frames = app->anim_bank->LoadFrames(anim_node.child("electro_dead"));
+
+	electocuted = app->audio->LoadFx("audio/Fx/entities/enemies/electrocuted.wav",25);
+
 	damaged_sprite_time = 150;
 	//colision si se puede desactivar
 
@@ -23,6 +35,9 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 
 	range_pos.center = pos_map;
 	range_pos.radius = 0.5f;
+
+	times_to_repeat_animation = 3u;
+
 
 	path_timer.Start();
 }
@@ -34,23 +49,42 @@ bool Obj_Enemy::Update(float dt)
 	ChangeTexture();
 	Oiled();
 
+	if (in_white)
+	{
+		ChangeTexture();
+	}
+	//if (life_collider != nullptr)
+	//	life_collider->SetPosToObj();
 	return true;
 }
 
 void Obj_Enemy::ChangeTexture()
 {
-	if ((damaged_sprite_timer.Read() > damaged_sprite_time))
-	{
-		if (oiled == false) 
-		{
-			curr_tex = tex;
-		}
-		else
-		{
-			curr_tex = oiled_tex;
-		}
-	}
-
+//<<<<<<< HEAD
+//	if ((damaged_sprite_timer.Read() > damaged_sprite_time))
+//	{
+//		if (oiled == false) 
+//		{
+//			curr_tex = tex;
+//		}
+//		else
+//		{
+//			curr_tex = oiled_tex;
+//		}
+//	}
+//
+//=======
+//	
+//	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
+//		curr_tex != tex && 
+//		state != ENEMY_STATE::STUNNED &&
+//		state != ENEMY_STATE::STUNNED_CHARGED)
+//	{
+//		curr_tex = last_texture;
+//		in_white = false;
+//	}
+//	
+//>>>>>>> development
 }
 
 void Obj_Enemy::Attack()
@@ -58,7 +92,7 @@ void Obj_Enemy::Attack()
 	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
 	{
 		if (target != nullptr
-			&& target->coll->GetTag() == Collider::TAG::PLAYER
+			&& target->coll->GetTag() == TAG::PLAYER
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
@@ -109,6 +143,7 @@ void Obj_Enemy::Movement(float &dt)
 	case ENEMY_STATE::RECHEAD_POINT:
 	{
 		RecheadPoint();
+
 	}
 	break;
 
@@ -129,13 +164,59 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case  ENEMY_STATE::DEAD:
 	{
-		Dead();
+		if (!is_electro_dead)
+		{
+			Dead();
+		}
+		else
+		{
+			ElectroDead();
+		}
 	}
 	break;
+	case ENEMY_STATE::STUNNED:
+	{
+		
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		draw_offset = electrocuted_draw_offset;
+		if ((int)electro_dead.current_frame >= 4)
+		{
+			electro_dead.Reset();
+
+			if (stun_charged && times_animation_repeated >= times_to_repeat_animation || !stun_charged)
+			{
+				times_animation_repeated = 0u;
+				state = state_saved;
+				curr_tex = tex;
+				curr_anim = anim_saved;
+				app->audio->PauseFx(channel_electrocuted, 1);
+				draw_offset = normal_draw_offset;
+			}
+			else
+			{
+				++times_animation_repeated;
+				app->audio->PauseFx(channel_electrocuted);
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				
+			}
+		}
+	}
+	break;
+
+
+	case ENEMY_STATE::BURN:
+	{
+		Burn(dt);
+	}
+		break;
+
 	default:
 		assert(true && "The enemy have no state");
 		break;
 	}
+
+	curr_anim = curr_anim;
 
 }
 
@@ -171,7 +252,32 @@ void Obj_Enemy::Dead()
 		if (death.Finished())
 		{
 			to_remove = true;
-			
+
+		}
+	}
+}
+
+void Obj_Enemy::ElectroDead()
+{
+	if (curr_anim != &electro_dead)
+	{
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		app->audio->PlayFx(sfx_death);
+		draw_offset = electrocuted_draw_offset;
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+	}
+	else
+	{
+		if (electro_dead.Finished())
+		{
+			to_remove = true;
+			app->audio->PauseFx(channel_electrocuted);
+
 		}
 	}
 }
@@ -203,20 +309,24 @@ int Obj_Enemy::Move(float & dt)
 		state = ENEMY_STATE::RECHEAD_POINT;
 	}
 
+	
+
 	if (update_velocity_vec.ReadSec() > 1)
 	{
 		UpdateVelocity();
 	}
 
-	pos_map += move_vect * speed * dt;
-	range_pos.center = pos_map;
+
 	curr_anim = &walk;
 
 	if (path_timer.ReadSec() >= check_path_time)
 		state = ENEMY_STATE::GET_PATH;
 
+	UpdatePos(dt);
 	return 0;
 }
+
+
 
 void Obj_Enemy::GetPath()
 {
@@ -256,14 +366,26 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 		&frame,
 		scale,
 		scale);
+
 	
 
+	return true;
+}
+
+bool Obj_Enemy::Start()
+{
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	return true;
 }
 
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->ReduceNumEnemies();
+
+	to_remove = true;
 	return true;
 }
 
@@ -276,6 +398,12 @@ inline void Obj_Enemy::UpdateVelocity()
 		move_vect = new_move_vec;
 		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
 	}
+}
+
+inline void Obj_Enemy::UpdatePos(const float& dt)
+{
+	pos_map += move_vect * speed * dt;
+	range_pos.center = pos_map;
 }
 
 void Obj_Enemy::DrawDebug(const Camera* camera)
@@ -292,9 +420,64 @@ void Obj_Enemy::DrawDebug(const Camera* camera)
 
 }
 
+inline void Obj_Enemy::Burn(const float & dt)
+{
+	if (burn_fist_enter)
+	{
+		curr_anim = &burn;
+		fire_damage = life / 3;
+		if (burn_texture != nullptr)
+			curr_tex = burn_texture;
+
+	
+	}
+	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
+	{
+		if (life > 0)
+		{
+			int max_rand = 101;
+			int max_rand_double = max_rand * 2;
+			float one_divided_by_100 = 0.01f;
+
+			move_vect = { ((rand() % max_rand_double) - max_rand)* one_divided_by_100 ,((rand() % max_rand_double) - max_rand)*one_divided_by_100 };
+			move_vect.Normalize();
+
+			angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+
+			timer_change_direction.Start();
+
+			max_time_change_direction = (rand() % max_rand)*one_divided_by_100;
+			max_time_change_direction += 0.5f;
+			life -= fire_damage;
+		}
+		else
+		{
+			curr_anim = &dying_burn;
+			if (coll != nullptr)
+			{
+				coll->Destroy();
+				coll = nullptr;
+			}
+			
+		}
+
+		if (burn_fist_enter)
+			burn_fist_enter = false;
+	}
+
+	if (life > 0)
+		UpdatePos(dt);
+	else if (curr_anim == &dying_burn && curr_anim->Finished())
+	{
+		CleanUp();
+	}
+
+}
+
+
 void Obj_Enemy::OnTriggerEnter(Collider * collider)
 {
-	if (collider->GetTag() == Collider::TAG::BULLET_LASER)
+	if (collider->GetTag() == TAG::BULLET_LASER)
 	{
 		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
 		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
@@ -302,7 +485,9 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
+			last_texture = curr_tex;
 			curr_tex = tex_damaged;
+			in_white = true;
 
 			if (life <= 0)
 			{
@@ -328,12 +513,61 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 		}
 
 	}
-}
 
-void Obj_Enemy::OnTrigger(Collider* collider)
-{
-	if ((collider->GetTag() == Collider::TAG::BULLET) || (collider->GetTag() == Collider::TAG::FRIENDLY_BULLET))
+	if (collider->GetTag() == TAG::ELECTRO_SHOT)
 	{
+		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+		//player->draw_electro_shot = true;
+		
+		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
+		{
+			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
+			
+			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
+			electro_anim->distance = player->pos_screen.DistanceTo(this->pos_screen);
+			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
+
+			player->GetEnemiesHitted()->push_back(this);
+			player->hit_no_enemie = false;
+
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+			/*curr_tex = tex_damaged;*/
+			//float player_enemy_distance = player->pos_map.DistanceTo(this->pos_map);
+			
+			if (life <= 0)
+			{
+				// DROP A PICK UP ITEM 
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				app->pick_manager->PickUpFromEnemy(pos_map);
+				state = ENEMY_STATE::DEAD;
+				is_electro_dead = true;
+				
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				state_saved = state;
+				
+				anim_saved = curr_anim;
+			
+				state = ENEMY_STATE::STUNNED;
+				if (player->GetIsElectroShotCharged())
+				{
+					stun_charged = true;
+				}
+				else
+				{
+					stun_charged = false;
+				}
+			}
+		}
+	}
+	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
+	{
+		in_white = true;
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
@@ -348,8 +582,7 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 			app->audio->PlayFx(sfx_hit);
 		}
 	}
-
-	else if (collider->GetTag() == Collider::TAG::BULLET_OIL)
+	else if (collider->GetTag() == TAG::BULLET_OIL)
 	{
 		life -= collider->damage;
 		oiled = true;
@@ -368,12 +601,13 @@ void Obj_Enemy::OnTrigger(Collider* collider)
 		}
 	}
 
-	else if (collider->GetTag() == Collider::TAG::OIL_POOL)
+	else if (collider->GetTag() == TAG::OIL_POOL)
 	{
 		oiled = true;
 		oiled_timer.Start();
 	}
 }
+
 
 bool Obj_Enemy::IsOnGoal(fPoint goal)
 {

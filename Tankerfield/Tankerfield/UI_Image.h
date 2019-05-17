@@ -25,6 +25,7 @@ public:
 public:
 
 	Animation* image_animation = nullptr;
+
 };
 
 #endif // _IMAGE_H__

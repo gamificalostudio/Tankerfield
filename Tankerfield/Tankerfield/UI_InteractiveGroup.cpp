@@ -2,96 +2,188 @@
 #include "M_Input.h"
 #include "App.h"
 #include "Obj_Tank.h"
+#include "Log.h"
+#include "UI_Image.h"
+#include <assert.h>
 
 
 UI_InteractiveGroup::UI_InteractiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener * listener) : UI_Element( position, definition, listener) , columns(definition.columns), rows(definition.rows)
 {
-	for (int i = 0; i < rows* columns; ++i)
+	group_elements = new UI_Element*[rows * columns];
+
+	for ( int i = 0 ; i < rows * columns ; ++i)
 	{
-		group_elements.push_back(nullptr);
+		group_elements[i] = nullptr;
 	}
+
+	focus_image = app->ui->CreateImage({ 0.F,0.F }, UI_ImageDef({ 255, 265, 126,126 }));
+	focus_image->SetParent(this);
 }
 
 UI_InteractiveGroup::~UI_InteractiveGroup()
 {
-
+	if (app->on_clean_up == false)
+	{
+		focus_image->Destroy();
+	}
 }
 
 bool UI_InteractiveGroup::Update(float dt)
 {
 
-	for (std::vector<Obj_Tank*>::iterator iterator = app->objectmanager->obj_tanks.begin(); iterator != app->objectmanager->obj_tanks.end(); ++iterator)
+	if ( current_controller != nullptr && (*current_controller) != nullptr)
 	{
-		Controller* controller = (*iterator)->GetController();
+		Controller* controller = (*current_controller);
 
-		(*iterator)->GetTankNum();
-
-		if (controller == nullptr)
+		if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN)
 		{
-			continue;
+			current_focus = GetNearestElement(current_focus, CONTROLLER_DIR::UP);
 		}
-		else
+		if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN)
 		{
-
+			current_focus = GetNearestElement(current_focus, CONTROLLER_DIR::DOWN);
 		}
+		if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN)
+		{
+			current_focus = GetNearestElement(current_focus, CONTROLLER_DIR::RIGHT);
+		}
+		if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN)
+		{
+			current_focus = GetNearestElement(current_focus, CONTROLLER_DIR::LEFT);
+		}
+
+		UI_Element* element = GetElement(current_focus);
+
+		focus_image->SetPos(element->position);
+		focus_image->SetParent(element);
 	}
+
+	return true;
+}
+
+bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
+{
+	current_focus = GetPos(element);
+	focus_image->SetPos(element->position);
+	focus_image->SetParent(element);
+
+	listener->OnHoverEnter(this);
+
+	return true;
+}
+
+bool UI_InteractiveGroup::OnHoverRepeat(UI_Element * object)
+{
+	listener->OnHoverRepeat(this);
 
 	return true;
 }
 
 void UI_InteractiveGroup::SetElement(UI_Element* element, const iPoint position)
 {
-	group_elements[position.y * columns + position.x] = element;
+
+	if (element == nullptr || position.x >= columns || position.y >= rows)
+	{
+		LOG("Imposible Set Element");
+		return;
+	}
+
+	group_elements[ (position.y * columns ) + position.x] = element;
+	element->SetParent(this);
+	element->SetListener(this);
+	element->section_width = element->sprite_rect.w;
+	element->section_height= element->sprite_rect.h;
+
+	app->ui->AddInteractiveElement(element);
 }
 
-UI_Element* UI_InteractiveGroup::GetNearestElement(PlayerFocus * player_focus, CONTROLLER_DIR dir)
+void UI_InteractiveGroup::SetController(Controller ** controller)
 {
-	UI_Element* current_element = GetElement( player_focus->focused_element);
-	UI_Element* focused_element = nullptr;
+	current_controller = controller;
+}
+
+iPoint UI_InteractiveGroup::GetNearestElement( const iPoint current_focus,  const CONTROLLER_DIR dir)
+{
+	iPoint new_focus_pos = current_focus;
 
 	switch (dir)
 	{
 	case CONTROLLER_DIR::UP:
-
-
+		new_focus_pos.y -= 1;
 		break;
-
 	case CONTROLLER_DIR::DOWN:
-
-
+		new_focus_pos.y += 1;
 		break;
-
 	case CONTROLLER_DIR::RIGHT:
-
-
+		new_focus_pos.x += 1;
 		break;
-
 	case CONTROLLER_DIR::LEFT:
-
+		new_focus_pos.x -= 1;
 		break;
 	}
 
-	if ( ElementIsFocused(focused_element) == false)
+
+	if (new_focus_pos.x < 0)
 	{
-		return focused_element;
+		new_focus_pos.x = columns - 1;
 	}
-	else
+	else if (new_focus_pos.x > columns -1)
 	{
-		return  current_element;
+		new_focus_pos.x = 0;
 	}
+
+	if (new_focus_pos.y < 0)
+	{
+		new_focus_pos.y = rows - 1;
+	}
+	else if (new_focus_pos.y > rows - 1)
+	{
+		new_focus_pos.y = 0;
+	}
+
+	return new_focus_pos;
 }
 
-bool UI_InteractiveGroup::ElementIsFocused(UI_Element * element)
+iPoint UI_InteractiveGroup::GetFirstAvailableElement()
 {
-	for (std::vector<PlayerFocus*>::iterator iter = player_focus.begin(); iter != player_focus.end(); ++iter)
+	for (int y = 0; y < rows; ++y)
 	{
-
+		for (int x = 0; x < columns; ++x)
+		{
+			if ( GetElement(iPoint(x, y)) != nullptr )
+			{				
+				return iPoint(x, y);
+			}
+		}
 	}
 
-	return false;
+	assert("Interactive Group : No avaliable elements");
+	return iPoint();
 }
 
 UI_Element* UI_InteractiveGroup::GetElement(iPoint position)
 {
-	return group_elements[ position.y * columns + position.x];
+	return group_elements[(position.y * columns ) + position.x];
+}
+
+UI_Element * UI_InteractiveGroup::GetFocusedElement()
+{
+	return GetElement(current_focus);
+}
+
+iPoint UI_InteractiveGroup::GetPos(UI_Element * element)
+{
+	for (int y = 0; y < rows; ++y)
+	{
+		for (int x = 0; x < columns; ++x)
+		{
+			if (group_elements[y * columns + x] == element)
+			{
+				return iPoint(x, y);
+			}
+		}
+	}
+
+	assert("Interactive Group : No avaliable elements");
+	return iPoint();
 }

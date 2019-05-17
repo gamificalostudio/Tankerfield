@@ -102,6 +102,9 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	case WEAPON::HEALING_SHOT:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
 		break;
+	case WEAPON::ELECTRO_SHOT:
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_ELECTRO_SHOT];
+		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
 		break;

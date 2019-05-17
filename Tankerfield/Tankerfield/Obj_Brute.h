@@ -32,6 +32,10 @@ public:
 
 	void Spawn(const float& dt) override;
 
+	inline void Burn(const float & dt);
+
+	bool Draw(float dt, Camera* cam) override;
+
 
 private:
 
@@ -39,12 +43,14 @@ private:
 
 	// ----------
 	iPoint spawn_draw_offset	= { 0,0 };
-	iPoint normal_draw_offset	= { 0, 0 };
+	
+	
 
 	Animation spawn;
+	Animation fire3;
 	
 	SDL_Texture * spawn_tex = nullptr;
-
+	SDL_Texture* fire_tex = nullptr;
 
 };
 

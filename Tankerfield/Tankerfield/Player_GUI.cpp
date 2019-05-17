@@ -224,7 +224,7 @@ void Player_GUI::Update(float dt)
 void Player_GUI::SetLifeBar(float life)
 {
 	life_bar->value = life / (float)player->GetMaxLife();
-	life_bar->color_1 = { 255u - (Uint8)(215.f* life_bar->value),  (Uint8)(215.f* life_bar->value) , 0u , 255u };
+	life_bar->color_1 = { 255u - (Uint8)(180.f* life_bar->value),  (Uint8)(180.f* life_bar->value) , 0u , 255u };
 }
 
 void Player_GUI::SetChargedShotBar(float percent)
@@ -247,6 +247,9 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 		break;
 	case WEAPON::HEALING_SHOT:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_HEALING_SHOT];
+		break;
+	case WEAPON::ELECTRO_SHOT:
+		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_ELECTRO_SHOT];
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::WEAPON_FLAMETHROWER];
