@@ -18,7 +18,7 @@
 void Obj_Tank::InitWeapons()
 {
 	//Basic weapon starting properties
-	SetWeapon(WEAPON::ELECTRO_SHOT, 1u);
+	SetWeapon(WEAPON::BASIC, 1u);
 
 	shot1_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot1_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
@@ -94,8 +94,8 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 		{
 			hit_no_enemie = false;
 			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, pos_map);
-			electro_anim->offset_dir_screen = app->map->MapToScreenF(GetShotDir());
-			electro_anim->distance = 50.f;
+			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
+			electro_anim->distance = 25.f;
 			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(GetShotDir());
 		}
 
@@ -238,6 +238,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
+		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		//electro_shot_collider->damage = weapon_info.bullet_damage;
 		//add with and height here?
 		break;
