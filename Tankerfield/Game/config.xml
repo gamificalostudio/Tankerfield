@@ -139,8 +139,8 @@
 
       <flamethrower>
         <flamethrower_animation>      
-        <tex_flamethrower>textures/objects/bullets/tex_electro_shot2.png</tex_flamethrower>
-          <animations>
+         <tex_flamethrower>textures/objects/bullets/tex_flamethrower.png</tex_flamethrower>
+         <animations>
             <anim_flamethrower1 speed="5" rotation="counter-clockwise" first_dir_angle ="-90">
               <dir>
                 <frame x="0"  y="0" w="154" h="112"/>

@@ -216,8 +216,8 @@ private:
 
 public:
 
-	float flame_coll_w = 2.f;
-	float flame_coll_h = 2.f;
+	float flame_coll_w = 3.f;
+	float flame_coll_h = 3.f;
 
 private:
 

@@ -474,6 +474,7 @@ void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
 		break;
 	case ObjectType::EXPLOSION:
 		app->render->DrawQuad(section, 255, 0, 255, alpha);
+
 	default:
 		break;
 	}
