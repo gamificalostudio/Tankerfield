@@ -32,6 +32,7 @@
 #include "Camera.h"
 #include "Item_InstantHelp.h"
 #include "Obj_Portal.h"
+#include "Obj_FlamethrowerFlame.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -233,11 +234,7 @@ bool Obj_Tank::Start()
 	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
-
 	//Flamethrower
-
-
-
 	coll_flame = app->collision->AddCollider(
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
 		flame_coll_w,
@@ -250,7 +247,8 @@ bool Obj_Tank::Start()
 	coll_flame->is_sensor = true;
 	coll_flame->ActiveOnTrigger(false);
 
-
+	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
+	flame->tank = this;
 
 	return true;
 }
@@ -533,8 +531,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		}
 
 	}
-	// Shot ==============================================
 
+	// Debug line
 	if (show_crosshairs && camera == camera_player)
 	{
 		float line_length = 5.f;
@@ -546,12 +544,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 			pos_screen.x, pos_screen.y - cannon_height,
 			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
-
-
-
-	
-
-
 	return true;
 }
 

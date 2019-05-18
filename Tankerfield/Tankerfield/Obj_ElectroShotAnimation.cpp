@@ -1,4 +1,4 @@
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 #include "M_Render.h"
 #include "App.h"
 #include "M_Textures.h"
@@ -18,10 +18,6 @@ Eletro_Shot_Animation::Eletro_Shot_Animation(fPoint pos) :Object(pos)
 	draw_offset = { 0,0 };
 	draw_offset.x = curr_anim->GetFrame(0).w * 0.5f;
 	//	electro_offset.y = 30;
-	
-	
-	
-
 }
 
 Eletro_Shot_Animation::~Eletro_Shot_Animation()

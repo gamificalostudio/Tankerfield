@@ -10,7 +10,7 @@
 #include "M_PickManager.h"
 #include "M_Map.h"
 #include "M_Audio.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 
 
 

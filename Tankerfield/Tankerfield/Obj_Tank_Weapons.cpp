@@ -16,7 +16,7 @@
 #include "Bullet_Laser.h"
 #include "Bullet_Oil.h"
 #include "Obj_OilPool.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 #include "Obj_FlamethrowerFlame.h"
 
 void Obj_Tank::InitWeapons()
@@ -106,26 +106,7 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 			electro_anim->tank = this;
 			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
 			electro_anim->hit_no_enemie = true;
-			
-
 		}
-
-	}
-
-	// Flamethrower
-
-	if (weapon_info.weapon == WEAPON::FLAMETHROWER)
-	{
-		if (flame_release_time.ReadSec() >= 1.f && coll_flame->GetIsActivated())
-		{
-				coll_flame->ActiveOnTrigger(false);
-		}
-
-		Obj_FlamethrowerFlame* flamethrower_anim = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
-		app->audio->PlayFx(electro_shot_sound);
-		flamethrower_anim->tank = this;
-		flamethrower_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
-		flamethrower_anim->hit_no_enemie = true;
 	}
 }
 

@@ -42,7 +42,7 @@
 #include "Obj_CannonFire.h"
 #include "Obj_Item.h"
 #include "Obj_Portal.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
 #include "Obj_FlamethrowerFlame.h"
 
