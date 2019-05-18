@@ -15,6 +15,8 @@ public:
 
 	void OnTriggerEnter(Collider* collider_1);
 
+	bool Update(float dt);
+
 public:
 	int explosion_damage = 0;
 };

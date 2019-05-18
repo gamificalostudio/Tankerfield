@@ -10,7 +10,7 @@
 #include "M_PickManager.h"
 #include "M_Map.h"
 #include "M_Audio.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 
 
 
@@ -139,7 +139,7 @@ void Obj_RewardBox::TakeDamage(Collider* collider)
 	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER || collider->GetTag() == TAG::BULLET_OIL)
 	{
 		++hits_taken;
-		if (hits_taken > max_hits)
+		if (hits_taken >= max_hits)
 		{
 			Dead();
 		}

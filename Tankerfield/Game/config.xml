@@ -136,6 +136,40 @@
           </animations>
         </electro_shot_animation>
       </electro_shot>
+
+      <flamethrower>
+        <tex_flamethrower>textures/objects/bullets/tex_flamethrower.png</tex_flamethrower>
+        <animations>
+          <fire speed="5">
+            <dir>
+              <frame x="0"   y="0"   w="154" h="112"/>
+              <frame x="154" y="0"   w="154" h="112"/>
+              <frame x="308" y="0"   w="154" h="112"/>
+              <frame x="462" y="0"   w="154" h="112"/>
+              <frame x="616" y="0"   w="154" h="112"/>
+              <frame x="770" y="0"   w="154" h="112"/>
+              <frame x="0"   y="112" w="154" h="112"/>
+              <frame x="154" y="112" w="154" h="112"/>
+              <frame x="308" y="112" w="154" h="112"/>
+              <frame x="462" y="112" w="154" h="112"/>
+              <frame x="616" y="112" w="154" h="112"/>
+              <frame x="770" y="112" w="154" h="112"/>
+              <frame x="0"   y="224" w="154" h="112"/>
+              <frame x="154" y="224" w="154" h="112"/>
+              <frame x="308" y="224" w="154" h="112"/>
+              <frame x="462" y="224" w="154" h="112"/>
+              <frame x="616" y="224" w="154" h="112"/>
+              <frame x="770" y="224" w="154" h="112"/>
+              <frame x="0"   y="336" w="154" h="112"/>
+              <frame x="154" y="336" w="154" h="112"/>
+              <frame x="308" y="336" w="154" h="112"/>
+              <frame x="462" y="336" w="154" h="112"/>
+              <frame x="616" y="336" w="154" h="112"/>
+              <frame x="770" y="336" w="154" h="112"/>
+            </dir>
+          </fire>
+        </animations>
+      </flamethrower>
       
       <time_between_bullets value ="100"/>
       <spritesheets>
@@ -742,7 +776,7 @@
       </animations>
     </basic_bullet>
     <laser_bullet>
-      <speed value ="0.5"/>
+      <speed value ="1.f"/>
       <life value ="1000"/>
       <tex path="textures/objects/bullets/laser-sheet.png"/>
       <kill_counter_max value="5"/>

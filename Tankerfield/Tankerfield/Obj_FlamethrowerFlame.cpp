@@ -12,25 +12,25 @@
 #include "M_Collision.h"
 #include "M_Map.h"
 #include "Obj_FlamethrowerFlame.h"
+#include "Obj_ElectroShotAnimation.h"
 #include "Animation.h"
 #include "M_AnimationBank.h"
 #include "M_Audio.h"
 #include "Obj_Tank.h"
 #include "WeaponInfo.h"
 
-Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) :Object(pos)
+Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) : Object(pos)
 {
-	pugi::xml_node explosion_node = app->config.child("object").child("explosion");
+	pugi::xml_node flamethrower_node = app->config.child("object").child("tank").child("flamethrower");
 
-	anim.frames = app->anim_bank->LoadFrames(explosion_node.child("animations").child("explosion"));
-	curr_anim = &anim;
-
-	tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
+	tex = app->tex->Load(flamethrower_node.child("tex_flamethrower").text().as_string());
 	curr_tex = tex;
 
-	draw_offset.x = 99;
-	draw_offset.y = 75;
+	anim.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire"));
+	curr_anim = &anim;
 
+	draw_offset = { 0,0 };
+	scale = 1.f;
 }
 
 Obj_FlamethrowerFlame::~Obj_FlamethrowerFlame()
@@ -39,27 +39,22 @@ Obj_FlamethrowerFlame::~Obj_FlamethrowerFlame()
 
 bool Obj_FlamethrowerFlame::Update(float dt)
 {
-	if (curr_anim != nullptr
-		&& curr_anim->Finished())
-	{
-		to_remove = true;
-	}
-	if (frame_explosion == 2)
-	{
-		coll->to_destroy = true;
-		coll = nullptr;
-	}
+	pos_map = tank->pos_map;
 
-	frame_explosion++;
 	return true;
 }
 
-bool Obj_FlamethrowerFlame::Draw(float dt, Camera* camera) {
-	app->render->Blit(tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
+bool Obj_FlamethrowerFlame::Draw(float dt, Camera* camera)
+{
+	app->render->BlitScaledAndRotated(
+		tex,
+		pos_screen.x,
+		pos_screen.y,
 		camera,
-		NULL);
+		&curr_anim->GetFrame(0),
+		scale,
+		scale);
+
 	return true;
 }
 

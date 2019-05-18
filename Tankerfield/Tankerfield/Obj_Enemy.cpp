@@ -13,7 +13,7 @@
 #include "M_Pathfinding.h"
 #include "M_AnimationBank.h"
 #include "M_Map.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 
 
 

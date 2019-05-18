@@ -16,7 +16,8 @@
 #include "Bullet_Laser.h"
 #include "Bullet_Oil.h"
 #include "Obj_OilPool.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
+#include "Obj_FlamethrowerFlame.h"
 
 void Obj_Tank::InitWeapons()
 {
@@ -105,20 +106,7 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 			electro_anim->tank = this;
 			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
 			electro_anim->hit_no_enemie = true;
-			
-
 		}
-
-	}
-
-	if (weapon_info.weapon == WEAPON::FLAMETHROWER)
-	{
-		//with the animation get frame?? only 1 frame
-		if (flame_release_time.ReadSec() >= 1.f && coll_flame->GetIsActivated())
-		{
-				coll_flame->ActiveOnTrigger(false);
-		}
-
 	}
 }
 
@@ -171,7 +159,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.explosion_damage = app->objectmanager->double_missile_info.damage_multiplier * pow(app->objectmanager->double_missile_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 10;
+		weapon_info.shot1.bullet_speed = 12;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.54f;
 		weapon_info.shot2.trauma = 0.76f;
@@ -205,7 +193,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 20;
+		weapon_info.shot1.bullet_speed = 25;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.405f;
 		weapon_info.shot2.trauma = 0.57f;
