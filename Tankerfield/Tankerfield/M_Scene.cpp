@@ -334,7 +334,7 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::LEADER_BOARD:
 
-		if (general_gui->UpdateLeaderBoard("data/leader_board.xml", 3) == true)
+		if (general_gui->UpdateLeaderBoard("data/leader_board.xml", round) == true)
 		{
 			general_gui->FillLeaderBoardTable();
 		}
