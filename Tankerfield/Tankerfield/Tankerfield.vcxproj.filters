@@ -4,18 +4,6 @@
     <ClCompile Include="Obj_Building.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_CannonFire.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Explosion.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Fire.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_HealingAnimation.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_Item.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -118,6 +106,9 @@
     <ClCompile Include="M_PickManager.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Bar.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="M_Render.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -126,6 +117,9 @@
     </ClCompile>
     <ClCompile Include="M_Scene.cpp">
       <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Item_HealthBag.cpp">
+      <Filter>Objects\Items</Filter>
     </ClCompile>
     <ClCompile Include="M_SceneManager.cpp">
       <Filter>Modules</Filter>
@@ -181,6 +175,9 @@
     <ClCompile Include="Item_InstantHelp.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Quadtree_Points.cpp">
+      <Filter>Tools\QuadTree</Filter>
+    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -190,11 +187,37 @@
     <ClCompile Include="Player_GUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="M_MainMenu.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Tank_Weapons.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Obj_Brute.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Enemy.cpp">
       <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet_Oil.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_CannonFire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Explosion.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Fire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_HealingAnimation.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Brute.cpp">
     </ClCompile>
     <ClCompile Include="Obj_RocketLauncher.cpp">
       <Filter>Objects\Enemies</Filter>
@@ -205,22 +228,31 @@
     <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="ElectroShotAnimation.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_HealingAnimation.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_CannonFire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Explosion.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Fire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_OilPool.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
     <ClCompile Include="ElectroShotAnimation.cpp" />
+    <ClCompile Include="Obj_FlamethrowerFlame.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Obj_Building.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_CannonFire.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Explosion.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Fire.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_HealingAnimation.h">
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Item.h">
@@ -349,11 +381,20 @@
     <ClInclude Include="Quadtree_Map.h">
       <Filter>Tools\QuadTree</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet_Missile.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Bar.h">
+      <Filter>UI</Filter>
+    </ClInclude>
     <ClInclude Include="Quadtree.h">
       <Filter>Tools\QuadTree</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugixml.hpp">
       <Filter>Tools\Pugi</Filter>
+    </ClInclude>
+    <ClInclude Include="Item_HealthBag.h">
+      <Filter>Objects\Items</Filter>
     </ClInclude>
     <ClInclude Include="PugiXml\src\pugiconfig.hpp">
       <Filter>Tools\Pugi</Filter>
@@ -400,6 +441,9 @@
     <ClInclude Include="Log.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="Quadtree_Points.h">
+      <Filter>Tools\QuadTree</Filter>
+    </ClInclude>
     <ClInclude Include="Module.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -411,6 +455,9 @@
     </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>Tools\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponInfo.h">
+      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Point.h">
       <Filter>Tools\Geometry</Filter>
@@ -424,6 +471,23 @@
     <ClInclude Include="Obj_Enemy.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet_Oil.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_CannonFire.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Explosion.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Fire.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_HealingAnimation.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Brute.h">
+    </ClInclude>
     <ClInclude Include="Obj_RocketLauncher.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
@@ -433,9 +497,29 @@
     <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="ElectroShotAnimation.h" />
     <ClInclude Include="Balance.h">
       <Filter>Tools\Balance</Filter>
+    <ClInclude Include="ElectroShotAnimation.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_HealingAnimation.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_CannonFire.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Explosion.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Fire.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_OilPool.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectroShotAnimation.h" />
+    <ClInclude Include="Obj_FlamethrowerFlame.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -485,6 +569,9 @@
     </Filter>
     <Filter Include="Tools\Geometry">
       <UniqueIdentifier>{6e682b8d-4a98-4114-b7bc-fd571d567eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Particles">
+      <UniqueIdentifier>{6dcad452-07af-4a3e-8814-0339b26a0501}</UniqueIdentifier>
     </Filter>
     <Filter Include="Objects\Enemies">
       <UniqueIdentifier>{03833ef9-4050-4efc-963c-7ae318029f4a}</UniqueIdentifier>

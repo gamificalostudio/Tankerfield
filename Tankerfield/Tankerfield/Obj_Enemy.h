@@ -34,8 +34,6 @@ public:
 
 	void OnTriggerEnter(Collider * collider);
 
-	void OnTrigger(Collider* collider);
-
 	inline bool IsOnGoal(fPoint goal); //const?
 
 	void DrawDebug(const Camera* camera)override;
@@ -75,22 +73,24 @@ protected:
 
 	bool CleanUp() override;
 
+	void Oiled();
+
 protected:
 
-
-	int life						= 0;
-	float speed						= 0.f;
+	int life = 0;
+	float speed = 0.f;
+	float original_speed = 0.f;
+	SDL_Texture * tex = nullptr;
+	SDL_Texture * tex_damaged = nullptr;
+	SDL_Texture * oiled_tex = nullptr;
+	SDL_Texture * tex_electro_dead = nullptr;
 
 	/* Attack properties */
 	float attack_frequency			= 0.f;
 	float attack_range				= 0.f;//Tile distance in which the enemy can attack
 	float attack_range_squared		= 0.f;
 	int attack_damage				= 0;
-
-	SDL_Texture * tex				= nullptr;
-	SDL_Texture * tex_damaged		= nullptr;
-	SDL_Texture * tex_electro_dead	= nullptr;
-
+  
 	iPoint normal_draw_offset		= { 0, 0 };
 	iPoint electrocuted_draw_offset	= { 0, 0 };
 
@@ -99,6 +99,7 @@ protected:
 
 	bool in_white					= false;
 
+	bool bool_electro_dead = false;
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
@@ -108,7 +109,10 @@ protected:
 
 	Timer update_velocity_vec;
 	Timer damaged_sprite_timer;
+	Timer oiled_timer;
 	int damaged_sprite_time = 0;
+
+	bool oiled = false;
 
 	Animation idle;
 	Animation walk;

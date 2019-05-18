@@ -27,6 +27,8 @@
 #include "Bullet_Basic.h"
 #include "Bullet_Missile.h"
 #include "Bullet_Laser.h"
+#include "Bullet_Oil.h"
+#include "Obj_OilPool.h"
 #include "Healing_Bullet.h"
 #include "Obj_Explosion.h"
 #include "Obj_HealingAnimation.h"
@@ -296,9 +298,21 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Healing_Bullet(pos);
 		ret->type = ObjectType::HEALING_BULLET;
 		break;
+	case ObjectType::BULLET_OIL:
+		ret = DBG_NEW Bullet_Oil(pos);
+		ret->type = ObjectType::BULLET_OIL;
+		break;
 	case ObjectType::STATIC:
 		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
+		break;
+	case ObjectType::REWARD_ZONE:
+		ret = DBG_NEW Reward_Zone(pos);
+		ret->type = ObjectType::REWARD_ZONE;
+		break;
+	case ObjectType::OIL_POOL:
+		ret = DBG_NEW Obj_OilPool(pos);
+		ret->type = ObjectType::OIL_POOL;
 		break;
 	case ObjectType::BRUTE:
 		ret = DBG_NEW Obj_Brute(pos);

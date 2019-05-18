@@ -41,6 +41,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	explosion_apper_tex = app->tex->Load("textures/Objects/particles/explosion2.png");
 	tex = app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
+	oiled_tex	= app->tex->Load(tesla_trooper_node.child("tex_oiled_path").child_value());
+	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	portal_tex = app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
 	curr_tex = tex;
 	last_texture = tex;
@@ -352,3 +354,4 @@ inline void Obj_TeslaTrooper::UpdateVelocity()
 		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
 	}
 }
+

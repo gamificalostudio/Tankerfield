@@ -89,7 +89,7 @@ void Obj_RocketLauncher::Attack()
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
 			curr_anim = &attack;
-			target->SetLife(target->GetLife() - attack_damage);
+			target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
 		}

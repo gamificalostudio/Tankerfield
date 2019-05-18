@@ -127,11 +127,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullet_Laser.cpp" />
+    <ClCompile Include="Bullet_Oil.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ElectroShotAnimation.cpp" />
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
+    <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
     <ClCompile Include="UI_InputText.cpp" />
     <ClCompile Include="UI_Table.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
@@ -144,6 +146,7 @@
     <ClCompile Include="Obj_CannonFire.cpp" />
     <ClCompile Include="Obj_Enemy.cpp" />
     <ClCompile Include="Obj_Fire.cpp" />
+    <ClCompile Include="Obj_OilPool.cpp" />
     <ClCompile Include="Obj_Portal.cpp" />
     <ClCompile Include="Obj_RewardBox.cpp" />
     <ClCompile Include="Obj_RocketLauncher.cpp" />
@@ -200,11 +203,13 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Balance.h" />
     <ClInclude Include="Bullet_Laser.h" />
+    <ClInclude Include="Bullet_Oil.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ElectroShotAnimation.h" />
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
+    <ClInclude Include="Obj_FlamethrowerFlame.h" />
     <ClInclude Include="UI_InputText.h" />
     <ClInclude Include="UI_Table.h" />
     <ClInclude Include="M_AnimationBank.h" />
@@ -218,6 +223,7 @@
     <ClInclude Include="Obj_CannonFire.h" />
     <ClInclude Include="Obj_Enemy.h" />
     <ClInclude Include="Obj_Fire.h" />
+    <ClInclude Include="Obj_OilPool.h" />
     <ClInclude Include="Obj_Portal.h" />
     <ClInclude Include="Obj_RewardBox.h" />
     <ClInclude Include="Obj_RocketLauncher.h" />
