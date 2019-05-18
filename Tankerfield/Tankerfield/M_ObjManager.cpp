@@ -44,6 +44,7 @@
 #include "Obj_Portal.h"
 #include "ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
+#include "Obj_FlamethrowerFlame.h"
 
 
 M_ObjManager::M_ObjManager()
@@ -348,12 +349,16 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::REWARD_BOX;
 		break;
 	case ObjectType::TANK_MAIN_MENU:
-		ret = new Obj_Tank_MainMenu(pos);
+		ret = DBG_NEW Obj_Tank_MainMenu(pos);
 		ret->type = ObjectType::REWARD_BOX;
 		break;
 	case ObjectType::ELECTRO_SHOT_ANIMATION:
-		ret = new Eletro_Shot_Animation(pos);
+		ret = DBG_NEW Eletro_Shot_Animation(pos);
 		ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
+		break;
+	case ObjectType::FLAMETHROWER_FLAME:
+		ret = DBG_NEW Obj_FlamethrowerFlame(pos);
+		ret->type = ObjectType::FLAMETHROWER_FLAME;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");

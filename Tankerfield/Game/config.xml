@@ -136,6 +136,42 @@
           </animations>
         </electro_shot_animation>
       </electro_shot>
+
+      <flamethrower>
+        <flamethrower_animation>      
+        <tex_flamethrower>textures/objects/bullets/tex_electro_shot2.png</tex_flamethrower>
+          <animations>
+            <anim_flamethrower1 speed="5" rotation="counter-clockwise" first_dir_angle ="-90">
+              <dir>
+                <frame x="0"  y="0" w="154" h="112"/>
+                <frame x="154" y="0" w="154" h="112"/>
+                <frame x="308" y="0" w="154" h="112"/>
+                <frame x="462" y="0" w="154" h="112"/>
+                <frame x="616" y="0" w="154" h="112"/>
+                <frame x="770" y="0" w="154" h="112"/>
+                <frame x="0"   y="112" w="154" h="112"/>
+                <frame x="154" y="112" w="154" h="112"/>
+                <frame x="308" y="112" w="154" h="112"/>
+                <frame x="462" y="112" w="154" h="112"/>
+                <frame x="616" y="112" w="154" h="112"/>
+                <frame x="770" y="112" w="154" h="112"/>
+                <frame x="0"   y="224" w="154" h="112"/>
+                <frame x="154" y="224" w="154" h="112"/>
+                <frame x="308" y="224" w="154" h="112"/>
+                <frame x="462" y="224" w="154" h="112"/>
+                <frame x="616" y="224" w="154" h="112"/>
+                <frame x="770" y="224" w="154" h="112"/>
+                <frame x="0"   y="336" w="154" h="112"/>
+                <frame x="154" y="336" w="154" h="112"/>
+                <frame x="308" y="336" w="154" h="112"/>
+                <frame x="462" y="336" w="154" h="112"/>
+                <frame x="616" y="336" w="154" h="112"/>
+                <frame x="770" y="336" w="154" h="112"/>   
+              </dir>
+            </anim_flamethrower1>
+          </animations>
+        </flamethrower_animation>
+      </flamethrower>
       
       <time_between_bullets value ="100"/>
       <spritesheets>
