@@ -33,8 +33,7 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
-
-	pugi::xml_node tesla_trooper_node	= app->config.child("object").child("enemies").child("tesla_trooper");
+	pugi::xml_node tesla_trooper_node = app->config.child("object").child("enemies").child("tesla_trooper");
 	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
 
@@ -56,8 +55,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 	curr_anim = &idle;
 
-
-
 	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
 	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
@@ -76,9 +73,9 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	draw = false;
 	state = ENEMY_STATE::SPAWN; //enemy
 
-	speed = tesla_trooper_node.child("speed").attribute("num").as_float();
+	speed = app->objectmanager->tesla_trooper_info.speed;
 
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 son 4/3
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 are 4/3
 	squared_detection_range = detection_range * detection_range;
 	coll_w = 0.5f;
 	coll_h = 0.5f;
@@ -91,18 +88,18 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 
 	//parameters-------------------------------------------
-	attack_damage = tesla_trooper_node.child("attack_damage").attribute("num").as_float();
-	attack_range = tesla_trooper_node.child("attack_range").attribute("num").as_float();
+	attack_damage = app->objectmanager->tesla_trooper_info.attack_damage;
+	attack_range = app->objectmanager->tesla_trooper_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
-	attack_frequency = tesla_trooper_node.child("attack_frequency").attribute("num").as_float();
+	attack_frequency = app->objectmanager->tesla_trooper_info.attack_frequency;
 
-	life = pow(tesla_trooper_node.child("base_life").attribute("num").as_float(), app->scene->round);
+	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
 
 	//teleport 
 	check_teleport_time = 10; //10s
 	teleport_timer.Start();
 
-	teleport_enemies_max = tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_uint();
+	teleport_enemies_max = app->objectmanager->tesla_trooper_info.teleport_max_enemies;
 
 	//Timers ----------------
 	check_path_time = 2.f; // 10s

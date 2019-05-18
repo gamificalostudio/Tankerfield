@@ -201,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="Balance.h" />
     <ClInclude Include="Bullet_Laser.h" />
     <ClInclude Include="Bullet_Oil.h" />
     <ClInclude Include="Camera.h" />
@@ -284,6 +285,7 @@
     <Xml Include="..\Game\animations.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="..\Game\balance.xml" />
     <Xml Include="..\Game\config.xml">
       <SubType>Designer</SubType>
     </Xml>

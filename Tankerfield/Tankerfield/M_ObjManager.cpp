@@ -68,6 +68,23 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 			(*iterator)->Awake(config);
 	}
 
+	//Open balance.xml
+	std::string path = config.child_value();
+	pugi::xml_parse_result result = balance_xml_doc.load_file(path.c_str());
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
+	}
+	else
+	{
+		balance_xml_node = balance_xml_doc.child("balance");
+	}
+
+	//Fill balance structs
+	LoadBalanceVariables(balance_xml_node);
+
+	//Close document
+
 	return ret;
 }
 
@@ -481,4 +498,85 @@ bool M_ObjManager::Save(pugi::xml_node& save) const
 bool M_ObjManager::SortByYPos(Object * obj1, Object * obj2)
 {
 	return obj1->pivot.y + obj1->pos_screen.y < obj2->pivot.y + obj2->pos_screen.y;
+}
+
+void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
+{
+	//ENEMIES
+
+	//TESLA_TROOPER
+	pugi::xml_node tesla_trooper_node = balance_node.child("enemies").child("tesla_trooper");
+	tesla_trooper_info.life_multiplier			= tesla_trooper_node.child("life_multiplier").attribute("num").as_float();
+	tesla_trooper_info.life_exponential_base	= tesla_trooper_node.child("life_exponential_base").attribute("num").as_float();
+	tesla_trooper_info.speed					= tesla_trooper_node.child("speed").attribute("num").as_float();
+	tesla_trooper_info.attack_damage			= tesla_trooper_node.child("attack_damage").attribute("num").as_int();
+	tesla_trooper_info.attack_range				= tesla_trooper_node.child("attack_range").attribute("num").as_float();
+	tesla_trooper_info.attack_frequency			= tesla_trooper_node.child("attack_frequency").attribute("num").as_uint();
+	tesla_trooper_info.teleport_max_enemies		= tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_int();
+
+	//BRUTE
+	pugi::xml_node brute_node = balance_node.child("enemies").child("brute");
+	brute_info.life_multiplier					= brute_node.child("life_multiplier").attribute("num").as_float();
+	brute_info.life_exponential_base			= brute_node.child("life_exponential_base").attribute("num").as_float();
+	brute_info.speed							= brute_node.child("speed").attribute("num").as_float();
+	brute_info.detection_range					= brute_node.child("detection_range").attribute("num").as_float();
+	brute_info.attack_damage					= brute_node.child("attack_damage").attribute("num").as_int();
+	brute_info.attack_range						= brute_node.child("attack_range").attribute("num").as_float();
+	brute_info.attack_frequency					= brute_node.child("attack_frequency").attribute("num").as_float();
+
+	//ROCKET LAUNCHER
+	pugi::xml_node rocket_launcher_node = balance_node.child("enemies").child("rocket_launcher");
+	rocket_launcher_info.attack_damage			= rocket_launcher_node.child("attack_damage").attribute("num").as_int();
+	rocket_launcher_info.attack_frequency		= rocket_launcher_node.child("attack_frequency").attribute("num").as_float();
+	rocket_launcher_info.attack_range			= rocket_launcher_node.child("attack_range").attribute("num").as_float();
+	rocket_launcher_info.speed					= rocket_launcher_node.child("speed").attribute("num").as_float();
+	rocket_launcher_info.life_multiplier		= rocket_launcher_node.child("life_multiplier").attribute("num").as_float();
+	rocket_launcher_info.life_exponential_base	= rocket_launcher_node.child("life_exponential_base").attribute("num").as_float();
+
+	//SUICIDAL
+	pugi::xml_node suicidal_node = balance_node.child("enemies").child("suicidal");
+	suicidal_info.attack_damage					= suicidal_node.child("attack_damage").attribute("num").as_int();
+	suicidal_info.attack_frequency				= suicidal_node.child("attack_frequency").attribute("num").as_float();
+	suicidal_info.attack_range					= suicidal_node.child("attack_range").attribute("num").as_float();
+	suicidal_info.speed							= suicidal_node.child("speed").attribute("num").as_float();
+	suicidal_info.life_multiplier				= suicidal_node.child("life_multiplier").attribute("num").as_float();
+	suicidal_info.life_exponential_base			= suicidal_node.child("life_exponential_base").attribute("num").as_float();
+
+	//WEAPONS
+
+	//Basic weapon
+	pugi::xml_node basic_weapon_node = balance_node.child("weapons").child("basic_weapon");
+	basic_weapon_info.damage_multiplier			= basic_weapon_node.child("damage_multiplier").attribute("num").as_float();
+	basic_weapon_info.damage_exponential_base	= basic_weapon_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Double missile
+	pugi::xml_node double_missile_node = balance_node.child("weapons").child("double_missile");
+	double_missile_info.damage_multiplier = double_missile_node.child("damage_multiplier").attribute("num").as_float();
+	double_missile_info.damage_exponential_base = double_missile_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Healing shot
+	pugi::xml_node healing_shot_node = balance_node.child("weapons").child("healing_shot");
+	healing_shot_info.damage_multiplier = healing_shot_node.child("damage_multiplier").attribute("num").as_float();
+	healing_shot_info.damage_exponential_base = healing_shot_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Laser
+	pugi::xml_node laser_node = balance_node.child("weapons").child("laser");
+	laser_info.damage_multiplier = laser_node.child("damage_multiplier").attribute("num").as_float();
+	laser_info.damage_exponential_base = laser_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Electro shot
+	pugi::xml_node electro_shot_node = balance_node.child("weapons").child("electro_shot");
+	electro_shot_info.damage_multiplier = electro_shot_node.child("damage_multiplier").attribute("num").as_float();
+	electro_shot_info.damage_exponential_base = electro_shot_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Flamethrower
+	pugi::xml_node flamethrower_node = balance_node.child("weapons").child("flamethrower");
+	flamethrower_info.damage_multiplier = flamethrower_node.child("damage_multiplier").attribute("num").as_float();
+	flamethrower_info.damage_exponential_base = flamethrower_node.child("damage_exponential_base").attribute("num").as_float();
+
+	//Oil weapon
+	pugi::xml_node oil_weapon_node = balance_node.child("weapons").child("oil_weapon");
+	oil_weapon_info.damage_multiplier = oil_weapon_node.child("damage_multiplier").attribute("num").as_float();
+	oil_weapon_info.damage_exponential_base = oil_weapon_node.child("damage_exponential_base").attribute("num").as_float();
+
 }

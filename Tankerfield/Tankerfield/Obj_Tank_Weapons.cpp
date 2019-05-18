@@ -129,7 +129,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	{
 	case WEAPON::BASIC:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.shot1.bullet_damage = 25 + level * 2;
+		weapon_info.shot1.bullet_damage = app->objectmanager->basic_weapon_info.damage_multiplier * pow(app->objectmanager->basic_weapon_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
@@ -146,7 +146,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
-		weapon_info.shot1.bullet_damage = 50 + level * 2;
+		weapon_info.shot1.bullet_damage = app->objectmanager->flamethrower_info.damage_multiplier * pow(app->objectmanager->flamethrower_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
@@ -164,7 +164,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.shot1.bullet_damage = 0;
-		weapon_info.shot1.explosion_damage = level * 100;
+		weapon_info.shot1.explosion_damage = app->objectmanager->double_missile_info.damage_multiplier * pow(app->objectmanager->double_missile_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 10;
@@ -180,7 +180,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::HEALING_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.shot1.bullet_damage = 25 + level;
+		weapon_info.shot1.bullet_damage = app->objectmanager->healing_shot_info.damage_multiplier * pow(app->objectmanager->healing_shot_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 5 + level;
 		weapon_info.shot1.bullet_life_ms = 2000;
@@ -197,7 +197,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.shot1.bullet_damage = 10 + level * 2;
+		weapon_info.shot1.bullet_damage = app->objectmanager->laser_info.damage_multiplier * pow(app->objectmanager->laser_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
@@ -230,7 +230,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::ELECTRO_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.shot1.bullet_damage = 100 + level * 2;
+		weapon_info.shot1.bullet_damage = app->objectmanager->electro_shot_info.damage_multiplier * pow(app->objectmanager->electro_shot_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 100;
 		weapon_info.shot1.bullet_speed = 0;
@@ -244,7 +244,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		//electro_shot_collider->damage = weapon_info.bullet_damage;
-		//add with and height here?
+		//add width and height here?
 		break;
 	}
 }

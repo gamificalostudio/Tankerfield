@@ -77,7 +77,6 @@ protected:
 
 protected:
 
-
 	int life = 0;
 	float speed = 0.f;
 	float original_speed = 0.f;
@@ -87,24 +86,24 @@ protected:
 	SDL_Texture * tex_electro_dead = nullptr;
 
 	/* Attack properties */
-	float attack_frequency = 0.f;
-	float attack_range = 0.f;//Tile distance in which the enemy can attack
-	float attack_range_squared = 0.f;
-	int attack_damage = 0;
+	float attack_frequency			= 0.f;
+	float attack_range				= 0.f;//Tile distance in which the enemy can attack
+	float attack_range_squared		= 0.f;
+	int attack_damage				= 0;
+  
+	iPoint normal_draw_offset		= { 0, 0 };
+	iPoint electrocuted_draw_offset	= { 0, 0 };
 
-	iPoint normal_draw_offset = { 0, 0 };
-	iPoint electrocuted_draw_offset = { 0, 0 };
+	SDL_Texture* burn_texture		= nullptr;
+	SDL_Texture* last_texture		= nullptr;
 
-	SDL_Texture* burn_texture = nullptr;
-	SDL_Texture* last_texture = nullptr;
-
-	bool in_white = false;
+	bool in_white					= false;
 
 	bool bool_electro_dead = false;
 
 	ENEMY_STATE state = ENEMY_STATE::IDLE;
 	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
-	Animation* anim_saved;
+	Animation* anim_saved = nullptr;
 	SDL_Texture* tex_saved = nullptr;
 	bool is_electro_dead = false;
 
