@@ -57,11 +57,11 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
 	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.5f });
 
-	attack_damage = suicidal_node.child("attack_damage").attribute("num").as_float();
-	attack_range = suicidal_node.child("attack_range").attribute("num").as_float();
+	attack_damage = app->objectmanager->suicidal_info.attack_damage;
+	attack_range = app->objectmanager->suicidal_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
-	attack_frequency = suicidal_node.child("attack_frequency").attribute("num").as_float();
-	life = pow(suicidal_node.child("base_life").attribute("num").as_float(), app->scene->round);
+	attack_frequency = app->objectmanager->suicidal_info.attack_frequency;
+	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
 
 	check_path_time = 2.0f;
 

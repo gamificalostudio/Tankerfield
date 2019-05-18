@@ -38,6 +38,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
+	oiled_tex = app->tex->Load("textures/Objects/enemies/brute-sheet_oiled.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
 
@@ -57,9 +58,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
 	state = ENEMY_STATE::SPAWN; 
-	speed = 1.5f;
-	detection_range = 10.0f; //change?
-
+	detection_range = app->objectmanager->brute_info.detection_range;
+	original_speed=speed = speed = app->objectmanager->brute_info.speed;
+	range_pos.radius = 1.f;
 
 	spawn_draw_offset = { 260, 274 };
 	normal_draw_offset = { 132, 75 };
@@ -67,17 +68,17 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	draw_offset = spawn_draw_offset;
 
 	angle = 180;//REMOVE
-
-	attack_damage = 10;
-	attack_range = 1;
+  
+	attack_damage = app->objectmanager->brute_info.attack_damage;
+	attack_range = app->objectmanager->brute_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
-	attack_frequency = 3000.0f;
+	attack_frequency = app->objectmanager->brute_info.attack_frequency;
   
 	coll_w = 0.5f;
 	coll_h = 0.5f;
   
 	damaged_sprite_time = 150;
-	life = 1;//750* (log(app->scene->round)+2);
+	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round - 1);
 
 	scale = 2.f;
 	app->audio->PlayFx(sfx_spawn);
@@ -94,9 +95,12 @@ void Obj_Brute::ChangeTexture()
 		damaged_sprite_timer.Read() > damaged_sprite_time &&
 		curr_tex != tex &&
 		state != ENEMY_STATE::STUNNED &&
-		state != ENEMY_STATE::STUNNED_CHARGED)
+		state != ENEMY_STATE::STUNNED_CHARGED &&
+		oiled == false &&
+		bool_electro_dead == false)
 	{
-		curr_tex = tex;
+		curr_tex = last_texture;
+		in_white = false;
 	}
 }
 
@@ -174,4 +178,26 @@ bool Obj_Brute::Draw(float dt, Camera * camera)
 		app->render->Blit(fire_tex, pos_screen.x - fire_frame.w*0.5f, pos_screen.y, camera, &fire_frame);
 	}
 	return true;
+}
+
+void Obj_Brute::Attack()
+{
+	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
+	{
+		if (curr_anim == &attack
+			&& curr_anim->Finished())
+		{
+			target->ReduceLife(attack_damage);
+			curr_anim = &idle;//walk?
+			attack.Reset();
+		}
+		else if (target != nullptr
+			&& pos_map.DistanceNoSqrt(target->pos_map) <= attack_range_squared
+			&& perf_timer.ReadMs() > (double)attack_frequency)
+		{
+			curr_anim = &attack;
+			perf_timer.Start();
+			app->audio->PlayFx(sfx_attack);
+		}
+	}
 }

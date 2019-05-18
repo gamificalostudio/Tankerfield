@@ -10,6 +10,7 @@
 
 #include "Module.h"
 #include "Point.h"
+#include "Balance.h"
 
 enum class ObjectType
 {
@@ -19,6 +20,7 @@ enum class ObjectType
 	REWARD_ZONE,
 	REWARD_BOX,
 	PICK_UP,
+	OIL_POOL,
 	PORTAL,
 	TANK_MAIN_MENU,
 
@@ -35,6 +37,7 @@ enum class ObjectType
 	BULLET_LASER,
 	EXPLOSION,
 	CANNON_FIRE,
+	BULLET_OIL,
 
 	//PARTICLES
 	HEALING_ANIMATION,
@@ -66,6 +69,8 @@ public:
 	~M_ObjManager();
 
 	bool Awake(pugi::xml_node& config) override;
+
+	void LoadBalanceVariables(pugi::xml_node & balance_node);
 
 	bool Start() override;
 
@@ -102,9 +107,26 @@ public:
 	 }
 
 public:
+	pugi::xml_node balance_xml_node;
 	std::vector<Obj_Tank*> obj_tanks;
 
+	//EnemyInfo
+	TeslaTrooperInfo tesla_trooper_info;
+	BruteInfo brute_info;
+	RocketLauncherInfo rocket_launcher_info;
+	SuicidalInfo suicidal_info;
+
+	//WeaponInfo
+	BasicWeaponInfo basic_weapon_info;
+	DoubleMissileInfo double_missile_info;
+	HealingShotInfo healing_shot_info;
+	LaserInfo laser_info;
+	ElectroShotInfo electro_shot_info;
+	FlameThrowerInfo flamethrower_info;
+	OilWeaponInfo oil_weapon_info;
+
 private:
+	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
 };

@@ -23,6 +23,7 @@ enum class TAG : int
 	BULLET,
 	FRIENDLY_BULLET,
 	BULLET_LASER,
+	BULLET_OIL,
 	ELECTRO_SHOT,
 	PORTAL,
 	ENEMY,
@@ -32,6 +33,7 @@ enum class TAG : int
 	REWARD_BOX,
 	PLAYER,
 	ROAD,
+	OIL_POOL,
 	MAX
 };
 

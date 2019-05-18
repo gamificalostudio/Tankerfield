@@ -70,15 +70,21 @@ M_Collision::M_Collision()
 	matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
 	matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
 
-
 	matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
 	matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
 	matrix[(int)TAG::ENEMY][(int)TAG::BULLET_LASER] = true;
 	matrix[(int)TAG::ENEMY][(int)TAG::ELECTRO_SHOT] = true;
+	matrix[(int)TAG::ENEMY][(int)TAG::BULLET_OIL] = true;
+	matrix[(int)TAG::ENEMY][(int)TAG::OIL_POOL] = true;
+
 
 	matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
 	matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
 	matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
+
+	matrix[(int)TAG::BULLET_OIL][(int)TAG::WALL] = true;
+	matrix[(int)TAG::BULLET_OIL][(int)TAG::ENEMY] = true;
+	matrix[(int)TAG::BULLET_OIL][(int)TAG::REWARD_BOX] = true;
 
 	matrix[(int)TAG::REWARD_ZONE][(int)TAG::PLAYER] = true;
 

@@ -1,0 +1,101 @@
+<balance>
+  
+  <!--Player-->
+  <tank>
+    <life value =""/>
+    <speed value =""/>
+  </tank>
+  
+  <!--Weapons-->
+  <weapons>
+
+    <basic_weapon>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </basic_weapon>
+
+    <double_missile>
+      <damage_multiplier num="50"/>
+      <damage_exponential_base num="1.55"/>
+    </double_missile>
+
+    <healing_shot>
+      <damage_multiplier num="75"/>
+      <damage_exponential_base num="1.55"/>
+    </healing_shot>
+
+    <laser>
+      <damage_multiplier num="50"/>
+      <damage_exponential_base num="1.55"/>
+    </laser>
+
+    <electro_shot>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </electro_shot>
+
+    <flamethrower>
+      <damage_multiplier num="5"/>
+      <damage_exponential_base num="1.55"/>
+    </flamethrower>
+
+    <oil_weapon>
+      <damage_multiplier num="100"/>
+      <damage_exponential_base num="1.55"/>
+    </oil_weapon>
+    
+  </weapons>
+  
+  <!--Enemies-->
+  <enemies>
+    
+    <tesla_trooper>
+      <life_multiplier num="100"/><!--Acts as initial life-->
+      <life_exponential_base num ="1.55"/>
+      <speed num="3"/>
+      <attack_damage num="5"/>
+      <attack_range num="1.5"/>
+      <attack_frequency num="3000"/>
+      <teleport_max_enemies num="100"/>
+    </tesla_trooper>
+    
+    <brute>
+      <life_multiplier num = "1500"/><!--Acts as initial life. Divided by 100 is the number of hits the enemy has to take with a weapon of the same level to die.-->
+      <life_exponential_base num ="1.55"/>
+      <detection_range num="10"/>
+      <speed num = "1.5"/>
+      <attack_damage num="10"/>
+      <attack_range num="1"/>
+      <attack_frequency num="3000"/>
+    </brute>
+
+    <rocket_launcher>
+      <speed num="1.5"/>
+      <attack_damage num="15"/>
+      <attack_range num="3"/>
+      <attack_frequency num="2000"/>
+      <life_multiplier num ="700"/>
+      <life_exponential_base num="1.55"/>
+    </rocket_launcher>
+
+    <suicidal>
+      <speed num="5.5"/>
+      <attack_damage num="75"/>
+      <attack_range num="1"/>
+      <attack_frequency num="1000"/>
+      <life_multiplier num ="50"/>
+      <life_exponential_base num="1.55"/>
+    </suicidal>
+    
+  </enemies>
+  
+  <!--Other-->
+  <box>
+    <spawn_rate value ="0"/>
+  </box>
+  
+  <rounds>
+    
+  </rounds>
+  
+</balance>

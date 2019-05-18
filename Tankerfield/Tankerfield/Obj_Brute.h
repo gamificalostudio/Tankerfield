@@ -36,6 +36,8 @@ public:
 
 	bool Draw(float dt, Camera* cam) override;
 
+	void Attack() override;
+
 
 private:
 

@@ -22,6 +22,7 @@
   </window>
 
   <animations_bank>animations.xml</animations_bank>
+  <object_manager>balance.xml</object_manager>
 
     <scene>
       <rounds_to_win value="10"/>
@@ -163,6 +164,7 @@
       <level name="Map2.tmx"/>
     </levels>
   </map>
+  
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
     <percentage_spawn_reward_box value="80"/>
@@ -173,45 +175,24 @@
       <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
-
     <enemies>
       <tex_electro_dead>textures/Objects/enemies/electro_dead.png</tex_electro_dead>
       <tesla_trooper>
-        <teleport_max_enemies num="100"/>
-        <speed num="3"/>
-        <attack_damage num="5"/>
-        <attack_range num="1.0"/>
-        <attack_frequency num="3000"/>
-        <base_life num="5"/>
         <tex_path>textures/Objects/enemies/shk-sheet.png</tex_path>
         <tex_damaged_path>textures/Objects/enemies/shk-sheet-white-1.png</tex_damaged_path>
+        <tex_oiled_path>textures/Objects/enemies/shk-sheet_oiled.png</tex_oiled_path>
         <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
       </tesla_trooper>
-      <brute>
-
-      </brute>
     </enemies>
-
-
-
-    <!--pasar al nodo enemies-->
+    
+    <!--TOOD: Put in enemies node-->
     <rocket_launcher>
-      <speed num="2"/>
-      <attack_damage num="15"/>
-      <attack_range num="3"/>
-      <attack_frequency num="2000"/>
-      <base_life num="3"/>
       <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
     </rocket_launcher>
+    
     <suicidal>
-      <speed num="5.5"/>
-      <attack_damage num="75"/>
-      <attack_range num="1"/>
-      <attack_frequency num="1000"/>
-      <base_life num="3"/>
       <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
     </suicidal>
-
 
     <tank>
       <speed value ="1"/>
@@ -1043,6 +1024,207 @@
         </rotate>
       </animations>
     </laser_bullet>
+    <oil_bullet>
+      <speed value ="0.5"/>
+      <life value ="1000"/>
+      <tex path="textures/objects/bullets/oil-sheet.png"/>
+      <animations>
+        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
+          <dir>
+            <frame x="0"   y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="378" w="67" h="42"/>
+          </dir>
+        </rotate>
+      </animations>
+    </oil_bullet>
   </object>
 
   <items>
