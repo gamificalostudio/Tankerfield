@@ -56,7 +56,7 @@ bool Obj_RewardBox::Update(float dt)
 
 void Obj_RewardBox::OnTrigger(Collider * collider)
 {
-	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER)
+	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER||collider->GetTag()==TAG::BULLET_OIL)
 	{
 		
 		++hits_taken;
