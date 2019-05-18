@@ -6,6 +6,8 @@
 #include "M_UI.h"
 
 #define MAX_PLAYERS 4
+#define DEFAULT_PANEL_COLUMNS 4
+#define DEFAULT_PANEL_ROWS 4
 
 struct SDL_Texture;
 struct Controller;
@@ -61,6 +63,15 @@ public:
 private:
 
 	void SetState(MENU_STATE new_state);
+
+	void InputControllers();
+
+	void InputMouse();
+
+	void SetPlayerProperties();
+
+	void ResetPanelColors();
+
 	SDL_Color GetColor(float value);
 
 private:
@@ -75,7 +86,13 @@ private:
 
 	Camera*			       camera = nullptr;
 
+	// Control helpers --------------------------------------
+
+	UI_Image* control_helper_image = nullptr;
+	UI_Label* control_helper_label = nullptr;
+
 	// Main screen --------------------------------
+
 	UI_Element		* menu_peg = nullptr;
 
 	UI_Image		* logo_image = nullptr;
@@ -94,7 +111,7 @@ private:
 	float B_Color[6] = { 0     , 0    , 0    , 255.F, 255.F, 255.F };
 
 	float color_percent = 0.f;
-	std::vector<SDL_Color>  colors;
+	SDL_Color colors[DEFAULT_PANEL_COLUMNS][DEFAULT_PANEL_ROWS];
 	UI_InteractiveGroup* selection_panel = nullptr;
 
 	bool              selection_able = false;

@@ -12,7 +12,7 @@ UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Li
 {
 	this->definition = definition;
 	this->is_interactive = true;
-	SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	section_width = definition.idle_rect.w;
 	section_height = definition.idle_rect.h;
 	sprite_rect = definition.idle_rect;
@@ -87,7 +87,7 @@ bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 	}
 
 	label = app->ui->CreateLabel(position + this->position, definition, this);
-	label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	label->SetParent(this);
 
 	return true;
