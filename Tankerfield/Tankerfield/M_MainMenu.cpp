@@ -29,26 +29,35 @@ bool M_MainMenu::Start()
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 	camera = app->render->CreateCamera( iPoint(0,0), (SDL_Rect)screen);
 
+	// Controll helper ------------------------
+
+	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
+	control_helper_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Acept", app->font->label_font_24));
+	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
 	// Main menu ------------------------------
 	menu_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
 
-	logo_image = app->ui->CreateImage({ 151.f, 151.f }, UI_ImageDef({10, 710, 915, 260}));
+	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, -200.f), UI_ImageDef({10, 710, 915, 260}));
+	logo_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	logo_image->SetParent(menu_peg);
 
-	multi_player_button = app->ui->CreateButton({ 600.f, 522.f }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 40), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font, { 50, 50, 50, 255 }));
 	multi_player_button->SetParent(menu_peg);
 
 	app->ui->AddInteractiveElement(multi_player_button);
 
-	exit_button = app->ui->CreateButton({ 600.f, 632.f }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 150.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font, { 50, 50, 50, 255 }));
 	exit_button->SetParent(menu_peg);
 
 	app->ui->AddInteractiveElement(exit_button);
 
 	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .0.5.7", app->font->label_font_38, {255,255,255,180}));
-	version_label->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	version_label->SetParent(menu_peg);
 
 
@@ -56,21 +65,22 @@ bool M_MainMenu::Start()
 
 	float element_side = 126;
 	UI_InteractiveGroupDef def;
-	def.columns = 4;
-	def.rows = 4;
-	float offset = def.columns * element_side * 0.5f;
+	def.columns = DEFAULT_PANEL_COLUMNS;
+	def.rows = DEFAULT_PANEL_ROWS;
+	float offset = DEFAULT_PANEL_COLUMNS * element_side * 0.5f;
 
 	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, def, this);
 
 	float color_value = 0.f;
-	float color_sum = 1.f / (def.columns * def.rows + 1);
+	float color_sum = 1.f / (DEFAULT_PANEL_COLUMNS * DEFAULT_PANEL_ROWS + 1);
 
-	for (int y = 0; y < def.rows; ++y)
+	for (int y = 0; y < DEFAULT_PANEL_ROWS; ++y)
 	{
-		for (int x = 0; x < def.columns; ++x)
+		for (int x = 0; x < DEFAULT_PANEL_COLUMNS; ++x)
 		{
 			UI_Element* element = app->ui->CreateImage(fPoint(screen_center.x - offset + x * element_side, screen_center.y - offset + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 }));
-			element->color_mod = GetColor(color_value);
+			colors[x][y] = GetColor(color_value);
+			element->color_mod = colors[x][y];
 			color_value += color_sum;
 			selection_panel->SetElement(element, iPoint(x, y));
 		}
@@ -142,13 +152,9 @@ bool M_MainMenu::PreUpdate()
 		SetState(MENU_STATE::SELECTION);
 	}
 
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	if ( selection_able == true)
 	{
-		if (players[i].controller == nullptr)
-		{
-			players[i].controller = app->input->GetAbleController();
-			players[i].tank->SetController(players[i].controller);
-		}
+		InputControllers();
 	}
 
 	return true;
@@ -212,17 +218,7 @@ bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 {
 	if (element == selection_panel && selection_able == true)
 	{
-		if (app->input->GetMouseButton(1) == KEY_DOWN || (players[current_player].controller != nullptr && (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) )
-		{
-			app->scene->tank_colors[current_player] = selection_panel->GetFocusedElement()->color_mod;
-			current_player += 1;
-			
-			if (current_player == MAX_PLAYERS )
-			{
-				app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
-				selection_able = false;
-			}
-		}
+		InputMouse();
 	}
 	return true;
 }
@@ -242,12 +238,18 @@ bool M_MainMenu::ClickUp(UI_Element * element)
 
 void M_MainMenu::SetState(MENU_STATE new_state)
 {
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
+
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
 		selection_able = false;
 		menu_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
+		control_helper_label->SetText("Acept");
+		control_helper_image->SetPos(screen_center + fPoint(-380, 260));
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
@@ -259,8 +261,12 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	case MENU_STATE::SELECTION:
 		selection_able = true;
 		current_player = 0;
+		ResetPanelColors();
 		menu_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		control_helper_label->SetPos(screen_center + fPoint( 40, 350));
+		control_helper_label->SetText("Select Color");
+		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
@@ -275,6 +281,81 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 	menu_state = new_state;
 
+}
+
+void M_MainMenu::InputControllers()
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (players[i].controller == nullptr)
+		{
+			players[i].controller = app->input->GetAbleController();
+			players[i].tank->SetController(players[i].controller);
+		}
+	}
+
+	if (players[current_player].controller != nullptr && (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+	{
+		SetPlayerProperties();
+	}
+}
+
+void M_MainMenu::InputMouse()
+{
+	if (app->input->GetMouseButton(1) == KEY_DOWN)
+	{
+		SetPlayerProperties();
+	}
+}
+
+void M_MainMenu::SetPlayerProperties()
+{
+	UI_Element* element_focused = selection_panel->GetFocusedElement();
+
+	if (element_focused == nullptr)
+	{
+		return;
+	}
+
+	SDL_Color color_1 = element_focused->color_mod;
+	SDL_Color color_2 = { 255,255,255,255 };
+
+	if (color_1.r == color_2.r && color_1.g == color_2.g && color_1.b == color_2.b )
+	{
+		return;
+	}
+
+	app->scene->tank_colors[current_player] = element_focused->color_mod;
+	element_focused->color_mod = color_2;
+
+	current_player += 1;
+
+	if (current_player == MAX_PLAYERS)
+	{
+		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
+		selection_able = false;
+	}
+}
+
+void M_MainMenu::ResetPanelColors()
+{
+	if (selection_panel == nullptr)
+	{
+		return;
+	}
+
+	UI_Element* aux = nullptr;
+
+	for (int y = 0; y < DEFAULT_PANEL_ROWS; ++y)
+	{
+		for (int x = 0; x < DEFAULT_PANEL_COLUMNS; ++x)
+		{
+			aux = selection_panel->GetElement(iPoint(x, y));
+			aux->color_mod = colors[x][y];
+		}
+	}
+
+	selection_panel->SetFocus(iPoint(0, 0));
 }
 
 SDL_Color M_MainMenu::GetColor(float value)

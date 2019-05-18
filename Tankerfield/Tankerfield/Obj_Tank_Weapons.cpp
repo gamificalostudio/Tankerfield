@@ -253,16 +253,6 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	}
 }
 
-void Obj_Tank::SetColor(const SDL_Color new_color)
-{
-	tank_color = new_color;
-
-	if (gui != nullptr)
-	{
-		gui->SetArrowColor(tank_color);
-	}
-}
-
 void Obj_Tank::ShootBasic()
 {
 	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
@@ -272,6 +262,8 @@ void Obj_Tank::ShootBasic()
 		weapon_info.shot1.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	bullet->SetPlayer(this);
 }
 
 void Obj_Tank::ShootDoubleMissile()
@@ -363,7 +355,7 @@ void Obj_Tank::ShootHealingShot()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
-	heal_bullet->tank_parent = this;
+	heal_bullet->SetPlayer(this);
 }
 
 void Obj_Tank::ShootLaserShot()
@@ -377,6 +369,8 @@ void Obj_Tank::ShootLaserShot()
 		weapon_info.shot1.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	laser_bullet->SetPlayer(this);
 }
 
 void Obj_Tank::ShootLaserShotCharged()
@@ -391,6 +385,9 @@ void Obj_Tank::ShootLaserShotCharged()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45,
 		true);
+
+	laser_bullet->SetPlayer(this);
+
 }
 
 void Obj_Tank::ShootFlameThrower()
@@ -436,6 +433,9 @@ void Obj_Tank::ShootOil()
 		weapon_info.shot1.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	bullet->SetPlayer(this);
+
 }
 
 void Obj_Tank::ShootOilCharged()
@@ -443,7 +443,6 @@ void Obj_Tank::ShootOilCharged()
 	fPoint pool_pos = turr_pos + shot_dir * 2.5F;
 	pool_pos -= fPoint(2.5f, 2.5f);
 	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, pool_pos);
-
 }
 
 void Obj_Tank::ShootElectroShot()

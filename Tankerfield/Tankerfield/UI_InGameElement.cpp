@@ -71,13 +71,13 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 	img_def.is_in_game = true;
 
 	weapon_frame = app->ui->CreateImage(position, img_def);
-	weapon_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	weapon_frame->SetPivot(Pivot::X::CENTER, Pivot::Y::BOTTOM);
 	weapon_frame->SetParent(this);
 
 	// Add icon ====================================================
 
 	weapon_icon = app->ui->CreateImage(position + app->map->ScreenToMapF(0.f, -29.f), img_def);
-	weapon_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	weapon_icon->SetPivot(Pivot::X::CENTER, Pivot::Y::BOTTOM);
 	weapon_icon->SetParent(weapon_frame);
 
 	Obj_PickUp* pick_up_obj = (Obj_PickUp*)pointed_obj;
@@ -186,7 +186,7 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 
 	img_def.sprite_section = { 390, 160, 55, 70 };
 	item_frame = app->ui->CreateImage( position, img_def);
-	item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::BOTTOM);
+	item_frame->SetPivot(Pivot::X::CENTER, Pivot::Y::BOTTOM);
 	item_frame->SetParent(this);
 
 	// Add icon ====================================================
@@ -209,7 +209,7 @@ UI_IG_Item::UI_IG_Item(const fPoint position, const UI_InGameElementDef definiti
 	}
 
 	item_icon = app->ui->CreateImage( position + app->map->ScreenToMapF(0.f, - 42.f), img_def);
-	item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	item_icon->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	item_icon->SetParent(item_frame);
 	
 	item_icon->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
@@ -241,7 +241,7 @@ void UI_IG_Helper::AddButtonHelper( const CONTROLLER_BUTTON button_type, const f
 
 	UI_Image*  ui_helper = app->ui->CreateImage(position + app->map->ScreenToMapF(offset.x, offset.y), def);
 	ui_helper->single_camera = this->single_camera;
-	ui_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	ui_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	ui_helper->SetParent(this);
 	helper_elements.push_back(ui_helper);
 }
@@ -253,14 +253,14 @@ void UI_IG_Helper::AddTextHelper(const String text, const fPoint offset)
 
 	UI_Label* ui_helper = app->ui->CreateLabel(position + app->map->ScreenToMapF(offset.x, offset.y), def);
 	ui_helper->single_camera = this->single_camera;
-	ui_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	ui_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	
 	UI_QuadDef quad_def({ 0,0, ui_helper->sprite_rect.w, ui_helper->sprite_rect.h }, { 100, 100, 100, 100 });
 	quad_def.is_in_game = true;
 
 	UI_Quad* back_quad = app->ui->CreateQuad(position + app->map->ScreenToMapF(offset.x, offset.y), quad_def);
 	back_quad->single_camera = this->single_camera;
-	back_quad->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	back_quad->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	back_quad->SetParent(this);
 	ui_helper->SetParent(back_quad);
