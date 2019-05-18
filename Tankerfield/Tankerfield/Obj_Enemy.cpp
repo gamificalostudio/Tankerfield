@@ -226,6 +226,9 @@ void Obj_Enemy::Dead()
 {
 	if (curr_anim != &death)
 	{
+		// DROP A PICK UP ITEM 
+		app->pick_manager->PickUpFromEnemy(pos_map);
+
 		curr_anim = &death;
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
@@ -253,6 +256,9 @@ void Obj_Enemy::ElectroDead()
 {
 	if (curr_anim != &electro_dead)
 	{
+		// DROP A PICK UP ITEM 
+		app->pick_manager->PickUpFromEnemy(pos_map);
+
 		bool_electro_dead = true;
 		curr_tex = tex_electro_dead;
 		curr_anim = &electro_dead;
@@ -485,8 +491,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 			if (life <= 0)
 			{
-				// DROP A PICK UP ITEM 
-				app->pick_manager->PickUpFromEnemy(pos_map);
+				
 				state = ENEMY_STATE::DEAD;
 			}
 			else
@@ -532,9 +537,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			
 			if (life <= 0)
 			{
-				// DROP A PICK UP ITEM 
 				channel_electrocuted = app->audio->PlayFx(electocuted);
-				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = ENEMY_STATE::DEAD;
 				is_electro_dead = true;
 				
