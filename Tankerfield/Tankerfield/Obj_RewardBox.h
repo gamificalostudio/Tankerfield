@@ -43,6 +43,8 @@ public:
 
 	bool Update(float dt) override;
 
+	void OnTriggerEnter(Collider * collider);
+
 	void OnTrigger(Collider * collider);
 
 	bool Draw(float dt, Camera * camera) override;
@@ -52,6 +54,10 @@ public:
 	void Dead();
 
 	void SetTypeBox(PICKUP_TYPE type = PICKUP_TYPE::NO_TYPE);
+
+private:
+
+	void TakeDamage(Collider * collider);
 };
 
 #endif // !__OBJ_REWARDBOX_H__
