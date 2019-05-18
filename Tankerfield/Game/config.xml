@@ -48,7 +48,7 @@
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
-      <green_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
+      <arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
         <dir>
           <frame x= "120" y= "160" w="25" h="25" />
         </dir>
@@ -73,89 +73,7 @@
         <dir>
           <frame x= "295 " y= "160" w="25" h="25" />
         </dir>
-      </green_arrow>
-
-      <blue_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
-        <dir>
-          <frame x= "120" y= "185" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "145" y= "185" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "170" y= "185" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "195" y= "185" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "220" y= "185" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "245" y= "185" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "270" y= "185" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "295" y= "185" w="25" h="25" />
-        </dir>
-      </blue_arrow>
-
-      <pink_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
-        <dir>
-          <frame x= "120" y= "210" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "145" y= "210" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "170" y= "210" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "195 " y= "210" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "220 " y= "210" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "245 " y= "210" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "270 " y= "210" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "295 " y= "210" w="25" h="25" />
-        </dir>
-      </pink_arrow>
-
-      <orange_arrow speed="0" rotation="counter-clockwise" first_dir_angle ="45">
-        <dir>
-          <frame x= "120" y= "235" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "145" y= "235" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "170" y= "235" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "195 " y= "235" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "220 " y= "235" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "245 " y= "235" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "270 " y= "235" w="25" h="25" />
-        </dir>
-        <dir>
-          <frame x= "295 " y= "235" w="25" h="25" />
-        </dir>
-      </orange_arrow>
-
+      </arrow>
     </animations>
   </ui>
   <map>

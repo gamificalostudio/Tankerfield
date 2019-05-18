@@ -1,41 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Obj_Building.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_AnimationBank.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Item.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_Audio.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_PickUp.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_Collision.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Portal.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_Fonts.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_RewardBox.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_Input.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Tank.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_MainMenu.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Tank_MainMenu.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_Map.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Tank_Weapons.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_ObjManager.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="M_Pathfinding.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_PickManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Render.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_RewardZoneManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Scene.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_SceneManager.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Textures.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_UI.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Window.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
     <ClCompile Include="App.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
-    <ClCompile Include="General_HUD.cpp">
-      <Filter>UI</Filter>
+    <ClCompile Include="Obj_Building.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_PickUp.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_RewardBox.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="UI_Bar.cpp">
       <Filter>UI</Filter>
@@ -76,72 +112,6 @@
     <ClCompile Include="UI_TextPanel.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="M_AnimationBank.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Audio.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Collision.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Fonts.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Input.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_MainMenu.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Map.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_ObjManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Pathfinding.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_PickManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="UI_Bar.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Render.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_RewardZoneManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Scene.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Item_HealthBag.cpp">
-      <Filter>Objects\Items</Filter>
-    </ClCompile>
-    <ClCompile Include="M_SceneManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Textures.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_UI.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="M_Window.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Quadtree_Map.cpp">
-      <Filter>Tools\QuadTree</Filter>
-    </ClCompile>
-    <ClCompile Include="Quadtree_Points.cpp">
-      <Filter>Tools\QuadTree</Filter>
-    </ClCompile>
-    <ClCompile Include="PugiXml\src\pugixml.cpp">
-      <Filter>Tools\Pugi</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Tools\Timers</Filter>
     </ClCompile>
@@ -150,6 +120,12 @@
     </ClCompile>
     <ClCompile Include="Log.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree_Points.cpp">
+      <Filter>Tools\QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree_Map.cpp">
+      <Filter>Tools\QuadTree</Filter>
     </ClCompile>
     <ClCompile Include="Bullet_Basic.cpp">
       <Filter>Objects\Bullets</Filter>
@@ -160,11 +136,17 @@
     <ClCompile Include="Bullet_Missile.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet_Oil.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
     <ClCompile Include="Obj_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Healing_Bullet.cpp">
-      <Filter>Objects\Bullets</Filter>
+    <ClCompile Include="Obj_Brute.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Item.cpp">
+      <Filter>Objects\Items</Filter>
     </ClCompile>
     <ClCompile Include="Item_HappyHour.cpp">
       <Filter>Objects\Items</Filter>
@@ -175,49 +157,38 @@
     <ClCompile Include="Item_InstantHelp.cpp">
       <Filter>Objects\Items</Filter>
     </ClCompile>
-    <ClCompile Include="Quadtree_Points.cpp">
-      <Filter>Tools\QuadTree</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="PugiXml\src\pugixml.cpp">
+      <Filter>Tools\PugiXML</Filter>
+    </ClCompile>
+    <ClCompile Include="ElectroShotAnimation.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Healing_Bullet.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="General_HUD.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Player_GUI.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="M_MainMenu.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Tank_Weapons.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Brute.cpp">
+    <ClCompile Include="Obj_TeslaTrooper.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Enemy.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet_Oil.cpp">
+    <ClCompile Include="Obj_CannonFire.cpp">
+      <Filter>Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_FlamethrowerFlame.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_CannonFire.cpp">
-      <Filter>Objects\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Explosion.cpp">
-      <Filter>Objects\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Fire.cpp">
-      <Filter>Objects\Particles</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_HealingAnimation.cpp">
-      <Filter>Objects\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Brute.cpp">
+      <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Obj_RocketLauncher.cpp">
       <Filter>Objects\Enemies</Filter>
@@ -225,105 +196,29 @@
     <ClCompile Include="Obj_Suicidal.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_TeslaTrooper.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="ElectroShotAnimation.cpp">
-      <Filter>Objects\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_HealingAnimation.cpp">
-      <Filter>Objects\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_CannonFire.cpp">
-      <Filter>Objects\Particles</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_Explosion.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Fire.cpp">
-      <Filter>Objects\Particles</Filter>
+      <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Obj_OilPool.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="ElectroShotAnimation.cpp" />
-    <ClCompile Include="Obj_FlamethrowerFlame.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="Obj_Tank_Weapons.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Tank.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Tank_MainMenu.cpp">
+      <Filter>Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Portal.cpp">
+      <Filter>Objects\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Obj_Building.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Item.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_PickUp.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Portal.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_RewardBox.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Tank.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Tank_MainMenu.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="App.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="General_HUD.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Bar.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Button.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Checkbox.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Element.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Image.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_InGameElement.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_InputText.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_InteractiveGroup.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Label.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Quad.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Slider.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_Table.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI_TextPanel.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="M_AnimationBank.h">
       <Filter>Modules</Filter>
     </ClInclude>
@@ -375,32 +270,74 @@
     <ClInclude Include="M_Window.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree_Points.h">
-      <Filter>Tools\QuadTree</Filter>
+    <ClInclude Include="App.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree_Map.h">
-      <Filter>Tools\QuadTree</Filter>
+    <ClInclude Include="Animation.h">
+      <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet_Missile.h">
-      <Filter>Objects\Bullets</Filter>
+    <ClInclude Include="Balance.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Building.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_PickUp.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_RewardBox.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>Tools\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="UI_Bar.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree.h">
-      <Filter>Tools\QuadTree</Filter>
+    <ClInclude Include="UI_Button.h">
+      <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="PugiXml\src\pugixml.hpp">
-      <Filter>Tools\Pugi</Filter>
+    <ClInclude Include="UI_Checkbox.h">
+      <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Item_HealthBag.h">
-      <Filter>Objects\Items</Filter>
+    <ClInclude Include="UI_Element.h">
+      <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="PugiXml\src\pugiconfig.hpp">
-      <Filter>Tools\Pugi</Filter>
+    <ClInclude Include="UI_Image.h">
+      <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h">
-      <Filter>Tools\Animations</Filter>
+    <ClInclude Include="UI_InGameElement.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_InputText.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_InteractiveGroup.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Label.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Quad.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Slider.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Table.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_TextPanel.h">
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Tools\Timers</Filter>
@@ -408,8 +345,23 @@
     <ClInclude Include="PerfTimer.h">
       <Filter>Tools\Timers</Filter>
     </ClInclude>
-    <ClInclude Include="Defs.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="Log.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Tools\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Tools\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree_Points.h">
+      <Filter>Tools\QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree_Map.h">
+      <Filter>Tools\QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
     <ClInclude Include="Bullet_Basic.h">
       <Filter>Objects\Bullets</Filter>
@@ -420,14 +372,17 @@
     <ClInclude Include="Bullet_Missile.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet_Oil.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
     <ClInclude Include="Obj_Bullet.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="MathUtils.h">
-      <Filter>Tools</Filter>
+    <ClInclude Include="Obj_Brute.h">
+      <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Healing_Bullet.h">
-      <Filter>Objects\Bullets</Filter>
+    <ClInclude Include="Obj_Item.h">
+      <Filter>Objects\Items</Filter>
     </ClInclude>
     <ClInclude Include="Item_HappyHour.h">
       <Filter>Objects\Items</Filter>
@@ -438,55 +393,47 @@
     <ClInclude Include="Item_InstantHelp.h">
       <Filter>Objects\Items</Filter>
     </ClInclude>
-    <ClInclude Include="Log.h">
+    <ClInclude Include="MathUtils.h">
       <Filter>Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Quadtree_Points.h">
-      <Filter>Tools\QuadTree</Filter>
+    <ClInclude Include="PugiXml\src\pugixml.hpp">
+      <Filter>Tools\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="PugiXml\src\pugiconfig.hpp">
+      <Filter>Tools\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectroShotAnimation.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Healing_Bullet.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Module.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="WeaponInfo.h">
-      <Filter>Objects</Filter>
+    <ClInclude Include="General_HUD.h">
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Player_GUI.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Tools\Geometry</Filter>
-    </ClInclude>
     <ClInclude Include="WeaponInfo.h">
-      <Filter>Utils</Filter>
+      <Filter>Objects\Weapons</Filter>
     </ClInclude>
-    <ClInclude Include="Point.h">
-      <Filter>Tools\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Circle.h">
-      <Filter>Tools\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Brute.h">
+    <ClInclude Include="Obj_TeslaTrooper.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Enemy.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet_Oil.h">
+    <ClInclude Include="Obj_CannonFire.h">
+      <Filter>Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_FlamethrowerFlame.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_CannonFire.h">
-      <Filter>Objects\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Explosion.h">
-      <Filter>Objects\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Fire.h">
-      <Filter>Objects\Particles</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_HealingAnimation.h">
-      <Filter>Objects\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Brute.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Obj_RocketLauncher.h">
       <Filter>Objects\Enemies</Filter>
@@ -494,90 +441,84 @@
     <ClInclude Include="Obj_Suicidal.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_TeslaTrooper.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Balance.h">
-      <Filter>Tools\Balance</Filter>
-    <ClInclude Include="ElectroShotAnimation.h">
-      <Filter>Objects\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_HealingAnimation.h">
-      <Filter>Objects\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_CannonFire.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_Explosion.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Fire.h">
-      <Filter>Objects\Particles</Filter>
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Obj_OilPool.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="ElectroShotAnimation.h" />
-    <ClInclude Include="Obj_FlamethrowerFlame.h">
-      <Filter>Objects</Filter>
+    <ClInclude Include="Obj_Tank.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Tank_MainMenu.h">
+      <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Portal.h">
+      <Filter>Objects\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="..\Game\config.xml">
-      <Filter>Core</Filter>
-    </Xml>
     <Xml Include="..\Game\animations.xml">
-      <Filter>Tools\Animations</Filter>
+      <Filter>Data</Filter>
     </Xml>
     <Xml Include="..\Game\balance.xml">
-      <Filter>Tools\Balance</Filter>
+      <Filter>Data</Filter>
+    </Xml>
+    <Xml Include="..\Game\config.xml">
+      <Filter>Data</Filter>
+    </Xml>
+    <Xml Include="..\Game\data\leader_board.xml">
+      <Filter>Data</Filter>
     </Xml>
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{81942fd6-8c45-4a5a-9630-e39191594881}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{0351f03c-1ee1-4d2d-95f2-d874bd5b3109}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Core">
-      <UniqueIdentifier>{fb6a637b-8962-4936-af04-21029aba865f}</UniqueIdentifier>
+      <UniqueIdentifier>{7d8c05ac-8071-430a-94e9-9e4c8ec0e325}</UniqueIdentifier>
     </Filter>
     <Filter Include="Objects">
-      <UniqueIdentifier>{03e850f5-9c27-4a8b-b285-a34ce909834a}</UniqueIdentifier>
+      <UniqueIdentifier>{4dd821e0-b782-4cf1-98b8-cdf5ffeb058e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tools">
-      <UniqueIdentifier>{4ae7c898-f406-46ba-a37b-1d6acb3b4d29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UI">
-      <UniqueIdentifier>{cfd5733a-fb99-41da-a05d-224074a8ab3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Modules">
-      <UniqueIdentifier>{50dfab3d-060d-444e-a41d-2c78594d802d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tools\QuadTree">
-      <UniqueIdentifier>{fade8147-44b0-478d-b3b1-ccc057af0ade}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tools\Pugi">
-      <UniqueIdentifier>{dd299fdf-ff72-4562-8d03-05a77c5f5857}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tools\Animations">
-      <UniqueIdentifier>{900b6c7d-1493-4355-9587-1e42fd7cf4c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Tools\Timers">
-      <UniqueIdentifier>{3b0da99a-0811-47ed-be11-d0102c14ce3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Objects\Bullets">
-      <UniqueIdentifier>{86f354ee-11c2-4411-9206-e2e57cbfb038}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Objects\Items">
-      <UniqueIdentifier>{d9809238-f750-41e7-95b3-4bafcdfeaa45}</UniqueIdentifier>
+      <UniqueIdentifier>{1fd42ccf-e9b9-42b4-8d03-ec23c473324c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Tools\Geometry">
-      <UniqueIdentifier>{6e682b8d-4a98-4114-b7bc-fd571d567eeb}</UniqueIdentifier>
+      <UniqueIdentifier>{89b4cac1-2f1d-43ce-9e86-da4dc2278249}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\Particles">
-      <UniqueIdentifier>{6dcad452-07af-4a3e-8814-0339b26a0501}</UniqueIdentifier>
+    <Filter Include="UI">
+      <UniqueIdentifier>{3134a1f3-537e-46b7-ac36-8c33510bfca3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Timers">
+      <UniqueIdentifier>{526f47db-e5cc-412e-9387-9a9ff6136a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\QuadTree">
+      <UniqueIdentifier>{2c3e4790-8320-4fc3-a6ec-e8321d7c255c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Items">
+      <UniqueIdentifier>{ed1b7882-0e17-4c9a-8fa0-e6d1537360af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Weapons">
+      <UniqueIdentifier>{221c1def-2a47-4ac8-84eb-5063c6c61d94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Bullets">
+      <UniqueIdentifier>{fab53e80-a992-45ed-93f8-b76566104fe7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Objects\Enemies">
-      <UniqueIdentifier>{03833ef9-4050-4efc-963c-7ae318029f4a}</UniqueIdentifier>
+      <UniqueIdentifier>{819ab318-d3c5-408c-8ceb-8376ec504b08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tools\Balance">
-      <UniqueIdentifier>{552bb5a0-2af5-4bc1-b61b-7751c5418ef7}</UniqueIdentifier>
+    <Filter Include="Tools\PugiXML">
+      <UniqueIdentifier>{b1e0a6e5-565a-4430-9b10-962e0bc42a8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Player">
+      <UniqueIdentifier>{1d857f95-9535-4f46-bfc9-658b8d38c8dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

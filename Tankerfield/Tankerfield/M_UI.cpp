@@ -62,10 +62,8 @@ bool M_UI::Awake(pugi::xml_node& config)
 	LOG("Loading Module UI");
 	bool ret = true;
 
-	green_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("green_arrow"));
-	pink_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("pink_arrow"));
-	blue_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("blue_arrow"));
-	orange_arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("orange_arrow"));
+	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
+
 
 	button_sprites[(int)CONTROLLER_BUTTON::A] =  { 440,10 ,50 ,50 };
 	button_sprites[(int)CONTROLLER_BUTTON::B] =  { 390,60 ,50 ,50 };

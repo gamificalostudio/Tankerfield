@@ -76,8 +76,11 @@ General_GUI::General_GUI()
 	UI_InputTextDef input_def;
 	input_def.font = app->font->label_font_24;
 	input_def.max_characters = 10;
+	input_def.default_text_color = { 200, 200,200,255 };
+
 
 	input_text = app->ui->CreateInputText(screen_center - fPoint( 0, 400.f), input_def);
+	input_text->alpha = 0.f;
 
 	// General HUD =================================================
 
@@ -211,14 +214,17 @@ void General_GUI::FadeLeaderBoardScreen(bool fade_on)
 	if (fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_ON;
+		input_text->ActiveInputText();
 	}
 	else
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 		background->SetFX(type, 2.F);
+		input_text->DesactiveInputText();
 	}
 	
 	leader_board_table->SetFX(type, 2.F);
+	input_text->SetFX(type, 2.F);
 
 	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
 	{

@@ -24,7 +24,7 @@ struct UI_InGameElementDef : public UI_ElementDef
 {
 	Object*         pointed_obj = nullptr;
 	bool            is_arrow_actived = false;
-	ARROW_COLOR     arrow_color = ARROW_COLOR::NONE;
+	SDL_Color       arrow_color = {255, 255, 255, 255};
 };
 
 class UI_InGameElement: public UI_Element
