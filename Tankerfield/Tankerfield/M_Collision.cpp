@@ -88,12 +88,14 @@ M_Collision::M_Collision()
 	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET] = true;
 	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::FRIENDLY_BULLET] = true;
 	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_LASER] = true;
+	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::ELECTRO_SHOT] = true;
+	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_OIL] = true;
+
 
 	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::WALL] = true;
 	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::ENEMY] = true; 
 	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::PLAYER] = true;
 	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::REWARD_BOX] = true;
-
 	on_trigger_matrix[(int)TAG::PICK_UP][(int)TAG::PLAYER] = true;
 	on_trigger_matrix[(int)TAG::BULLET_LASER][(int)TAG::WALL] = true;
 	on_trigger_matrix[(int)TAG::GOD][(int)TAG::PICK_UP] = true;

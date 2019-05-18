@@ -511,15 +511,16 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	if (collider->GetTag() == TAG::ELECTRO_SHOT)
 	{
 		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
-		//player->draw_electro_shot = true;
 		
 		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
 		{
 			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
 			
+			electro_anim->tank = player;
 			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
-			electro_anim->distance = player->pos_screen.DistanceTo(this->pos_screen);
-			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(this->pos_map - player->pos_map);
+			electro_anim->enemy_pos_screen = pos_screen;
+			electro_anim->enemy_pos_map = pos_map;
+			electro_anim->hit_no_enemie = false;
 
 			player->GetEnemiesHitted()->push_back(this);
 			player->hit_no_enemie = false;
@@ -527,8 +528,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			life -= collider->damage;
 
 			damaged_sprite_timer.Start();
-			/*curr_tex = tex_damaged;*/
-			//float player_enemy_distance = player->pos_map.DistanceTo(this->pos_map);
+
 			
 			if (life <= 0)
 			{

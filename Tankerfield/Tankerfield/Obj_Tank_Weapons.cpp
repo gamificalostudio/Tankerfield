@@ -8,6 +8,7 @@
 #include "M_AnimationBank.h"
 #include "M_Textures.h"
 #include "M_Map.h"
+#include "M_Audio.h"
 
 //Bullets
 #include "Bullet_Missile.h"
@@ -34,7 +35,7 @@ void Obj_Tank::InitWeapons()
 	pugi::xml_node electro_shot_node = app->config.child("object").child("tank").child("electro_shot");
 
 	float coll_size_init = electro_shot_node.child("collider_size").attribute("value").as_float();
-
+	electro_shot_sound = app->audio->LoadFx(electro_shot_node.child("electro_shot_sound").child_value(),25);
 	//Basic electro shot colliders
 	for (uint i = 1; i <= 3/*num max of colliders*/; ++i)
 	{
@@ -100,9 +101,12 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 		{
 			hit_no_enemie = false;
 			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, pos_map);
+			app->audio->PlayFx(electro_shot_sound);
+			electro_anim->tank = this;
 			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
-			electro_anim->distance = 25.f;
-			electro_anim->player_enemy_distance_point = app->map->MapToScreenF(GetShotDir());
+			electro_anim->hit_no_enemie = true;
+			
+
 		}
 
 	}
