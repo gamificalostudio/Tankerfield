@@ -1,4 +1,7 @@
 #include "General_HUD.h"
+#include "PugiXml/src/pugixml.hpp"
+#include "PugiXml/src/pugiconfig.hpp"
+#include "Log.h"
 #include "App.h"
 #include "M_UI.h"
 #include "M_Window.h"
@@ -70,24 +73,11 @@ General_GUI::General_GUI()
 	leader_board_table->SetParent(background);
 	leader_board_table->alpha = 0;
 
-	for (int i = 1; i < 11; ++i)
-	{
-		UI_Element* number = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(std::to_string(i), app->font->label_font_24));
-		number->SetParent(background);
-		number->alpha = 0;
-		leader_board_elements.push_back(number);
-		leader_board_table->AssortElementToTable(number, iPoint(0, i));
-	}
+	UI_InputTextDef input_def;
+	input_def.font = app->font->label_font_24;
+	input_def.max_characters = 10;
 
-	// ===========================================
-
-	//UI_InputTextDef input_def;
-	//input_def.font = app->font->label_font_24;
-	//input_def.max_characters = 10;
-	//app->ui->CreateInputText(screen_center, input_def);
-
-	//UI_Element* rank = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef("Rank", app->font->label_font_24));
-	//table->AssortElementToTable(rank, iPoint(0, 0));
+	input_text = app->ui->CreateInputText(screen_center - fPoint( 0, 400.f), input_def);
 
 	// General HUD =================================================
 
@@ -147,6 +137,15 @@ void General_GUI::SetRoundNumber(int round)
 	round_number_label->SetText(std::to_string(round).c_str());
 	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1.F, 3.F);
 }
+
+void General_GUI::SetInputTextToNameLabel()
+{
+	if (current_name != nullptr)
+	{
+		current_name->SetText(input_text->GetText());
+	}
+}
+
 
 void General_GUI::FadeGameOverScreen(bool fade_on, int rounds_survived)
 {
@@ -224,5 +223,140 @@ void General_GUI::FadeLeaderBoardScreen(bool fade_on)
 	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
 	{
 		(*iter)->SetFX(type, 2.F);
+	}
+}
+
+bool General_GUI::UpdateLeaderBoard(std::string path, int round)
+{
+	bool ret = false;
+
+	leader_board_doc.load_file(path.c_str());
+
+	if (leader_board_doc == NULL)
+	{
+		LOG("leader_board.xml not found");
+		return false;
+	}
+
+	doc_path = path;
+	pugi::xml_node leader_board_node = leader_board_doc.child("leader_board");
+	int rank_pos = 1;
+
+	// Case: XML is empty ===========================================================
+
+	if (leader_board_doc.child("leader_board").child("data") == NULL)
+	{
+		new_score_node = leader_board_node.prepend_child("data");
+		ret = true;
+	}
+
+	// Case: XML is not empty ========================================================
+
+	for (pugi::xml_node data_node = leader_board_doc.child("leader_board").child("data") ; data_node && ret == false ; data_node = data_node.next_sibling("data"))
+	{
+		if (data_node.attribute("round").as_int(0) <= round)
+		{
+			new_score_node = data_node;
+			break;
+		}
+
+		++rank_pos;
+	}
+
+	if (ret == false)
+	{
+		// It is placed between current data nodes -------------------------
+		if (new_score_node != NULL)
+		{
+			new_score_node = leader_board_node.insert_child_before("data", new_score_node);
+			ret = true;
+		}
+
+		// It is placed at the end of data nodes ---------------------------
+		else
+		{
+			new_score_node = leader_board_node.append_child("data");
+			ret = true;
+		}
+	}
+	
+	// Add new data node ===========================================================
+
+	if (ret == true)
+	{
+		new_score_node.append_attribute("rank") = rank_pos;
+		new_score_node.append_attribute("round") = round;
+		new_score_node.append_attribute("name") = "";
+	
+		current_rank = rank_pos;
+
+		// Update next data nodes rank positions ---------------------------
+
+		rank_pos = 1;
+
+		for (pugi::xml_node data_node = leader_board_doc.child("leader_board").child("data"); data_node ; data_node = data_node.next_sibling("data"))
+		{
+			data_node.attribute("rank") = rank_pos;
+			++rank_pos;
+		}
+
+		leader_board_doc.save_file(path.c_str());
+	}
+
+	return ret;
+
+}
+
+void General_GUI::FillLeaderBoardTable()
+{
+	int rank_pos = 1;
+
+	UI_Label* aux = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Rank", app->font->label_font_24));
+	leader_board_table->AssortElementToTable(aux, iPoint(0, 0));
+	leader_board_elements.push_back(aux);
+
+	aux = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Squad Name", app->font->label_font_24));
+	leader_board_table->AssortElementToTable(aux, iPoint(1, 0));
+	leader_board_elements.push_back(aux);
+
+	aux = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Round", app->font->label_font_24));
+	leader_board_table->AssortElementToTable(aux, iPoint(2, 0));
+	leader_board_elements.push_back(aux);
+
+
+	for (pugi::xml_node data_node = leader_board_doc.child("leader_board").child("data"); data_node && rank_pos <= 10; data_node = data_node.next_sibling("data"))
+	{
+		UI_Label* number = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(data_node.attribute("rank").as_string(""), app->font->label_font_24));
+		leader_board_elements.push_back(number);
+		leader_board_table->AssortElementToTable(number, iPoint(0, rank_pos));
+
+		UI_Label* name = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(data_node.attribute("name").as_string(""), app->font->label_font_24));
+		leader_board_elements.push_back(name);
+		leader_board_table->AssortElementToTable(name, iPoint(1, rank_pos));
+
+		UI_Label* round = app->ui->CreateLabel(fPoint(0.f, 0.f), UI_LabelDef(data_node.attribute("round").as_string(""), app->font->label_font_24));
+		leader_board_elements.push_back(round);
+		leader_board_table->AssortElementToTable(round, iPoint(2, rank_pos));
+
+		if (rank_pos == current_rank)
+		{
+			current_name = name;
+			
+			number->color_mod = { 255, 0, 0 ,255 };
+			name->color_mod = { 255, 0, 0 ,255 };
+			round->color_mod = { 255, 0, 0 ,255 };
+		}
+
+		++rank_pos;
+	}
+
+}
+
+void General_GUI::UpdateLeaderBoardSquadName()
+{
+	if (new_score_node != NULL && leader_board_doc != NULL)
+	{
+		new_score_node.attribute("name") = input_text->GetText().c_str();
+		leader_board_doc.save_file(doc_path.c_str());
 	}
 }

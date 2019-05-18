@@ -233,19 +233,27 @@ bool M_Scene::PreUpdate()
 // Called each loop iteration
 bool M_Scene::Update(float dt)
 {
-	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue)
-	
+	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue);
+
+	bool input_acept = false;
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
-	//if (app->input->GetKey(SDL_SCANCODE_F10)== KeyState::KEY_DOWN)
-	//{
-	//	if (label_number_of_enemies->GetState() == ELEMENT_STATE::VISIBLE)
-	//		label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
-	//	else
-	//		label_number_of_enemies->SetState(ELEMENT_STATE::VISIBLE);
-	//}
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		input_acept = true;
+	}
+
+	for (int i = 0; i < MAX_PLAYERS && input_acept == false; ++i) {
+
+		Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
+
+		if (controller != nullptr && (*controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		{
+			input_acept = true;
+		}
+	}
 
 	switch (game_state)
 	{
@@ -317,21 +325,20 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::WAIT_PLAYER_INPUT_1:
 
-		for (int i = 0; i < MAX_PLAYERS; ++i) {
-
-			Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
-
-			if (controller != nullptr && (*controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-			{
-				game_state = GAME_STATE::LEADER_BOARD;
-				break;
-			}
+		if (input_acept == true)
+		{
+			game_state = GAME_STATE::LEADER_BOARD;
 		}
 
 		break;
 
 	case GAME_STATE::LEADER_BOARD:
 
+		if (general_gui->UpdateLeaderBoard("data/leader_board.xml", 3) == true)
+		{
+			general_gui->FillLeaderBoardTable();
+		}
+		
 		general_gui->FadeGameOverScreen(false);
 		general_gui->FadeLeaderBoardScreen(true);
 		game_state = GAME_STATE::WAIT_PLAYER_INPUT_2;
@@ -340,9 +347,14 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::WAIT_PLAYER_INPUT_2:
 
-		break;
-	}
+		general_gui->SetInputTextToNameLabel();
 
+		if (input_acept == true)
+		{
+			general_gui->UpdateLeaderBoardSquadName();
+			app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f);
+		}
+	}
 
 	if (!game_over
 		&& !app->objectmanager->obj_tanks[0]->Alive()

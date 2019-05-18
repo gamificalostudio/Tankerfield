@@ -1,3 +1,13 @@
+<?xml version="1.0"?>
 <leader_board>
-  <data  rank ="" name="" round =""/>
+	<data rank="1" round="10" name="Minions" />
+	<data rank="2" round="9" name="Minions" />
+	<data rank="3" round="8" name="Minions" />
+	<data rank="4" round="7" name="Minions" />
+	<data rank="5" round="6" name="Minions" />
+	<data rank="6" round="5" name="Minions" />
+	<data rank="10" round="3" name="Minions" />
+	<data rank="11" round="3" name="Minions" />
+	<data rank="12" round="3" name="Minions" />
+	<data rank="13" round="3" name="Minions" />
 </leader_board>

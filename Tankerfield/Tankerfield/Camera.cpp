@@ -33,15 +33,14 @@ void Camera::ResetCamera()
 void Camera::ShakeCamera(float dt)
 {
 	//Keep the original position
-	unaltered_pos.x = rect.x;
-	unaltered_pos.y = rect.y;
+	unaltered_pos = camera_pos;
 
 	//Apply the camera shake
 	if (trauma > 0.f)
 	{
 		float shake = GetShakeAmount();
-		rect.x += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
-		rect.y += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
+		camera_pos.x += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
+		camera_pos.y += max_shake_offset * shake * GetRandomValue(-1.f, 1.f);
 
 		//Reduce trauma
 		trauma -= trauma_decay * dt;
@@ -57,15 +56,13 @@ float Camera::GetShakeAmount() const
 
 void Camera::FollowPlayer(float dt, Obj_Tank * player)
 {
-	fPoint source_pos((float) rect.x, (float)rect.y);
-
 	fPoint aim_pos = app->map->MapToScreenF(player->pos_map + player->GetShotDir() * aim_distance);
 	fPoint target_pos (aim_pos.x - rect.w * 0.5f, aim_pos.y - rect.h * 0.5f);
 
-	fPoint lerp_pos = lerp(source_pos, target_pos, dt * lerp_factor);
+	camera_pos = lerp(camera_pos, target_pos, dt * lerp_factor);
 
-	rect.x = lerp_pos.x;
-	rect.y = lerp_pos.y;
+	rect.x = camera_pos.x;
+	rect.y = camera_pos.y;
 }
 
 //Remove

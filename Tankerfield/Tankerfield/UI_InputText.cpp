@@ -42,6 +42,11 @@ bool UI_InputText::Update(float dt)
 	return true;
 }
 
+std::string UI_InputText::GetText()
+{
+	return input_text;
+}
+
 void UI_InputText::AddText(std::string text)
 {
 	if (input_text.length() < max_characters)
