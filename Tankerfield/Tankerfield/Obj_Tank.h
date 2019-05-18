@@ -201,6 +201,7 @@ private:
 	//Electro shot
 	PerfTimer electro_shot_timer;
 	bool is_electro_shot_charged = false;
+	uint electro_shot_sound = 0u;
 
 	std::vector<Collider*> electric_shot_colliders_vector;
 

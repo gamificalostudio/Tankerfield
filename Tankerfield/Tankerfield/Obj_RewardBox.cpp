@@ -10,6 +10,7 @@
 #include "M_PickManager.h"
 #include "M_Map.h"
 #include "M_Audio.h"
+#include "ElectroShotAnimation.h"
 
 
 
@@ -69,6 +70,30 @@ void Obj_RewardBox::OnTrigger(Collider * collider)
 			curr_frame = &frame_white;
 			timer_white.Start();
 		}
+	}
+
+	else if (collider->GetTag() == TAG::ELECTRO_SHOT)
+	{
+		++hits_taken;
+		if (hits_taken > max_hits)
+		{
+			Dead();
+		}
+		else
+		{
+			is_white = true;
+			curr_frame = &frame_white;
+			timer_white.Start();
+		}
+		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+		Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
+		
+		electro_anim->tank = player;
+		electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
+		electro_anim->enemy_pos_screen = pos_screen;
+		electro_anim->enemy_pos_map = pos_map;
+		electro_anim->hit_no_enemie = false;
+
 	}
 
 }

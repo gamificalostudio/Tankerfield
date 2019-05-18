@@ -91,6 +91,7 @@ M_Collision::M_Collision()
 	matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET] = true;
 	matrix[(int)TAG::REWARD_BOX][(int)TAG::FRIENDLY_BULLET] = true;
 	matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_LASER] = true;
+	matrix[(int)TAG::REWARD_BOX][(int)TAG::ELECTRO_SHOT] = true;
 
 	matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::WALL] = true;
 	matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::ENEMY] = true; 

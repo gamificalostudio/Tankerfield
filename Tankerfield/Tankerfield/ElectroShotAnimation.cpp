@@ -3,6 +3,7 @@
 #include "App.h"
 #include "M_Textures.h"
 #include "M_AnimationBank.h"
+#include "M_Map.h"
 
 Eletro_Shot_Animation::Eletro_Shot_Animation(fPoint pos) :Object(pos)
 {
@@ -19,6 +20,7 @@ Eletro_Shot_Animation::Eletro_Shot_Animation(fPoint pos) :Object(pos)
 	//	electro_offset.y = 30;
 	
 	
+	
 
 }
 
@@ -28,6 +30,18 @@ Eletro_Shot_Animation::~Eletro_Shot_Animation()
 
 bool Eletro_Shot_Animation::Update(float dt)
 {
+	pos_map = tank->pos_map;
+	pos_screen = tank->pos_screen;
+	if (!hit_no_enemie)
+	{
+		player_enemy_distance_point = app->map->MapToScreenF(enemy_pos_map - pos_map);
+		distance = pos_screen.DistanceTo(enemy_pos_screen);
+	}
+	else
+	{
+		distance = 25.f;
+		player_enemy_distance_point = app->map->MapToScreenF(tank->GetShotDir());
+	}
 	if (!curr_anim->Finished())
 	{
 		curr_anim->NextFrame(dt);

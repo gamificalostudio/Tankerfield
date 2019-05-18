@@ -18,10 +18,13 @@ public:
 	bool Draw(float dt, Camera* camera) override;
 
 public:
-	//Obj_Tank * tank = nullptr;
+	Obj_Tank * tank = nullptr;
+	fPoint enemy_pos_map = { 0,0 };
+	fPoint enemy_pos_screen = { 0,0 };
 	fPoint player_enemy_distance_point{0.f,0.f};
 	fPoint offset_dir_screen{ 0.f,0.f };
 	float distance = 0.f;
+	bool hit_no_enemie = false;
 
 private:
 	Animation anim;
