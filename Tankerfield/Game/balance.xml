@@ -15,17 +15,17 @@
     </basic_weapon>
 
     <double_missile>
-      <damage_multiplier num="100"/>
+      <damage_multiplier num="50"/>
       <damage_exponential_base num="1.55"/>
     </double_missile>
 
     <healing_shot>
-      <damage_multiplier num="100"/>
+      <damage_multiplier num="75"/>
       <damage_exponential_base num="1.55"/>
     </healing_shot>
 
     <laser>
-      <damage_multiplier num="100"/>
+      <damage_multiplier num="50"/>
       <damage_exponential_base num="1.55"/>
     </laser>
 
@@ -35,7 +35,7 @@
     </electro_shot>
 
     <flamethrower>
-      <damage_multiplier num="100"/>
+      <damage_multiplier num="5"/>
       <damage_exponential_base num="1.55"/>
     </flamethrower>
 
