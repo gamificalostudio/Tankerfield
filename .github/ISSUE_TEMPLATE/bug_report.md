@@ -13,6 +13,8 @@ assignees: ''
 
 **Expected behaviour**
 
+**Actual behaviour**
+
 **Game version**
 
 **Screenshots**
