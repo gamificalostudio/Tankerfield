@@ -219,7 +219,7 @@ bool M_Collision::Update(float dt)
 
 			// Solve Overlap  ==================================================================
 
-			if (on_collision && collider_1->is_sensor == false && collider_2->is_sensor == false)
+			if (on_collision && (matrix[(int)collider_1->tag][(int)collider_2->tag] || matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_1->is_sensor == false && collider_2->is_sensor == false)
 			{
 				if ((int)collider_1->tag > (int)collider_2->tag)
 				{
@@ -270,8 +270,7 @@ bool M_Collision::Update(float dt)
 
 			// Solve Overlap  ==================================================================
 
-
-			if (on_collision && collider_2->is_sensor == false)
+			if (on_collision && (matrix[(int)collider_1->tag][(int)collider_2->tag] || matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_2->is_sensor == false)
 			{
 				SolveOverlapDS(collider_2, collider_1);
 			}
