@@ -1150,3 +1150,8 @@ void Obj_Tank::CreatePortals()
 
 	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
 }
+
+float Obj_Tank::GetTurrAngle() const
+{
+	return turr_angle;
+}

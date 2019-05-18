@@ -61,6 +61,7 @@ public:
 	bool GetShotAutomatically() const;
 	bool GetIsElectroShotCharged() const;
 	fPoint GetShotDir() const;
+	float GetTurrAngle() const;
 	WeaponInfo GetWeaponInfo() const;
 
 	bool IsReady() const;
