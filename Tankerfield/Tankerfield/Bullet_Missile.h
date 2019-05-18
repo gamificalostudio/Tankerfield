@@ -13,7 +13,7 @@ public:
 
 	Bullet_Missile(fPoint pos);
 
-	void OnTrigger(Collider* collider_1);
+	void OnTriggerEnter(Collider* collider_1);
 
 public:
 	int explosion_damage = 0;
