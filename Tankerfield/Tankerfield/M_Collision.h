@@ -198,7 +198,9 @@ private:
 
 	std::map<Collider* ,bool> mod_on_trigger_colliders;
 
-	bool matrix[(int)TAG::MAX][(int)TAG::MAX];
+	bool on_trigger_matrix[(int)TAG::MAX][(int)TAG::MAX];
+
+	bool solve_overlap_matrix[(int)TAG::MAX][(int)TAG::MAX];
 
 	bool is_updating = false;
 

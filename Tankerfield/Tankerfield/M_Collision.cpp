@@ -58,51 +58,68 @@ M_Collision::M_Collision()
 	{
 		for (int j = 0; j < (int)TAG::MAX; ++j)
 		{
-			matrix[i][j] = false;
+			on_trigger_matrix[i][j] = false;
 		}
 	}
 
-	matrix[(int)TAG::PLAYER][(int)TAG::WALL] = true;
-	matrix[(int)TAG::PLAYER][(int)TAG::WATER] = true;
-	matrix[(int)TAG::PLAYER][(int)TAG::ENEMY] = true;
-	matrix[(int)TAG::PLAYER][(int)TAG::FRIENDLY_BULLET] = true;
-	matrix[(int)TAG::PLAYER][(int)TAG::PICK_UP] = true;
-	matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
-	matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
+	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::ENEMY] = true;
+	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::FRIENDLY_BULLET] = true;
+	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::PICK_UP] = true;
+	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
+	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
 
-	matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
-	matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
-	matrix[(int)TAG::ENEMY][(int)TAG::BULLET_LASER] = true;
-	matrix[(int)TAG::ENEMY][(int)TAG::ELECTRO_SHOT] = true;
-	matrix[(int)TAG::ENEMY][(int)TAG::BULLET_OIL] = true;
-	matrix[(int)TAG::ENEMY][(int)TAG::OIL_POOL] = true;
+	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
+	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
+	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET_LASER] = true;
+	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::ELECTRO_SHOT] = true;
+	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET_OIL] = true;
+	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::OIL_POOL] = true;
 
 
-	matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
-	matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
-	matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
+	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
+	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
+	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
+	on_trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::WALL] = true;
+	on_trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::ENEMY] = true;
+	on_trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::REWARD_BOX] = true;
 
-	matrix[(int)TAG::BULLET_OIL][(int)TAG::WALL] = true;
-	matrix[(int)TAG::BULLET_OIL][(int)TAG::ENEMY] = true;
-	matrix[(int)TAG::BULLET_OIL][(int)TAG::REWARD_BOX] = true;
+	on_trigger_matrix[(int)TAG::REWARD_ZONE][(int)TAG::PLAYER] = true;
 
-	matrix[(int)TAG::REWARD_ZONE][(int)TAG::PLAYER] = true;
+	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET] = true;
+	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::FRIENDLY_BULLET] = true;
+	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_LASER] = true;
 
-	matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET] = true;
-	matrix[(int)TAG::REWARD_BOX][(int)TAG::FRIENDLY_BULLET] = true;
-	matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_LASER] = true;
+	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::WALL] = true;
+	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::ENEMY] = true; 
+	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::PLAYER] = true;
+	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::REWARD_BOX] = true;
 
-	matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::WALL] = true;
-	matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::ENEMY] = true; 
-	matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::PLAYER] = true;
-	matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::REWARD_BOX] = true;
+	on_trigger_matrix[(int)TAG::PICK_UP][(int)TAG::PLAYER] = true;
+	on_trigger_matrix[(int)TAG::BULLET_LASER][(int)TAG::WALL] = true;
+	on_trigger_matrix[(int)TAG::GOD][(int)TAG::PICK_UP] = true;
+	on_trigger_matrix[(int)TAG::GOD][(int)TAG::ROAD] = true;
 
-	matrix[(int)TAG::PICK_UP][(int)TAG::PLAYER] = true;
 
-	matrix[(int)TAG::BULLET_LASER][(int)TAG::WALL] = true;
+	for (int i = 0; i < (int)TAG::MAX; ++i)
+	{
+		for (int j = 0; j < (int)TAG::MAX; ++j)
+		{
+			solve_overlap_matrix[i][j] = false;
+		}
+	}
 
-	matrix[(int)TAG::GOD][(int)TAG::PICK_UP] = true;
-	matrix[(int)TAG::GOD][(int)TAG::ROAD] = true;
+	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::PLAYER]      = true;
+	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::WALL]	      = true;
+	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::WATER]		  = true;
+	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::REWARD_BOX]  = true;
+	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::ENEMY]       = true;
+
+	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::ENEMY] = true;
+	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::PLAYER] = true;
+	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::WALL] = true;
+	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::WATER] = true;
+	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
+
 }
 
 M_Collision::~M_Collision()
@@ -217,7 +234,7 @@ bool M_Collision::Update(float dt)
 
 			// Solve Overlap  ==================================================================
 
-			if (on_collision && (matrix[(int)collider_1->tag][(int)collider_2->tag] || matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_1->is_sensor == false && collider_2->is_sensor == false)
+			if (on_collision && (solve_overlap_matrix[(int)collider_1->tag][(int)collider_2->tag] || solve_overlap_matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_1->is_sensor == false && collider_2->is_sensor == false)
 			{
 				if ((int)collider_1->tag > (int)collider_2->tag)
 				{
@@ -268,7 +285,7 @@ bool M_Collision::Update(float dt)
 
 			// Solve Overlap  ==================================================================
 
-			if (on_collision && (matrix[(int)collider_1->tag][(int)collider_2->tag] || matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_2->is_sensor == false)
+			if (on_collision && (solve_overlap_matrix[(int)collider_1->tag][(int)collider_2->tag] || solve_overlap_matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_2->is_sensor == false)
 			{
 				SolveOverlapDS(collider_2, collider_1);
 			}
@@ -500,7 +517,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	
 	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
 	{
-		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
+		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
 			c1->object->OnTrigger(c2);
 		}
@@ -509,7 +526,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	{
 		c1->collisions_list.push_back(c2);
 
-		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
+		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
 			c1->object->OnTriggerEnter(c2);
 		}
@@ -519,7 +536,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 
 	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
 	{
-		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
+		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
 			c1->object->OnTrigger(c2);
 		}
@@ -528,7 +545,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	{
 		c1->collisions_list.push_back(c2);
 
-		if (c1->object != nullptr && matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
+		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
 			c1->object->OnTriggerEnter(c2);
 		}
