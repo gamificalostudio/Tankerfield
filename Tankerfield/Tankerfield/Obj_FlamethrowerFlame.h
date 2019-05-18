@@ -28,6 +28,7 @@ private:
 	Animation anim;
 	SDL_Texture * tex	= nullptr;
 	float scale = 1.f;
+	SDL_Point pivot;
 };
 
 #endif

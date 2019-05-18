@@ -8,19 +8,19 @@ UI_InputText::UI_InputText(const fPoint position, const UI_InputTextDef definiti
 max_characters(definition.max_characters), font(definition.font)
 {
 	editable_label = app->ui->CreateLabel(fPoint(position), UI_LabelDef("", font, definition.editable_text_color));
-	editable_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	editable_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	editable_label->SetParent(this);
 	editable_label->SetState(ELEMENT_STATE::HIDDEN);
 
 	default_label = app->ui->CreateLabel(fPoint(position), UI_LabelDef(definition.default_text, font, definition.default_text_color));
-	default_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	default_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	default_label->SetParent(this);
 	default_label->SetState(ELEMENT_STATE::HIDDEN);
 
 	SDL_Rect rect = editable_label->GetDrawRect();
 	fPoint point(rect.x + rect.w, rect.y + rect.h* 0.5f);
 	cursor = app->ui->CreateQuad(point, UI_QuadDef({ 0,0,3,25 }, {255,255,255,255}));
-	cursor->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
+	cursor->SetPivot(Pivot::X::LEFT, Pivot::Y::CENTER);
 	cursor->SetParent(editable_label);
 	cursor->SetState(ELEMENT_STATE::HIDDEN);
 

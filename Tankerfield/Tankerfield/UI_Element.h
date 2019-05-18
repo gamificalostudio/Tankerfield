@@ -24,19 +24,19 @@ public:
 	Pivot()
 	{};
 
-	enum class POS_X
+	enum class X
 	{
 		LEFT,
 		CENTER,
 		RIGHT
-	} pos_x = POS_X::LEFT;
+	} pos_x = X::LEFT;
 
-	enum class POS_Y
+	enum class Y
 	{
 		TOP,
 		CENTER,
 		BOTTOM
-	} pos_y = POS_Y::TOP;
+	} pos_y = Y::TOP;
 
 };
 
@@ -102,7 +102,7 @@ public:
 
 	void SetStateToBranch(ELEMENT_STATE new_state);
 
-	void SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y);
+	void SetPivot(const Pivot::X x, const Pivot::Y y);
 
 	void SetFX(UI_Fade_FX::FX_TYPE type, float seconds, float loops = -1.F, float init_value = -1.F, float target_value = -1.F);
 

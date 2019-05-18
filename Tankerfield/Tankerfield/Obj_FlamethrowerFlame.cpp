@@ -29,7 +29,12 @@ Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) : Object(pos)
 	anim.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire"));
 	curr_anim = &anim;
 
-	draw_offset = { 0,0 };
+	
+	draw_offset = { curr_anim->GetFrame(0).w/2, 0 };
+	
+	pivot.x = draw_offset.x;
+	pivot.y = draw_offset.y;
+
 	scale = 1.f;
 }
 
@@ -48,12 +53,14 @@ bool Obj_FlamethrowerFlame::Draw(float dt, Camera* camera)
 {
 	app->render->BlitScaledAndRotated(
 		tex,
-		pos_screen.x,
-		pos_screen.y,
+		pos_screen.x-draw_offset.x,
+		pos_screen.y-draw_offset.y,
 		camera,
 		&curr_anim->GetFrame(0),
 		scale,
-		scale);
+		scale,
+		pivot,
+		-tank->GetTurrAngle()-90.f);
 
 	return true;
 }

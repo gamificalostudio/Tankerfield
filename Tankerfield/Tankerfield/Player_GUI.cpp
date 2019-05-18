@@ -55,24 +55,24 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	if (tank_num == 0 || tank_num == 1)
 	{
 		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, image_def);
-		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		item_frame->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
 		item_frame = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetBottom() - margin.y - 30.f }, image_def);
-		item_frame->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		item_frame->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	image_def.sprite_section = { 0, 0, 0, 0 };
 
 	if (tank_num == 0 || tank_num == 1)
 	{
 		item_icon = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, image_def);
-		item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		item_icon->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
 		item_icon = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetBottom() - margin.y - 30.f }, image_def);
-		item_icon->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		item_icon->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 
 	image_def.sprite_section = { 10, 10, 60, 60 };
@@ -80,24 +80,24 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	if (tank_num == 0 || tank_num == 1)
 	{
 		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - margin.x  ,viewport.GetTop() + margin.y }, image_def);
-		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+		weapon_frame->SetPivot(Pivot::X::RIGHT, Pivot::Y::TOP);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
 		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - margin.x ,viewport.GetBottom() - margin.y }, image_def);
-		weapon_frame->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+		weapon_frame->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
 	image_def.sprite_section = { 0, 0, 0, 0 };
 
 	if (tank_num == 0 || tank_num == 1)
 	{
 		weapon_icon = app->ui->CreateImage({ viewport.GetRight() - margin.x - 8.f,viewport.GetTop() + margin.y + 8.f }, image_def);
-		weapon_icon->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+		weapon_icon->SetPivot(Pivot::X::RIGHT, Pivot::Y::TOP);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
 		weapon_icon = app->ui->CreateImage({ viewport.GetRight() - margin.x - 8.f ,viewport.GetBottom() - margin.y - 8.f }, image_def);
-		weapon_icon->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+		weapon_icon->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
 
 	SetWeaponIcon(WEAPON::BASIC);
@@ -111,22 +111,22 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	case 0:
 		life_bar_def.direction = UI_Bar::DIR::UP;
 		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
-		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::BOTTOM);
+		life_bar->SetPivot(Pivot::X::LEFT, Pivot::Y::BOTTOM);
 		break;
 	case 1:
 		life_bar_def.direction = UI_Bar::DIR::UP;
 		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
-		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+		life_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 		break;
 	case 2:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
 		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetTop() + 21.f }, life_bar_def);
-		life_bar->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::TOP);
+		life_bar->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
 		break;
 	case 3:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
 		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetTop() + 21.f }, life_bar_def);
-		life_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+		life_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::TOP);
 		break;
 	default:
 		break;
@@ -140,35 +140,35 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	{           
 		charged_shot_bar_def.direction = UI_Bar::DIR::DOWN;
 		charged_shot_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x - 8.f, viewport.GetTop() + margin.y + 8.f }, charged_shot_bar_def);
-		charged_shot_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
+		charged_shot_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::TOP);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
 		charged_shot_bar_def.direction = UI_Bar::DIR::UP;
 		charged_shot_bar = app->ui->CreateBar({ viewport.GetRight() - margin.x - 8.f, viewport.GetBottom() - margin.y - 8.f }, charged_shot_bar_def);
-		charged_shot_bar->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
+		charged_shot_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
 
 	if (tank_num == 0 || tank_num == 1)
 	{
 		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, 55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::RT] }));
-		item_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		item_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
 		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, -55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::RT] }));
-		item_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		item_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 
 	if (tank_num == 0 || tank_num == 1)
 	{
 		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, 28.F), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::LB] }));
-		weapon_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		weapon_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
 		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, -28.F), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::LB] }));
-		weapon_helper->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+		weapon_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 
 

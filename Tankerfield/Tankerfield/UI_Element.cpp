@@ -100,7 +100,7 @@ void UI_Element::SetStateToBranch(ELEMENT_STATE new_state)
 	app->ui->SetStateToBranch(new_state, this);
 }
 
-void UI_Element::SetPivot(const Pivot::POS_X x, const Pivot::POS_Y y)
+void UI_Element::SetPivot(const Pivot::X x, const Pivot::Y y)
 {
 	pivot.pos_x = x;
 	pivot.pos_y = y;
@@ -133,26 +133,26 @@ fRect UI_Element::GetSection()
 	{
 		switch (pivot.pos_x)
 		{
-		case Pivot::POS_X::CENTER:
+		case Pivot::X::CENTER:
 			pos.x = position.x -section_width * .5f + section_offset.x;
 			break;
-		case Pivot::POS_X::LEFT:
+		case Pivot::X::LEFT:
 			pos.x = position.x + section_offset.x;
 			break;
-		case Pivot::POS_X::RIGHT:
+		case Pivot::X::RIGHT:
 			pos.x = position.x - section_width + section_offset.x;
 			break;
 		}
 
 		switch (pivot.pos_y)
 		{
-		case Pivot::POS_Y::CENTER:
+		case Pivot::Y::CENTER:
 			pos.y = position.y - section_height * .5f + section_offset.y;
 			break;
-		case Pivot::POS_Y::TOP:
+		case Pivot::Y::TOP:
 			pos.y = position.y + section_offset.y;
 			break;
-		case Pivot::POS_Y::BOTTOM:
+		case Pivot::Y::BOTTOM:
 			pos.y = position.y - section_height + section_offset.y;
 			break;
 		}
@@ -161,26 +161,26 @@ fRect UI_Element::GetSection()
 	{
 		switch (pivot.pos_x)
 		{
-		case Pivot::POS_X::CENTER:
+		case Pivot::X::CENTER:
 			pos.x = position.x - (float)sprite_rect.w * .5f + section_offset.x;
 			break;
-		case Pivot::POS_X::LEFT:
+		case Pivot::X::LEFT:
 			pos.x = position.x + section_offset.x;
 			break;
-		case Pivot::POS_X::RIGHT:
+		case Pivot::X::RIGHT:
 			pos.x = position.x - (float)sprite_rect.w + section_offset.x;
 			break;
 		}
 
 		switch (pivot.pos_y)
 		{
-		case Pivot::POS_Y::CENTER:
+		case Pivot::Y::CENTER:
 			pos.y = position.y - (float)sprite_rect.h * .5f + section_offset.y;
 			break;
-		case Pivot::POS_Y::TOP:
+		case Pivot::Y::TOP:
 			pos.y = position.y + section_offset.y;
 			break;
-		case Pivot::POS_Y::BOTTOM:
+		case Pivot::Y::BOTTOM:
 			pos.y = position.y - (float)sprite_rect.h + section_offset.y;
 			break;
 		}
@@ -208,26 +208,26 @@ SDL_Rect UI_Element::GetDrawRect()
 
 	switch (pivot.pos_x)
 	{
-	case Pivot::POS_X::CENTER:
+	case Pivot::X::CENTER:
 		rect_pos.x = mod_pos.x - (float)sprite_rect.w * .5f;
 		break;
-	case Pivot::POS_X::LEFT:
+	case Pivot::X::LEFT:
 		rect_pos.x = mod_pos.x;
 		break;
-	case Pivot::POS_X::RIGHT:
+	case Pivot::X::RIGHT:
 		rect_pos.x = mod_pos.x - (float)sprite_rect.w;
 		break;
 	}
 
 	switch (pivot.pos_y)
 	{
-	case Pivot::POS_Y::CENTER:
+	case Pivot::Y::CENTER:
 		rect_pos.y = mod_pos.y - (float)sprite_rect.h * .5f;
 		break;
-	case Pivot::POS_Y::TOP:
+	case Pivot::Y::TOP:
 		rect_pos.y = mod_pos.y;
 		break;
-	case Pivot::POS_Y::BOTTOM:
+	case Pivot::Y::BOTTOM:
 		rect_pos.y = mod_pos.y - (float)sprite_rect.h;
 		break;
 	}

@@ -89,7 +89,7 @@ void UI_Table::AssortElementToTable(UI_Element * element, const iPoint position)
 		return;
 	}
 
-	element->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	element->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	element->SetPos( (fPoint)GetElementScreenPos(position) );
 }
 
