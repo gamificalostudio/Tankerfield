@@ -310,13 +310,7 @@ public:
 
 	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
 
-	Animation	green_arrow_anim;
-
-	Animation   pink_arrow_anim;
-
-	Animation   blue_arrow_anim;
-
-	Animation   orange_arrow_anim;
+	Animation	arrow_anim;
 
 	friend UI_Element;
 };

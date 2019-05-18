@@ -252,6 +252,11 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 void Obj_Tank::SetColor(const SDL_Color new_color)
 {
 	tank_color = new_color;
+
+	if (gui != nullptr)
+	{
+		gui->SetArrowColor(tank_color);
+	}
 }
 
 void Obj_Tank::ShootBasic()

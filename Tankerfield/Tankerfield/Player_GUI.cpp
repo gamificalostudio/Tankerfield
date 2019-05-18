@@ -24,6 +24,8 @@
 
 Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 {
+	int tank_num = player->GetTankNum();
+
 	viewport.create(
 		player_object->camera_player->screen_section.x,
 		player_object->camera_player->screen_section.y,
@@ -41,23 +43,6 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	UI_InGameElementDef arrow_def;
 	arrow_def.is_arrow_actived = true;
 	arrow_def.pointed_obj = player_object;
-	int tank_num = player->GetTankNum();
-
-	switch (tank_num)
-	{
-	case 0:
-		arrow_def.arrow_color = ARROW_COLOR::GREEN;
-		break;
-	case 1:
-		arrow_def.arrow_color = ARROW_COLOR::BLUE;
-		break;
-	case 2:
-		arrow_def.arrow_color = ARROW_COLOR::PINK;
-		break;
-	case 3:
-		arrow_def.arrow_color = ARROW_COLOR::ORANGE;
-		break;
-	}
 
 	player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
 
@@ -292,6 +277,10 @@ void Player_GUI::SetItemIcon(ItemType type)
 
 }
 
+void Player_GUI::SetArrowColor(const SDL_Color color )
+{
+	player_arrow->color_mod = color;
+}
 
 void Player_GUI::ClearHelpers()
 {
@@ -321,48 +310,6 @@ void Player_GUI::AddTextHelper(const std::string text)
 
 Player_GUI::~Player_GUI()
 {
-	if (app->on_clean_up == false)
-	{
-		if (weapon_frame != nullptr)
-		{
-			weapon_frame->Destroy();
-			weapon_frame = nullptr;
-
-		}
-		if (weapon_icon != nullptr)
-		{
-			weapon_icon->Destroy();
-			weapon_icon = nullptr;
-
-		}
-
-		if (item_frame != nullptr)
-		{
-			item_frame->Destroy();
-			item_frame = nullptr;
-		}
-
-		if (item_icon != nullptr)
-		{
-			item_icon->Destroy();
-			item_icon = nullptr;
-		}
-		if (life_bar != nullptr)
-		{
-			life_bar->Destroy();
-			life_bar = nullptr;
-		}
-		if (weapon_helper != nullptr)
-		{
-			weapon_helper->Destroy();
-			weapon_helper = nullptr;
-		}
-		if (item_helper != nullptr)
-		{
-			item_helper->Destroy();
-			item_helper = nullptr;
-		}
-	}
 }
 
 

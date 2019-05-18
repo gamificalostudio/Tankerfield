@@ -21,24 +21,9 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 
 	if (definition.is_arrow_actived == true)
 	{
-		switch (definition.arrow_color)
-		{
-		case ARROW_COLOR::GREEN:
-			arrow_animation = &app->ui->green_arrow_anim;
-			break;
-		case ARROW_COLOR::BLUE:
-			arrow_animation = &app->ui->blue_arrow_anim;
-			break;
-		case ARROW_COLOR::PINK:
-			arrow_animation = &app->ui->pink_arrow_anim;
-			break;
-		case ARROW_COLOR::ORANGE:
-			arrow_animation = &app->ui->orange_arrow_anim;
-			break;
-		}
+		arrow_animation = &app->ui->arrow_anim;
+		color_mod = definition.arrow_color;
 	}
-
-	
 }
 
 bool UI_InGameElement::Update(float dt)
@@ -69,7 +54,10 @@ bool UI_InGameElement::Draw()
 		sprite_rect = arrow_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
 		vector.Normalize();
 		screen_pos = app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 2.f, app->ui->current_camera);
+
+		SDL_SetTextureColorMod(app->ui->GetAtlas(), color_mod.r, color_mod.g, color_mod.b);
 		app->render->BlitUI( app->ui->GetAtlas(), screen_pos.x - (float)sprite_rect.w * 0.5f, screen_pos.y - (float)sprite_rect.h * 0.5f, &sprite_rect ,app->ui->current_camera);
+		SDL_SetTextureColorMod(app->ui->GetAtlas(), 255, 255, 255);
 	}
 }
 

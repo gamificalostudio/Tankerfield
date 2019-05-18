@@ -45,6 +45,8 @@ public:
 
 	void SetItemIcon(ItemType type);
 
+	void SetArrowColor(const SDL_Color color);
+
 	void Fade_GUI(bool fade_on);
 
 	~Player_GUI();
