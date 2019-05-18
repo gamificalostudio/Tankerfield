@@ -22,6 +22,8 @@ void Bullet_Missile::OnTriggerEnter(Collider * collider_1)
 
 bool Bullet_Missile::Update(float dt)
 {
+	pos_map += direction * speed * dt;
+
 	if (bullet_life_ms_timer.ReadMs() >= bullet_life_ms)
 	{
 		Obj_Explosion* explosion_obj = (Obj_Explosion*)app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
