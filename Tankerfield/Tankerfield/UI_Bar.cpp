@@ -9,12 +9,6 @@ UI_Bar::UI_Bar(fPoint position, UI_BarDef definition, UI_Listener* listener) : U
 	
 }
 
-
-UI_Bar::~UI_Bar()
-{
-
-}
-
 bool UI_Bar::Draw()
 {
 	fRect back_rect = GetSection();

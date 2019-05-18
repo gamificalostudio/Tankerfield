@@ -18,14 +18,15 @@ UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Li
 	sprite_rect = definition.idle_rect;
 }
 
-
-UI_Button::~UI_Button()
+void UI_Button::Destroy()
 {
 	if (label != nullptr)
 	{
 		label->Destroy();
 		label = nullptr;
 	}
+
+	to_destroy = true;
 }
 
 bool UI_Button::Draw()

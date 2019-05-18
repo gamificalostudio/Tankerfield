@@ -28,6 +28,8 @@ public:
 
 	bool Update(float dt);
 
+	void Destroy();
+
 	std::string GetText();
 
 	void AddChar(char text);

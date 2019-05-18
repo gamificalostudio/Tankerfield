@@ -162,6 +162,7 @@ bool M_UI::CleanUp()
 bool M_UI::Reset()
 {
 	selected_element = nullptr;
+	reset = true;
 
 	interactive_elements.clear();
 
@@ -192,6 +193,8 @@ bool M_UI::Reset()
 			(*element)->Destroy();
 		}
 	}
+
+	reset = false;
 
 	return true;
 }

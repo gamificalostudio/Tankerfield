@@ -137,3 +137,24 @@ void UI_InputText::SetInputState(INPUT_STATE state)
 		break;
 	}
 }
+
+void UI_InputText::Destroy()
+{
+	to_destroy = true;
+
+	if (default_label != nullptr)
+	{
+		default_label->Destroy();
+	}
+
+	if (editable_label != nullptr)
+	{
+		editable_label->Destroy();
+	}
+
+	if (cursor != nullptr)
+	{
+		cursor->Destroy();
+	}
+
+}

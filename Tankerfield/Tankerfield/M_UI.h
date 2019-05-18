@@ -268,6 +268,8 @@ private:
 
 	bool debug = false;
 
+	bool reset = false;
+
 	// Atlas Texture ---------------------------------------
 
 	SDL_Texture* atlas = nullptr;

@@ -22,10 +22,6 @@ UI_InteractiveGroup::UI_InteractiveGroup(const fPoint position, const UI_Interac
 
 UI_InteractiveGroup::~UI_InteractiveGroup()
 {
-	if (app->on_clean_up == false)
-	{
-		focus_image->Destroy();
-	}
 }
 
 bool UI_InteractiveGroup::Update(float dt)
@@ -192,4 +188,15 @@ iPoint UI_InteractiveGroup::GetPos(UI_Element * element)
 
 	assert("Interactive Group : No avaliable elements");
 	return iPoint();
+}
+
+void  UI_InteractiveGroup::Destroy()
+{
+	to_destroy = true;
+
+	if (focus_image != nullptr)
+	{
+		focus_image->Destroy();
+	}
+
 }

@@ -22,6 +22,8 @@ public:
 
 	~UI_InteractiveGroup();
 
+	void Destroy();
+
 	bool Update(float dt);
 
 	bool OnHoverEnter(UI_Element* object);

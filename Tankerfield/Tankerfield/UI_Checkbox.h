@@ -22,7 +22,7 @@ public:
 
 	UI_Checkbox(const fPoint position, const UI_CheckboxDef definition, UI_Listener * listener);
 
-	virtual ~UI_Checkbox();
+	void Destroy();
 
 	void SetValue(const bool value);
 

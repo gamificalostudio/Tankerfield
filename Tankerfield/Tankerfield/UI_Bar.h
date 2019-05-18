@@ -13,8 +13,6 @@ public:
 
 	UI_Bar(const fPoint position, const UI_BarDef def, UI_Listener* listener);
 
-	virtual ~UI_Bar();
-
 	bool Draw();
 
 public:

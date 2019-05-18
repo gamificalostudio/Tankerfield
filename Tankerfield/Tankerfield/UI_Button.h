@@ -31,7 +31,7 @@ public:
 
 	UI_Button(const fPoint position, const UI_ButtonDef definition , UI_Listener * listener);
 
-	virtual ~UI_Button();
+	void Destroy();
 
 	bool PreUpdate();
 

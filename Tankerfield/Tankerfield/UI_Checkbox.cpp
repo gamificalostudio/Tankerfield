@@ -24,13 +24,16 @@ UI_Checkbox::UI_Checkbox(const fPoint position, const UI_CheckboxDef definition,
 	button->SetParent(this);
 }
 
-UI_Checkbox::~UI_Checkbox()
+void UI_Checkbox::Destroy()
 {
-	if (app->on_clean_up == false && button != nullptr)
+	if (button != nullptr)
 	{
 		button->Destroy();
 		button = nullptr;
 	}
+
+	to_destroy = true;
+
 }
 
 void UI_Checkbox::SetValue(const bool value)
