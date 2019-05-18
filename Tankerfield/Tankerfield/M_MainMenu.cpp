@@ -1,4 +1,5 @@
 #include "App.h"
+#include "Log.h"
 #include "M_MainMenu.h"
 #include "M_Render.h"
 #include "M_Textures.h"
@@ -106,7 +107,7 @@ bool M_MainMenu::Start()
 
 	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
-
+	
 	return true;
 }
 
@@ -166,6 +167,7 @@ bool M_MainMenu::Update(float dt)
 
 bool M_MainMenu::PostUpdate(float dt)
 {
+	LOG("Current  player : %i",current_player );
 	// Blit background ===================================
 
 	SDL_RenderCopy(app->render->renderer, background_texture, NULL, &(SDL_Rect)app->win->GetWindowRect());
@@ -215,7 +217,7 @@ bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 			app->scene->tank_colors[current_player] = selection_panel->GetFocusedElement()->color_mod;
 			current_player += 1;
 			
-			if (current_player == MAX_PLAYERS)
+			if (current_player == MAX_PLAYERS )
 			{
 				app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
 				selection_able = false;

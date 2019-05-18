@@ -266,47 +266,6 @@ bool M_UI::PostUpdate(float dt)
 
 void M_UI::FocusMouse()
 {
-	// Click States ============================================
-
-	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		SelectClickedObject();
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_element)
-	{
-		click_state = FocusState::REPEAT;
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_element)
-	{
-		click_state = FocusState::EXIT;
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_element)
-
-	{
-		click_state = FocusState::NONE;
-		selected_element = nullptr;
-	}
-
-	// Click Callbacks =============================================
-
-	if (selected_element != nullptr && selected_element->listener != nullptr)
-	{
-		switch (click_state)
-		{
-		case FocusState::ENTER:
-			selected_element->listener->ClickDown(selected_element);
-			break;
-		case FocusState::REPEAT:
-			selected_element->listener->ClickRepeat(selected_element);
-			break;
-		case FocusState::EXIT:
-			if (selected_element->hover_state != HoverState::NONE)
-			{
-				selected_element->listener->ClickUp(selected_element);
-			}
-			break;
-		}
-	}
 
 	// Draggable ================================================
 	if (selected_element && selected_element->is_draggable)
@@ -384,6 +343,49 @@ void M_UI::FocusMouse()
 			break;
 		case HoverState::EXIT:
 			(*item)->listener->OnHoverExit((*item));
+			break;
+		}
+	}
+
+
+	// Click States ============================================
+
+	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		SelectClickedObject();
+	}
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_element)
+	{
+		click_state = FocusState::REPEAT;
+	}
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_element)
+	{
+		click_state = FocusState::EXIT;
+	}
+	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_element)
+
+	{
+		click_state = FocusState::NONE;
+		selected_element = nullptr;
+	}
+
+	// Click Callbacks =============================================
+
+	if (selected_element != nullptr && selected_element->listener != nullptr)
+	{
+		switch (click_state)
+		{
+		case FocusState::ENTER:
+			selected_element->listener->ClickDown(selected_element);
+			break;
+		case FocusState::REPEAT:
+			selected_element->listener->ClickRepeat(selected_element);
+			break;
+		case FocusState::EXIT:
+			if (selected_element->hover_state != HoverState::NONE)
+			{
+				selected_element->listener->ClickUp(selected_element);
+			}
 			break;
 		}
 	}
