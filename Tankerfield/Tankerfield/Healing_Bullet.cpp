@@ -31,3 +31,11 @@ bool Healing_Bullet::Start()
 
 		return true;
 }
+
+void Healing_Bullet::OnTriggerEnter(Collider * collider)
+{
+	if (collider->GetObj() != player)
+	{
+		to_remove = true;
+	}
+}

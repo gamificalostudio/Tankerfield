@@ -605,20 +605,18 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-
-
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
 	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
-		if (bullet->tank_parent != this) // he does not heal himself
+		if (bullet->player != this) // he does not heal himself
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + bullet->tank_parent->weapon_info.shot1.bullet_healing);
+				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
 			}
 		}
 		else
@@ -627,6 +625,22 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		}
 	}
 
+	if (c1->GetTag() == TAG::PORTAL)
+	{
+		if (time_between_portal_tp.ReadMs() > 2000) {
+			if (c1 == portal1->coll) {
+				pos_map = portal2->pos_map;
+			}
+			else if (c1 == portal2->coll) {
+				pos_map = portal1->pos_map;
+			}
+			time_between_portal_tp.Start();
+		}
+	}
+}
+
+void Obj_Tank::OnTrigger(Collider * c1)
+{
 	if (c1->GetTag() == TAG::PICK_UP)
 	{
 		if (this->Alive())
@@ -648,22 +662,6 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
 	{
 			curr_speed += road_buff;
-	}
-}
-
-void Obj_Tank::OnTriggerEnter(Collider * c1)
-{
-	if (c1->GetTag() == TAG::PORTAL)
-	{
-		if (time_between_portal_tp.ReadMs() > 2000) {
-			if (c1 == portal1->coll) {
-				pos_map = portal2->pos_map;
-			}
-			else if (c1 == portal2->coll) {
-				pos_map = portal1->pos_map;
-			}
-			time_between_portal_tp.Start();
-		}
 	}
 }
 
@@ -712,6 +710,16 @@ void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
 	gui->SetItemIcon(type);
+}
+
+void Obj_Tank::SetColor(const SDL_Color new_color)
+{
+	tank_color = new_color;
+
+	if (gui != nullptr)
+	{
+		gui->SetArrowColor(tank_color);
+	}
 }
 
 WeaponInfo Obj_Tank::GetWeaponInfo() const 
