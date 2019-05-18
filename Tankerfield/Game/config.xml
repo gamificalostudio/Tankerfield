@@ -140,7 +140,7 @@
       <flamethrower>
         <tex_flamethrower>textures/objects/bullets/tex_flamethrower.png</tex_flamethrower>
         <animations>
-          <fire speed="5">
+          <fire speed="15">
             <dir>
               <frame x="0"   y="0"   w="154" h="112"/>
               <frame x="154" y="0"   w="154" h="112"/>
@@ -152,7 +152,7 @@
               <frame x="154" y="112" w="154" h="112"/>
               <frame x="308" y="112" w="154" h="112"/>
               <frame x="462" y="112" w="154" h="112"/>
-              <frame x="616" y="112" w="154" h="112"/>
+              <!--<frame x="616" y="112" w="154" h="112"/>
               <frame x="770" y="112" w="154" h="112"/>
               <frame x="0"   y="224" w="154" h="112"/>
               <frame x="154" y="224" w="154" h="112"/>
@@ -165,7 +165,7 @@
               <frame x="308" y="336" w="154" h="112"/>
               <frame x="462" y="336" w="154" h="112"/>
               <frame x="616" y="336" w="154" h="112"/>
-              <frame x="770" y="336" w="154" h="112"/>
+              <frame x="770" y="336" w="154" h="112"/>-->
             </dir>
           </fire>
         </animations>
