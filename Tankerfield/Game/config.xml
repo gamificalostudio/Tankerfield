@@ -778,7 +778,7 @@
       </animations>
     </basic_bullet>
     <laser_bullet>
-      <speed value ="0.5"/>
+      <speed value ="1.f"/>
       <life value ="1000"/>
       <tex path="textures/objects/bullets/laser-sheet.png"/>
       <kill_counter_max value="5"/>
