@@ -201,3 +201,60 @@ void Obj_Brute::Attack()
 		}
 	}
 }
+
+void Obj_Brute::Dead()
+{
+	if (curr_anim != &death)
+	{
+		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
+		curr_anim = &death;
+		app->audio->PlayFx(sfx_death);
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->Destroy();
+			life_collider = nullptr;
+		}
+	}
+	else
+	{
+		if (death.Finished())
+		{
+			to_remove = true;
+
+		}
+	}
+	
+}
+
+void Obj_Brute::ElectroDead()
+{
+	if (curr_anim != &electro_dead)
+	{
+		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
+		bool_electro_dead = true;
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		app->audio->PlayFx(sfx_death);
+		draw_offset = electrocuted_draw_offset;
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+	}
+	else
+	{
+		if (electro_dead.Finished())
+		{
+			to_remove = true;
+			app->audio->PauseFx(channel_electrocuted);
+
+		}
+	}
+	
+}

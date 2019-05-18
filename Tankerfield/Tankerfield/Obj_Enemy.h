@@ -53,9 +53,9 @@ protected:
 
 	inline void RecheadPoint();
 
-	inline void Dead();
+	inline virtual void Dead();
 
-	void ElectroDead();
+	inline virtual void ElectroDead();
 
 	inline virtual void Idle();
 
