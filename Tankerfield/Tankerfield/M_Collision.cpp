@@ -67,6 +67,7 @@ M_Collision::M_Collision()
 	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::PICK_UP] = true;
 	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
 	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
+	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::HEALING_AREA_SHOT] = true;
 
 	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
 	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;

@@ -32,6 +32,7 @@
 #include "Camera.h"
 #include "Item_InstantHelp.h"
 #include "Obj_Portal.h"
+#include "Obj_Healing_Area_Shot.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -672,6 +673,12 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			}
 			time_between_portal_tp.Start();
 		}
+	}
+
+	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
+	{
+		Obj_Healing_Area_Shot* area= (Obj_Healing_Area_Shot*)c1->GetObj();
+		this->SetLife(this->life + weapon_info.level_weapon+area->healing);
 	}
 }
 

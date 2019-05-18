@@ -19,6 +19,8 @@
 #include "ElectroShotAnimation.h"
 #include "Obj_FlamethrowerFlame.h"
 
+#include "Obj_Healing_Area_Shot.h"
+
 void Obj_Tank::InitWeapons()
 {
 	//Basic weapon starting properties
@@ -71,7 +73,7 @@ void Obj_Tank::InitWeapons()
 	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
-	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
+	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
 	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
 	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
@@ -198,13 +200,13 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_speed = 10;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.54f;
-		weapon_info.shot2.trauma = 0.76f;
-		weapon_info.shot1.rumble_strength = 0.92f;
+		weapon_info.shot2.trauma = 0.2f;
+		weapon_info.shot1.rumble_strength = 0.8f;
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
-		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -371,6 +373,12 @@ void Obj_Tank::ShootHealingShot()
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
 	heal_bullet->tank_parent = this;
+}
+
+void Obj_Tank::ShootHealingShotCharged()
+{
+	Obj_Healing_Area_Shot * heal_area = (Obj_Healing_Area_Shot*)app->objectmanager->CreateObject(ObjectType::HEALING_AREA_SHOT, pos_map);
+
 }
 
 void Obj_Tank::ShootLaserShot()

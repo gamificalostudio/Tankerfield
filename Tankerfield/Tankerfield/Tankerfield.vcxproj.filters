@@ -217,6 +217,9 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Healing_Area_Shot.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -458,6 +461,9 @@
     </ClInclude>
     <ClInclude Include="Obj_Portal.h">
       <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Healing_Area_Shot.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
