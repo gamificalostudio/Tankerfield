@@ -3,6 +3,13 @@
 
 class UI_Label;
 class UI_Quad;
+class Timer;
+
+enum class INPUT_STATE
+{
+	DEFAULT_TEXT,
+	EDITABLE_TEXT
+};
 
 struct UI_InputTextDef : public UI_ElementDef
 {
@@ -29,15 +36,23 @@ public:
 
 	void DeleteLastChar();
 
+	void ActiveInputText();
+
+	void DesactiveInputText();
+
 private:
+
+	void SetInputState(INPUT_STATE state);
 
 	void SetCursorPos();
 
 private:
 
+	INPUT_STATE input_state = INPUT_STATE::DEFAULT_TEXT;
+	bool active_input_text = false;
+
 	std::string input_text;
 	TTF_Font* font = nullptr;
-
 	UI_Quad* cursor = nullptr;
 	UI_Label* default_label = nullptr;
 	UI_Label* editable_label = nullptr;
@@ -45,5 +60,6 @@ private:
 	int default_text = 0;
 	SDL_Color default_text_color = { 255, 255, 255,255 };
 	SDL_Color editable_text_color = { 255, 255, 255,255 };;
+
 };
 

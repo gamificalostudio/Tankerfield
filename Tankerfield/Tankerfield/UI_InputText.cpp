@@ -1,6 +1,5 @@
 #include "App.h"
 #include "M_UI.h"
-
 #include "UI_Label.h"
 #include "UI_InputText.h"
 #include "UI_Quad.h"
@@ -16,7 +15,7 @@ max_characters(definition.max_characters), font(definition.font)
 	default_label = app->ui->CreateLabel(fPoint(position), UI_LabelDef(definition.default_text, font, definition.default_text_color));
 	default_label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
 	default_label->SetParent(this);
-	default_label->SetState(ELEMENT_STATE::VISIBLE);
+	default_label->SetState(ELEMENT_STATE::HIDDEN);
 
 	SDL_Rect rect = editable_label->GetDrawRect();
 	fPoint point(rect.x + rect.w, rect.y + rect.h* 0.5f);
@@ -24,6 +23,7 @@ max_characters(definition.max_characters), font(definition.font)
 	cursor->SetPivot(Pivot::POS_X::LEFT, Pivot::POS_Y::CENTER);
 	cursor->SetParent(editable_label);
 	cursor->SetState(ELEMENT_STATE::HIDDEN);
+
 }
 
 bool UI_InputText::Update(float dt)
@@ -49,18 +49,19 @@ std::string UI_InputText::GetText()
 
 void UI_InputText::AddText(std::string text)
 {
-	if (input_text.length() < max_characters)
+	if (active_input_text == true)
 	{
-		input_text += text;
-		editable_label->SetText(input_text);
-		SetCursorPos();
-	}
+		if (input_text.length() < max_characters)
+		{
+			input_text += text;
+			editable_label->SetText(input_text);
+			SetCursorPos();
+		}
 
-	if (cursor->GetState() == ELEMENT_STATE::HIDDEN)
-	{
-		cursor->SetState(ELEMENT_STATE::VISIBLE);
-		editable_label->SetState(ELEMENT_STATE::VISIBLE);
-		default_label->SetState(ELEMENT_STATE::HIDDEN);
+		if (input_state == INPUT_STATE::DEFAULT_TEXT)
+		{
+			SetInputState(INPUT_STATE::EDITABLE_TEXT);
+		}
 	}
 }
 
@@ -80,13 +81,11 @@ void UI_InputText::DeleteLastChar()
 		input_text.pop_back();
 		editable_label->SetText(input_text);
 		SetCursorPos();
-	}
 
-	if (input_text.empty())
-	{
-		cursor->SetState(ELEMENT_STATE::HIDDEN);
-		editable_label->SetState(ELEMENT_STATE::HIDDEN);
-		default_label->SetState(ELEMENT_STATE::VISIBLE);
+		if (input_text.empty())
+		{
+			SetInputState(INPUT_STATE::DEFAULT_TEXT);
+		}
 	}
 
 }
@@ -96,4 +95,45 @@ void UI_InputText::SetCursorPos()
 	SDL_Rect rect = editable_label->GetDrawRect();
 	fPoint point(rect.x + rect.w, rect.y + rect.h* 0.5f);
 	cursor->SetPos(point);
+}
+
+void UI_InputText::ActiveInputText()
+{
+	active_input_text = true;
+	SetInputState(INPUT_STATE::DEFAULT_TEXT);
+}
+
+void UI_InputText::DesactiveInputText()
+{
+	active_input_text = false;
+}
+
+void UI_InputText::SetInputState(INPUT_STATE state)
+{
+	input_state = state;
+
+	switch (state)
+	{
+	case INPUT_STATE::DEFAULT_TEXT:
+
+		cursor->SetState(ELEMENT_STATE::HIDDEN);
+		cursor->FinishFX();
+		cursor->alpha = 0;
+		editable_label->SetState(ELEMENT_STATE::HIDDEN);
+		default_label->SetState(ELEMENT_STATE::VISIBLE);
+		default_label->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1.f, -1.f, 0.f, 255.f);
+
+		break;
+	case INPUT_STATE::EDITABLE_TEXT:
+
+		cursor->SetState(ELEMENT_STATE::VISIBLE);
+		cursor->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.5f, -1.f, 0.f, 255.f);
+
+		editable_label->SetState(ELEMENT_STATE::VISIBLE);
+		default_label->SetState(ELEMENT_STATE::HIDDEN);
+		default_label->FinishFX();
+		default_label->alpha = 0;
+
+		break;
+	}
 }
