@@ -21,6 +21,8 @@ public:
 
 	bool Update(float dt);
 
+	std::string GetText();
+
 	void AddChar(char text);
 
 	void AddText(std::string text);

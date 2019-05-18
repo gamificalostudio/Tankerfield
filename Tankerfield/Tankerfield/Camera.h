@@ -26,12 +26,14 @@ private:
 	float GetShakeAmount() const;
 
 public:
-	iPoint unaltered_pos	= { 0, 0 };//The real position of the camera. Without adding the screen shake.
+	fPoint camera_pos = { 0.f, 0.f };
+	fPoint unaltered_pos	= { 0, 0 };//The real position of the camera. Without adding the screen shake.
 	SDL_Rect rect			= { 0, 0, 0, 0 };//The actual camera coordinates in the world
 	SDL_Rect screen_section	= { 0, 0, 0, 0 };//The section on the screen it covers (ex. player one gets 0, 0, w/2, h/2)
 	uint number_player		= 0u;
 
 private:
+
 	//Follow player
 	float lerp_factor		= 0.f;
 	float aim_distance		= 0.f;

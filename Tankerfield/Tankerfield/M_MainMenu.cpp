@@ -33,27 +33,23 @@ bool M_MainMenu::Start()
 
 	logo_image = app->ui->CreateImage({ 151.f, 151.f }, UI_ImageDef({10, 710, 915, 260}));
 	logo_image->SetParent(menu_peg);
-	menu_elements.push_back(logo_image);
 
 	multi_player_button = app->ui->CreateButton({ 600.f, 522.f }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font, { 50, 50, 50, 255 }));
 	multi_player_button->SetParent(menu_peg);
 
 	app->ui->AddInteractiveElement(multi_player_button);
-	menu_elements.push_back(multi_player_button);
 
 	exit_button = app->ui->CreateButton({ 600.f, 632.f }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font, { 50, 50, 50, 255 }));
 	exit_button->SetParent(menu_peg);
 
 	app->ui->AddInteractiveElement(exit_button);
-	menu_elements.push_back(exit_button);
 
 	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .0.5.7", app->font->label_font_38, {255,255,255,180}));
 	version_label->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
 	version_label->SetParent(menu_peg);
 
-	menu_elements.push_back(version_label);
 
 	// Selection screen ------------------------
 
@@ -76,9 +72,10 @@ bool M_MainMenu::Start()
 			element->color_mod = GetColor(color_value);
 			color_value += color_sum;
 			selection_panel->SetElement(element, iPoint(x, y));
-			menu_elements.push_back(element);
 		}
 	}
+
+	selection_panel->SetFocus( iPoint(0, 0) );
 
 	fPoint tank_offset = { 280.f, 280.f };
 
@@ -107,7 +104,6 @@ bool M_MainMenu::Start()
 	
 	// Set values ==========================================
 
-
 	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
 
@@ -122,28 +118,8 @@ bool M_MainMenu::CleanUp()
 
 	for (int i = 0; i < 4; ++i)
 	{
-		players[i].tank->to_remove = true;
 		players[i].tank = nullptr;
 	}
-
-	if (app->on_clean_up == false)
-	{
-		for (std::list<UI_Element*>::iterator iter = menu_elements.begin(); iter != menu_elements.end(); ++iter)
-		{
-			(*iter)->Destroy();
-		}
-
-		selection_panel->Destroy();
-		menu_peg->Destroy();
-	}
-
-	menu_elements.clear();
-
-	logo_image = nullptr;
-	single_player_button = nullptr;
-	multi_player_button = nullptr;
-	exit_button = nullptr;
-	version_label = nullptr;
 
 	return true;
 }
@@ -179,7 +155,7 @@ bool M_MainMenu::PreUpdate()
 
 bool M_MainMenu::Update(float dt)
 {
-	if (selection_finished == false)
+	if (selection_able == true)
 	{
 		selection_panel->SetController(players[current_player].controller);
 		players[current_player].tank->SetColor(selection_panel->GetFocusedElement()->color_mod);
@@ -220,6 +196,8 @@ bool M_MainMenu::PostUpdate(float dt)
 
 bool M_MainMenu::Reset()
 {
+	app->objectmanager->Reset();
+	app->ui->Reset();
 	return true;
 }
 
@@ -230,7 +208,7 @@ bool M_MainMenu::OnHoverEnter(UI_Element * element)
 
 bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 {
-	if (element == selection_panel && selection_finished == false)
+	if (element == selection_panel && selection_able == true)
 	{
 		if (app->input->GetMouseButton(1) == KEY_DOWN || (players[current_player].controller != nullptr && (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN) )
 		{
@@ -240,7 +218,7 @@ bool M_MainMenu::OnHoverRepeat(UI_Element * element)
 			if (current_player == MAX_PLAYERS)
 			{
 				app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
-				selection_finished = true;
+				selection_able = false;
 			}
 		}
 	}
@@ -265,7 +243,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
-
+		selection_able = false;
 		menu_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
@@ -277,7 +255,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 
 	case MENU_STATE::SELECTION:
-
+		selection_able = true;
 		current_player = 0;
 		menu_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);

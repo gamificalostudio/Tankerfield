@@ -82,7 +82,7 @@ void Obj_Suicidal::Spawn(const float& dt)
 
 void Obj_Suicidal::Attack()
 {
-	if (life > 0 && app->scene->stat_of_wave != WaveStat::NO_TYPE)
+	if (life > 0 && app->scene->game_state != GAME_STATE::NO_TYPE)
 	{
 		if (target != nullptr
 			&& target->coll->GetTag() == TAG::PLAYER

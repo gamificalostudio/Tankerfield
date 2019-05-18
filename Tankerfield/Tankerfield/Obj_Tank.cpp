@@ -1130,13 +1130,18 @@ int Obj_Tank::GetTankNum() const
 	return tank_num;
 }
 
+Controller ** Obj_Tank::GetController()
+{
+	return controller;
+}
+
 void Obj_Tank::InputReadyKeyboard()
 {
-	if (app->scene->stat_of_wave == WaveStat::OUT_WAVE && app->input->GetKey(kb_ready) == KEY_DOWN)
+	if (app->scene->game_state == GAME_STATE::OUT_WAVE && app->input->GetKey(kb_ready) == KEY_DOWN)
 	{
 		ready = !ready;
 	}
-	else if (app->scene->stat_of_wave != WaveStat::OUT_WAVE)
+	else if (app->scene->game_state != GAME_STATE::OUT_WAVE)
 	{
 		ready = false;
 	}

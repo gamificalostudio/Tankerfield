@@ -35,7 +35,6 @@ private:
 	SDL_Texture*        label_texture = nullptr;
 	_TTF_Font*			font = nullptr;
 	String	    	    text;
-	SDL_Color           color = { 255,255,255,255 };
 
 private:
 

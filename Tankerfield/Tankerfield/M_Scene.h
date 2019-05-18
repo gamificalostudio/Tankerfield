@@ -21,7 +21,7 @@ class General_GUI;
 class UI_Label;
 
 
-enum class WaveStat
+enum class GAME_STATE
 {
 	NO_TYPE,
 	ENTER_IN_WAVE,
@@ -29,7 +29,10 @@ enum class WaveStat
 	EXIT_OF_WAVE,
 	OUT_WAVE,
 	GAME_OVER,
-	WIN_GAME
+	GAME_WON,
+	WAIT_PLAYER_INPUT_1,
+	LEADER_BOARD,
+	WAIT_PLAYER_INPUT_2
 };
 
 class PerfTimer;
@@ -46,11 +49,11 @@ public:
 
 	int current_level				= 0;
 
-	General_GUI * general_hud		= nullptr;
+	General_GUI * general_gui		= nullptr;
 
 	uint round		= 0;
 
-	WaveStat stat_of_wave			= WaveStat::NO_TYPE;
+	GAME_STATE game_state			= GAME_STATE::NO_TYPE;
 
 	Timer timer_between_waves;
 
