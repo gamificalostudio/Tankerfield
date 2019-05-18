@@ -43,7 +43,7 @@ public:
 	virtual  bool Start() override;
 
 protected:
-	inline void UpdateVelocity();
+	inline void UpdateMoveVec();
 
 	inline void UpdatePos(const float& dt);
 

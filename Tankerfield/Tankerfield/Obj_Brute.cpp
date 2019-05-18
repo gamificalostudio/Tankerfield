@@ -59,7 +59,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 	state = ENEMY_STATE::SPAWN; 
 	detection_range = app->objectmanager->brute_info.detection_range;
-	original_speed=speed = speed = app->objectmanager->brute_info.speed;
+	original_speed= speed = app->objectmanager->brute_info.speed;
 	range_pos.radius = 1.f;
 
 	spawn_draw_offset = { 260, 274 };

@@ -46,8 +46,8 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	
-	Oiled();
+	if(oiled)
+		Oiled();
 
 	if (in_white)
 	{
@@ -214,7 +214,7 @@ void Obj_Enemy::RecheadPoint()
 	{
 		next_pos = (fPoint)(*path.begin());
 		next_pos += {0.5f, 0.5f};
-		UpdateVelocity();
+		UpdateMoveVec();
 		update_velocity_vec.Start();
 		state = ENEMY_STATE::MOVE;
 	}
@@ -307,7 +307,7 @@ int Obj_Enemy::Move(float & dt)
 
 	if (update_velocity_vec.ReadSec() > 1)
 	{
-		UpdateVelocity();
+		UpdateMoveVec();
 	}
 
 	if (curr_anim != &attack)
@@ -337,7 +337,7 @@ void Obj_Enemy::GetPath()
 			if (path.size() > 0)
 				path.erase(path.begin());
 			next_pos = (fPoint)(*path.begin());
-			UpdateVelocity();
+			UpdateMoveVec();
 
 			state = ENEMY_STATE::MOVE;
 		}
@@ -383,7 +383,7 @@ bool Obj_Enemy::CleanUp()
 	return true;
 }
 
-inline void Obj_Enemy::UpdateVelocity()
+inline void Obj_Enemy::UpdateMoveVec()
 {
 	fPoint new_move_vec = (fPoint)(next_pos)-pos_map;
 	new_move_vec.Normalize();
@@ -612,8 +612,7 @@ bool Obj_Enemy::IsOnGoal(fPoint goal)
 
 void Obj_Enemy::Oiled()
 {
-	if (oiled == true)
-	{
+
 		if (damaged_sprite_timer.Read() > damaged_sprite_time && 
 			!bool_electro_dead
 			&& state != ENEMY_STATE::STUNNED
@@ -623,11 +622,11 @@ void Obj_Enemy::Oiled()
 			in_white = true;
 		}
 		speed = original_speed*0.5f;
-	}
 
-	if (oiled_timer.Read() >= 5000)
-	{
-		oiled = false;
-		speed = original_speed;
-	}
+		if (oiled_timer.Read() >= 5000)
+		{
+			oiled = false;
+			speed = original_speed;
+		}
+
 }

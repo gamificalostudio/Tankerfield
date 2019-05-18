@@ -73,7 +73,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	draw = false;
 	state = ENEMY_STATE::SPAWN; //enemy
 
-	speed = app->objectmanager->tesla_trooper_info.speed;
+	original_speed = speed = app->objectmanager->tesla_trooper_info.speed;
 
 	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 are 4/3
 	squared_detection_range = detection_range * detection_range;
@@ -246,8 +246,7 @@ int Obj_TeslaTrooper::Move(float & dt)
 		UpdateVelocity();
 	}
 
-	pos_map += move_vect * speed * dt;
-	range_pos.center = pos_map;
+	UpdatePos(dt);
 
 	if (path_timer.ReadSec() > check_path_time || (teleport_timer.ReadSec() >= check_teleport_time && (target == nullptr || !target->Alive())))
 	{

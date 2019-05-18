@@ -47,7 +47,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	state = ENEMY_STATE::IDLE;
 	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 
-	speed = app->objectmanager->rocket_launcher_info.speed;
+	original_speed = speed = app->objectmanager->rocket_launcher_info.speed;
 
 	spawn_draw_offset = { 49, 50 };
 	normal_draw_offset = { 49, 50 };
