@@ -892,7 +892,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 		anim_charging.Reset();
 		this->curr_speed = speed;
 		//- Basic shot
-		if (charged_shot_timer.ReadMs() < charge_time)
+		if (charged_shot_timer.ReadMs() < charge_time || GetShotAutomatically())
 		{
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
