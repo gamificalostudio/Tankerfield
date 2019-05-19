@@ -37,7 +37,7 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.radius = 0.5f;
 
 	times_to_repeat_animation = 3u;
-
+	
 
 	path_timer.Start();
 }
@@ -513,55 +513,8 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 	}
 
-	if (collider->GetTag() == TAG::ELECTRO_SHOT)
-	{
-		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
-		
-		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
-		{
-			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
-			
-			electro_anim->tank = player;
-			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
-			electro_anim->enemy_pos_screen = pos_screen;
-			electro_anim->enemy_pos_map = pos_map;
-			electro_anim->hit_no_enemie = false;
-
-			player->GetEnemiesHitted()->push_back(this);
-			player->hit_no_enemie = false;
-
-			life -= collider->damage;
-
-			damaged_sprite_timer.Start();
-
-			
-			if (life <= 0)
-			{
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				state = ENEMY_STATE::DEAD;
-				is_electro_dead = true;
-				
-			}
-			else
-			{
-				app->audio->PlayFx(sfx_hit);
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				state_saved = state;
-				
-				anim_saved = curr_anim;
-			
-				state = ENEMY_STATE::STUNNED;
-				if (player->GetIsElectroShotCharged())
-				{
-					stun_charged = true;
-				}
-				else
-				{
-					stun_charged = false;
-				}
-			}
-		}
-	}
+	
+	
 	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 	{
 		in_white = true;
@@ -603,6 +556,64 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	{
 		oiled = true;
 		oiled_timer.Start();
+	}
+}
+
+void Obj_Enemy::OnTrigger(Collider * collider)
+{
+	if (collider->GetTag() == TAG::ELECTRO_SHOT)
+	{
+		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+
+		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
+		{
+			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
+
+			electro_anim->tank = player;
+			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
+			electro_anim->enemy_pos_screen = pos_screen;
+			electro_anim->enemy_pos_map = pos_map;
+			electro_anim->hit_no_enemie = false;
+
+			player->GetEnemiesHitted()->push_back(this);
+			player->hit_no_enemie = false;
+
+			life -= collider->damage;
+
+			damaged_sprite_timer.Start();
+
+
+			if (life <= 0)
+			{
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				state = ENEMY_STATE::DEAD;
+				is_electro_dead = true;
+
+			}
+			else
+			{
+				app->audio->PlayFx(sfx_hit);
+				channel_electrocuted = app->audio->PlayFx(electocuted);
+				state_saved = state;
+
+				anim_saved = curr_anim;
+
+				state = ENEMY_STATE::STUNNED;
+				if (player->GetIsElectroShotCharged())
+				{
+					stun_charged = true;
+				}
+				else
+				{
+					stun_charged = false;
+				}
+			}
+		}
+
+		else
+		{
+			LOG("inside");
+		}
 	}
 }
 

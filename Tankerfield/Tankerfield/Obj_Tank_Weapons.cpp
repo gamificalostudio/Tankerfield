@@ -221,6 +221,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::ELECTRO_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.shot1.bullet_damage = app->objectmanager->electro_shot_info.damage_multiplier * pow(app->objectmanager->electro_shot_info.damage_exponential_base, level - 1);
+		weapon_info.shot2.bullet_damage = app->objectmanager->electro_shot_info.damage_multiplier * pow(app->objectmanager->electro_shot_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 100;
 		weapon_info.shot1.bullet_speed = 0;
@@ -235,8 +236,19 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		//electro_shot_collider->damage = weapon_info.bullet_damage;
 		//add width and height here?
+		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
+		{
+			(*iter)->damage = weapon_info.shot1.bullet_damage;
+		}
+
+
+		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
+		{
+			(*iter)->damage = weapon_info.shot2.bullet_damage;
+		}
 		break;
 	}
+	
 }
 
 void Obj_Tank::ShootBasic()
