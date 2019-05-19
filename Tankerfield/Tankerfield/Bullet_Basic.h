@@ -17,6 +17,7 @@ public:
 public:
 	//Add functions that are overriden
 	bool Start();
+	uint shot_sound = 0u;
 };
 
 #endif
