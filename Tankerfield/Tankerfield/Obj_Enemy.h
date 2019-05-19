@@ -5,6 +5,8 @@
 #include "Circle.h"
 #include "Timer.h"
 
+struct SpawnPoint;
+
 enum class ENEMY_STATE
 {
 	SPAWN,
@@ -65,13 +67,15 @@ protected:
 
 	inline virtual void GetPath();
 
-	inline virtual void GetTeleportPoint() {};
+	inline virtual void GetTeleportPoint();
 
-	inline virtual void TeleportIn(float & dt) {};
+	inline virtual void TeleportIn(float & dt);
 
-	inline virtual void TeleportOut(float & dt) {};
+	inline virtual void TeleportOut(float & dt);
 
 	inline virtual void Burn(const float& dt);
+
+	inline virtual void Stunned();
 
 	bool CleanUp() override;
 
@@ -79,34 +83,52 @@ protected:
 
 protected:
 
+	//VARIABLES ================================
 	int life = 0;
 	float speed = 0.f;
 	float original_speed = 0.f;
+
+	ENEMY_STATE state = ENEMY_STATE::IDLE;
+	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
+
+	Collider* life_collider = nullptr;
+	
+
+	//DRAW =======================================
+	SDL_Texture* tex_saved = nullptr;
 	SDL_Texture * tex = nullptr;
 	SDL_Texture * tex_damaged = nullptr;
 	SDL_Texture * oiled_tex = nullptr;
 	SDL_Texture * tex_electro_dead = nullptr;
+	SDL_Texture* burn_texture = nullptr;
+	SDL_Texture* last_texture = nullptr;
+	SDL_Texture * portal_tex = nullptr;
+	iPoint normal_draw_offset = { 0, 0 };
+	iPoint electrocuted_draw_offset = { 0, 0 };
+	bool draw = true;
 
-	/* Attack properties */
+	//ANIMATIONS ==============================
+	Animation* in_portal = nullptr;
+	Animation* anim_saved = nullptr;
+	Animation idle;
+	Animation walk;
+	Animation attack;
+	Animation death;
+	Animation burn;
+	Animation dying_burn;
+	Animation electro_dead;
+	Animation portal_animation;
+	Animation portal_close_anim;
+
+	//ATTACK ==================================
 	float attack_frequency			= 0.f;
 	float attack_range				= 0.f;//Tile distance in which the enemy can attack
 	float attack_range_squared		= 0.f;
 	int attack_damage				= 0;
-  
-	iPoint normal_draw_offset		= { 0, 0 };
-	iPoint electrocuted_draw_offset	= { 0, 0 };
+	bool damaged					= false;
 
-	SDL_Texture* burn_texture		= nullptr;
-	SDL_Texture* last_texture		= nullptr;
-
-	bool in_white					= false;
-
+	//ELECTRIC DAMAG VARIABLES ===============
 	bool bool_electro_dead = false;
-
-	ENEMY_STATE state = ENEMY_STATE::IDLE;
-	ENEMY_STATE state_saved = ENEMY_STATE::IDLE;
-	Animation* anim_saved = nullptr;
-	SDL_Texture* tex_saved = nullptr;
 	bool is_electro_dead = false;
 
 	Timer update_velocity_vec;
@@ -116,15 +138,7 @@ protected:
 
 	bool oiled = false;
 
-	Animation idle;
-	Animation walk;
-	Animation attack;
-	Animation death;
-	Animation burn;
-	Animation dying_burn;
 	
-
-	Animation electro_dead;
 
 	float scale = 0.f;
 
@@ -157,16 +171,20 @@ protected:
 	uint electocuted;
 	uint channel_electrocuted;
 
-	// Burn state variables------
+	// BURN VARIABLES =======================
 	bool burn_fist_enter = true;
-	Timer timer_change_direction;
-	
-
 	float max_time_change_direction = 0.5f;
 	float fire_damage = 0;
+	Timer timer_change_direction;
 
-	Collider* life_collider = nullptr;
 
+
+	//TELEPORT VARIABLES ======================
+	float check_teleport_time = 0.f;
+	uint teleport_enemies_max = 0u;
+	SpawnPoint* teleport_spawnpoint = nullptr;
+	Timer	teleport_timer;
+	Timer	teleport_anim_duration;
 
 };
 

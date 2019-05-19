@@ -40,6 +40,15 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	
 
 	path_timer.Start();
+
+	//TELEPORT VARIABLES =============
+		teleport_enemies_max = app->objectmanager->tesla_trooper_info.teleport_max_enemies;
+		check_teleport_time = 10; //10s
+		teleport_timer.Start();
+		portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
+		portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
+		portal_tex = app->tex->Load("textures/Objects/enemies/portal.png");
+	
 }
 
 bool Obj_Enemy::Update(float dt)
@@ -49,7 +58,7 @@ bool Obj_Enemy::Update(float dt)
 	if(oiled)
 		Oiled();
 
-	if (in_white)
+	if (damaged)
 	{
 		ChangeTexture();
 	}
@@ -70,7 +79,7 @@ void Obj_Enemy::ChangeTexture()
 		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
-		in_white = false;
+		damaged = false;
 	}
 }
 
@@ -164,31 +173,7 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case ENEMY_STATE::STUNNED:
 	{
-		
-		curr_tex = tex_electro_dead;
-		curr_anim = &electro_dead;
-		draw_offset = electrocuted_draw_offset;
-		if ((int)electro_dead.current_frame >= 4)
-		{
-			electro_dead.Reset();
-
-			if (stun_charged && times_animation_repeated >= times_to_repeat_animation || !stun_charged)
-			{
-				times_animation_repeated = 0u;
-				state = state_saved;
-				curr_tex = tex;
-				curr_anim = anim_saved;
-				app->audio->PauseFx(channel_electrocuted, 1);
-				draw_offset = normal_draw_offset;
-			}
-			else
-			{
-				++times_animation_repeated;
-				app->audio->PauseFx(channel_electrocuted);
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				
-			}
-		}
+		Stunned();
 	}
 	break;
 
@@ -347,6 +332,25 @@ void Obj_Enemy::GetPath()
 
 			state = ENEMY_STATE::MOVE;
 		}
+		else
+		{
+			if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
+			{
+				state = ENEMY_STATE::GET_TELEPORT_POINT;
+				curr_anim = &idle;
+			}
+			else if (path.size() > 0)
+			{
+				state = ENEMY_STATE::MOVE;
+				curr_anim = &walk;
+			}
+			else
+			{
+				state = ENEMY_STATE::IDLE;
+				curr_anim = &idle;
+				path_timer.Start();
+			}
+		}
 
 	}
 	else
@@ -355,17 +359,111 @@ void Obj_Enemy::GetPath()
 	}
 }
 
+inline void Obj_Enemy::GetTeleportPoint()
+{
+	move_vect.SetToZero();
+	float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
+	SpawnPoint* nearest_spawners_points = nullptr;
+	float last_distance_to_spawnpoint = 0.f;
+
+	for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
+	{
+		float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
+
+		if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
+			/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
+			&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+			&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
+		{
+			nearest_spawners_points = (*spawn_point);
+			last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+		}
+	}
+
+	if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
+	{
+		check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
+		uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
+		if (number_of_enemies <= teleport_enemies_max)
+		{
+			check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+		}
+		teleport_spawnpoint = nearest_spawners_points;
+		state = ENEMY_STATE::TELEPORT_IN;
+		draw = false;
+		in_portal = &portal_animation;
+		angle = -90;
+
+		teleport_anim_duration.Start();
+	}
+	else
+	{
+		state = ENEMY_STATE::GET_PATH;
+
+	}
+	teleport_timer.Start();
+}
+
+inline void Obj_Enemy::TeleportIn(float & dt)
+{
+	move_vect.SetToZero();
+	if (in_portal != nullptr)
+		in_portal->NextFrame(dt);
+
+	if (teleport_anim_duration.ReadSec() >= 1)
+	{
+		in_portal = &portal_close_anim;
+		
+		if (in_portal->Finished())
+		{
+			in_portal->Reset();
+			pos_map = teleport_spawnpoint->pos;
+			state = ENEMY_STATE::TELEPORT_OUT;
+			teleport_timer.Start();
+			angle = 90;
+		}
+	}
+}
+
+inline void Obj_Enemy::TeleportOut(float & dt)
+{
+	if (in_portal->Finished())
+	{
+		in_portal->Reset();
+		in_portal = &portal_animation;
+		state = ENEMY_STATE::GET_PATH;
+		angle = -90;
+		draw = true;
+	}
+	if (in_portal != nullptr)
+	{
+		in_portal->NextFrame(dt);
+	}
+}
+
 bool Obj_Enemy::Draw(float dt, Camera * camera)
 {
 
-	app->render->BlitScaled(
-		curr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&frame,
-		scale,
-		scale);
+	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)
+	{
+		SDL_Rect portal_frame = in_portal->GetFrame(0);
+		app->render->Blit(
+			portal_tex,
+			pos_screen.x - portal_frame.w * 0.5f,
+			pos_screen.y - portal_frame.h,
+			camera,
+			&portal_frame);
+	}
+
+	if(draw)
+		app->render->BlitScaled(
+			curr_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&frame,
+			scale,
+			scale);
 
 	
 
@@ -474,6 +572,34 @@ inline void Obj_Enemy::Burn(const float & dt)
 
 }
 
+inline void Obj_Enemy::Stunned()
+{
+	curr_tex = tex_electro_dead;
+	curr_anim = &electro_dead;
+	draw_offset = electrocuted_draw_offset;
+	if ((int)electro_dead.current_frame >= 4)
+	{
+		electro_dead.Reset();
+
+		if (stun_charged && times_animation_repeated >= times_to_repeat_animation || !stun_charged)
+		{
+			times_animation_repeated = 0u;
+			state = state_saved;
+			curr_tex = tex;
+			curr_anim = anim_saved;
+			app->audio->PauseFx(channel_electrocuted, 1);
+			draw_offset = normal_draw_offset;
+		}
+		else
+		{
+			++times_animation_repeated;
+			app->audio->PauseFx(channel_electrocuted);
+			channel_electrocuted = app->audio->PlayFx(electocuted);
+
+		}
+	}
+}
+
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider)
 {
@@ -487,7 +613,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			damaged_sprite_timer.Start();
 			last_texture = curr_tex;
 			curr_tex = tex_damaged;
-			in_white = true;
+			damaged = true;
 
 			if (life <= 0)
 			{
@@ -517,7 +643,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 	
 	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 	{
-		in_white = true;
+		damaged = true;
 		life -= collider->damage;
 		damaged_sprite_timer.Start();
 		curr_tex = tex_damaged;
@@ -633,7 +759,7 @@ void Obj_Enemy::Oiled()
 			&& state != ENEMY_STATE::STUNNED_CHARGED )
 		{
 			curr_tex = oiled_tex;
-			in_white = true;
+			damaged = true;
 		}
 		speed = original_speed*0.5f;
 

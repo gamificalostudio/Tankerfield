@@ -183,9 +183,14 @@ bool M_Scene::PreUpdate()
 	{
 		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
 	}
+	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		app->objectmanager->CreateObject(ObjectType::SUICIDAL, (fPoint)mouse_pos);
+	}
 	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 	{
-		general_gui->SetRoundNumber(2);
+		app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, (fPoint)mouse_pos);
+
 	}
 	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
