@@ -102,7 +102,7 @@ bool Obj_Tank::Start()
 	// Revive ------------------------ 
 	revive_range = 2.5f;
 	revive_range_squared = revive_range * revive_range;
-	revive_life = 100;
+	revive_life = 50;
 	revive_time = 2.f;
 	cycle_bar_tex = app->tex->Load(tank_node.child("spritesheets").child("cycle_bar_tex").text().as_string());
 	cycle_bar_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("cycle-progress-bar"));
