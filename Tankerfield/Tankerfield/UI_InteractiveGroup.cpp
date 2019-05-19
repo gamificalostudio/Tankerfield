@@ -38,44 +38,60 @@ bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-void UI_InteractiveGroup::AndleControllerINavigation( Controller* controller )
+bool UI_InteractiveGroup::AndleControllerINavigation( Controller* controller )
 {
+	bool ret = false;
+
 	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::UP);
+		ret = true;
 	}
 	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::DOWN);
+		ret = true;
 	}
 	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::RIGHT);
+		ret = true;
 	}
 	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::LEFT);
+		ret = true;
 	}
+
+	return ret;
 }
 
-void UI_InteractiveGroup::AndleKeyboardNavigation()
+bool UI_InteractiveGroup::AndleKeyboardNavigation()
 {
+	bool ret = false;
+
 	if (app->input->GetKey(SDL_Scancode::SDL_SCANCODE_UP) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::UP);
+		ret = true;
 	}
 	if (app->input->GetKey(SDL_Scancode::SDL_SCANCODE_DOWN) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::DOWN);
+		ret = true;
 	}
 	if (app->input->GetKey(SDL_Scancode::SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::RIGHT);
+		ret = true;
 	}
 	if (app->input->GetKey(SDL_Scancode::SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
 		SetNearestElement(INPUT_DIR::LEFT);
+		ret = true;
 	}
+
+	return ret;
 }
 
 

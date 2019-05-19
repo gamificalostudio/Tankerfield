@@ -6,8 +6,8 @@
 #include "M_UI.h"
 
 #define MAX_PLAYERS 4
-#define DEFAULT_PANEL_COLUMNS 4
-#define DEFAULT_PANEL_ROWS 4
+#define DEFAULT_PANEL_COLUMNS 5
+#define DEFAULT_PANEL_ROWS 5
 
 struct SDL_Texture;
 struct Controller;
@@ -64,7 +64,7 @@ private:
 
 	void InputSelect();
 
-	void SetPlayerProperties();
+	bool SetPlayerProperties();
 
 	void ResetPanelColors();
 
@@ -73,6 +73,7 @@ private:
 private:
 
 	MENU_STATE	      menu_state = MENU_STATE::INIT_MENU;
+	bool              exit_game = false;
 
 	// Textrues ================================================
 
@@ -110,7 +111,12 @@ private:
 	SDL_Color colors[DEFAULT_PANEL_COLUMNS][DEFAULT_PANEL_ROWS];
 	UI_InteractiveGroup * selection_panel = nullptr;
 
-	bool              exit_game = false;
+	// Sfx --------------------------------------------
+
+	uint button_enter_sfx = 0u;
+	uint button_select_sfx = 0u;
+	uint button_error_sfx = 0u;
+	uint selection_finished_sfx = 0u;
 };
 
 #endif // __j1SCENE_H__

@@ -23,6 +23,12 @@ bool M_MainMenu::Start()
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
 	app->audio->PlayMusic("audio/Music/menu_music.ogg");
 
+	button_enter_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_enter.wav", 20);
+	button_select_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_select.wav", 35);
+	button_error_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_error.wav", 35);
+	selection_finished_sfx = app->audio->LoadFx("audio/Fx/main_menu/selection_finished.wav", 35);
+
+	
 	// Create UI Elements ====================================
 
 	fRect screen = app->win->GetWindowRect();
@@ -67,7 +73,7 @@ bool M_MainMenu::Start()
 	selection_panel_def.rows = DEFAULT_PANEL_ROWS;
 	selection_panel_def.focus_indicator = app->ui->CreateImage({ 0.F,0.F }, UI_ImageDef({ 255, 265, 126,126 }));;
 
-	float offset = DEFAULT_PANEL_COLUMNS * element_side * 0.5f;
+	fPoint  offset (DEFAULT_PANEL_COLUMNS * element_side * 0.5f , DEFAULT_PANEL_ROWS  * element_side * 0.5f);
 
 	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, selection_panel_def, this);
 
@@ -78,7 +84,7 @@ bool M_MainMenu::Start()
 	{
 		for (int x = 0; x < DEFAULT_PANEL_COLUMNS; ++x)
 		{
-			UI_Element* element = app->ui->CreateImage(fPoint(screen_center.x - offset + x * element_side, screen_center.y - offset + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 }));
+			UI_Element* element = app->ui->CreateImage(fPoint(screen_center.x - offset.x + x * element_side, screen_center.y - offset.y + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 }));
 			colors[x][y] = GetColor(color_value);
 			element->color_mod = colors[x][y];
 			color_value += color_sum;
@@ -151,8 +157,11 @@ bool M_MainMenu::PreUpdate()
 		}
 	}
 
-	InputNavigate();
-	InputSelect();
+	if (menu_state != MENU_STATE::CHANGE_SCENE)
+	{
+		InputNavigate();
+		InputSelect();
+	}
 
 	return true;
 }
@@ -200,6 +209,8 @@ bool M_MainMenu::Reset()
 
 bool M_MainMenu::OnHoverEnter(UI_Element * element)
 {
+
+	app->audio->PlayFx(button_enter_sfx);
 	return true;
 }
 
@@ -266,21 +277,34 @@ void M_MainMenu::InputNavigate()
 		{
 			if (players[i].controller != nullptr)
 			{
-				menu_panel->AndleControllerINavigation((*players[i].controller));
+				if (menu_panel->AndleControllerINavigation((*players[i].controller)))
+				{
+					app->audio->PlayFx(button_enter_sfx);
+				}
 			}
 		}
 
-		menu_panel->AndleKeyboardNavigation();
+		if (menu_panel->AndleKeyboardNavigation())
+		{
+			app->audio->PlayFx(button_enter_sfx);
+		}
+		
 
 	}
 	else if (menu_state == MENU_STATE::SELECTION)
 	{
 		if (players[current_player].controller != nullptr)
 		{
-			selection_panel->AndleControllerINavigation((*players[current_player].controller));
+			if (selection_panel->AndleControllerINavigation((*players[current_player].controller)))
+			{
+				app->audio->PlayFx(button_enter_sfx);
+			}
 		}
 
-		selection_panel->AndleKeyboardNavigation();
+		if (selection_panel->AndleKeyboardNavigation())
+		{
+			app->audio->PlayFx(button_enter_sfx);
+		}
 	}
 }
 
@@ -315,34 +339,50 @@ void M_MainMenu::InputSelect()
 	{
 		if (menu_state == MENU_STATE::SELECTION && selection_panel->GetFocusedElement() != nullptr )
 		{
-			SetPlayerProperties();
+			if (SetPlayerProperties() == true)
+			{
+				if (current_player < MAX_PLAYERS)
+				{
+					app->audio->PlayFx(button_select_sfx);
+				}
+				else
+				{
+					app->audio->PlayFx(selection_finished_sfx);
+				}
+			}
+			else
+			{
+				app->audio->PlayFx(button_error_sfx);
+			}
 		}
-
-		if ( menu_state == MENU_STATE::INIT_MENU && app->ui->GetFocusedElement() != nullptr)
+		else if ( menu_state == MENU_STATE::INIT_MENU && app->ui->GetFocusedElement() != nullptr)
 		{
 			UI_Element*  menu_element = menu_panel->GetFocusedElement();
 
 			if (menu_element == multi_player_button)
 			{
 				SetState(MENU_STATE::SELECTION);
+				app->audio->PlayFx(button_select_sfx);
 			}
 			else if (menu_element == exit_button)
 			{
 				exit_game = true;
+				app->audio->PlayFx(button_select_sfx);
 			}
+			
 		}
 	}
 
 }
 
 
-void M_MainMenu::SetPlayerProperties()
+bool M_MainMenu::SetPlayerProperties()
 {
 	UI_Element* element_focused = selection_panel->GetFocusedElement();
 
 	if (element_focused == nullptr)
 	{
-		return;
+		return false;
 	}
 
 	SDL_Color color_1 = element_focused->color_mod;
@@ -350,7 +390,7 @@ void M_MainMenu::SetPlayerProperties()
 
 	if (color_1.r == color_2.r && color_1.g == color_2.g && color_1.b == color_2.b )
 	{
-		return;
+		return false;
 	}
 
 	app->scene->tank_colors[current_player] = element_focused->color_mod;
@@ -363,6 +403,8 @@ void M_MainMenu::SetPlayerProperties()
 		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
 		menu_state = MENU_STATE::CHANGE_SCENE;
 	}
+
+	return true;
 }
 
 void M_MainMenu::ResetPanelColors()
