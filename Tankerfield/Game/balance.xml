@@ -12,11 +12,13 @@
     <basic_weapon>
       <damage_multiplier num="100"/>
       <damage_exponential_base num="1.55"/>
+      <speed num="15"/>
     </basic_weapon>
 
     <double_missile>
       <damage_multiplier num="50"/>
       <damage_exponential_base num="1.55"/>
+      <speed num="15"/>
     </double_missile>
 
     <healing_shot>
@@ -42,6 +44,7 @@
     <oil_weapon>
       <damage_multiplier num="100"/>
       <damage_exponential_base num="1.55"/>
+      <speed num="15"/>
     </oil_weapon>
     
   </weapons>

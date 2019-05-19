@@ -128,7 +128,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 10;
+		weapon_info.shot1.bullet_speed = app->objectmanager->basic_weapon_info.speed;
 		weapon_info.shot1.time_between_bullets = 250;
 		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.54f;
 		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.3f;
@@ -158,7 +158,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.explosion_damage = app->objectmanager->double_missile_info.damage_multiplier * pow(app->objectmanager->double_missile_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 12;
+		weapon_info.shot1.bullet_speed = weapon_info.shot2.bullet_speed = app->objectmanager->double_missile_info.speed;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.54f;
 		weapon_info.shot2.trauma = 0.76f;
@@ -209,7 +209,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_damage = 25 + level * 2;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 10;
+		weapon_info.shot1.bullet_speed = weapon_info.shot2.bullet_speed = app->objectmanager->oil_weapon_info.speed;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.54f;
 		weapon_info.shot2.trauma = 0.76f;
@@ -217,8 +217,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
-		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
 	case WEAPON::ELECTRO_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
