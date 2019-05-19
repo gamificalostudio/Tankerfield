@@ -144,8 +144,8 @@ bool M_Scene::Start()
 	
 	general_gui = DBG_NEW General_GUI();
 
-	round = 1u;
-	game_state = GAME_STATE::EXIT_OF_WAVE;
+	round = 0u;
+	game_state = GAME_STATE::ENTER_IN_WAVE;
 	game_over = false;
 
 	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
