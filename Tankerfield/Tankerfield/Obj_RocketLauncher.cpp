@@ -35,6 +35,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 
 	tex = app->tex->Load(rocket_launcher_node.child("tex_path").child_value());
 	curr_tex = tex;
+	tex_damaged = app->tex->Load("textures/Objects/enemies/flakt-sheet-white.png");
 
 	//Loading animations ------------------------------------------------------------------------------------------------------------------------
 	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
@@ -61,7 +62,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, app->scene->round - 1);
 	
 	check_path_time = 2.0f;
-
+	damaged_sprite_time = 75;
 	scale = 1.f;
 
 	coll_w = 0.5f;
