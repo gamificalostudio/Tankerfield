@@ -782,7 +782,7 @@
       <life value ="1000"/>
       <tex path="textures/objects/bullets/Healing_Shot_Charged.png"/>
       <animations>
-        <anim speed="10" rotation="counter-clockwise" first_dir_angle ="0">
+        <anim speed="12" rotation="counter-clockwise" first_dir_angle ="0">
           <dir>
             <frame x="0"     y="0" w="150" h="150"/>
             <frame x="150"   y="0" w="150" h="150"/>

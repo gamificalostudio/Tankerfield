@@ -680,6 +680,8 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
 		if (this->GetLife() < GetMaxLife())
 		{
+			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+			new_particle->tank = this;
 			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
 	}
