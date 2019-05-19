@@ -29,7 +29,7 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 	draw_shadow_offset = {-2 , -4 };
 	frame = { 0, 0, 28,34 };
 	frame_white = { 28,0,28,34 };
-	draw_offset = { -14,-20 };
+	draw_offset = { -14,-17 };
 	curr_frame = &frame;
 
 	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);//width and height hardcoded
