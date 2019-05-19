@@ -93,7 +93,7 @@ void Obj_Suicidal::Attack()
 			target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
-			
+			state = ENEMY_STATE::DEAD;
 		}
 
 		if (curr_anim == &attack
@@ -101,7 +101,7 @@ void Obj_Suicidal::Attack()
 		{
 			curr_anim = &idle;
 			attack.Reset();
-			state = ENEMY_STATE::DEAD;
+			
 		}
 	}
 }
