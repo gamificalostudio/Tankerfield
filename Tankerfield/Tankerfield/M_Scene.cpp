@@ -311,6 +311,7 @@ bool M_Scene::Update(float dt)
 		for (int i = 0; i < MAX_PLAYERS; ++i) {
 			app->objectmanager->obj_tanks[i]->gui->Fade_GUI(false);
 		}
+		app->audio->PlayMusic("audio/Music/defeat.ogg", 2.0f);
 		general_gui->FadeGeneralHUD(false);
 		general_gui->FadeGameOverScreen(true, round);
 		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
