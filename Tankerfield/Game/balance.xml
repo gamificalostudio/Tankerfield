@@ -27,7 +27,7 @@
     </healing_shot>
 
     <laser>
-      <damage_multiplier num="50"/>
+      <damage_multiplier num="100"/>
       <damage_exponential_base num="1.25"/>
     </laser>
 

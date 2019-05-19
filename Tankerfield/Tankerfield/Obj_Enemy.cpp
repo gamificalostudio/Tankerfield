@@ -379,11 +379,19 @@ inline void Obj_Enemy::GetTeleportPoint()
 
 	if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
 	{
-		check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
 		uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
-		if (number_of_enemies <= teleport_enemies_max)
+		if (number_of_enemies <= 5)
 		{
-			check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+			check_teleport_time = 1;
+		}
+		else
+		{
+			check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
+			if (number_of_enemies <= teleport_enemies_max)
+			{
+				check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+			}
+
 		}
 		teleport_spawnpoint = nearest_spawners_points;
 		state = ENEMY_STATE::TELEPORT_IN;

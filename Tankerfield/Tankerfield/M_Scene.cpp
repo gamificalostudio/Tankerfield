@@ -522,6 +522,9 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies = 0;
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
+	number_of_enemies += RocketLauncher_units;
+	number_of_enemies += Suicidal_units;
+
 	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
 
 	for (int i = 0; i < Tesla_trooper_units; i++)
@@ -578,9 +581,11 @@ void M_Scene::NewWave()
 	Tesla_trooper_units = 10 * round * 4;
 	Tesla_trooper_units *= percentage_enemies_subround[subround];
 
-	if (round >= 3)
+	if (round >= 2)
 	{
-		Brute_units += round - 2;
+		Brute_units += round - 1;
+		RocketLauncher_units += round - 1;
+		Suicidal_units += round - 1;
 	}
 
 	CreateEnemyWave();
