@@ -140,11 +140,11 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 10;
 		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.54f;
-		weapon_info.shot2.trauma = 0.76f;
+		weapon_info.shot1.trauma = 0.56f;
+		weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = 0.92f;
 		weapon_info.shot1.rumble_duration = 250;
-		weapon_info.shot2.rumble_strength = 1.0f;
+		weapon_info.shot2.rumble_strength = 0.3f;
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
