@@ -44,7 +44,13 @@
         <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
       </sounds>
   </scene>
-
+  <map>
+    <folder>Maps/</folder>
+    <levels>
+      <level name="Map2.tmx"/>
+    </levels>
+  </map>
+  
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
@@ -76,12 +82,7 @@
       </arrow>
     </animations>
   </ui>
-  <map>
-    <folder>Maps/</folder>
-    <levels>
-      <level name="Map2.tmx"/>
-    </levels>
-  </map>
+ 
   
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
