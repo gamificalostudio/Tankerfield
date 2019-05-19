@@ -111,8 +111,20 @@
         <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
       </suicidal>
     </enemies>
-    
 
+    <oil>
+      <speed value ="0"/>
+      <life value ="1000"/>
+      <tex path="textures/objects/bullets/oil_pool.png"/>
+      <animations>
+        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame x="0"   y="0"   w="300" h="151"/>
+          </dir>
+        </rotate>
+      </animations>
+    </oil>
+    
     <tank>
       <speed value ="1"/>
       <recoil>
