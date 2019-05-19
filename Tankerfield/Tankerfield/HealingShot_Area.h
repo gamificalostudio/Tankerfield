@@ -2,13 +2,11 @@
 #define __HEALINGSHOT_AREA__
 
 #include "App.h"
-#include "M_Collision.h"
 #include "Object.h"
 #include "PerfTimer.h"
 #include "Obj_Bullet.h"
 
 class PerfTimer;
-class Collision;
 struct SDL_Texture;
 class Obj_Tank;
 
