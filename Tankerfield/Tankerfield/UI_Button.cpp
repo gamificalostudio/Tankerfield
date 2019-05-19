@@ -33,42 +33,21 @@ bool UI_Button::Draw()
 {
 	FocusState state = app->ui->GetClickState();
 
-	if (app->ui->GetInputType() == UI_INPUT_TYPE::MOUSE)
+	sprite_rect = definition.idle_rect;
+
+	if (app->ui->GetFocusedElement() == this)
 	{
-		if (app->ui->GetFocusedElement() == this && state != FocusState::NONE &&  state != FocusState::EXIT)
+		if (app->input->GetMouseButton(1) == KEY_REPEAT)
 		{
 			sprite_rect = definition.pushed_rect;
 		}
-		else
-		{
-			sprite_rect = definition.idle_rect;
-		}
 
-		if (hover_state == HoverState::REPEAT)
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
-		}
-		else
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
-		}
+		app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
 	}
-	else if (app->ui->GetInputType() == UI_INPUT_TYPE::CONTROLLER)
+	else
 	{
-	
-		sprite_rect = definition.idle_rect;
-
-
-		if (app->ui->GetFocusedElement() == this)
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
-		}
-		else
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
-		}
+		app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
 	}
-
 
 	SDL_Rect draw_rect = GetDrawRect();
 
