@@ -55,7 +55,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
 
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
-	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.5f });
+	coll->SetObjOffset({ -coll_w * 2.25f, -coll_h * 1.75f });
 
 	attack_damage = app->objectmanager->suicidal_info.attack_damage;
 	attack_range = app->objectmanager->suicidal_info.attack_range;
@@ -93,7 +93,7 @@ void Obj_Suicidal::Attack()
 			target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
-			state = ENEMY_STATE::DEAD;
+			
 		}
 
 		if (curr_anim == &attack
@@ -101,6 +101,7 @@ void Obj_Suicidal::Attack()
 		{
 			curr_anim = &idle;
 			attack.Reset();
+			state = ENEMY_STATE::DEAD;
 		}
 	}
 }
