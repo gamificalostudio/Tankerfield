@@ -55,7 +55,7 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	if(oiled)
+	if(oiled && state != ENEMY_STATE::BURN)
 		Oiled();
 
 		ChangeTexture();
@@ -523,6 +523,8 @@ inline void Obj_Enemy::Burn(const float & dt)
 		fire_damage = life / 3;
 		if (burn_texture != nullptr)
 			curr_tex = burn_texture;
+		oiled = false;
+		speed = original_speed;
 	/*	if (coll != nullptr)
 		{
 			coll->to_destroy = true;
