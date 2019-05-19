@@ -32,6 +32,7 @@
 #include "Camera.h"
 #include "Item_InstantHelp.h"
 #include "Obj_Portal.h"
+#include "HealingShot_Area.h"
 #include "Obj_FlamethrowerFlame.h"
 
 int Obj_Tank::number_of_tanks = 0;
@@ -385,53 +386,55 @@ void Obj_Tank::Movement(float dt)
 
 void Obj_Tank::ShotRecoilMovement(float &dt)
 {
-	if (this->life != 0) {
-		//if the player shot
-		if ((ReleaseShot()
-			|| GetShotAutomatically())
-			&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
+	if (life == 0) {
+		return;
+	}
+
+	//if the player shot
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
+	{
+		//- Basic shot
+		if (charged_shot_timer.ReadMs() < charge_time)
 		{
-			//- Basic shot
-			if (charged_shot_timer.ReadMs() < charge_time)
-			{
-				//set the max velocity in a basic shot
-				velocity_recoil_curr_speed = velocity_recoil_speed_max;
-			}
-
-			//Item Happy hour activated
-			else if (GetShotAutomatically())
-			{
-				velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
-			}
-
-			//- Charged shot
-			else
-			{
-				//set the max velocity in a charged shot
-				velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
-			}
-			// set the direction when shot
-			recoil_dir = -GetShotDir();
+			//set the max velocity in a basic shot
+			velocity_recoil_curr_speed = velocity_recoil_speed_max;
 		}
+
+		//Item Happy hour activated
+		else if (GetShotAutomatically())
+		{
+			velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+		}
+
+		//- Charged shot
 		else
 		{
-			//reduce the velocity to 0 with decay
-			if (velocity_recoil_curr_speed > 0)
+			//set the max velocity in a charged shot
+			velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
+		}
+		// set the direction when shot
+		recoil_dir = -GetShotDir();
+	}
+	else
+	{
+		//reduce the velocity to 0 with decay
+		if (velocity_recoil_curr_speed > 0)
+		{
+			velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
+			if (velocity_recoil_curr_speed < 0)
 			{
-				velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
-				if (velocity_recoil_curr_speed < 0)
-				{
-					velocity_recoil_curr_speed = 0;
-				}
+				velocity_recoil_curr_speed = 0;
 			}
 		}
-		//calculate the max position of the lerp
-		velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
-
-		//calculate the velocity in lerp
-		//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
-		velocity += velocity_recoil_final_lerp;
 	}
+	//calculate the max position of the lerp
+	velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
+
+	//calculate the velocity in lerp
+	//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
+	velocity += velocity_recoil_final_lerp;
 }
 
 
@@ -647,7 +650,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == TAG::PORTAL)
+	else if (c1->GetTag() == TAG::PORTAL)
 	{
 		if (time_between_portal_tp.ReadMs() > 2000) {
 			if (c1 == portal1->coll) {
@@ -657,6 +660,17 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 				pos_map = portal1->pos_map;
 			}
 			time_between_portal_tp.Start();
+		}
+	}
+
+	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
+	{
+		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
+		if (this->GetLife() < GetMaxLife())
+		{
+			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+			new_particle->tank = this;
+			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
 	}
 }
@@ -706,7 +720,8 @@ void Obj_Tank::SetLife(int life)
 	{
 		this->life = GetMaxLife();
 	}
-	else if (life <= 0 && this->life != 0)
+
+	else if (life <= 0)
 	{
 		this->life = 0;
 		app->audio->PlayFx(die_sfx);
@@ -910,15 +925,19 @@ void Obj_Tank::ShootSustainedWeapon()
 	}
 
 	//- Quick shot
-	if ((ReleaseShot()
-		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
+	if (ReleaseShot())
 	{
-		(this->*shot1_function[(uint)weapon_info.weapon])();
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
-		app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
-		shot_timer.Start();
+		if (shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
+			&& sustained_shot_timer.ReadMs() <= quick_shot_time
+			&& GetShotAutomatically())
+		{
+			(this->*shot1_function[(uint)weapon_info.weapon])();
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
+			shot_timer.Start();
+		}
+
+		(this->*release_shot[(uint)weapon_info.weapon])();
 	}
 }
 
@@ -1126,12 +1145,13 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::StopTank()
 {
-	if (!fire_dead)
+	if (this->fire_dead==false)
 	{
-		fire_dead = true;
 		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 		dead_fire->tank = this;
+		this->fire_dead = true;
 	}
+
 	this->SetWeapon(WEAPON::BASIC, 1);
 	this->SetItem(ItemType::NO_TYPE);
 }

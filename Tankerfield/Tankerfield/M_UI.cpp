@@ -128,7 +128,7 @@ bool M_UI::CleanUp()
 
 	app->tex->UnLoad(atlas);
 	atlas = nullptr;
-	selected_element = nullptr;
+	focused_element = nullptr;
 	interactive_elements.clear();
 
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
@@ -161,7 +161,7 @@ bool M_UI::CleanUp()
 
 bool M_UI::Reset()
 {
-	selected_element = nullptr;
+	focused_element = nullptr;
 	reset = true;
 
 	interactive_elements.clear();
@@ -268,16 +268,16 @@ void M_UI::FocusMouse()
 {
 
 	// Draggable ================================================
-	if (selected_element && selected_element->is_draggable)
+	if (focused_element && focused_element->is_draggable)
 	{
-		switch (click_state)
+		switch (focus_state)
 		{
 		case FocusState::ENTER:
-			mouse_offset = mouse_position - selected_element->position;
+			mouse_offset = mouse_position - focused_element->position;
 			break;
 		case FocusState::REPEAT:
-			selected_element->position = mouse_position - mouse_offset;
-			selected_element->UpdateRelativePosition();
+			focused_element->position = mouse_position - mouse_offset;
+			focused_element->UpdateRelativePosition();
 			break;
 		case FocusState::EXIT:
 			mouse_offset = { 0,0 };
@@ -350,45 +350,45 @@ void M_UI::FocusMouse()
 
 	// Click States ============================================
 
-	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		SelectClickedObject();
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && selected_element)
-	{
-		click_state = FocusState::REPEAT;
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && selected_element)
-	{
-		click_state = FocusState::EXIT;
-	}
-	else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && selected_element)
+	//if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	//{
+	//	SelectClickedObject();
+	//}
+	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && focused_element)
+	//{
+	//	focus_state = FocusState::REPEAT;
+	//}
+	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && focused_element)
+	//{
+	//	focus_state = FocusState::EXIT;
+	//}
+	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && focused_element)
 
-	{
-		click_state = FocusState::NONE;
-		selected_element = nullptr;
-	}
+	//{
+	//	focus_state = FocusState::NONE;
+	//	focused_element = nullptr;
+	//}
 
-	// Click Callbacks =============================================
+	//// Click Callbacks =============================================
 
-	if (selected_element != nullptr && selected_element->listener != nullptr)
-	{
-		switch (click_state)
-		{
-		case FocusState::ENTER:
-			selected_element->listener->ClickDown(selected_element);
-			break;
-		case FocusState::REPEAT:
-			selected_element->listener->ClickRepeat(selected_element);
-			break;
-		case FocusState::EXIT:
-			if (selected_element->hover_state != HoverState::NONE)
-			{
-				selected_element->listener->ClickUp(selected_element);
-			}
-			break;
-		}
-	}
+	//if (focused_element != nullptr && focused_element->listener != nullptr)
+	//{
+	//	switch (focus_state)
+	//	{
+	//	case FocusState::ENTER:
+	//		focused_element->listener->ClickDown(focused_element);
+	//		break;
+	//	case FocusState::REPEAT:
+	//		focused_element->listener->ClickRepeat(focused_element);
+	//		break;
+	//	case FocusState::EXIT:
+	//		if (focused_element->hover_state != HoverState::NONE)
+	//		{
+	//			focused_element->listener->ClickUp(focused_element);
+	//		}
+	//		break;
+	//	}
+	//}
 }
 
 void M_UI::UpdateElements(float dt)
@@ -473,9 +473,9 @@ void M_UI::UpdateElements(float dt)
 
 			// Check if it is teh current selected element
 
-			if (selected_element == (*element))
+			if (focused_element == (*element))
 			{
-				selected_element = nullptr;
+				focused_element = nullptr;
 			}
 
 			// Delete from UI list
@@ -519,12 +519,17 @@ Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
 
  FocusState M_UI::GetClickState() const
  {
-	 return click_state;
+	 return focus_state;
  }
 
-UI_Element * M_UI::GetFocusedElement()
+ void M_UI::SetFocusedElement(UI_Element * element)
+ {
+	 focused_element = element;
+ }
+
+ UI_Element * M_UI::GetFocusedElement()
 {
-	return selected_element;
+	return focused_element;
 }
 
 UI_INPUT_TYPE M_UI::GetInputType()
@@ -580,8 +585,8 @@ bool M_UI::SelectClickedObject()
 				nearest_object = (*item);
 			}
 		}
-		selected_element = nearest_object;
-		click_state = FocusState::ENTER;
+
+		focused_element = nearest_object;
 	}
 
 	return true;
@@ -618,7 +623,7 @@ void M_UI::DrawUI(UI_Element * object)
 	{
 		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
-		if (selected_element == object)
+		if (focused_element == object)
 		{
 			app->render->DrawQuad(rect, 255, 233, 15, 100, true, false);
 		}

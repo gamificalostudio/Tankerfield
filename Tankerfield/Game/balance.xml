@@ -12,11 +12,13 @@
     <basic_weapon>
       <damage_multiplier num="100"/>
       <damage_exponential_base num="1.55"/>
+      <speed num="15"/>
     </basic_weapon>
 
     <double_missile>
       <damage_multiplier num="50"/>
       <damage_exponential_base num="1.55"/>
+      <speed num="15"/>
     </double_missile>
 
     <healing_shot>
@@ -42,6 +44,7 @@
     <oil_weapon>
       <damage_multiplier num="100"/>
       <damage_exponential_base num="1.55"/>
+      <speed num="15"/>
     </oil_weapon>
     
   </weapons>
@@ -60,12 +63,12 @@
     </tesla_trooper>
     
     <brute>
-      <life_multiplier num = "1500"/><!--Acts as initial life. Divided by 100 is the number of hits the enemy has to take with a weapon of the same level to die.-->
+      <life_multiplier num = "2000"/><!--Acts as initial life. Divided by 100 is the number of hits the enemy has to take with a weapon of the same level to die.-->
       <life_exponential_base num ="1.55"/>
       <detection_range num="10"/>
       <speed num = "1.5"/>
-      <attack_damage num="10"/>
-      <attack_range num="1"/>
+      <attack_damage num="50"/>
+      <attack_range num="1.25"/>
       <attack_frequency num="3000"/>
     </brute>
 

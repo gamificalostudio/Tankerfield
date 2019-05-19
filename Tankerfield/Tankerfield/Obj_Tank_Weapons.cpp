@@ -18,6 +18,7 @@
 #include "Obj_OilPool.h"
 #include "Obj_ElectroShotAnimation.h"
 #include "Obj_FlamethrowerFlame.h"
+#include "HealingShot_Area.h"
 
 void Obj_Tank::InitWeapons()
 {
@@ -71,11 +72,13 @@ void Obj_Tank::InitWeapons()
 	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
-	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
+	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
 	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
 	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
 	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
 	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
+
+	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -125,7 +128,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 10;
+		weapon_info.shot1.bullet_speed = app->objectmanager->basic_weapon_info.speed;
 		weapon_info.shot1.time_between_bullets = 250;
 		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.54f;
 		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.3f;
@@ -155,7 +158,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.explosion_damage = app->objectmanager->double_missile_info.damage_multiplier * pow(app->objectmanager->double_missile_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 12;
+		weapon_info.shot1.bullet_speed = weapon_info.shot2.bullet_speed = app->objectmanager->double_missile_info.speed;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.54f;
 		weapon_info.shot2.trauma = 0.76f;
@@ -175,13 +178,14 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_speed = 10;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.54f;
-		weapon_info.shot2.trauma = 0.76f;
-		weapon_info.shot1.rumble_strength = 0.92f;
+		weapon_info.shot2.trauma = 0;
+		weapon_info.shot1.rumble_strength = 0.8f;
 		weapon_info.shot1.rumble_duration = 250;
-		weapon_info.shot2.rumble_strength = 1.0f;
-		weapon_info.shot2.rumble_duration = 400;
+		weapon_info.shot2.rumble_strength = 0.25f;
+		weapon_info.shot2.rumble_duration = 250;
+		weapon_info.shot2.bullet_healing = 15 + level;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
-		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -205,7 +209,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_damage = 25 + level * 2;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 10;
+		weapon_info.shot1.bullet_speed = weapon_info.shot2.bullet_speed = app->objectmanager->oil_weapon_info.speed;
 		weapon_info.shot1.time_between_bullets = 500;
 		weapon_info.shot1.trauma = 0.54f;
 		weapon_info.shot2.trauma = 0.76f;
@@ -213,8 +217,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
-		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
 	case WEAPON::ELECTRO_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -352,6 +355,20 @@ void Obj_Tank::ShootHealingShot()
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
 	heal_bullet->SetPlayer(this);
+}
+
+void Obj_Tank::ShootHealingShotCharged()
+{
+	HealingShot_Area * heal_area = (HealingShot_Area*)app->objectmanager->CreateObject(ObjectType::HEALING_AREA_SHOT, pos_map);
+
+	heal_area->SetBulletProperties(
+		weapon_info.shot1.bullet_speed,
+		weapon_info.shot1.bullet_life_ms,
+		weapon_info.shot1.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	heal_area->tank_parent = this;
 }
 
 void Obj_Tank::ShootLaserShot()
@@ -514,6 +531,11 @@ bool Obj_Tank::GetIsElectroShotCharged() const
 std::vector<Object*>* Obj_Tank::GetEnemiesHitted() 
 {
 	return &enemies_hitted;
+}
+
+void Obj_Tank::ReleaseFlameThrower()
+{
+	flame->is_holding = false;
 }
 
 

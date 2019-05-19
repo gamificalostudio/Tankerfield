@@ -101,7 +101,7 @@ void Obj_Brute::ChangeTexture()
 		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
-		in_white = false;
+		damaged = false;
 	}
 }
 
@@ -164,14 +164,25 @@ void Obj_Brute::Burn(const float& dt)
 
 bool Obj_Brute::Draw(float dt, Camera * camera)
 {
-	app->render->BlitScaled(
-		curr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&frame,
-		scale,
-		scale);
+	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)
+	{
+		SDL_Rect portal_frame = in_portal->GetFrame(0);
+		app->render->Blit(
+			portal_tex,
+			pos_screen.x - portal_frame.w * 0.5f,
+			pos_screen.y - portal_frame.h,
+			camera,
+			&portal_frame);
+	}
+	if(draw)
+		app->render->BlitScaled(
+			curr_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&frame,
+			scale,
+			scale);
 
 	if (state == ENEMY_STATE::BURN)
 	{

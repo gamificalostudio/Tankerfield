@@ -12,7 +12,7 @@
 struct SDL_Texture;
 class Timer;
 class Obj_Tank;
-struct SpawnPoint;
+
 
 
 class Obj_TeslaTrooper : public Obj_Enemy 
@@ -24,8 +24,6 @@ public:
 	inline void TeleportOut(float & dt) override;
 
 	inline void TeleportIn(float & dt) override;
-
-	inline void GetTeleportPoint() override;
 
 	inline void Spawn(const float & dt) override;
 
@@ -41,25 +39,12 @@ private:
 
 	inline void UpdateVelocity();
 
-	Timer	teleport_timer;
-	Timer	teleport_anim_duration;
-
-	
-	Animation portal_animation;
-	Animation portal_close_anim;
 	Animation spawn_anim;
-
-	bool draw							= true;
-	Animation* in_portal				= nullptr;
-
-	SDL_Texture * portal_tex			= nullptr;
+	
 	SDL_Texture * explosion_apper_tex	= nullptr;
 
-	SpawnPoint* teleport_spawnpoint		= nullptr;
+	
 
-	//teleport values ----------
-	float check_teleport_time			= 0.f;
-	uint teleport_enemies_max			= 0u;
 
 	float squared_detection_range		= 0.f;
 

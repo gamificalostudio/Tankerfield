@@ -62,37 +62,44 @@ public:
 
 class BasicWeaponInfo : public WeaponXMLInfo
 {
-
+public:
+	float speed = 0.f;
 };
 
 class DoubleMissileInfo : public WeaponXMLInfo
 {
-
+public:
+	float speed = 0.f;
 };
 
 class HealingShotInfo : public WeaponXMLInfo
 {
+public:
 
 };
 
 class LaserInfo : public WeaponXMLInfo
 {
+public:
 
 };
 
 class ElectroShotInfo : public WeaponXMLInfo
 {
+public:
 
 };
 
 class FlameThrowerInfo : public WeaponXMLInfo
 {
+public:
 
 };
 
 class OilWeaponInfo : public WeaponXMLInfo
 {
-
+public:
+	float speed = 0.f;
 };
 
 #endif // !
