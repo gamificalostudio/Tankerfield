@@ -5,7 +5,7 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="0" />
+    <mode value ="1" />
 
   </app>
 
@@ -79,7 +79,8 @@
   <map>
     <folder>Maps/</folder>
     <levels>
-      <level name="Map2.tmx"/>
+      <!--<level name="Map2.tmx"/>-->
+      <level name="test/test.tmx"/>
     </levels>
   </map>
   
@@ -138,7 +139,7 @@
       <flamethrower>
         <tex_flamethrower>textures/objects/bullets/tex_flamethrower1.png</tex_flamethrower>
         <animations>
-          <fire1 speed="15">                         
+          <fire_start speed="15">                         
             <dir>
               <frame x="0"   y="0"   w="154" h="112"/>
               <frame x="154" y="0"   w="154" h="112"/>
@@ -148,8 +149,8 @@
               <frame x="770" y="0"   w="154" h="112"/>
               <frame x="0"   y="112" w="154" h="112"/>
             </dir>
-          </fire1>
-          <fire2 speed="15">
+          </fire_start>
+          <fire speed="15">
             <dir>             
               <frame x="154" y="112" w="154" h="112"/>
               <frame x="308" y="112" w="154" h="112"/>
@@ -161,8 +162,19 @@
               <frame x="308" y="224" w="154" h="112"/>
               <frame x="462" y="224" w="154" h="112"/>
             </dir>
-          </fire2>
-          <fire3 speed="15">
+          </fire>
+          <fire_reverse speed="15">
+            <dir>
+              <frame x="308" y="224" w="154" h="112"/>
+              <frame x="154" y="224" w="154" h="112"/>
+              <frame x="0"   y="224" w="154" h="112"/>
+              <frame x="770" y="112" w="154" h="112"/>
+              <frame x="616" y="112" w="154" h="112"/>
+              <frame x="462" y="112" w="154" h="112"/>
+              <frame x="308" y="112" w="154" h="112"/>
+            </dir>
+          </fire_reverse>
+          <fire_end speed="15">
             <dir>
               <frame x="616" y="224" w="154" h="112"/>
               <frame x="770" y="224" w="154" h="112"/>
@@ -173,7 +185,7 @@
               <frame x="616" y="336" w="154" h="112"/>
               <frame x="770" y="336" w="154" h="112"/>
             </dir>
-          </fire3>
+          </fire_end>
         </animations>
       </flamethrower>
       

@@ -26,9 +26,10 @@ Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) : Object(pos)
 	tex = app->tex->Load(flamethrower_node.child("tex_flamethrower").text().as_string());
 	curr_tex = tex;
 
-	fire_start.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire1"));
-	fire.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire2"));
-	fire_end.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire3"));
+	fire_start.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire_start"));
+	fire.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire"));
+	fire_reverse.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire_reverse"));
+	fire_end.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire_end"));
 	
 	curr_anim = nullptr;
 
@@ -65,12 +66,19 @@ bool Obj_FlamethrowerFlame::Update(float dt)
 		if (is_holding)
 		{
 			fire.Reset();
+			curr_anim = &fire_reverse;
 		}
 		else
 		{
 			fire.Reset();
 			curr_anim = &fire_end;
 		}
+	}
+
+	if (fire_reverse.Finished())
+	{
+		fire_reverse.Reset();
+		curr_anim = &fire;
 	}
 
 	if (fire_end.Finished())

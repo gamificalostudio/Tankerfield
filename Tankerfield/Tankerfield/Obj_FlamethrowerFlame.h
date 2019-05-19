@@ -28,6 +28,7 @@ public:
 private:
 	Animation fire_start;
 	Animation fire;
+	Animation fire_reverse;
 	Animation fire_end;
 	SDL_Texture * tex	= nullptr;
 	float scale = 1.f;

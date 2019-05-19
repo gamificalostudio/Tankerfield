@@ -375,53 +375,55 @@ void Obj_Tank::Movement(float dt)
 
 void Obj_Tank::ShotRecoilMovement(float &dt)
 {
-	if (this->life != 0) {
-		//if the player shot
-		if ((ReleaseShot()
-			|| GetShotAutomatically())
-			&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
+	if (life == 0) {
+		return;
+	}
+
+	//if the player shot
+	if ((ReleaseShot()
+		|| GetShotAutomatically())
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
+	{
+		//- Basic shot
+		if (charged_shot_timer.ReadMs() < charge_time)
 		{
-			//- Basic shot
-			if (charged_shot_timer.ReadMs() < charge_time)
-			{
-				//set the max velocity in a basic shot
-				velocity_recoil_curr_speed = velocity_recoil_speed_max;
-			}
-
-			//Item Happy hour activated
-			else if (GetShotAutomatically())
-			{
-				velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
-			}
-
-			//- Charged shot
-			else
-			{
-				//set the max velocity in a charged shot
-				velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
-			}
-			// set the direction when shot
-			recoil_dir = -GetShotDir();
+			//set the max velocity in a basic shot
+			velocity_recoil_curr_speed = velocity_recoil_speed_max;
 		}
+
+		//Item Happy hour activated
+		else if (GetShotAutomatically())
+		{
+			velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+		}
+
+		//- Charged shot
 		else
 		{
-			//reduce the velocity to 0 with decay
-			if (velocity_recoil_curr_speed > 0)
+			//set the max velocity in a charged shot
+			velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
+		}
+		// set the direction when shot
+		recoil_dir = -GetShotDir();
+	}
+	else
+	{
+		//reduce the velocity to 0 with decay
+		if (velocity_recoil_curr_speed > 0)
+		{
+			velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
+			if (velocity_recoil_curr_speed < 0)
 			{
-				velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
-				if (velocity_recoil_curr_speed < 0)
-				{
-					velocity_recoil_curr_speed = 0;
-				}
+				velocity_recoil_curr_speed = 0;
 			}
 		}
-		//calculate the max position of the lerp
-		velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
-
-		//calculate the velocity in lerp
-		//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
-		velocity += velocity_recoil_final_lerp;
 	}
+	//calculate the max position of the lerp
+	velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
+
+	//calculate the velocity in lerp
+	//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
+	velocity += velocity_recoil_final_lerp;
 }
 
 
