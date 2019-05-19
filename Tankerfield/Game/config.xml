@@ -18,7 +18,7 @@
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
-    <fullscreen_window value="false"/>
+    <fullscreen_window value="true"/>
   </window>
 
   <animations_bank>animations.xml</animations_bank>
@@ -47,6 +47,7 @@
   <map>
     <folder>Maps/</folder>
     <levels>
+      <!--<level name="test/test.tmx"/>-->
       <level name="Map2.tmx"/>
     </levels>
   </map>
@@ -83,13 +84,7 @@
     </animations>
   </ui>
   
-  <map>
-    <folder>Maps/</folder>
-    <levels>
-      <level name="Map2.tmx"/>
-      <!--<level name="test/test.tmx"/>-->
-    </levels>
-  </map>
+
   
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>

@@ -298,6 +298,8 @@ private:
 	//sfx 
 	uint die_sfx						= 0u;
 
+	bool picking = false;
+
 public:
 	Camera* camera_player				= nullptr;
 

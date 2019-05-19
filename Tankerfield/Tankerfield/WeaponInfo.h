@@ -36,7 +36,7 @@ struct ShotInfo
 	float bullet_life_ms			= 0.f;
 	float time_between_bullets		= 0.f;
 	uint sfx						= 0u;
-	uint recoil						= 0u;
+	float recoil					= 0.f;
 	float rumble_strength			= 0.f;
 	Uint32 rumble_duration			= 0u;
 	float trauma					= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake

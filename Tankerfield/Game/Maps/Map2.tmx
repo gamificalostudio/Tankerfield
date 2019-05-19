@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3744">
+<map version="1.2" tiledversion="1.2.4" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3744">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
@@ -200251,12 +200251,12 @@
   <object id="1998" type="WATER" x="3060" y="2190" width="270" height="180"/>
   <object id="2000" type="WATER" x="2310" y="2190" width="750" height="450"/>
   <object id="2001" type="WATER" x="2280" y="2220" width="30" height="420"/>
-  <object id="2008" type="WALL" x="750" y="3390" width="30" height="630"/>
+  <object id="2008" type="WALL" x="600" y="3420" width="60" height="600"/>
   <object id="2010" type="WATER" x="1020" y="2700" width="240" height="960"/>
   <object id="2011" type="WATER" x="990" y="2730" width="30" height="930"/>
   <object id="2012" type="WATER" x="960" y="2760" width="30" height="900"/>
   <object id="2013" type="WATER" x="930" y="3000" width="30" height="660"/>
-  <object id="2014" type="WATER" x="780" y="3000" width="150" height="420"/>
+  <object id="2014" type="WATER" x="600" y="3000" width="330" height="420"/>
   <object id="2018" type="WALL" x="1020" y="1500" width="1530" height="30"/>
   <object id="2019" type="WALL" x="750" y="1740" width="30" height="1260"/>
   <object id="2020" type="WALL" x="780" y="1680" width="60" height="60"/>
@@ -200264,7 +200264,7 @@
   <object id="2022" type="WALL" x="900" y="1560" width="60" height="60"/>
   <object id="2023" type="WALL" x="960" y="1530" width="60" height="30"/>
   <object id="2029" type="ROAD" x="1410" y="3660" width="990" height="90"/>
-  <object id="2030" type="ROAD" x="780" y="3660" width="540" height="90"/>
+  <object id="2030" type="ROAD" x="660" y="3660" width="660" height="90"/>
   <object id="2033" type="ROAD" x="3390" y="2520" width="90" height="210"/>
   <object id="2034" type="ROAD" x="4050" y="2850" width="90" height="180"/>
   <object id="2035" type="ROAD" x="4170" y="5460" width="90" height="660"/>
@@ -200281,7 +200281,7 @@
   <object id="2047" type="WALL" x="2610" y="6660" width="30" height="30"/>
   <object id="2048" type="WALL" x="2580" y="6630" width="30" height="30"/>
   <object id="2049" type="WALL" x="900" y="6600" width="1680" height="30"/>
-  <object id="2051" type="WATER" x="780" y="3990" width="150" height="30"/>
+  <object id="2051" type="WATER" x="660" y="3990" width="270" height="30"/>
   <object id="2854" type="ROAD" x="2550" y="5070" width="90" height="1530"/>
   <object id="2855" type="ROAD" x="2490" y="5070" width="60" height="90"/>
   <object id="2870" type="ROAD" x="4650" y="2790" width="150" height="90"/>
@@ -256386,9 +256386,9 @@
   <object id="3731" name="REWARD_BOX" type="REWARD_BOX" x="3900" y="5190" width="30" height="30"/>
  </objectgroup>
  <objectgroup id="9" name="Players">
-  <object id="410" x="4830" y="3900" width="30" height="30"/>
-  <object id="411" x="3960" y="5520" width="30" height="30"/>
-  <object id="412" x="4440" y="5610" width="30" height="30"/>
-  <object id="413" x="4440" y="5400" width="30" height="30"/>
+  <object id="410" x="750" y="3780" width="30" height="30"/>
+  <object id="411" x="750" y="3600" width="30" height="30"/>
+  <object id="412" x="750" y="3660" width="30" height="30"/>
+  <object id="413" x="750" y="3720" width="30" height="30"/>
  </objectgroup>
 </map>

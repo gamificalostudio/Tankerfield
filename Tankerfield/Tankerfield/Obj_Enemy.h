@@ -30,7 +30,7 @@ public:
 
 	bool Update(float dt) ;
 
-	virtual void ChangeTexture();
+	inline virtual void ChangeTexture();
 
 	virtual void Attack();
 
@@ -80,6 +80,8 @@ protected:
 	bool CleanUp() override;
 
 	void Oiled();
+
+	inline void ReduceLife(Collider* collider);
 
 protected:
 
