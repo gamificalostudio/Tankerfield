@@ -33,8 +33,7 @@ public:
 	void ShootMissile();
 
 private:
-	iPoint spawn_draw_offset = { 0, 0 };
-	iPoint normal_draw_offset = { 0, 0 };
+	
 };
 
 #endif /* __OBJ_ROCKETLAUNCHER_H__ */

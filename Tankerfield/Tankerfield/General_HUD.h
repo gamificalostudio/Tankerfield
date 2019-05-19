@@ -28,6 +28,8 @@ public:
 
 	void SetRoundNumber(int round);
 
+	void RoundFX();
+
 	void SetInputTextToNameLabel();
 
 	void FadeGameOverScreen(bool fade_on, int round = -1);
