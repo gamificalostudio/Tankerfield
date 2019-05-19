@@ -20,7 +20,7 @@ bool Bullet_Basic::Start()
 
 	draw_offset = { (int)(35*0.5f), 7 };
 
-	shot_sound = app->audio->LoadFx("audio/Fx/tank/weapons/basic_shot/machine_gun.wav",20);
+	shot_sound = app->audio->LoadFx("audio/Fx/tank/weapons/basic_shot/machine_gun.wav",10);
 	app->audio->PlayFx(shot_sound);
 	coll = app->collision->AddCollider(pos_map, .25f, .25f, TAG::BULLET, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->SetObjOffset({ -0.25f*0.5f, -0.25f*0.5f });
