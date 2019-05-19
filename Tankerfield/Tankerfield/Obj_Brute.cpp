@@ -101,7 +101,7 @@ void Obj_Brute::ChangeTexture()
 		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
-		in_white = false;
+		damaged = false;
 	}
 }
 
