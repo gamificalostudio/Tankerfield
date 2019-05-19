@@ -133,7 +133,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = app->objectmanager->basic_weapon_info.speed;
 		weapon_info.shot1.time_between_bullets = 100;
-		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.1f;
+		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
 		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 100;
 		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
@@ -147,7 +147,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 10;
 		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.56f;
+		weapon_info.shot1.trauma = 0.0f;
 		weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = 0.92f;
 		weapon_info.shot1.rumble_duration = 250;

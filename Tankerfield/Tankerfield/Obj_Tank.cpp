@@ -922,6 +922,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		&& sustained_shot_timer.ReadMs() > weapon_info.quick_shot_time)
 	{
 		(this->*shot2_function[(uint)weapon_info.weapon])();
+		camera_player->AddTrauma(weapon_info.shot1.trauma);
 		//TODO: Play wepon sfx
 		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
 	}
@@ -933,6 +934,7 @@ void Obj_Tank::ShootSustainedWeapon()
 			&& sustained_shot_timer.ReadMs() <= weapon_info.quick_shot_time
 			&& GetShotAutomatically())
 		{
+			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
