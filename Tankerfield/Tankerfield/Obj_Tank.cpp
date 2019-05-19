@@ -913,6 +913,7 @@ void Obj_Tank::ShootSustainedWeapon()
 	if (PressShot())
 	{
 		sustained_shot_timer.Start();
+		shot_timer_basic_bullet.Start();
 	}
 
 	//- Sustained shot
