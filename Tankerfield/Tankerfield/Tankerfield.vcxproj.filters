@@ -211,6 +211,8 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HealingShot_Area.cpp">
+    </ClCompile>
     <ClCompile Include="Obj_ElectroShotAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -452,6 +454,8 @@
     </ClInclude>
     <ClInclude Include="Obj_Portal.h">
       <Filter>Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="HealingShot_Area.h">
     </ClInclude>
     <ClInclude Include="Obj_ElectroShotAnimation.h">
       <Filter>Objects\Bullets</Filter>
