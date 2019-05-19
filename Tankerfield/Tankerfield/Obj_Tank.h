@@ -220,6 +220,8 @@ private:
 	//Flamethrower shot
 	Obj_FlamethrowerFlame * flame = nullptr;
 
+	bool picking = false;
+
 public:
 
 	float flame_coll_w = 3.f;
