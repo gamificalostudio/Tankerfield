@@ -93,6 +93,7 @@ public:
 	bool Reset();
 
 	Object* CreateObject(ObjectType type, fPoint map_pos);
+
 	Obj_Item* CreateItem(ItemType type, fPoint map_pos);
 
 	static bool SortByYPos(Object * obj1, Object * obj2);
@@ -108,9 +109,10 @@ public:
 	uint GetNumberOfEnemies()
 	{
 		return enemies.size();
-	 }
+	}
 
 public:
+	bool delete_all_enemies = false;
 	pugi::xml_node balance_xml_node;
 	std::vector<Obj_Tank*> obj_tanks;
 

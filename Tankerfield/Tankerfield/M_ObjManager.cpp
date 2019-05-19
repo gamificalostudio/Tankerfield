@@ -108,6 +108,22 @@ bool M_ObjManager::PreUpdate()
 			(*iterator)->PreUpdate();
 		}
 	}
+
+	if (delete_all_enemies == true)
+	{
+		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+		{
+			ObjectType o_t = (*iterator)->type;
+
+			if (o_t == ObjectType::TESLA_TROOPER || o_t == ObjectType::BRUTE || o_t == ObjectType::SUICIDAL || o_t == ObjectType::ROCKETLAUNCHER)
+			{
+				(*iterator)->to_remove = true;
+			}
+		}
+
+		delete_all_enemies = false;
+	}
+
 	return true;
 }
 
