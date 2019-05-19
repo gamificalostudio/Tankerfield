@@ -845,6 +845,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 		alpha = 0;
 		curr_text_charging = text_charging;
 		curr_anim_charging = anim_charging;
+		
 		charging = true;
 	}
 

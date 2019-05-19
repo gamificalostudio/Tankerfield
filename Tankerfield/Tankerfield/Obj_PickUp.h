@@ -29,6 +29,8 @@ public:
 
 	uint level_of_weapon						= NULL;
 
+	Timer Timer_to_delete;
+
 public:
 
 	Obj_PickUp(fPoint pos);

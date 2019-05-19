@@ -75,7 +75,7 @@ void Obj_Enemy::ChangeTexture()
 		curr_tex != tex &&
 		bool_electro_dead == false)
 	{
-		curr_tex = last_texture;
+		curr_tex = tex;
 		damaged = false;
 	}
 }
@@ -210,7 +210,7 @@ void Obj_Enemy::Dead()
 	{
 		// DROP A PICK UP ITEM 
 		app->pick_manager->PickUpFromEnemy(pos_map);
-		curr_tex = tex;
+		//curr_tex = tex;
 		curr_anim = &death;
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
@@ -645,7 +645,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 				life -= collider->damage;
 
 				damaged_sprite_timer.Start();
-				last_texture = curr_tex;
+			//	last_texture = curr_tex;
 				curr_tex = tex_damaged;
 				damaged = true;
 
