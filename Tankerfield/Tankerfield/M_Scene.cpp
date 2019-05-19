@@ -160,6 +160,8 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
+	LOG("Enemy number %i", number_of_enemies);
+
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
@@ -281,7 +283,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::IN_WAVE:
 	{
-		if (number_of_enemies<=0)
+		if (number_of_enemies<=0)//Hardcode to go to next round when there are less enemies
 		{
 			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}
@@ -578,7 +580,7 @@ void M_Scene::CreateEnemyWave()
 
 void M_Scene::NewWave()
 {
-	Tesla_trooper_units = 50 + 20 * round;
+	Tesla_trooper_units = 30 + 40 * round;
 	Tesla_trooper_units *= percentage_enemies_subround[subround];
 
 	if (round >= 2)
