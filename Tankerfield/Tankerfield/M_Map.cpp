@@ -81,10 +81,10 @@ bool M_Map::PostUpdate(float dt)
 
 		std::vector<Tile>aux = data.qt->GetTilesIntersection(*(*item_cam));
 
-	/*	std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
+		std::sort(aux.begin(), aux.end(), [](Tile a, Tile b)
 		{
 			return a.sorting_value < b.sorting_value;
-		});*/
+		});
 
 		for (std::vector<Tile>::iterator sorted_tiles = aux.begin(); sorted_tiles != aux.end(); ++sorted_tiles)
 		{
