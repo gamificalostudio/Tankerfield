@@ -359,14 +359,16 @@ void Obj_Tank::Movement(float dt)
 	}
 	pos_map			+= velocity_map * dt;
 
+	////DEBUG
 	if(tank_num == 0)
 	{
-		fPoint input_debug(iso_dir);
-		input_debug.Normalize();
-		LOG("input     x: %f, y:%f", input_debug.x, input_debug.y);
-		fPoint velocity_debug(velocity_map);
-		velocity_debug.Normalize();
-		LOG("velocity  x: %f, y:%f", velocity_debug.x, velocity_debug.y);
+	//	fPoint input_debug(iso_dir);
+	//	input_debug.Normalize();
+	//	LOG("input     x: %f, y:%f", input_debug.x, input_debug.y);
+	//	fPoint velocity_debug(velocity_map);
+	//	velocity_debug.Normalize();
+	//	LOG("velocity  x: %f, y:%f", velocity_debug.x, velocity_debug.y);
+		LOG("Max speed %f", max_speed);
 	}
 
 	if (!no_input)
@@ -375,13 +377,13 @@ void Obj_Tank::Movement(float dt)
 		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
-		target_angle += 360.f * turns;
+		target_angle += 360.f * turns - ISO_COMPENSATION;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - ISO_COMPENSATION) < abs(target_angle - angle))
+		if (abs((target_angle + 360.f)) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
-		angle = lerp(angle, target_angle - 45, base_angle_lerp_factor * dt);
+		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
 	}
 
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
