@@ -36,6 +36,7 @@ enum class TAG : int
 	PLAYER,
 	ROAD,
 	OIL_POOL,
+	FLAMETHROWER,
 	MAX
 };
 

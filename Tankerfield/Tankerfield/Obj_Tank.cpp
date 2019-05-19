@@ -240,7 +240,7 @@ bool Obj_Tank::Start()
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
 		flame_coll_w,
 		flame_coll_h,
-		TAG::BULLET,
+		TAG::FLAMETHROWER,
 		BODY_TYPE::DYNAMIC,
 		50.f,
 		this);
