@@ -30,7 +30,7 @@
 
 Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node rocket_launcher_node = app->config.child("object").child("rocket_launcher");
+	pugi::xml_node rocket_launcher_node = app->config.child("object").child("enemies").child("rocket_launcher");
 	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("rocketlauncher");
 
 	tex = app->tex->Load(rocket_launcher_node.child("tex_path").child_value());

@@ -6,6 +6,8 @@
 #include "M_UI.h"
 
 #define MAX_PLAYERS 4
+#define DEFAULT_PANEL_COLUMNS 5
+#define DEFAULT_PANEL_ROWS 5
 
 struct SDL_Texture;
 struct Controller;
@@ -21,7 +23,7 @@ class Obj_Tank_MainMenu;
 enum class MENU_STATE
 {
 	INIT_MENU,
-	OPTIONS,
+	CHANGE_SCENE,
 	SELECTION,
 };
 
@@ -54,18 +56,24 @@ public:
 
 	bool OnHoverEnter(UI_Element * element);
 
-	bool OnHoverRepeat(UI_Element * element);
-
-	bool ClickUp(UI_Element * element);
-
 private:
 
 	void SetState(MENU_STATE new_state);
+
+	void InputNavigate();
+
+	void InputSelect();
+
+	bool SetPlayerProperties();
+
+	void ResetPanelColors();
+
 	SDL_Color GetColor(float value);
 
 private:
 
 	MENU_STATE	      menu_state = MENU_STATE::INIT_MENU;
+	bool              exit_game = false;
 
 	// Textrues ================================================
 
@@ -75,8 +83,14 @@ private:
 
 	Camera*			       camera = nullptr;
 
+	// Control helpers --------------------------------------
+
+	UI_Image* control_helper_image = nullptr;
+	UI_Label* control_helper_label = nullptr;
+
 	// Main screen --------------------------------
-	UI_Element		* menu_peg = nullptr;
+
+	UI_InteractiveGroup * menu_panel = nullptr;
 
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
@@ -94,11 +108,15 @@ private:
 	float B_Color[6] = { 0     , 0    , 0    , 255.F, 255.F, 255.F };
 
 	float color_percent = 0.f;
-	std::vector<SDL_Color>  colors;
-	UI_InteractiveGroup* selection_panel = nullptr;
+	SDL_Color colors[DEFAULT_PANEL_COLUMNS][DEFAULT_PANEL_ROWS];
+	UI_InteractiveGroup * selection_panel = nullptr;
 
-	bool              selection_able = false;
-	bool              exit_game = false;
+	// Sfx --------------------------------------------
+
+	uint button_enter_sfx = 0u;
+	uint button_select_sfx = 0u;
+	uint button_error_sfx = 0u;
+	uint selection_finished_sfx = 0u;
 };
 
 #endif // __j1SCENE_H__

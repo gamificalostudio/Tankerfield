@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
     <RootNamespace>Tankerfield</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -129,7 +129,7 @@
     <ClCompile Include="Bullet_Laser.cpp" />
     <ClCompile Include="Bullet_Oil.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ElectroShotAnimation.cpp" />
+    <ClCompile Include="Obj_ElectroShotAnimation.cpp" />
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="HealingShot_Area.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
@@ -206,7 +206,7 @@
     <ClInclude Include="Bullet_Laser.h" />
     <ClInclude Include="Bullet_Oil.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="ElectroShotAnimation.h" />
+    <ClInclude Include="Obj_ElectroShotAnimation.h" />
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="HealingShot_Area.h" />
     <ClInclude Include="Item_HappyHour.h" />

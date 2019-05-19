@@ -16,7 +16,7 @@
 #include "Bullet_Laser.h"
 #include "Bullet_Oil.h"
 #include "Obj_OilPool.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 #include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
 
@@ -77,6 +77,8 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
 	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
 	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
+
+	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -107,26 +109,7 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 			electro_anim->tank = this;
 			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
 			electro_anim->hit_no_enemie = true;
-			
-
 		}
-
-	}
-
-	// Flamethrower
-
-	if (weapon_info.weapon == WEAPON::FLAMETHROWER)
-	{
-		if (flame_release_time.ReadSec() >= 1.f && coll_flame->GetIsActivated())
-		{
-				coll_flame->ActiveOnTrigger(false);
-		}
-
-		Obj_FlamethrowerFlame* flamethrower_anim = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
-		app->audio->PlayFx(electro_shot_sound);
-		flamethrower_anim->tank = this;
-		flamethrower_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
-		flamethrower_anim->hit_no_enemie = true;
 	}
 }
 
@@ -146,15 +129,11 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 10;
-		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.54f;
-		weapon_info.shot2.trauma = 0.76f;
-		weapon_info.shot1.rumble_strength = 0.92f;
-		weapon_info.shot1.rumble_duration = 250;
-		weapon_info.shot2.rumble_strength = 1.0f;
-		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
-		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.time_between_bullets = 250;
+		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.54f;
+		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.3f;
+		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 250;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
@@ -164,11 +143,11 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 10;
 		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.54f;
-		weapon_info.shot2.trauma = 0.76f;
+		weapon_info.shot1.trauma = 0.56f;
+		weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = 0.92f;
 		weapon_info.shot1.rumble_duration = 250;
-		weapon_info.shot2.rumble_strength = 1.0f;
+		weapon_info.shot2.rumble_strength = 0.3f;
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
@@ -244,6 +223,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	case WEAPON::ELECTRO_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.shot1.bullet_damage = app->objectmanager->electro_shot_info.damage_multiplier * pow(app->objectmanager->electro_shot_info.damage_exponential_base, level - 1);
+		weapon_info.shot2.bullet_damage = app->objectmanager->electro_shot_info.damage_multiplier * pow(app->objectmanager->electro_shot_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 100;
 		weapon_info.shot1.bullet_speed = 0;
@@ -258,18 +238,19 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		//electro_shot_collider->damage = weapon_info.bullet_damage;
 		//add width and height here?
+		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
+		{
+			(*iter)->damage = weapon_info.shot1.bullet_damage;
+		}
+
+
+		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
+		{
+			(*iter)->damage = weapon_info.shot2.bullet_damage;
+		}
 		break;
 	}
-}
-
-void Obj_Tank::SetColor(const SDL_Color new_color)
-{
-	tank_color = new_color;
-
-	if (gui != nullptr)
-	{
-		gui->SetArrowColor(tank_color);
-	}
+	
 }
 
 void Obj_Tank::ShootBasic()
@@ -281,6 +262,8 @@ void Obj_Tank::ShootBasic()
 		weapon_info.shot1.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	bullet->SetPlayer(this);
 }
 
 void Obj_Tank::ShootDoubleMissile()
@@ -372,7 +355,7 @@ void Obj_Tank::ShootHealingShot()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
-	heal_bullet->tank_parent = this;
+	heal_bullet->SetPlayer(this);
 }
 
 void Obj_Tank::ShootHealingShotCharged()
@@ -400,6 +383,8 @@ void Obj_Tank::ShootLaserShot()
 		weapon_info.shot1.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	laser_bullet->SetPlayer(this);
 }
 
 void Obj_Tank::ShootLaserShotCharged()
@@ -414,10 +399,14 @@ void Obj_Tank::ShootLaserShotCharged()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45,
 		true);
+
+	laser_bullet->SetPlayer(this);
+
 }
 
 void Obj_Tank::ShootFlameThrower()
 {
+	flame->is_holding = true;
 	flame_release_time.Start();
 
 	if(coll_flame->GetIsActivated() == false)
@@ -438,8 +427,6 @@ void Obj_Tank::ShootFlameThrower()
 
 	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
 
-
-
 	fPoint dir_distance = GetShotDir() * distance;
 	distance += increment;
 
@@ -459,6 +446,9 @@ void Obj_Tank::ShootOil()
 		weapon_info.shot1.bullet_damage,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+
+	bullet->SetPlayer(this);
+
 }
 
 void Obj_Tank::ShootOilCharged()
@@ -466,7 +456,6 @@ void Obj_Tank::ShootOilCharged()
 	fPoint pool_pos = turr_pos + shot_dir * 2.5F;
 	pool_pos -= fPoint(2.5f, 2.5f);
 	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, pool_pos);
-
 }
 
 void Obj_Tank::ShootElectroShot()
@@ -543,6 +532,11 @@ bool Obj_Tank::GetIsElectroShotCharged() const
 std::vector<Object*>* Obj_Tank::GetEnemiesHitted() 
 {
 	return &enemies_hitted;
+}
+
+void Obj_Tank::ReleaseFlameThrower()
+{
+	flame->is_holding = false;
 }
 
 

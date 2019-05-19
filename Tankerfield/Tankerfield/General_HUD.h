@@ -56,6 +56,12 @@ private:
 
 	UI_Image* right_tank_life = nullptr;
 
+	// Control helpers --------------------------------------
+
+	UI_Image* control_helper_image = nullptr;
+
+	UI_Label* control_helper_label = nullptr;
+
 	// Win / Game Over Screen ------------------------------- 
 
 	UI_Image* game_word = nullptr;

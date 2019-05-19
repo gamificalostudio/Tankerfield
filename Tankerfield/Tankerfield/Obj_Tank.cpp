@@ -33,6 +33,7 @@
 #include "Item_InstantHelp.h"
 #include "Obj_Portal.h"
 #include "HealingShot_Area.h"
+#include "Obj_FlamethrowerFlame.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -234,11 +235,7 @@ bool Obj_Tank::Start()
 	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
-
 	//Flamethrower
-
-
-
 	coll_flame = app->collision->AddCollider(
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
 		flame_coll_w,
@@ -251,7 +248,8 @@ bool Obj_Tank::Start()
 	coll_flame->is_sensor = true;
 	coll_flame->ActiveOnTrigger(false);
 
-
+	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
+	flame->tank = this;
 
 	return true;
 }
@@ -534,8 +532,8 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 		}
 
 	}
-	// Shot ==============================================
 
+	// Debug line
 	if (show_crosshairs && camera == camera_player)
 	{
 		float line_length = 5.f;
@@ -547,12 +545,6 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 			pos_screen.x, pos_screen.y - cannon_height,
 			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
-
-
-
-	
-
-
 	return true;
 }
 
@@ -614,20 +606,18 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-
-
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
 	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
-		if (bullet->tank_parent != this) // he does not heal himself
+		if (bullet->player != this) // he does not heal himself
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + bullet->tank_parent->weapon_info.shot1.bullet_healing);
+				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
 			}
 		}
 		else
@@ -636,33 +626,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == TAG::PICK_UP)
-	{
-		if (this->Alive())
-		{
-			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-
-			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
-			{
-				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-				SetPickUp(pick_up);
-			}
-		}
-		else
-		{
-			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		}
-	}
-
-	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
-	{
-			curr_speed += road_buff;
-	}
-}
-
-void Obj_Tank::OnTriggerEnter(Collider * c1)
-{
-	if (c1->GetTag() == TAG::PORTAL)
+	else if (c1->GetTag() == TAG::PORTAL)
 	{
 		if (time_between_portal_tp.ReadMs() > 2000) {
 			if (c1 == portal1->coll) {
@@ -687,6 +651,32 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 	}
 }
 
+void Obj_Tank::OnTrigger(Collider * c1)
+{
+	if (c1->GetTag() == TAG::PICK_UP)
+	{
+		if (this->Alive())
+		{
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
+			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+			{
+				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+				SetPickUp(pick_up);
+			}
+		}
+		else
+		{
+			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		}
+	}
+
+	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
+	{
+			curr_speed += road_buff;
+	}
+}
+
 void Obj_Tank::OnTriggerExit(Collider * c1)
 {
 	if (c1->GetTag() == TAG::PICK_UP)
@@ -706,7 +696,8 @@ void Obj_Tank::SetLife(int life)
 	{
 		this->life = GetMaxLife();
 	}
-	else if (life <= 0 && this->life != 0)
+
+	else if (life <= 0)
 	{
 		this->life = 0;
 		app->audio->PlayFx(die_sfx);
@@ -732,6 +723,16 @@ void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
 	gui->SetItemIcon(type);
+}
+
+void Obj_Tank::SetColor(const SDL_Color new_color)
+{
+	tank_color = new_color;
+
+	if (gui != nullptr)
+	{
+		gui->SetArrowColor(tank_color);
+	}
 }
 
 WeaponInfo Obj_Tank::GetWeaponInfo() const 
@@ -866,15 +867,19 @@ void Obj_Tank::ShootSustainedWeapon()
 	}
 
 	//- Quick shot
-	if ((ReleaseShot()
-		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
+	if (ReleaseShot())
 	{
-		(this->*shot1_function[(uint)weapon_info.weapon])();
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
-		app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
-		shot_timer.Start();
+		if (shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
+			&& sustained_shot_timer.ReadMs() <= quick_shot_time
+			&& GetShotAutomatically())
+		{
+			(this->*shot1_function[(uint)weapon_info.weapon])();
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
+			shot_timer.Start();
+		}
+
+		(this->*release_shot[(uint)weapon_info.weapon])();
 	}
 }
 
@@ -1082,12 +1087,13 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::StopTank()
 {
-	if (!fire_dead)
+	if (this->fire_dead==false)
 	{
-		fire_dead = true;
 		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 		dead_fire->tank = this;
+		this->fire_dead = true;
 	}
+
 	this->SetWeapon(WEAPON::BASIC, 1);
 	this->SetItem(ItemType::NO_TYPE);
 }
@@ -1169,4 +1175,9 @@ void Obj_Tank::CreatePortals()
 	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
 
 	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
+}
+
+float Obj_Tank::GetTurrAngle() const
+{
+	return turr_angle;
 }

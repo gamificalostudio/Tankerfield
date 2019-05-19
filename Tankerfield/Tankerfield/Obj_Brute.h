@@ -38,6 +38,10 @@ public:
 
 	void Attack() override;
 
+	inline void Dead() override;
+
+	inline void ElectroDead() override;
+
 
 private:
 

@@ -101,16 +101,14 @@
         <tex_oiled_path>textures/Objects/enemies/shk-sheet_oiled.png</tex_oiled_path>
         <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
       </tesla_trooper>
+      <rocket_launcher>
+        <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
+      </rocket_launcher>
+      <suicidal>
+        <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
+      </suicidal>
     </enemies>
     
-    <!--TOOD: Put in enemies node-->
-    <rocket_launcher>
-      <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
-    </rocket_launcher>
-    
-    <suicidal>
-      <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
-    </suicidal>
 
     <tank>
       <speed value ="1"/>
@@ -138,39 +136,45 @@
       </electro_shot>
 
       <flamethrower>
-        <flamethrower_animation>      
-         <tex_flamethrower>textures/objects/bullets/tex_flamethrower.png</tex_flamethrower>
-         <animations>
-            <anim_flamethrower1 speed="5" rotation="counter-clockwise" first_dir_angle ="-90">
-              <dir>
-                <frame x="0"  y="0" w="154" h="112"/>
-                <frame x="154" y="0" w="154" h="112"/>
-                <frame x="308" y="0" w="154" h="112"/>
-                <frame x="462" y="0" w="154" h="112"/>
-                <frame x="616" y="0" w="154" h="112"/>
-                <frame x="770" y="0" w="154" h="112"/>
-                <frame x="0"   y="112" w="154" h="112"/>
-                <frame x="154" y="112" w="154" h="112"/>
-                <frame x="308" y="112" w="154" h="112"/>
-                <frame x="462" y="112" w="154" h="112"/>
-                <frame x="616" y="112" w="154" h="112"/>
-                <frame x="770" y="112" w="154" h="112"/>
-                <frame x="0"   y="224" w="154" h="112"/>
-                <frame x="154" y="224" w="154" h="112"/>
-                <frame x="308" y="224" w="154" h="112"/>
-                <frame x="462" y="224" w="154" h="112"/>
-                <frame x="616" y="224" w="154" h="112"/>
-                <frame x="770" y="224" w="154" h="112"/>
-                <frame x="0"   y="336" w="154" h="112"/>
-                <frame x="154" y="336" w="154" h="112"/>
-                <frame x="308" y="336" w="154" h="112"/>
-                <frame x="462" y="336" w="154" h="112"/>
-                <frame x="616" y="336" w="154" h="112"/>
-                <frame x="770" y="336" w="154" h="112"/>   
-              </dir>
-            </anim_flamethrower1>
-          </animations>
-        </flamethrower_animation>
+        <tex_flamethrower>textures/objects/bullets/tex_flamethrower1.png</tex_flamethrower>
+        <animations>
+          <fire1 speed="15">                         
+            <dir>
+              <frame x="0"   y="0"   w="154" h="112"/>
+              <frame x="154" y="0"   w="154" h="112"/>
+              <frame x="308" y="0"   w="154" h="112"/>
+              <frame x="462" y="0"   w="154" h="112"/>
+              <frame x="616" y="0"   w="154" h="112"/>
+              <frame x="770" y="0"   w="154" h="112"/>
+              <frame x="0"   y="112" w="154" h="112"/>
+            </dir>
+          </fire1>
+          <fire2 speed="15">
+            <dir>             
+              <frame x="154" y="112" w="154" h="112"/>
+              <frame x="308" y="112" w="154" h="112"/>
+              <frame x="462" y="112" w="154" h="112"/>
+              <frame x="616" y="112" w="154" h="112"/>
+              <frame x="770" y="112" w="154" h="112"/>
+              <frame x="0"   y="224" w="154" h="112"/>
+              <frame x="154" y="224" w="154" h="112"/>
+              <frame x="308" y="224" w="154" h="112"/>
+              <frame x="462" y="224" w="154" h="112"/>
+            </dir>
+          </fire2>
+          <fire3 speed="15">
+            <dir>
+              <frame x="616" y="224" w="154" h="112"/>
+              <frame x="770" y="224" w="154" h="112"/>
+              <frame x="0"   y="336" w="154" h="112"/>
+              <frame x="154" y="336" w="154" h="112"/>
+              <frame x="308" y="336" w="154" h="112"/>
+              <frame x="462" y="336" w="154" h="112"/>
+              <frame x="616" y="336" w="154" h="112"/>
+              <frame x="770" y="336" w="154" h="112"/>
+            </dir>
+          </fire3>
+        </animations>
       </flamethrower>
       
       <time_between_bullets value ="100"/>
@@ -800,6 +804,9 @@
         </anim>
       </animations>
     </charged_healing>
+    <healing_bullet>
+      <tex path="textures/objects/bullets/bullet_healing.png"/>
+    </healing_bullet>
     <laser_bullet>
       <speed value ="1.f"/>
       <life value ="1000"/>

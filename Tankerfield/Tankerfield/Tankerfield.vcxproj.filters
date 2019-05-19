@@ -163,9 +163,6 @@
     <ClCompile Include="PugiXml\src\pugixml.cpp">
       <Filter>Tools\PugiXML</Filter>
     </ClCompile>
-    <ClCompile Include="ElectroShotAnimation.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="Healing_Bullet.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -218,6 +215,8 @@
       <Filter>Objects\Player</Filter>
     </ClCompile>
     <ClCompile Include="HealingShot_Area.cpp">
+    </ClCompile>
+    <ClCompile Include="Obj_ElectroShotAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
@@ -405,9 +404,6 @@
     <ClInclude Include="PugiXml\src\pugiconfig.hpp">
       <Filter>Tools\PugiXML</Filter>
     </ClInclude>
-    <ClInclude Include="ElectroShotAnimation.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Healing_Bullet.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -463,6 +459,8 @@
       <Filter>Objects\Player</Filter>
     </ClInclude>
     <ClInclude Include="HealingShot_Area.h">
+    </ClInclude>
+    <ClInclude Include="Obj_ElectroShotAnimation.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>

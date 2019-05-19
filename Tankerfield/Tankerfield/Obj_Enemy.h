@@ -34,6 +34,8 @@ public:
 
 	void OnTriggerEnter(Collider * collider);
 
+	void OnTrigger(Collider * collider);
+
 	inline bool IsOnGoal(fPoint goal); //const?
 
 	void DrawDebug(const Camera* camera)override;
@@ -53,9 +55,9 @@ protected:
 
 	inline void RecheadPoint();
 
-	inline void Dead();
+	inline virtual void Dead();
 
-	void ElectroDead();
+	inline virtual void ElectroDead();
 
 	inline virtual void Idle();
 

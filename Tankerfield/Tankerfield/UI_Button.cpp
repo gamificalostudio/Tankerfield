@@ -12,7 +12,7 @@ UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Li
 {
 	this->definition = definition;
 	this->is_interactive = true;
-	SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	section_width = definition.idle_rect.w;
 	section_height = definition.idle_rect.h;
 	sprite_rect = definition.idle_rect;
@@ -33,42 +33,21 @@ bool UI_Button::Draw()
 {
 	FocusState state = app->ui->GetClickState();
 
-	if (app->ui->GetInputType() == UI_INPUT_TYPE::MOUSE)
+	sprite_rect = definition.idle_rect;
+
+	if (app->ui->GetFocusedElement() == this)
 	{
-		if (app->ui->GetFocusedElement() == this && state != FocusState::NONE &&  state != FocusState::EXIT)
+		if (app->input->GetMouseButton(1) == KEY_REPEAT)
 		{
 			sprite_rect = definition.pushed_rect;
 		}
-		else
-		{
-			sprite_rect = definition.idle_rect;
-		}
 
-		if (hover_state == HoverState::REPEAT)
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
-		}
-		else
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
-		}
+		app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
 	}
-	else if (app->ui->GetInputType() == UI_INPUT_TYPE::CONTROLLER)
+	else
 	{
-	
-		sprite_rect = definition.idle_rect;
-
-
-		if (app->ui->GetFocusedElement() == this)
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.focus_fx.w * 0.5f, position.y - definition.focus_fx.h * 0.5f, &definition.focus_fx, app->ui->current_camera, (int)alpha);
-		}
-		else
-		{
-			app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
-		}
+		app->render->BlitUI(app->ui->GetAtlas(), position.x - definition.normal_fx.w * 0.5f, position.y - definition.normal_fx.h * 0.5f, &definition.normal_fx, app->ui->current_camera, (int)alpha);
 	}
-
 
 	SDL_Rect draw_rect = GetDrawRect();
 
@@ -87,7 +66,7 @@ bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 	}
 
 	label = app->ui->CreateLabel(position + this->position, definition, this);
-	label->SetPivot(Pivot::POS_X::CENTER, Pivot::POS_Y::CENTER);
+	label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	label->SetParent(this);
 
 	return true;

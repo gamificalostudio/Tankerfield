@@ -18,8 +18,7 @@ public:
 	//Add functions that are overriden
 	bool Start();
 
-public:
-	Obj_Tank* tank_parent = nullptr;
+	void OnTriggerEnter(Collider* collider);
 };
 
 #endif

@@ -42,7 +42,7 @@
 #include "Obj_CannonFire.h"
 #include "Obj_Item.h"
 #include "Obj_Portal.h"
-#include "ElectroShotAnimation.h"
+#include "Obj_ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
 #include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
@@ -201,7 +201,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-			if ((*item) != nullptr && (*item)->active == true)
+			if ((*item) != nullptr )
 			{
 				(*item)->DrawShadow((*item_cam), dt);
 			}
@@ -210,7 +210,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw the objects above the shadows
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-			if ((*item) != nullptr && (*item)->active == true)
+			if ((*item) != nullptr)
 			{
 				(*item)->Draw(dt, (*item_cam));
 

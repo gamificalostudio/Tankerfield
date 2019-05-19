@@ -19,44 +19,19 @@ public:
 	~Obj_FlamethrowerFlame();
 
 	bool Update(float dt) override;
-	bool Draw(float dt, Camera* camera);
-
-	//void SetExplosionDamage(WeaponInfo info);
-
-	bool Awake(pugi::xml_node&) { return true; };
+	bool Draw(float dt, Camera* camera) override;
 
 public:
-
-	Obj_Tank * tank = nullptr;
-	fPoint enemy_pos_map = { 0,0 };
-	fPoint enemy_pos_screen = { 0,0 };
-	fPoint player_enemy_distance_point{ 0.f,0.f };
-	fPoint offset_dir_screen{ 0.f,0.f };
-	float distance = 0.f;
-	bool hit_no_enemie = false;
+	Obj_Tank * tank		= nullptr;
+	bool is_holding = false;
 
 private:
-
-	bool death = false;
-
-	int frame_explosion = 0;
-	int damage = 0;
-	int original_damage = 200;
-	int level = 0;
-
-	float speed = 0.f;
-	float time = 0.f;
-
-	Circle range_pos;
-
-	WeaponInfo weapon_info;
-
-	// ---
-	Animation anim;
-	SDL_Texture * tex = nullptr;
-
-	float coll_w = 0.f;
-	float coll_h = 0.f;
+	Animation fire_start;
+	Animation fire;
+	Animation fire_end;
+	SDL_Texture * tex	= nullptr;
+	float scale = 1.f;
+	SDL_Point pivot;
 };
 
 #endif
