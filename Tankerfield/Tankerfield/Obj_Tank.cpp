@@ -559,7 +559,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	}
 	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
-		app->render->BlitUI(
+		app->render->BlitAlphaAndScale(
 			curr_text_charging,
 			pos_screen.x-camera->rect.x - curr_anim_charging.GetFrame(0).w *0.5f * charging_scale + camera->screen_section.x,
 			pos_screen.y - camera->rect.y - curr_anim_charging.GetFrame(0).h *0.5f * charging_scale + camera->screen_section.y,

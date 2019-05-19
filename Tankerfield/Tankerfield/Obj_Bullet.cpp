@@ -17,7 +17,7 @@ Obj_Bullet::~Obj_Bullet()
 
 bool Obj_Bullet::Start()
 {
-	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
+	pugi::xml_node bullet_node = app->config.child("object").child("bullet");
 
 	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
 	curr_anim = &anim;

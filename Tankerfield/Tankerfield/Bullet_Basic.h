@@ -13,8 +13,10 @@ public:
 	Bullet_Basic(fPoint pos);
 	~Bullet_Basic();
 
+
 public:
 	//Add functions that are overriden
+	bool Start();
 };
 
 #endif
