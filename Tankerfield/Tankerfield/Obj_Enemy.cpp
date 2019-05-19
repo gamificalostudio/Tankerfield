@@ -813,7 +813,7 @@ void Obj_Enemy::Oiled()
 			curr_tex = oiled_tex;
 			damaged = true;
 		}
-		speed = original_speed*0.5f;
+		speed = original_speed*0.25f;
 
 		if (oiled_timer.Read() >= 5000)
 		{
