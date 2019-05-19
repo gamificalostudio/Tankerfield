@@ -45,7 +45,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 
 	state = ENEMY_STATE::SPAWN;
-	original_speed = speed = suicidal_node.child("speed").attribute("num").as_float();
+	original_speed = speed = app->objectmanager->suicidal_info.speed;
 	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width) * 1.33f;
 
 	normal_draw_offset = { 33, 50 };

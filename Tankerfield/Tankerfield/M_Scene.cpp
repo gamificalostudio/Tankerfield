@@ -143,12 +143,12 @@ bool M_Scene::Start()
 	}
 	
 	general_gui = DBG_NEW General_GUI();
-	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map);
 
 	round = 1u;
 	game_state = GAME_STATE::EXIT_OF_WAVE;
 	game_over = false;
 
+	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
 
 	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
 	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
