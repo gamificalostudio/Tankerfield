@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3750">
+<map version="1.2" tiledversion="1.2.4" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3751">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
@@ -200752,7 +200752,7 @@
     <property name="pivot_y" type="float" value="29"/>
    </properties>
   </object>
-  <object id="278" name="cahse3" x="4740" y="5040" width="60" height="60">
+  <object id="278" name="cahse3" x="4770" y="5040" width="60" height="60">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
@@ -204023,7 +204023,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="2861" name="cabunk" x="1830" y="6000" width="60" height="60">
+  <object id="2861" name="cabunk" x="1890" y="6030" width="60" height="60">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
@@ -204032,7 +204032,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="2862" name="cabunk" x="1920" y="5910" width="60" height="60">
+  <object id="2862" name="cabunk" x="1980" y="5940" width="60" height="60">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
@@ -256368,16 +256368,16 @@
   <object id="3389" name="REWARD_BOX" type="REWARD_BOX" x="840" y="2940" width="30" height="30"/>
   <object id="3394" name="REWARD_BOX" type="REWARD_BOX" x="2430" y="5400" width="30" height="30"/>
   <object id="3395" name="REWARD_BOX" type="REWARD_BOX" x="2460" y="6510" width="30" height="30"/>
-  <object id="3396" name="REWARD_BOX" type="REWARD_BOX" x="1800" y="5880" width="30" height="30"/>
+  <object id="3396" name="REWARD_BOX" type="REWARD_BOX" x="1770" y="5760" width="30" height="30"/>
   <object id="3397" name="ENEMY" type="ENEMY" x="4560" y="3060" width="120" height="120"/>
   <object id="3398" name="ENEMY" type="ENEMY" x="4110" y="2760" width="120" height="120"/>
   <object id="3402" name="ENEMY" type="ENEMY" x="3360" y="2610" width="120" height="120"/>
   <object id="3403" name="ENEMY" type="ENEMY" x="2400" y="3660" width="120" height="120"/>
   <object id="3404" name="ENEMY" type="ENEMY" x="1980" y="2610" width="120" height="120"/>
   <object id="3405" name="ENEMY" type="ENEMY" x="1320" y="3000" width="120" height="120"/>
-  <object id="3406" name="ENEMY" type="ENEMY" x="2040" y="5820" width="120" height="120"/>
-  <object id="3407" name="ENEMY" type="ENEMY" x="1350" y="5940" width="120" height="120"/>
-  <object id="3408" name="ENEMY" type="ENEMY" x="3960" y="5910" width="120" height="120"/>
+  <object id="3406" name="ENEMY" type="ENEMY" x="2550" y="6030" width="120" height="120"/>
+  <object id="3407" name="ENEMY" type="ENEMY" x="1770" y="5850" width="120" height="120"/>
+  <object id="3408" name="ENEMY" type="ENEMY" x="3960" y="5940" width="120" height="120"/>
   <object id="3409" name="ENEMY" type="ENEMY" x="4320" y="5280" width="120" height="120"/>
   <object id="3726" name="REWARD_BOX" type="REWARD_BOX" x="1710" y="1800" width="30" height="30"/>
   <object id="3727" name="REWARD_BOX" type="REWARD_BOX" x="1860" y="3030" width="30" height="30"/>
@@ -256389,6 +256389,7 @@
   <object id="3745" name="ENEMY" type="ENEMY" x="1290" y="4500" width="120" height="120"/>
   <object id="3746" name="ENEMY" type="ENEMY" x="4080" y="3660" width="120" height="120"/>
   <object id="3747" name="ENEMY" type="ENEMY" x="3870" y="5310" width="120" height="120"/>
+  <object id="3750" name="ENEMY" type="ENEMY" x="4560" y="5070" width="120" height="120"/>
  </objectgroup>
  <objectgroup id="9" name="Players">
   <object id="410" x="750" y="3780" width="30" height="30"/>
