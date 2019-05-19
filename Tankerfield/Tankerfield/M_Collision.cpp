@@ -78,6 +78,7 @@ M_Collision::M_Collision()
 	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::FLAMETHROWER] = true;
 	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
 
+
 	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
 	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
 	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
@@ -92,6 +93,7 @@ M_Collision::M_Collision()
 	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_LASER] = true;
 	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::ELECTRO_SHOT] = true;
 	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_OIL] = true;
+	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::FLAMETHROWER] = true;
 
 
 	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::WALL] = true;
