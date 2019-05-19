@@ -272,6 +272,10 @@ private:
 
 	SDL_Texture * text_charging				= nullptr;
 	Animation anim_charging;
+	SDL_Texture * text_finished_charged		= nullptr;
+	Animation anim_finished_charged;
+	SDL_Texture * curr_text_charging = nullptr;
+	Animation * curr_anim_charging;
 	int alpha = 0;
 	float charging_scale = 0.f;
 

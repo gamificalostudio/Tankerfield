@@ -37,6 +37,17 @@
          
         </dir>
       </charging>
+      <finish_charged speed="10" rotation="counter-clockwise" first_dir_angle="0">
+        <dir>
+        <frame x="0"   y="0"   w="100" h="100"></frame>
+        <frame x="100" y="0"   w="100" h="100"></frame>
+        <frame x="200" y="0"   w="100" h="100"></frame>
+        <frame x="0"   y="100" w="100" h="100"></frame>
+        <frame x="100" y="100" w="100" h="100"></frame>
+        <frame x="200" y="100" w="100" h="100"></frame>
+        <frame x="0  " y="200" w="100" h="100"></frame>
+        </dir>
+      </finish_charged>
     </animation>
   </charging>
   <portal>
