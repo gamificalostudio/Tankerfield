@@ -91,8 +91,8 @@ private:
 
 	//- Shooting
 	void Aim(float dt);
-	void Shoot();
-	void ShootChargedWeapon();
+	void Shoot(float dt);
+	void ShootChargedWeapon(float dt);
 	void ShootSustainedWeapon();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
@@ -122,6 +122,7 @@ private:
 	void ShootElectroShotCharged();
 
 	void ReleaseFlameThrower();
+	void ReleaseBasicShot() {};
 
 	//- TankDeath
 	void ReviveTank(float dt);
@@ -195,6 +196,7 @@ private:
 	PerfTimer shot_timer;				//Determines how much time it must pass to be albe to shoot another shot again
 	PerfTimer charged_shot_timer;
 	PerfTimer sustained_shot_timer;
+	PerfTimer shot_timer_basic_bullet;
 	float charge_time						= 0.f;//Charge time in ms
 	float quick_shot_time					= 0.f;//If time is bigger than this, you will start to use the sustained shot and won't use a qucik shot
 	uint shot_sound							= 0u;
@@ -273,6 +275,17 @@ private:
 	SDL_Texture * turret_color_tex			= nullptr;
 	SDL_Texture * turret_common_tex			= nullptr;
 	SDL_Texture * turret_shadow_tex			= nullptr;
+
+	SDL_Texture * text_charging				= nullptr;
+	Animation anim_charging;
+	SDL_Texture * text_finished_charged		= nullptr;
+	Animation anim_finished_charged;
+	SDL_Texture * curr_text_charging = nullptr;
+	Animation curr_anim_charging;
+	int alpha = 0;
+	float charging_scale = 0.f;
+	uint charging_ready = 0u;
+	bool charging = false;
 
 	iPoint turr_draw_offset						= { 0,0 };
 	float turr_scale							= 1.f;

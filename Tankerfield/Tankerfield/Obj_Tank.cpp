@@ -251,6 +251,16 @@ bool Obj_Tank::Start()
 	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
 	flame->tank = this;
 
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("charging").child("animation");
+
+	text_charging = app->tex->Load("textures/Objects/tank/texture_charging.png");
+	anim_charging.frames = app->anim_bank->LoadFrames(anim_node.child("charging"));
+
+	text_finished_charged = app->tex->Load("textures/Objects/tank/texture_charging_finished.png");
+	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
+
+	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+
 	return true;
 }
 
@@ -284,7 +294,7 @@ bool Obj_Tank::Update(float dt)
 {
 	Movement(dt);
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
-	Shoot();
+	Shoot(dt);
 	Item();
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
@@ -383,7 +393,8 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 	//if the player shot
 	if ((ReleaseShot()
 		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
+		&& weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
@@ -547,6 +558,18 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 			pos_screen.x, pos_screen.y - cannon_height,
 			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
+	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
+	{
+		app->render->BlitAlphaAndScale(
+			curr_text_charging,
+			pos_screen.x-camera->rect.x - curr_anim_charging.GetFrame(0).w *0.5f * charging_scale + camera->screen_section.x,
+			pos_screen.y - camera->rect.y - curr_anim_charging.GetFrame(0).h *0.5f * charging_scale + camera->screen_section.y,
+			&curr_anim_charging.GetFrame(0),
+			camera,
+			alpha,
+			charging_scale,
+			charging_scale);
+	}
 	return true;
 }
 
@@ -650,6 +673,11 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			new_particle->tank = this;
 			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
+	}
+
+	else if (c1->GetTag() == TAG::BULLET_ENEMY)
+	{
+		this->SetLife(GetLife() - c1->damage);
 	}
 }
 
@@ -792,12 +820,12 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 	}
 }
 
-void Obj_Tank::Shoot()
+void Obj_Tank::Shoot(float dt)
 {
 	switch (weapon_info.type)
 	{
 	case WEAPON_TYPE::CHARGED:
-		ShootChargedWeapon();
+		ShootChargedWeapon(dt);
 		break;
 	case WEAPON_TYPE::SUSTAINED:
 		ShootSustainedWeapon();
@@ -808,11 +836,16 @@ void Obj_Tank::Shoot()
 	}
 }
 
-void Obj_Tank::ShootChargedWeapon()
+void Obj_Tank::ShootChargedWeapon(float dt)
 {
 	if (PressShot())
 	{
 		charged_shot_timer.Start();
+		charging_scale = 0.f;
+		alpha = 0;
+		curr_text_charging = text_charging;
+		curr_anim_charging = anim_charging;
+		charging = true;
 	}
 
 	if (HoldShot())
@@ -821,6 +854,34 @@ void Obj_Tank::ShootChargedWeapon()
 		{
 			this->curr_speed = charged_shot_speed;
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
+			if (camera_player->GetShakeAmount() <= 0.05f)
+			{
+				camera_player->AddTrauma(0.02f);
+			}
+			if (controller != nullptr) 
+			{ 
+				(*controller)->PlayRumble(0.1f, 100); 
+			}
+
+			if (charging)
+			{
+				if (alpha < 200)
+				{
+					alpha = charged_shot_timer.ReadMs() * 200 / charge_time;
+					charging_scale = charged_shot_timer.ReadMs() * 1.50f / charge_time;
+				}
+				else
+				{
+					charging = false;
+					curr_text_charging = text_finished_charged;
+					curr_anim_charging = anim_finished_charged;
+					charging_scale = 1;
+					app->audio->PlayFx(charging_ready);
+				}
+			}
+
+			curr_anim_charging.NextFrame(dt);
+
 		}
 	}
 
@@ -828,6 +889,7 @@ void Obj_Tank::ShootChargedWeapon()
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
+		anim_charging.Reset();
 		this->curr_speed = speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
@@ -857,13 +919,15 @@ void Obj_Tank::ShootSustainedWeapon()
 	if (PressShot())
 	{
 		sustained_shot_timer.Start();
+		shot_timer_basic_bullet.Start();
 	}
 
 	//- Sustained shot
 	if (HoldShot()
-		&& sustained_shot_timer.ReadMs() > quick_shot_time)
+		&& sustained_shot_timer.ReadMs() > weapon_info.quick_shot_time)
 	{
 		(this->*shot2_function[(uint)weapon_info.weapon])();
+		camera_player->AddTrauma(weapon_info.shot1.trauma);
 		//TODO: Play wepon sfx
 		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
 	}
@@ -872,9 +936,10 @@ void Obj_Tank::ShootSustainedWeapon()
 	if (ReleaseShot())
 	{
 		if (shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-			&& sustained_shot_timer.ReadMs() <= quick_shot_time
+			&& sustained_shot_timer.ReadMs() <= weapon_info.quick_shot_time
 			&& GetShotAutomatically())
 		{
+			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);

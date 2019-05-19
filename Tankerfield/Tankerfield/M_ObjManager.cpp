@@ -40,6 +40,7 @@
 #include "Obj_PickUp.h"
 #include "Obj_RewardBox.h"
 #include "Obj_CannonFire.h"
+#include "Bullet_RocketLauncher.h"
 #include "Obj_Item.h"
 #include "Obj_Portal.h"
 #include "Obj_ElectroShotAnimation.h"
@@ -302,6 +303,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::BULLET_OIL:
 		ret = DBG_NEW Bullet_Oil(pos);
 		ret->type = ObjectType::BULLET_OIL;
+		break;
+	case ObjectType::BULLET_ROCKETLAUNCHER:
+		ret = DBG_NEW Bullet_RocketLauncher(pos);
+		ret->type = ObjectType::BULLET_ROCKETLAUNCHER;
 		break;
 	case ObjectType::STATIC:
 		ret = DBG_NEW Obj_Building(pos);
@@ -592,4 +597,8 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	oil_weapon_info.damage_exponential_base = oil_weapon_node.child("damage_exponential_base").attribute("num").as_float();
 	oil_weapon_info.speed = oil_weapon_node.child("speed").attribute("num").as_float();
 
+	// (Enemy Rocket Launcher) weapon
+	pugi::xml_node rl_weapon_node = balance_node.child("weapons").child("rocket_launcher_weapon");
+	rocketlauncher_weapon_info.damage_multiplier = rl_weapon_node.child("damage_multiplier").attribute("num").as_float();
+	rocketlauncher_weapon_info.damage_exponential_base = rl_weapon_node.child("damage_exponential_base").attribute("num").as_float();
 }

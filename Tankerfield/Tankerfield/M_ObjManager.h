@@ -34,6 +34,7 @@ enum class ObjectType
 	//BULLETS
 	BASIC_BULLET,
 	BULLET_MISSILE,
+	BULLET_ROCKETLAUNCHER,
 	HEALING_BULLET,
 	BULLET_LASER,
 	EXPLOSION,
@@ -54,8 +55,9 @@ enum class ItemType
 	NO_TYPE = -1,
 	HEALTH_BAG ,
 	HAPPY_HOUR_ITEM,
-	INSTANT_HELP,
 	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
+	INSTANT_HELP,
+	
 };
 
 class Object;
@@ -117,6 +119,8 @@ public:
 	BruteInfo brute_info;
 	RocketLauncherInfo rocket_launcher_info;
 	SuicidalInfo suicidal_info;
+
+	RocketLauncherWeaponInfo rocketlauncher_weapon_info;
 
 	//WeaponInfo
 	BasicWeaponInfo basic_weapon_info;

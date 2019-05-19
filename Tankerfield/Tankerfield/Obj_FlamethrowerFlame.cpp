@@ -87,7 +87,7 @@ bool Obj_FlamethrowerFlame::Update(float dt)
 		curr_anim = nullptr;
 	}
 
-	pos_map = tank->pos_map;
+	pos_map = tank->GetTurrPos();
 
 	return true;
 }
