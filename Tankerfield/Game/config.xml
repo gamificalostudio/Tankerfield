@@ -136,7 +136,7 @@
       </electro_shot>
 
       <flamethrower>
-        <tex_flamethrower>textures/objects/bullets/tex_flamethrower.png</tex_flamethrower>
+        <tex_flamethrower>textures/objects/bullets/tex_flamethrower1.png</tex_flamethrower>
         <animations>
           <fire1 speed="15">                         
             <dir>
