@@ -122,6 +122,7 @@ private:
 	void ShootElectroShotCharged();
 
 	void ReleaseFlameThrower();
+	void ReleaseBasicShot() {};
 
 	//- TankDeath
 	void ReviveTank(float dt);
@@ -195,6 +196,7 @@ private:
 	PerfTimer shot_timer;				//Determines how much time it must pass to be albe to shoot another shot again
 	PerfTimer charged_shot_timer;
 	PerfTimer sustained_shot_timer;
+	PerfTimer shot_timer_basic_bullet;
 	float charge_time						= 0.f;//Charge time in ms
 	float quick_shot_time					= 0.f;//If time is bigger than this, you will start to use the sustained shot and won't use a qucik shot
 	uint shot_sound							= 0u;

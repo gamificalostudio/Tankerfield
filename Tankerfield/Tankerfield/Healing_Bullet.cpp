@@ -16,7 +16,7 @@ Healing_Bullet::~Healing_Bullet()
 
 bool Healing_Bullet::Start()
 {
-		anim.frames=app->anim_bank->LoadFrames(app->config.child("object").child("basic_bullet").child("animations").child("rotate"));
+		anim.frames=app->anim_bank->LoadFrames(app->config.child("object").child("bullet").child("animations").child("rotate"));
 		curr_anim = &anim;
 
 		tex = app->tex->Load(app->config.child("object").child("healing_bullet").child("tex").attribute("path").as_string());
