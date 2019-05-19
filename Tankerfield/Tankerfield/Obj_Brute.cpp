@@ -41,6 +41,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	oiled_tex = app->tex->Load("textures/Objects/enemies/brute-sheet_oiled.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
+	last_texture = tex;
 
 	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
 	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
