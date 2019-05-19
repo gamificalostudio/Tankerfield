@@ -51,6 +51,7 @@ public:
 	WEAPON weapon					= WEAPON::BASIC;
 	WEAPON_TYPE type				= WEAPON_TYPE::CHARGED;
 	int level_weapon				= 0;
+	float quick_shot_time			= 0.f;
 
 	ShotInfo shot1;//Basic shot on charged weapons and quick shot on sustained weapons
 	ShotInfo shot2;//Charged shot on charged weapons and sustained shot on sustained weapons

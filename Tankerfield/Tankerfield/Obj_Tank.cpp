@@ -393,7 +393,8 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 	//if the player shot
 	if ((ReleaseShot()
 		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
+		&& weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
@@ -559,7 +560,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	}
 	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
-		app->render->BlitUI(
+		app->render->BlitAlphaAndScale(
 			curr_text_charging,
 			pos_screen.x-camera->rect.x - curr_anim_charging.GetFrame(0).w *0.5f * charging_scale + camera->screen_section.x,
 			pos_screen.y - camera->rect.y - curr_anim_charging.GetFrame(0).h *0.5f * charging_scale + camera->screen_section.y,
@@ -913,13 +914,15 @@ void Obj_Tank::ShootSustainedWeapon()
 	if (PressShot())
 	{
 		sustained_shot_timer.Start();
+		shot_timer_basic_bullet.Start();
 	}
 
 	//- Sustained shot
 	if (HoldShot()
-		&& sustained_shot_timer.ReadMs() > quick_shot_time)
+		&& sustained_shot_timer.ReadMs() > weapon_info.quick_shot_time)
 	{
 		(this->*shot2_function[(uint)weapon_info.weapon])();
+		camera_player->AddTrauma(weapon_info.shot1.trauma);
 		//TODO: Play wepon sfx
 		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
 	}
@@ -928,9 +931,10 @@ void Obj_Tank::ShootSustainedWeapon()
 	if (ReleaseShot())
 	{
 		if (shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-			&& sustained_shot_timer.ReadMs() <= quick_shot_time
+			&& sustained_shot_timer.ReadMs() <= weapon_info.quick_shot_time
 			&& GetShotAutomatically())
 		{
+			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
