@@ -413,7 +413,7 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		else
 		{
 			//set the max velocity in a charged shot
-			velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
+			velocity_recoil_curr_speed = weapon_info.shot2.recoil;
 		}
 		// set the direction when shot
 		recoil_dir = -GetShotDir();
