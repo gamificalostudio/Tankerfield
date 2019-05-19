@@ -786,6 +786,9 @@
         </rotate>
       </animations>
     </basic_bullet>
+    <healing_bullet>
+      <tex path="textures/objects/bullets/bullet_healing.png"/>
+    </healing_bullet>
     <laser_bullet>
       <speed value ="1.f"/>
       <life value ="1000"/>

@@ -16,12 +16,10 @@ Healing_Bullet::~Healing_Bullet()
 
 bool Healing_Bullet::Start()
 {
-		pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
-
-		anim.frames=app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
+		anim.frames=app->anim_bank->LoadFrames(app->config.child("object").child("basic_bullet").child("animations").child("rotate"));
 		curr_anim = &anim;
 
-		tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+		tex = app->tex->Load(app->config.child("object").child("healing_bullet").child("tex").attribute("path").as_string());
 		curr_tex = tex;
 
 		draw_offset = { 35, 14 };
