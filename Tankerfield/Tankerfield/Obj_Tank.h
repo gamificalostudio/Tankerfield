@@ -143,26 +143,19 @@ private:
 
 
 	//- Movement
-	float curr_speed						= 0.f;
-	float speed								= 0.f;
 	float road_buff							= 0.f;
-	fPoint velocity							= { 0.f, 0.f };
-	fPoint max_velocity						= { 0.f, 0.f };
-	fPoint velocity_recoil_lerp				= { 0.f, 0.f };
-	fPoint velocity_recoil_final_lerp		= { 0.f, 0.f };
-	fPoint recoil_dir						= { 0.f, 0.f };
-	float velocity_recoil_curr_speed		= 0.f;
-	float velocity_recoil_decay				= 0.f;
-	float velocity_recoil_speed_max			= 0.f;
-	float velocity_recoil_speed_max_charged = 0.f;
+	float speed								= 0.f;
+	float curr_speed						= 0.f;
+	fPoint velocity_map						= { 0.f, 0.f };
+	fPoint acceleration_map					= { 0.f, 0.f};
 	float charged_shot_speed				= 0.0f;
-	float lerp_factor_recoil				= 0.f;
-	Timer movement_timer;
+	float cos_45 = 0.f;//TODO: Create a macro with its value directly
+	float sin_45 = 0.f;
+	float base_angle_lerp_factor = 0.f;
+
+	//Teleport
 	PerfTimer time_between_portal_tp;
 
-	float cos_45							= 0.f;//TODO: Create a macro with its value directly
-	float sin_45							= 0.f;
-	float base_angle_lerp_factor			= 0.f;
 	//-- Move tutorial
 	Timer tutorial_move_timer;
 	UI_IG_Helper * tutorial_move			= nullptr;

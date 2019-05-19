@@ -88,8 +88,8 @@ public:
 	ObjectType		type = ObjectType::NO_TYPE;
 	fPoint			pos_map		= { 0.f, 0.f };			//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	fPoint			pos_screen	= { 0.f, 0.f };			//The position in the screen. Is measured with pixels. Modifying this value wil have no effect because is overwritten in every frame. Use this instead of calling MapToScreenF.
-	fPoint			velocity		= { 0.f, 0.f };
-	fPoint			acceleration = { 0.f, 0.f };
+	//fPoint			velocity		= { 0.f, 0.f };
+	//fPoint			acceleration = { 0.f, 0.f };
 	bool			to_remove = false;						//Set it to true if you want the object to be removed
 	bool            is_isometric = true;
 	ObjectInfo		data;

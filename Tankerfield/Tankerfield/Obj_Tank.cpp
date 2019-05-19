@@ -78,11 +78,6 @@ bool Obj_Tank::Start()
 
 	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
 
-	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
-	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
-	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
-	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
-
 	// Textures ================================================
 
 	// Base -------------------------
@@ -217,7 +212,6 @@ bool Obj_Tank::Start()
 	tutorial_move->AddButtonHelper(CONTROLLER_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
 	tutorial_move_time = 4500;
-	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
@@ -341,90 +335,39 @@ void Obj_Tank::Movement(float dt)
 	iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 	iso_dir.Normalize();
 
-	if (!iso_dir.IsZero())
+	//TODO: Instead of setting it to zero, add very high friction which makes it stop quickly
+	if (input_dir.IsZero())
 	{
-		if (movement_timer.ReadSec() >= 0.7)
-		{
-			movement_timer.Start();
-		}
-
-		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
-		//Calculate how many turns has the base angle and apply them to the target angle
-		float turns = floor(angle / 360.f);
-		target_angle += 360.f * turns;
-		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
-		{
-			target_angle += 360.f;
-		}
-		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
-
+		acceleration_map.SetToZero();
+		velocity_map.SetToZero();
 	}
 
-	velocity = iso_dir * curr_speed * dt;  
+	acceleration_map = iso_dir * 1000.f * dt;//5.f = acceleration power
+	velocity_map	+= acceleration_map * dt;
+	if (velocity_map.DistanceTo(fPoint(0.f,0.f)) > speed)//If the module of the velocity is bigger than the speed
+	{
+		velocity_map.Normalize();
+		velocity_map *= speed;
+	}
+	pos_map			+= velocity_map * dt;
 
-	ShotRecoilMovement(dt);
-
-	pos_map += velocity;
+	////CALCULATE ANGLE
+	//float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG;
+	////Calculate how many turns has the base angle and apply them to the target angle
+	//float turns = floor(angle / 360.f);
+	//target_angle += 360.f * turns;
+	////Check which distance is shorter. Rotating clockwise or counter-clockwise
+	//if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
+	//{
+	//	target_angle += 360.f;
+	//}
+	//angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
 
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
 	{
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
-}
-
-void Obj_Tank::ShotRecoilMovement(float &dt)
-{
-	if (life == 0) {
-		return;
-	}
-
-	//if the player shot
-	if ((ReleaseShot()
-		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
-	{
-		//- Basic shot
-		if (charged_shot_timer.ReadMs() < charge_time)
-		{
-			//set the max velocity in a basic shot
-			velocity_recoil_curr_speed = velocity_recoil_speed_max;
-		}
-
-		//Item Happy hour activated
-		else if (GetShotAutomatically())
-		{
-			velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
-		}
-
-		//- Charged shot
-		else
-		{
-			//set the max velocity in a charged shot
-			velocity_recoil_curr_speed = velocity_recoil_speed_max_charged;
-		}
-		// set the direction when shot
-		recoil_dir = -GetShotDir();
-	}
-	else
-	{
-		//reduce the velocity to 0 with decay
-		if (velocity_recoil_curr_speed > 0)
-		{
-			velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
-			if (velocity_recoil_curr_speed < 0)
-			{
-				velocity_recoil_curr_speed = 0;
-			}
-		}
-	}
-	//calculate the max position of the lerp
-	velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
-
-	//calculate the velocity in lerp
-	//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
-	velocity += velocity_recoil_final_lerp;
 }
 
 
