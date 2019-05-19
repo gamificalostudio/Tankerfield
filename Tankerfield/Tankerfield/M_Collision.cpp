@@ -104,6 +104,7 @@ M_Collision::M_Collision()
 
 	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::WALL] = true;
 	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::PLAYER] = true;
+	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::BULLET_ENEMY] = true;
 	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::ENEMY] = false;
 	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::REWARD_BOX] = false;
 
