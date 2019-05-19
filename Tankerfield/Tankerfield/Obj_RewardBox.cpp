@@ -37,6 +37,7 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 
 Obj_RewardBox::~Obj_RewardBox()
 {
+
 }
 
 bool Obj_RewardBox::Update(float dt)
