@@ -47,6 +47,10 @@
       <speed num="15"/>
     </oil_weapon>
     
+    <rocket_launcher_weapon>
+      <damage_multiplier num="50"/>
+      <damage_exponential_base num="1.55"/>
+    </rocket_launcher_weapon>
   </weapons>
   
   <!--Enemies-->

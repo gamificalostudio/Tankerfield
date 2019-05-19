@@ -24,8 +24,7 @@
 #include "M_AnimationBank.h"
 #include "Obj_Tank.h"
 #include "M_PickManager.h"
-#include "Bullet_Laser.h"
-#include "Obj_Bullet.h"
+#include "Bullet_RocketLauncher.h"
 #include "M_Audio.h"
 
 Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
@@ -89,9 +88,10 @@ void Obj_RocketLauncher::Attack()
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
 			curr_anim = &attack;
-			target->ReduceLife(attack_damage);
+			//target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
+			ShootMissile();
 		}
 
 		if (curr_anim == &attack
@@ -100,5 +100,27 @@ void Obj_RocketLauncher::Attack()
 			curr_anim = &idle;
 			attack.Reset();
 		}
+	}
+}
+
+void Obj_RocketLauncher::ShootMissile()
+{
+	fPoint p_dir(0.0f, 0.0f);
+	if (target != nullptr
+		&& target->coll->GetTag() == TAG::PLAYER
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared)
+	{
+		p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map;
+		p_dir.Normalize();
+
+		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map + p_dir);
+		bullet->SetBulletProperties(
+			10.0f,
+			2000.0f,
+			20.0f,
+			p_dir,
+			atan2(-p_dir.y, p_dir.x) * RADTODEG - 45);
+
+		bullet->SetPlayer(target);
 	}
 }

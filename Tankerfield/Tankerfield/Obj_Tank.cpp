@@ -674,6 +674,11 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
 	}
+
+	else if (c1->GetTag() == TAG::BULLET_ENEMY)
+	{
+		this->SetLife(GetLife() - c1->damage);
+	}
 }
 
 void Obj_Tank::OnTrigger(Collider * c1)
