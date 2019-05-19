@@ -82,7 +82,6 @@ public:
 private:
 	//- Movement
 	void Movement(float dt);
-	void ShotRecoilMovement(float &dt);
 	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
 
@@ -141,14 +140,15 @@ private:
 	bool ready								= false;
 	bool fire_dead							= false;
 
-
 	//- Movement
-	float road_buff							= 0.f;
-	float speed								= 0.f;
-	float curr_speed						= 0.f;
+	float max_speed							= 0.f;
+	float default_max_speed					= 0.f;
+	float road_max_speed					= 0.f;
+	float charged_shot_max_speed			= 0.f;
+
+	float acceleration_power				= 0.f;
 	fPoint velocity_map						= { 0.f, 0.f };
 	fPoint acceleration_map					= { 0.f, 0.f};
-	float charged_shot_speed				= 0.0f;
 	float cos_45 = 0.f;//TODO: Create a macro with its value directly
 	float sin_45 = 0.f;
 	float base_angle_lerp_factor = 0.f;

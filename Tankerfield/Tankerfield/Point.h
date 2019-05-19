@@ -166,6 +166,16 @@ public:
 		}
 	}
 
+	double Module()
+	{
+		return sqrt(x * x + y * y);
+	}
+
+	float ModuleF()
+	{
+		return sqrtf(x * x + y * y);
+	}
+
 	//Rotate a vector in radians
 	Point Rotate(float angle) {
 		Point aux = (*this);

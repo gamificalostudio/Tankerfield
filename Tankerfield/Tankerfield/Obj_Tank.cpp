@@ -77,6 +77,7 @@ bool Obj_Tank::Start()
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
 	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
+	pugi::xml_node tank_stats_node = app->objectmanager->balance_xml_node.child("tank");
 
 	// Textures ================================================
 
@@ -162,8 +163,13 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	curr_speed = speed = 5.f;//TODO: Load from xml
-	road_buff = 3.f;
+	max_speed = default_max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
+	charged_shot_max_speed = tank_stats_node.child("charged_shot_max_speed").attribute("value").as_float();
+	road_max_speed = tank_stats_node.child("road_max_speed").attribute("value").as_float();
+
+	acceleration_power = tank_stats_node.child("acceleration_power").attribute("value").as_float();
+
+
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
@@ -197,8 +203,6 @@ bool Obj_Tank::Start()
 
 	max_life = 100;
 	SetLife(100);
-
-	charged_shot_speed = 1.0f;
 
 	turr_scale = 1.2f;
 
@@ -244,7 +248,6 @@ bool Obj_Tank::Start()
 
 	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
 	flame->tank = this;
-
 	return true;
 }
 
@@ -347,12 +350,12 @@ void Obj_Tank::Movement(float dt)
 		velocity_map.SetToZero();
 	}
 
-	acceleration_map = iso_dir * 1000.f * dt;//5.f = acceleration power
+	acceleration_map = iso_dir * acceleration_power * dt;//5.f = acceleration power
 	velocity_map	+= acceleration_map * dt;
-	if (velocity_map.DistanceTo(fPoint(0.f,0.f)) > speed)//If the module of the velocity is bigger than the speed
+	if (velocity_map.ModuleF() > max_speed)//If the module of the velocity is bigger than the speed
 	{
 		velocity_map.Normalize();
-		velocity_map *= speed;
+		velocity_map *= max_speed;
 	}
 	pos_map			+= velocity_map * dt;
 
@@ -632,9 +635,9 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
+	if (c1->GetTag() == TAG::ROAD && max_speed != road_max_speed)
 	{
-			curr_speed += road_buff;
+		max_speed = road_max_speed;
 	}
 }
 
@@ -644,10 +647,10 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
-	if (c1->GetTag() == TAG::ROAD && curr_speed >= speed + road_buff)
-		{
-			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
-		}
+	if (c1->GetTag() == TAG::ROAD && max_speed != default_max_speed)
+	{
+		max_speed = default_max_speed;
+	}
 }
 
 void Obj_Tank::SetLife(int life)
@@ -778,7 +781,7 @@ void Obj_Tank::ShootChargedWeapon()
 	{
 		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
-			this->curr_speed = charged_shot_speed;
+			max_speed = charged_shot_max_speed;
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 		}
 	}
@@ -787,7 +790,7 @@ void Obj_Tank::ShootChargedWeapon()
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
-		this->curr_speed = speed;
+		max_speed = charged_shot_max_speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
 		{
