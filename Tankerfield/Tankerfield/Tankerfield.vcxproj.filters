@@ -217,8 +217,8 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Healing_Area_Shot.cpp">
-      <Filter>Objects</Filter>
+    <ClCompile Include="HealingShot_Area.cpp">
+      <Filter>Objects\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -462,8 +462,8 @@
     <ClInclude Include="Obj_Portal.h">
       <Filter>Objects\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Healing_Area_Shot.h">
-      <Filter>Objects</Filter>
+    <ClInclude Include="HealingShot_Area.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

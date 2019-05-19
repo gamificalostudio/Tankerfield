@@ -45,7 +45,7 @@
 #include "ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
 #include "Obj_FlamethrowerFlame.h"
-#include "Obj_Healing_Area_Shot.h"
+#include "HealingShot_Area.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -361,7 +361,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret->type = ObjectType::FLAMETHROWER_FLAME;
 		break;
 	case ObjectType::HEALING_AREA_SHOT:
-		ret = DBG_NEW Obj_Healing_Area_Shot(pos);
+		ret = DBG_NEW HealingShot_Area(pos);
 		ret->type = ObjectType::HEALING_AREA_SHOT;
 		break;
 	default:

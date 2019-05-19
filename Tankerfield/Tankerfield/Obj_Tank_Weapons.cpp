@@ -18,8 +18,7 @@
 #include "Obj_OilPool.h"
 #include "ElectroShotAnimation.h"
 #include "Obj_FlamethrowerFlame.h"
-
-#include "Obj_Healing_Area_Shot.h"
+#include "HealingShot_Area.h"
 
 void Obj_Tank::InitWeapons()
 {
@@ -205,6 +204,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
+		weapon_info.shot2.bullet_healing = 15 + level;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
@@ -377,7 +377,14 @@ void Obj_Tank::ShootHealingShot()
 
 void Obj_Tank::ShootHealingShotCharged()
 {
-	Obj_Healing_Area_Shot * heal_area = (Obj_Healing_Area_Shot*)app->objectmanager->CreateObject(ObjectType::HEALING_AREA_SHOT, pos_map);
+	HealingShot_Area * heal_area = (HealingShot_Area*)app->objectmanager->CreateObject(ObjectType::HEALING_AREA_SHOT, pos_map);
+
+	heal_area->SetBulletProperties(
+		weapon_info.shot1.bullet_speed,
+		weapon_info.shot1.bullet_life_ms,
+		weapon_info.shot1.bullet_damage,
+		shot_dir,
+		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
 }
 

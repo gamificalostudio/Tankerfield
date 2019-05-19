@@ -131,7 +131,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ElectroShotAnimation.cpp" />
     <ClCompile Include="General_HUD.cpp" />
-    <ClCompile Include="Healing_Area_Shot.cpp" />
+    <ClCompile Include="HealingShot_Area.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
     <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
@@ -208,7 +208,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ElectroShotAnimation.h" />
     <ClInclude Include="General_HUD.h" />
-    <ClInclude Include="Obj_Healing_Area_Shot.h" />
+    <ClInclude Include="HealingShot_Area.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="Obj_FlamethrowerFlame.h" />
