@@ -137,6 +137,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
 		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 100;
 		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.recoil = 25;
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
@@ -155,6 +156,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.recoil = 0;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -172,6 +174,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.recoil = 25;
 		break;
 	case WEAPON::HEALING_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -190,6 +193,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.bullet_healing = 15 + level;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.recoil = 25;
 		break;
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -199,14 +203,15 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 25;
 		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.405f;
-		weapon_info.shot2.trauma = 0.57f;
+		weapon_info.shot1.trauma = 0.f;
+		weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = 0.92f;
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.recoil = 0;
 		break;
 	case WEAPON::OIL:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -222,6 +227,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.recoil = 25;
 		break;
 	case WEAPON::ELECTRO_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -239,12 +245,13 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.recoil = 25;
+
 		//add width and height here?
 		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
 		{
 			(*iter)->damage = weapon_info.shot1.bullet_damage;
 		}
-
 
 		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
 		{

@@ -353,7 +353,7 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		if (movement_timer.ReadSec() >= 0.7)
+		if (movement_timer.ReadSec() >= 0.7f)
 		{
 			movement_timer.Start();
 		}
@@ -400,13 +400,13 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		if (charged_shot_timer.ReadMs() < charge_time)
 		{
 			//set the max velocity in a basic shot
-			velocity_recoil_curr_speed = velocity_recoil_speed_max;
+			velocity_recoil_curr_speed = weapon_info.shot1.recoil;
 		}
 
 		//Item Happy hour activated
 		else if (GetShotAutomatically())
 		{
-			velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+			velocity_recoil_curr_speed = weapon_info.shot1.recoil * 0.75f;
 		}
 
 		//- Charged shot
