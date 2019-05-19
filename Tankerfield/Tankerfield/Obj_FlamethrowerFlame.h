@@ -23,11 +23,15 @@ public:
 
 public:
 	Obj_Tank * tank		= nullptr;
+	bool is_holding = false;
 
 private:
-	Animation anim;
+	Animation fire_start;
+	Animation fire;
+	Animation fire_end;
 	SDL_Texture * tex	= nullptr;
 	float scale = 1.f;
+	SDL_Point pivot;
 };
 
 #endif

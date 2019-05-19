@@ -140,7 +140,7 @@
       <flamethrower>
         <tex_flamethrower>textures/objects/bullets/tex_flamethrower.png</tex_flamethrower>
         <animations>
-          <fire speed="5">
+          <fire1 speed="15">                         
             <dir>
               <frame x="0"   y="0"   w="154" h="112"/>
               <frame x="154" y="0"   w="154" h="112"/>
@@ -149,6 +149,10 @@
               <frame x="616" y="0"   w="154" h="112"/>
               <frame x="770" y="0"   w="154" h="112"/>
               <frame x="0"   y="112" w="154" h="112"/>
+            </dir>
+          </fire1>
+          <fire2 speed="15">
+            <dir>             
               <frame x="154" y="112" w="154" h="112"/>
               <frame x="308" y="112" w="154" h="112"/>
               <frame x="462" y="112" w="154" h="112"/>
@@ -158,6 +162,10 @@
               <frame x="154" y="224" w="154" h="112"/>
               <frame x="308" y="224" w="154" h="112"/>
               <frame x="462" y="224" w="154" h="112"/>
+            </dir>
+          </fire2>
+          <fire3 speed="15">
+            <dir>
               <frame x="616" y="224" w="154" h="112"/>
               <frame x="770" y="224" w="154" h="112"/>
               <frame x="0"   y="336" w="154" h="112"/>
@@ -167,7 +175,7 @@
               <frame x="616" y="336" w="154" h="112"/>
               <frame x="770" y="336" w="154" h="112"/>
             </dir>
-          </fire>
+          </fire3>
         </animations>
       </flamethrower>
       
@@ -775,6 +783,9 @@
         </rotate>
       </animations>
     </basic_bullet>
+    <healing_bullet>
+      <tex path="textures/objects/bullets/bullet_healing.png"/>
+    </healing_bullet>
     <laser_bullet>
       <speed value ="1.f"/>
       <life value ="1000"/>

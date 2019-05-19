@@ -41,6 +41,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	oiled_tex = app->tex->Load("textures/Objects/enemies/brute-sheet_oiled.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
 	curr_tex = spawn_tex;
+	last_texture = tex;
 
 	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
 	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
@@ -200,4 +201,61 @@ void Obj_Brute::Attack()
 			app->audio->PlayFx(sfx_attack);
 		}
 	}
+}
+
+void Obj_Brute::Dead()
+{
+	if (curr_anim != &death)
+	{
+		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
+		curr_anim = &death;
+		app->audio->PlayFx(sfx_death);
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->Destroy();
+			life_collider = nullptr;
+		}
+	}
+	else
+	{
+		if (death.Finished())
+		{
+			to_remove = true;
+
+		}
+	}
+	
+}
+
+void Obj_Brute::ElectroDead()
+{
+	if (curr_anim != &electro_dead)
+	{
+		app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
+		bool_electro_dead = true;
+		curr_tex = tex_electro_dead;
+		curr_anim = &electro_dead;
+		app->audio->PlayFx(sfx_death);
+		draw_offset = electrocuted_draw_offset;
+		if (coll != nullptr)
+		{
+			coll->Destroy();
+			coll = nullptr;
+		}
+	}
+	else
+	{
+		if (electro_dead.Finished())
+		{
+			to_remove = true;
+			app->audio->PauseFx(channel_electrocuted);
+
+		}
+	}
+	
 }
