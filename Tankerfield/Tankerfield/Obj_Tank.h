@@ -270,6 +270,11 @@ private:
 	SDL_Texture * turret_common_tex			= nullptr;
 	SDL_Texture * turret_shadow_tex			= nullptr;
 
+	SDL_Texture * text_charging				= nullptr;
+	Animation anim_charging;
+	int alpha = 0;
+	float charging_scale = 0.f;
+
 	iPoint turr_draw_offset						= { 0,0 };
 	float turr_scale							= 1.f;
 

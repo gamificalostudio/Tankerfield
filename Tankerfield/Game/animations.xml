@@ -20,6 +20,25 @@
       </explotion2>
     </animations>
   </explotions>
+  <charging>
+    <animation>
+      <charging speed="10" rotation="counter-clockwise" first_dir_angle="0">
+        <dir>
+          
+            <frame x="0"   y="0"   w="77" h="51"></frame>
+            <frame x="77"  y="0"   w="77" h="51"></frame>
+            <frame x="154" y="0"   w="77" h="51"></frame>
+            <frame x="0"   y="51"  w="77" h="51"></frame>
+            <frame x="77"  y="51"  w="77" h="51"></frame>
+            <frame x="154" y="51"  w="77" h="51"></frame>
+            <frame x="0"   y="102" w="77" h="51"></frame>
+            <frame x="77"  y="102" w="77" h="51"></frame>
+            <frame x="154" y="102" w="77" h="51"></frame>
+         
+        </dir>
+      </charging>
+    </animation>
+  </charging>
   <portal>
     <animations>
       <spawn speed="10" rotation="counter-clockwise" first_dir_angle ="0">

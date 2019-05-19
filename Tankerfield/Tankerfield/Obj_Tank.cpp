@@ -250,6 +250,12 @@ bool Obj_Tank::Start()
 	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
 	flame->tank = this;
 
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("charging").child("animation");
+
+	text_charging = app->tex->Load("textures/Objects/tank/texture_charging.png");
+	anim_charging.frames = app->anim_bank->LoadFrames(anim_node.child("charging"));
+
+
 	return true;
 }
 
@@ -544,6 +550,27 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 			pos_screen.x, pos_screen.y - cannon_height,
 			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
+	if (HoldShot())
+	{
+		
+		if (alpha < 200)
+		{
+			alpha = charged_shot_timer.ReadMs() * 200 / charge_time;
+			charging_scale = charged_shot_timer.ReadMs() * 1.50f / charge_time;
+		}
+		
+		anim_charging.NextFrame(dt);
+		
+		app->render->BlitUI(
+			text_charging,
+			pos_screen.x-camera->rect.x - anim_charging.GetFrame(0).w *0.5f * charging_scale + camera->screen_section.x,
+			pos_screen.y - camera->rect.y - anim_charging.GetFrame(0).h *0.5f * charging_scale + camera->screen_section.y,
+			&anim_charging.GetFrame(0),
+			camera,
+			alpha,
+			charging_scale,
+			charging_scale);
+	}
 	return true;
 }
 
@@ -798,6 +825,8 @@ void Obj_Tank::ShootChargedWeapon()
 	if (PressShot())
 	{
 		charged_shot_timer.Start();
+		charging_scale = 0.f;
+		alpha = 0;
 	}
 
 	if (HoldShot())
@@ -806,6 +835,7 @@ void Obj_Tank::ShootChargedWeapon()
 		{
 			this->curr_speed = charged_shot_speed;
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
+
 		}
 	}
 
@@ -813,6 +843,7 @@ void Obj_Tank::ShootChargedWeapon()
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
+		anim_charging.Reset();
 		this->curr_speed = speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
