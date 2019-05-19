@@ -7,6 +7,7 @@
 
 #include "Point.h"
 #include "Log.h"
+#include "Balance.h"
 #include "Animation.h"
 #include "App.h"
 #include "Object.h"
@@ -115,9 +116,9 @@ void Obj_RocketLauncher::ShootMissile()
 
 		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map + p_dir);
 		bullet->SetBulletProperties(
-			10.0f,
+			9.0f,
 			2000.0f,
-			20.0f,
+			attack_damage,
 			p_dir,
 			atan2(-p_dir.y, p_dir.x) * RADTODEG - 45);
 
