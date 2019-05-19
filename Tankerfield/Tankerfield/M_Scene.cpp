@@ -93,8 +93,6 @@ bool M_Scene::Start()
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
 
-
-
 	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
 	// Load the first level of the list on first game start -------------------------
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
@@ -147,6 +145,11 @@ bool M_Scene::Start()
 	round = 1u;
 	game_state = GAME_STATE::EXIT_OF_WAVE;
 	game_over = false;
+
+	Tesla_trooper_units = 0u;
+	Brute_units = 0u;
+	Suicidal_units = 0u;
+	RocketLauncher_units = 0u;
 
 	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
 
@@ -230,6 +233,11 @@ bool M_Scene::PreUpdate()
 			new_weapon = (int)WEAPON::DOUBLE_MISSILE;
 		}
 		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+	{
+		app->objectmanager->delete_all_enemies = true;
 	}
 
 	return true;
@@ -522,6 +530,9 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies = 0;
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
+	number_of_enemies += RocketLauncher_units;
+	number_of_enemies += Suicidal_units;
+
 	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
 
 	for (int i = 0; i < Tesla_trooper_units; i++)
