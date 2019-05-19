@@ -267,13 +267,13 @@ bool M_Scene::Update(float dt)
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
-		++subround;
-		if (subround > MAX_SUBROUNDS)
-		{
-			subround = 0;
-			++round;
-		}
-
+		//++subround;
+		//if (subround > MAX_SUBROUNDS)
+		//{
+		//	subround = 0;
+		//	++round;
+		//}
+		++round;
 		NewWave();
 		game_state = GAME_STATE::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
@@ -302,7 +302,7 @@ bool M_Scene::Update(float dt)
 		break;
 	}
 	case GAME_STATE::OUT_WAVE:
-		if (timer_between_waves.ReadSec() >= time_between_rounds[subround] || AllPlayersReady())
+		if (timer_between_waves.ReadSec() >= 3 || AllPlayersReady())
 		{
 			game_state = GAME_STATE::ENTER_IN_WAVE;
 		}
@@ -581,7 +581,7 @@ void M_Scene::CreateEnemyWave()
 void M_Scene::NewWave()
 {
 	Tesla_trooper_units = 30 + 40 * round;
-	Tesla_trooper_units *= percentage_enemies_subround[subround];
+	//Tesla_trooper_units *= percentage_enemies_subround[subround];
 
 	if (round >= 2)
 	{

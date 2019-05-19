@@ -87,6 +87,11 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 Obj_Brute::~Obj_Brute()
 {
+	if (life_collider != nullptr)
+	{
+		life_collider->to_destroy = true;
+		life_collider = nullptr;
+	}
 }
 
 
