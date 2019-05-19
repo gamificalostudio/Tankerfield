@@ -113,6 +113,7 @@ private:
 	void ShootDoubleMissileCharged();
 	void ShootDoubleMissile();
 	void ShootHealingShot();
+	void ShootHealingShotCharged();
 	void ShootLaserShot();
 	void ShootLaserShotCharged();
 	void ShootOil();

@@ -42,8 +42,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex = app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	oiled_tex	= app->tex->Load(tesla_trooper_node.child("tex_oiled_path").child_value());
-	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
-	portal_tex = app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
+	
 	curr_tex = tex;
 	last_texture = tex;
 
@@ -55,8 +54,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 	curr_anim = &idle;
 
-	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
-	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
 
 	//curr_anim = &idle;
@@ -92,14 +89,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	attack_range = app->objectmanager->tesla_trooper_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->tesla_trooper_info.attack_frequency;
-
 	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
-
-	//teleport 
-	check_teleport_time = 10; //10s
-	teleport_timer.Start();
-
-	teleport_enemies_max = app->objectmanager->tesla_trooper_info.teleport_max_enemies;
 
 	//Timers ----------------
 	check_path_time = 2.f; // 10s
@@ -150,49 +140,6 @@ void Obj_TeslaTrooper::TeleportIn(float & dt)
 			angle = 90;
 		}
 	}
-}
-void Obj_TeslaTrooper::GetTeleportPoint()
-{
-	move_vect.SetToZero();
-	float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
-	SpawnPoint* nearest_spawners_points = nullptr;
-	float last_distance_to_spawnpoint = 0.f;
-
-	for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
-	{
-		float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
-
-		if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
-			/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
-			&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
-			&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
-		{
-			nearest_spawners_points = (*spawn_point);
-			last_distance_to_spawnpoint = distance_to_this_spawnpoint;
-		}
-	}
-
-	if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
-	{
-		check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
-		uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
-		if (number_of_enemies <= teleport_enemies_max)
-		{
-			check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
-		}
-		teleport_spawnpoint = nearest_spawners_points;
-		state = ENEMY_STATE::TELEPORT_IN;
-		in_portal = &portal_animation;
-		angle = -90;
-
-		teleport_anim_duration.Start();
-	}
-	else
-	{
-		state = ENEMY_STATE::GET_PATH;
-
-	}
-	teleport_timer.Start();
 }
 void Obj_TeslaTrooper::Spawn(const float & dt)
 {

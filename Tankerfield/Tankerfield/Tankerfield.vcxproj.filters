@@ -178,9 +178,6 @@
     <ClCompile Include="Obj_Enemy.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_CannonFire.cpp">
-      <Filter>Objects\Enemies</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_FlamethrowerFlame.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -214,8 +211,13 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HealingShot_Area.cpp">
+    </ClCompile>
     <ClCompile Include="Obj_ElectroShotAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_CannonFire.cpp">
+      <Filter>Objects\Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -423,9 +425,6 @@
     <ClInclude Include="Obj_Enemy.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_CannonFire.h">
-      <Filter>Objects\Enemies</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_FlamethrowerFlame.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -456,8 +455,13 @@
     <ClInclude Include="Obj_Portal.h">
       <Filter>Objects\Player</Filter>
     </ClInclude>
+    <ClInclude Include="HealingShot_Area.h">
+    </ClInclude>
     <ClInclude Include="Obj_ElectroShotAnimation.h">
       <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_CannonFire.h">
+      <Filter>Objects\Particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -519,6 +523,9 @@
     </Filter>
     <Filter Include="Objects\Player">
       <UniqueIdentifier>{1d857f95-9535-4f46-bfc9-658b8d38c8dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Particles">
+      <UniqueIdentifier>{9ebcce9b-e2e9-4b17-9e32-108b6bba6746}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

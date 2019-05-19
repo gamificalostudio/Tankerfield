@@ -44,7 +44,13 @@
         <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
       </sounds>
   </scene>
-
+  <map>
+    <folder>Maps/</folder>
+    <levels>
+      <level name="Map2.tmx"/>
+    </levels>
+  </map>
+  
   <ui>
     <atlas file="ui/atlas.png"/>
     <animations>
@@ -76,11 +82,12 @@
       </arrow>
     </animations>
   </ui>
+  
   <map>
     <folder>Maps/</folder>
     <levels>
-      <!--<level name="Map2.tmx"/>-->
-      <level name="test/test.tmx"/>
+      <level name="Map2.tmx"/>
+      <!--<level name="test/test.tmx"/>-->
     </levels>
   </map>
   
@@ -793,6 +800,29 @@
         </rotate>
       </animations>
     </basic_bullet>
+    <charged_healing>
+      <speed value ="0"/>
+      <life value ="1000"/>
+      <tex path="textures/objects/bullets/Healing_Shot_Charged.png"/>
+      <animations>
+        <anim speed="12" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame x="0"     y="0" w="150" h="150"/>
+            <frame x="150"   y="0" w="150" h="150"/>
+            <frame x="300"   y="0" w="150" h="150"/>
+            <frame x="450"   y="0" w="150" h="150"/>
+            <frame x="600"   y="0" w="150" h="150"/>
+            <frame x="750"   y="0" w="150" h="150"/>
+            <frame x="0"     y="150" w="150" h="150"/>
+            <frame x="150"   y="150" w="150" h="150"/>
+            <frame x="300"   y="150" w="150" h="150"/>
+            <frame x="450"   y="150" w="150" h="150"/>
+            <frame x="600"   y="150" w="150" h="150"/>
+            <frame x="750"   y="150" w="150" h="150"/>
+          </dir>
+        </anim>
+      </animations>
+    </charged_healing>
     <healing_bullet>
       <tex path="textures/objects/bullets/bullet_healing.png"/>
     </healing_bullet>
