@@ -28,9 +28,6 @@ public:
 public:
 	Obj_Tank* tank_parent = nullptr;
 
-private:
-	PerfTimer time;
-
 };
 
 #endif // !__HEALING_AREA_SHOT__

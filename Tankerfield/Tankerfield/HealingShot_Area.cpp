@@ -19,20 +19,19 @@ HealingShot_Area::~HealingShot_Area()
 
 bool HealingShot_Area::Start()
 {
-	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet");
+	pugi::xml_node area_node = app->config.child("object").child("charged_healing");
 
-	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
+	anim.frames = app->anim_bank->LoadFrames(area_node.child("animations").child("anim"));
 	curr_anim = &anim;
 
-	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	tex = app->tex->Load(area_node.child("tex").attribute("path").as_string());
 	curr_tex = tex;
 
-	draw_offset = { 35, 14 };
+	draw_offset = { 75, 110 };
 
-	coll = app->collision->AddCollider(pos_map, 3, 3, TAG::HEALING_AREA_SHOT, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll = app->collision->AddCollider(pos_map, 2.5f, 2.5f, TAG::HEALING_AREA_SHOT, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll->SetObjOffset({-1.25f,-1.25f});
 	coll->is_sensor = true;
-
-	time.Start();
 
 	return true;
 }
@@ -40,7 +39,7 @@ bool HealingShot_Area::Start()
 
 bool HealingShot_Area::Update(float dt)
 {
-	if (time.ReadMs() >= 3000)
+	if (anim.Finished())
 	{
 		to_remove = true;
 	}
