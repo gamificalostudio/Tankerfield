@@ -684,7 +684,8 @@ void Obj_Tank::SetLife(int life)
 	{
 		this->life = GetMaxLife();
 	}
-	else if (life <= 0 && this->life != 0)
+
+	else if (life <= 0)
 	{
 		this->life = 0;
 		app->audio->PlayFx(die_sfx);
@@ -1074,12 +1075,13 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::StopTank()
 {
-	if (!fire_dead)
+	if (this->fire_dead==false)
 	{
-		fire_dead = true;
 		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 		dead_fire->tank = this;
+		this->fire_dead = true;
 	}
+
 	this->SetWeapon(WEAPON::BASIC, 1);
 	this->SetItem(ItemType::NO_TYPE);
 }
