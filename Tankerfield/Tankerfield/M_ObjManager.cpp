@@ -558,11 +558,13 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	pugi::xml_node basic_weapon_node = balance_node.child("weapons").child("basic_weapon");
 	basic_weapon_info.damage_multiplier			= basic_weapon_node.child("damage_multiplier").attribute("num").as_float();
 	basic_weapon_info.damage_exponential_base	= basic_weapon_node.child("damage_exponential_base").attribute("num").as_float();
+	basic_weapon_info.speed	= basic_weapon_node.child("speed").attribute("num").as_float();
 
 	//Double missile
 	pugi::xml_node double_missile_node = balance_node.child("weapons").child("double_missile");
 	double_missile_info.damage_multiplier = double_missile_node.child("damage_multiplier").attribute("num").as_float();
 	double_missile_info.damage_exponential_base = double_missile_node.child("damage_exponential_base").attribute("num").as_float();
+	double_missile_info.speed = double_missile_node.child("speed").attribute("num").as_float();
 
 	//Healing shot
 	pugi::xml_node healing_shot_node = balance_node.child("weapons").child("healing_shot");
@@ -588,5 +590,6 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	pugi::xml_node oil_weapon_node = balance_node.child("weapons").child("oil_weapon");
 	oil_weapon_info.damage_multiplier = oil_weapon_node.child("damage_multiplier").attribute("num").as_float();
 	oil_weapon_info.damage_exponential_base = oil_weapon_node.child("damage_exponential_base").attribute("num").as_float();
+	oil_weapon_info.speed = oil_weapon_node.child("speed").attribute("num").as_float();
 
 }
