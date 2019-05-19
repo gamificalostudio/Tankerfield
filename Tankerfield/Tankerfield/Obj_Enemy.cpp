@@ -210,7 +210,7 @@ void Obj_Enemy::Dead()
 	{
 		// DROP A PICK UP ITEM 
 		app->pick_manager->PickUpFromEnemy(pos_map);
-
+		curr_tex = tex;
 		curr_anim = &death;
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
