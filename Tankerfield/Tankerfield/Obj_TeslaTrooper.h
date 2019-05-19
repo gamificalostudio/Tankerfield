@@ -42,7 +42,7 @@ private:
 	Animation spawn_anim;
 	bool draw							= true;
 
-	SDL_Texture * portal_tex			= nullptr;
+	
 	SDL_Texture * explosion_apper_tex	= nullptr;
 
 	

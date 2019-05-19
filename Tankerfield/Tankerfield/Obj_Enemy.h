@@ -75,6 +75,8 @@ protected:
 
 	inline virtual void Burn(const float& dt);
 
+	inline virtual void Stunned();
+
 	bool CleanUp() override;
 
 	void Oiled();
@@ -100,6 +102,7 @@ protected:
 	SDL_Texture * tex_electro_dead = nullptr;
 	SDL_Texture* burn_texture = nullptr;
 	SDL_Texture* last_texture = nullptr;
+	SDL_Texture * portal_tex = nullptr;
 	iPoint normal_draw_offset = { 0, 0 };
 	iPoint electrocuted_draw_offset = { 0, 0 };
 	bool draw = true;

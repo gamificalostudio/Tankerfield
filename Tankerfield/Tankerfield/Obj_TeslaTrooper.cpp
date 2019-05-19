@@ -42,8 +42,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex = app->tex->Load(tesla_trooper_node.child("tex_path").child_value());
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	oiled_tex	= app->tex->Load(tesla_trooper_node.child("tex_oiled_path").child_value());
-	portal_tex	= app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
-	portal_tex = app->tex->Load(tesla_trooper_node.child("tex_portal").child_value());
+	
 	curr_tex = tex;
 	last_texture = tex;
 
@@ -55,8 +54,6 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 	curr_anim = &idle;
 
-	portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
-	portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
 
 
 	//curr_anim = &idle;
@@ -92,14 +89,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	attack_range = app->objectmanager->tesla_trooper_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->tesla_trooper_info.attack_frequency;
-
 	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
-
-	//teleport 
-	check_teleport_time = 10; //10s
-	teleport_timer.Start();
-
-	teleport_enemies_max = app->objectmanager->tesla_trooper_info.teleport_max_enemies;
 
 	//Timers ----------------
 	check_path_time = 2.f; // 10s

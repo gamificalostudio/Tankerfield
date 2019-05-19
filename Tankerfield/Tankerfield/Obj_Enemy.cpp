@@ -40,6 +40,15 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	
 
 	path_timer.Start();
+
+	//TELEPORT VARIABLES =============
+		teleport_enemies_max = app->objectmanager->tesla_trooper_info.teleport_max_enemies;
+		check_teleport_time = 10; //10s
+		teleport_timer.Start();
+		portal_animation.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("open"));
+		portal_close_anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("portal").child("animations").child("close"));
+		portal_tex = app->tex->Load("textures/Objects/enemies/portal.png");
+	
 }
 
 bool Obj_Enemy::Update(float dt)
@@ -164,31 +173,7 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case ENEMY_STATE::STUNNED:
 	{
-		
-		curr_tex = tex_electro_dead;
-		curr_anim = &electro_dead;
-		draw_offset = electrocuted_draw_offset;
-		if ((int)electro_dead.current_frame >= 4)
-		{
-			electro_dead.Reset();
-
-			if (stun_charged && times_animation_repeated >= times_to_repeat_animation || !stun_charged)
-			{
-				times_animation_repeated = 0u;
-				state = state_saved;
-				curr_tex = tex;
-				curr_anim = anim_saved;
-				app->audio->PauseFx(channel_electrocuted, 1);
-				draw_offset = normal_draw_offset;
-			}
-			else
-			{
-				++times_animation_repeated;
-				app->audio->PauseFx(channel_electrocuted);
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				
-			}
-		}
+		Stunned();
 	}
 	break;
 
@@ -347,6 +332,25 @@ void Obj_Enemy::GetPath()
 
 			state = ENEMY_STATE::MOVE;
 		}
+		else
+		{
+			if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
+			{
+				state = ENEMY_STATE::GET_TELEPORT_POINT;
+				curr_anim = &idle;
+			}
+			else if (path.size() > 0)
+			{
+				state = ENEMY_STATE::MOVE;
+				curr_anim = &walk;
+			}
+			else
+			{
+				state = ENEMY_STATE::IDLE;
+				curr_anim = &idle;
+				path_timer.Start();
+			}
+		}
 
 	}
 	else
@@ -386,6 +390,7 @@ inline void Obj_Enemy::GetTeleportPoint()
 		}
 		teleport_spawnpoint = nearest_spawners_points;
 		state = ENEMY_STATE::TELEPORT_IN;
+		draw = false;
 		in_portal = &portal_animation;
 		angle = -90;
 
@@ -408,7 +413,7 @@ inline void Obj_Enemy::TeleportIn(float & dt)
 	if (teleport_anim_duration.ReadSec() >= 1)
 	{
 		in_portal = &portal_close_anim;
-		draw = false;
+		
 		if (in_portal->Finished())
 		{
 			in_portal->Reset();
@@ -439,14 +444,26 @@ inline void Obj_Enemy::TeleportOut(float & dt)
 bool Obj_Enemy::Draw(float dt, Camera * camera)
 {
 
-	app->render->BlitScaled(
-		curr_tex,
-		pos_screen.x - draw_offset.x,
-		pos_screen.y - draw_offset.y,
-		camera,
-		&frame,
-		scale,
-		scale);
+	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)
+	{
+		SDL_Rect portal_frame = in_portal->GetFrame(0);
+		app->render->Blit(
+			portal_tex,
+			pos_screen.x - portal_frame.w * 0.5f,
+			pos_screen.y - portal_frame.h,
+			camera,
+			&portal_frame);
+	}
+
+	if(draw)
+		app->render->BlitScaled(
+			curr_tex,
+			pos_screen.x - draw_offset.x,
+			pos_screen.y - draw_offset.y,
+			camera,
+			&frame,
+			scale,
+			scale);
 
 	
 
@@ -553,6 +570,34 @@ inline void Obj_Enemy::Burn(const float & dt)
 		CleanUp();
 	}
 
+}
+
+inline void Obj_Enemy::Stunned()
+{
+	curr_tex = tex_electro_dead;
+	curr_anim = &electro_dead;
+	draw_offset = electrocuted_draw_offset;
+	if ((int)electro_dead.current_frame >= 4)
+	{
+		electro_dead.Reset();
+
+		if (stun_charged && times_animation_repeated >= times_to_repeat_animation || !stun_charged)
+		{
+			times_animation_repeated = 0u;
+			state = state_saved;
+			curr_tex = tex;
+			curr_anim = anim_saved;
+			app->audio->PauseFx(channel_electrocuted, 1);
+			draw_offset = normal_draw_offset;
+		}
+		else
+		{
+			++times_animation_repeated;
+			app->audio->PauseFx(channel_electrocuted);
+			channel_electrocuted = app->audio->PlayFx(electocuted);
+
+		}
+	}
 }
 
 
