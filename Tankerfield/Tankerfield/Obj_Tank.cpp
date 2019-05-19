@@ -689,7 +689,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 
-			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
 				SetPickUp(pick_up);
@@ -1182,7 +1182,9 @@ void Obj_Tank::Item()
 		new_item->Use();
 		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
+		
 	}
+	picking = false;
 }
 
 
@@ -1198,6 +1200,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	}
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();
+	picking = true;
 }
 
 void Obj_Tank::SetGui(Player_GUI * gui)
