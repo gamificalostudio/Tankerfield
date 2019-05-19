@@ -136,7 +136,7 @@ void Obj_RewardBox::SetTypeBox(PICKUP_TYPE type)
 
 void Obj_RewardBox::TakeDamage(Collider* collider)
 {
-	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER || collider->GetTag() == TAG::BULLET_OIL)
+	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER || collider->GetTag() == TAG::BULLET_OIL || collider->GetTag() == TAG::FLAMETHROWER)
 	{
 		++hits_taken;
 		if (hits_taken >= max_hits)
