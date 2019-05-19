@@ -32,6 +32,7 @@
 #include "Camera.h"
 #include "Item_InstantHelp.h"
 #include "Obj_Portal.h"
+#include "HealingShot_Area.h"
 #include "Obj_FlamethrowerFlame.h"
 
 int Obj_Tank::number_of_tanks = 0;
@@ -625,7 +626,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		}
 	}
 
-	if (c1->GetTag() == TAG::PORTAL)
+	else if (c1->GetTag() == TAG::PORTAL)
 	{
 		if (time_between_portal_tp.ReadMs() > 2000) {
 			if (c1 == portal1->coll) {
@@ -635,6 +636,17 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 				pos_map = portal1->pos_map;
 			}
 			time_between_portal_tp.Start();
+		}
+	}
+
+	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
+	{
+		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
+		if (this->GetLife() < GetMaxLife())
+		{
+			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+			new_particle->tank = this;
+			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
 	}
 }

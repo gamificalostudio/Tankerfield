@@ -45,7 +45,7 @@
 #include "Obj_ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
 #include "Obj_FlamethrowerFlame.h"
-
+#include "HealingShot_Area.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -359,6 +359,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::FLAMETHROWER_FLAME:
 		ret = DBG_NEW Obj_FlamethrowerFlame(pos);
 		ret->type = ObjectType::FLAMETHROWER_FLAME;
+		break;
+	case ObjectType::HEALING_AREA_SHOT:
+		ret = DBG_NEW HealingShot_Area(pos);
+		ret->type = ObjectType::HEALING_AREA_SHOT;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");
