@@ -205,8 +205,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
-		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
 	case WEAPON::OIL:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
