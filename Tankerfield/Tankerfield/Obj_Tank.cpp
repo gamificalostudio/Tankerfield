@@ -552,7 +552,7 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 			pos_screen.x, pos_screen.y - cannon_height,
 			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
 	}
-	if (HoldShot())
+	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
 		
 		if (alpha < 200)
