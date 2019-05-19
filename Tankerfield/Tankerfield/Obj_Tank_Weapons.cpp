@@ -134,7 +134,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.1f;
 		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
 		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 100;
-		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;

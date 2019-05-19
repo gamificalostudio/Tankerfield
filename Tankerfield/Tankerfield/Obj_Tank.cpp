@@ -393,7 +393,8 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 	//if the player shot
 	if ((ReleaseShot()
 		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
+		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
+		&& weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
