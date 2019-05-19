@@ -70,7 +70,7 @@
       <life_multiplier num = "1200"/><!--Acts as initial life. Divided by 100 is the number of hits the enemy has to take with a weapon of the same level to die.-->
       <life_exponential_base num ="1.25"/>
       <detection_range num="10"/>
-      <speed num = "1.5"/>
+      <speed num = "2.5"/>
       <attack_damage num="50"/>
       <attack_range num="1.25"/>
       <attack_frequency num="3000"/>
