@@ -283,7 +283,6 @@ bool Obj_Tank::Update(float dt)
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
-	
 
 	UpdateWeaponsWithoutBullets(dt);
 	return true;
@@ -351,6 +350,16 @@ void Obj_Tank::Movement(float dt)
 	}
 	pos_map			+= velocity_map * dt;
 
+	if(tank_num == 0)
+	{
+		fPoint input_debug(iso_dir);
+		input_debug.Normalize();
+		LOG("input     x: %f, y:%f", input_debug.x, input_debug.y);
+		fPoint velocity_debug(velocity_map);
+		velocity_debug.Normalize();
+		LOG("velocity  x: %f, y:%f", velocity_debug.x, velocity_debug.y);
+	}
+
 	////CALCULATE ANGLE
 	//float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG;
 	////Calculate how many turns has the base angle and apply them to the target angle
@@ -400,8 +409,6 @@ void Obj_Tank::InputMovementController(fPoint & input)
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
-
-
 	if (!damaged)
 	{
 		// Base common ========================================
