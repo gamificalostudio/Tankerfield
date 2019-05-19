@@ -151,7 +151,11 @@ void General_GUI::FadeGeneralHUD(bool fade_on)
 void General_GUI::SetRoundNumber(int round)
 {
 	round_number_label->SetText(std::to_string(round).c_str());
-	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1.F, 3.F);
+}
+
+void General_GUI::RoundFX()
+{
+	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.8F, 4.F);
 }
 
 void General_GUI::SetInputTextToNameLabel()
