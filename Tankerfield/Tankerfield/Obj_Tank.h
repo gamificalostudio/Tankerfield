@@ -91,8 +91,8 @@ private:
 
 	//- Shooting
 	void Aim(float dt);
-	void Shoot();
-	void ShootChargedWeapon();
+	void Shoot(float dt);
+	void ShootChargedWeapon(float dt);
 	void ShootSustainedWeapon();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
@@ -273,6 +273,17 @@ private:
 	SDL_Texture * turret_color_tex			= nullptr;
 	SDL_Texture * turret_common_tex			= nullptr;
 	SDL_Texture * turret_shadow_tex			= nullptr;
+
+	SDL_Texture * text_charging				= nullptr;
+	Animation anim_charging;
+	SDL_Texture * text_finished_charged		= nullptr;
+	Animation anim_finished_charged;
+	SDL_Texture * curr_text_charging = nullptr;
+	Animation curr_anim_charging;
+	int alpha = 0;
+	float charging_scale = 0.f;
+	uint charging_ready = 0u;
+	bool charging = false;
 
 	iPoint turr_draw_offset						= { 0,0 };
 	float turr_scale							= 1.f;

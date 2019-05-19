@@ -312,7 +312,7 @@ void M_Render::BlitScaledAndRotated(SDL_Texture* texture, const int screen_x, co
 	}
 }
 
-void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section,  Camera* camera, const int alpha) const
+void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SDL_Rect* section,  Camera* camera, const int alpha, float scale_w, float scale_h) const
 {
 	if (alpha == 0.f)
 	{
@@ -330,8 +330,8 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 
 	if (section != NULL)
 	{
-		rect.w = section->w;
-		rect.h = section->h;
+		rect.w = section->w * scale_w;
+		rect.h = section->h * scale_h;
 	}
 	else
 	{
