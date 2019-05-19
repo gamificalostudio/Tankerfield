@@ -376,6 +376,7 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
+	flame->is_holding = true;
 	flame_release_time.Start();
 
 	if(coll_flame->GetIsActivated() == false)
@@ -395,8 +396,6 @@ void Obj_Tank::ShootFlameThrower()
 
 
 	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
-
-
 
 	fPoint dir_distance = GetShotDir() * distance;
 	distance += increment;
