@@ -856,8 +856,6 @@ void Obj_Tank::ShootSustainedWeapon()
 	//- Quick shot
 	if (ReleaseShot())
 	{
-		(this->*release_shot[(uint)weapon_info.weapon])();
-
 		if (shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
 			&& sustained_shot_timer.ReadMs() <= quick_shot_time
 			&& GetShotAutomatically())
@@ -867,6 +865,8 @@ void Obj_Tank::ShootSustainedWeapon()
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 			shot_timer.Start();
 		}
+
+		(this->*release_shot[(uint)weapon_info.weapon])();
 	}
 }
 
