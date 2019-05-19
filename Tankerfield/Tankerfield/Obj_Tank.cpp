@@ -258,6 +258,8 @@ bool Obj_Tank::Start()
 	text_finished_charged = app->tex->Load("textures/Objects/tank/texture_charging_finished.png");
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
+	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+
 	return true;
 }
 
@@ -291,7 +293,7 @@ bool Obj_Tank::Update(float dt)
 {
 	Movement(dt);
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
-	Shoot();
+	Shoot(dt);
 	Item();
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
@@ -554,26 +556,11 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	}
 	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
-		
-		if (alpha < 200)
-		{
-			alpha = charged_shot_timer.ReadMs() * 200 / charge_time;
-			charging_scale = charged_shot_timer.ReadMs() * 1.50f / charge_time;
-		}
-		else
-		{
-			curr_text_charging = text_finished_charged;
-			curr_anim_charging = &anim_finished_charged;
-			charging_scale = 1;
-		}
-		
-		curr_anim_charging->NextFrame(dt);
-		
 		app->render->BlitUI(
 			curr_text_charging,
-			pos_screen.x-camera->rect.x - curr_anim_charging->GetFrame(0).w *0.5f * charging_scale + camera->screen_section.x,
-			pos_screen.y - camera->rect.y - curr_anim_charging->GetFrame(0).h *0.5f * charging_scale + camera->screen_section.y,
-			&curr_anim_charging->GetFrame(0),
+			pos_screen.x-camera->rect.x - curr_anim_charging.GetFrame(0).w *0.5f * charging_scale + camera->screen_section.x,
+			pos_screen.y - camera->rect.y - curr_anim_charging.GetFrame(0).h *0.5f * charging_scale + camera->screen_section.y,
+			&curr_anim_charging.GetFrame(0),
 			camera,
 			alpha,
 			charging_scale,
@@ -812,12 +799,12 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 	}
 }
 
-void Obj_Tank::Shoot()
+void Obj_Tank::Shoot(float dt)
 {
 	switch (weapon_info.type)
 	{
 	case WEAPON_TYPE::CHARGED:
-		ShootChargedWeapon();
+		ShootChargedWeapon(dt);
 		break;
 	case WEAPON_TYPE::SUSTAINED:
 		ShootSustainedWeapon();
@@ -828,7 +815,7 @@ void Obj_Tank::Shoot()
 	}
 }
 
-void Obj_Tank::ShootChargedWeapon()
+void Obj_Tank::ShootChargedWeapon(float dt)
 {
 	if (PressShot())
 	{
@@ -836,7 +823,8 @@ void Obj_Tank::ShootChargedWeapon()
 		charging_scale = 0.f;
 		alpha = 0;
 		curr_text_charging = text_charging;
-		curr_anim_charging = &anim_charging;
+		curr_anim_charging = anim_charging;
+		charging = true;
 	}
 
 	if (HoldShot())
@@ -853,6 +841,25 @@ void Obj_Tank::ShootChargedWeapon()
 			{ 
 				(*controller)->PlayRumble(0.1f, 100); 
 			}
+
+			if (charging)
+			{
+				if (alpha < 200)
+				{
+					alpha = charged_shot_timer.ReadMs() * 200 / charge_time;
+					charging_scale = charged_shot_timer.ReadMs() * 1.50f / charge_time;
+				}
+				else
+				{
+					charging = false;
+					curr_text_charging = text_finished_charged;
+					curr_anim_charging = anim_finished_charged;
+					charging_scale = 1;
+					app->audio->PlayFx(charging_ready);
+				}
+			}
+
+			curr_anim_charging.NextFrame(dt);
 
 		}
 	}

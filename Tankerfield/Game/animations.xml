@@ -22,7 +22,7 @@
   </explotions>
   <charging>
     <animation>
-      <charging speed="10" rotation="counter-clockwise" first_dir_angle="0">
+      <charging speed="20" rotation="counter-clockwise" first_dir_angle="0">
         <dir>
           
             <frame x="0"   y="0"   w="77" h="51"></frame>
@@ -37,7 +37,7 @@
          
         </dir>
       </charging>
-      <finish_charged speed="10" rotation="counter-clockwise" first_dir_angle="0">
+      <finish_charged speed="20" rotation="counter-clockwise" first_dir_angle="0">
         <dir>
         <frame x="0"   y="0"   w="100" h="100"></frame>
         <frame x="100" y="0"   w="100" h="100"></frame>
