@@ -232,7 +232,7 @@ private:
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
-	UI_IG_Helper * tutorial_pick_up			= nullptr;
+	
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
@@ -302,6 +302,8 @@ private:
 
 public:
 	Camera* camera_player				= nullptr;
+
+	UI_IG_Helper * tutorial_pick_up = nullptr;
 
 	//- GUI
 	Player_GUI*  gui = nullptr;

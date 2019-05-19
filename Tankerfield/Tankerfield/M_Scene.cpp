@@ -142,8 +142,8 @@ bool M_Scene::Start()
 	
 	general_gui = DBG_NEW General_GUI();
 
-	round = 1u;
-	game_state = GAME_STATE::EXIT_OF_WAVE;
+	round = 0u;
+	game_state = GAME_STATE::ENTER_IN_WAVE;
 	game_over = false;
 
 	Tesla_trooper_units = 0u;
@@ -163,6 +163,8 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
+	LOG("Enemy number %i", number_of_enemies);
+
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
@@ -273,13 +275,13 @@ bool M_Scene::Update(float dt)
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
-		++subround;
-		if (subround > MAX_SUBROUNDS)
-		{
-			subround = 0;
-			++round;
-		}
-
+		//++subround;
+		//if (subround > MAX_SUBROUNDS)
+		//{
+		//	subround = 0;
+		//	++round;
+		//}
+		++round;
 		NewWave();
 		game_state = GAME_STATE::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
@@ -289,7 +291,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::IN_WAVE:
 	{
-		if (number_of_enemies<=0)
+		if (number_of_enemies<=0)//Hardcode to go to next round when there are less enemies
 		{
 			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}
@@ -308,7 +310,7 @@ bool M_Scene::Update(float dt)
 		break;
 	}
 	case GAME_STATE::OUT_WAVE:
-		if (timer_between_waves.ReadSec() >= time_between_rounds[subround] || AllPlayersReady())
+		if (timer_between_waves.ReadSec() >= 3 || AllPlayersReady())
 		{
 			game_state = GAME_STATE::ENTER_IN_WAVE;
 		}
@@ -530,8 +532,8 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies = 0;
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
-	number_of_enemies += RocketLauncher_units;
-	number_of_enemies += Suicidal_units;
+
+	//number_of_enemies += Suicidal_units;
 
 	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
 
@@ -570,28 +572,30 @@ void M_Scene::CreateEnemyWave()
 		}
 	}
 
-	for (int i = 0; i < Suicidal_units; i++)
-	{
-		if (app->map->data.spawners_position_enemy.size() != 0)
-		{
-			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
+	//for (int i = 0; i < Suicidal_units; i++)
+	//{
+	//	if (app->map->data.spawners_position_enemy.size() != 0)
+	//	{
+	//		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+	//		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+	//		app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
 
-		}
-	}
+	//	}
+	//}
 
 
 }
 
 void M_Scene::NewWave()
 {
-	Tesla_trooper_units = 10 * round * 4;
-	Tesla_trooper_units *= percentage_enemies_subround[subround];
+	Tesla_trooper_units = 30 + 40 * round;
+	//Tesla_trooper_units *= percentage_enemies_subround[subround];
 
-	if (round >= 3)
+	if (round >= 2)
 	{
-		Brute_units += round - 2;
+		Brute_units += round - 1;
+		RocketLauncher_units += round - 1;
+		//Suicidal_units += round - 1;
 	}
 
 	CreateEnemyWave();

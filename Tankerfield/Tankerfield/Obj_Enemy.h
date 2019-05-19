@@ -27,6 +27,7 @@ class Obj_Enemy : public Object
 {
 public:
 	Obj_Enemy(fPoint pos);
+	~Obj_Enemy();
 
 	bool Update(float dt) ;
 

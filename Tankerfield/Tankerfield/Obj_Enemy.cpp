@@ -51,6 +51,15 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	
 }
 
+Obj_Enemy::~Obj_Enemy()
+{
+	if (life_collider != nullptr)
+	{
+		life_collider->to_destroy = true;
+		life_collider = nullptr;
+	}
+}
+
 bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
@@ -75,7 +84,7 @@ void Obj_Enemy::ChangeTexture()
 		curr_tex != tex &&
 		bool_electro_dead == false)
 	{
-		curr_tex = last_texture;
+		curr_tex = tex;
 		damaged = false;
 	}
 }
@@ -210,7 +219,7 @@ void Obj_Enemy::Dead()
 	{
 		// DROP A PICK UP ITEM 
 		app->pick_manager->PickUpFromEnemy(pos_map);
-		curr_tex = tex;
+		//curr_tex = tex;
 		curr_anim = &death;
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
@@ -362,28 +371,54 @@ inline void Obj_Enemy::GetTeleportPoint()
 	float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
 	SpawnPoint* nearest_spawners_points = nullptr;
 	float last_distance_to_spawnpoint = 0.f;
-
-	for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
+	uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
+	float min_num_instant_teleport_enemies = 10;
+	if (number_of_enemies <= min_num_instant_teleport_enemies)
 	{
-		float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
-
-		if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
-			/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
-			&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
-			&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
+		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
 		{
-			nearest_spawners_points = (*spawn_point);
-			last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			float distance_to_this_spawnpoint = (target->pos_map.DistanceManhattan((*spawn_point)->pos));
+
+			if (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+			{
+				nearest_spawners_points = (*spawn_point);
+				last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			}
+		}
+	}
+	else
+	{
+		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
+		{
+			float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
+
+			if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
+				/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
+				&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+				&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
+			{
+				nearest_spawners_points = (*spawn_point);
+				last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			}
 		}
 	}
 
+
 	if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
 	{
-		check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
-		uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
-		if (number_of_enemies <= teleport_enemies_max)
+		
+		if (number_of_enemies <= min_num_instant_teleport_enemies)
 		{
-			check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+			check_teleport_time = 0;
+		}
+		else
+		{
+			check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
+			if (number_of_enemies <= teleport_enemies_max)
+			{
+				check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+			}
+
 		}
 		teleport_spawnpoint = nearest_spawners_points;
 		state = ENEMY_STATE::TELEPORT_IN;
@@ -619,7 +654,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 				life -= collider->damage;
 
 				damaged_sprite_timer.Start();
-				last_texture = curr_tex;
+			//	last_texture = curr_tex;
 				curr_tex = tex_damaged;
 				damaged = true;
 
@@ -787,7 +822,7 @@ void Obj_Enemy::Oiled()
 			curr_tex = oiled_tex;
 			damaged = true;
 		}
-		speed = original_speed*0.5f;
+		speed = original_speed*0.25f;
 
 		if (oiled_timer.Read() >= 5000)
 		{

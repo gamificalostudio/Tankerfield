@@ -9,6 +9,7 @@
 #include "M_Textures.h"
 #include "M_Map.h"
 #include "M_Audio.h"
+#include "M_Input.h"
 
 //Bullets
 #include "Bullet_Missile.h"
@@ -80,7 +81,7 @@ void Obj_Tank::InitWeapons()
 	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
 	release_shot[(uint)WEAPON::BASIC] = &Obj_Tank::ReleaseBasicShot;
 
-	//SetWeapon(WEAPON::BASIC,1u);
+	
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -264,6 +265,13 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		}
 		break;
 	}
+
+		if (weapon_info.type == WEAPON_TYPE::CHARGED)
+		{
+			curr_text_charging = text_charging;
+			curr_anim_charging = anim_charging;
+		}
+	
 	
 }
 

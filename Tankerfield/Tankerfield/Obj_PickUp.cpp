@@ -23,6 +23,7 @@ Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 
 	frame.w = 1;
 	frame.h = 1;
+	Timer_to_delete.Start();
 	
 }
 
@@ -59,7 +60,14 @@ void Obj_PickUp::GenerationOfPickUp(PICKUP_TYPE type_of_pick_up, uint levels_to_
 
 bool Obj_PickUp::Update(float dt)
 {	
-
+	if (Timer_to_delete.ReadSec() >= 30)
+	{
+		for (uint i = 0; i < 4; ++i)
+		{
+			app->objectmanager->obj_tanks[i]->tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		}
+		DeletePickUp();
+	}
 	return true;
 }
 
