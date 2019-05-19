@@ -854,15 +854,19 @@ void Obj_Tank::ShootSustainedWeapon()
 	}
 
 	//- Quick shot
-	if ((ReleaseShot()
-		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-		&& sustained_shot_timer.ReadMs() <= quick_shot_time)
+	if (ReleaseShot())
 	{
-		(this->*shot1_function[(uint)weapon_info.weapon])();
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
-		app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
-		shot_timer.Start();
+		(this->*release_shot[(uint)weapon_info.weapon])();
+
+		if (shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
+			&& sustained_shot_timer.ReadMs() <= quick_shot_time
+			&& GetShotAutomatically())
+		{
+			(this->*shot1_function[(uint)weapon_info.weapon])();
+			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
+			shot_timer.Start();
+		}
 	}
 }
 

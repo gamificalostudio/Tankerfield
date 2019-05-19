@@ -52,28 +52,33 @@ bool Obj_FlamethrowerFlame::Update(float dt)
 		curr_anim = &fire_start;
 	}
 	
+
 	if (fire_start.Finished())
 	{
 		fire_start.Reset();
 		curr_anim = &fire;
 	}
 
+
 	if (fire.Finished())
 	{
-		if (is_holding == true)
-		{	
-			fire_start.Reset();
+		if (is_holding)
+		{
+			fire.Reset();
 		}
-		else {
+		else
+		{
 			fire.Reset();
 			curr_anim = &fire_end;
 		}
 	}
+
 	if (fire_end.Finished())
 	{
 		fire_end.Reset();
 		curr_anim = nullptr;
 	}
+
 	pos_map = tank->pos_map;
 
 	return true;
@@ -81,8 +86,6 @@ bool Obj_FlamethrowerFlame::Update(float dt)
 
 bool Obj_FlamethrowerFlame::Draw(float dt, Camera* camera)
 {
-	is_holding = false;
-
 	if (curr_anim != nullptr) {
 		app->render->BlitScaledAndRotated(
 			tex,
@@ -95,9 +98,6 @@ bool Obj_FlamethrowerFlame::Draw(float dt, Camera* camera)
 			pivot,
 			-tank->GetTurrAngle() - 90.f);
 	}
-
-
-
 
 	return true;
 }

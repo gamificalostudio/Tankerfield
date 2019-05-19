@@ -76,6 +76,8 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
 	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
 	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
+
+	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -502,6 +504,11 @@ bool Obj_Tank::GetIsElectroShotCharged() const
 std::vector<Object*>* Obj_Tank::GetEnemiesHitted() 
 {
 	return &enemies_hitted;
+}
+
+void Obj_Tank::ReleaseFlameThrower()
+{
+	flame->is_holding = false;
 }
 
 

@@ -120,6 +120,8 @@ private:
 	void ShootElectroShot();
 	void ShootElectroShotCharged();
 
+	void ReleaseFlameThrower();
+
 	//- TankDeath
 	void ReviveTank(float dt);
 	void StopTank();
@@ -197,6 +199,7 @@ private:
 	uint shot_sound							= 0u;
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
+	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot
 	bool show_crosshairs					= false;
 	bool shot_automatically					= false;
 
