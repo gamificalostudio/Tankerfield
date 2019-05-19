@@ -194,6 +194,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		weapon_info.shot1.recoil = 25;
+		weapon_info.shot2.recoil = 0;
 		break;
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
