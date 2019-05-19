@@ -1,13 +1,12 @@
 #include "Obj_OilPool.h"
 #include "M_Collision.h"
 #include "App.h"
+#include "M_Textures.h"
+#include "Animation.h"
+#include "M_AnimationBank.h"
 
-Obj_OilPool::Obj_OilPool(fPoint pos) : Object(pos)
+Obj_OilPool::Obj_OilPool(fPoint pos) : Obj_Bullet(pos)
 {
-	time.Start();
-
-	coll=app->collision->AddCollider(pos_map, 5, 5, TAG::OIL_POOL, BODY_TYPE::DYNAMIC);
-	coll->is_sensor = true;
 }
 
 Obj_OilPool::~Obj_OilPool()
@@ -20,6 +19,26 @@ bool Obj_OilPool::Update(float dt)
 	{
 		to_remove = true;
 	}
+
+	return true;
+}
+
+bool Obj_OilPool::Start()
+{
+	pugi::xml_node bullet_node = app->config.child("object").child("oil");
+
+	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
+	curr_anim = &anim;
+
+	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	curr_tex = tex;
+
+	draw_offset = { 150,0 };
+
+	time.Start();
+
+	coll = app->collision->AddCollider(pos_map, 5, 5, TAG::OIL_POOL, BODY_TYPE::DYNAMIC);
+	coll->is_sensor = true;
 
 	return true;
 }
