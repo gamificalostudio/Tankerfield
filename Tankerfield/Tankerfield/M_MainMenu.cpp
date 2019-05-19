@@ -26,7 +26,7 @@ bool M_MainMenu::Start()
 	button_enter_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_enter.wav", 20);
 	button_select_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_select.wav", 35);
 	button_error_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_error.wav", 35);
-	selection_finished_sfx = app->audio->LoadFx("audio/Fx/main_menu/selection_finished.wav", 35);
+	selection_finished_sfx = app->audio->LoadFx("audio/Fx/main_menu/selection_finished.wav", 40);
 
 	
 	// Create UI Elements ====================================
