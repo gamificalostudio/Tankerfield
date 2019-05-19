@@ -45,9 +45,9 @@
       </sounds>
   </scene>
   <map>
-    <folder>Maps/</folder>
+    <folder>Maps/test/</folder>
     <levels>
-      <level name="Map2.tmx"/>
+      <level name="test.tmx"/>
     </levels>
   </map>
   
@@ -83,13 +83,7 @@
     </animations>
   </ui>
   
-  <map>
-    <folder>Maps/</folder>
-    <levels>
-      <level name="Map2.tmx"/>
-      <!--<level name="test/test.tmx"/>-->
-    </levels>
-  </map>
+
   
   <pick_manager>
     <percentage_spawn_item_from_enemy value="5"/>
