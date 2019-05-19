@@ -800,6 +800,207 @@
         </rotate>
       </animations>
     </basic_bullet>
+    <basic_bullet_rocketlauncher>
+      <speed value ="1.2"/>
+      <life value ="1000"/>
+      <tex path="textures/objects/bullets/bullet_rocketlauncher.png"/>
+      <animations> 
+        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
+          <dir>
+            <frame x="0"   y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="0"   w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="42"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="84"  w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="126" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="168" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="210" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="252" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="294" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="67"  y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="134" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="201" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="268" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="335" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="402" y="336" w="67" h="42"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="378" w="67" h="42"/>
+          </dir>
+        </rotate>
+      </animations>
+    </basic_bullet_rocketlauncher>
     <charged_healing>
       <speed value ="0"/>
       <life value ="1000"/>

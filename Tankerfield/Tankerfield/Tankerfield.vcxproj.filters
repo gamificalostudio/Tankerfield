@@ -219,6 +219,9 @@
     <ClCompile Include="Obj_CannonFire.cpp">
       <Filter>Objects\Particles</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Bullet_RocketLauncher.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -462,6 +465,9 @@
     </ClInclude>
     <ClInclude Include="Obj_CannonFire.h">
       <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Bullet_RocketLauncher.h">
+      <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
