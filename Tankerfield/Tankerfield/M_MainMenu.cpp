@@ -38,38 +38,38 @@ bool M_MainMenu::Start()
 	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	// Main menu ------------------------------
-	menu_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
 
 	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, -200.f), UI_ImageDef({10, 710, 915, 260}));
 	logo_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	logo_image->SetParent(menu_peg);
 
 	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 40), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font, { 50, 50, 50, 255 }));
-	multi_player_button->SetParent(menu_peg);
-
-	app->ui->AddInteractiveElement(multi_player_button);
 
 	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 150.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font, { 50, 50, 50, 255 }));
-	exit_button->SetParent(menu_peg);
-
-	app->ui->AddInteractiveElement(exit_button);
 
 	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .0.5.7", app->font->label_font_38, {255,255,255,180}));
 	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
-	version_label->SetParent(menu_peg);
 
+	UI_InteractiveGroupDef menu_panel_def;
+	menu_panel_def.columns = 1;
+	menu_panel_def.rows = 2;
+
+	menu_panel = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
+	menu_panel->SetElement(multi_player_button, iPoint(0,0));
+	menu_panel->SetElement(exit_button, iPoint(0, 1));
 
 	// Selection screen ------------------------
 
 	float element_side = 126;
-	UI_InteractiveGroupDef def;
-	def.columns = DEFAULT_PANEL_COLUMNS;
-	def.rows = DEFAULT_PANEL_ROWS;
+	UI_InteractiveGroupDef selection_panel_def;
+	selection_panel_def.columns = DEFAULT_PANEL_COLUMNS;
+	selection_panel_def.rows = DEFAULT_PANEL_ROWS;
+	selection_panel_def.focus_indicator = app->ui->CreateImage({ 0.F,0.F }, UI_ImageDef({ 255, 265, 126,126 }));;
+
 	float offset = DEFAULT_PANEL_COLUMNS * element_side * 0.5f;
 
-	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, def, this);
+	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, selection_panel_def, this);
 
 	float color_value = 0.f;
 	float color_sum = 1.f / (DEFAULT_PANEL_COLUMNS * DEFAULT_PANEL_ROWS + 1);
@@ -86,7 +86,7 @@ bool M_MainMenu::Start()
 		}
 	}
 
-	selection_panel->SetFocus( iPoint(0, 0) );
+	selection_panel->SetFocusImage( iPoint(0, 0) );
 
 	fPoint tank_offset = { 280.f, 280.f };
 
@@ -142,29 +142,25 @@ bool M_MainMenu::PreUpdate()
 		return false;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
+	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		SetState(MENU_STATE::INIT_MENU);
+		if (players[i].controller == nullptr)
+		{
+			players[i].controller = app->input->GetAbleController();
+			players[i].tank->SetController(players[i].controller);
+		}
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
-	{
-		SetState(MENU_STATE::SELECTION);
-	}
-
-	if ( selection_able == true)
-	{
-		InputControllers();
-	}
+	InputNavigate();
+	InputSelect();
 
 	return true;
 }
 
 bool M_MainMenu::Update(float dt)
 {
-	if (selection_able == true)
+	if (menu_state == MENU_STATE::SELECTION)
 	{
-		selection_panel->SetController(players[current_player].controller);
 		players[current_player].tank->SetColor(selection_panel->GetFocusedElement()->color_mod);
 	}
 
@@ -181,23 +177,16 @@ bool M_MainMenu::PostUpdate(float dt)
 	float scale = 2.f;
 	SDL_Rect section = { 256, 400, 160, 96 };
 
-	switch (menu_state)
+	if (menu_state == MENU_STATE::SELECTION || menu_state == MENU_STATE::CHANGE_SCENE)
 	{
-	case MENU_STATE::INIT_MENU:
-		break;
-	case MENU_STATE::SELECTION:
-
 		app->render->DrawQuad((SDL_Rect)app->win->GetWindowRect(), 0, 0, 0, 180);
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			app->render->BlitScaled(app->ui->GetAtlas(), players[i].tank_pos.x - section.w * 0.5f * scale, players[i].tank_pos.y - section.h * 0.5f * scale + 8.f, camera, &section, scale, scale);
 		}
-
-		break;
-	case MENU_STATE::OPTIONS:
-		break;
 	}
+
 	return true;
 }
 
@@ -214,28 +203,6 @@ bool M_MainMenu::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-bool M_MainMenu::OnHoverRepeat(UI_Element * element)
-{
-	if (element == selection_panel && selection_able == true)
-	{
-		InputMouse();
-	}
-	return true;
-}
-
-bool M_MainMenu::ClickUp(UI_Element * element)
-{
-	if (element == multi_player_button)
-	{
-		SetState(MENU_STATE::SELECTION);
-	}
-	else if (element == exit_button)
-	{
-		exit_game = true;
-	}
-	return true;
-}
-
 void M_MainMenu::SetState(MENU_STATE new_state)
 {
 	fRect screen = app->win->GetWindowRect();
@@ -244,8 +211,10 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
-		selection_able = false;
-		menu_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
+		menu_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		logo_image->SetState(ELEMENT_STATE::VISIBLE);
+
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
 		control_helper_label->SetText("Acept");
@@ -259,10 +228,15 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 
 	case MENU_STATE::SELECTION:
-		selection_able = true;
+		//Set Values -------------------------------------------
+
 		current_player = 0;
 		ResetPanelColors();
-		menu_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+
+		// Set visible elements --------------------------------
+		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		logo_image->SetState(ELEMENT_STATE::HIDDEN);
+
 		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		control_helper_label->SetPos(screen_center + fPoint( 40, 350));
 		control_helper_label->SetText("Select Color");
@@ -274,39 +248,93 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		}
 
 		break;
-
-	case MENU_STATE::OPTIONS:
-		break;
 	}
 
 	menu_state = new_state;
 
 }
 
-void M_MainMenu::InputControllers()
+void M_MainMenu::InputNavigate()
 {
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+
+	int player_num = -1;
+	UI_InteractiveGroup* panel = nullptr;
+
+	if (menu_state == MENU_STATE::INIT_MENU)
 	{
-		if (players[i].controller == nullptr)
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			players[i].controller = app->input->GetAbleController();
-			players[i].tank->SetController(players[i].controller);
+			if (players[i].controller != nullptr)
+			{
+				menu_panel->AndleControllerINavigation((*players[i].controller));
+			}
+		}
+
+		menu_panel->AndleKeyboardNavigation();
+
+	}
+	else if (menu_state == MENU_STATE::SELECTION)
+	{
+		if (players[current_player].controller != nullptr)
+		{
+			selection_panel->AndleControllerINavigation((*players[current_player].controller));
+		}
+
+		selection_panel->AndleKeyboardNavigation();
+	}
+}
+
+void M_MainMenu::InputSelect()
+{
+	bool input_select_controller = false;
+
+	if (menu_state == MENU_STATE::INIT_MENU)
+	{
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+		{
+			if (players[i].controller != nullptr && (*players[i].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			{
+				input_select_controller = true;
+			}
+		}
+	}
+	else if (menu_state == MENU_STATE::SELECTION)
+	{
+		if (players[current_player].controller != nullptr &&  (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		{
+			input_select_controller = true;
 		}
 	}
 
-	if (players[current_player].controller != nullptr && (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+	if (app->input->GetMouseButton(1) == KEY_UP)
 	{
-		SetPlayerProperties();
+		input_select_controller = true;
 	}
+
+	if (input_select_controller == true)
+	{
+		if (menu_state == MENU_STATE::SELECTION && selection_panel->GetFocusedElement() != nullptr )
+		{
+			SetPlayerProperties();
+		}
+
+		if ( menu_state == MENU_STATE::INIT_MENU && app->ui->GetFocusedElement() != nullptr)
+		{
+			UI_Element*  menu_element = menu_panel->GetFocusedElement();
+
+			if (menu_element == multi_player_button)
+			{
+				SetState(MENU_STATE::SELECTION);
+			}
+			else if (menu_element == exit_button)
+			{
+				exit_game = true;
+			}
+		}
+	}
+
 }
 
-void M_MainMenu::InputMouse()
-{
-	if (app->input->GetMouseButton(1) == KEY_DOWN)
-	{
-		SetPlayerProperties();
-	}
-}
 
 void M_MainMenu::SetPlayerProperties()
 {
@@ -333,7 +361,7 @@ void M_MainMenu::SetPlayerProperties()
 	if (current_player == MAX_PLAYERS)
 	{
 		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
-		selection_able = false;
+		menu_state = MENU_STATE::CHANGE_SCENE;
 	}
 }
 
@@ -355,7 +383,7 @@ void M_MainMenu::ResetPanelColors()
 		}
 	}
 
-	selection_panel->SetFocus(iPoint(0, 0));
+	selection_panel->SetFocusImage(iPoint(0, 0));
 }
 
 SDL_Color M_MainMenu::GetColor(float value)

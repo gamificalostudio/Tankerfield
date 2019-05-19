@@ -77,7 +77,7 @@ enum class UI_INPUT_TYPE
 	KEYBOARD
 };
 
-enum class CONTROLLER_DIR
+enum class INPUT_DIR
 {
 	NO_DIR,
 	UP,
@@ -241,6 +241,8 @@ public:
 
 	// Object functions ----------------------------------------------------------
 
+	void SetFocusedElement(UI_Element* element);
+
 	UI_Element*  GetFocusedElement();
 
 	UI_INPUT_TYPE GetInputType();
@@ -290,9 +292,9 @@ private:
 
 	UI_Element* main_in_game_element = nullptr;
 
-	UI_Element* selected_element = nullptr;
+	UI_Element* focused_element = nullptr;
 
-	FocusState click_state = FocusState::NONE;
+	FocusState focus_state = FocusState::NONE;
 
 	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
 

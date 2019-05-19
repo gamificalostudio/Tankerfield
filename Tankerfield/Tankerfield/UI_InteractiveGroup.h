@@ -5,13 +5,13 @@
 #include "Point.h"
 #include "M_UI.h"
 
-struct Controller;
 class UI_Quad;
 
 struct UI_InteractiveGroupDef : public UI_ElementDef
 {
 	uint columns = 0u;
 	uint rows = 0u;
+	UI_Image*  focus_indicator = nullptr;
 };
 
 class UI_InteractiveGroup : public UI_Element , public UI_Listener
@@ -20,23 +20,23 @@ public:
 
 	UI_InteractiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener *listener);
 
-	~UI_InteractiveGroup();
-
 	void Destroy();
-
-	bool Update(float dt);
 
 	bool OnHoverEnter(UI_Element* object);
 
+	void AndleControllerINavigation(Controller* controller);
+
+	void AndleKeyboardNavigation();
+
 	bool OnHoverRepeat(UI_Element* object);
+
+	bool OnHoverExit(UI_Element * object);
 
 public:
 
-	void SetFocus(iPoint point);
+	void SetFocusImage(iPoint point);
 
 	void SetElement( UI_Element* element, const iPoint position);
-
-	void SetController(Controller ** controller);
 
 	UI_Element * GetElement(iPoint position);
 
@@ -44,9 +44,9 @@ public:
 
 	iPoint GetPos(UI_Element* element);
 
-private:
+	void SetNearestElement(const INPUT_DIR dir);
 
-	iPoint GetNearestElement(const iPoint current_focus_pos, const CONTROLLER_DIR dir);
+private:
 
 	iPoint GetFirstAvailableElement();
 
@@ -56,8 +56,7 @@ private:
 	uint rows = 0u;
 
 	iPoint current_focus_pos = { 0,0 };
-	UI_Image*  focus_image = nullptr;
-	Controller ** current_controller = nullptr;
+	UI_Image*  focus_indicator = nullptr;
 	UI_Element** group_elements = nullptr;
 };
 
