@@ -101,16 +101,14 @@
         <tex_oiled_path>textures/Objects/enemies/shk-sheet_oiled.png</tex_oiled_path>
         <tex_portal>textures/Objects/enemies/portal.png</tex_portal>
       </tesla_trooper>
+      <rocket_launcher>
+        <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
+      </rocket_launcher>
+      <suicidal>
+        <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
+      </suicidal>
     </enemies>
     
-    <!--TOOD: Put in enemies node-->
-    <rocket_launcher>
-      <tex_path>textures/Objects/enemies/flakt-sheet.png</tex_path>
-    </rocket_launcher>
-    
-    <suicidal>
-      <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
-    </suicidal>
 
     <tank>
       <speed value ="1"/>
