@@ -578,7 +578,7 @@ void M_Scene::CreateEnemyWave()
 
 void M_Scene::NewWave()
 {
-	Tesla_trooper_units = 10 * round * 4;
+	Tesla_trooper_units = 50 + 20 * round;
 	Tesla_trooper_units *= percentage_enemies_subround[subround];
 
 	if (round >= 2)

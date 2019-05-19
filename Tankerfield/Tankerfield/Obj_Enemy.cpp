@@ -362,27 +362,45 @@ inline void Obj_Enemy::GetTeleportPoint()
 	float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
 	SpawnPoint* nearest_spawners_points = nullptr;
 	float last_distance_to_spawnpoint = 0.f;
-
-	for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
+	uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
+	float min_num_instant_teleport_enemies = 10;
+	if (number_of_enemies <= min_num_instant_teleport_enemies)
 	{
-		float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
-
-		if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
-			/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
-			&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
-			&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
+		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
 		{
-			nearest_spawners_points = (*spawn_point);
-			last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			float distance_to_this_spawnpoint = (target->pos_map.DistanceManhattan((*spawn_point)->pos));
+
+			if (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+			{
+				nearest_spawners_points = (*spawn_point);
+				last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			}
+		}
+	}
+	else
+	{
+		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
+		{
+			float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
+
+			if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
+				/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
+				&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+				&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
+			{
+				nearest_spawners_points = (*spawn_point);
+				last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			}
 		}
 	}
 
+
 	if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
 	{
-		uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
-		if (number_of_enemies <= 5)
+		
+		if (number_of_enemies <= min_num_instant_teleport_enemies)
 		{
-			check_teleport_time = 1;
+			check_teleport_time = 0;
 		}
 		else
 		{
