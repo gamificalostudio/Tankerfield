@@ -30,6 +30,7 @@ public:
 	
 	void Spawn(const float& dt) override;
 	void Attack() override;
+	void ShootMissile();
 
 private:
 	iPoint spawn_draw_offset = { 0, 0 };

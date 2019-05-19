@@ -128,8 +128,8 @@
   <ItemGroup>
     <ClCompile Include="Bullet_Laser.cpp" />
     <ClCompile Include="Bullet_Oil.cpp" />
+    <ClCompile Include="Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Obj_Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Obj_ElectroShotAnimation.cpp" />
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="HealingShot_Area.cpp" />
@@ -206,8 +206,8 @@
     <ClInclude Include="Balance.h" />
     <ClInclude Include="Bullet_Laser.h" />
     <ClInclude Include="Bullet_Oil.h" />
+    <ClInclude Include="Bullet_RocketLauncher.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Obj_Bullet_RocketLauncher.h" />
     <ClInclude Include="Obj_ElectroShotAnimation.h" />
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="HealingShot_Area.h" />

@@ -56,7 +56,7 @@ bool M_Audio::Start()
 	else
 	{
 		Mix_VolumeMusic(20);
-		Mix_AllocateChannels(16);
+		Mix_AllocateChannels(100);
 	}
 	explosion_fx = LoadFx("audio/Fx/explosion.wav");
 

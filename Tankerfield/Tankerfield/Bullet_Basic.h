@@ -13,8 +13,11 @@ public:
 	Bullet_Basic(fPoint pos);
 	~Bullet_Basic();
 
+
 public:
 	//Add functions that are overriden
+	bool Start();
+	uint shot_sound = 0u;
 };
 
 #endif

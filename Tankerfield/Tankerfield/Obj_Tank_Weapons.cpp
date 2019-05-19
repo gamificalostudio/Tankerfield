@@ -69,7 +69,6 @@ void Obj_Tank::InitWeapons()
 	}
   
 	charge_time = 2500.f; // Same for all bullets (player gets used to it)
-	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
@@ -79,6 +78,9 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 
 	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
+	release_shot[(uint)WEAPON::BASIC] = &Obj_Tank::ReleaseBasicShot;
+
+	//SetWeapon(WEAPON::BASIC,1u);
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -123,27 +125,29 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	switch (type)
 	{
 	case WEAPON::BASIC:
-		weapon_info.type = WEAPON_TYPE::CHARGED;
+		weapon_info.type = WEAPON_TYPE::SUSTAINED;
+		weapon_info.quick_shot_time = 0.f;
 		weapon_info.shot1.bullet_damage = app->objectmanager->basic_weapon_info.damage_multiplier * pow(app->objectmanager->basic_weapon_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = app->objectmanager->basic_weapon_info.speed;
-		weapon_info.shot1.time_between_bullets = 250;
-		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.54f;
-		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.3f;
-		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 250;
-		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.time_between_bullets = 100;
+		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.f;
+		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
+		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 100;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
+		weapon_info.quick_shot_time = 500.f;
 		weapon_info.shot1.bullet_damage = app->objectmanager->flamethrower_info.damage_multiplier * pow(app->objectmanager->flamethrower_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 10;
 		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.56f;
+		weapon_info.shot1.trauma = 0.0f;
 		weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = 0.92f;
 		weapon_info.shot1.rumble_duration = 250;
@@ -235,7 +239,6 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
-		//electro_shot_collider->damage = weapon_info.bullet_damage;
 		//add width and height here?
 		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
 		{
@@ -254,15 +257,19 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 
 void Obj_Tank::ShootBasic()
 {
-	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
-	bullet->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+	if (shot_timer_basic_bullet.ReadMs() >= weapon_info.shot1.time_between_bullets)
+	{
+		Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
+		bullet->SetBulletProperties(
+			weapon_info.shot1.bullet_speed,
+			weapon_info.shot1.bullet_life_ms,
+			weapon_info.shot1.bullet_damage,
+			shot_dir,
+			atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
-	bullet->SetPlayer(this);
+		bullet->SetPlayer(this);
+		shot_timer_basic_bullet.Start();
+	}
 }
 
 void Obj_Tank::ShootDoubleMissile()
