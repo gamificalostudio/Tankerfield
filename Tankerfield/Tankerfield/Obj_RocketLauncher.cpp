@@ -50,7 +50,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	original_speed = speed = app->objectmanager->rocket_launcher_info.speed;
 
 	//spawn_draw_offset = { 49, 50 };
-	normal_draw_offset = { 49, 50 };
+	normal_draw_offset = { 60, 60 };
 	electrocuted_draw_offset = { 35, 30 };
 	draw_offset = normal_draw_offset;
 
@@ -62,7 +62,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	
 	check_path_time = 2.0f;
 
-	scale = 0.75f;
+	scale = 1.f;
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;

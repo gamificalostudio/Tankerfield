@@ -306,14 +306,16 @@ bool M_Scene::Update(float dt)
 		wind_sound_channel = app->audio->PlayFx(wind_sound_uint);
 		
 		game_state = GAME_STATE::OUT_WAVE;
-
+		general_gui->RoundFX();
 		break;
 	}
 	case GAME_STATE::OUT_WAVE:
+
 		if (timer_between_waves.ReadSec() >= 3 || AllPlayersReady())
 		{
 			game_state = GAME_STATE::ENTER_IN_WAVE;
 		}
+
 		break;
 
 	case GAME_STATE::GAME_OVER:
