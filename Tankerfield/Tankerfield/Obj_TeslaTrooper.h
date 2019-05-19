@@ -40,8 +40,6 @@ private:
 	inline void UpdateVelocity();
 
 	Animation spawn_anim;
-	bool draw							= true;
-
 	
 	SDL_Texture * explosion_apper_tex	= nullptr;
 
