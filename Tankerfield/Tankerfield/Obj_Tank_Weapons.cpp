@@ -69,7 +69,6 @@ void Obj_Tank::InitWeapons()
 	}
   
 	charge_time = 2500.f; // Same for all bullets (player gets used to it)
-	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
@@ -80,6 +79,8 @@ void Obj_Tank::InitWeapons()
 
 	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
 	release_shot[(uint)WEAPON::BASIC] = &Obj_Tank::ReleaseBasicShot;
+
+	//SetWeapon(WEAPON::BASIC,1u);
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -125,12 +126,13 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	{
 	case WEAPON::BASIC:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
+		weapon_info.quick_shot_time = 0.f;
 		weapon_info.shot1.bullet_damage = app->objectmanager->basic_weapon_info.damage_multiplier * pow(app->objectmanager->basic_weapon_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = app->objectmanager->basic_weapon_info.speed;
-		weapon_info.shot1.time_between_bullets = 250;
+		weapon_info.shot1.time_between_bullets = 100;
 		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.1f;
 		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
 		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 100;
@@ -138,6 +140,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
+		weapon_info.quick_shot_time = 500.f;
 		weapon_info.shot1.bullet_damage = app->objectmanager->flamethrower_info.damage_multiplier * pow(app->objectmanager->flamethrower_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;

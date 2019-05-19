@@ -919,7 +919,7 @@ void Obj_Tank::ShootSustainedWeapon()
 
 	//- Sustained shot
 	if (HoldShot()
-		&& sustained_shot_timer.ReadMs() > quick_shot_time)
+		&& sustained_shot_timer.ReadMs() > weapon_info.quick_shot_time)
 	{
 		(this->*shot2_function[(uint)weapon_info.weapon])();
 		//TODO: Play wepon sfx
@@ -930,7 +930,7 @@ void Obj_Tank::ShootSustainedWeapon()
 	if (ReleaseShot())
 	{
 		if (shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-			&& sustained_shot_timer.ReadMs() <= quick_shot_time
+			&& sustained_shot_timer.ReadMs() <= weapon_info.quick_shot_time
 			&& GetShotAutomatically())
 		{
 			(this->*shot1_function[(uint)weapon_info.weapon])();
