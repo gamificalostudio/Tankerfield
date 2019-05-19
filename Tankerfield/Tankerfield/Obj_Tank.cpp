@@ -835,6 +835,10 @@ void Obj_Tank::ShootChargedWeapon()
 		{
 			this->curr_speed = charged_shot_speed;
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
+			if (camera_player->GetShakeAmount() <= 0.05f)
+			{
+				camera_player->AddTrauma(0.02f);
+			}
 
 		}
 	}
