@@ -91,8 +91,8 @@ General_GUI::General_GUI()
 	input_def.font = app->font->label_font_24;
 	input_def.max_characters = 10;
 	input_def.default_text_color = { 200, 200,200,255 };
-
-	input_text = app->ui->CreateInputText(screen_center - fPoint( 0, 400.f), input_def);
+	input_def.default_text = "Enter your squad name";
+;	input_text = app->ui->CreateInputText(screen_center - fPoint( 0, 400.f), input_def);
 	input_text->alpha = 0.f;
 
 	// General HUD =================================================
