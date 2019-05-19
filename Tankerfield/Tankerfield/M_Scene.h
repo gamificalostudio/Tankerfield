@@ -51,7 +51,7 @@ public:
 
 	General_GUI * general_gui		= nullptr;
 
-	uint round		= 0;
+	uint round		= 0u;
 
 	GAME_STATE game_state			= GAME_STATE::NO_TYPE;
 
@@ -110,14 +110,14 @@ private:
 	bool test_path = true;
 
 	iPoint path_tex_offset = { -30, 0 };
-	uint initial_num_enemies = 0;
+	uint initial_num_enemies = 0u;
 private:
 
 	/* Game variables*/
 	bool game_over = false;
 	bool win_game = false;
 
-	int rounds_to_win = NULL;
+	int rounds_to_win = 0;
 	float accumulated_time = 0.0f;
 
 	// Every two seconds we check
@@ -127,9 +127,10 @@ private:
 	/* Wave System */
 	int time_between_rounds[MAX_SUBROUNDS] = { 0,0,0 };
 
-	uint Tesla_trooper_units			= 0;
-
-	uint Brute_units					= 0;
+	uint Tesla_trooper_units			= 0u;
+	uint Brute_units					= 0u;
+	uint Suicidal_units					= 0u;
+	uint RocketLauncher_units			= 0u;
 
 	float percentage_enemies_subround[MAX_SUBROUNDS] = { 0.f,0.f,0.f };
 

@@ -100,6 +100,9 @@ private:
 
 	// Selection screen --------------------------------
 
+	UI_Element      *player_labels_peg = nullptr;
+	UI_Label*        player_labels[4];
+
 	Player_Selection     players[MAX_PLAYERS];
 	int                  current_player = 0;
 

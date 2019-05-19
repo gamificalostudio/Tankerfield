@@ -55,13 +55,10 @@ bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
 	Attack();
-	if(oiled)
+	if(oiled && state != ENEMY_STATE::BURN)
 		Oiled();
 
-	if (damaged)
-	{
 		ChangeTexture();
-	}
 
 	if (life_collider != nullptr)
 		life_collider->SetPosToObj();
@@ -71,11 +68,11 @@ bool Obj_Enemy::Update(float dt)
 
 void Obj_Enemy::ChangeTexture()
 {
-	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
-		curr_tex != tex && 
+	if (damaged && state != ENEMY_STATE::BURN &&
 		state != ENEMY_STATE::STUNNED &&
 		state != ENEMY_STATE::STUNNED_CHARGED &&
-		!oiled &&
+		!oiled && damaged_sprite_timer.Read() > damaged_sprite_time &&
+		curr_tex != tex &&
 		bool_electro_dead == false)
 	{
 		curr_tex = last_texture;
@@ -526,7 +523,16 @@ inline void Obj_Enemy::Burn(const float & dt)
 		fire_damage = life / 3;
 		if (burn_texture != nullptr)
 			curr_tex = burn_texture;
-
+		oiled = false;
+		speed = original_speed;
+	/*	if (coll != nullptr)
+		{
+			coll->to_destroy = true;
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->to_destroy = true;
+		}*/
 	
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
@@ -603,142 +609,162 @@ inline void Obj_Enemy::Stunned()
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider)
 {
-	if (collider->GetTag() == TAG::BULLET_LASER)
+	if (state != ENEMY_STATE::BURN)
 	{
-		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
-		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
+		if (collider->GetTag() == TAG::BULLET_LASER)
 		{
-			life -= collider->damage;
+			Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
+			if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
+			{
+				life -= collider->damage;
 
+				damaged_sprite_timer.Start();
+				last_texture = curr_tex;
+				curr_tex = tex_damaged;
+				damaged = true;
+
+				if (life <= 0)
+				{
+
+					state = ENEMY_STATE::DEAD;
+				}
+				else
+				{
+					app->audio->PlayFx(sfx_hit);
+				}
+
+
+				if (!obj->charged)
+				{
+					++obj->kill_counter;
+					if (obj->kill_counter >= obj->kill_counter_max)
+					{
+						obj->to_remove = true;
+
+					}
+				}
+			}
+
+		}
+
+		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
+		{
+			ReduceLife(collider);
+		}
+		else if (collider->GetTag() == TAG::BULLET_OIL)
+		{
+
+			life -= collider->damage;
+			oiled = true;
+			oiled_timer.Start();
 			damaged_sprite_timer.Start();
-			last_texture = curr_tex;
 			curr_tex = tex_damaged;
-			damaged = true;
 
 			if (life <= 0)
 			{
-				
+				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = ENEMY_STATE::DEAD;
 			}
 			else
 			{
 				app->audio->PlayFx(sfx_hit);
 			}
+		}
 
-
-			if (!obj->charged)
+		else if (collider->GetTag() == TAG::OIL_POOL)
+		{
+			oiled = true;
+			oiled_timer.Start();
+		}
+		else if (collider->GetTag() == TAG::FLAMETHROWER)
+		{
+			if (oiled)
 			{
-				++obj->kill_counter;
-				if (obj->kill_counter >= obj->kill_counter_max)
-				{
-					obj->to_remove = true;
-
-				}
+				state = ENEMY_STATE::BURN;
+			}
+			else
+			{
+				ReduceLife(collider);
 			}
 		}
-
 	}
-
 	
-	
-	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
-	{
-		damaged = true;
-		life -= collider->damage;
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
-		{
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = ENEMY_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}
-	}
-	else if (collider->GetTag() == TAG::BULLET_OIL)
-	{
-		
-		life -= collider->damage;
-		oiled = true;
-		oiled_timer.Start();
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
-		{
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = ENEMY_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}
-	}
-
-	else if (collider->GetTag() == TAG::OIL_POOL)
-	{
-		oiled = true;
-		oiled_timer.Start();
-	}
 }
 
 void Obj_Enemy::OnTrigger(Collider * collider)
 {
-	if (collider->GetTag() == TAG::ELECTRO_SHOT)
+	if (state != ENEMY_STATE::BURN)
 	{
-		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
-
-		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
+		if (collider->GetTag() == TAG::ELECTRO_SHOT)
 		{
-			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
+			Obj_Tank* player = (Obj_Tank*)collider->GetObj();
 
-			electro_anim->tank = player;
-			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
-			electro_anim->enemy_pos_screen = pos_screen;
-			electro_anim->enemy_pos_map = pos_map;
-			electro_anim->hit_no_enemie = false;
-
-			player->GetEnemiesHitted()->push_back(this);
-			player->hit_no_enemie = false;
-
-			life -= collider->damage;
-
-			damaged_sprite_timer.Start();
-
-
-			if (life <= 0)
+			if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
 			{
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				state = ENEMY_STATE::DEAD;
-				is_electro_dead = true;
+				Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
 
-			}
-			else
-			{
-				app->audio->PlayFx(sfx_hit);
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				state_saved = state;
+				electro_anim->tank = player;
+				electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
+				electro_anim->enemy_pos_screen = pos_screen;
+				electro_anim->enemy_pos_map = pos_map;
+				electro_anim->hit_no_enemie = false;
 
-				anim_saved = curr_anim;
+				player->GetEnemiesHitted()->push_back(this);
+				player->hit_no_enemie = false;
 
-				state = ENEMY_STATE::STUNNED;
-				if (player->GetIsElectroShotCharged())
+				life -= collider->damage;
+
+				damaged_sprite_timer.Start();
+
+
+				if (life <= 0)
 				{
-					stun_charged = true;
+					channel_electrocuted = app->audio->PlayFx(electocuted);
+					state = ENEMY_STATE::DEAD;
+					is_electro_dead = true;
+
 				}
 				else
 				{
-					stun_charged = false;
+					app->audio->PlayFx(sfx_hit);
+					channel_electrocuted = app->audio->PlayFx(electocuted);
+					state_saved = state;
+
+					anim_saved = curr_anim;
+
+					state = ENEMY_STATE::STUNNED;
+					if (player->GetIsElectroShotCharged())
+					{
+						stun_charged = true;
+					}
+					else
+					{
+						stun_charged = false;
+					}
 				}
 			}
-		}
 
-		else
+			else
+			{
+				LOG("inside");
+			}
+		}
+		else if (collider->GetTag() == TAG::BULLET)
 		{
-			LOG("inside");
+			Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+			WeaponInfo weapon_info = player->GetWeaponInfo();
+
+		}
+		else if (collider->GetTag() == TAG::FLAMETHROWER)
+		{
+			if (oiled)
+			{
+				state = ENEMY_STATE::BURN;
+			}
+			else
+			{
+				ReduceLife(collider);
+			}
 		}
 	}
 }
@@ -768,5 +794,24 @@ void Obj_Enemy::Oiled()
 			oiled = false;
 			speed = original_speed;
 		}
+}
 
+inline void Obj_Enemy::ReduceLife(Collider * collider)
+{
+	life -= collider->damage;
+
+	damaged_sprite_timer.Start();
+	last_texture = curr_tex;
+	curr_tex = tex_damaged;
+	damaged = true;
+
+	if (life <= 0)
+	{
+		app->pick_manager->PickUpFromEnemy(pos_map);
+		state = ENEMY_STATE::DEAD;
+	}
+	else
+	{
+		app->audio->PlayFx(sfx_hit);
+	}
 }

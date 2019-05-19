@@ -240,7 +240,7 @@ bool Obj_Tank::Start()
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
 		flame_coll_w,
 		flame_coll_h,
-		TAG::BULLET,
+		TAG::FLAMETHROWER,
 		BODY_TYPE::DYNAMIC,
 		50.f,
 		this);
@@ -353,7 +353,7 @@ void Obj_Tank::Movement(float dt)
 
 	if (!iso_dir.IsZero())
 	{
-		if (movement_timer.ReadSec() >= 0.7)
+		if (movement_timer.ReadSec() >= 0.7f)
 		{
 			movement_timer.Start();
 		}
@@ -400,13 +400,13 @@ void Obj_Tank::ShotRecoilMovement(float &dt)
 		if (charged_shot_timer.ReadMs() < charge_time)
 		{
 			//set the max velocity in a basic shot
-			velocity_recoil_curr_speed = velocity_recoil_speed_max;
+			velocity_recoil_curr_speed = weapon_info.shot1.recoil;
 		}
 
 		//Item Happy hour activated
 		else if (GetShotAutomatically())
 		{
-			velocity_recoil_curr_speed = velocity_recoil_speed_max * 0.75f;
+			velocity_recoil_curr_speed = weapon_info.shot1.recoil * 0.75f;
 		}
 
 		//- Charged shot
@@ -689,7 +689,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 
-			if (app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract())
+			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
 				SetPickUp(pick_up);
@@ -1182,7 +1182,9 @@ void Obj_Tank::Item()
 		new_item->Use();
 		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
+		
 	}
+	picking = false;
 }
 
 
@@ -1198,6 +1200,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	}
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();
+	picking = true;
 }
 
 void Obj_Tank::SetGui(Player_GUI * gui)
