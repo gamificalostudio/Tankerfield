@@ -49,12 +49,12 @@ bool M_MainMenu::Start()
 	logo_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 40), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font, { 50, 50, 50, 255 }));
+	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 150.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font, { 50, 50, 50, 255 }));
+	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .0.5.7", app->font->label_font_38, {255,255,255,180}));
+	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .1.0.0", app->font->label_font_38, {255,255,255,180}));
 	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 
 	UI_InteractiveGroupDef menu_panel_def;
@@ -66,6 +66,7 @@ bool M_MainMenu::Start()
 	menu_panel->SetElement(exit_button, iPoint(0, 1));
 
 	// Selection screen ------------------------
+	player_labels_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
 
 	float element_side = 126;
 	UI_InteractiveGroupDef selection_panel_def;
@@ -98,24 +99,34 @@ bool M_MainMenu::Start()
 
 	for (int i = 0; i < 4; ++i)
 	{
+		std::string player_string;
+
 		switch (i)
 		{
 		case 0:
 			players[i].tank_pos = { screen.GetLeft() + tank_offset.x, screen.GetTop() + tank_offset.y };
+			player_string = "PLAYER 1";
 			break;
 		case 1:
 			players[i].tank_pos = { screen.GetRight() - tank_offset.x, screen.GetTop() + tank_offset.y };
+			player_string = "PLAYER 2";
 			break;
 		case 2:
 			players[i].tank_pos = { screen.GetLeft() + tank_offset.x, screen.GetBottom() - tank_offset.y };
+			player_string = "PLAYER 3";
 			break;
 		case 3:
 			players[i].tank_pos = { screen.GetRight() - tank_offset.x, screen.GetBottom() - tank_offset.y };
+			player_string = "PLAYER 4";
 			break;
 		}
 
 		players[i].tank = (Obj_Tank_MainMenu*)app->objectmanager->CreateObject(ObjectType::TANK_MAIN_MENU, players[i].tank_pos);
 		players[i].tank->is_isometric = false;
+
+		player_labels[i] = app->ui->CreateLabel(players[i].tank_pos + fPoint(0, 150), UI_LabelDef(player_string, app->font->button_font_40, { 220, 220,220,255 }));
+		player_labels[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+		player_labels[i]->SetParent(player_labels_peg);
 	}
 
 	
@@ -222,10 +233,11 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
-
 		menu_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		logo_image->SetState(ELEMENT_STATE::VISIBLE);
+		version_label->SetState(ELEMENT_STATE::VISIBLE);
 
+		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
 		control_helper_label->SetText("Acept");
@@ -244,19 +256,26 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		current_player = 0;
 		ResetPanelColors();
 
-		// Set visible elements --------------------------------
-		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		logo_image->SetState(ELEMENT_STATE::HIDDEN);
-
-		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		control_helper_label->SetPos(screen_center + fPoint( 40, 350));
-		control_helper_label->SetText("Select Color");
-		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
-
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			players[i].tank->active = true;
 		}
+
+		player_labels[0]->color_mod = { 250, 20, 20, 255 };
+		player_labels[1]->color_mod = { 220, 220, 220, 255 };
+		player_labels[2]->color_mod = { 220, 220, 220, 255 };
+		player_labels[3]->color_mod = { 220, 220, 220, 255 };
+
+		// Set visible elements --------------------------------
+		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		logo_image->SetState(ELEMENT_STATE::HIDDEN);
+		version_label->SetState(ELEMENT_STATE::HIDDEN);
+
+		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		control_helper_label->SetPos(screen_center + fPoint( 40, 350));
+		control_helper_label->SetText("Select Color");
+		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
 
 		break;
 	}
@@ -395,13 +414,17 @@ bool M_MainMenu::SetPlayerProperties()
 
 	app->scene->tank_colors[current_player] = element_focused->color_mod;
 	element_focused->color_mod = color_2;
-
+	player_labels[current_player]->color_mod = { 220, 220, 220, 255 };
 	current_player += 1;
 
 	if (current_player == MAX_PLAYERS)
 	{
 		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
 		menu_state = MENU_STATE::CHANGE_SCENE;
+	}
+	else
+	{
+		player_labels[current_player]->color_mod = { 255, 20, 20, 255 };
 	}
 
 	return true;
