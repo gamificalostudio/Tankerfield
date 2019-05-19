@@ -523,7 +523,7 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
 	number_of_enemies += RocketLauncher_units;
-	number_of_enemies += Suicidal_units;
+	//number_of_enemies += Suicidal_units;
 
 	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
 
@@ -562,16 +562,16 @@ void M_Scene::CreateEnemyWave()
 		}
 	}
 
-	for (int i = 0; i < Suicidal_units; i++)
-	{
-		if (app->map->data.spawners_position_enemy.size() != 0)
-		{
-			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
+	//for (int i = 0; i < Suicidal_units; i++)
+	//{
+	//	if (app->map->data.spawners_position_enemy.size() != 0)
+	//	{
+	//		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+	//		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+	//		app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
 
-		}
-	}
+	//	}
+	//}
 
 
 }
@@ -585,7 +585,7 @@ void M_Scene::NewWave()
 	{
 		Brute_units += round - 1;
 		RocketLauncher_units += round - 1;
-		Suicidal_units += round - 1;
+		//Suicidal_units += round - 1;
 	}
 
 	CreateEnemyWave();
