@@ -250,8 +250,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
 		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
-		weapon_info.shot1.recoil = 25;
-		weapon_info.shot2.recoil = 50;
+		weapon_info.shot1.recoil = 0;
+		weapon_info.shot2.recoil = 0;
 
 		//add width and height here?
 		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
