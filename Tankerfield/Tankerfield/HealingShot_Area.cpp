@@ -8,6 +8,7 @@
 #include "Animation.h"
 #include "M_AnimationBank.h"
 #include "Object.h"
+#include "Obj_Tank.h"
 
 HealingShot_Area::HealingShot_Area(fPoint pos) : Obj_Bullet(pos)
 {
@@ -39,6 +40,8 @@ bool HealingShot_Area::Start()
 
 bool HealingShot_Area::Update(float dt)
 {
+	pos_map = tank_parent->pos_map;
+
 	if (anim.Finished())
 	{
 		to_remove = true;
