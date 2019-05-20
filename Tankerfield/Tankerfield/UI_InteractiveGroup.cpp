@@ -38,7 +38,7 @@ bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-bool UI_InteractiveGroup::AndleControllerINavigation( Controller* controller )
+bool UI_InteractiveGroup::HandleControllerINavigation( Controller* controller )
 {
 	bool ret = false;
 
@@ -66,7 +66,7 @@ bool UI_InteractiveGroup::AndleControllerINavigation( Controller* controller )
 	return ret;
 }
 
-bool UI_InteractiveGroup::AndleKeyboardNavigation()
+bool UI_InteractiveGroup::HandleKeyboardNavigation()
 {
 	bool ret = false;
 
