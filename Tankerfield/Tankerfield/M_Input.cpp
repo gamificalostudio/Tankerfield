@@ -335,9 +335,10 @@ void M_Input::UpdateControllers()
 		}
 
 		//Joysticks
-		for (int joystick = (uint)SDL_CONTROLLER_AXIS_LEFTX; joystick < SDL_CONTROLLER_AXIS_TRIGGERLEFT; ++joystick)
+		//for joysticks
+		for (int joystick = (uint)Joystick::LEFT; joystick < (uint)Joystick::LEFT * (uint)JoystickButton::MAX; joystick += 2)
 		{
-			int joystick_value = (*iter)->GetAxis((SDL_GameControllerAxis)joystick);
+			int joystick_value = (*iter)->GetAxis((SDL_GameControllerAxis)(joystick * 0.5f));
 			//1 value
 			if (joystick_value > 0)
 			{
@@ -348,7 +349,7 @@ void M_Input::UpdateControllers()
 			}
 			else
 			{
-				if ((*iter)->joystick_state[joystick] == KEY_REPEAT || (*iter)->trigger_state[joystick] == KEY_DOWN)
+				if ((*iter)->joystick_state[joystick] == KEY_REPEAT || (*iter)->joystick_state[joystick] == KEY_DOWN)
 					(*iter)->joystick_state[joystick] = KEY_UP;
 				else
 					(*iter)->joystick_state[joystick] = KEY_IDLE;
@@ -363,7 +364,7 @@ void M_Input::UpdateControllers()
 			}
 			else
 			{
-				if ((*iter)->joystick_state[joystick + 1] == KEY_REPEAT || (*iter)->trigger_state[joystick + 1] == KEY_DOWN)
+				if ((*iter)->joystick_state[joystick + 1] == KEY_REPEAT || (*iter)->joystick_state[joystick + 1] == KEY_DOWN)
 					(*iter)->joystick_state[joystick + 1] = KEY_UP;
 				else
 					(*iter)->joystick_state[joystick + 1] = KEY_IDLE;
