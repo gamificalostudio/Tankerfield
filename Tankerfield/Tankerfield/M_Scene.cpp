@@ -163,7 +163,7 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
-	LOG("Enemy number %i", number_of_enemies);
+	//LOG("Enemy number %i", number_of_enemies);
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{

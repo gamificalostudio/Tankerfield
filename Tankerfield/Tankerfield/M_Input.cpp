@@ -333,6 +333,46 @@ void M_Input::UpdateControllers()
 					(*iter)->trigger_state[trigger_pos_on_array] = KEY_IDLE;
 			}
 		}
+
+		//Joysticks
+		//for joysticks
+		int joystick_enum = 0;
+		for (int sdl_joystick = SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX; sdl_joystick < SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT; ++sdl_joystick)
+		{
+			int joystick_value = (*iter)->GetAxis((SDL_GameControllerAxis)(sdl_joystick));
+			//1 value
+			if (joystick_value > 0)
+			{
+				if ((*iter)->joystick_state[joystick_enum] == KEY_IDLE)
+					(*iter)->joystick_state[joystick_enum] = KEY_DOWN;
+				else
+					(*iter)->joystick_state[joystick_enum] = KEY_REPEAT;
+			}
+			else
+			{
+				if ((*iter)->joystick_state[joystick_enum] == KEY_REPEAT || (*iter)->joystick_state[joystick_enum] == KEY_DOWN)
+					(*iter)->joystick_state[joystick_enum] = KEY_UP;
+				else
+					(*iter)->joystick_state[joystick_enum] = KEY_IDLE;
+			}
+			++joystick_enum;
+			//-1 value
+			if (joystick_value < 0)
+			{
+				if ((*iter)->joystick_state[joystick_enum] == KEY_IDLE)
+					(*iter)->joystick_state[joystick_enum] = KEY_DOWN;
+				else
+					(*iter)->joystick_state[joystick_enum] = KEY_REPEAT;
+			}
+			else
+			{
+				if ((*iter)->joystick_state[joystick_enum] == KEY_REPEAT || (*iter)->joystick_state[joystick_enum] == KEY_DOWN)
+					(*iter)->joystick_state[joystick_enum] = KEY_UP;
+				else
+					(*iter)->joystick_state[joystick_enum] = KEY_IDLE;
+			}
+			++joystick_enum;
+		}
 	}
 }
 
@@ -354,12 +394,21 @@ Controller::Controller()
 {
 	memset(button_state, KEY_IDLE, sizeof(KeyState) * SDL_CONTROLLER_BUTTON_MAX);
 	memset(trigger_state, KEY_IDLE, sizeof(KeyState) * (SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT));
+	memset(joystick_state, KEY_IDLE, sizeof(KeyState) * (uint)INPUT_DIR::MAX * (uint)Joystick::MAX);
 }
 
 KeyState Controller::GetButtonState(SDL_GameControllerButton button)
 {
 	if (this != nullptr)
 		return button_state[button];
+	else
+		return KeyState::KEY_IDLE;
+}
+
+KeyState Controller::GetJoystickState(Joystick joystick, INPUT_DIR joystick_button)
+{
+	if (this != nullptr)
+		return joystick_state[(uint)joystick * (uint)(INPUT_DIR::MAX) + (uint)joystick_button];
 	else
 		return KeyState::KEY_IDLE;
 }

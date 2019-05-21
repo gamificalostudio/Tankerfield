@@ -250,8 +250,8 @@ private:
 	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
-	Joystick gamepad_move							= Joystick::INVALID;
-	Joystick gamepad_aim							= Joystick::INVALID;
+	Joystick gamepad_move							= Joystick::MAX;
+	Joystick gamepad_aim							= Joystick::MAX;
 	int dead_zone									= 0;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;

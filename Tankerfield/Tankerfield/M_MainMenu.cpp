@@ -296,14 +296,14 @@ void M_MainMenu::InputNavigate()
 		{
 			if (players[i].controller != nullptr)
 			{
-				if (menu_panel->AndleControllerINavigation((*players[i].controller)))
+				if (menu_panel->HandleControllerINavigation((*players[i].controller)))
 				{
 					app->audio->PlayFx(button_enter_sfx);
 				}
 			}
 		}
 
-		if (menu_panel->AndleKeyboardNavigation())
+		if (menu_panel->HandleKeyboardNavigation())
 		{
 			app->audio->PlayFx(button_enter_sfx);
 		}
@@ -314,13 +314,13 @@ void M_MainMenu::InputNavigate()
 	{
 		if (players[current_player].controller != nullptr)
 		{
-			if (selection_panel->AndleControllerINavigation((*players[current_player].controller)))
+			if (selection_panel->HandleControllerINavigation((*players[current_player].controller)))
 			{
 				app->audio->PlayFx(button_enter_sfx);
 			}
 		}
 
-		if (selection_panel->AndleKeyboardNavigation())
+		if (selection_panel->HandleKeyboardNavigation())
 		{
 			app->audio->PlayFx(button_enter_sfx);
 		}
