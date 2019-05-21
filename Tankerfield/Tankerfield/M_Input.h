@@ -36,6 +36,7 @@ enum KeyState
 	KEY_UP
 };
 
+//Order is based on SDL_GameControllerAxis, if changed, it will stop working
 enum class Joystick
 {
 	LEFT,
@@ -43,12 +44,13 @@ enum class Joystick
 	MAX
 };
 
+//Order is based on SDL_GameControllerAxis, if changed, it will stop working
 enum class JoystickButton
 {
 	JOYSTICK_LEFT,
 	JOYSTICK_RIGHT,
-	JOYSTCIK_UP,
 	JOYSTICK_DOWN,
+	JOYSTICK_UP,
 	MAX
 };
 

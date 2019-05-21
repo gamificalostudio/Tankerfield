@@ -336,39 +336,42 @@ void M_Input::UpdateControllers()
 
 		//Joysticks
 		//for joysticks
-		for (int joystick = (uint)Joystick::LEFT; joystick < (uint)Joystick::MAX * (uint)JoystickButton::MAX; joystick += 2)
+		int joystick_enum = 0;
+		for (int sdl_joystick = SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX; sdl_joystick < SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT; ++sdl_joystick)
 		{
-			int joystick_value = (*iter)->GetAxis((SDL_GameControllerAxis)(joystick * 0.5f));
+			int joystick_value = (*iter)->GetAxis((SDL_GameControllerAxis)(sdl_joystick));
 			//1 value
 			if (joystick_value > 0)
 			{
-				if ((*iter)->joystick_state[joystick] == KEY_IDLE)
-					(*iter)->joystick_state[joystick] = KEY_DOWN;
+				if ((*iter)->joystick_state[joystick_enum] == KEY_IDLE)
+					(*iter)->joystick_state[joystick_enum] = KEY_DOWN;
 				else
-					(*iter)->joystick_state[joystick] = KEY_REPEAT;
+					(*iter)->joystick_state[joystick_enum] = KEY_REPEAT;
 			}
 			else
 			{
-				if ((*iter)->joystick_state[joystick] == KEY_REPEAT || (*iter)->joystick_state[joystick] == KEY_DOWN)
-					(*iter)->joystick_state[joystick] = KEY_UP;
+				if ((*iter)->joystick_state[joystick_enum] == KEY_REPEAT || (*iter)->joystick_state[joystick_enum] == KEY_DOWN)
+					(*iter)->joystick_state[joystick_enum] = KEY_UP;
 				else
-					(*iter)->joystick_state[joystick] = KEY_IDLE;
+					(*iter)->joystick_state[joystick_enum] = KEY_IDLE;
 			}
+			++joystick_enum;
 			//-1 value
 			if (joystick_value < 0)
 			{
-				if ((*iter)->joystick_state[joystick + 1] == KEY_IDLE)
-					(*iter)->joystick_state[joystick + 1] = KEY_DOWN;
+				if ((*iter)->joystick_state[joystick_enum] == KEY_IDLE)
+					(*iter)->joystick_state[joystick_enum] = KEY_DOWN;
 				else
-					(*iter)->joystick_state[joystick + 1] = KEY_REPEAT;
+					(*iter)->joystick_state[joystick_enum] = KEY_REPEAT;
 			}
 			else
 			{
-				if ((*iter)->joystick_state[joystick + 1] == KEY_REPEAT || (*iter)->joystick_state[joystick + 1] == KEY_DOWN)
-					(*iter)->joystick_state[joystick + 1] = KEY_UP;
+				if ((*iter)->joystick_state[joystick_enum] == KEY_REPEAT || (*iter)->joystick_state[joystick_enum] == KEY_DOWN)
+					(*iter)->joystick_state[joystick_enum] = KEY_UP;
 				else
-					(*iter)->joystick_state[joystick + 1] = KEY_IDLE;
+					(*iter)->joystick_state[joystick_enum] = KEY_IDLE;
 			}
+			++joystick_enum;
 		}
 
 		//for(int joystick = (uint)Joystick::LEFT; joystick  < (uint)Joystick::MAX; ++joystick)
