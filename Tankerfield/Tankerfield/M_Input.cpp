@@ -373,18 +373,6 @@ void M_Input::UpdateControllers()
 			}
 			++joystick_enum;
 		}
-
-		//for(int joystick = (uint)Joystick::LEFT; joystick  < (uint)Joystick::MAX; ++joystick)
-		//{
-		//	for (int joystick_dir = (uint)JoystickButton::JOYSTICK_LEFT; joystick_dir < (uint)JoystickButton::MAX; ++joystick_dir)
-		//	{
-		//		if ((*iter)->GetAxis((SDL_GameControllerAxis)))
-		//		{
-
-		//		}
-		//		(*iter)->joystick_state[joystick * (uint)JoystickButton::MAX + joystick_dir] = 
-		//	}
-		//}
 	}
 }
 
@@ -406,7 +394,7 @@ Controller::Controller()
 {
 	memset(button_state, KEY_IDLE, sizeof(KeyState) * SDL_CONTROLLER_BUTTON_MAX);
 	memset(trigger_state, KEY_IDLE, sizeof(KeyState) * (SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT));
-	memset(joystick_state, KEY_IDLE, sizeof(KeyState) * (uint)JoystickButton::MAX * (uint)Joystick::MAX);
+	memset(joystick_state, KEY_IDLE, sizeof(KeyState) * (uint)INPUT_DIR::MAX * (uint)Joystick::MAX);
 }
 
 KeyState Controller::GetButtonState(SDL_GameControllerButton button)
@@ -417,10 +405,10 @@ KeyState Controller::GetButtonState(SDL_GameControllerButton button)
 		return KeyState::KEY_IDLE;
 }
 
-KeyState Controller::GetJoystickState(Joystick joystick, JoystickButton joystick_button)
+KeyState Controller::GetJoystickState(Joystick joystick, INPUT_DIR joystick_button)
 {
 	if (this != nullptr)
-		return joystick_state[(uint)joystick * (uint)(JoystickButton::MAX) + (uint)joystick_button];
+		return joystick_state[(uint)joystick * (uint)(INPUT_DIR::MAX) + (uint)joystick_button];
 	else
 		return KeyState::KEY_IDLE;
 }

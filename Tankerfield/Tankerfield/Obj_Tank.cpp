@@ -305,28 +305,28 @@ bool Obj_Tank::Update(float dt)
 
 	if (tank_num == 0)
 	{
-		if ((*controller)->GetJoystickState(Joystick::LEFT, JoystickButton::JOYSTICK_LEFT) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::LEFT, INPUT_DIR::LEFT) == KEY_DOWN) {
 			LOG("Pressed joystick left button left");
 		}
-		if ((*controller)->GetJoystickState(Joystick::LEFT, JoystickButton::JOYSTICK_RIGHT) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::LEFT, INPUT_DIR::RIGHT) == KEY_DOWN) {
 			LOG("Pressed joystick left button right");
 		}
-		if ((*controller)->GetJoystickState(Joystick::LEFT, JoystickButton::JOYSTICK_UP) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::LEFT, INPUT_DIR::UP) == KEY_DOWN) {
 			LOG("Pressed joystick left button up");
 		}
-		if ((*controller)->GetJoystickState(Joystick::LEFT, JoystickButton::JOYSTICK_DOWN) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::LEFT, INPUT_DIR::DOWN) == KEY_DOWN) {
 			LOG("Pressed joystick left button down");
 		}
-		if ((*controller)->GetJoystickState(Joystick::RIGHT, JoystickButton::JOYSTICK_LEFT) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::RIGHT, INPUT_DIR::LEFT) == KEY_DOWN) {
 			LOG("Pressed joystick right button left");
 		}
-		if ((*controller)->GetJoystickState(Joystick::RIGHT, JoystickButton::JOYSTICK_RIGHT) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::RIGHT, INPUT_DIR::RIGHT) == KEY_DOWN) {
 			LOG("Pressed joystick right button right");
 		}
-		if ((*controller)->GetJoystickState(Joystick::RIGHT, JoystickButton::JOYSTICK_UP) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::RIGHT, INPUT_DIR::UP) == KEY_DOWN) {
 			LOG("Pressed joystick right button up");
 		}
-		if ((*controller)->GetJoystickState(Joystick::RIGHT, JoystickButton::JOYSTICK_DOWN) == KEY_DOWN) {
+		if ((*controller)->GetJoystickState(Joystick::RIGHT, INPUT_DIR::DOWN) == KEY_DOWN) {
 			LOG("Pressed joystick right button down");
 		}
 	}

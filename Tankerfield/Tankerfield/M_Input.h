@@ -45,14 +45,15 @@ enum class Joystick
 };
 
 //Order is based on SDL_GameControllerAxis, if changed, it will stop working
-enum class JoystickButton
+enum class INPUT_DIR
 {
-	JOYSTICK_LEFT,
-	JOYSTICK_RIGHT,
-	JOYSTICK_DOWN,
-	JOYSTICK_UP,
+	RIGHT,
+	LEFT,
+	DOWN,
+	UP,
 	MAX
 };
+
 
 class M_Input;
 
@@ -62,7 +63,7 @@ private:
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
-	KeyState joystick_state[(uint)JoystickButton::MAX * (uint)Joystick::MAX];//Only used for joysticks, not for triggers (they have 1, 0 and -1)
+	KeyState joystick_state[(uint)Joystick::MAX * (uint)INPUT_DIR::MAX];//Only used for joysticks, not for triggers (they have 1, 0 and -1)
 	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis (they only have 1 and 0)
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
@@ -78,7 +79,7 @@ public:
 	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
 	
 	//Treat joysticks like buttons or keys to more easily manage them
-	KeyState GetJoystickState(Joystick joystick, JoystickButton joystick_button);
+	KeyState GetJoystickState(Joystick joystick, INPUT_DIR joystick_button);
 	//Treat triggers like buttons or keys to more easily manage them
 	KeyState GetTriggerState(SDL_GameControllerAxis axis);
 	

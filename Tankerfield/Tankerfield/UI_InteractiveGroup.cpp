@@ -42,25 +42,13 @@ bool UI_InteractiveGroup::HandleControllerINavigation( Controller* controller )
 {
 	bool ret = false;
 
-	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_UP) == KEY_DOWN)
+	for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
 	{
-		SetNearestElement(INPUT_DIR::UP);
-		ret = true;
-	}
-	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_DOWN) == KEY_DOWN)
-	{
-		SetNearestElement(INPUT_DIR::DOWN);
-		ret = true;
-	}
-	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_RIGHT) == KEY_DOWN)
-	{
-		SetNearestElement(INPUT_DIR::RIGHT);
-		ret = true;
-	}
-	if (controller->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_DPAD_LEFT) == KEY_DOWN)
-	{
-		SetNearestElement(INPUT_DIR::LEFT);
-		ret = true;
+		if (controller->GetJoystickState(Joystick::LEFT, (INPUT_DIR)input_dir) == KEY_DOWN)
+		{
+			SetNearestElement((INPUT_DIR)input_dir);
+			ret = true;
+		}
 	}
 
 	return ret;
