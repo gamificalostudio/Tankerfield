@@ -336,7 +336,7 @@ void M_Input::UpdateControllers()
 
 		//Joysticks
 		//for joysticks
-		for (int joystick = (uint)Joystick::LEFT; joystick < (uint)Joystick::LEFT * (uint)JoystickButton::MAX; joystick += 2)
+		for (int joystick = (uint)Joystick::LEFT; joystick < (uint)Joystick::MAX * (uint)JoystickButton::MAX; joystick += 2)
 		{
 			int joystick_value = (*iter)->GetAxis((SDL_GameControllerAxis)(joystick * 0.5f));
 			//1 value
