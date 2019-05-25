@@ -40,7 +40,7 @@ bool M_MainMenu::Start()
 	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
 	control_helper_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Acept", app->font->label_font_24));
+	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
 	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	// Main menu ------------------------------
@@ -240,7 +240,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
-		control_helper_label->SetText("Acept");
+		control_helper_label->SetText("Accept");
 		control_helper_image->SetPos(screen_center + fPoint(-380, 260));
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)

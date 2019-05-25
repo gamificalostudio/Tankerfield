@@ -40,7 +40,7 @@ General_GUI::General_GUI()
 	control_helper_image->alpha = 0;
 	control_helper_image->SetParent(background);
 
-	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Acept", app->font->label_font_24));
+	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
 	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	control_helper_label->alpha = 0;
 	control_helper_label->SetParent(background);

@@ -250,23 +250,23 @@ bool M_Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue);
 
-	bool input_acept = false;
+	bool input_accept = false;
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		input_acept = true;
+		input_accept = true;
 	}
 
-	for (int i = 0; i < MAX_PLAYERS && input_acept == false; ++i) {
+	for (int i = 0; i < MAX_PLAYERS && input_accept == false; ++i) {
 
 		Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
 
 		if (controller != nullptr && (*controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
-			input_acept = true;
+			input_accept = true;
 		}
 	}
 
@@ -343,7 +343,7 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::WAIT_PLAYER_INPUT_1:
 
-		if (input_acept == true)
+		if (input_accept == true)
 		{
 			game_state = GAME_STATE::LEADER_BOARD;
 		}
@@ -367,7 +367,7 @@ bool M_Scene::Update(float dt)
 
 		general_gui->SetInputTextToNameLabel();
 
-		if (input_acept == true)
+		if (input_accept == true)
 		{
 			general_gui->UpdateLeaderBoardSquadName();
 			app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f);
