@@ -30,10 +30,12 @@ public:
 	
 	void Spawn(const float& dt) override;
 	void Attack() override;
+	void Move(const float & dt) override;
 
 private:
 	iPoint spawn_draw_offset = { 0, 0 };
 	iPoint normal_draw_offset = { 0, 0 };
+	uint distance_to_player = 0;
 };
 
 #endif /* __OBJ_ROCKETLAUNCHER_H__ */

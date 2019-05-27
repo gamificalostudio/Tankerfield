@@ -67,6 +67,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.0f });
+	can_attack = false;
+	distance_to_player = 5; //this is in tiles
 }
 
 Obj_RocketLauncher::~Obj_RocketLauncher()
@@ -101,4 +103,43 @@ void Obj_RocketLauncher::Attack()
 			attack.Reset();
 		}
 	}
+}
+
+void Obj_RocketLauncher::Move(const float & dt)
+{
+	if (target->pos_map.DistanceNoSqrt(pos_map) <= 5 * 5)
+	{
+		can_attack = true;
+	}
+	else
+		can_attack = false;
+
+	if (!can_attack)
+	{
+		if (IsOnGoal(next_pos))
+		{
+			if (path.size() > 0)
+				path.erase(path.begin());
+			else
+				state = ENEMY_STATE::GET_PATH;
+
+			state = ENEMY_STATE::RECHEAD_POINT;
+		}
+
+		if (update_velocity_vec.ReadSec() > 1)
+		{
+			UpdateMoveVec();
+		}
+
+		if (curr_anim != &attack)
+			curr_anim = &walk;
+
+		if (path_timer.ReadSec() >= check_path_time)
+			state = ENEMY_STATE::GET_PATH;
+
+		UpdatePos(dt);
+
+	}
+		
+	
 }

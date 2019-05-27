@@ -29,9 +29,9 @@ public:
 
 	inline void Idle() override;
 
-	inline int Move(float & dt);
+	inline void Move(const float & dt) override;
 
-	inline virtual void GetPath();
+	inline virtual void GetPath() override;
 
 	bool Draw(float dt, Camera * camera) override;
 

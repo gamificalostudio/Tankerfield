@@ -162,10 +162,10 @@ void Obj_TeslaTrooper::Idle()
 		state = ENEMY_STATE::GET_PATH;
 	}
 }
-int Obj_TeslaTrooper::Move(float & dt)
+void Obj_TeslaTrooper::Move(const float & dt)
 {
-	int retflag;
-	retflag = 1;
+	
+
 	if (IsOnGoal(next_pos))
 	{
 		update_velocity_vec.Start();
@@ -184,8 +184,6 @@ int Obj_TeslaTrooper::Move(float & dt)
 		{
 			state = ENEMY_STATE::GET_PATH;
 			curr_anim = &idle;
-			{ retflag = 2;
-			return retflag; };
 		}
 	}
 	if (update_velocity_vec.ReadSec() > 1)
@@ -200,7 +198,6 @@ int Obj_TeslaTrooper::Move(float & dt)
 		state = ENEMY_STATE::GET_PATH;
 		curr_anim = &idle;
 	}
-	return retflag;
 
 }
 

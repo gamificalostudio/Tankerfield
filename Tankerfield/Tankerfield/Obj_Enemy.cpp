@@ -54,7 +54,8 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
-	Attack();
+	if(can_attack)
+		Attack();
 	if(oiled)
 		Oiled();
 
@@ -132,8 +133,7 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case ENEMY_STATE::MOVE:
 	{
-		int retflag = Move(dt);
-		if (retflag == 2) break;
+		Move(dt);
 
 	}
 	break;
@@ -282,7 +282,7 @@ void Obj_Enemy::Idle()
 	}
 }
 
-int Obj_Enemy::Move(float & dt)
+void Obj_Enemy::Move(const float & dt)
 {
 	if (IsOnGoal(next_pos))
 	{
@@ -293,8 +293,6 @@ int Obj_Enemy::Move(float & dt)
 
 		state = ENEMY_STATE::RECHEAD_POINT;
 	}
-
-	
 
 	if (update_velocity_vec.ReadSec() > 1)
 	{
@@ -308,10 +306,8 @@ int Obj_Enemy::Move(float & dt)
 		state = ENEMY_STATE::GET_PATH;
 
 	UpdatePos(dt);
-	return 0;
+
 }
-
-
 
 void Obj_Enemy::GetPath()
 {
@@ -320,7 +316,6 @@ void Obj_Enemy::GetPath()
 	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 	if (target != nullptr)
 	{
-
 		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 		{
 			path.clear();
@@ -351,7 +346,6 @@ void Obj_Enemy::GetPath()
 				path_timer.Start();
 			}
 		}
-
 	}
 	else
 	{
