@@ -20,20 +20,18 @@ class UI_InteractiveGroup;
 
 class Obj_Tank_MainMenu;
 
-enum class MENU_STATE
+enum class OPTIONS_STATE
 {
 	GLOBAL_OPTIONS,
 	INDIVIDUAL_OPTIONS,
 	CHANGE_SCENE,
 };
 
-struct Player_Selection
+struct Player_Options_Selection
 {
 	int id = 0;
-	SDL_Color color = { 255,255,255,255 };
 	Controller** controller = nullptr;
 	Obj_Tank_MainMenu*  tank = nullptr;
-	fPoint tank_pos = { 0,0 };
 };
 
 class M_Options_Menu : public Module, public UI_Listener
@@ -56,7 +54,7 @@ public:
 
 private:
 
-	void SetState(MENU_STATE new_state);
+	void SetState(OPTIONS_STATE new_state);
 
 	void InputNavigate();
 
@@ -64,13 +62,9 @@ private:
 
 	bool SetPlayerProperties();
 
-	void ResetPanelColors();
-
-	SDL_Color GetColor(float value);
-
 private:
 
-	MENU_STATE	      menu_state = MENU_STATE::GLOBAL_OPTIONS;
+	OPTIONS_STATE		options_state = OPTIONS_STATE::GLOBAL_OPTIONS;
 
 	// Textrues ================================================
 
@@ -97,8 +91,8 @@ private:
 	uint selection_finished_sfx = 0u;
 
 	// Players ----------------------------------------------
-	Player_Selection     players[MAX_PLAYERS];
-	int                  current_player = 0;
+	Player_Options_Selection    players[MAX_PLAYERS];
+	int							current_player = 0;
 };
 
 #endif // __j1SCENE_H__

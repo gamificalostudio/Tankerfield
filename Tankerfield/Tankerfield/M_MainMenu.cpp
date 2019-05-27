@@ -8,6 +8,7 @@
 #include "M_Window.h"
 #include "M_Audio.h"
 #include "M_Scene.h"
+#include "M_Options_Menu.h"
 
 #include "UI_Image.h"
 #include "UI_Button.h"
@@ -400,8 +401,8 @@ void M_MainMenu::InputSelect()
 			}
 			else if (menu_element == options_menu_button)
 			{
-				SetState(MENU_STATE::SELECTION);
 				app->audio->PlayFx(button_select_sfx);
+				app->scmanager->FadeToBlack(this, app->options_menu, 1.f, 1.f);
 			}
 			else if (menu_element == exit_button)
 			{

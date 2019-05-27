@@ -49,7 +49,7 @@ bool M_Options_Menu::Start()
 
 	// Set values ==========================================
 
-	SetState(MENU_STATE::GLOBAL_OPTIONS);
+	SetState(OPTIONS_STATE::GLOBAL_OPTIONS);
 	SDL_ShowCursor(SDL_ENABLE);
 
 	return true;
@@ -72,7 +72,7 @@ bool M_Options_Menu::CleanUp()
 
 bool M_Options_Menu::PreUpdate()
 {
-	if (menu_state != MENU_STATE::CHANGE_SCENE)
+	if (options_state != OPTIONS_STATE::CHANGE_SCENE)
 	{
 		InputNavigate();
 		InputSelect();
@@ -113,14 +113,14 @@ bool M_Options_Menu::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-void M_Options_Menu::SetState(MENU_STATE new_state)
+void M_Options_Menu::SetState(OPTIONS_STATE new_state)
 {
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
 	switch (new_state)
 	{
-	case MENU_STATE::GLOBAL_OPTIONS:
+	case OPTIONS_STATE::GLOBAL_OPTIONS:
 		control_helper_label->SetPos(screen_center + fPoint(30, 450));
 		control_helper_label->SetText("Accept");
 		control_helper_image->SetPos(screen_center + fPoint(-30, 450));
@@ -129,7 +129,7 @@ void M_Options_Menu::SetState(MENU_STATE new_state)
 
 		break;
 	}
-	menu_state = new_state;
+	options_state = new_state;
 
 }
 
@@ -139,7 +139,7 @@ void M_Options_Menu::InputNavigate()
 	int player_num = -1;
 	UI_InteractiveGroup* panel = nullptr;
 
-	if (menu_state == MENU_STATE::GLOBAL_OPTIONS)
+	if (options_state == OPTIONS_STATE::GLOBAL_OPTIONS)
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
@@ -165,7 +165,7 @@ void M_Options_Menu::InputSelect()
 {
 	bool input_select_controller = false;
 
-	if (menu_state == MENU_STATE::GLOBAL_OPTIONS)
+	if (options_state == OPTIONS_STATE::GLOBAL_OPTIONS)
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
@@ -183,7 +183,7 @@ void M_Options_Menu::InputSelect()
 
 	if (input_select_controller == true)
 	{
-		if (menu_state == MENU_STATE::GLOBAL_OPTIONS && global_options_panel->GetFocusedElement() != nullptr)
+		if (options_state == OPTIONS_STATE::GLOBAL_OPTIONS && global_options_panel->GetFocusedElement() != nullptr)
 		{
 			UI_Element*  menu_element = global_options_panel->GetFocusedElement();
 
