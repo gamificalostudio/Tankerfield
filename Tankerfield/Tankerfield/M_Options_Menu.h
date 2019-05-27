@@ -85,9 +85,13 @@ private:
 
 	UI_Label* options_title = nullptr;
 	UI_Checkbox* fullscreen_checkbox = nullptr;
-	UI_Slider* master_volume_slider = nullptr;
-	UI_Slider* music_volume_slider = nullptr;
-	UI_Slider* sfx_volume_slider = nullptr;
+	UI_Label* master_volume = nullptr;
+	UI_Label* music_volume = nullptr;
+	UI_Label* sfx_volume = nullptr;
+
+	UI_Button* master_volume_L = nullptr;
+	UI_Button* master_volume_R = nullptr;
+	UI_Label* master_volume_value = nullptr;
 
 	UI_Button* individual_settings = nullptr;
 

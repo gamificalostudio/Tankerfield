@@ -46,7 +46,16 @@ bool M_Options_Menu::Start()
 
 	/*fullscreen_checkbox = app->ui->CreateCheckbox({ screen.w / 2,200 }, UI_CheckboxDef, this);*/
 
-	/*master_volume_slider = app->ui->CreateSlider({ screen.w / 2,250 }, UI_SliderDef definition, this);*/
+	master_volume=app->ui->CreateLabel({ screen.w / 2-200, 250 }, UI_LabelDef("Master Volume", app->font->label_font_24, { 255,255,255,180 }));
+	
+	master_volume_L = app->ui->CreateButton({ screen.w / 2 + 20, 250 },UI_ButtonDef({ 10,980,50,10 }, { 255, 980,50,10 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	master_volume_L->SetParent(master_volume);
+
+	master_volume_R = app->ui->CreateButton({ screen.w / 2 + 140, 250 }, UI_ButtonDef({ 10,980,50,10 }, { 255, 980,50,10 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	master_volume_R->SetParent(master_volume);
+
+	master_volume_value = app->ui->CreateLabel({ screen.w / 2 + 80, 250 }, UI_LabelDef("30",app->font->label_font_24), this);
+	master_volume_value->SetParent(master_volume);
 
 	individual_settings = app->ui->CreateButton({ screen.w / 2,800 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	individual_settings->SetLabel({ 0.f,2.f }, UI_LabelDef("Settings", app->font->button_font_22, { 50, 50, 50, 255 }));
@@ -57,6 +66,7 @@ bool M_Options_Menu::Start()
 
 	global_options_panel = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
 	global_options_panel->SetElement(options_title, iPoint(0, 0));
+	global_options_panel->SetElement(master_volume, iPoint(0, 1));
 	global_options_panel->SetElement(individual_settings, iPoint(0, 5));
 	// Set values ==========================================
 
