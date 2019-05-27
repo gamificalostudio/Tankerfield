@@ -1,6 +1,7 @@
 #ifndef __M_SCENEMANAGER_H__
 #define __M_SCENEMANAGER_H__
 
+#include <vector>
 #include "Module.h"
 #include "SDL\include\SDL_rect.h"
 

@@ -226,17 +226,6 @@ bool M_Scene::PreUpdate()
 		game_state = GAME_STATE::GAME_WON;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		int new_weapon = (int)app->objectmanager->obj_tanks[0]->GetWeaponInfo().weapon;
-		++new_weapon;
-		if (new_weapon == (int)WEAPON::MAX_WEAPONS)
-		{
-			new_weapon = (int)WEAPON::DOUBLE_MISSILE;
-		}
-		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
-	}
-
 	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
 	{
 		app->objectmanager->delete_all_enemies = true;
