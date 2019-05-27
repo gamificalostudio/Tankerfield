@@ -64,7 +64,7 @@ protected:
 
 	inline virtual void Idle();
 
-	inline virtual int Move(float & dt);
+	inline virtual void Move(const float & dt);
 
 	inline virtual void GetPath();
 
@@ -188,6 +188,9 @@ protected:
 	SpawnPoint* teleport_spawnpoint = nullptr;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
+
+	bool can_attack = true;
+
 
 };
 
