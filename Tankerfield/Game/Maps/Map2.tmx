@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3744">
+<map version="1.2" tiledversion="1.2.4" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3751">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
@@ -157,7 +157,7 @@
  <tileset firstgid="518" name="Trees2" tilewidth="120" tileheight="135" tilecount="1" columns="1">
   <image source="Buildings/Trees2.png" trans="ff00ff" width="120" height="135"/>
  </tileset>
- <layer id="1" name="Ground" width="200" height="250" visible="0">
+ <layer id="1" name="Ground" width="200" height="250">
   <data>
    <tile/>
    <tile/>
@@ -186862,7 +186862,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -187062,7 +187062,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="33"/>
    <tile/>
    <tile/>
    <tile/>
@@ -187262,7 +187261,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="361"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -200251,12 +200251,12 @@
   <object id="1998" type="WATER" x="3060" y="2190" width="270" height="180"/>
   <object id="2000" type="WATER" x="2310" y="2190" width="750" height="450"/>
   <object id="2001" type="WATER" x="2280" y="2220" width="30" height="420"/>
-  <object id="2008" type="WALL" x="750" y="3390" width="30" height="630"/>
+  <object id="2008" type="WALL" x="600" y="3420" width="60" height="600"/>
   <object id="2010" type="WATER" x="1020" y="2700" width="240" height="960"/>
   <object id="2011" type="WATER" x="990" y="2730" width="30" height="930"/>
   <object id="2012" type="WATER" x="960" y="2760" width="30" height="900"/>
   <object id="2013" type="WATER" x="930" y="3000" width="30" height="660"/>
-  <object id="2014" type="WATER" x="780" y="3000" width="150" height="420"/>
+  <object id="2014" type="WATER" x="600" y="3000" width="330" height="420"/>
   <object id="2018" type="WALL" x="1020" y="1500" width="1530" height="30"/>
   <object id="2019" type="WALL" x="750" y="1740" width="30" height="1260"/>
   <object id="2020" type="WALL" x="780" y="1680" width="60" height="60"/>
@@ -200264,7 +200264,7 @@
   <object id="2022" type="WALL" x="900" y="1560" width="60" height="60"/>
   <object id="2023" type="WALL" x="960" y="1530" width="60" height="30"/>
   <object id="2029" type="ROAD" x="1410" y="3660" width="990" height="90"/>
-  <object id="2030" type="ROAD" x="780" y="3660" width="540" height="90"/>
+  <object id="2030" type="ROAD" x="660" y="3660" width="660" height="90"/>
   <object id="2033" type="ROAD" x="3390" y="2520" width="90" height="210"/>
   <object id="2034" type="ROAD" x="4050" y="2850" width="90" height="180"/>
   <object id="2035" type="ROAD" x="4170" y="5460" width="90" height="660"/>
@@ -200281,7 +200281,7 @@
   <object id="2047" type="WALL" x="2610" y="6660" width="30" height="30"/>
   <object id="2048" type="WALL" x="2580" y="6630" width="30" height="30"/>
   <object id="2049" type="WALL" x="900" y="6600" width="1680" height="30"/>
-  <object id="2051" type="WATER" x="780" y="3990" width="150" height="30"/>
+  <object id="2051" type="WATER" x="660" y="3990" width="270" height="30"/>
   <object id="2854" type="ROAD" x="2550" y="5070" width="90" height="1530"/>
   <object id="2855" type="ROAD" x="2490" y="5070" width="60" height="90"/>
   <object id="2870" type="ROAD" x="4650" y="2790" width="150" height="90"/>
@@ -200752,7 +200752,7 @@
     <property name="pivot_y" type="float" value="29"/>
    </properties>
   </object>
-  <object id="278" name="cahse3" x="4740" y="5040" width="60" height="60">
+  <object id="278" name="cahse3" x="4770" y="5040" width="60" height="60">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
@@ -204023,7 +204023,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="2861" name="cabunk" x="1830" y="6000" width="60" height="60">
+  <object id="2861" name="cabunk" x="1890" y="6030" width="60" height="60">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
@@ -204032,7 +204032,7 @@
     <property name="pivot_y" type="float" value="35"/>
    </properties>
   </object>
-  <object id="2862" name="cabunk" x="1920" y="5910" width="60" height="60">
+  <object id="2862" name="cabunk" x="1980" y="5940" width="60" height="60">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="60"/>
@@ -204086,7 +204086,7 @@
     <property name="pivot_y" type="float" value="50"/>
    </properties>
   </object>
-  <object id="2871" name="cgwash" x="2490" y="1980" width="90" height="120">
+  <object id="2871" name="cgwash" x="2400" y="1560" width="90" height="120">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="115"/>
@@ -204104,7 +204104,7 @@
     <property name="pivot_y" type="float" value="50"/>
    </properties>
   </object>
-  <object id="2874" name="cgwashL" x="2490" y="1830" width="120" height="90">
+  <object id="2874" name="cgwashL" x="2550" y="1800" width="120" height="90">
    <properties>
     <property name="has_collider" type="bool" value="true"/>
     <property name="offset_x" type="int" value="90"/>
@@ -206348,6 +206348,7 @@
     <property name="path" value="Maps/Buildings/gayar.png"/>
    </properties>
   </object>
+  <object id="3749" name="ENEMY" type="ENEMY" x="2100" y="2190" width="120" height="120"/>
  </objectgroup>
  <layer id="7" name="Navigation" width="200" height="250" visible="0">
   <properties>
@@ -229176,15 +229177,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229326,7 +229327,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229377,14 +229377,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229526,9 +229527,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229579,12 +229577,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229726,10 +229727,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229785,6 +229782,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229926,7 +229927,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -229977,14 +229977,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230126,8 +230127,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230178,13 +230177,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230326,10 +230327,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230385,6 +230382,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230526,7 +230527,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230577,14 +230577,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230726,8 +230727,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230778,8 +230777,9 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -230896,6 +230896,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -230926,10 +230927,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231096,6 +231093,10 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231176,10 +231177,7 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -231296,6 +231294,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231326,8 +231327,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231378,13 +231377,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231526,9 +231527,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231579,7 +231577,10 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -231776,15 +231777,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231926,8 +231927,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -231978,13 +231977,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -232126,9 +232127,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -232179,7 +232177,10 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -232376,15 +232377,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -232526,7 +232527,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -232577,14 +232577,15 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -232726,9 +232727,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="476"/>
-   <tile gid="476"/>
-   <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
@@ -232779,7 +232777,10 @@
    <tile gid="476"/>
    <tile gid="476"/>
    <tile gid="476"/>
-   <tile gid="476"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -256367,16 +256368,16 @@
   <object id="3389" name="REWARD_BOX" type="REWARD_BOX" x="840" y="2940" width="30" height="30"/>
   <object id="3394" name="REWARD_BOX" type="REWARD_BOX" x="2430" y="5400" width="30" height="30"/>
   <object id="3395" name="REWARD_BOX" type="REWARD_BOX" x="2460" y="6510" width="30" height="30"/>
-  <object id="3396" name="REWARD_BOX" type="REWARD_BOX" x="1800" y="5880" width="30" height="30"/>
-  <object id="3397" name="ENEMY" type="ENEMY" x="4800" y="3480" width="120" height="120"/>
+  <object id="3396" name="REWARD_BOX" type="REWARD_BOX" x="1770" y="5760" width="30" height="30"/>
+  <object id="3397" name="ENEMY" type="ENEMY" x="4560" y="3060" width="120" height="120"/>
   <object id="3398" name="ENEMY" type="ENEMY" x="4110" y="2760" width="120" height="120"/>
   <object id="3402" name="ENEMY" type="ENEMY" x="3360" y="2610" width="120" height="120"/>
   <object id="3403" name="ENEMY" type="ENEMY" x="2400" y="3660" width="120" height="120"/>
-  <object id="3404" name="ENEMY" type="ENEMY" x="1710" y="1890" width="120" height="120"/>
-  <object id="3405" name="ENEMY" type="ENEMY" x="1680" y="2940" width="120" height="120"/>
-  <object id="3406" name="ENEMY" type="ENEMY" x="2010" y="5850" width="120" height="120"/>
-  <object id="3407" name="ENEMY" type="ENEMY" x="1350" y="5970" width="120" height="120"/>
-  <object id="3408" name="ENEMY" type="ENEMY" x="3960" y="5910" width="120" height="120"/>
+  <object id="3404" name="ENEMY" type="ENEMY" x="1980" y="2610" width="120" height="120"/>
+  <object id="3405" name="ENEMY" type="ENEMY" x="1320" y="3000" width="120" height="120"/>
+  <object id="3406" name="ENEMY" type="ENEMY" x="2550" y="6030" width="120" height="120"/>
+  <object id="3407" name="ENEMY" type="ENEMY" x="1770" y="5850" width="120" height="120"/>
+  <object id="3408" name="ENEMY" type="ENEMY" x="3960" y="5940" width="120" height="120"/>
   <object id="3409" name="ENEMY" type="ENEMY" x="4320" y="5280" width="120" height="120"/>
   <object id="3726" name="REWARD_BOX" type="REWARD_BOX" x="1710" y="1800" width="30" height="30"/>
   <object id="3727" name="REWARD_BOX" type="REWARD_BOX" x="1860" y="3030" width="30" height="30"/>
@@ -256384,11 +256385,16 @@
   <object id="3729" name="REWARD_BOX" type="REWARD_BOX" x="1020" y="5880" width="30" height="30"/>
   <object id="3730" name="REWARD_BOX" type="REWARD_BOX" x="3510" y="2760" width="30" height="30"/>
   <object id="3731" name="REWARD_BOX" type="REWARD_BOX" x="3900" y="5190" width="30" height="30"/>
+  <object id="3744" name="ENEMY" type="ENEMY" x="1650" y="3660" width="120" height="120"/>
+  <object id="3745" name="ENEMY" type="ENEMY" x="1290" y="4500" width="120" height="120"/>
+  <object id="3746" name="ENEMY" type="ENEMY" x="4080" y="3660" width="120" height="120"/>
+  <object id="3747" name="ENEMY" type="ENEMY" x="3870" y="5310" width="120" height="120"/>
+  <object id="3750" name="ENEMY" type="ENEMY" x="4560" y="5070" width="120" height="120"/>
  </objectgroup>
  <objectgroup id="9" name="Players">
-  <object id="410" x="4830" y="3900" width="30" height="30"/>
-  <object id="411" x="3960" y="5520" width="30" height="30"/>
-  <object id="412" x="4440" y="5610" width="30" height="30"/>
-  <object id="413" x="4440" y="5400" width="30" height="30"/>
+  <object id="410" x="750" y="3780" width="30" height="30"/>
+  <object id="411" x="750" y="3600" width="30" height="30"/>
+  <object id="412" x="750" y="3660" width="30" height="30"/>
+  <object id="413" x="750" y="3720" width="30" height="30"/>
  </objectgroup>
 </map>

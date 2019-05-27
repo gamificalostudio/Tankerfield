@@ -29,7 +29,7 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 	draw_shadow_offset = {-2 , -4 };
 	frame = { 0, 0, 28,34 };
 	frame_white = { 28,0,28,34 };
-	draw_offset = { -14,-20 };
+	draw_offset = { -14,-17 };
 	curr_frame = &frame;
 
 	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);//width and height hardcoded
@@ -37,6 +37,7 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 
 Obj_RewardBox::~Obj_RewardBox()
 {
+
 }
 
 bool Obj_RewardBox::Update(float dt)
@@ -136,7 +137,7 @@ void Obj_RewardBox::SetTypeBox(PICKUP_TYPE type)
 
 void Obj_RewardBox::TakeDamage(Collider* collider)
 {
-	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER || collider->GetTag() == TAG::BULLET_OIL)
+	if (collider->GetTag() == TAG::BULLET || collider->GetTag() == TAG::FRIENDLY_BULLET || collider->GetTag() == TAG::BULLET_LASER || collider->GetTag() == TAG::BULLET_OIL || collider->GetTag() == TAG::FLAMETHROWER)
 	{
 		++hits_taken;
 		if (hits_taken >= max_hits)

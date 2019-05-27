@@ -7,6 +7,7 @@
 
 #include "Point.h"
 #include "Log.h"
+#include "Balance.h"
 #include "Animation.h"
 #include "App.h"
 #include "Object.h"
@@ -24,8 +25,7 @@
 #include "M_AnimationBank.h"
 #include "Obj_Tank.h"
 #include "M_PickManager.h"
-#include "Bullet_Laser.h"
-#include "Obj_Bullet.h"
+#include "Bullet_RocketLauncher.h"
 #include "M_Audio.h"
 
 Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
@@ -35,6 +35,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 
 	tex = app->tex->Load(rocket_launcher_node.child("tex_path").child_value());
 	curr_tex = tex;
+	tex_damaged = app->tex->Load("textures/Objects/enemies/flakt-sheet-white.png");
 
 	//Loading animations ------------------------------------------------------------------------------------------------------------------------
 	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
@@ -49,9 +50,10 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 
 	original_speed = speed = app->objectmanager->rocket_launcher_info.speed;
 
-	spawn_draw_offset = { 49, 50 };
-	normal_draw_offset = { 49, 50 };
-	draw_offset = spawn_draw_offset;
+	//spawn_draw_offset = { 49, 50 };
+	normal_draw_offset = { 60, 60 };
+	electrocuted_draw_offset = { 35, 30 };
+	draw_offset = normal_draw_offset;
 
 	attack_damage = app->objectmanager->rocket_launcher_info.attack_damage;
 	attack_range = app->objectmanager->rocket_launcher_info.attack_range;
@@ -60,8 +62,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, app->scene->round - 1);
 	
 	check_path_time = 2.0f;
-
-	scale = 0.75f;
+	damaged_sprite_time = 75;
+	scale = 1.f;
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
@@ -92,9 +94,10 @@ void Obj_RocketLauncher::Attack()
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
 			curr_anim = &attack;
-			target->ReduceLife(attack_damage);
+			//target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
+			ShootMissile();
 		}
 
 		if (curr_anim == &attack
@@ -149,6 +152,28 @@ void Obj_RocketLauncher::Move(const float & dt)
 		UpdatePos(dt);
 
 	}
-		
+}
 	
+
+void Obj_RocketLauncher::ShootMissile()
+{
+	fPoint p_dir(0.0f, 0.0f);
+	if (target != nullptr
+		&& target->coll->GetTag() == TAG::PLAYER
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared)
+	{
+		p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map;
+		p_dir.Normalize();
+
+		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map + p_dir);
+		bullet->SetBulletProperties(
+			9.0f,
+			2000.0f,
+			attack_damage,
+			p_dir,
+			atan2(-p_dir.y, p_dir.x) * RADTODEG - 45);
+
+		bullet->SetPlayer(target);
+	}
+
 }

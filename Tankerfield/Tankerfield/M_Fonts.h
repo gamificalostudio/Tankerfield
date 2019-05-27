@@ -47,7 +47,8 @@ public:
 	_TTF_Font*			        default_font = nullptr;
 	_TTF_Font*					font_open_sants_bold_12 = nullptr;
 	_TTF_Font*					rounds_font = nullptr;
-	_TTF_Font*					button_font = nullptr;
+	_TTF_Font*					button_font_22 = nullptr;
+	_TTF_Font*					button_font_40 = nullptr;
 	_TTF_Font*					label_font_24 = nullptr;
 	_TTF_Font*					label_font_38 = nullptr;
 };

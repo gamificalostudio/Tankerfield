@@ -97,6 +97,35 @@ Tank 4:
 - KP_7: Use item
 - KP_9: Interact
 
+#Changelist
+
+-Content (Build 0.6):
+
+All skills.
+All bonuses.
+Adjust the mechanics with the feedback we’ve received from our first playable demo.
+
+-Content (Build 0.7):
+
+2 Vehicles.
+2nd map.
+All enemies .
+
+
+-Content (Build 0.8):
+
+Last vehicle.
+Skippable cinematic.
+
+
+-Content (Build 0.9):
+
+Test cooperative with all tanks.
+
+-Content (Build 1.0 Alpha):
+
+Test All.
+Presentation.
 
 # License
 

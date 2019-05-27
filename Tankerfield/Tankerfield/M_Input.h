@@ -36,12 +36,24 @@ enum KeyState
 	KEY_UP
 };
 
+//Order is based on SDL_GameControllerAxis, if changed, it will stop working
 enum class Joystick
 {
 	LEFT,
 	RIGHT,
-	INVALID
+	MAX
 };
+
+//Order is based on SDL_GameControllerAxis, if changed, it will stop working
+enum class INPUT_DIR
+{
+	RIGHT,
+	LEFT,
+	DOWN,
+	UP,
+	MAX
+};
+
 
 class M_Input;
 
@@ -51,7 +63,8 @@ private:
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
-	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis
+	KeyState joystick_state[(uint)Joystick::MAX * (uint)INPUT_DIR::MAX];//Only used for joysticks, not for triggers (they have 1, 0 and -1)
+	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis (they only have 1 and 0)
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
 
@@ -61,13 +74,14 @@ public:
 	KeyState GetButtonState(SDL_GameControllerButton button);
 	
 	iPoint GetJoystick(Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
-
-	//Treat triggers like buttons or keys to more easily manage them
-	KeyState GetTriggerState(SDL_GameControllerAxis axis);
-
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
 	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
+	
+	//Treat joysticks like buttons or keys to more easily manage them
+	KeyState GetJoystickState(Joystick joystick, INPUT_DIR joystick_button);
+	//Treat triggers like buttons or keys to more easily manage them
+	KeyState GetTriggerState(SDL_GameControllerAxis axis);
 	
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value

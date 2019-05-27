@@ -93,8 +93,6 @@ bool M_Scene::Start()
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
 	wind_sound_uint = app->audio->LoadFx(wind_sound_string);
 
-
-
 	//Create map quadtrees (need cameras to be created first and cameras are created inside the tank's constructor)
 	// Load the first level of the list on first game start -------------------------
 	std::list<Levels*>::iterator levelData = app->map->levels.begin();
@@ -144,11 +142,16 @@ bool M_Scene::Start()
 	
 	general_gui = DBG_NEW General_GUI();
 
-	round = 1u;
-	game_state = GAME_STATE::EXIT_OF_WAVE;
+	round = 0u;
+	game_state = GAME_STATE::ENTER_IN_WAVE;
 	game_over = false;
 
-	//app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
+	Tesla_trooper_units = 0u;
+	Brute_units = 0u;
+	Suicidal_units = 0u;
+	RocketLauncher_units = 0u;
+
+	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
 
 	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
 	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
@@ -160,6 +163,8 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
+	//LOG("Enemy number %i", number_of_enemies);
+
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
@@ -232,6 +237,11 @@ bool M_Scene::PreUpdate()
 		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+	{
+		app->objectmanager->delete_all_enemies = true;
+	}
+
 	return true;
 }
 
@@ -240,23 +250,23 @@ bool M_Scene::Update(float dt)
 {
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue);
 
-	bool input_acept = false;
+	bool input_accept = false;
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 		draw_debug = !draw_debug;
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		input_acept = true;
+		input_accept = true;
 	}
 
-	for (int i = 0; i < MAX_PLAYERS && input_acept == false; ++i) {
+	for (int i = 0; i < MAX_PLAYERS && input_accept == false; ++i) {
 
 		Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
 
 		if (controller != nullptr && (*controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
-			input_acept = true;
+			input_accept = true;
 		}
 	}
 
@@ -265,13 +275,13 @@ bool M_Scene::Update(float dt)
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
 		/* Generate new wave, restart the vars and increase units number */
-		++subround;
-		if (subround > MAX_SUBROUNDS)
-		{
-			subround = 0;
-			++round;
-		}
-
+		//++subround;
+		//if (subround > MAX_SUBROUNDS)
+		//{
+		//	subround = 0;
+		//	++round;
+		//}
+		++round;
 		NewWave();
 		game_state = GAME_STATE::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
@@ -281,7 +291,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::IN_WAVE:
 	{
-		if (number_of_enemies<=0)
+		if (number_of_enemies<=5)//Hardcode to go to next round when there are less enemies
 		{
 			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}
@@ -296,14 +306,16 @@ bool M_Scene::Update(float dt)
 		wind_sound_channel = app->audio->PlayFx(wind_sound_uint);
 		
 		game_state = GAME_STATE::OUT_WAVE;
-
+		general_gui->RoundFX();
 		break;
 	}
 	case GAME_STATE::OUT_WAVE:
-		if (timer_between_waves.ReadSec() >= time_between_rounds[subround] || AllPlayersReady())
+
+		if (timer_between_waves.ReadSec() >= 3 || AllPlayersReady())
 		{
 			game_state = GAME_STATE::ENTER_IN_WAVE;
 		}
+
 		break;
 
 	case GAME_STATE::GAME_OVER:
@@ -311,6 +323,7 @@ bool M_Scene::Update(float dt)
 		for (int i = 0; i < MAX_PLAYERS; ++i) {
 			app->objectmanager->obj_tanks[i]->gui->Fade_GUI(false);
 		}
+		app->audio->PlayMusic("audio/Music/defeat.ogg", 2.0f);
 		general_gui->FadeGeneralHUD(false);
 		general_gui->FadeGameOverScreen(true, round);
 		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
@@ -330,7 +343,7 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::WAIT_PLAYER_INPUT_1:
 
-		if (input_acept == true)
+		if (input_accept == true)
 		{
 			game_state = GAME_STATE::LEADER_BOARD;
 		}
@@ -354,7 +367,7 @@ bool M_Scene::Update(float dt)
 
 		general_gui->SetInputTextToNameLabel();
 
-		if (input_acept == true)
+		if (input_accept == true)
 		{
 			general_gui->UpdateLeaderBoardSquadName();
 			app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f);
@@ -521,8 +534,10 @@ void M_Scene::CreateEnemyWave()
 	number_of_enemies = 0;
 	number_of_enemies += Tesla_trooper_units;
 	number_of_enemies += Brute_units;
+
+	//number_of_enemies += Suicidal_units;
+
 	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
-	 
 
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
@@ -548,17 +563,41 @@ void M_Scene::CreateEnemyWave()
 		}
 	}
 
+	for (int i = 0; i < RocketLauncher_units; i++)
+	{
+		if (app->map->data.spawners_position_enemy.size() != 0)
+		{
+			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+			app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
+
+		}
+	}
+
+	//for (int i = 0; i < Suicidal_units; i++)
+	//{
+	//	if (app->map->data.spawners_position_enemy.size() != 0)
+	//	{
+	//		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+	//		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+	//		app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
+
+	//	}
+	//}
+
 
 }
 
 void M_Scene::NewWave()
 {
-	Tesla_trooper_units = 10 * round * 4;
-	Tesla_trooper_units *= percentage_enemies_subround[subround];
+	Tesla_trooper_units = 30 + 40 * round;
+	//Tesla_trooper_units *= percentage_enemies_subround[subround];
 
-	if (round >= 3)
+	if (round >= 2)
 	{
-		Brute_units += round - 2;
+		Brute_units += round - 1;
+		RocketLauncher_units += round - 1;
+		//Suicidal_units += round - 1;
 	}
 
 	CreateEnemyWave();

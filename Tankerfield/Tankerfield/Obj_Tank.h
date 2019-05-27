@@ -122,6 +122,7 @@ private:
 	void ShootElectroShotCharged();
 
 	void ReleaseFlameThrower();
+	void ReleaseBasicShot() {};
 
 	//- TankDeath
 	void ReviveTank(float dt);
@@ -195,6 +196,7 @@ private:
 	PerfTimer shot_timer;				//Determines how much time it must pass to be albe to shoot another shot again
 	PerfTimer charged_shot_timer;
 	PerfTimer sustained_shot_timer;
+	PerfTimer shot_timer_basic_bullet;
 	float charge_time						= 0.f;//Charge time in ms
 	float quick_shot_time					= 0.f;//If time is bigger than this, you will start to use the sustained shot and won't use a qucik shot
 	uint shot_sound							= 0u;
@@ -230,7 +232,7 @@ private:
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
-	UI_IG_Helper * tutorial_pick_up			= nullptr;
+	
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
@@ -248,8 +250,8 @@ private:
 	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
-	Joystick gamepad_move							= Joystick::INVALID;
-	Joystick gamepad_aim							= Joystick::INVALID;
+	Joystick gamepad_move							= Joystick::MAX;
+	Joystick gamepad_aim							= Joystick::MAX;
 	int dead_zone									= 0;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
@@ -296,8 +298,12 @@ private:
 	//sfx 
 	uint die_sfx						= 0u;
 
+	bool picking = false;
+
 public:
 	Camera* camera_player				= nullptr;
+
+	UI_IG_Helper * tutorial_pick_up = nullptr;
 
 	//- GUI
 	Player_GUI*  gui = nullptr;

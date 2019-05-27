@@ -40,7 +40,7 @@ General_GUI::General_GUI()
 	control_helper_image->alpha = 0;
 	control_helper_image->SetParent(background);
 
-	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Acept", app->font->label_font_24));
+	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
 	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	control_helper_label->alpha = 0;
 	control_helper_label->SetParent(background);
@@ -91,8 +91,8 @@ General_GUI::General_GUI()
 	input_def.font = app->font->label_font_24;
 	input_def.max_characters = 10;
 	input_def.default_text_color = { 200, 200,200,255 };
-
-	input_text = app->ui->CreateInputText(screen_center - fPoint( 0, 400.f), input_def);
+	input_def.default_text = "Enter your squad name";
+;	input_text = app->ui->CreateInputText(screen_center - fPoint( 0, 400.f), input_def);
 	input_text->alpha = 0.f;
 
 	// General HUD =================================================
@@ -151,7 +151,11 @@ void General_GUI::FadeGeneralHUD(bool fade_on)
 void General_GUI::SetRoundNumber(int round)
 {
 	round_number_label->SetText(std::to_string(round).c_str());
-	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1.F, 3.F);
+}
+
+void General_GUI::RoundFX()
+{
+	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.8F, 4.F);
 }
 
 void General_GUI::SetInputTextToNameLabel()

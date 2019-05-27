@@ -78,7 +78,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	coll_w = 0.5f;
 	coll_h = 0.5f;
   
-	damaged_sprite_time = 150;
+	damaged_sprite_time = 75;
 	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round - 1);
 
 	scale = 2.f;
@@ -87,6 +87,11 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 Obj_Brute::~Obj_Brute()
 {
+	if (life_collider != nullptr)
+	{
+		life_collider->to_destroy = true;
+		life_collider = nullptr;
+	}
 }
 
 
@@ -100,7 +105,7 @@ void Obj_Brute::ChangeTexture()
 		oiled == false &&
 		bool_electro_dead == false)
 	{
-		curr_tex = last_texture;
+		curr_tex = tex;
 		damaged = false;
 	}
 }
