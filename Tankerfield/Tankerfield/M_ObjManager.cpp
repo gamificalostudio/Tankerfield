@@ -507,10 +507,6 @@ void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
 	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
 }
 
-
-
-
-
 bool M_ObjManager::Load(pugi::xml_node& load)
 {
 	bool ret = true;

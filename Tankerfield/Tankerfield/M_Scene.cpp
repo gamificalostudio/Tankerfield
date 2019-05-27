@@ -87,7 +87,7 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
-	path_tex = app->tex->Load("maps/path.png");
+	//path_tex = app->tex->Load("maps/path.png");
 
 	// Load Fxs
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
