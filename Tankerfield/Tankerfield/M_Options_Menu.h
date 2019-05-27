@@ -83,6 +83,14 @@ private:
 
 	UI_InteractiveGroup * global_options_panel = nullptr;
 
+	UI_Label* options_title = nullptr;
+	UI_Checkbox* fullscreen_checkbox = nullptr;
+	UI_Slider* master_volume_slider = nullptr;
+	UI_Slider* music_volume_slider = nullptr;
+	UI_Slider* sfx_volume_slider = nullptr;
+
+	UI_Button* individual_settings = nullptr;
+
 	// Sfx --------------------------------------------
 
 	uint button_enter_sfx = 0u;

@@ -41,12 +41,23 @@ bool M_Options_Menu::Start()
 
 	// Global Options Menu
 
+	options_title = app->ui->CreateLabel({ screen.w/2, 100 }, UI_LabelDef("Options", app->font->label_font_38, { 255,255,255,180 }));
+	options_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+	/*fullscreen_checkbox = app->ui->CreateCheckbox({ screen.w / 2,200 }, UI_CheckboxDef, this);*/
+
+	/*master_volume_slider = app->ui->CreateSlider({ screen.w / 2,250 }, UI_SliderDef definition, this);*/
+
+	individual_settings = app->ui->CreateButton({ screen.w / 2,800 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	individual_settings->SetLabel({ 0.f,2.f }, UI_LabelDef("Settings", app->font->button_font_22, { 50, 50, 50, 255 }));
+
 	UI_InteractiveGroupDef options_panel_def;
 	options_panel_def.columns = 1;
-	options_panel_def.rows = 5;
+	options_panel_def.rows = 6;
 
 	global_options_panel = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
-
+	global_options_panel->SetElement(options_title, iPoint(0, 0));
+	global_options_panel->SetElement(individual_settings, iPoint(0, 5));
 	// Set values ==========================================
 
 	SetState(OPTIONS_STATE::GLOBAL_OPTIONS);
@@ -72,6 +83,11 @@ bool M_Options_Menu::CleanUp()
 
 bool M_Options_Menu::PreUpdate()
 {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		return false;
+	}
+
 	if (options_state != OPTIONS_STATE::CHANGE_SCENE)
 	{
 		InputNavigate();
@@ -126,6 +142,14 @@ void M_Options_Menu::SetState(OPTIONS_STATE new_state)
 		control_helper_image->SetPos(screen_center + fPoint(-30, 450));
 
 		global_options_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
+		break;
+	case OPTIONS_STATE::INDIVIDUAL_OPTIONS:
+		control_helper_label->SetPos(screen_center + fPoint(30, 450));
+		control_helper_label->SetText("Accept");
+		control_helper_image->SetPos(screen_center + fPoint(-30, 450));
+
+		global_options_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 		break;
 	}
@@ -187,11 +211,11 @@ void M_Options_Menu::InputSelect()
 		{
 			UI_Element*  menu_element = global_options_panel->GetFocusedElement();
 
-			//if (menu_element == multi_player_button)
-			//{
-			//	SetState(MENU_STATE::SELECTION);
-			//	app->audio->PlayFx(button_select_sfx);
-			//}
+			if (menu_element == individual_settings)
+			{
+				SetState(OPTIONS_STATE::INDIVIDUAL_OPTIONS);
+				app->audio->PlayFx(button_select_sfx);
+			}
 			//else if (menu_element == leaderboard_menu_button)
 			//{
 			//	SetState(MENU_STATE::OPTIONS);
