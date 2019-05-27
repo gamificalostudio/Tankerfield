@@ -36,6 +36,9 @@ private:
 	iPoint spawn_draw_offset = { 0, 0 };
 	iPoint normal_draw_offset = { 0, 0 };
 	uint distance_to_player = 0;
+	Timer timer_check_distance;
+	float deltatime_to_check_distance = 0.f;
+	bool fist_enter_to_move = true;
 };
 
 #endif /* __OBJ_ROCKETLAUNCHER_H__ */

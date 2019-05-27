@@ -31,7 +31,7 @@
 Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node rocket_launcher_node = app->config.child("object").child("enemies").child("rocket_launcher");
-	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("rocketlauncher");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("rocketlauncher").child("animation");
 
 	tex = app->tex->Load(rocket_launcher_node.child("tex_path").child_value());
 	curr_tex = tex;
@@ -69,6 +69,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.0f });
 	can_attack = false;
 	distance_to_player = 5; //this is in tiles
+	deltatime_to_check_distance = 1;
 }
 
 Obj_RocketLauncher::~Obj_RocketLauncher()
@@ -86,8 +87,8 @@ void Obj_RocketLauncher::Attack()
 	if (life > 0 && app->scene->game_state != GAME_STATE::NO_TYPE)
 	{
 		if (target != nullptr
-			&& target->coll->GetTag() == TAG::PLAYER
-			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+			/*&& target->coll->GetTag() == TAG::PLAYER*/
+			/*&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared*/
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
 			curr_anim = &attack;
@@ -107,13 +108,24 @@ void Obj_RocketLauncher::Attack()
 
 void Obj_RocketLauncher::Move(const float & dt)
 {
-	if (target->pos_map.DistanceNoSqrt(pos_map) <= 5 * 5)
+	if (timer_check_distance.ReadSec() >= deltatime_to_check_distance || fist_enter_to_move)
 	{
-		can_attack = true;
-	}
-	else
-		can_attack = false;
+		if (target->pos_map.DistanceNoSqrt(pos_map) <= 5 * 5)
+		{
+			can_attack = true;
+			curr_anim = &idle;
+		}
+		else
+		{
+			can_attack = false;
+			curr_anim = &walk;
+		}
 
+		timer_check_distance.Start();
+
+		if (fist_enter_to_move)
+			fist_enter_to_move = false;
+	}
 	if (!can_attack)
 	{
 		if (IsOnGoal(next_pos))
@@ -130,9 +142,6 @@ void Obj_RocketLauncher::Move(const float & dt)
 		{
 			UpdateMoveVec();
 		}
-
-		if (curr_anim != &attack)
-			curr_anim = &walk;
 
 		if (path_timer.ReadSec() >= check_path_time)
 			state = ENEMY_STATE::GET_PATH;

@@ -40016,8 +40016,6 @@
  </layer>
  <objectgroup id="3" name="Colliders"/>
  <objectgroup id="4" name="SpawnPoints">
-  <object id="5" name="ENEMY" type="ENEMY" x="570" y="600" width="30" height="30"/>
   <object id="6" x="600" y="600"/>
-  <object id="7" name="ENEMY" type="ENEMY" x="60" y="30" width="30" height="30"/>
  </objectgroup>
 </map>
