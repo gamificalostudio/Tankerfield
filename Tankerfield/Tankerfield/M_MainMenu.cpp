@@ -60,7 +60,7 @@ bool M_MainMenu::Start()
 	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 360.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .1.0.0", app->font->label_font_38, {255,255,255,180}));
+	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v 1.0.0", app->font->label_font_38, {255,255,255,180}));
 	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 
 	UI_InteractiveGroupDef menu_panel_def;
@@ -247,9 +247,10 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
+		control_helper_label->SetPos(screen_center + fPoint(-250, 320));
 		control_helper_label->SetText("Accept");
-		control_helper_image->SetPos(screen_center + fPoint(-380, 260));
+		control_helper_image->SetPos(screen_center + fPoint(-300, 320));
+
 
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
@@ -257,7 +258,6 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		}
 
 		break;
-
 	case MENU_STATE::SELECTION:
 		//Set Values -------------------------------------------
 
@@ -278,6 +278,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		logo_image->SetState(ELEMENT_STATE::HIDDEN);
 		version_label->SetState(ELEMENT_STATE::HIDDEN);
+
 
 		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
