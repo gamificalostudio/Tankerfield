@@ -132,6 +132,8 @@ bool M_MainMenu::Start()
 	
 	// Set values ==========================================
 
+	app->ui->HideAllUI();
+	SetPlayerObjectsState(false);
 	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
 	
@@ -225,64 +227,6 @@ bool M_MainMenu::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-void M_MainMenu::SetState(MENU_STATE new_state)
-{
-	fRect screen = app->win->GetWindowRect();
-	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-
-	switch (new_state)
-	{
-	case MENU_STATE::INIT_MENU:
-		menu_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		logo_image->SetState(ELEMENT_STATE::VISIBLE);
-		version_label->SetState(ELEMENT_STATE::VISIBLE);
-
-		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
-		control_helper_label->SetText("Accept");
-		control_helper_image->SetPos(screen_center + fPoint(-380, 260));
-
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			players[i].tank->active = false;
-		}
-
-		break;
-
-	case MENU_STATE::SELECTION:
-		//Set Values -------------------------------------------
-
-		current_player = 0;
-		ResetPanelColors();
-
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			players[i].tank->active = true;
-		}
-
-		player_labels[0]->color_mod = { 250, 20, 20, 255 };
-		player_labels[1]->color_mod = { 220, 220, 220, 255 };
-		player_labels[2]->color_mod = { 220, 220, 220, 255 };
-		player_labels[3]->color_mod = { 220, 220, 220, 255 };
-
-		// Set visible elements --------------------------------
-		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		logo_image->SetState(ELEMENT_STATE::HIDDEN);
-		version_label->SetState(ELEMENT_STATE::HIDDEN);
-
-		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		control_helper_label->SetPos(screen_center + fPoint( 40, 350));
-		control_helper_label->SetText("Select Color");
-		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
-
-		break;
-	}
-
-	menu_state = new_state;
-
-}
 
 void M_MainMenu::InputNavigate()
 {
@@ -430,6 +374,7 @@ bool M_MainMenu::SetPlayerProperties()
 	return true;
 }
 
+
 void M_MainMenu::ResetPanelColors()
 {
 	if (selection_panel == nullptr)
@@ -449,6 +394,83 @@ void M_MainMenu::ResetPanelColors()
 	}
 
 	selection_panel->SetFocusImage(iPoint(0, 0));
+}
+
+void M_MainMenu::SetState(MENU_STATE new_state)
+{
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
+
+	// If state is equal to current state ========================
+
+	if (new_state == menu_state)
+	{
+		return;
+	}
+
+	// Desactive current state ==================================
+
+	switch (menu_state)
+	{
+	case MENU_STATE::INIT_MENU:
+
+		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		logo_image->SetState(ELEMENT_STATE::HIDDEN);
+		version_label->SetState(ELEMENT_STATE::HIDDEN);
+
+		break;
+
+	case MENU_STATE::SELECTION:
+		
+		current_player = 0;
+		ResetPanelColors();
+		SetPlayerObjectsState(false);
+
+		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+
+		player_labels[0]->color_mod = { 250, 20, 20, 255 };
+		player_labels[1]->color_mod = { 220, 220, 220, 255 };
+		player_labels[2]->color_mod = { 220, 220, 220, 255 };
+		player_labels[3]->color_mod = { 220, 220, 220, 255 };
+
+		break;
+	}
+
+	// Active new state ======================================
+
+	switch (new_state)
+	{
+	case MENU_STATE::INIT_MENU:
+
+		menu_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		logo_image->SetState(ELEMENT_STATE::VISIBLE);
+		version_label->SetState(ELEMENT_STATE::VISIBLE);
+
+		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
+		control_helper_label->SetText("Accept");
+		control_helper_image->SetPos(screen_center + fPoint(-380, 260));
+		break;
+
+	case MENU_STATE::SELECTION:
+
+		//Set Values -------------------------------------------
+
+		SetPlayerObjectsState(true);
+
+		// Set elements state --------------------------------
+
+		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		control_helper_label->SetPos(screen_center + fPoint(40, 350));
+		control_helper_label->SetText("Select Color");
+		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
+
+		break;
+	}
+
+	menu_state = new_state;
+
 }
 
 SDL_Color M_MainMenu::GetColor(float value)
@@ -474,8 +496,15 @@ SDL_Color M_MainMenu::GetColor(float value)
 	float g_value = lerp(G_Color[src], G_Color[target], float_part);
 	float b_value = lerp(B_Color[src], B_Color[target], float_part);
 
-	SDL_Color ret = { (uint)r_value,  (uint)g_value, (uint)b_value, 255u};
+	SDL_Color ret = { (uint)r_value,  (uint)g_value, (uint)b_value, 255u };
 
 	return ret;
+}
 
+void M_MainMenu::SetPlayerObjectsState(bool new_value)
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		players[i].tank->active = new_value;
+	}
 }

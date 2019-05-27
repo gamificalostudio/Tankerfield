@@ -242,6 +242,7 @@ public:
 
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
+	void HideAllUI();
 
 private:
 
