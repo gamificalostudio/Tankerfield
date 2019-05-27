@@ -211,8 +211,6 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects\Player</Filter>
     </ClCompile>
-    <ClCompile Include="HealingShot_Area.cpp">
-    </ClCompile>
     <ClCompile Include="Obj_ElectroShotAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -220,6 +218,9 @@
       <Filter>Objects\Particles</Filter>
     </ClCompile>
     <ClCompile Include="Bullet_RocketLauncher.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="HealingShot_Area.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
   </ItemGroup>
@@ -458,8 +459,6 @@
     <ClInclude Include="Obj_Portal.h">
       <Filter>Objects\Player</Filter>
     </ClInclude>
-    <ClInclude Include="HealingShot_Area.h">
-    </ClInclude>
     <ClInclude Include="Obj_ElectroShotAnimation.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -467,6 +466,9 @@
       <Filter>Objects\Particles</Filter>
     </ClInclude>
     <ClInclude Include="Bullet_RocketLauncher.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="HealingShot_Area.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
   </ItemGroup>

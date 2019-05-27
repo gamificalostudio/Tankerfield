@@ -48,10 +48,16 @@ bool M_MainMenu::Start()
 	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, -200.f), UI_ImageDef({10, 710, 915, 260}));
 	logo_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 40), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 0), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 150.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	leaderboard_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 120.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	leaderboard_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Leaderboard", app->font->button_font_22, { 50, 50, 50, 255 }));
+
+	options_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 240.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	options_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Options", app->font->button_font_22, { 50, 50, 50, 255 }));
+
+	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 360.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .1.0.0", app->font->label_font_38, {255,255,255,180}));
@@ -59,11 +65,13 @@ bool M_MainMenu::Start()
 
 	UI_InteractiveGroupDef menu_panel_def;
 	menu_panel_def.columns = 1;
-	menu_panel_def.rows = 2;
+	menu_panel_def.rows = 4;
 
 	menu_panel = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
 	menu_panel->SetElement(multi_player_button, iPoint(0,0));
-	menu_panel->SetElement(exit_button, iPoint(0, 1));
+	menu_panel->SetElement(leaderboard_menu_button, iPoint(0, 1));
+	menu_panel->SetElement(options_menu_button, iPoint(0, 2));
+	menu_panel->SetElement(exit_button, iPoint(0, 3));
 
 	// Selection screen ------------------------
 	player_labels_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
@@ -374,11 +382,22 @@ void M_MainMenu::InputSelect()
 				app->audio->PlayFx(button_error_sfx);
 			}
 		}
+
 		else if ( menu_state == MENU_STATE::INIT_MENU && app->ui->GetFocusedElement() != nullptr)
 		{
 			UI_Element*  menu_element = menu_panel->GetFocusedElement();
 
 			if (menu_element == multi_player_button)
+			{
+				SetState(MENU_STATE::SELECTION);
+				app->audio->PlayFx(button_select_sfx);
+			}
+			else if (menu_element == leaderboard_menu_button)
+			{
+				SetState(MENU_STATE::SELECTION);
+				app->audio->PlayFx(button_select_sfx);
+			}
+			else if (menu_element == options_menu_button)
 			{
 				SetState(MENU_STATE::SELECTION);
 				app->audio->PlayFx(button_select_sfx);

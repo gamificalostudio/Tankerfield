@@ -95,6 +95,8 @@ private:
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
 	UI_Button		* multi_player_button = nullptr;
+	UI_Button		* leaderboard_menu_button = nullptr;
+	UI_Button		* options_menu_button = nullptr;
 	UI_Button		* exit_button = nullptr;
 	UI_Label        * version_label = nullptr;
 
