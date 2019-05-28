@@ -387,3 +387,11 @@ void General_GUI::UpdateLeaderBoardSquadName()
 		leader_board_doc.save_file(doc_path.c_str());
 	}
 }
+
+void General_GUI::MakeChildOfRoundElement(UI_Element * elem)
+{
+	//if (round_element != nullptr)
+	//{
+	//	elem->SetParent(round_element);
+	//}
+}

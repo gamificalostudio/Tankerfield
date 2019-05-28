@@ -14,6 +14,7 @@
 #include "UI_Label.h"
 #include "M_Window.h"
 #include "M_Fonts.h"
+#include "General_HUD.h"
 
 bool M_Debug::Start()
 {
@@ -61,9 +62,10 @@ void M_Debug::CreateLabel()
 {
 	fRect screen = app->win->GetWindowRect();
 	UI_LabelDef label_round_def("", app->font->rounds_font);
-	debug_label = app->ui->CreateLabel({ screen.w * 0.5f ,  screen.h * 0.5f }, label_round_def);
+	debug_label = app->ui->CreateLabel({ screen.w * 0.5f ,  screen.h * 0.15f }, label_round_def);
 	debug_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	debug_label->SetState(ELEMENT_STATE::HIDDEN);
+	app->scene->general_gui->MakeChildOfRoundElement(debug_label);
 }
 
 void M_Debug::ManageNumericDebug(fPoint mouse_pos)
@@ -252,7 +254,7 @@ void DebugNumeric::PressedKey()
 	if (app->input->GetKey(key) == KEY_DOWN)
 	{
 		app->debug->curr_debug_num = type;
-		app->debug->debug_label->SetText(label_message);
+		app->debug->debug_label->SetText(label_message + std::to_string(num));
 		app->debug->debug_label->SetState(ELEMENT_STATE::VISIBLE);
 	}
 }
@@ -268,6 +270,8 @@ void DebugNumeric::UpdateNumber(int new_digit)
 	num = num * 10 + new_digit;
 	num = MIN(num, max_num);
 	num = MAX(num, min_num);
+
+	app->debug->debug_label->SetText(label_message + std::to_string(num));
 }
 
 bool DebugNumeric::ReleasedKey()

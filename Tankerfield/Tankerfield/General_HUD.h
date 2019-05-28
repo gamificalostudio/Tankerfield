@@ -44,6 +44,8 @@ public:
 
 	void UpdateLeaderBoardSquadName();
 
+	void MakeChildOfRoundElement(UI_Element* elem);//To be painted over the rhombus on the center, it needs to be a child of round element
+
 private:
 
 	// General HUD -------------------------------------------
