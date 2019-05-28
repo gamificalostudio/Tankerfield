@@ -39,8 +39,11 @@ private:
 	iPoint normal_draw_offset = { 0, 0 };
 	uint distance_to_player = 0;
 	Timer timer_check_distance;
+	Timer timer_charging;
+	float deltatime_charge = 0.f;
 	float deltatime_to_check_distance = 0.f;
 	bool fist_enter_to_move = true;
+	bool shoot;
 
 
 

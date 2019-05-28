@@ -60,7 +60,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->rocket_launcher_info.attack_frequency;
 	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, app->scene->round - 1);
-	
+	deltatime_charge = 0.5f;
+
 	check_path_time = 2.0f;
 	damaged_sprite_time = 75;
 	scale = 1.f;
@@ -70,7 +71,6 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.0f });
 	can_attack = false;
-	distance_to_player = 5; //this is in tiles
 	deltatime_to_check_distance = 1;
 }
 
@@ -88,24 +88,31 @@ void Obj_RocketLauncher::Attack()
 {
 	if (life > 0 && app->scene->game_state != GAME_STATE::NO_TYPE)
 	{
-		if (target != nullptr
-			/*&& target->coll->GetTag() == TAG::PLAYER*/
+		if (timer_charging.ReadSec() >= deltatime_charge)
+		{
+			shoot = true;
+		}
+		if (shoot)
+		{
+			if (/*&& target->coll->GetTag() == TAG::PLAYER*/
 			/*&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared*/
-			&& perf_timer.ReadMs() > (double)attack_frequency)
-		{
-			curr_anim = &attack;
-			//target->ReduceLife(attack_damage);
-			perf_timer.Start();
-			app->audio->PlayFx(sfx_attack);
-			ShootMissile();
-		}
+			  perf_timer.ReadMs() > (double)attack_frequency)
+			{
+				curr_anim = &attack;
+				perf_timer.Start();
+				app->audio->PlayFx(sfx_attack);
+				ShootMissile();
 
-		if (curr_anim == &attack
-			&& curr_anim->Finished())
-		{
-			curr_anim = &idle;
-			attack.Reset();
+			}
+
+			if (curr_anim == &attack
+				&& curr_anim->Finished())
+			{
+				curr_anim = &idle;
+				attack.Reset();
+			}
 		}
+		
 	}
 }
 
@@ -113,7 +120,7 @@ void Obj_RocketLauncher::Move(const float & dt)
 {
 	if (timer_check_distance.ReadSec() >= deltatime_to_check_distance || fist_enter_to_move)
 	{
-		if (target->pos_map.DistanceNoSqrt(pos_map) <= 5 * 5)
+		if (target->pos_map.DistanceNoSqrt(pos_map) <= attack_range_squared)
 		{
 			can_attack = true;
 			curr_anim = &idle;
