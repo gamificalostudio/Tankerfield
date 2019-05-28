@@ -12,8 +12,16 @@ bool M_Debug::PreUpdate()
 	//SWITCH BETWEEN MAP AND TEST MAP
 	if(app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
 	{
-		app->scene->current_level = 1;
-		app->scmanager->FadeToBlack(app->scene, app->scene, 2.f, 2.f);
+		if (app->scene->current_level == 0)
+		{
+			app->scene->current_level = 1;
+			app->scmanager->FadeToBlack(app->scene, app->scene, 2.f, 2.f);
+		}
+		else
+		{
+			app->scene->current_level = 0;
+			app->scmanager->FadeToBlack(app->scene, app->scene, 2.f, 2.f);
+		}
 	}
 
 	//focus tank pressing one of the buttons (1,2,3,4)

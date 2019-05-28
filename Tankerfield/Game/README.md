@@ -56,7 +56,7 @@ https://github.com/AitorVelez
 - F7: Activate/ Deactivate God Mode
 - F9: Show colliders
 - F10: Show information on screen
-- F11: Change to test map
+- F11: Switch between map and test map
 - 6: Kill all player
 - 0: Kill all enemies
 
