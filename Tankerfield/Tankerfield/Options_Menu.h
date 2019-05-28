@@ -1,5 +1,5 @@
-#ifndef __M_OPTIONS_MENU_H__
-#define __M_OPTIONS_MENU_H__
+#ifndef __OPTIONS_MENU_H__
+#define __OPTIONS_MENU_H__
 
 #include "SDL/include/SDL_rect.h"
 #include "Module.h"
@@ -20,12 +20,6 @@ class UI_InteractiveGroup;
 
 class Obj_Tank_MainMenu;
 
-enum class OPTIONS_STATE
-{
-	GLOBAL_OPTIONS,
-	INDIVIDUAL_OPTIONS,
-	CHANGE_SCENE,
-};
 
 struct Player_Options_Selection
 {
@@ -34,41 +28,23 @@ struct Player_Options_Selection
 	Obj_Tank_MainMenu*  tank = nullptr;
 };
 
-class M_Options_Menu : public Module, public UI_Listener
+class Options_Menu :public UI_Listener
 {
 public:
 
-	M_Options_Menu() {};
-
-	bool Start() override;
-
-	bool PreUpdate() override;
-
-	bool Update(float dt) override;
-
-	bool PostUpdate(float dt) override;
-
-	bool CleanUp() override;
+	Options_Menu();
 
 	bool OnHoverEnter(UI_Element * element);
 
-private:
+	void ShowMenu();
 
-	void SetState(OPTIONS_STATE new_state);
+	void HideMenu();
 
 	void InputNavigate();
 
 	void InputSelect();
 
-	bool SetPlayerProperties();
-
 private:
-
-	OPTIONS_STATE		options_state = OPTIONS_STATE::GLOBAL_OPTIONS;
-
-	// Textrues ================================================
-
-	SDL_Texture     * background_texture = nullptr;
 
 	// Elements ================================================
 

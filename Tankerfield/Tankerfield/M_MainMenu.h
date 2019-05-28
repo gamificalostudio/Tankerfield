@@ -17,6 +17,7 @@ class UI_Image;
 class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
+class Options_Menu;
 
 class Obj_Tank_MainMenu;
 
@@ -129,6 +130,10 @@ private:
 	uint button_select_sfx = 0u;
 	uint button_error_sfx = 0u;
 	uint selection_finished_sfx = 0u;
+
+	// Menus ------------------------------------------
+
+	Options_Menu* options = nullptr;
 };
 
 #endif // __j1SCENE_H__

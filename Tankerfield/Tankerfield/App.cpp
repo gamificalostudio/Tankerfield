@@ -26,7 +26,7 @@
 #include "M_AnimationBank.h"
 #include "M_RewardZoneManager.h"
 #include "M_MainMenu.h"
-#include "M_Options_Menu.h"
+#include "Options_Menu.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -51,7 +51,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	anim_bank = DBG_NEW M_AnimationBank();
 	reward_zone_manager = DBG_NEW M_RewardZoneManager();
 	main_menu = DBG_NEW M_MainMenu();
-	options_menu = DBG_NEW M_Options_Menu();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
@@ -63,7 +62,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(pathfinding);
 	AddModule(map);
 	AddModule(scene);
-	AddModule(options_menu);
 	AddModule(main_menu);
 	AddModule(objectmanager);
 	AddModule(pick_manager);
@@ -132,15 +130,12 @@ bool App::Awake()
 		{
 		case APP_MODE::RELEASE:
 			scene->active = false;
-			options_menu->active = false;
 			break;
 		case APP_MODE::DEBUG_MAIN_MENU:
 			scene->active = false;
-			options_menu->active = false;
 			break;
 		case APP_MODE::DEBUG_MULTIPLAYER:
 			main_menu->active = false;
-			options_menu->active = false;
 			break;
 		}
 

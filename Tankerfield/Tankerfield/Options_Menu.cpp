@@ -1,6 +1,6 @@
 #include "App.h"
 #include "Log.h"
-#include "M_Options_Menu.h"
+#include "Options_Menu.h"
 #include "M_Render.h"
 #include "M_Textures.h"
 #include "M_Fonts.h"
@@ -16,11 +16,8 @@
 #include "UI_Label.h"
 #include "UI_InteractiveGroup.h"
 
-bool M_Options_Menu::Start()
+Options_Menu::Options_Menu()
 {
-	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
-	app->audio->PlayMusic("audio/Music/menu_music.ogg");
-
 	button_enter_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_enter.wav", 20);
 	button_select_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_select.wav", 35);
 	button_error_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_error.wav", 35);
@@ -46,13 +43,15 @@ bool M_Options_Menu::Start()
 	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
 	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	options_title = app->ui->CreateLabel({ screen.w/2, 225 }, UI_LabelDef("Options", app->font->label_font_38, { 255,255,255,180 }));
+	options_title = app->ui->CreateLabel({ screen.w / 2, 225 }, UI_LabelDef("Options", app->font->label_font_38, { 255,255,255,180 }));
 	options_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	options_title->SetParent(panel_background);
 
 		//Master Volume
 
 	master_volume_label=app->ui->CreateLabel({ screen.w * 0.5f -100, 325 }, UI_LabelDef("Master Volume", app->font->label_font_38, { 255,255,255,180 }));
 	master_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	master_volume_label->SetParent(panel_background);
 
 	master_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 325 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
 	master_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -64,11 +63,13 @@ bool M_Options_Menu::Start()
 
 	master_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 325 }, UI_LabelDef(master_multiplier_string,app->font->label_font_38), this);
 	master_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	master_volume_value->SetParent(panel_background);
 
 		//Music Volume
 
 	music_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 500 }, UI_LabelDef("Music Volume", app->font->label_font_38, { 255,255,255,180 }));
 	music_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	music_volume_label->SetParent(panel_background);
 
 	music_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 500 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
 	music_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -80,11 +81,13 @@ bool M_Options_Menu::Start()
 
 	music_volume_value = app->ui->CreateLabel({ screen.w* 0.5f + 110, 500 }, UI_LabelDef(music_volume_string, app->font->label_font_38), this);
 	music_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	music_volume_value->SetParent(panel_background);
 
 		// Sfx Volume
 
 	sfx_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 675 }, UI_LabelDef("SFX Volume", app->font->label_font_38, { 255,255,255,180 }));
 	sfx_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	sfx_volume_label->SetParent(panel_background);
 
 	sfx_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 675 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
 	sfx_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -96,6 +99,7 @@ bool M_Options_Menu::Start()
 
 	sfx_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 675 }, UI_LabelDef(sfx_volume_string, app->font->label_font_38), this);
 	sfx_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	sfx_volume_value->SetParent(panel_background);
 
 		// Else
 
@@ -120,252 +124,113 @@ bool M_Options_Menu::Start()
 	global_navigation_panel->SetElement(individual_settings, iPoint(0, 5));
 	global_navigation_panel->SetElement(individual_settings, iPoint(1, 5));
 
-		// Labels Matrix
-
-	UI_InteractiveGroupDef labels_panel_def;
-	labels_panel_def.columns = 2;
-	labels_panel_def.rows = 6;
-
-	labels_panel = app->ui->CreateIntearctiveGroup(screen_center, labels_panel_def, this);
-	labels_panel->SetElement(master_volume_label, iPoint(0, 0));
-	labels_panel->SetElement(master_volume_value, iPoint(1, 0));
-	labels_panel->SetElement(music_volume_label, iPoint(0, 1));
-	labels_panel->SetElement(music_volume_value, iPoint(1, 1));
-	labels_panel->SetElement(sfx_volume_label, iPoint(0, 2));
-	labels_panel->SetElement(sfx_volume_value, iPoint(1, 2));
-
 	// Set values ==========================================
-
-	SetState(OPTIONS_STATE::GLOBAL_OPTIONS);
 	SDL_ShowCursor(SDL_ENABLE);
-
-	return true;
 }
 
-
-
-bool M_Options_Menu::CleanUp()
-{
-	app->tex->UnLoad(background_texture);
-	app->render->DestroyCamera(camera);
-
-	for (int i = 0; i < 4; ++i)
-	{
-		players[i].tank = nullptr;
-	}
-
-	return true;
-}
-
-bool M_Options_Menu::PreUpdate()
-{
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-	{
-		return false;
-	}
-
-	if (options_state != OPTIONS_STATE::CHANGE_SCENE)
-	{
-		InputNavigate();
-		InputSelect();
-	}
-
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (players[i].controller == nullptr)
-		{
-			players[i].controller = app->input->GetAbleController();
-		}
-	}
-
-	return true;
-}
-
-bool M_Options_Menu::Update(float dt)
-{
-
-	return true;
-}
-
-bool M_Options_Menu::PostUpdate(float dt)
-{
-	// Blit background ===================================
-
-	SDL_RenderCopy(app->render->renderer, background_texture, NULL, &(SDL_Rect)app->win->GetWindowRect());
-
-	float scale = 2.f;
-	SDL_Rect section = { 256, 400, 160, 96 };
-
-	return true;
-}
-
-bool M_Options_Menu::OnHoverEnter(UI_Element * element)
+bool Options_Menu::OnHoverEnter(UI_Element * element)
 {
 	app->audio->PlayFx(button_enter_sfx);
 	return true;
 }
 
-void M_Options_Menu::SetState(OPTIONS_STATE new_state)
+void Options_Menu::ShowMenu()
 {
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
-	switch (new_state)
-	{
-	case OPTIONS_STATE::GLOBAL_OPTIONS:
-		control_helper_label->SetPos(screen_center + fPoint(30, 450));
-		control_helper_label->SetText("Accept");
-		control_helper_image->SetPos(screen_center + fPoint(-30, 450));
+	control_helper_label->SetPos(screen_center + fPoint(30, 450));
+	control_helper_label->SetText("Accept");
+	control_helper_image->SetPos(screen_center + fPoint(-30, 450));
 
-		global_navigation_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		labels_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-
-		break;
-
-	case OPTIONS_STATE::INDIVIDUAL_OPTIONS:
-		control_helper_label->SetPos(screen_center + fPoint(30, 450));
-		control_helper_label->SetText("Accept");
-		control_helper_image->SetPos(screen_center + fPoint(-30, 450));
-
-		global_navigation_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		labels_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-
-		break;
-	}
-	options_state = new_state;
-
+	panel_background->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
 
-void M_Options_Menu::InputNavigate()
+void Options_Menu::HideMenu()
 {
-
-	int player_num = -1;
-	UI_InteractiveGroup* panel = nullptr;
-
-	if (options_state == OPTIONS_STATE::GLOBAL_OPTIONS)
-	{
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if (players[i].controller != nullptr)
-			{
-				if (global_navigation_panel->HandleControllerINavigation((*players[i].controller)))
-				{
-					app->audio->PlayFx(button_enter_sfx);
-				}
-			}
-		}
-
-		if (global_navigation_panel->HandleKeyboardNavigation())
-		{
-			app->audio->PlayFx(button_enter_sfx);
-		}
-
-
-	}
-}
-
-void M_Options_Menu::InputSelect()
-{
-	bool input_select_controller = false;
-
-	if (options_state == OPTIONS_STATE::GLOBAL_OPTIONS)
-	{
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if (players[i].controller != nullptr && (*players[i].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-			{
-				input_select_controller = true;
-			}
-		}
-	}
-
-	if (app->input->GetMouseButton(1) == KEY_UP)
-	{
-		input_select_controller = true;
-	}
-
-	if (input_select_controller == true)
-	{
-		if (options_state == OPTIONS_STATE::GLOBAL_OPTIONS && global_navigation_panel->GetFocusedElement() != nullptr)
-		{
-			UI_Element*  menu_element = global_navigation_panel->GetFocusedElement();
-
-			if (menu_element == individual_settings)
-			{
-				SetState(OPTIONS_STATE::INDIVIDUAL_OPTIONS);
-				
-			}
-			else if (menu_element == master_volume_L)
-			{
-				if (app->audio->master_volume >= 0.04)
-				{
-					master_multiplier_string = std::to_string(int(round((app->audio->master_volume -= 0.05) * 100)));
-					master_volume_value->SetText(master_multiplier_string);
-					app->audio->SetMasterVolume(app->audio->master_volume);
-					LOG("%f", app->audio->master_volume);
-				}
-			}
-			else if (menu_element == master_volume_R)
-			{
-				if (app->audio->master_volume <= 0.95)
-				{
-					master_multiplier_string = std::to_string(int(round((app->audio->master_volume += 0.05) * 100)));
-					master_volume_value->SetText(master_multiplier_string);
-					app->audio->SetMasterVolume(app->audio->master_volume);
-					LOG("%f", app->audio->master_volume);
-				}
-			}
-			else if (menu_element == music_volume_L)
-			{
-				if (app->audio->music_volume >= 5)
-				{
-					music_volume_string = std::to_string(app->audio->music_volume -= 5);
-					music_volume_value->SetText(music_volume_string);
-					app->audio->SetMusicVolume(app->audio->music_volume);
-				}
-			}
-			else if (menu_element == music_volume_R)
-			{
-				if (app->audio->music_volume <= 95)
-				{
-					music_volume_string = std::to_string(app->audio->music_volume += 5);
-					music_volume_value->SetText(music_volume_string);
-					app->audio->SetMusicVolume(app->audio->music_volume);
-				}
-			}
-			else if (menu_element == sfx_volume_L)
-			{
-				if (app->audio->sfx_volume >= 5)
-				{
-					sfx_volume_string = std::to_string(app->audio->sfx_volume -= 5);
-					sfx_volume_value->SetText(sfx_volume_string);
-				}
-			}
-			else if (menu_element == sfx_volume_R)
-			{
-				if (app->audio->sfx_volume <= 95)
-				{
-					sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
-					sfx_volume_value->SetText(sfx_volume_string);
-				}
-			}
-
-			app->audio->PlayFx(button_select_sfx);
-		}
-
-	}
-
+	panel_background->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 
 
-bool M_Options_Menu::SetPlayerProperties()
+void Options_Menu::InputNavigate()
 {
-	UI_Element* element_focused = global_navigation_panel->GetFocusedElement();
-
-	if (element_focused == nullptr)
+	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		return false;
+		if (players[i].controller != nullptr)
+		{
+			if (global_navigation_panel->HandleControllerINavigation(players[i].controller))
+			{
+				app->audio->PlayFx(button_enter_sfx);
+			}
+		}
 	}
 
-	return true;
+	if (global_navigation_panel->HandleKeyboardNavigation())
+	{
+		app->audio->PlayFx(button_enter_sfx);
+	}
+}
+
+void Options_Menu::InputSelect()
+{
+		UI_Element*  menu_element = global_navigation_panel->GetFocusedElement();
+
+		if (menu_element == master_volume_L)
+		{
+			if (app->audio->master_volume >= 0.04)
+			{
+				master_multiplier_string = std::to_string(int(round((app->audio->master_volume -= 0.05) * 100)));
+				master_volume_value->SetText(master_multiplier_string);
+				app->audio->SetMasterVolume(app->audio->master_volume);
+				LOG("%f", app->audio->master_volume);
+			}
+		}
+		else if (menu_element == master_volume_R)
+		{
+			if (app->audio->master_volume <= 0.95)
+			{
+				master_multiplier_string = std::to_string(int(round((app->audio->master_volume += 0.05) * 100)));
+				master_volume_value->SetText(master_multiplier_string);
+				app->audio->SetMasterVolume(app->audio->master_volume);
+				LOG("%f", app->audio->master_volume);
+			}
+		}
+		else if (menu_element == music_volume_L)
+		{
+			if (app->audio->music_volume >= 5)
+			{
+				music_volume_string = std::to_string(app->audio->music_volume -= 5);
+				music_volume_value->SetText(music_volume_string);
+				app->audio->SetMusicVolume(app->audio->music_volume);
+			}
+		}
+		else if (menu_element == music_volume_R)
+		{
+			if (app->audio->music_volume <= 95)
+			{
+				music_volume_string = std::to_string(app->audio->music_volume += 5);
+				music_volume_value->SetText(music_volume_string);
+				app->audio->SetMusicVolume(app->audio->music_volume);
+			}
+		}
+		else if (menu_element == sfx_volume_L)
+		{
+			if (app->audio->sfx_volume >= 5)
+			{
+				sfx_volume_string = std::to_string(app->audio->sfx_volume -= 5);
+				sfx_volume_value->SetText(sfx_volume_string);
+			}
+		}
+		else if (menu_element == sfx_volume_R)
+		{
+			if (app->audio->sfx_volume <= 95)
+			{
+				sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
+				sfx_volume_value->SetText(sfx_volume_string);
+			}
+		}
+
+		app->audio->PlayFx(button_select_sfx);
 }

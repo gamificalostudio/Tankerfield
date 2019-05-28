@@ -223,7 +223,7 @@
     <ClCompile Include="HealingShot_Area.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="M_Options_Menu.cpp">
+    <ClCompile Include="Options_Menu.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -474,7 +474,7 @@
     <ClInclude Include="HealingShot_Area.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="M_Options_Menu.h">
+    <ClInclude Include="Options_Menu.h">
       <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
