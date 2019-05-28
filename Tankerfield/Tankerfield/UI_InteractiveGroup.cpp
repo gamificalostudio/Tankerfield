@@ -38,13 +38,13 @@ bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-bool UI_InteractiveGroup::HandleControllerINavigation( Controller* controller )
+bool UI_InteractiveGroup::HandleControllerINavigation(Controller** controller )
 {
 	bool ret = false;
 
 	for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
 	{
-		if (controller->GetJoystickState(Joystick::LEFT, (INPUT_DIR)input_dir) == KEY_DOWN)
+		if (app->input->GetControllerJoystickState(controller,Joystick::LEFT, (INPUT_DIR)input_dir) == KEY_DOWN)
 		{
 			SetNearestElement((INPUT_DIR)input_dir);
 			ret = true;
