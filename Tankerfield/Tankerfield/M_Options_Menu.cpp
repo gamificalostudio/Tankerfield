@@ -83,23 +83,23 @@ bool M_Options_Menu::Start()
 
 		// Sfx Volume
 
-	sfx_volume_label = app->ui->CreateLabel({ screen.w / 2 - 100, 675 }, UI_LabelDef("SFX Volume", app->font->label_font_38, { 255,255,255,180 }));
+	sfx_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 675 }, UI_LabelDef("SFX Volume", app->font->label_font_38, { 255,255,255,180 }));
 	sfx_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sfx_volume_L = app->ui->CreateButton({ screen.w / 2 + 50, 675 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	sfx_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 675 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
 	sfx_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sfx_volume_R = app->ui->CreateButton({ screen.w / 2 + 170, 675 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	sfx_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 675 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
 	sfx_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	sfx_volume_string=std::to_string(app->audio->GetSfxVolume());
 
-	sfx_volume_value = app->ui->CreateLabel({ screen.w / 2 + 110, 675 }, UI_LabelDef(sfx_volume_string, app->font->label_font_38), this);
+	sfx_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 675 }, UI_LabelDef(sfx_volume_string, app->font->label_font_38), this);
 	sfx_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		// Else
 
-	individual_settings = app->ui->CreateButton({ screen.w / 2,800 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	individual_settings = app->ui->CreateButton({ screen.w * 0.5f,800 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	individual_settings->SetLabel({ 0.f,2.f }, UI_LabelDef("Settings", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 
