@@ -11,6 +11,9 @@
 #include "Obj_Enemy.h"
 #include "Object.h"
 #include <assert.h>
+#include "UI_Label.h"
+#include "M_Window.h"
+#include "M_Fonts.h"
 
 bool M_Debug::Start()
 {
@@ -18,31 +21,42 @@ bool M_Debug::Start()
 		DebugNumericType::SELECT_TANK,
 		SDL_SCANCODE_Z,
 		0,
-		4);
+		4,
+		"Selecting tank: ");
 
 	debug_numeric[(int)DebugNumericType::SELECT_WEAPON].SetValues(
 		DebugNumericType::SELECT_WEAPON,
 		SDL_SCANCODE_F2,
 		0,
-		(int)WEAPON::MAX_WEAPONS);
+		(int)WEAPON::MAX_WEAPONS,
+		"Selecting tank weapon: ");
 
 	debug_numeric[(int)DebugNumericType::SELECT_WEAPON_LEVEL].SetValues(
 		DebugNumericType::SELECT_WEAPON_LEVEL,
 		SDL_SCANCODE_X,
 		1,
-		INT_MAX);
+		INT_MAX,
+		"Selecting weapon level: ");
 
 	debug_numeric[(int)DebugNumericType::SELECT_OBJECT].SetValues(
 		DebugNumericType::SELECT_OBJECT,
 		SDL_SCANCODE_C,
 		0,
-		(int)ObjectType::MAX);
+		(int)ObjectType::MAX,
+		"Selecting object: ");
 
 	debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].SetValues(
 		DebugNumericType::SELECT_ENEMY_LEVEL,
 		SDL_SCANCODE_V,
 		1,
-		INT_MAX);
+		INT_MAX,
+		"Selecting enemy level: ");
+
+	fRect screen = app->win->GetWindowRect();
+	UI_LabelDef label_round_def("", app->font->rounds_font);
+	debug_label = app->ui->CreateLabel({ screen.w * 0.5f ,  screen.h * 0.5f }, label_round_def);
+	debug_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	debug_label->SetState(ELEMENT_STATE::HIDDEN);
 
 	return true;
 }
@@ -69,8 +83,6 @@ void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 			debug_numeric[(int)curr_debug_num].UpdateNumber(GetNumberFromScancode(keyboard_number));
 		}
 	}
-
-	//Print according label
 
 	//Do whatever you need to do when it is released
 	if (debug_numeric[(int)curr_debug_num].ReleasedKey())
@@ -211,7 +223,7 @@ int M_Debug::GetNumberFromScancode(int num)
 	}
 }
 
-void DebugNumeric::SetValues(DebugNumericType type, SDL_Scancode key, int min_num, int max_num)
+void DebugNumeric::SetValues(DebugNumericType type, SDL_Scancode key, int min_num, int max_num, std::string label_message)
 {
 	this->type = type;
 	type_num = (int)type;
@@ -219,6 +231,7 @@ void DebugNumeric::SetValues(DebugNumericType type, SDL_Scancode key, int min_nu
 	assert(min_num < max_num);
 	this->num = this->min_num = min_num;
 	this->max_num = max_num;
+	this->label_message = label_message;
 }
 
 void DebugNumeric::PressedKey()
@@ -226,6 +239,8 @@ void DebugNumeric::PressedKey()
 	if (app->input->GetKey(key) == KEY_DOWN)
 	{
 		app->debug->curr_debug_num = type;
+		app->debug->debug_label->SetState(ELEMENT_STATE::VISIBLE);
+		app->debug->debug_label->SetText(label_message);
 	}
 }
 
@@ -249,7 +264,7 @@ bool DebugNumeric::ReleasedKey()
 	{
 		pressed_numbers = false;
 		app->debug->curr_debug_num = DebugNumericType::MAX;
-		//TODO: Hide the label
+		app->debug->debug_label->SetState(ELEMENT_STATE::HIDDEN);
 		ret = true;
 	}
 	return ret;
