@@ -1,24 +1,22 @@
-	
 #include "Brofiler/Brofiler.h"
 
 #include "Log.h"
 #include "Defs.h"
+#include <math.h>
 
 #include "App.h"
 #include "M_Input.h"
 #include "M_Render.h"
 #include "M_Collision.h"
+
 #include "Object.h"
-#include "Defs.h"
-#include "Log.h"
-#include "Brofiler/Brofiler.h"
-#include <math.h>
+#include "Quadtree_Collision.h"
 
 void Collider::SetPosToObj()
 {
 	if (object != nullptr)
 	{
-		position = object->pos_map + obj_offset;
+		rect.pos = object->pos_map + obj_offset;
 	}
 }
 
@@ -43,11 +41,6 @@ void Collider::Destroy()
 bool Collider::GetIsActivated() const
 {
 	return active_on_trigger;
-}
-
-bool Collider::CheckCollision(Collider*  coll) const
-{
-	return !(coll->position.x >= (position.x + width) || (coll->position.x + coll->width) <= position.x || coll->position.y >= (position.y + height) || (coll->position.y + coll->height) <= position.y);
 }
 
 M_Collision::M_Collision()
@@ -342,7 +335,7 @@ bool M_Collision::PostUpdate(float dt)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 0 , 255 }, (*item_cam));
+			app->render->DrawIsometricQuad((*item)->rect.pos.x, (*item)->rect.pos.y, (*item)->rect.w, (*item)->rect.h, { 255, 0, 0 , 255 }, (*item_cam));
 
 			SDL_RenderSetClipRect(app->render->renderer, nullptr);
 		}
@@ -351,7 +344,7 @@ bool M_Collision::PostUpdate(float dt)
 		{
 			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
 
-			app->render->DrawIsometricQuad((*item)->position.x, (*item)->position.y, (*item)->width, (*item)->height, { 255, 0, 255 , 255 }, (*item_cam));
+			app->render->DrawIsometricQuad((*item)->rect.pos.x, (*item)->rect.pos.y, (*item)->rect.w, (*item)->rect.h, { 255, 0, 255 , 255 }, (*item_cam));
 
 			SDL_RenderSetClipRect(app->render->renderer, nullptr);
 		}
@@ -370,13 +363,13 @@ void M_Collision::DestroyColliders()
 		{
 			// Destroy from current colliders on collision ==============
 
-			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
+			for (std::list<Collider*>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
 			{
-				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
+				std::list<Collider*>::iterator to_destroy = std::find((*itr)->triggers_list.begin(), (*itr)->triggers_list.end(), (*iterator));
 
-				if (to_destroy != (*itr)->collisions_list.end())
+				if (to_destroy != (*itr)->triggers_list.end())
 				{
-					(*itr)->collisions_list.erase(to_destroy);
+					(*itr)->triggers_list.erase(to_destroy);
 				}
 			}
 
@@ -398,13 +391,13 @@ void M_Collision::DestroyColliders()
 		{
 			// Destroy from current colliders on collision ==============
 
-			for (std::list<Collider*>::iterator itr = (*iterator)->collisions_list.begin(); itr != (*iterator)->collisions_list.end(); ++itr)
+			for (std::list<Collider*>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
 			{
-				std::list<Collider*>::iterator to_destroy = std::find((*itr)->collisions_list.begin(), (*itr)->collisions_list.end(), (*iterator));
+				std::list<Collider*>::iterator to_destroy = std::find((*itr)->triggers_list.begin(), (*itr)->triggers_list.end(), (*iterator));
 
-				if (to_destroy != (*itr)->collisions_list.end())
+				if (to_destroy != (*itr)->triggers_list.end())
 				{
-					(*itr)->collisions_list.erase(to_destroy);
+					(*itr)->triggers_list.erase(to_destroy);
 				}
 			}
 
@@ -430,10 +423,10 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 {
 	// Calculate between colliders overlap ============================================
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
-	distances[(int)Collider::OVERLAP_DIR::LEFT] = dynamic_col->position.x + dynamic_col->width - static_col->position.x;
-	distances[(int)Collider::OVERLAP_DIR::RIGHT] = static_col->position.x + static_col->width - dynamic_col->position.x;
-	distances[(int)Collider::OVERLAP_DIR::UP] = dynamic_col->position.y + dynamic_col->height - static_col->position.y;
-	distances[(int)Collider::OVERLAP_DIR::DOWN] = static_col->position.y + static_col->height - dynamic_col->position.y;
+	distances[(int)Collider::OVERLAP_DIR::LEFT] = dynamic_col->rect.pos.x + dynamic_col->rect.w - static_col->rect.pos.x;
+	distances[(int)Collider::OVERLAP_DIR::RIGHT] = static_col->rect.pos.x + static_col->rect.w - dynamic_col->rect.pos.x;
+	distances[(int)Collider::OVERLAP_DIR::UP] = dynamic_col->rect.pos.y + dynamic_col->rect.h - static_col->rect.pos.y;
+	distances[(int)Collider::OVERLAP_DIR::DOWN] = static_col->rect.pos.y + static_col->rect.h - dynamic_col->rect.pos.y;
 
 	int overlap_dir = -1;
 
@@ -459,20 +452,20 @@ void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
 	case Collider::OVERLAP_DIR::LEFT:
-		dynamic_col->position.x = static_col->position.x - dynamic_col->width;
+		dynamic_col->rect.pos.x = static_col->rect.pos.x - dynamic_col->rect.w;
 		break;
 	case Collider::OVERLAP_DIR::RIGHT:
-		dynamic_col->position.x = static_col->position.x + static_col->width;
+		dynamic_col->rect.pos.x = static_col->rect.pos.x + static_col->rect.w;
 		break;
 	case Collider::OVERLAP_DIR::UP:
-		dynamic_col->position.y = static_col->position.y - dynamic_col->height;
+		dynamic_col->rect.pos.y = static_col->rect.pos.y - dynamic_col->rect.h;
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
-		dynamic_col->position.y = static_col->position.y + static_col->height;
+		dynamic_col->rect.pos.y = static_col->rect.pos.y + static_col->rect.h;
 		break;
 	}
 
-	dynamic_col->object->pos_map = dynamic_col->position - dynamic_col->obj_offset;
+	dynamic_col->object->pos_map = dynamic_col->rect.pos - dynamic_col->obj_offset;
 	dynamic_col->last_overlap = (Collider::OVERLAP_DIR)overlap_dir;
 
 }
@@ -483,10 +476,10 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 	// Calculate between colliders overlap (c1 reference collider) ========================
 
 	float distances[(int)Collider::OVERLAP_DIR::MAX];
-	distances[(int)Collider::OVERLAP_DIR::RIGHT] = c1->position.x + c1->width - c2->position.x;
-	distances[(int)Collider::OVERLAP_DIR::LEFT] = c2->position.x + c2->width - c1->position.x;
-	distances[(int)Collider::OVERLAP_DIR::UP] = c1->position.y + c1->height - c2->position.y;
-	distances[(int)Collider::OVERLAP_DIR::DOWN] = c2->position.y + c2->height - c1->position.y;
+	distances[(int)Collider::OVERLAP_DIR::RIGHT] = c1->rect.pos.x + c1->rect.w - c2->rect.pos.x;
+	distances[(int)Collider::OVERLAP_DIR::LEFT] = c2->rect.pos.x + c2->rect.w - c1->rect.pos.x;
+	distances[(int)Collider::OVERLAP_DIR::UP] = c1->rect.pos.y + c1->rect.h - c2->rect.pos.y;
+	distances[(int)Collider::OVERLAP_DIR::DOWN] = c2->rect.pos.y + c2->rect.h - c1->rect.pos.y;
 
 	int overlap_dir = -1;
 
@@ -501,32 +494,32 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 	switch ((Collider::OVERLAP_DIR)overlap_dir)
 	{
 	case Collider::OVERLAP_DIR::RIGHT:
-		c1->position.x -= distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
-		c2->position.x += distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+		c1->rect.pos.x -= distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
+		c2->rect.pos.x += distances[(int)Collider::OVERLAP_DIR::RIGHT] * 0.5f;
 
 		break;
 	case Collider::OVERLAP_DIR::LEFT:
-		c1->position.x += distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
-		c2->position.x -= distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+		c1->rect.pos.x += distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
+		c2->rect.pos.x -= distances[(int)Collider::OVERLAP_DIR::LEFT] * 0.5f;
 		break;
 	case Collider::OVERLAP_DIR::UP:
-		c1->position.y -= distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
-		c2->position.y += distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+		c1->rect.pos.y -= distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
+		c2->rect.pos.y += distances[(int)Collider::OVERLAP_DIR::UP] * 0.5f;
 		break;
 	case Collider::OVERLAP_DIR::DOWN:
-		c1->position.y += distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
-		c2->position.y -= distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		c1->rect.pos.y += distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
+		c2->rect.pos.y -= distances[(int)Collider::OVERLAP_DIR::DOWN] * 0.5f;
 		break;
 	}
 
-	c1->object->pos_map = c1->position - c1->obj_offset;
-	c2->object->pos_map = c2->position - c2->obj_offset;
+	c1->object->pos_map = c1->rect.pos - c1->obj_offset;
+	c2->object->pos_map = c2->rect.pos - c2->obj_offset;
 }
 
 inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 {
 	
-	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
+	if (std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2) != c1->triggers_list.end())
 	{
 		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
@@ -535,7 +528,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	}
 	else
 	{
-		c1->collisions_list.push_back(c2);
+		c1->triggers_list.push_back(c2);
 
 		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
@@ -545,7 +538,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 
 	std::swap(c1, c2);
 
-	if (std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2) != c1->collisions_list.end())
+	if (std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2) != c1->triggers_list.end())
 	{
 		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
@@ -554,7 +547,7 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 	}
 	else
 	{
-		c1->collisions_list.push_back(c2);
+		c1->triggers_list.push_back(c2);
 
 		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
 		{
@@ -567,13 +560,13 @@ inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
 
 inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
 {
-	std::list<Collider*>::iterator iter = std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2);
+	std::list<Collider*>::iterator iter = std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2);
 
-	if (c1->collisions_list.empty() == false)
+	if (c1->triggers_list.empty() == false)
 	{
-		if (iter != c1->collisions_list.end())
+		if (iter != c1->triggers_list.end())
 		{
-			c1->collisions_list.erase(iter);
+			c1->triggers_list.erase(iter);
 
 			if (c1->object != nullptr)
 			{
@@ -584,13 +577,13 @@ inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
 
 	std::swap(c1, c2);
 
-	iter = std::find(c1->collisions_list.begin(), c1->collisions_list.end(), c2);
+	iter = std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2);
 
-	if (c1->collisions_list.empty() == false)
+	if (c1->triggers_list.empty() == false)
 	{
-		if (iter != c1->collisions_list.end())
+		if (iter != c1->triggers_list.end())
 		{
-			c1->collisions_list.erase(iter);
+			c1->triggers_list.erase(iter);
 
 			if (c1->object != nullptr)
 			{

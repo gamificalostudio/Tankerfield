@@ -222,6 +222,9 @@
     <ClCompile Include="Bullet_RocketLauncher.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="Quadtree_Collision.cpp">
+      <Filter>Tools\QuadTree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -468,6 +471,9 @@
     </ClInclude>
     <ClInclude Include="Bullet_RocketLauncher.h">
       <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree_Collision.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

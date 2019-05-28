@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <typeinfo>
+#include "Rect.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -14,6 +15,8 @@
 
 class Object;
 class M_Collision;
+class M_ObjManager;
+class QuadTree_Collision;
 
 enum class TAG : int
 {
@@ -50,16 +53,6 @@ class Collider
 {
 public:
 
-	enum class ON_TRIGGER_STATE
-	{
-		NONE,
-		ENTER,
-		STAY,
-		EXIT
-	};
-
-
-
 	enum class OVERLAP_DIR : int
 	{
 		NONE = -1,
@@ -71,23 +64,32 @@ public:
 	};
 
 	Collider(const fPoint pos, const  float width, const  float height, const float damage, const TAG tag, BODY_TYPE body, Object* object = nullptr) :
-		position(pos),
-		width(width),
-		height(height),
 		damage(damage),
 		tag(tag),
 		body_type(body),
 		object(object)
-	{}
+	{
+		rect.create(pos.x, pos.y, width, height);
+	}
+
+	fRect GetRect() const
+	{
+		return rect;
+	}
 
 	void SetPos(const fPoint pos)
 	{
-		position = pos;
+		rect.pos = pos;
 	}
 
 	void SetObjOffset(const fPoint offset)
 	{
 		obj_offset = offset;
+	}
+
+	void SetTag(TAG new_tag)
+	{
+		tag = new_tag;
 	}
 
 	void SetPosToObj();
@@ -99,26 +101,23 @@ public:
 
 	void GetSize(float & w, float & h) 
 	{
-		w = width;
-		h = height;
+		w = rect.w;
+		h = rect.h;
 	}
-
-	inline bool CheckCollision(Collider*  coll) const;
 
 	TAG GetTag() const
 	{
 		return tag;
 	}
 
-	void SetTag(TAG new_tag)
+	inline bool CheckCollision(Collider*  coll) const
 	{
-		tag = new_tag;
+		return !(coll->rect.pos.x >= (rect.pos.x + rect.w) || (coll->rect.pos.x + coll->rect.w) <= rect.pos.x || coll->rect.pos.y >= (rect.pos.y + rect.h) || (coll->rect.pos.y + coll->rect.h) <= rect.pos.y);
 	}
 
 	void ActiveOnTrigger(bool value);
 
 	void Destroy();
-
 
 	bool GetIsActivated() const;
 
@@ -132,13 +131,9 @@ public:
 
 private:
 
-	fPoint position = { 0.f , 0.f };
+	fRect  rect;
 
 	fPoint obj_offset = { 0.f, 0.f };
-
-	float width = 0.f;
-		
-	float height = 0.f;
 
 	// Collision vars ==============================================
 
@@ -148,8 +143,7 @@ private:
 
 	std::list<Collider*> collisions_list;
 
-
-
+	std::list<Collider*> triggers_list;
 
 	Object * object = nullptr;
 
@@ -157,8 +151,13 @@ private:
 
 	BODY_TYPE body_type = BODY_TYPE::STATIC;
 
+	// Quadtree ===================================================
+
+	bool subdivision_intersection[4];
+
 	friend M_Collision;
 	friend M_ObjManager;
+	friend QuadTree_Collision;
 };
 
 class M_Collision : public Module
