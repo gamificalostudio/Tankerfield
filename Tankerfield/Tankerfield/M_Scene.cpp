@@ -165,70 +165,9 @@ bool M_Scene::PreUpdate()
 {
 	//LOG("Enemy number %i", number_of_enemies);
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)//TODO: Go to pause screen
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
-	{
-		app->scmanager->FadeToBlack(this, this, 2.f, 2.f);
-	}
-
-	iPoint mouse_pos;
-	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
-	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
-
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::SUICIDAL, (fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, (fPoint)mouse_pos);
-
-	}
-	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
-	{
-		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
-	{
-		app->objectmanager->obj_tanks[0]->SetLife(0);
-		app->objectmanager->obj_tanks[1]->SetLife(0);
-		app->objectmanager->obj_tanks[2]->SetLife(0);
-		app->objectmanager->obj_tanks[3]->SetLife(0);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
-	{
-		iPoint mouse_pos;
-		app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-		mouse_pos += iPoint(app->render->cameras[0]->rect.x, app->render->cameras[0]->rect.y);
-		fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
-		app->objectmanager->CreateObject(ObjectType::EXPLOSION, map_mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
-	{
-		++this->round;
-		general_gui->SetRoundNumber(round);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
-	{
-		game_state = GAME_STATE::GAME_WON;
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
-	{
-		app->objectmanager->delete_all_enemies = true;
 	}
 
 	return true;

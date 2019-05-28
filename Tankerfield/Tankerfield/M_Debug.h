@@ -6,9 +6,11 @@
 
 enum class DebugElement
 {
-	INVALID = -1,
-	WEAPON,
-	OBJECT
+	SELECT_WEAPON,
+	SELECT_WEAPON_LEVEL,
+	SELECT_TANK,
+	SELECT_OBJECT,
+	MAX
 };
 
 class M_Debug : public Module
@@ -17,8 +19,7 @@ public:
 	bool PreUpdate() override;
 
 private:
-	void SelectDebugNumber();
-	void ClearDebugNumber();
+	void SelectDebugNumber(int elem_num);
 	int GetNumberFromScancode(int num);
 
 	//Debug functionalities
@@ -27,10 +28,10 @@ private:
 	//void ChangeWeapon();
 
 private:
-	DebugElement debug_elem = DebugElement::INVALID;
+	DebugElement debug_elem = DebugElement::MAX;
 
 	//Pressed number
-	int debug_num = 0;
+	int debug_num[(int)DebugElement::MAX] = { 0 };
 
 	//Variables to keep
 	int selected_tank = 0;

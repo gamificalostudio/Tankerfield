@@ -47,7 +47,7 @@ enum class ObjectType
 	ELECTRO_SHOT_ANIMATION,
 	FLAMETHROWER_FLAME,
 
-	NO_TYPE
+	MAX
 };
 
 enum class ItemType
