@@ -38,6 +38,22 @@ bool M_Debug::PreUpdate()
 	{
 		debug_elem = DebugElement::WEAPON;
 	}
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN
+		|| app->input->GetKey(SDL_SCANCODE_F2) == KEY_REPEAT
+		&& debug_elem == DebugElement::WEAPON)
+	{
+		SelectDebugNumber();
+		debug_num = MIN(debug_num, (int)WEAPON::MAX_WEAPON);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_UP
+		&& debug_elem == DebugElement::WEAPON)
+	{
+		app->objectmanager->obj_tanks[0]->SetWeapon(
+			(WEAPON)debug_num,
+			app->objectmanager->obj_tanks[0]->GetWeaponInfo().level_weapon);
+		ClearDebugNumber();
+	}
+
 	//Change to the selected weapon
 	//1. select tank to change the weapon
 	//2. change the weapon with a number
@@ -53,22 +69,27 @@ bool M_Debug::PreUpdate()
 	//}
 
 	//Detect input for numbers
-	SelectNumber();
-	LOG("number; %i", number);
+
+	LOG("number; %i", debug_num);
 
 	//Attack with only one tank
 	return true;
 }
 
-void M_Debug::SelectNumber()
+void M_Debug::SelectDebugNumber()
 {
 	for (int keyboard_number = (int)SDL_SCANCODE_1; keyboard_number <= (int)SDL_SCANCODE_0; ++keyboard_number)
 	{
 		if (app->input->GetKey(keyboard_number) == KEY_DOWN)
 		{
-			number = number * 10 + GetNumberFromScancode(keyboard_number);
+			debug_num = debug_num * 10 + GetNumberFromScancode(keyboard_number);
 		}
 	}
+}
+
+void M_Debug::ClearDebugNumber()
+{
+	debug_num = 0;
 }
 
 int M_Debug::GetNumberFromScancode(int num)

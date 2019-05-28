@@ -14,6 +14,7 @@ enum class WEAPON {
 	ELECTRO_SHOT,
 	MAX_WEAPONS,// must be in the last position of the weapons that work. Needed from the creation of pickUps
 	FLAMETHROWER,
+	MAX_WEAPON
 };
 
 //Charged weapons have two shots:

@@ -15,15 +15,15 @@ class M_Debug : public Module
 	bool PreUpdate() override;
 
 private:
-	void SelectNumber();
+	void SelectDebugNumber();
+	void ClearDebugNumber();
 	int GetNumberFromScancode(int num);
 
 private:
 	DebugElement debug_elem = DebugElement::INVALID;
 
 	//Pressed number
-	int digits = 0;
-	int number = 0;
+	int debug_num = 0;
 };
 
 #endif
