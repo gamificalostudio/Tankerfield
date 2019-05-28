@@ -297,14 +297,14 @@ void M_Options_Menu::InputSelect()
 			}
 			else if (menu_element == master_volume_L)
 			{
-				master_multiplier_string = std::to_string(int((app->audio->master_volume -= 0.05)*100));
+				master_multiplier_string = std::to_string(int(round((app->audio->master_volume -= 0.05)*100)));
 				master_volume_value->SetText(master_multiplier_string);
 				app->audio->SetMasterVolume(app->audio->master_volume);
 				LOG("%f", app->audio->master_volume);
 			}
 			else if (menu_element == master_volume_R)
 			{
-				master_multiplier_string = std::to_string(int((app->audio->master_volume += 0.05) * 100));
+				master_multiplier_string = std::to_string(int(round((app->audio->master_volume += 0.05) * 100)));
 				master_volume_value->SetText(master_multiplier_string);
 				app->audio->SetMasterVolume(app->audio->master_volume);
 				LOG("%f", app->audio->master_volume);
