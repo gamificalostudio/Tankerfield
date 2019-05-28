@@ -81,17 +81,27 @@ private:
 
 	// Main screen --------------------------------
 
-	UI_InteractiveGroup * global_options_panel = nullptr;
+	UI_InteractiveGroup * global_navigation_panel = nullptr;
+	UI_InteractiveGroup * labels_panel = nullptr;
 
 	UI_Label* options_title = nullptr;
 	UI_Checkbox* fullscreen_checkbox = nullptr;
-	UI_Label* master_volume = nullptr;
-	UI_Label* music_volume = nullptr;
+	UI_Label* master_volume_label = nullptr;
+	UI_Label* music_volume_label = nullptr;
+	UI_Label* sfx_volume_label = nullptr;
 	UI_Label* sfx_volume = nullptr;
 
 	UI_Button* master_volume_L = nullptr;
 	UI_Button* master_volume_R = nullptr;
 	UI_Label* master_volume_value = nullptr;
+
+	UI_Button* music_volume_L = nullptr;
+	UI_Button* music_volume_R = nullptr;
+	UI_Label* music_volume_value = nullptr;
+
+	UI_Button* sfx_volume_L = nullptr;
+	UI_Button* sfx_volume_R = nullptr;
+	UI_Label* sfx_volume_value = nullptr;
 
 	UI_Button* individual_settings = nullptr;
 
