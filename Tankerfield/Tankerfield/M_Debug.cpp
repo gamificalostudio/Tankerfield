@@ -5,6 +5,7 @@
 #include "M_ObjManager.h"
 #include "Obj_Tank.h"
 #include "M_Scene.h"
+#include "Log.h"
 
 bool M_Debug::PreUpdate()
 {
@@ -24,9 +25,19 @@ bool M_Debug::PreUpdate()
 		}
 	}
 
+	//GOD MODE
+	//+ Add label that says "God Mode"
+
+	//Debug Window with any variable you want to put in (you can add a parameter and it will be printed there with the string and the number you pass it)
+
 	//focus tank pressing one of the buttons (1,2,3,4)
 	//they shoot, etc
 
+	//CHANGE SELECTED WEAPON
+	if (app->input->GetKey(SDL_SCANCODE_F2)==KEY_DOWN)
+	{
+		debug_elem = DebugElement::WEAPON;
+	}
 	//Change to the selected weapon
 	//1. select tank to change the weapon
 	//2. change the weapon with a number
@@ -41,6 +52,33 @@ bool M_Debug::PreUpdate()
 	//	app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, app->scene->round);
 	//}
 
+	//Detect input for numbers
+	SelectNumber();
+	LOG("number; %i", number);
+
 	//Attack with only one tank
 	return true;
+}
+
+void M_Debug::SelectNumber()
+{
+	for (int keyboard_number = (int)SDL_SCANCODE_1; keyboard_number <= (int)SDL_SCANCODE_0; ++keyboard_number)
+	{
+		if (app->input->GetKey(keyboard_number) == KEY_DOWN)
+		{
+			number = number * 10 + GetNumberFromScancode(keyboard_number);
+		}
+	}
+}
+
+int M_Debug::GetNumberFromScancode(int num)
+{
+	if (num == (int)SDL_SCANCODE_0)//0 is placed in last position instead of first
+	{
+		return 0;
+	}
+	else
+	{
+		return num - (int)SDL_SCANCODE_1 + 1;
+	}
 }
