@@ -9,21 +9,8 @@
 
 bool M_Debug::PreUpdate()
 {
-
-	//SWITCH BETWEEN MAP AND TEST MAP
-	if(app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
-	{
-		if (app->scene->current_level == 0)
-		{
-			app->scene->current_level = 1;
-			app->scmanager->FadeToBlack(app->scene, app->scene, 2.f, 2.f);
-		}
-		else
-		{
-			app->scene->current_level = 0;
-			app->scmanager->FadeToBlack(app->scene, app->scene, 2.f, 2.f);
-		}
-	}
+	ChangeMap();
+	ChangeWeapon();
 
 	//GOD MODE
 	//+ Add label that says "God Mode"
@@ -32,27 +19,6 @@ bool M_Debug::PreUpdate()
 
 	//focus tank pressing one of the buttons (1,2,3,4)
 	//they shoot, etc
-
-	//CHANGE SELECTED WEAPON
-	if (app->input->GetKey(SDL_SCANCODE_F2)==KEY_DOWN)
-	{
-		debug_elem = DebugElement::WEAPON;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN
-		|| app->input->GetKey(SDL_SCANCODE_F2) == KEY_REPEAT
-		&& debug_elem == DebugElement::WEAPON)
-	{
-		SelectDebugNumber();
-		debug_num = MIN(debug_num, (int)WEAPON::MAX_WEAPON);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_UP
-		&& debug_elem == DebugElement::WEAPON)
-	{
-		app->objectmanager->obj_tanks[0]->SetWeapon(
-			(WEAPON)debug_num,
-			app->objectmanager->obj_tanks[0]->GetWeaponInfo().level_weapon);
-		ClearDebugNumber();
-	}
 
 	//Change to the selected weapon
 	//1. select tank to change the weapon
@@ -74,6 +40,46 @@ bool M_Debug::PreUpdate()
 
 	//Attack with only one tank
 	return true;
+}
+
+void M_Debug::ChangeMap()
+{
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	{
+		if (app->scene->current_level == 0)
+		{
+			app->scene->current_level = 1;
+			app->scmanager->FadeToBlack(app->scene, app->scene, 0.5f, 0.5f);
+		}
+		else
+		{
+			app->scene->current_level = 0;
+			app->scmanager->FadeToBlack(app->scene, app->scene, 0.5f, 0.5f);
+		}
+	}
+}
+
+void M_Debug::ChangeWeapon()
+{
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		debug_elem = DebugElement::WEAPON;
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN
+		|| app->input->GetKey(SDL_SCANCODE_F2) == KEY_REPEAT
+		&& debug_elem == DebugElement::WEAPON)
+	{
+		SelectDebugNumber();
+		debug_num = MIN(debug_num, (int)WEAPON::MAX_WEAPON);
+	}
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_UP
+		&& debug_elem == DebugElement::WEAPON)
+	{
+		app->objectmanager->obj_tanks[0]->SetWeapon(
+			(WEAPON)debug_num,
+			app->objectmanager->obj_tanks[0]->GetWeaponInfo().level_weapon);
+		ClearDebugNumber();
+	}//If this returns true, execute a function and then clear the number?
 }
 
 void M_Debug::SelectDebugNumber()

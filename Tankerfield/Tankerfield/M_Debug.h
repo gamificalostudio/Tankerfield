@@ -12,6 +12,7 @@ enum class DebugElement
 
 class M_Debug : public Module
 {
+public:
 	bool PreUpdate() override;
 
 private:
@@ -19,11 +20,18 @@ private:
 	void ClearDebugNumber();
 	int GetNumberFromScancode(int num);
 
+	//Debug functionalities
+	void ChangeMap();
+	void ChangeWeapon();
+
 private:
 	DebugElement debug_elem = DebugElement::INVALID;
 
 	//Pressed number
 	int debug_num = 0;
+
+	//Variables to keep
+	int selected_tank = 0;
 };
 
 #endif
