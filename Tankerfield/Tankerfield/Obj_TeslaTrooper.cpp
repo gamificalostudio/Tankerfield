@@ -287,6 +287,10 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 	return true;
 }
 
+void Obj_TeslaTrooper::SetStats(int level)
+{
+}
+
 inline void Obj_TeslaTrooper::UpdateVelocity()
 {
 	fPoint new_move_vec = (fPoint)(next_pos)-pos_map;

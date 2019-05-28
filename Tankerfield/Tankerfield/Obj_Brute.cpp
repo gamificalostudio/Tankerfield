@@ -275,3 +275,7 @@ void Obj_Brute::ElectroDead()
 	}
 	
 }
+
+void Obj_Brute::SetStats(int level)
+{
+}

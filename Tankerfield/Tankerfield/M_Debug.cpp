@@ -8,6 +8,8 @@
 #include "Log.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "Obj_Enemy.h"
+#include "Object.h"
 
 bool M_Debug::Start()
 {
@@ -44,14 +46,14 @@ bool M_Debug::PreUpdate()
 	if (SelectElement(SDL_SCANCODE_C, DebugElement::SELECT_OBJECT, (int)ObjectType::MAX))
 	{
 		ObjectType obj_type = (ObjectType)debug_num[(int)DebugElement::SELECT_OBJECT];
-		app->objectmanager->CreateObject(
+		Object * obj = app->objectmanager->CreateObject(
 			obj_type,
 			(fPoint)mouse_pos);
 		if (app->objectmanager->IsEnemy(obj_type))
 		{
-
+			Obj_Enemy * enemy = (Obj_Enemy*)obj;
+			enemy->SetStats(debug_num[(int)DebugElement::SELECT_ENEMY_LEVEL]);
 		}
-		//ENEMY LEVEL
 	}
 
 	//Switch between map and test map

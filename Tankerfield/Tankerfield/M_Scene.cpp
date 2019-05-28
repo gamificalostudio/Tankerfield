@@ -39,6 +39,8 @@
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
 #include "Obj_RocketLauncher.h"
+#include "Obj_Suicidal.h"
+
 #include "Object.h"
 #include "Obj_RewardBox.h"
 
@@ -473,9 +475,8 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
-
-			
+			Obj_TeslaTrooper * enemy = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+			enemy->SetStats(app->scene->round);
 		}
 	
 	}
@@ -486,8 +487,8 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
-
+			Obj_Brute * enemy = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+			enemy->SetStats(app->scene->round);
 		}
 	}
 
@@ -497,21 +498,21 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
-
+			Obj_RocketLauncher * enemy = (Obj_RocketLauncher*) app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
+			enemy->SetStats(app->scene->round);
 		}
 	}
 
-	//for (int i = 0; i < Suicidal_units; i++)
-	//{
-	//	if (app->map->data.spawners_position_enemy.size() != 0)
-	//	{
-	//		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-	//		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-	//		app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
-
-	//	}
-	//}
+	for (int i = 0; i < Suicidal_units; i++)
+	{
+		if (app->map->data.spawners_position_enemy.size() != 0)
+		{
+			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+			Obj_Suicidal * enemy = (Obj_Suicidal*)app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
+			enemy->SetStats(app->scene->round);
+		}
+	}
 
 
 }

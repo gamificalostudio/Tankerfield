@@ -153,6 +153,10 @@ void Obj_RocketLauncher::Move(const float & dt)
 
 	}
 }
+
+void Obj_RocketLauncher::SetStats(int level)
+{
+}
 	
 
 void Obj_RocketLauncher::ShootMissile()

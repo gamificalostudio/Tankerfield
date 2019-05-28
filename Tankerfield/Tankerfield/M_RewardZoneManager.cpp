@@ -4,6 +4,7 @@
 #include "M_RewardZoneManager.h"
 #include "M_ObjManager.h"
 #include "Obj_TeslaTrooper.h"
+#include "M_Scene.h"
 
 /* Reward Zone */
 
@@ -127,7 +128,9 @@ RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint si
 	{
 		for (int j = map_center_pos.y - size / 2; j <= map_center_pos.y + size / 2; j++)
 		{
-			Object* temp_obj_02 = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(i, j));
+			Object* temp_obj_02 = app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, fPoint(i, j));
+			Obj_TeslaTrooper * enemy = (Obj_TeslaTrooper*)temp_obj_02;
+			enemy->SetStats(app->scene->round);
 			temp_rz->enemy_list.push_back(temp_obj_02);
 		}
 	}
