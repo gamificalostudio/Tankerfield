@@ -9,6 +9,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "Log.h"
+#include <string.h>
 
 #include "UI_Image.h"
 #include "UI_Button.h"
@@ -41,49 +42,56 @@ bool M_Options_Menu::Start()
 
 	// Global Options Menu
 
-	options_title = app->ui->CreateLabel({ screen.w/2, 100 }, UI_LabelDef("Options", app->font->label_font_38, { 255,255,255,180 }));
+	panel_background = app->ui->CreateImage({ screen.w / 2,screen.h / 2 }, UI_ImageDef({ 1075,395,606,771 }), this);
+	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+	options_title = app->ui->CreateLabel({ screen.w/2, 225 }, UI_LabelDef("Options", app->font->label_font_38, { 255,255,255,180 }));
 	options_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		//Master Volume
 
-	master_volume_label=app->ui->CreateLabel({ screen.w / 2-150, 250 }, UI_LabelDef("Master Volume", app->font->label_font_24, { 255,255,255,180 }));
+	master_volume_label=app->ui->CreateLabel({ screen.w / 2-100, 325 }, UI_LabelDef("Master Volume", app->font->label_font_38, { 255,255,255,180 }));
 	master_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	master_volume_L = app->ui->CreateButton({ screen.w / 2 + 20, 250 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	master_volume_L = app->ui->CreateButton({ screen.w / 2 + 50, 325 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
 	master_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	master_volume_R = app->ui->CreateButton({ screen.w / 2 + 140, 250 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	master_volume_R = app->ui->CreateButton({ screen.w / 2 + 170, 325 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
 	master_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	master_volume_value = app->ui->CreateLabel({ screen.w / 2 + 80, 250 }, UI_LabelDef("30",app->font->label_font_24), this);
+	master_volume_value = app->ui->CreateLabel({ screen.w / 2 + 110, 325 }, UI_LabelDef("30",app->font->label_font_38), this);
 	master_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		//Music Volume
 
-	music_volume_label = app->ui->CreateLabel({ screen.w / 2 - 150, 300 }, UI_LabelDef("Music Volume", app->font->label_font_24, { 255,255,255,180 }));
+	music_volume_label = app->ui->CreateLabel({ screen.w / 2 - 100, 500 }, UI_LabelDef("Music Volume", app->font->label_font_38, { 255,255,255,180 }));
 	music_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	music_volume_L = app->ui->CreateButton({ screen.w / 2 + 20, 300 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	music_volume_L = app->ui->CreateButton({ screen.w / 2 + 50, 500 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
 	music_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	music_volume_R = app->ui->CreateButton({ screen.w / 2 + 140, 300 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	music_volume_R = app->ui->CreateButton({ screen.w / 2 + 170, 500 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
 	music_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	music_volume_value = app->ui->CreateLabel({ screen.w / 2 + 80, 300 }, UI_LabelDef("30", app->font->label_font_24), this);
+	music_volume_string = std::to_string(app->audio->GetMusicVolume());
+
+	music_volume_value = app->ui->CreateLabel({ screen.w / 2 + 110, 500 }, UI_LabelDef(music_volume_string, app->font->label_font_38), this);
 	music_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		// Sfx Volume
 
-	sfx_volume_label = app->ui->CreateLabel({ screen.w / 2 - 150, 350 }, UI_LabelDef("SFX Volume", app->font->label_font_24, { 255,255,255,180 }));
+	sfx_volume_label = app->ui->CreateLabel({ screen.w / 2 - 100, 675 }, UI_LabelDef("SFX Volume", app->font->label_font_38, { 255,255,255,180 }));
 	sfx_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sfx_volume_L = app->ui->CreateButton({ screen.w / 2 + 20, 350 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	sfx_volume_L = app->ui->CreateButton({ screen.w / 2 + 50, 675 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
 	sfx_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sfx_volume_R = app->ui->CreateButton({ screen.w / 2 + 140, 350 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	sfx_volume_R = app->ui->CreateButton({ screen.w / 2 + 170, 675 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
 	sfx_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sfx_volume_value = app->ui->CreateLabel({ screen.w / 2 + 80, 350 }, UI_LabelDef("30", app->font->label_font_24), this);
+	sfx_volume_string=std::to_string(app->audio->GetSfxVolume());
+
+	sfx_volume_value = app->ui->CreateLabel({ screen.w / 2 + 110, 675 }, UI_LabelDef(sfx_volume_string, app->font->label_font_38), this);
 	sfx_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		// Else
@@ -98,6 +106,7 @@ bool M_Options_Menu::Start()
 	options_panel_def.columns = 2;
 	options_panel_def.rows = 6;
 
+
 	global_navigation_panel = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
 	global_navigation_panel->SetElement(master_volume_L, iPoint(0, 0));
 	global_navigation_panel->SetElement(master_volume_R, iPoint(1, 0));
@@ -111,8 +120,8 @@ bool M_Options_Menu::Start()
 		// Labels Matrix
 
 	UI_InteractiveGroupDef labels_panel_def;
-	options_panel_def.columns = 2;
-	options_panel_def.rows = 6;
+	labels_panel_def.columns = 2;
+	labels_panel_def.rows = 6;
 
 	labels_panel = app->ui->CreateIntearctiveGroup(screen_center, labels_panel_def, this);
 	labels_panel->SetElement(master_volume_label, iPoint(0, 0));
@@ -209,6 +218,7 @@ void M_Options_Menu::SetState(OPTIONS_STATE new_state)
 		labels_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 
 		break;
+
 	case OPTIONS_STATE::INDIVIDUAL_OPTIONS:
 		control_helper_label->SetPos(screen_center + fPoint(30, 450));
 		control_helper_label->SetText("Accept");
@@ -280,23 +290,30 @@ void M_Options_Menu::InputSelect()
 			if (menu_element == individual_settings)
 			{
 				SetState(OPTIONS_STATE::INDIVIDUAL_OPTIONS);
-				app->audio->PlayFx(button_select_sfx);
+				
 			}
-			//else if (menu_element == leaderboard_menu_button)
-			//{
-			//	SetState(MENU_STATE::OPTIONS);
-			//	app->audio->PlayFx(button_select_sfx);
-			//}
-			//else if (menu_element == options_menu_button)
-			//{
-			//	SetState(MENU_STATE::OPTIONS);
-			//	app->audio->PlayFx(button_select_sfx);
-			//}
-			//else if (menu_element == exit_button)
-			//{
-			//	exit_game = true;
-			//	app->audio->PlayFx(button_select_sfx);
-			//}
+			else if (menu_element == music_volume_L)
+			{
+				music_volume_string = std::to_string(app->audio->music_volume -= 5);
+				music_volume_value->SetText(music_volume_string);
+			}
+			else if (menu_element == music_volume_R)
+			{
+				music_volume_string = std::to_string(app->audio->music_volume += 5);
+				music_volume_value->SetText(music_volume_string);
+			}
+			else if (menu_element == sfx_volume_L)
+			{
+				sfx_volume_string=std::to_string(app->audio->sfx_volume -= 5);
+				sfx_volume_value->SetText(sfx_volume_string);
+			}
+			else if (menu_element == sfx_volume_R)
+			{
+				sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
+				sfx_volume_value->SetText(sfx_volume_string);
+			}
+
+			app->audio->PlayFx(button_select_sfx);
 		}
 
 	}

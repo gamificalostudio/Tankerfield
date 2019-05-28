@@ -46,7 +46,16 @@ public:
 public:
 	uint GetExplosionFx();
 
+	int GetSfxVolume();
+
+	int GetMusicVolume();
+
 	uint explosion_fx;
+
+	Mix_Chunk* chunk;
+
+	int sfx_volume = 0;
+	int music_volume = 0;
 
 private:
 	_Mix_Music* music = nullptr;

@@ -84,12 +84,13 @@ private:
 	UI_InteractiveGroup * global_navigation_panel = nullptr;
 	UI_InteractiveGroup * labels_panel = nullptr;
 
+	UI_Image* panel_background = nullptr;
+
 	UI_Label* options_title = nullptr;
 	UI_Checkbox* fullscreen_checkbox = nullptr;
 	UI_Label* master_volume_label = nullptr;
 	UI_Label* music_volume_label = nullptr;
 	UI_Label* sfx_volume_label = nullptr;
-	UI_Label* sfx_volume = nullptr;
 
 	UI_Button* master_volume_L = nullptr;
 	UI_Button* master_volume_R = nullptr;
@@ -115,6 +116,11 @@ private:
 	// Players ----------------------------------------------
 	Player_Options_Selection    players[MAX_PLAYERS];
 	int							current_player = 0;
+
+	// Volumes
+
+	String sfx_volume_string;
+	String music_volume_string;
 };
 
 #endif // __j1SCENE_H__

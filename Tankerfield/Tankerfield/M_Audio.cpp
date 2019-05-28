@@ -55,7 +55,10 @@ bool M_Audio::Start()
 	}
 	else
 	{
-		Mix_VolumeMusic(75);
+		sfx_volume = 60;
+		music_volume = 75;
+
+		Mix_VolumeMusic(music_volume);
 		Mix_AllocateChannels(100);
 	}
 	explosion_fx = LoadFx("audio/Fx/explosion.wav");
@@ -161,7 +164,7 @@ unsigned int M_Audio::LoadFx(const char* path, int volume)
 	}
 	else
 	{
-		Mix_Chunk* chunk = Mix_LoadWAV(path);
+		chunk = Mix_LoadWAV(path);
 		//set volume in a range of 0 to MIX_MAX_VOLUME (128)
 		Mix_VolumeChunk(chunk, volume);
 		if (chunk == NULL)
@@ -213,5 +216,15 @@ void M_Audio::PauseFx(unsigned int channel, int fade_out)
 unsigned int M_Audio::GetExplosionFx()
 {
 	return explosion_fx;
+}
+
+int M_Audio::GetSfxVolume()
+{
+	return sfx_volume;
+}
+
+int M_Audio::GetMusicVolume()
+{
+	return music_volume;
 }
 
