@@ -41,12 +41,10 @@ void QuadTree_Collision::Subdivide()
 	DistrbuteColliders();
 }
 
-
-
 void QuadTree_Collision::DistrbuteColliders()
 {
 
-	for (std::list<Collider*>::iterator iter = colliders.begin(); iter != colliders.end();)
+	for (std::list<Collider*>::iterator iter = colliders.begin(); iter != colliders.end(); ++iter)
 	{
 		uint intersections = 0;
 		int last_intersection = -1;
@@ -118,26 +116,25 @@ void QuadTree_Collision::CheckCollisions()
 	Collider* c1 = nullptr;
 	Collider* c2 = nullptr;
 
-
-	for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+	if (is_divided)
 	{
-		c1 = (*item);
-
-		std::list<Collider*>::iterator item2 = ++item;
-		--item;
-		
-		for (; item2 != colliders.end(); ++item2)
+		for (std::list<Collider*>::iterator item = multi_check_colliders.begin(); item != multi_check_colliders.end(); ++item)
 		{
-			c2 = *item2;
-		
-			if (c1->CheckCollision(c2) == true)
+			c1 = (*item);
+
+			std::list<Collider*>::iterator item2 = ++item;
+			--item;
+
+			for (; item2 != multi_check_colliders.end(); ++item2)
 			{
+				c2 = *item2;
 
+				if (c1->CheckCollision(c2) == true)
+				{
+
+				}
 			}
-		}
 
-		if (is_divided)
-		{
 			for (int i = 0; i < 4; ++i)
 			{
 				if (c1->subdivision_intersection[i] == true)
@@ -146,13 +143,30 @@ void QuadTree_Collision::CheckCollisions()
 				}
 			}
 		}
-	}
 
-	if (is_divided)
-	{
 		for (int i = 0; i < 4; ++i)
 		{
 			child_nodes[i]->CheckCollisions();
+		}
+	}
+	else
+	{
+		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
+		{
+			c1 = (*item);
+
+			std::list<Collider*>::iterator item2 = ++item;
+			--item;
+
+			for (; item2 != colliders.end(); ++item2)
+			{
+				c2 = *item2;
+
+				if (c1->CheckCollision(c2) == true)
+				{
+
+				}
+			}
 		}
 	}
 }

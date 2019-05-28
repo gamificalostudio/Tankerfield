@@ -168,7 +168,13 @@ public:
 
 	virtual ~M_Collision();
 
+	bool Start();
+
 	bool Update(float dt) override;
+
+	bool UpdateQuadtreeMethod(float dt);
+
+	bool UpdateForcedMethod(float dt);
 
 	bool PostUpdate(float dt) override;
 
@@ -192,6 +198,12 @@ private:
 
 private:
 
+	// Collision quadtree ====================================================
+
+	QuadTree_Collision* quad_tree_collision = nullptr;
+
+	// Collider lists ========================================================
+
 	std::list<Collider*> static_colliders;
 
 	std::list<Collider*> dynamic_colliders;
@@ -199,6 +211,8 @@ private:
 	std::list<Collider*> colliders_to_add;
 
 	std::map<Collider* ,bool> mod_on_trigger_colliders;
+
+	// Collider matrix ======================================================
 
 	bool on_trigger_matrix[(int)TAG::MAX][(int)TAG::MAX];
 

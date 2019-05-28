@@ -246,6 +246,8 @@ public:
   
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer) const;
 
+	bool MapIsLoaded() const ;
+
 public:
 
 	MapData							data;

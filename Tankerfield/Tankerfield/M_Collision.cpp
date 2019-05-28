@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "App.h"
+#include "M_Map.h"
 #include "M_Input.h"
 #include "M_Render.h"
 #include "M_Collision.h"
@@ -129,6 +130,13 @@ M_Collision::M_Collision()
 M_Collision::~M_Collision()
 {}
 
+bool M_Collision::Start()
+{
+	
+
+	return true;
+}
+
 bool M_Collision::CleanUp()
 {
 	LOG("Freeing all colliders");
@@ -170,9 +178,22 @@ bool M_Collision::Reset()
 
 bool M_Collision::Update(float dt)
 {
+	/*UpdateQuadtreeMethod(dt);*/
+	UpdateForcedMethod(dt);
+	return true;
+}
+
+
+bool M_Collision::UpdateQuadtreeMethod(float dt)
+{
 	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange);
 
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) 
+	if (app->map->MapIsLoaded() == false)
+	{
+		return true;
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 	{
 		debug = !debug;
 	}
@@ -181,7 +202,7 @@ bool M_Collision::Update(float dt)
 
 	// Fill body types lists ====================================================================
 
-	if (! colliders_to_add.empty())
+	if (!colliders_to_add.empty())
 	{
 		for (std::list<Collider*>::iterator itr = colliders_to_add.begin(); itr != colliders_to_add.end(); ++itr)
 		{
@@ -197,7 +218,64 @@ bool M_Collision::Update(float dt)
 		}
 		colliders_to_add.clear();
 	}
-	
+
+	// Update Quadtree Collision ================================================================
+
+	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns *  app->map->data.tile_width, app->map->data.rows *  app->map->data.tile_height), 40, nullptr);
+
+	for (std::list<Collider*>::iterator itr = static_colliders.begin(); itr != static_colliders.end(); ++itr)
+	{
+		quad_tree_collision->PlaceCollider(*itr);
+	}
+
+	for (std::list<Collider*>::iterator itr = dynamic_colliders.begin(); itr != dynamic_colliders.end(); ++itr)
+	{
+		quad_tree_collision->PlaceCollider(*itr);
+	}
+
+	quad_tree_collision->CheckCollisions();
+
+	// Destroy Colliders =============================================
+
+	DestroyColliders();
+
+	delete quad_tree_collision;
+
+	is_updating = false;
+
+	return true;
+}
+
+bool M_Collision::UpdateForcedMethod(float dt)
+{
+	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange);
+
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
+	{
+		debug = !debug;
+	}
+
+	is_updating = true;
+
+	// Fill body types lists ====================================================================
+
+	if (!colliders_to_add.empty())
+	{
+		for (std::list<Collider*>::iterator itr = colliders_to_add.begin(); itr != colliders_to_add.end(); ++itr)
+		{
+			switch ((*itr)->body_type)
+			{
+			case BODY_TYPE::STATIC:
+				static_colliders.push_back(*itr);
+				break;
+			case BODY_TYPE::DYNAMIC:
+				dynamic_colliders.push_back(*itr);
+				break;
+			}
+		}
+		colliders_to_add.clear();
+	}
+
 	if (!mod_on_trigger_colliders.empty())
 	{
 		for (std::map<Collider*, bool>::iterator itr = mod_on_trigger_colliders.begin(); itr != mod_on_trigger_colliders.end(); ++itr)
@@ -411,6 +489,10 @@ void M_Collision::DestroyColliders()
 		++iterator;
 	}
 }
+
+
+
+
 
 Collider * M_Collision::AddCollider(fPoint pos, float width, float height, TAG tag, BODY_TYPE body, float damage, Object* object)
 {
