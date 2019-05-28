@@ -4,7 +4,7 @@
   <app>
     <title>Title</title>
     <organization>UPC</organization>
-    <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
+    <!-- 0.Release | 1.Debug(play) | 2.Debug(mainmenu) -->
     <mode value ="0" />
 
   </app>
@@ -48,8 +48,8 @@
   <map>
     <folder>Maps/</folder>
     <levels>
-      <level name="Map2.tmx"/>
       <level name="test.tmx"/>
+      <level name="Map2.tmx"/>
     </levels>
   </map>
   

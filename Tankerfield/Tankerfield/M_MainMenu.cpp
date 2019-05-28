@@ -15,6 +15,7 @@
 #include "UI_InteractiveGroup.h"
 
 #include "Obj_Tank_MainMenu.h"
+#include <vector>
 
 bool M_MainMenu::Start()
 {
@@ -213,8 +214,6 @@ bool M_MainMenu::PostUpdate(float dt)
 
 bool M_MainMenu::Reset()
 {
-	app->objectmanager->Reset();
-	app->ui->Reset();
 	return true;
 }
 
@@ -419,7 +418,11 @@ bool M_MainMenu::SetPlayerProperties()
 
 	if (current_player == MAX_PLAYERS)
 	{
-		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f);
+		std::vector<Module*> modules_to_reset;
+		modules_to_reset.push_back((Module*)app->objectmanager);
+		modules_to_reset.push_back((Module*)app->ui);
+		modules_to_reset.push_back((Module*)app->debug);
+		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f, modules_to_reset);
 		menu_state = MENU_STATE::CHANGE_SCENE;
 	}
 	else

@@ -43,8 +43,10 @@ class M_Debug : public Module
 public:
 	bool Start() override;
 	bool PreUpdate() override;
+	bool Reset() override;
 
 private:
+	void CreateLabel();
 	void ManageNumericDebug(fPoint mouse_pos);
 	int GetNumberFromScancode(int num);
 	void ChangeMap();

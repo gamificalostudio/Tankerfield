@@ -52,17 +52,23 @@ bool M_Debug::Start()
 		INT_MAX,
 		"Selecting enemy level: ");
 
+	CreateLabel();
+
+	return true;
+}
+
+void M_Debug::CreateLabel()
+{
 	fRect screen = app->win->GetWindowRect();
 	UI_LabelDef label_round_def("", app->font->rounds_font);
 	debug_label = app->ui->CreateLabel({ screen.w * 0.5f ,  screen.h * 0.5f }, label_round_def);
 	debug_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	debug_label->SetState(ELEMENT_STATE::HIDDEN);
-
-	return true;
 }
 
 void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 {
+	LOG("debugging debug");
 	//Checks which numeric debug has been the last one pressed
 	//and puts it in curr_debug_num
 	for (int debug_num_iter = 0; debug_num_iter < (int)DebugNumericType::MAX; ++debug_num_iter)
@@ -190,6 +196,13 @@ bool M_Debug::PreUpdate()
 	//}
 
 	return true;
+}
+
+bool M_Debug::Reset()
+{
+	//TODO: Currently, creates a label every time it is reset, even if there is one created already
+	CreateLabel();
+	return false;
 }
 
 void M_Debug::ChangeMap()
