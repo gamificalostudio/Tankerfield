@@ -111,7 +111,9 @@ bool Obj_Tank::Start()
 	// ==========================================================
 
 	//sfx -------------------------------------------------------------------------------------------------------
-	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
+	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string(), 100);
+	heal_sound = app->audio->LoadFx(tank_node.child("sounds").child("heal_shot").attribute("sound").as_string(), 100);
+	laser_sound = app->audio->LoadFx(tank_node.child("sounds").child("laser_shot").attribute("sound").as_string(), 100);
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -644,6 +646,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			if (GetLife() < GetMaxLife())
 			{
 				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
+				app->audio->PlayFx(heal_sound);
 			}
 		}
 		else

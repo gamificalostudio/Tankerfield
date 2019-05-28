@@ -19,8 +19,11 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 
 	pugi::xml_node reward_box_node = app->config.child("object").child("reward_box");
 
-	reward_box_dead_sound_string = reward_box_node.child("sound").attribute("value").as_string();
-	reward_box_dead_sound_int = app->audio->LoadFx(reward_box_dead_sound_string);
+	reward_box_dead_sound_string = reward_box_node.child("crash_sound").attribute("value").as_string();
+	reward_box_dead_sound_int = app->audio->LoadFx(reward_box_dead_sound_string, 100);
+
+	reward_box_hit_sound_string = reward_box_node.child("hit_sound").attribute("value").as_string();
+	reward_box_hit_sound_int = app->audio->LoadFx(reward_box_hit_sound_string, 100);
 
 	texture = app->tex->Load(reward_box_node.child("image_path").attribute("value").as_string());
 	curr_tex = texture;
@@ -150,6 +153,8 @@ void Obj_RewardBox::TakeDamage(Collider* collider)
 			curr_frame = &frame_white;
 			timer_white.Start();
 		}
+
+		app->audio->PlayFx(reward_box_hit_sound_int);
 	}
 
 	else if (collider->GetTag() == TAG::ELECTRO_SHOT)
@@ -174,6 +179,7 @@ void Obj_RewardBox::TakeDamage(Collider* collider)
 		electro_anim->enemy_pos_map = pos_map;
 		electro_anim->hit_no_enemie = false;
 
+		app->audio->PlayFx(reward_box_hit_sound_int);
 	}
 }
 
