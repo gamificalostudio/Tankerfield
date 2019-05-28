@@ -60,7 +60,9 @@ bool M_Options_Menu::Start()
 	master_volume_R = app->ui->CreateButton({ screen.w / 2 + 170, 325 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
 	master_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	master_volume_value = app->ui->CreateLabel({ screen.w / 2 + 110, 325 }, UI_LabelDef("30",app->font->label_font_38), this);
+	master_multiplier_string = std::to_string(int(app->audio->master_volume * 100));
+
+	master_volume_value = app->ui->CreateLabel({ screen.w / 2 + 110, 325 }, UI_LabelDef(master_multiplier_string,app->font->label_font_38), this);
 	master_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		//Music Volume
@@ -293,17 +295,31 @@ void M_Options_Menu::InputSelect()
 				SetState(OPTIONS_STATE::INDIVIDUAL_OPTIONS);
 				
 			}
+			else if (menu_element == master_volume_L)
+			{
+				master_multiplier_string = std::to_string(int((app->audio->master_volume -= 0.05)*100));
+				master_volume_value->SetText(master_multiplier_string);
+				app->audio->SetMasterVolume(app->audio->master_volume);
+				LOG("%f", app->audio->master_volume);
+			}
+			else if (menu_element == master_volume_R)
+			{
+				master_multiplier_string = std::to_string(int((app->audio->master_volume += 0.05) * 100));
+				master_volume_value->SetText(master_multiplier_string);
+				app->audio->SetMasterVolume(app->audio->master_volume);
+				LOG("%f", app->audio->master_volume);
+			}
 			else if (menu_element == music_volume_L)
 			{
 				music_volume_string = std::to_string(app->audio->music_volume -= 5);
 				music_volume_value->SetText(music_volume_string);
-				app->audio->ModifyMusicVolume(app->audio->music_volume);
+				app->audio->SetMusicVolume(app->audio->music_volume);
 			}
 			else if (menu_element == music_volume_R)
 			{
 				music_volume_string = std::to_string(app->audio->music_volume += 5);
 				music_volume_value->SetText(music_volume_string);
-				app->audio->ModifyMusicVolume(app->audio->music_volume);
+				app->audio->SetMusicVolume(app->audio->music_volume);
 			}
 			else if (menu_element == sfx_volume_L)
 			{

@@ -228,7 +228,15 @@ int M_Audio::GetMusicVolume()
 	return music_volume;
 }
 
-void M_Audio::ModifyMusicVolume(int volume)
+void M_Audio::SetMasterVolume(float master_multiplier)
 {
-	Mix_VolumeMusic(volume);
+	master_volume = master_multiplier;
+
+	Mix_VolumeMusic(music_volume*master_multiplier);
+}
+
+
+void M_Audio::SetMusicVolume(int volume)
+{
+	Mix_VolumeMusic(volume*master_volume);
 }

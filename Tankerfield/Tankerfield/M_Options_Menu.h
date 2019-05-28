@@ -121,6 +121,7 @@ private:
 
 	String sfx_volume_string;
 	String music_volume_string;
+	String master_multiplier_string;
 };
 
 #endif // __j1SCENE_H__

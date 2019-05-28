@@ -50,7 +50,9 @@ public:
 
 	int GetMusicVolume();
 
-	void ModifyMusicVolume(int volume);
+	void SetMasterVolume(float master_multiplier);
+
+	void SetMusicVolume(int volume);
 
 	uint explosion_fx;
 
@@ -58,6 +60,7 @@ public:
 
 	int sfx_volume = 0;
 	int music_volume = 0;
+	float master_volume = 1;
 
 private:
 	_Mix_Music* music = nullptr;
