@@ -297,39 +297,57 @@ void M_Options_Menu::InputSelect()
 			}
 			else if (menu_element == master_volume_L)
 			{
-				master_multiplier_string = std::to_string(int(round((app->audio->master_volume -= 0.05)*100)));
-				master_volume_value->SetText(master_multiplier_string);
-				app->audio->SetMasterVolume(app->audio->master_volume);
-				LOG("%f", app->audio->master_volume);
+				if (app->audio->master_volume >= 0.04)
+				{
+					master_multiplier_string = std::to_string(int(round((app->audio->master_volume -= 0.05) * 100)));
+					master_volume_value->SetText(master_multiplier_string);
+					app->audio->SetMasterVolume(app->audio->master_volume);
+					LOG("%f", app->audio->master_volume);
+				}
 			}
 			else if (menu_element == master_volume_R)
 			{
-				master_multiplier_string = std::to_string(int(round((app->audio->master_volume += 0.05) * 100)));
-				master_volume_value->SetText(master_multiplier_string);
-				app->audio->SetMasterVolume(app->audio->master_volume);
-				LOG("%f", app->audio->master_volume);
+				if (app->audio->master_volume <= 0.95)
+				{
+					master_multiplier_string = std::to_string(int(round((app->audio->master_volume += 0.05) * 100)));
+					master_volume_value->SetText(master_multiplier_string);
+					app->audio->SetMasterVolume(app->audio->master_volume);
+					LOG("%f", app->audio->master_volume);
+				}
 			}
 			else if (menu_element == music_volume_L)
 			{
-				music_volume_string = std::to_string(app->audio->music_volume -= 5);
-				music_volume_value->SetText(music_volume_string);
-				app->audio->SetMusicVolume(app->audio->music_volume);
+				if (app->audio->music_volume >= 5)
+				{
+					music_volume_string = std::to_string(app->audio->music_volume -= 5);
+					music_volume_value->SetText(music_volume_string);
+					app->audio->SetMusicVolume(app->audio->music_volume);
+				}
 			}
 			else if (menu_element == music_volume_R)
 			{
-				music_volume_string = std::to_string(app->audio->music_volume += 5);
-				music_volume_value->SetText(music_volume_string);
-				app->audio->SetMusicVolume(app->audio->music_volume);
+				if (app->audio->music_volume <= 95)
+				{
+					music_volume_string = std::to_string(app->audio->music_volume += 5);
+					music_volume_value->SetText(music_volume_string);
+					app->audio->SetMusicVolume(app->audio->music_volume);
+				}
 			}
 			else if (menu_element == sfx_volume_L)
 			{
-				sfx_volume_string=std::to_string(app->audio->sfx_volume -= 5);
-				sfx_volume_value->SetText(sfx_volume_string);
+				if (app->audio->sfx_volume >= 5)
+				{
+					sfx_volume_string = std::to_string(app->audio->sfx_volume -= 5);
+					sfx_volume_value->SetText(sfx_volume_string);
+				}
 			}
 			else if (menu_element == sfx_volume_R)
 			{
-				sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
-				sfx_volume_value->SetText(sfx_volume_string);
+				if (app->audio->sfx_volume <= 95)
+				{
+					sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
+					sfx_volume_value->SetText(sfx_volume_string);
+				}
 			}
 
 			app->audio->PlayFx(button_select_sfx);
