@@ -131,7 +131,6 @@ bool M_MainMenu::Start()
 
 	
 	// Set values ==========================================
-
 	app->ui->HideAllUI();
 	SetPlayerObjectsState(false);
 	SetState(MENU_STATE::INIT_MENU);
@@ -240,7 +239,7 @@ void M_MainMenu::InputNavigate()
 		{
 			if (players[i].controller != nullptr)
 			{
-				if (menu_panel->HandleControllerINavigation((*players[i].controller)))
+				if (menu_panel->HandleControllerINavigation(players[i].controller))
 				{
 					app->audio->PlayFx(button_enter_sfx);
 				}
@@ -258,7 +257,7 @@ void M_MainMenu::InputNavigate()
 	{
 		if (players[current_player].controller != nullptr)
 		{
-			if (selection_panel->HandleControllerINavigation((*players[current_player].controller)))
+			if (selection_panel->HandleControllerINavigation(players[current_player].controller))
 			{
 				app->audio->PlayFx(button_enter_sfx);
 			}
@@ -279,7 +278,7 @@ void M_MainMenu::InputSelect()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != nullptr && (*players[i].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if (players[i].controller != nullptr && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 			{
 				input_select_controller = true;
 			}
@@ -287,7 +286,7 @@ void M_MainMenu::InputSelect()
 	}
 	else if (menu_state == MENU_STATE::SELECTION)
 	{
-		if (players[current_player].controller != nullptr &&  (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (players[current_player].controller != nullptr &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			input_select_controller = true;
 		}
