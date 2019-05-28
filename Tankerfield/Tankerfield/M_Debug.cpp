@@ -10,6 +10,7 @@
 #include "M_Map.h"
 #include "Obj_Enemy.h"
 #include "Object.h"
+#include <assert.h>
 
 bool M_Debug::Start()
 {
@@ -53,6 +54,11 @@ void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 	for (int debug_num_iter = 0; debug_num_iter < (int)DebugNumericType::MAX; ++debug_num_iter)
 	{
 		debug_numeric[debug_num_iter].PressedKey();
+	}
+
+	if (curr_debug_num == DebugNumericType::MAX)
+	{
+		return;
 	}
 
 	//Update its number based on which keys have been pressed
@@ -210,6 +216,7 @@ void DebugNumeric::SetValues(DebugNumericType type, SDL_Scancode key, int min_nu
 	this->type = type;
 	type_num = (int)type;
 	this->key = key;
+	assert(min_num < max_num);
 	this->num = this->min_num = min_num;
 	this->max_num = max_num;
 }
@@ -241,6 +248,8 @@ bool DebugNumeric::ReleasedKey()
 	if (app->input->GetKey(key) == KEY_UP)
 	{
 		pressed_numbers = false;
+		app->debug->curr_debug_num = DebugNumericType::MAX;
+		//TODO: Hide the label
 		ret = true;
 	}
 	return ret;
