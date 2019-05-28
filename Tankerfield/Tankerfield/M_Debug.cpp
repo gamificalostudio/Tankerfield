@@ -280,7 +280,6 @@ bool DebugNumeric::ReleasedKey()
 	if (app->input->GetKey(key) == KEY_UP)
 	{
 		pressed_numbers = false;
-		app->debug->curr_debug_num = DebugNumericType::MAX;
 		app->debug->debug_label->SetState(ELEMENT_STATE::HIDDEN);
 		ret = true;
 	}
