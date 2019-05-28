@@ -3,8 +3,9 @@
 
 #include "Module.h"
 #include "SDL/include/SDL_scancode.h"
+#include "Point.h"
 
-enum class DebugElement
+enum class DebugNumericType
 {
 	SELECT_TANK,
 	SELECT_WEAPON,
@@ -14,29 +15,43 @@ enum class DebugElement
 	MAX
 };
 
+struct DebugNumeric
+{
+	DebugNumericType type = DebugNumericType::MAX;
+	int type_num = 0;
+	SDL_Scancode key = SDL_SCANCODE_UNKNOWN;
+	int num = 0;
+	int min_num = 0;
+	int max_num = 0;
+	bool pressed_numbers = false;//Indicates if it has pressed any number since the SDL_Scancode key has been presssed down
+	//If you press the debug key without pressing any numbers, it will perform the action with the last number you've inserted
+
+	void SetValues(DebugNumericType type, SDL_Scancode key, int min_num, int max_num);
+
+	void PressedKey();//Checks if the debug element has been pressed
+	void UpdateNumber(int new_digit);
+	bool ReleasedKey();//Returns true if the element has been used
+};
+
 class M_Debug : public Module
 {
 public:
 	bool Start() override;
 	bool PreUpdate() override;
 
+	void ManageNumericDebug(fPoint mouse_pos);
+
 private:
-	void SelectDebugNumber(int elem_num);
 	int GetNumberFromScancode(int num);
 
 	//Debug functionalities
 	void ChangeMap();
-	bool SelectElement(SDL_Scancode key, DebugElement elem, int max_num);
-	//void ChangeWeapon();
 
 private:
-	DebugElement debug_elem = DebugElement::MAX;
-
-	//Pressed number
-	int debug_num[(int)DebugElement::MAX] = { 0 };
-
-	//Variables to keep
-	int selected_tank = 0;
+	DebugNumericType curr_debug_num = DebugNumericType::MAX;
+	DebugNumeric debug_numeric[(int)DebugNumericType::MAX];
+	
+	friend struct DebugNumeric;
 };
 
 #endif

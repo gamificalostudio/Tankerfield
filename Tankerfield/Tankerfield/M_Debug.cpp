@@ -13,10 +13,106 @@
 
 bool M_Debug::Start()
 {
-	debug_num[(int)DebugElement::SELECT_ENEMY_LEVEL] = 1;//Enemies cannot have level 0
+	debug_numeric[(int)DebugNumericType::SELECT_TANK].SetValues(
+		DebugNumericType::SELECT_TANK,
+		SDL_SCANCODE_Z,
+		0,
+		4);
+
+	debug_numeric[(int)DebugNumericType::SELECT_WEAPON].SetValues(
+		DebugNumericType::SELECT_WEAPON,
+		SDL_SCANCODE_F2,
+		0,
+		(int)WEAPON::MAX_WEAPONS);
+
+	debug_numeric[(int)DebugNumericType::SELECT_WEAPON_LEVEL].SetValues(
+		DebugNumericType::SELECT_WEAPON_LEVEL,
+		SDL_SCANCODE_X,
+		1,
+		INT_MAX);
+
+	debug_numeric[(int)DebugNumericType::SELECT_OBJECT].SetValues(
+		DebugNumericType::SELECT_OBJECT,
+		SDL_SCANCODE_C,
+		0,
+		(int)ObjectType::MAX);
+
+	debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].SetValues(
+		DebugNumericType::SELECT_ENEMY_LEVEL,
+		SDL_SCANCODE_V,
+		1,
+		INT_MAX);
 
 	return true;
 }
+
+void M_Debug::ManageNumericDebug(fPoint mouse_pos)
+{
+	//Checks which numeric debug has been the last one pressed
+	//and puts it in curr_debug_num
+	for (int debug_num_iter = 0; debug_num_iter < (int)DebugNumericType::MAX; ++debug_num_iter)
+	{
+		debug_numeric[debug_num_iter].PressedKey();
+	}
+
+	//Update its number based on which keys have been pressed
+	for (int keyboard_number = (int)SDL_SCANCODE_1; keyboard_number <= (int)SDL_SCANCODE_0; ++keyboard_number)
+	{
+		if (app->input->GetKey(keyboard_number) == KEY_DOWN)
+		{
+			debug_numeric[(int)curr_debug_num].UpdateNumber(GetNumberFromScancode(keyboard_number));
+		}
+	}
+
+	//Print according label
+
+	//Do whatever you need to do when it is released
+	if (debug_numeric[(int)curr_debug_num].ReleasedKey())
+	{
+		switch (debug_numeric[(int)curr_debug_num].type)
+		{
+		case DebugNumericType::SELECT_TANK: {
+			//Empty intentionally
+		}	break;
+
+		case DebugNumericType::SELECT_WEAPON: {
+			int selected_tank = debug_numeric[(int)DebugNumericType::SELECT_TANK].num;
+			app->objectmanager->obj_tanks[selected_tank]->SetWeapon(
+				(WEAPON)debug_numeric[(int)DebugNumericType::SELECT_WEAPON].num,
+				app->objectmanager->obj_tanks[selected_tank]->GetWeaponInfo().level_weapon);
+		}	break;
+
+		case DebugNumericType::SELECT_WEAPON_LEVEL: {
+			int selected_tank = debug_numeric[(int)DebugNumericType::SELECT_TANK].num;
+			app->objectmanager->obj_tanks[selected_tank]->SetWeapon(
+				app->objectmanager->obj_tanks[selected_tank]->GetWeaponInfo().weapon,
+				debug_numeric[(int)DebugNumericType::SELECT_WEAPON_LEVEL].num);
+		}	break;
+
+		case DebugNumericType::SELECT_ENEMY_LEVEL: {
+			//Empty intentionally
+		}	break;
+
+		case DebugNumericType::SELECT_OBJECT: {
+			ObjectType obj_type = (ObjectType)debug_numeric[(int)DebugNumericType::SELECT_OBJECT].num;
+			Object * obj = app->objectmanager->CreateObject(
+				obj_type,
+				mouse_pos);
+			if (app->objectmanager->IsEnemy(obj_type))
+			{
+				Obj_Enemy * enemy = (Obj_Enemy*)obj;
+				enemy->SetStats(debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].num);
+			}
+		}	break;
+
+		default: {
+			LOG("Debug type not set correctly.");
+		}	break;
+
+		}
+	}
+}
+
 
 bool M_Debug::PreUpdate()
 {
@@ -25,40 +121,8 @@ bool M_Debug::PreUpdate()
 	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
 	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 
-	SelectElement(SDL_SCANCODE_Z, DebugElement::SELECT_TANK, 4);
-
-	if (SelectElement(SDL_SCANCODE_F2, DebugElement::SELECT_WEAPON, (int)WEAPON::MAX_WEAPONS))
-	{
-		app->objectmanager->obj_tanks[selected_tank]->SetWeapon(
-			(WEAPON)debug_num[(int)DebugElement::SELECT_WEAPON],
-			app->objectmanager->obj_tanks[selected_tank]->GetWeaponInfo().level_weapon);
-	}
-
-	if (SelectElement(SDL_SCANCODE_X, DebugElement::SELECT_WEAPON_LEVEL, INT_MAX))
-	{
-		app->objectmanager->obj_tanks[selected_tank]->SetWeapon(
-			app->objectmanager->obj_tanks[selected_tank]->GetWeaponInfo().weapon,
-			debug_num[(int)DebugElement::SELECT_WEAPON_LEVEL]);
-	}
-
-	SelectElement(SDL_SCANCODE_V, DebugElement::SELECT_ENEMY_LEVEL, INT_MAX);
-
-	if (SelectElement(SDL_SCANCODE_C, DebugElement::SELECT_OBJECT, (int)ObjectType::MAX))
-	{
-		ObjectType obj_type = (ObjectType)debug_num[(int)DebugElement::SELECT_OBJECT];
-		Object * obj = app->objectmanager->CreateObject(
-			obj_type,
-			(fPoint)mouse_pos);
-		if (app->objectmanager->IsEnemy(obj_type))
-		{
-			Obj_Enemy * enemy = (Obj_Enemy*)obj;
-			enemy->SetStats(debug_num[(int)DebugElement::SELECT_ENEMY_LEVEL]);
-		}
-	}
-
-	//Switch between map and test map
+	ManageNumericDebug((fPoint)mouse_pos);
 	ChangeMap();
-
 	//Reset scene
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
 	{
@@ -127,42 +191,7 @@ void M_Debug::ChangeMap()
 	}
 }
 
-bool M_Debug::SelectElement(SDL_Scancode key, DebugElement elem, int max_num)
-{
-	bool ret = false;
-	int elem_num = (int)elem;
-
-	if (app->input->GetKey(key) == KEY_DOWN)
-	{
-		debug_elem = elem;
-		debug_num[elem_num] = 0;//TODO: Enemy level would be set to 0 instead of its minimum, 1
-		//TODO: Maybe create a struct that relates the scancode, the debug element the minimum value and the maximum value and its debug num
-	}
-	if (app->input->GetKey(key) == KEY_DOWN
-		|| app->input->GetKey(key) == KEY_REPEAT
-		&& debug_elem == elem)
-	{
-		SelectDebugNumber(elem_num);
-		debug_num[elem_num] = MIN(debug_num[elem_num], max_num);
-	}
-	if (app->input->GetKey(key) == KEY_UP
-		&& debug_elem == elem)
-	{
-		ret = true;
-	}
-	return ret;
-}
-
-void M_Debug::SelectDebugNumber(int elem_num)
-{
-	for (int keyboard_number = (int)SDL_SCANCODE_1; keyboard_number <= (int)SDL_SCANCODE_0; ++keyboard_number)
-	{
-		if (app->input->GetKey(keyboard_number) == KEY_DOWN)
-		{
-			debug_num[elem_num] = debug_num[elem_num] * 10 + GetNumberFromScancode(keyboard_number);
-		}
-	}
-}
+//Debug numeric
 
 int M_Debug::GetNumberFromScancode(int num)
 {
@@ -174,4 +203,45 @@ int M_Debug::GetNumberFromScancode(int num)
 	{
 		return num - (int)SDL_SCANCODE_1 + 1;
 	}
+}
+
+void DebugNumeric::SetValues(DebugNumericType type, SDL_Scancode key, int min_num, int max_num)
+{
+	this->type = type;
+	type_num = (int)type;
+	this->key = key;
+	this->num = this->min_num = min_num;
+	this->max_num = max_num;
+}
+
+void DebugNumeric::PressedKey()
+{
+	if (app->input->GetKey(key) == KEY_DOWN)
+	{
+		app->debug->curr_debug_num = type;
+	}
+}
+
+void DebugNumeric::UpdateNumber(int new_digit)
+{
+	if (!pressed_numbers)
+	{
+		//Clear the previous number
+		num = 0;
+		pressed_numbers = true;
+	}
+	num = num * 10 + new_digit;
+	num = MIN(num, max_num);
+	num = MAX(num, min_num);
+}
+
+bool DebugNumeric::ReleasedKey()
+{
+	bool ret = false;
+	if (app->input->GetKey(key) == KEY_UP)
+	{
+		pressed_numbers = false;
+		ret = true;
+	}
+	return ret;
 }
