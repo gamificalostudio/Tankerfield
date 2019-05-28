@@ -2,6 +2,7 @@
 #define __M_DEBUG_H__
 
 #include "Module.h"
+#include "SDL/include/SDL_scancode.h"
 
 enum class DebugElement
 {
@@ -22,7 +23,8 @@ private:
 
 	//Debug functionalities
 	void ChangeMap();
-	void ChangeWeapon();
+	bool SelectElement(SDL_Scancode key, DebugElement elem, int max_num);
+	//void ChangeWeapon();
 
 private:
 	DebugElement debug_elem = DebugElement::INVALID;

@@ -10,7 +10,14 @@
 bool M_Debug::PreUpdate()
 {
 	ChangeMap();
-	ChangeWeapon();
+	//ChangeWeapon();
+	if (SelectElement(SDL_SCANCODE_F2, DebugElement::WEAPON, (int)WEAPON::MAX_WEAPONS))
+	{
+		app->objectmanager->obj_tanks[0]->SetWeapon(
+			(WEAPON)debug_num,
+			app->objectmanager->obj_tanks[0]->GetWeaponInfo().level_weapon);
+		ClearDebugNumber();
+	}
 
 	//GOD MODE
 	//+ Add label that says "God Mode"
@@ -59,28 +66,50 @@ void M_Debug::ChangeMap()
 	}
 }
 
-void M_Debug::ChangeWeapon()
+bool M_Debug::SelectElement(SDL_Scancode key, DebugElement elem, int max_num)
 {
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	bool ret = false;
+	if (app->input->GetKey(key) == KEY_DOWN)
 	{
-		debug_elem = DebugElement::WEAPON;
+		debug_elem = elem;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN
-		|| app->input->GetKey(SDL_SCANCODE_F2) == KEY_REPEAT
-		&& debug_elem == DebugElement::WEAPON)
+	if (app->input->GetKey(key) == KEY_DOWN
+		|| app->input->GetKey(key) == KEY_REPEAT
+		&& debug_elem == elem)
 	{
 		SelectDebugNumber();
-		debug_num = MIN(debug_num, (int)WEAPON::MAX_WEAPON);
+		debug_num = MIN(debug_num, max_num);
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_UP
-		&& debug_elem == DebugElement::WEAPON)
+	if (app->input->GetKey(key) == KEY_UP
+		&& debug_elem == elem)
 	{
-		app->objectmanager->obj_tanks[0]->SetWeapon(
-			(WEAPON)debug_num,
-			app->objectmanager->obj_tanks[0]->GetWeaponInfo().level_weapon);
-		ClearDebugNumber();
-	}//If this returns true, execute a function and then clear the number?
+		ret = true;
+	}
+	return ret;
 }
+
+//void M_Debug::ChangeWeapon()
+//{
+//	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+//	{
+//		debug_elem = DebugElement::WEAPON;
+//	}
+//	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN
+//		|| app->input->GetKey(SDL_SCANCODE_F2) == KEY_REPEAT
+//		&& debug_elem == DebugElement::WEAPON)
+//	{
+//		SelectDebugNumber();
+//		debug_num = MIN(debug_num, (int)WEAPON::MAX_WEAPONS);
+//	}
+//	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_UP
+//		&& debug_elem == DebugElement::WEAPON)
+//	{
+//		app->objectmanager->obj_tanks[0]->SetWeapon(
+//			(WEAPON)debug_num,
+//			app->objectmanager->obj_tanks[0]->GetWeaponInfo().level_weapon);
+//		ClearDebugNumber();
+//	}
+//}
 
 void M_Debug::SelectDebugNumber()
 {
