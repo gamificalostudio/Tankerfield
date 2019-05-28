@@ -9,6 +9,8 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "M_ObjManager.h"
+#include "Obj_Tank.h"
 
 
 
@@ -81,8 +83,7 @@ bool M_Input::PreUpdate()
 	BROFILER_CATEGORY("M_InputPreUpdate", Profiler::Color::Green)
 	static SDL_Event event;
 	
-	UpdateKeyboardState();
-	UpdateMouseState();
+	
 
 
 	while(SDL_PollEvent(&event) != 0)
@@ -154,22 +155,7 @@ bool M_Input::PreUpdate()
 						}
 						if (!is_joystick)
 						{
-							Controller* controller = DBG_NEW Controller();
-							controller->ctr_pointer = SDL_GameControllerOpen(i);
-							SDL_Joystick* j = SDL_GameControllerGetJoystick(controller->ctr_pointer);
-							controller->joyId = SDL_JoystickInstanceID(j);
-							controller->index_number = i;
-							controller->haptic = SDL_HapticOpen(i);
-							LOG("Joys stick is aptic: %i", SDL_JoystickIsHaptic(j));
-							if (controller->haptic == NULL)
-							{
-								LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
-							}
-							else
-							{
-								SDL_HapticRumbleInit(controller->haptic);
-							}
-							controllers.push_back(controller);
+							CreateController(i);
 						}
 					}
 				}
@@ -177,33 +163,7 @@ bool M_Input::PreUpdate()
 			}
 			case SDL_CONTROLLERDEVICEREMOVED:
 			{
-				for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end();)
-				{
-					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
-					{
-						if ((*iter)->haptic != nullptr)
-						{
-							SDL_HapticClose((*iter)->haptic);
-							(*iter)->haptic = nullptr;
-						}
-							
-
-						if ((*iter)->ctr_pointer != nullptr)
-						{
-							SDL_GameControllerClose((*iter)->ctr_pointer);
-							(*iter)->ctr_pointer = nullptr;
-						}
-						
-
-						delete (*iter);
-						(*iter) = nullptr;
-						iter = controllers.erase(iter);
-					}
-					else
-					{
-						++iter;
-					}
-				}
+				RemoveController();
 				break;
 			}
 			case SDL_TEXTINPUT:
@@ -214,6 +174,8 @@ bool M_Input::PreUpdate()
 		}
 	}
 
+	UpdateKeyboardState();
+	UpdateMouseState();
 	UpdateControllers();
 
 	return true;
@@ -344,6 +306,13 @@ void M_Input::DetachController(Controller ** controller)
 	if (controller != nullptr && (*controller) != nullptr)
 	{
 		(*controller)->attached = false;
+		if ((*controller)->player != nullptr)
+		{
+			(*controller)->player->SetController(nullptr);
+		}
+
+		(*controller)->player = nullptr;
+		free_controllers.push_back((*controller));
 	}
 	else if (controller != nullptr && (*controller) == nullptr)
 	{
@@ -402,6 +371,10 @@ void M_Input::UpdateMouseState()
 
 void M_Input::UpdateControllers()
 {
+	for (std::list<Controller*>::iterator iter = free_controllers.begin(); iter != free_controllers.end(); ++iter)
+	{
+		AddControllerToPlayer(&(*iter));
+	}
 	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
 	{
 		for (int button = SDL_CONTROLLER_BUTTON_A; button < SDL_CONTROLLER_BUTTON_MAX; ++button)
@@ -484,6 +457,80 @@ void M_Input::UpdateControllers()
 	}
 }
 
+void M_Input::AddControllerToPlayer(Controller ** controller)
+{
+	for (std::vector<Obj_Tank*>::iterator iterator = app->objectmanager->obj_tanks.begin(); iterator != app->objectmanager->obj_tanks.end(); ++iterator)
+	{
+		if ((*iterator) != nullptr)
+		{
+			if ((*iterator)->GetController() == nullptr)
+			{
+				(*iterator)->SetController(controller);
+				(*controller)->player = (*iterator);
+				(*controller)->attached = true;
+				free_controllers.remove((*controller));
+			}
+		}
+	}
+}
+
+void M_Input::CreateController(int i)
+{
+	Controller* controller = DBG_NEW Controller();
+	controller->ctr_pointer = SDL_GameControllerOpen(i);
+	SDL_Joystick* j = SDL_GameControllerGetJoystick(controller->ctr_pointer);
+	controller->joyId = SDL_JoystickInstanceID(j);
+	controller->index_number = i;
+	controller->haptic = SDL_HapticOpen(i);
+	LOG("Joys stick is aptic: %i", SDL_JoystickIsHaptic(j));
+
+	if (controller->haptic == NULL)
+	{
+		LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
+	}
+	else
+	{
+		SDL_HapticRumbleInit(controller->haptic);
+	}
+	controllers.push_back(controller);
+
+	AddControllerToPlayer(&controller);
+}
+
+void M_Input::RemoveController()
+{
+	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end();)
+	{
+		if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
+		{
+			if ((*iter)->haptic != nullptr)
+			{
+				SDL_HapticClose((*iter)->haptic);
+				(*iter)->haptic = nullptr;
+			}
+
+
+			if ((*iter)->ctr_pointer != nullptr)
+			{
+				SDL_GameControllerClose((*iter)->ctr_pointer);
+				(*iter)->ctr_pointer = nullptr;
+			}
+
+			DetachController(&(*iter));
+
+			delete (*iter);
+			(*iter) = nullptr;
+			iter = controllers.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
+
+
 Controller** M_Input::GetAbleController()
 {
 	Controller** ret = nullptr;
@@ -561,3 +608,6 @@ int Controller::StopRumble()
 {
 	return SDL_HapticRumbleStop(haptic);
 }
+
+
+

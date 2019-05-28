@@ -160,15 +160,6 @@ bool M_MainMenu::PreUpdate()
 		return false;
 	}
 
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (players[i].controller == nullptr)
-		{
-			players[i].controller = app->input->GetAbleController();
-			players[i].tank->SetController(players[i].controller);
-		}
-	}
-
 	if (menu_state != MENU_STATE::CHANGE_SCENE)
 	{
 		InputNavigate();

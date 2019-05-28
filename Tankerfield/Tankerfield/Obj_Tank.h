@@ -57,7 +57,10 @@ public:
 	int GetMaxLife() const;
 	int GetTimeBetweenBullets() const;
 	int GetTankNum() const;
+
 	Controller ** GetController();
+	void SetController(Controller** controller);
+
 	bool GetShotAutomatically() const;
 	bool GetIsElectroShotCharged() const;
 	fPoint GetShotDir() const;

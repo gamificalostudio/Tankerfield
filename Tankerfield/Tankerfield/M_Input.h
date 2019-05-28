@@ -56,6 +56,7 @@ enum class INPUT_DIR
 
 
 class M_Input;
+class Obj_Tank;
 
 struct Controller
 {
@@ -67,11 +68,9 @@ private:
 	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis (they only have 1 and 0)
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
-
+	Obj_Tank* player = nullptr;
 public:
 	Controller();
-
-	
 
 private:
 	bool attached = false;
@@ -100,6 +99,8 @@ private:
 	{
 		attached = false;
 	}
+
+	
 
 	friend class M_Input;
 };
@@ -177,9 +178,18 @@ public:
 
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
+
 	void UpdateKeyboardState();
+
 	void UpdateMouseState();
+
 	void UpdateControllers();
+
+	void AddControllerToPlayer(Controller** controller);
+
+	void CreateController(int i);
+
+	void RemoveController();
 
 private:
 	bool		window_events[WE_COUNT];
@@ -193,6 +203,7 @@ private:
 public:
 	std::string input_text;
 	std::vector<Controller*> controllers;
+	std::list<Controller*> free_controllers;
 	Controller** GetAbleController();
 };
 
