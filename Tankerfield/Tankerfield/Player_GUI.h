@@ -86,6 +86,10 @@ private:
 
 	UI_InGameElement* player_arrow = nullptr;
 
+	// HUD Animated images ===================
+
+	UI_Image* electric_particle = nullptr;
+
 	friend M_UI;
 };
 

@@ -46,6 +46,32 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 
 	player_arrow = app->ui->CreateInGameElement( fPoint(0.f, 0.f), arrow_def );
 
+	// Animated images ================================================
+	
+	UI_ImageDef anim_image_def;
+	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
+	switch (tank_num)
+	{
+	case 0:
+		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, anim_image_def);
+		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
+		break;
+	case 1:
+		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, anim_image_def);
+		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
+		break;
+	case 2:
+		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, anim_image_def);
+		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
+		break;
+	case 3:
+		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, anim_image_def);
+		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
+		break;
+	default:
+		break;
+	}
+
 	// HUD  Elements ========================================================
 
 	UI_ImageDef image_def;
@@ -196,7 +222,7 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	item_icon			->SetFX(type, 3.f);
 	charged_shot_bar	->SetFX(type, 3.f);
 	life_bar			->SetFX(type, 3.f);
-	
+	electric_particle   ->SetFX(type, 3.f);
 }
 
 
