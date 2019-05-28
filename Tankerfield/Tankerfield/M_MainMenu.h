@@ -78,6 +78,10 @@ private:
 
 	SDL_Color GetColor(float value);
 
+public:
+
+	Player_Selection     players[MAX_PLAYERS];
+
 private:
 
 	MENU_STATE	      menu_state = MENU_STATE::NO_TYPE;
@@ -113,7 +117,6 @@ private:
 	UI_Element      *player_labels_peg = nullptr;
 	UI_Label*        player_labels[4];
 
-	Player_Selection     players[MAX_PLAYERS];
 	int                  current_player = 0;
 
 	float R_Color[6] = { 255.F , 255.F, 0    , 0    , 0    , 255.F };

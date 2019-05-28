@@ -18,16 +18,6 @@ class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
 
-class Obj_Tank_MainMenu;
-
-
-struct Player_Options_Selection
-{
-	int id = 0;
-	Controller** controller = nullptr;
-	Obj_Tank_MainMenu*  tank = nullptr;
-};
-
 class Options_Menu :public UI_Listener
 {
 public:
@@ -88,10 +78,6 @@ private:
 	uint button_select_sfx = 0u;
 	uint button_error_sfx = 0u;
 	uint selection_finished_sfx = 0u;
-
-	// Players ----------------------------------------------
-	Player_Options_Selection    players[MAX_PLAYERS];
-	int							current_player = 0;
 
 	// Volumes
 

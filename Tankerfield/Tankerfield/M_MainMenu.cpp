@@ -258,7 +258,6 @@ void M_MainMenu::InputNavigate()
 		{
 			app->audio->PlayFx(button_enter_sfx);
 		}
-		
 
 	}
 	else if (menu_state == MENU_STATE::SELECTION)

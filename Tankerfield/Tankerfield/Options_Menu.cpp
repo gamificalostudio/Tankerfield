@@ -10,6 +10,7 @@
 #include "M_Scene.h"
 #include "Log.h"
 #include <string.h>
+#include "M_MainMenu.h"
 
 #include "UI_Image.h"
 #include "UI_Button.h"
@@ -158,9 +159,9 @@ void Options_Menu::InputNavigate()
 {
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (players[i].controller != nullptr)
+		if (app->main_menu->players[i].controller != nullptr)
 		{
-			if (global_navigation_panel->HandleControllerINavigation(players[i].controller))
+			if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
 			{
 				app->audio->PlayFx(button_enter_sfx);
 			}
