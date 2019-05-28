@@ -107,10 +107,11 @@ public:
 	{
 		return enemies.size();
 	}
+
 private:
 	inline void RemoveObject(std::list<Object*>::iterator& iterator);
+
 	inline void DesactivateObject(std::list<Object*>::iterator& iterator);
-	inline void UpdateCollider(std::list<Object*>::iterator& iterator);
 
 public:
 	bool delete_all_enemies = false;

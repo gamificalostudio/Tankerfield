@@ -61,12 +61,7 @@ public:
 
 	virtual bool CleanUp() { return true; };
 
-	virtual bool Desactivate() { 
-			if (coll != nullptr)
-			{
-				coll->ActiveOnTrigger(false);
-			}
-	};
+	virtual bool Desactivate();
 
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
