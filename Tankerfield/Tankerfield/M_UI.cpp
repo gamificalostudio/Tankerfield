@@ -668,6 +668,11 @@ void M_UI::AddInteractiveElement(UI_Element* element)
 	}
 }
 
+void M_UI::HideAllUI()
+{
+	app->ui->SetStateToBranch(ELEMENT_STATE::HIDDEN, main_ui_element);
+}
+
 void M_UI::AddFX(UI_Fade_FX::FX_TYPE type, const float seconds,  UI_Element * element, const float loops , const float init_value, const float target_value)
 {
 	UI_Fade_FX* new_fx = DBG_NEW  UI_Fade_FX(type, seconds, element, loops,  init_value, target_value);

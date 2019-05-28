@@ -33,7 +33,7 @@ enum KeyState
 	KEY_IDLE = 0,
 	KEY_DOWN,
 	KEY_REPEAT,
-	KEY_UP
+	KEY_UP,
 };
 
 //Order is based on SDL_GameControllerAxis, if changed, it will stop working
@@ -71,29 +71,35 @@ private:
 public:
 	Controller();
 
-	KeyState GetButtonState(SDL_GameControllerButton button);
 	
-	iPoint GetJoystick(Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
-	//This funtion returns axis and triggers state value
-	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
-	
-	//Treat joysticks like buttons or keys to more easily manage them
-	KeyState GetJoystickState(Joystick joystick, INPUT_DIR joystick_button);
-	//Treat triggers like buttons or keys to more easily manage them
-	KeyState GetTriggerState(SDL_GameControllerAxis axis);
-	
-	//strengh -> from 0 to 1
-	//length  -> strength of the rumble to play as a 0-1 float value
-	int PlayRumble(float strengh, Uint32 length);
-	int StopRumble();
-	void DetachController()
-	{
-		if(this != nullptr)
-			attached = false;
-	}
+
 private:
 	bool attached = false;
+
+	inline KeyState GetButtonState(SDL_GameControllerButton button);
+
+	inline iPoint GetJoystick(Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
+
+	//This funtion returns axis and triggers state value
+	// The state is a value ranging from -32768 to 32767.
+	inline Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
+
+	//Treat joysticks like buttons or keys to more easily manage them
+	inline KeyState GetJoystickState(Joystick joystick, INPUT_DIR joystick_button);
+
+	//Treat triggers like buttons or keys to more easily manage them
+	inline KeyState GetTriggerState(SDL_GameControllerAxis axis);
+
+	//strengh -> from 0 to 1
+	//length  -> strength of the rumble to play as a 0-1 float value
+	inline int PlayRumble(float strengh, Uint32 length);
+
+	inline int StopRumble();
+
+	void DetachController()
+	{
+		attached = false;
+	}
 
 	friend class M_Input;
 };
@@ -145,6 +151,29 @@ public:
 	}
 
 	void GetMouseMotion(int& x, int& y);
+
+
+	//Controller funtions===================================================================================================
+
+	KeyState GetControllerButtonState(Controller** controller, SDL_GameControllerButton button);
+
+	iPoint GetControllerJoystick(Controller** controller, Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
+	//This funtion returns axis and triggers state value
+	// The state is a value ranging from -32768 to 32767.
+	Sint16 GetControllerAxis(Controller** controller, SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
+
+	//Treat joysticks like buttons or keys to more easily manage them
+	KeyState GetControllerJoystickState(Controller** controller, Joystick joystick, INPUT_DIR joystick_button);
+	//Treat triggers like buttons or keys to more easily manage them
+	KeyState GetControllerTriggerState(Controller** controller, SDL_GameControllerAxis axis);
+
+	//strengh -> from 0 to 1
+	//length  -> strength of the rumble to play as a 0-1 float value
+	int ControllerPlayRumble(Controller** controller, float strengh, Uint32 length);
+
+	int ControllerStopRumble(Controller** controller);
+
+	void DetachController(Controller** controller);
 
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);

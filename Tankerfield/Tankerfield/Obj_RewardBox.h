@@ -15,7 +15,10 @@ private:
 
 	//SOUND ===================================
 	const char* reward_box_dead_sound_string;
-	uint reward_box_dead_sound_int	= 0u;
+	const char* reward_box_hit_sound_string;
+	uint reward_box_dead_sound_int = 0u;
+	uint reward_box_hit_sound_int = 0u;
+
 
 	//IMAGE ==================================
 	SDL_Texture* texture;

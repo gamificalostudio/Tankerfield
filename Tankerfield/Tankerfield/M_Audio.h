@@ -54,7 +54,7 @@ public:
 
 	void SetMusicVolume(int volume);
 
-	uint explosion_fx;
+	uint explosion_fx = 0u;
 
 	Mix_Chunk* chunk;
 

@@ -23,8 +23,11 @@ class Obj_Tank_MainMenu;
 enum class MENU_STATE
 {
 	INIT_MENU,
-	CHANGE_SCENE,
+	OPTIONS,
+	CREDITS,
 	SELECTION,
+	CHANGE_SCENE,
+	NO_TYPE
 };
 
 struct Player_Selection
@@ -60,11 +63,15 @@ private:
 
 	void SetState(MENU_STATE new_state);
 
+	bool SetPlayerProperties();
+
+	void SetPlayerObjectsState(bool new_value);
+
 	void InputNavigate();
 
 	void InputSelect();
 
-	bool SetPlayerProperties();
+	
 
 	void ResetPanelColors();
 
@@ -72,7 +79,7 @@ private:
 
 private:
 
-	MENU_STATE	      menu_state = MENU_STATE::INIT_MENU;
+	MENU_STATE	      menu_state = MENU_STATE::NO_TYPE;
 	bool              exit_game = false;
 
 	// Textrues ================================================
