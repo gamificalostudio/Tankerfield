@@ -71,7 +71,7 @@ void Obj_Suicidal::SetStats(int level)
 	attack_range = app->objectmanager->suicidal_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->suicidal_info.attack_frequency;
-	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
+	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, level - 1);
 }
 
 Obj_Suicidal::~Obj_Suicidal()
