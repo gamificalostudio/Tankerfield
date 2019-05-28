@@ -50,6 +50,8 @@ public:
 
 	int GetMusicVolume();
 
+	void ModifyMusicVolume(int volume);
+
 	uint explosion_fx;
 
 	Mix_Chunk* chunk;

@@ -228,3 +228,7 @@ int M_Audio::GetMusicVolume()
 	return music_volume;
 }
 
+void M_Audio::ModifyMusicVolume(int volume)
+{
+	Mix_VolumeMusic(volume);
+}

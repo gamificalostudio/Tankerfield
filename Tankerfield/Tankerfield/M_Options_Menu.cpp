@@ -19,6 +19,7 @@
 bool M_Options_Menu::Start()
 {
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
+	app->audio->PlayMusic("audio/Music/menu_music.ogg");
 
 	button_enter_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_enter.wav", 20);
 	button_select_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_select.wav", 35);
@@ -296,11 +297,13 @@ void M_Options_Menu::InputSelect()
 			{
 				music_volume_string = std::to_string(app->audio->music_volume -= 5);
 				music_volume_value->SetText(music_volume_string);
+				app->audio->ModifyMusicVolume(app->audio->music_volume);
 			}
 			else if (menu_element == music_volume_R)
 			{
 				music_volume_string = std::to_string(app->audio->music_volume += 5);
 				music_volume_value->SetText(music_volume_string);
+				app->audio->ModifyMusicVolume(app->audio->music_volume);
 			}
 			else if (menu_element == sfx_volume_L)
 			{
