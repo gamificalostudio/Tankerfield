@@ -111,16 +111,10 @@ bool M_ObjManager::PreUpdate()
 
 	if (delete_all_enemies == true)
 	{
-		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+		for (std::list<Object*>::iterator iterator = enemies.begin(); iterator != enemies.end(); ++iterator)
 		{
-			ObjectType o_t = (*iterator)->type;
-
-			if (o_t == ObjectType::TESLA_TROOPER || o_t == ObjectType::BRUTE || o_t == ObjectType::SUICIDAL || o_t == ObjectType::ROCKETLAUNCHER)
-			{
 				(*iterator)->to_remove = true;
-			}
 		}
-
 		delete_all_enemies = false;
 	}
 
@@ -131,7 +125,7 @@ bool M_ObjManager::Update(float dt)
 {
 	BROFILER_CATEGORY("Object Manager: Update", Profiler::Color::ForestGreen);
 
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
+	for (std::list<Object*>::iterator iterator = active_objects.begin(); iterator != active_objects.end();)
 	{
 		if ((*iterator) != nullptr )
 		{
@@ -139,28 +133,14 @@ bool M_ObjManager::Update(float dt)
 			{
 				(*iterator)->Update(dt);
 			}
+			else
+			{
+				DesactivateObject(iterator);
+			}
 
 			if ((*iterator)->to_remove)
 			{
-			
-				(*iterator)->CleanUp();
-
-				if ((*iterator)->type == ObjectType::TESLA_TROOPER
-					|| (*iterator)->type == ObjectType::BRUTE)
-				{
-					enemies.remove((*iterator));
-				}
-
-				if ((*iterator)->coll != nullptr)
-				{
-					(*iterator)->coll->object = nullptr;
-					(*iterator)->coll->Destroy();
-					(*iterator)->coll = nullptr;
-				}
-
-				delete((*iterator));
-				(*iterator) = nullptr;
-				iterator = objects.erase(iterator);
+				RemoveObject(iterator);
 			}
 			else
 			{
@@ -255,22 +235,7 @@ bool M_ObjManager::CleanUp()
 
 bool M_ObjManager::Reset()
 {
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
-	{
-		(*iterator)->CleanUp();
-		if ((*iterator)->coll != nullptr)
-		{
-			(*iterator)->coll->Destroy();
-			(*iterator)->coll = nullptr;
-		}
-
-		delete((*iterator));
-		(*iterator) = nullptr;
-		iterator = objects.erase(iterator);
-	}
-
-	obj_tanks.clear();
-	objects.clear();
+	DeleteObjects();
 
 	return true;
 }
@@ -507,24 +472,33 @@ void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
 	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
 }
 
-
-
-
-
-bool M_ObjManager::Load(pugi::xml_node& load)
+inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator& iterator)
 {
-	bool ret = true;
+	(*iterator)->CleanUp();
 
-	return ret;
+	if ((*iterator)->type >= ObjectType::TESLA_TROOPER
+		|| (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.remove((*iterator));
+	}
+
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->object = nullptr;
+		(*iterator)->coll->Destroy();
+		(*iterator)->coll = nullptr;
+	}
+
+	delete((*iterator));
+	(*iterator) = nullptr;
+	iterator = objects.erase(iterator);
 }
 
-bool M_ObjManager::Save(pugi::xml_node& save) const
+inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & iterator)
 {
-	bool ret = true;
+	(*iterator)->Desactivate();
 
-	return ret;
 }
-
 
 bool M_ObjManager::SortByYPos(Object * obj1, Object * obj2)
 {

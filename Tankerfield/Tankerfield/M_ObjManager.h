@@ -26,6 +26,7 @@ enum class ObjectType
 	HEALING_AREA_SHOT,
 
 	//ENEMIES
+	//add enemies between tesla and rocketlauncher
 	TESLA_TROOPER,
 	BRUTE,
 	SUICIDAL,
@@ -84,10 +85,6 @@ public:
 
 	bool PostUpdate(float dt) override;
 
-	bool Load(pugi::xml_node&);
-
-	bool Save(pugi::xml_node&) const;
-
 	bool CleanUp() override;
 
 	bool Reset();
@@ -110,6 +107,10 @@ public:
 	{
 		return enemies.size();
 	}
+private:
+	inline void RemoveObject(std::list<Object*>::iterator& iterator);
+	inline void DesactivateObject(std::list<Object*>::iterator& iterator);
+	inline void UpdateCollider(std::list<Object*>::iterator& iterator);
 
 public:
 	bool delete_all_enemies = false;
@@ -136,6 +137,10 @@ public:
 private:
 	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
+
+	std::list<Object*> active_objects;
+	std::list<Object*> inactive_objetcs;
+
 	std::list<Object*> enemies;
 };
 

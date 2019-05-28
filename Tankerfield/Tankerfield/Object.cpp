@@ -48,6 +48,15 @@ bool Object::Draw(float dt, Camera * camera)
 	return true;
 }
 
+bool Object::Desactivate()
+{
+		if (coll != nullptr)
+		{
+			coll->ActiveOnTrigger(false);
+		}
+	return true;
+}
+
 void Object::SetDamage(float damage)
 {
 	if (coll != nullptr)

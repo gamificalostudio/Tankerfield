@@ -55,13 +55,18 @@ public:
 
 	virtual bool Update(float dt);
 
-	//SDL_Rect * GetRect();
-
 	virtual bool Draw(float dt, Camera * camera);
 
 	virtual bool DrawShadow(Camera * camera, float dt) { return true; }
 
 	virtual bool CleanUp() { return true; };
+
+	virtual bool Desactivate() { 
+			if (coll != nullptr)
+			{
+				coll->ActiveOnTrigger(false);
+			}
+	};
 
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
