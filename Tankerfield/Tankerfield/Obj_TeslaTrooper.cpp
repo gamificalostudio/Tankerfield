@@ -268,6 +268,7 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			scale,
 			scale);
 	}
+
 	if (state == ENEMY_STATE::SPAWN)
 	{
 		SDL_Rect rect = spawn_anim.GetFrame(0);
@@ -277,9 +278,9 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			pos_screen.y - rect.h,
 			camera,
 			&rect);
-
 	}
 
+	DrawAttackRange(camera);
 
 	return true;
 }

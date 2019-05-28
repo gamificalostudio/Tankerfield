@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Circle.h"
 #include "Timer.h"
+#include "M_Debug.h"
 
 struct SpawnPoint;
 
@@ -48,6 +49,8 @@ public:
 	virtual bool Start() override;
 
 	virtual void SetStats(int level);
+
+	void DrawAttackRange(Camera * camera);
 
 protected:
 	inline void UpdateMoveVec();
@@ -142,8 +145,6 @@ protected:
 	int damaged_sprite_time = 0;
 
 	bool oiled = false;
-
-	
 
 	float scale = 0.f;
 

@@ -513,6 +513,14 @@ void Obj_Enemy::SetStats(int level)//Executes just after creation
 
 }
 
+void Obj_Enemy::DrawAttackRange(Camera * camera)
+{
+	if (app->debug->debug_enemy_attack_range)
+	{
+		app->render->DrawIsoCircle(pos_screen.x, pos_screen.y, attack_range * app->map->data.tile_height, camera, 255, 0, 0, 255);
+	}
+}
+
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->ReduceNumEnemies();

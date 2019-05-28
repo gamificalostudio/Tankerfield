@@ -139,7 +139,6 @@ void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 	}
 }
 
-
 bool M_Debug::PreUpdate()
 {
 	iPoint mouse_pos;
@@ -153,6 +152,12 @@ bool M_Debug::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
 	{
 		app->scmanager->FadeToBlack(this, this, 2.f, 2.f);
+	}
+
+	//See enemy attack range
+	if (app->input->GetKey(SDL_SCANCODE_B) == KeyState::KEY_DOWN)
+	{
+		debug_enemy_attack_range = !debug_enemy_attack_range;
 	}
 
 	//GOD MODE

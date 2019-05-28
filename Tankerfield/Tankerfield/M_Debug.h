@@ -51,6 +51,9 @@ private:
 	int GetNumberFromScancode(int num);
 	void ChangeMap();
 
+public:
+	bool debug_enemy_attack_range = false;
+
 private:
 	DebugNumericType curr_debug_num = DebugNumericType::MAX;
 	DebugNumeric debug_numeric[(int)DebugNumericType::MAX];

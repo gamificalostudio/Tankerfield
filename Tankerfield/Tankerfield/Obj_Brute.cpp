@@ -195,6 +195,9 @@ bool Obj_Brute::Draw(float dt, Camera * camera)
 		SDL_Rect fire_frame = fire3.GetFrame(0);
 		app->render->Blit(fire_tex, pos_screen.x - fire_frame.w*0.5f, pos_screen.y, camera, &fire_frame);
 	}
+
+	DrawAttackRange(camera);
+
 	return true;
 }
 
