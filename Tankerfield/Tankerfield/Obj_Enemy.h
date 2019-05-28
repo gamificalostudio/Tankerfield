@@ -45,7 +45,9 @@ public:
 
 	virtual bool Draw(float dt, Camera* camera)override;
 
-	virtual  bool Start() override;
+	virtual bool Start() override;
+
+	virtual void SetStats(int level);
 
 protected:
 	inline void UpdateMoveVec();

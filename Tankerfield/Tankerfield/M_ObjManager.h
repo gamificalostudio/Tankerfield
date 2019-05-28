@@ -30,6 +30,7 @@ enum class ObjectType
 	BRUTE,
 	SUICIDAL,
 	ROCKETLAUNCHER,
+	//Modify bool M_ObjManager::IsEnemy() if you add an enemy or it won't delete enemies correctly
 
 	//BULLETS
 	BASIC_BULLET,
@@ -110,6 +111,8 @@ public:
 	{
 		return enemies.size();
 	}
+
+	bool IsEnemy(ObjectType type);
 
 public:
 	bool delete_all_enemies = false;

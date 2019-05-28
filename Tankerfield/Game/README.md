@@ -69,6 +69,8 @@ Hold, type a number and then release
 Note: List of weapons
 https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/WeaponInfo.h#L7
 
+- V: Change enemy level
+
 - C: Select object
 Note: List of objects
 https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/M_ObjManager.h#L15

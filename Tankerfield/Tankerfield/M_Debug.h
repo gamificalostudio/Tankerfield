@@ -6,9 +6,10 @@
 
 enum class DebugElement
 {
+	SELECT_TANK,
 	SELECT_WEAPON,
 	SELECT_WEAPON_LEVEL,
-	SELECT_TANK,
+	SELECT_ENEMY_LEVEL,
 	SELECT_OBJECT,
 	MAX
 };
@@ -16,6 +17,7 @@ enum class DebugElement
 class M_Debug : public Module
 {
 public:
+	bool Start() override;
 	bool PreUpdate() override;
 
 private:

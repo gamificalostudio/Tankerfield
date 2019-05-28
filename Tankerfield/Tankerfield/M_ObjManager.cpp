@@ -113,9 +113,7 @@ bool M_ObjManager::PreUpdate()
 	{
 		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 		{
-			ObjectType o_t = (*iterator)->type;
-
-			if (o_t == ObjectType::TESLA_TROOPER || o_t == ObjectType::BRUTE || o_t == ObjectType::SUICIDAL || o_t == ObjectType::ROCKETLAUNCHER)
+			if (IsEnemy((*iterator)->type))
 			{
 				(*iterator)->to_remove = true;
 			}
@@ -145,8 +143,7 @@ bool M_ObjManager::Update(float dt)
 			
 				(*iterator)->CleanUp();
 
-				if ((*iterator)->type == ObjectType::TESLA_TROOPER
-					|| (*iterator)->type == ObjectType::BRUTE)
+				if (IsEnemy((*iterator)->type))
 				{
 					enemies.remove((*iterator));
 				}
@@ -185,6 +182,11 @@ bool M_ObjManager::Update(float dt)
 	}
 	
 	return true;
+}
+
+bool M_ObjManager::IsEnemy(ObjectType type)
+{
+	return (type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER);//Change this enemy for the last enemy on the ObjectType enum
 }
 
 bool M_ObjManager::PostUpdate(float dt)

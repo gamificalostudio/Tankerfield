@@ -9,6 +9,13 @@
 #include "M_Render.h"
 #include "M_Map.h"
 
+bool M_Debug::Start()
+{
+	debug_num[(int)DebugElement::SELECT_ENEMY_LEVEL] = 1;//Enemies cannot have level 0
+
+	return true;
+}
+
 bool M_Debug::PreUpdate()
 {
 	iPoint mouse_pos;
@@ -32,11 +39,19 @@ bool M_Debug::PreUpdate()
 			debug_num[(int)DebugElement::SELECT_WEAPON_LEVEL]);
 	}
 
+	SelectElement(SDL_SCANCODE_V, DebugElement::SELECT_ENEMY_LEVEL, INT_MAX);
+
 	if (SelectElement(SDL_SCANCODE_C, DebugElement::SELECT_OBJECT, (int)ObjectType::MAX))
 	{
+		ObjectType obj_type = (ObjectType)debug_num[(int)DebugElement::SELECT_OBJECT];
 		app->objectmanager->CreateObject(
-			(ObjectType)debug_num[(int)DebugElement::SELECT_OBJECT],
+			obj_type,
 			(fPoint)mouse_pos);
+		if (app->objectmanager->IsEnemy(obj_type))
+		{
+
+		}
+		//ENEMY LEVEL
 	}
 
 	//Switch between map and test map
@@ -118,7 +133,8 @@ bool M_Debug::SelectElement(SDL_Scancode key, DebugElement elem, int max_num)
 	if (app->input->GetKey(key) == KEY_DOWN)
 	{
 		debug_elem = elem;
-		debug_num[elem_num] = 0;
+		debug_num[elem_num] = 0;//TODO: Enemy level would be set to 0 instead of its minimum, 1
+		//TODO: Maybe create a struct that relates the scancode, the debug element the minimum value and the maximum value and its debug num
 	}
 	if (app->input->GetKey(key) == KEY_DOWN
 		|| app->input->GetKey(key) == KEY_REPEAT

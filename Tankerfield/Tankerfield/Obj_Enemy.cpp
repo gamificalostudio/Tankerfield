@@ -508,6 +508,11 @@ bool Obj_Enemy::Start()
 	return true;
 }
 
+void Obj_Enemy::SetStats(int level)//Executes just after creation
+{
+
+}
+
 bool Obj_Enemy::CleanUp()
 {
 	app->scene->ReduceNumEnemies();
