@@ -33,10 +33,10 @@ void QuadTree_Collision::Subdivide()
 
 	is_divided = true;
 
-	child_nodes[0] = new QuadTree_Collision({ rect_area.GetLeft() , rect_area.GetBottom(), rect_area.w * 0.5F, rect_area.h * 0.5F }, max_elements, this);																														                       
-	child_nodes[1] = new QuadTree_Collision({ rect_area.GetLeft() + rect_area.w * 0.5F ,rect_area.GetBottom(),rect_area.w * 0.5F, rect_area.h * 0.5F }, max_elements, this);																															                       
-	child_nodes[2] = new QuadTree_Collision({ rect_area.GetLeft(), rect_area.GetBottom() + rect_area.h * 0.5F , rect_area.w * 0.5F, rect_area.h * 0.5F }, max_elements, this);
-	child_nodes[3] = new QuadTree_Collision({ rect_area.GetLeft() + rect_area.w * 0.5F ,rect_area.GetBottom() + rect_area.h * 0.5F, rect_area.w * 0.5F,  rect_area.h * 0.5F }, max_elements, this);
+	child_nodes[0] = new QuadTree_Collision({ rect_area.GetLeft() , rect_area.GetTop(), rect_area.w * 0.5F, rect_area.h * 0.5F }, max_elements, this);																														                       
+	child_nodes[1] = new QuadTree_Collision({ rect_area.GetLeft() + rect_area.w * 0.5F ,rect_area.GetTop(),rect_area.w * 0.5F, rect_area.h * 0.5F }, max_elements, this);
+	child_nodes[2] = new QuadTree_Collision({ rect_area.GetLeft(), rect_area.GetTop() + rect_area.h * 0.5F , rect_area.w * 0.5F, rect_area.h * 0.5F }, max_elements, this);
+	child_nodes[3] = new QuadTree_Collision({ rect_area.GetLeft() + rect_area.w * 0.5F ,rect_area.GetTop() + rect_area.h * 0.5F, rect_area.w * 0.5F,  rect_area.h * 0.5F }, max_elements, this);
 
 	DistrbuteColliders();
 }
@@ -129,9 +129,11 @@ void QuadTree_Collision::CheckCollisions()
 			{
 				c2 = *item2;
 
+				++app->collision->collisions_per_frame;
+
 				if (c1->CheckCollision(c2) == true)
 				{
-
+					
 				}
 			}
 
@@ -162,9 +164,11 @@ void QuadTree_Collision::CheckCollisions()
 			{
 				c2 = *item2;
 
+				++app->collision->collisions_per_frame;
+
 				if (c1->CheckCollision(c2) == true)
 				{
-
+					
 				}
 			}
 		}
@@ -175,9 +179,11 @@ void QuadTree_Collision::CheckCollisionsSubdivisions(Collider* collider)
 {
 	for (std::list<Collider*>::iterator iter = colliders.begin(); iter != colliders.end(); ++iter)
 	{
+		++app->collision->collisions_per_frame;
+
 		if ( (*iter)->CheckCollision(collider) == true)
 		{
-
+			
 		}
 	}
 
@@ -185,9 +191,11 @@ void QuadTree_Collision::CheckCollisionsSubdivisions(Collider* collider)
 	{
 		for (std::list<Collider*>::iterator iter = multi_check_colliders.begin(); iter != multi_check_colliders.end(); ++iter)
 		{
+			++app->collision->collisions_per_frame;
+
 			if ((*iter)->CheckCollision(collider) == true)
 			{
-
+				
 			}
 		}
 

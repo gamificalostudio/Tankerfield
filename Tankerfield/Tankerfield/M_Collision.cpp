@@ -178,8 +178,8 @@ bool M_Collision::Reset()
 
 bool M_Collision::Update(float dt)
 {
-	/*UpdateQuadtreeMethod(dt);*/
-	UpdateForcedMethod(dt);
+	UpdateQuadtreeMethod(dt);
+	/*UpdateForcedMethod(dt);*/
 	return true;
 }
 
@@ -221,7 +221,7 @@ bool M_Collision::UpdateQuadtreeMethod(float dt)
 
 	// Update Quadtree Collision ================================================================
 
-	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns *  app->map->data.tile_width, app->map->data.rows *  app->map->data.tile_height), 40, nullptr);
+	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns *  app->map->data.tile_width, app->map->data.rows *  app->map->data.tile_height), 10, nullptr);
 
 	for (std::list<Collider*>::iterator itr = static_colliders.begin(); itr != static_colliders.end(); ++itr)
 	{
@@ -235,6 +235,8 @@ bool M_Collision::UpdateQuadtreeMethod(float dt)
 
 	quad_tree_collision->CheckCollisions();
 
+	LOG("%i" , collisions_per_frame);
+	collisions_per_frame = 0;
 	// Destroy Colliders =============================================
 
 	DestroyColliders();

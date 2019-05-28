@@ -196,8 +196,13 @@ private:
 
 	void DestroyColliders();
 
+public:
+
+	int collisions_per_frame = 0;
+
 private:
 
+	
 	// Collision quadtree ====================================================
 
 	QuadTree_Collision* quad_tree_collision = nullptr;
