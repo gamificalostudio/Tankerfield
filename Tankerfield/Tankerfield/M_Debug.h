@@ -32,7 +32,7 @@ struct DebugNumeric
 	//If you press the debug key without pressing any numbers, it will perform the action with the last number you've inserted
 	bool pressed_numbers	= false;
 
-	void SetValues(DebugNumericType type, SDL_Scancode key, int min_num, int max_num, std::string &label_message);
+	void SetValues(DebugNumericType type, SDL_Scancode key, int min_num, int max_num, std::string label_message);
 	void PressedKey();//Checks if the debug element has been pressed
 	void UpdateNumber(int new_digit);
 	bool ReleasedKey();//Returns true if the element has been used

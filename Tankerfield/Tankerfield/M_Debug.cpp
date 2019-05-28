@@ -239,8 +239,8 @@ void DebugNumeric::PressedKey()
 	if (app->input->GetKey(key) == KEY_DOWN)
 	{
 		app->debug->curr_debug_num = type;
-		app->debug->debug_label->SetState(ELEMENT_STATE::VISIBLE);
 		app->debug->debug_label->SetText(label_message);
+		app->debug->debug_label->SetState(ELEMENT_STATE::VISIBLE);
 	}
 }
 
