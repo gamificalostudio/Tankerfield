@@ -164,11 +164,6 @@ bool M_Debug::PreUpdate()
 	//GOD MODE
 	//+ Add label that says "God Mode"
 
-	//Debug Window with any variable you want to put in (you can add a parameter and it will be printed there with the string and the number you pass it)
-
-	//Attack with only one tank
-
-
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 	{
 		//Currently is random, but you could pass any WEAPON or ItemType to make it spawn the item you need (they are non-obligatory paramenters)
@@ -208,6 +203,14 @@ bool M_Debug::PreUpdate()
 	{
 		debug_pathfinding = !debug_pathfinding;
 	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
+	{
+		god_mode = !god_mode;
+	}
+
+	//TODO: Debug Window with any variable you want to put in (you can add a parameter and it will be printed there with the string and the number you pass it)
+	//TODO: Attack with only one tank
 
 	return true;
 }

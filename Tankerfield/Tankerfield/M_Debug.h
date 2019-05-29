@@ -55,6 +55,7 @@ public:
 	bool debug_enemy_attack_range = false;
 	bool debug_sprite_sorting = false;
 	bool debug_pathfinding = false;
+	bool god_mode = false;
 	bool debug_ui = false;
 
 private:

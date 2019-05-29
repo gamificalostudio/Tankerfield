@@ -34,6 +34,7 @@
 #include "Obj_Portal.h"
 #include "HealingShot_Area.h"
 #include "Obj_FlamethrowerFlame.h"
+#include "M_Debug.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -276,17 +277,7 @@ bool Obj_Tank::PreUpdate()
 	{
 		show_crosshairs = !show_crosshairs;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
-	{
-		if (coll->GetTag() == TAG::PLAYER)
-		{
-			coll->SetTag(TAG::GOD);
-		}
-		else
-		{
-			coll->SetTag(TAG::PLAYER);
-		}
-	}
+
 	return true;
 }
 
@@ -722,6 +713,11 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 
 void Obj_Tank::SetLife(int life)
 {
+	//Don't change life if we're in god mode
+	if (app->debug->god_mode)
+	{
+		return;
+	}
 
 	if (life > GetMaxLife())
 	{
