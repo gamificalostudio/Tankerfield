@@ -149,10 +149,18 @@ bool M_Debug::PreUpdate()
 {
 	iPoint mouse_pos;
 	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
-	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
+	mouse_pos += iPoint(app->render->cameras[0u]->rect.x, app->render->cameras[0]->rect.y);
+	fPoint mouse_pos_map = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
+	//mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
+	//mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 
-	ManageNumericDebug((fPoint)mouse_pos);
+	//iPoint mouse_pos;
+	//app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	//mouse_pos += iPoint(app->render->cameras[0]->rect.x, app->render->cameras[0]->rect.y);
+	//fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
+	//app->objectmanager->CreateObject(ObjectType::EXPLOSION, map_mouse_pos);
+
+	ManageNumericDebug(mouse_pos_map);
 	ChangeMap();
 	//Reset scene
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
@@ -169,7 +177,7 @@ bool M_Debug::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 	{
 		//Currently is random, but you could pass any WEAPON or ItemType to make it spawn the item you need (they are non-obligatory paramenters)
-		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
+		app->pick_manager->CreatePickUp(mouse_pos_map);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
