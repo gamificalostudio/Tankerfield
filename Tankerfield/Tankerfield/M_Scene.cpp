@@ -167,9 +167,6 @@ bool M_Scene::Update(float dt)
 
 	bool input_accept = false;
 
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-		draw_debug = !draw_debug;
-
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		input_accept = true;

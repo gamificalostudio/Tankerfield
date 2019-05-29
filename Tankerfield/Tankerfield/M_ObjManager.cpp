@@ -233,7 +233,7 @@ bool M_ObjManager::PostUpdate(float dt)
 			{
 				(*item)->Draw(dt, (*item_cam));
 
-				if (app->scene->draw_debug)
+				if (app->debug->debug_sprite_sorting)
 				{
 					(*item)->DrawDebug((*item_cam));
 				}

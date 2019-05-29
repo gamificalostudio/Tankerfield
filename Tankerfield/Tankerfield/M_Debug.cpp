@@ -189,6 +189,11 @@ bool M_Debug::PreUpdate()
 		app->scene->general_gui->SetRoundNumber(app->scene->round);
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		debug_sprite_sorting = !debug_sprite_sorting;
+	}
+
 	if (app->input->GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
 	{
 		app->objectmanager->delete_all_enemies = true;

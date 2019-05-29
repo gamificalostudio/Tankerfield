@@ -53,6 +53,7 @@ private:
 
 public:
 	bool debug_enemy_attack_range = false;
+	bool debug_sprite_sorting = false;
 
 private:
 	DebugNumericType curr_debug_num = DebugNumericType::MAX;
