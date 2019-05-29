@@ -47,8 +47,6 @@ public:
 
 	void SetArrowColor(const SDL_Color color);
 
-	void ActivateAndMoveElectricalParticle(const fPoint& target_pos, const float& factor);
-
 	void Fade_GUI(bool fade_on);
 
 	/* UI Elements getters */

@@ -411,23 +411,6 @@ void Obj_Tank::Movement(float dt)
 			picked_weapon = false;
 			this->gui->electric_particle->SetPos(electric_particle_initial_pos);
 		}
-
-		/*if ((iPoint)this->gui->electric_particle->position == (iPoint)this->gui->GetWeaponFramePos() - (iPoint)wf_offset)
-		{
-			int i = 0;
-			//this->velocity_recoil_final_lerp = { 0, 0 };
-			this->gui->electric_particle->SetState(ELEMENT_STATE::HIDDEN);
-			picked_weapon = false;
-			this->gui->electric_particle->SetPos(electric_particle_initial_pos);
-		}*/
-		/*if (lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 0.2f) == this->gui->GetWeaponFramePos() - wf_offset)
-		{
-			int i = 0;
-			//this->velocity_recoil_final_lerp = { 0, 0 };
-			this->gui->electric_particle->SetState(ELEMENT_STATE::HIDDEN);
-			picked_weapon = false;
-			this->gui->electric_particle->SetPos(electric_particle_initial_pos);
-		}*/
 	}
 }
 
