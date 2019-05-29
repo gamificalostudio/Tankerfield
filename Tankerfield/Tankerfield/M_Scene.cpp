@@ -68,15 +68,6 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	srand(time(NULL));
 
-	// Wave System setup
-	pugi::xml_node subround_node = config.child("subrounds").child("subround");
-	for (uint i = 0; i < MAX_SUBROUNDS; ++i)
-	{
-		percentage_enemies_subround[i] = subround_node.attribute("percent").as_float(0);
-		time_between_rounds[i] = subround_node.attribute("time").as_int(0);
-		subround_node = subround_node.next_sibling("subround");
-	}
-
 	return ret;
 }
 
@@ -198,13 +189,6 @@ bool M_Scene::Update(float dt)
 	{
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
-		/* Generate new wave, restart the vars and increase units number */
-		//++subround;
-		//if (subround > MAX_SUBROUNDS)
-		//{
-		//	subround = 0;
-		//	++round;
-		//}
 		++round;
 		NewWave();
 		game_state = GAME_STATE::IN_WAVE;
@@ -487,7 +471,6 @@ void M_Scene::CreateEnemyWave()
 void M_Scene::NewWave()
 {
 	Tesla_trooper_units = 30 + 40 * round;
-	//Tesla_trooper_units *= percentage_enemies_subround[subround];
 
 	if (round >= 2)
 	{

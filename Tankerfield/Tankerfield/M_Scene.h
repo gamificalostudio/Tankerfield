@@ -1,8 +1,6 @@
 #ifndef __M_SCENE_H__
 #define __M_SCENE_H__
 
-#define MAX_SUBROUNDS 3
-
 #include <vector>
 
 #include "SDL/include/SDL_rect.h"
@@ -116,18 +114,11 @@ private:
 	bool game_over = false;
 
 	/* Wave System */
-	int time_between_rounds[MAX_SUBROUNDS] = { 0,0,0 };
 
 	uint Tesla_trooper_units			= 0u;
 	uint Brute_units					= 0u;
 	uint Suicidal_units					= 0u;
 	uint RocketLauncher_units			= 0u;
-
-	float percentage_enemies_subround[MAX_SUBROUNDS] = { 0.f,0.f,0.f };
-
-	float wait_time[MAX_SUBROUNDS] = { 0.f,0.f,0.f };
-
-	uint subround = 0;
 
 
 	// Fx and Music

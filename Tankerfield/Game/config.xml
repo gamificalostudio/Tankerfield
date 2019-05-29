@@ -26,12 +26,6 @@
 
     <scene>
       
-      <subrounds>
-        <subround percent="0.4" time="2"/>
-        <subround percent="0.6" time="3"/>
-        <subround percent="1.0" time="5"/>
-      </subrounds>
-  
       <music>
         <main_music music ="audio/Music/indeep.ogg"/>
       </music>
