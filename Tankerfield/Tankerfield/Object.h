@@ -59,6 +59,10 @@ public:
 
 	virtual bool Draw(float dt, Camera * camera);
 
+	virtual void DebugSpriteSorting(Camera* camera);
+
+	virtual void DebugPathfinding(Camera* camera) {};
+
 	virtual bool DrawShadow(Camera * camera, float dt) { return true; }
 
 	virtual bool CleanUp() { return true; };
@@ -76,8 +80,6 @@ public:
 	virtual void OnTrigger(Collider * collider) {}
 
 	virtual void OnTriggerExit(Collider * collider) {}
-
-	virtual void DrawDebug(const Camera* camera) {};
 
 	void SetDamage(float damage);
 

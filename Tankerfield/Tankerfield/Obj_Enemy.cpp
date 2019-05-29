@@ -541,20 +541,6 @@ inline void Obj_Enemy::UpdatePos(const float& dt)
 	range_pos.center = pos_map;
 }
 
-void Obj_Enemy::DrawDebug(const Camera* camera)
-{
-	if (path.size() >= 2)
-	{
-		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
-		{
-			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
-			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
-		}
-	}
-
-}
-
 inline void Obj_Enemy::Burn(const float & dt)
 {
 	if (burn_fist_enter)
@@ -813,6 +799,19 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 bool Obj_Enemy::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
+}
+
+void Obj_Enemy::DebugPathfinding(Camera * camera)
+{
+	if (path.size() >= 2)
+	{
+		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		{
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
+		}
+	}
 }
 
 

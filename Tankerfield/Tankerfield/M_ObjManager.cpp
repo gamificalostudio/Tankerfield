@@ -220,7 +220,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-			if ((*item) != nullptr )
+			if ((*item) != nullptr)
 			{
 				(*item)->DrawShadow((*item_cam), dt);
 			}
@@ -232,10 +232,29 @@ bool M_ObjManager::PostUpdate(float dt)
 			if ((*item) != nullptr)
 			{
 				(*item)->Draw(dt, (*item_cam));
+			}
+		}
 
-				if (app->debug->debug_sprite_sorting)
+		//Draw debug over the objects
+
+		if (app->debug->debug_sprite_sorting)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
 				{
-					(*item)->DrawDebug((*item_cam));
+					(*item)->DebugSpriteSorting((*item_cam));
+				}
+			}
+		}
+
+		if (app->debug->debug_pathfinding)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
+				{
+					(*item)->DebugPathfinding((*item_cam));
 				}
 			}
 		}
@@ -481,32 +500,6 @@ Obj_Tank* M_ObjManager::GetNearestTank(fPoint pos, float max_dist)
 std::list<Object*> M_ObjManager::GetObjects() const
 {
 	return this->objects;
-}
-
-void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
-{
-	SDL_Rect section = { obj->pos_screen.x - obj->draw_offset.x, obj->pos_screen.y - obj->draw_offset.y, obj->frame.w, obj->frame.h };
-
-	Uint8 alpha = 0;
-	switch (obj->type)
-	{
-	case ObjectType::TANK:
-		app->render->DrawQuad(section, 255, 0, 0, alpha);
-		break;
-	case ObjectType::STATIC:
-		app->render->DrawQuad(section, 0, 255, 0, alpha);
-		break;
-	case ObjectType::TESLA_TROOPER:
-		app->render->DrawQuad(section, 0, 0, 255, alpha);
-		break;
-	case ObjectType::EXPLOSION:
-		app->render->DrawQuad(section, 255, 0, 255, alpha);
-
-	default:
-		break;
-	}
-
-	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
 }
 
 bool M_ObjManager::Load(pugi::xml_node& load)

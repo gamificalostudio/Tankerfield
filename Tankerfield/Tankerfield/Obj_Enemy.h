@@ -42,7 +42,7 @@ public:
 
 	inline bool IsOnGoal(fPoint goal); //const?
 
-	void DrawDebug(const Camera* camera)override;
+	void DebugPathfinding (Camera* camera)override;
 
 	virtual bool Draw(float dt, Camera* camera)override;
 

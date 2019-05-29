@@ -104,8 +104,6 @@ public:
 
 	std::list<Object*> GetObjects() const;
 
-	inline void DrawDebug(const Object* obj, Camera* camera);
-
 	uint GetNumberOfEnemies()
 	{
 		return enemies.size();
