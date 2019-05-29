@@ -33,7 +33,9 @@ public:
 
 	void CreateRewardBoxWave();
 
-
+	PICKUP_TYPE RandomPickUp() const;
+	WEAPON RandomWeapon() const;
+	ItemType RandomItem() const;
 
 private:
 	uint percentage_spawn_item_from_enemy = NULL;

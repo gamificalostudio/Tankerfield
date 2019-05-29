@@ -15,6 +15,7 @@
 #include "M_Window.h"
 #include "M_Fonts.h"
 #include "General_HUD.h"
+#include "M_PickManager.h"
 
 bool M_Debug::Start()
 {
@@ -168,10 +169,10 @@ bool M_Debug::PreUpdate()
 	//Attack with only one tank
 
 
-	//if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
-	//{
-	//	app->pick_manager->CreatePickUp((fPoint)mouse_pos);
-	//}
+	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+	{
+		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
+	}
 	//if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
 	//{
 	//	app->objectmanager->obj_tanks[0]->SetLife(0);

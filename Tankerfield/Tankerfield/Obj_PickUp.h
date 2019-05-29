@@ -25,7 +25,7 @@ public:
 
 	PICKUP_TYPE type_of_pick_up					= PICKUP_TYPE::NO_TYPE;
 	WEAPON      type_of_weapon					= WEAPON::BASIC;
-	ItemType  type_of_item					= ItemType::NO_TYPE;
+	ItemType  type_of_item						= ItemType::NO_TYPE;
 
 	uint level_of_weapon						= NULL;
 
@@ -37,17 +37,11 @@ public:
 
 	~Obj_PickUp();
 
-	void GenerationOfPickUp(PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, uint levels_to_add = 0);
+	void CreatePickUpUI(PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE);
 
 	bool Update(float dt) override;
 
 	bool Draw(float dt, Camera* camera);
-
-	WEAPON RandomWeapon() ;
-
-	ItemType RandomItem() const;
-
-	PICKUP_TYPE RandomPickUp() const;
 
 	void DeletePickUp();
 };
