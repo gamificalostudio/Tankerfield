@@ -27,6 +27,7 @@
 #include "M_AnimationBank.h"
 #include "Player_GUI.h"
 #include "UI_InGameElement.h"
+#include "UI_Image.h"
 #include "M_UI.h"
 #include "M_ObjManager.h"
 #include "Camera.h"
@@ -390,7 +391,9 @@ void Obj_Tank::Movement(float dt)
 	// Check if picked weapon and update the GUI if true
 	if (picked_weapon)
 	{
-		gui->ActivateAndMoveElectricalParticle(this->gui->GetWeaponFramePos(), 9.75 * dt);
+		//gui->ActivateAndMoveElectricalParticle(this->gui->GetWeaponFramePos(), 9.75 * dt);
+		//gui->electric_particle->position.x = gui->electric_particle->position.x + 20;
+		this->gui->electric_particle->SetPos({ 100.0f, 100.0f });
 	}
 }
 

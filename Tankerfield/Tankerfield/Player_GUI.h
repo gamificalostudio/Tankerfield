@@ -65,6 +65,10 @@ public:
 
 	SDL_Rect viewport_with_margin = { 0,0,0,0 };
 
+	// HUD Animated images ===================
+
+	UI_Image* electric_particle = nullptr;
+
 private:
 
 	// HUD Elements =========================
@@ -91,9 +95,7 @@ private:
 
 	UI_InGameElement* player_arrow = nullptr;
 
-	// HUD Animated images ===================
 
-	UI_Image* electric_particle = nullptr;
 
 	friend M_UI;
 };
