@@ -263,6 +263,7 @@ void Options_Menu::InputSelect()
 			{
 				sfx_volume_string = std::to_string(app->audio->sfx_volume -= 5);
 				sfx_volume_value->SetText(sfx_volume_string);
+				app->audio->SetSfxVolume(-5);
 			}
 		}
 		else if (menu_element == sfx_volume_R)
@@ -271,6 +272,7 @@ void Options_Menu::InputSelect()
 			{
 				sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
 				sfx_volume_value->SetText(sfx_volume_string);
+				app->audio->SetSfxVolume(5);
 			}
 		}
 

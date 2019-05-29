@@ -233,10 +233,23 @@ void M_Audio::SetMasterVolume(float master_multiplier)
 	master_volume = master_multiplier;
 
 	Mix_VolumeMusic(music_volume*master_multiplier);
+
+	for (std::list<Mix_Chunk*>::const_iterator iter = fx.begin(); iter != fx.end(); ++iter)
+	{
+		Mix_VolumeChunk((*iter), (*iter)->volume*master_multiplier);
+	}
 }
 
 
 void M_Audio::SetMusicVolume(int volume)
 {
 	Mix_VolumeMusic(volume*master_volume);
+}
+
+void M_Audio::SetSfxVolume(int volume)
+{
+	for (std::list<Mix_Chunk*>::const_iterator iter = fx.begin(); iter != fx.end(); ++iter)
+	{
+		Mix_VolumeChunk((*iter), ((*iter)->volume + volume)*master_volume);
+	}
 }
