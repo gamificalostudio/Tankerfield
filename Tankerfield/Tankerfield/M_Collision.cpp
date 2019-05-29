@@ -200,7 +200,7 @@ bool M_Collision::UpdateQuadtreeMethod(float dt)
 
 	is_updating = true;
 
-	// Fill body types lists ====================================================================
+	// Fill body types lists ==================================================
 
 	if (!colliders_to_add.empty())
 	{
@@ -219,16 +219,14 @@ bool M_Collision::UpdateQuadtreeMethod(float dt)
 		colliders_to_add.clear();
 	}
 
-	// Update Quadtree Collision ================================================================
+	std::list<Collider*> colliders_list(dynamic_colliders);
+	colliders_list.merge(static_colliders);
+	colliders_list.sort()
+	// Update Quadtree Collision =============================================
 
-	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns *  app->map->data.tile_width, app->map->data.rows *  app->map->data.tile_height), 10, nullptr);
+	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns *  app->map->data.tile_width, app->map->data.rows *  app->map->data.tile_height), 5, nullptr);
 
-	for (std::list<Collider*>::iterator itr = static_colliders.begin(); itr != static_colliders.end(); ++itr)
-	{
-		quad_tree_collision->PlaceCollider(*itr);
-	}
-
-	for (std::list<Collider*>::iterator itr = dynamic_colliders.begin(); itr != dynamic_colliders.end(); ++itr)
+	for (std::list<Collider*>::iterator itr = colliders_list.begin(); itr != colliders_list.end(); ++itr)
 	{
 		quad_tree_collision->PlaceCollider(*itr);
 	}
@@ -237,7 +235,28 @@ bool M_Collision::UpdateQuadtreeMethod(float dt)
 
 	LOG("%i" , collisions_per_frame);
 	collisions_per_frame = 0;
-	// Destroy Colliders =============================================
+
+	// Triggers ==============================================================
+
+	for (std::list<Collider*>::iterator collider_to_check = colliders_list.begin(); collider_to_check != colliders_list.end(); ++collider_to_check)
+	{
+		for (std::list<Collider*>::iterator collider_colliding = (*collider_to_check)->collisions_list.begin(); collider_colliding != (*collider_to_check)->collisions_list.end(); ++collider_colliding)
+		{
+			(*itr)->collisions_list.clear();
+		}
+	}
+
+	// Solve Overlaps ==============================================================
+
+
+
+
+	// Destroy Colliders =====================================================
+
+	for (std::list<Collider*>::iterator itr = colliders_list.begin(); itr != colliders_list.end(); ++itr)
+	{
+		(*itr)->collisions_list.clear();
+	}
 
 	DestroyColliders();
 
@@ -278,15 +297,6 @@ bool M_Collision::UpdateForcedMethod(float dt)
 		colliders_to_add.clear();
 	}
 
-	if (!mod_on_trigger_colliders.empty())
-	{
-		for (std::map<Collider*, bool>::iterator itr = mod_on_trigger_colliders.begin(); itr != mod_on_trigger_colliders.end(); ++itr)
-		{
-			(*itr).first->active_on_trigger = (*itr).second;
-		}
-
-		mod_on_trigger_colliders.clear();
-	}
 
 	// Check collisions =========================================================================
 
@@ -443,13 +453,13 @@ void M_Collision::DestroyColliders()
 		{
 			// Destroy from current colliders on collision ==============
 
-			for (std::list<Collider*>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
+			for (std::map<Collider*, bool>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
 			{
-				std::list<Collider*>::iterator to_destroy = std::find((*itr)->triggers_list.begin(), (*itr)->triggers_list.end(), (*iterator));
+				std::map<Collider*, bool>::iterator to_destroy = (*itr).first->triggers_list.find( (*itr).first );
 
-				if (to_destroy != (*itr)->triggers_list.end())
+				if (to_destroy != (*itr).first->triggers_list.end())
 				{
-					(*itr)->triggers_list.erase(to_destroy);
+					(*itr).first->triggers_list.erase(to_destroy);
 				}
 			}
 
@@ -471,20 +481,20 @@ void M_Collision::DestroyColliders()
 		{
 			// Destroy from current colliders on collision ==============
 
-			for (std::list<Collider*>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
+			for (std::map<Collider*, bool>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
 			{
-				std::list<Collider*>::iterator to_destroy = std::find((*itr)->triggers_list.begin(), (*itr)->triggers_list.end(), (*iterator));
+				std::map<Collider*, bool>::iterator to_destroy = (*itr).first->triggers_list.find((*itr).first);
 
-				if (to_destroy != (*itr)->triggers_list.end())
+				if (to_destroy != (*itr).first->triggers_list.end())
 				{
-					(*itr)->triggers_list.erase(to_destroy);
+					(*itr).first->triggers_list.erase(to_destroy);
 				}
 			}
 
 			// Destroy ==================================================
 
 			RELEASE(*iterator);
-			iterator = dynamic_colliders.erase(iterator);
+			iterator = static_colliders.erase(iterator);
 
 			continue;
 		}

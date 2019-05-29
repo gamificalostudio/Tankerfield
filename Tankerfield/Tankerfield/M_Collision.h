@@ -143,7 +143,7 @@ private:
 
 	std::list<Collider*> collisions_list;
 
-	std::list<Collider*> triggers_list;
+	std::map<Collider*, bool> triggers_list;
 
 	Object * object = nullptr;
 
@@ -158,6 +158,13 @@ private:
 	friend M_Collision;
 	friend M_ObjManager;
 	friend QuadTree_Collision;
+};
+
+struct Collision_Info
+{
+	int type = 0;             // 1. Dynamic-Dynamic   2. Dynamic-Static
+	Collider* collider_1 = nullptr;
+	Collider* collider_2 = nullptr;
 };
 
 class M_Collision : public Module
@@ -214,8 +221,6 @@ private:
 	std::list<Collider*> dynamic_colliders;
 
 	std::list<Collider*> colliders_to_add;
-
-	std::map<Collider* ,bool> mod_on_trigger_colliders;
 
 	// Collider matrix ======================================================
 
