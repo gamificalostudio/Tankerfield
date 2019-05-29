@@ -391,10 +391,8 @@ void Obj_Tank::Movement(float dt)
 	// Check if picked weapon and update the GUI if true
 	if (picked_weapon)
 	{
-		//gui->ActivateAndMoveElectricalParticle(this->gui->GetWeaponFramePos(), 9.75 * dt);
-		//gui->electric_particle->position.x = gui->electric_particle->position.x + 20;
-		//this->gui->electric_particle->SetPos({ 100.0f, 100.0f });
 		fPoint wf_offset = { 58.0f, 30.0f };
+		this->gui->electric_particle->SetState(ELEMENT_STATE::VISIBLE);
 		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 0.2f));
 	}
 }
