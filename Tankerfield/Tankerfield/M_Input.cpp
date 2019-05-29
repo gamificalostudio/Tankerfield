@@ -83,7 +83,9 @@ bool M_Input::PreUpdate()
 	BROFILER_CATEGORY("M_InputPreUpdate", Profiler::Color::Green)
 	static SDL_Event event;
 	
-	
+	UpdateKeyboardState();
+	UpdateMouseState();
+	UpdateControllers();
 
 
 	while(SDL_PollEvent(&event) != 0)
@@ -174,9 +176,7 @@ bool M_Input::PreUpdate()
 		}
 	}
 
-	UpdateKeyboardState();
-	UpdateMouseState();
-	UpdateControllers();
+	
 
 	return true;
 }
