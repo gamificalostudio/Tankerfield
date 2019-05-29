@@ -28,16 +28,16 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 	texture = app->tex->Load(reward_box_node.child("image_path").attribute("value").as_string());
 	curr_tex = texture;
 	
-	default_frame = {  0, 0, 45, 34 };
+	frame = default_frame = {  0, 0, 45, 34 };
 	frame_white   = { 45, 0, 45, 34 };
 	shadow_frame  = { 90, 0, 45, 34 };
 
 	draw_offset   = { 14, 27 };
 
-	float coll_w = 0.5f;
-	float coll_h = 0.5f;
+	float coll_w = 0.75f;
+	float coll_h = 0.75f;
 	coll = app->collision->AddCollider(pos, coll_w ,coll_h , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);
-	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	coll->SetObjOffset({ -coll_w * 0.75f, -coll_h * 0.75f });
 }
 
 Obj_RewardBox::~Obj_RewardBox()

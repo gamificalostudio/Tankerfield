@@ -71,7 +71,6 @@ void M_Debug::CreateLabel()
 
 void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 {
-	LOG("debugging debug");
 	//Checks which numeric debug has been the last one pressed
 	//and puts it in curr_debug_num
 	for (int debug_num_iter = 0; debug_num_iter < (int)DebugNumericType::MAX; ++debug_num_iter)
