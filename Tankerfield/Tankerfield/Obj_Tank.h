@@ -300,6 +300,8 @@ private:
 
 	bool picking = false;
 
+	bool picked_weapon = false;
+
 public:
 	Camera* camera_player				= nullptr;
 

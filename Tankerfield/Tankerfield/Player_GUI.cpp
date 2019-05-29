@@ -308,6 +308,11 @@ void Player_GUI::SetArrowColor(const SDL_Color color )
 	player_arrow->color_mod = color;
 }
 
+void Player_GUI::ActivateAndMoveElectricalParticle(const fPoint& target_pos, const float& factor)
+{
+	this->electric_particle->position = lerp(this->electric_particle->position, target_pos, factor);
+}
+
 void Player_GUI::ClearHelpers()
 {
 	for (std::vector<UI_Element*>::iterator iter = helper_elements.begin(); iter != helper_elements.end(); ++iter)
@@ -332,6 +337,11 @@ void Player_GUI::AddButtonHelper( const CONTROLLER_BUTTON button_type)
 void Player_GUI::AddTextHelper(const std::string text)
 {
 	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->font->font_open_sants_bold_12));
+}
+
+fPoint Player_GUI::GetWeaponFramePos() const
+{
+	return this->weapon_icon->position;
 }
 
 Player_GUI::~Player_GUI()

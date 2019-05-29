@@ -383,6 +383,13 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
+
+
+	// Check if picked weapon and update the GUI if true
+	if (picked_weapon)
+	{
+		gui->ActivateAndMoveElectricalParticle(this->gui->GetWeaponFramePos(), 9.75 * dt);
+	}
 }
 
 void Obj_Tank::ShotRecoilMovement(float &dt)
@@ -693,6 +700,8 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+				
+				this->picked_weapon = true;
 				SetPickUp(pick_up);
 			}
 		}
@@ -1184,8 +1193,8 @@ void Obj_Tank::Item()
 		new_item->Use();
 		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
-		
 	}
+
 	picking = false;
 }
 
