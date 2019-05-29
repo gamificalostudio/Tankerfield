@@ -17,6 +17,7 @@ class UI_Image;
 class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
+class Options_Menu;
 
 class Obj_Tank_MainMenu;
 
@@ -77,6 +78,10 @@ private:
 
 	SDL_Color GetColor(float value);
 
+public:
+
+	Player_Selection     players[MAX_PLAYERS];
+
 private:
 
 	MENU_STATE	      menu_state = MENU_STATE::NO_TYPE;
@@ -102,6 +107,8 @@ private:
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
 	UI_Button		* multi_player_button = nullptr;
+	UI_Button		* leaderboard_menu_button = nullptr;
+	UI_Button		* options_menu_button = nullptr;
 	UI_Button		* exit_button = nullptr;
 	UI_Label        * version_label = nullptr;
 
@@ -110,7 +117,6 @@ private:
 	UI_Element      *player_labels_peg = nullptr;
 	UI_Label*        player_labels[4];
 
-	Player_Selection     players[MAX_PLAYERS];
 	int                  current_player = 0;
 
 	float R_Color[6] = { 255.F , 255.F, 0    , 0    , 0    , 255.F };
@@ -127,6 +133,10 @@ private:
 	uint button_select_sfx = 0u;
 	uint button_error_sfx = 0u;
 	uint selection_finished_sfx = 0u;
+
+	// Menus ------------------------------------------
+
+	Options_Menu* options = nullptr;
 };
 
 #endif // __j1SCENE_H__

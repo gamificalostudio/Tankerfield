@@ -26,6 +26,7 @@
 #include "M_AnimationBank.h"
 #include "M_RewardZoneManager.h"
 #include "M_MainMenu.h"
+#include "Options_Menu.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -50,7 +51,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	anim_bank = DBG_NEW M_AnimationBank();
 	reward_zone_manager = DBG_NEW M_RewardZoneManager();
 	main_menu = DBG_NEW M_MainMenu();
-  
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
