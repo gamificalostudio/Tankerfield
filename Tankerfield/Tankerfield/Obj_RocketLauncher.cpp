@@ -48,13 +48,13 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	state = ENEMY_STATE::IDLE;
 
 	//spawn_draw_offset = { 49, 50 };
-	normal_draw_offset = { 60, 60 };
-	electrocuted_draw_offset = { 35, 30 };
-	draw_offset = normal_draw_offset;
+	scale = 1.75f;
+	//NOTE: Draw offset depends on the scale
+	draw_offset = normal_draw_offset = (iPoint)(fPoint(49.f, 48.f) * scale);
+	electrocuted_draw_offset = (iPoint)(fPoint(35.f, 30.f) * scale);
 	
 	check_path_time = 2.0f;
 	damaged_sprite_time = 75;
-	scale = 1.f;
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
