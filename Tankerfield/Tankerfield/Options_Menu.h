@@ -53,7 +53,13 @@ private:
 	UI_Image* panel_background = nullptr;
 
 	UI_Label* options_title = nullptr;
-	UI_Checkbox* fullscreen_checkbox = nullptr;
+
+	UI_Label* fullscreen_label = nullptr;
+	UI_Label* fullscreen_value = nullptr;
+	UI_Button* fullscreen_R = nullptr;
+	UI_Button* fullscreen_L = nullptr;
+	bool fullscreen_value_info = false;
+
 	UI_Label* master_volume_label = nullptr;
 	UI_Label* music_volume_label = nullptr;
 	UI_Label* sfx_volume_label = nullptr;
