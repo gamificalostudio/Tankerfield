@@ -172,10 +172,10 @@ bool M_Debug::PreUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
 	{
-		app->objectmanager->obj_tanks[0]->SetLife(0);
-		app->objectmanager->obj_tanks[1]->SetLife(0);
-		app->objectmanager->obj_tanks[2]->SetLife(0);
-		app->objectmanager->obj_tanks[3]->SetLife(0);
+		app->objectmanager->obj_tanks[0]->ReduceLife(app->objectmanager->obj_tanks[0]->GetMaxLife());
+		app->objectmanager->obj_tanks[1]->ReduceLife(app->objectmanager->obj_tanks[1]->GetMaxLife());
+		app->objectmanager->obj_tanks[2]->ReduceLife(app->objectmanager->obj_tanks[2]->GetMaxLife());
+		app->objectmanager->obj_tanks[3]->ReduceLife(app->objectmanager->obj_tanks[3]->GetMaxLife());
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)

@@ -46,8 +46,8 @@ public:
 
 public:
 	//- Logic
-	void SetLife(int life);
 	void ReduceLife(int damage);
+	void IncreaseLife(int heal);
 	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	void SetColor(const SDL_Color new_color);
@@ -80,6 +80,9 @@ public:
 	fPoint GetTurrPos() const;
 
 private:
+	//- Logic
+	void SetLife(int life);//Don't use SetLife directly from other classes, use ReduceLife() or IncreaseLife()
+
 	//- Movement
 	void Movement(float dt);
 	void ShotRecoilMovement(float &dt);
@@ -126,7 +129,7 @@ private:
 
 	//- TankDeath
 	void ReviveTank(float dt);
-	void StopTank();
+	void Die();
 
 	//- Item
 	void Item();
@@ -140,8 +143,6 @@ private:
 	static int number_of_tanks;
 
 	bool ready								= false;
-	bool fire_dead							= false;
-
 
 	//- Movement
 	float curr_speed						= 0.f;
