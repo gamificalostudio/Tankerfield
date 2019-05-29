@@ -105,7 +105,6 @@ void Obj_Suicidal::Attack()
 		{
 			curr_anim = &idle;
 			attack.Reset();
-			
 		}
 	}
 }

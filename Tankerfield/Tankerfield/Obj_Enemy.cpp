@@ -112,9 +112,6 @@ void Obj_Enemy::Attack()
 				perf_timer.Start();
 				app->audio->PlayFx(sfx_attack);
 			}
-	
-
-		
 	}
 }
 void Obj_Enemy::Movement(float &dt)
@@ -197,8 +194,6 @@ void Obj_Enemy::Movement(float &dt)
 		assert(true && "The enemy have no state");
 		break;
 	}
-
-
 }
 
 void Obj_Enemy::RecheadPoint()
@@ -494,7 +489,7 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 			scale,
 			scale);
 
-	
+	DrawAttackRange(camera);
 
 	return true;
 }
