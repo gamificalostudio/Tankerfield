@@ -264,7 +264,7 @@ bool M_Scene::Update(float dt)
 
 		Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
 
-		if (controller != nullptr && (*controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (controller != nullptr && app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			input_accept = true;
 		}

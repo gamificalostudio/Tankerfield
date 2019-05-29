@@ -68,7 +68,7 @@ Obj_Tank::~Obj_Tank()
 
 	if (controller != nullptr)
 	{
-		(*controller)->DetachController();
+		app->input->DetachController(controller);
 	}
 }
 
@@ -111,7 +111,9 @@ bool Obj_Tank::Start()
 	// ==========================================================
 
 	//sfx -------------------------------------------------------------------------------------------------------
-	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string());
+	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string(), 100);
+	heal_sound = app->audio->LoadFx(tank_node.child("sounds").child("heal_shot").attribute("sound").as_string(), 100);
+	laser_sound = app->audio->LoadFx(tank_node.child("sounds").child("laser_shot").attribute("sound").as_string(), 100);
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -471,7 +473,7 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input)
 
 void Obj_Tank::InputMovementController(fPoint & input)
 {
-	input = (fPoint)(*controller)->GetJoystick(gamepad_move, dead_zone);
+	input = (fPoint)app->input->GetControllerJoystick(controller, gamepad_move, dead_zone);;
 }
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
@@ -651,6 +653,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			if (GetLife() < GetMaxLife())
 			{
 				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
+				app->audio->PlayFx(heal_sound);
 			}
 		}
 		else
@@ -823,7 +826,7 @@ void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, 
 {
 	if (controller != nullptr)
 	{
-		input_dir = (fPoint)(*controller)->GetJoystick(gamepad_aim, dead_zone);
+		input_dir = (fPoint)app->input->GetControllerJoystick(controller, gamepad_aim, dead_zone);
 		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
 		iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 		iso_dir.Normalize();
@@ -871,7 +874,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			}
 			if (controller != nullptr) 
 			{ 
-				(*controller)->PlayRumble(0.1f, 100); 
+				app->input->ControllerPlayRumble(controller, 0.1f, 100);
 			}
 
 			if (charging)
@@ -908,7 +911,10 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			(this->*shot1_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot1.trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+
+			if (controller != nullptr) 
+				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration);
+
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
 		//- Charged shot
@@ -917,7 +923,9 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			(this->*shot2_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
-			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
+			if (controller != nullptr)
+				app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration);
+
 			app->objectmanager->CreateObject(weapon_info.shot2.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
 		shot_timer.Start();
@@ -940,7 +948,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		(this->*shot2_function[(uint)weapon_info.weapon])();
 		camera_player->AddTrauma(weapon_info.shot1.trauma);
 		//TODO: Play wepon sfx
-		if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
+		if (controller != nullptr) { app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
 	}
 
 	//- Quick shot
@@ -952,7 +960,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		{
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			(this->*shot1_function[(uint)weapon_info.weapon])();
-			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			if (controller != nullptr) { app->input->ControllerPlayRumble(controller, weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 			shot_timer.Start();
 		}
@@ -1004,7 +1012,7 @@ bool Obj_Tank::PressShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_DOWN;
+		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_DOWN;
 	}
 }
 
@@ -1016,7 +1024,7 @@ bool Obj_Tank::HoldShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_REPEAT;
+		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_REPEAT;
 	}
 }
 
@@ -1028,7 +1036,7 @@ bool Obj_Tank::ReleaseShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return (*controller)->GetTriggerState(gamepad_shoot) == KEY_UP;
+		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_UP;
 	}
 }
 
@@ -1062,7 +1070,7 @@ void Obj_Tank::SelectInputMethod()
 	}
 	if (move_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
-		&& !(*controller)->GetJoystick(gamepad_move, dead_zone).IsZero()))
+		&& !app->input->GetControllerJoystick(controller, gamepad_move, dead_zone).IsZero()))
 	{
 		move_input = INPUT_METHOD::CONTROLLER;
 	}
@@ -1076,8 +1084,8 @@ void Obj_Tank::SelectInputMethod()
 	}
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (controller != nullptr
-		&& (!(*controller)->GetJoystick(gamepad_aim, dead_zone).IsZero()
-		|| (*controller)->GetAxis(gamepad_shoot) > 0)))
+			&& (!app->input->GetControllerJoystick(controller, gamepad_aim, dead_zone).IsZero()
+				|| app->input->GetControllerAxis(controller, gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
@@ -1155,12 +1163,12 @@ void Obj_Tank::ReviveTank(float dt)
 
 bool Obj_Tank::PressInteract()
 {
-	return (controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
+	return (controller != nullptr && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
 }
 
 bool Obj_Tank::ReleaseInteract()
 {
-	return (controller != nullptr && ((*controller)->GetButtonState(gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
+	return (controller != nullptr && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
 void Obj_Tank::StopTank()
@@ -1186,7 +1194,7 @@ void Obj_Tank::Item()
 	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
 			|| (controller != nullptr
-				&& (*controller)->GetButtonState(gamepad_item) == KEY_DOWN)))
+				&& app->input->GetControllerButtonState(controller, gamepad_item) == KEY_DOWN)))
 	{
 		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);
 		new_item->caster = this;

@@ -46,7 +46,7 @@ public:
 public:
 	uint GetExplosionFx();
 
-	uint explosion_fx;
+	uint explosion_fx = 0u;
 
 private:
 	_Mix_Music* music = nullptr;

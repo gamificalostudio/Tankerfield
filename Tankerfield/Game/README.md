@@ -56,8 +56,25 @@ https://github.com/AitorVelez
 - F7: Activate/ Deactivate God Mode
 - F9: Show colliders
 - F10: Show information on screen
+- F11: Switch between map and test map
 - 6: Kill all player
 - 0: Kill all enemies
+- B: See enemy attack range
+
+
+Hold, type a number and then release
+
+- Z: Select player
+
+- X: Select weapon level
+Note: List of weapons
+https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/WeaponInfo.h#L7
+
+- V: Change enemy level
+
+- C: Select object
+Note: List of objects
+https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/M_ObjManager.h#L15
 
 
 ## Keyboard controls:
