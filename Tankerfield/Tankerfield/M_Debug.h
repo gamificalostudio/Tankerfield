@@ -62,6 +62,7 @@ private:
 	DebugNumericType curr_debug_num = DebugNumericType::MAX;
 	DebugNumeric debug_numeric[(int)DebugNumericType::MAX];
 	UI_Label* debug_label = nullptr;
+	UI_Label* god_mode_label = nullptr;
 	
 	friend struct DebugNumeric;
 };
