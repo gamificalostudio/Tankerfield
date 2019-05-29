@@ -46,7 +46,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 
 	state = ENEMY_STATE::SPAWN;
 
-	scale = 0.75f;
+	scale = 1.75f;
 	//INFO: Draw offset depends on the scale
 	draw_offset = normal_draw_offset = (iPoint)(fPoint(32.f, 36.f) * scale);
 
