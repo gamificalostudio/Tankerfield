@@ -46,8 +46,9 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 
 	state = ENEMY_STATE::SPAWN;
 
-	normal_draw_offset = { 33, 50 };
-	draw_offset = normal_draw_offset;
+	scale = 0.75f;
+	//INFO: Draw offset depends on the scale
+	draw_offset = normal_draw_offset = (iPoint)(fPoint(32.f, 36.f) * scale);
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
@@ -58,8 +59,6 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	check_path_time = 2.0f;
 
 	curr_anim = &idle;
-
-	scale = 0.75f;
 }
 
 //Called after creating the enemy
