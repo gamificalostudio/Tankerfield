@@ -231,10 +231,10 @@ bool M_Scene::Update(float dt)
 		app->audio->PlayMusic("audio/Music/defeat.ogg", 2.0f);
 		general_gui->FadeGeneralHUD(false);
 		general_gui->FadeGameOverScreen(true, round);
-		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
+		game_state = GAME_STATE::WAITING_GAMEOVER;
 		break;
 
-	case GAME_STATE::WAIT_PLAYER_INPUT_1:
+	case GAME_STATE::WAITING_GAMEOVER:
 
 		if (input_accept == true)
 		{
@@ -252,11 +252,11 @@ bool M_Scene::Update(float dt)
 		
 		general_gui->FadeGameOverScreen(false);
 		general_gui->FadeLeaderBoardScreen(true);
-		game_state = GAME_STATE::WAIT_PLAYER_INPUT_2;
+		game_state = GAME_STATE::WAITING_LEADERBOARD;
 
 		break;
 
-	case GAME_STATE::WAIT_PLAYER_INPUT_2:
+	case GAME_STATE::WAITING_LEADERBOARD:
 
 		general_gui->SetInputTextToNameLabel();
 

@@ -27,9 +27,9 @@ enum class GAME_STATE
 	EXIT_OF_WAVE,
 	OUT_WAVE,
 	GAME_OVER,
-	WAIT_PLAYER_INPUT_1,
+	WAITING_GAMEOVER,//Waiting for player input
 	LEADER_BOARD,
-	WAIT_PLAYER_INPUT_2
+	WAITING_LEADERBOARD//Waiting for player input
 };
 
 class PerfTimer;
