@@ -261,8 +261,6 @@ private:
 
 private:
 
-	bool debug = false;
-
 	bool reset = false;
 
 	// Atlas Texture ---------------------------------------

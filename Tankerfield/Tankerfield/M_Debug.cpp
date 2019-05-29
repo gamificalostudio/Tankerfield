@@ -194,12 +194,17 @@ bool M_Debug::PreUpdate()
 		debug_sprite_sorting = !debug_sprite_sorting;
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
+	{
+		debug_ui = !debug_ui;
+	}
+
 	if (app->input->GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
 	{
 		app->objectmanager->delete_all_enemies = true;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_PERIOD) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 	{
 		debug_pathfinding = !debug_pathfinding;
 	}

@@ -12,6 +12,7 @@
 #include "M_Scene.h"
 #include "M_Fonts.h"
 #include "M_AnimationBank.h"
+#include "M_Debug.h"
 
 #include "Player_GUI.h"
 
@@ -203,12 +204,6 @@ bool M_UI::PreUpdate()
 {
 	BROFILER_CATEGORY("M_UI_Preupdate", Profiler::Color::Brown);
 
-	// Debug ===================================================
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
-	{
-		debug = !debug;
-	}
-
 	int x = 0, y = 0;
 	app->input->GetMousePosition(x,y);
 	mouse_position = fPoint( x,y );
@@ -251,7 +246,7 @@ bool M_UI::PostUpdate(float dt)
 
 	// Debug Positions  =======================================
 
-	if (debug)
+	if (app->debug->debug_ui)
 	{
 		for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 		{
@@ -619,7 +614,7 @@ void M_UI::DrawUI(UI_Element * object)
 		}
 	}
 	
-	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
+	if (app->debug->debug_ui && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
 	{
 		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
