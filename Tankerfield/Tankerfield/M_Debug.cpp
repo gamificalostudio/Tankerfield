@@ -156,7 +156,7 @@ bool M_Debug::PreUpdate()
 	}
 
 	//See enemy attack range
-	if (app->input->GetKey(SDL_SCANCODE_B) == KeyState::KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_PERIOD) == KeyState::KEY_DOWN)
 	{
 		debug_enemy_attack_range = !debug_enemy_attack_range;
 	}

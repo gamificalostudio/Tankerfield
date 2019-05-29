@@ -58,9 +58,10 @@ https://github.com/AitorVelez
 - F9: Show colliders
 - F10: Show information on screen
 - F11: Switch between map and test map
-- N: Kill all player
+- N: Kill all players
 - , (COMMA): Kill all enemies
 - B: Create pick up
+- . (PERIOD): Debug enemy attack range
 - M: Go to next round
 - Z: Select player
 - X: Select weapon level
