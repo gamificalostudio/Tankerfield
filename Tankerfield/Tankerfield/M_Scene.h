@@ -104,6 +104,7 @@ private:
 public:
 	SDL_Texture* path_tex = nullptr;
 
+	Pause_Menu*			   pause_menu = nullptr;
 private:
 	/* Debug pathfinding */
 	std::vector<iPoint> debug_path;

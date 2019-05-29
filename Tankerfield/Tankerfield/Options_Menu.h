@@ -48,7 +48,6 @@ private:
 	// Main screen --------------------------------
 
 	UI_InteractiveGroup * global_navigation_panel = nullptr;
-	UI_InteractiveGroup * labels_panel = nullptr;
 
 	UI_Image* panel_background = nullptr;
 

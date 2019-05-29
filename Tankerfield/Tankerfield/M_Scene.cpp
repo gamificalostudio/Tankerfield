@@ -41,7 +41,7 @@
 #include "Obj_RocketLauncher.h"
 #include "Object.h"
 #include "Obj_RewardBox.h"
-
+#include "Pause_Menu.h"
 
 M_Scene::M_Scene() : Module()
 {
@@ -88,6 +88,9 @@ bool M_Scene::Awake(pugi::xml_node& config)
 bool M_Scene::Start()
 {
 	path_tex = app->tex->Load("maps/path.png");
+
+	pause_menu = new Pause_Menu();
+	pause_menu->HidePauseMenu();
 
 	// Load Fxs
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);

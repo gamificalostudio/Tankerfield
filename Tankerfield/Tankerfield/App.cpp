@@ -27,6 +27,7 @@
 #include "M_RewardZoneManager.h"
 #include "M_MainMenu.h"
 #include "Options_Menu.h"
+#include "Pause_Menu.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -198,6 +199,7 @@ bool App::Start()
 	
 	startup_time.Start();
 
+	
 	PERF_PEEK(ptimer);
 
 	return ret;
@@ -211,6 +213,14 @@ bool App::Update()
 	if (input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
 	{
 		pause = !pause;
+		if (pause == true)
+		{
+			app->scene->pause_menu->ShowPauseMenu();
+		}
+		else
+		{
+			app->scene->pause_menu->HidePauseMenu();
+		}
 		frame_time.Start();
 	}
 	if (input->GetWindowEvent(WE_QUIT) == true)

@@ -223,8 +223,11 @@
     <ClCompile Include="HealingShot_Area.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="Pause_Menu.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="Options_Menu.cpp">
-      <Filter>Modules</Filter>
+      <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -474,8 +477,11 @@
     <ClInclude Include="HealingShot_Area.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
+    <ClInclude Include="Pause_Menu.h">
+      <Filter>UI</Filter>
+    </ClInclude>
     <ClInclude Include="Options_Menu.h">
-      <Filter>Modules</Filter>
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

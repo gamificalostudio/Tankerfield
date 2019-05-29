@@ -1,0 +1,69 @@
+#ifndef __PAUSE_MENU_H__
+#define __PAUSE_MENU_H__
+
+#include "SDL/include/SDL_rect.h"
+#include "Module.h"
+#include "M_UI.h"
+
+#define MAX_PLAYERS 4
+#define DEFAULT_PANEL_COLUMNS 5
+#define DEFAULT_PANEL_ROWS 5
+
+struct SDL_Texture;
+struct Controller;
+
+class UI_Element;
+class UI_Image;
+class UI_Button;
+class UI_Label;
+class UI_InteractiveGroup;
+class Options_Menu;
+
+class Pause_Menu :public UI_Listener
+{
+public:
+
+	Pause_Menu();
+
+	bool OnHoverEnter(UI_Element * element);
+
+	void ShowPauseMenu();
+
+	void HidePauseMenu();
+
+	void InputNavigate();
+
+	void InputSelect();
+
+private:
+
+	UI_InteractiveGroup * global_navigation_panel = nullptr;
+
+	UI_Image* panel_background = nullptr;
+
+	// Elements ================================================
+
+	Camera*			       camera = nullptr;
+
+	// Control helpers --------------------------------------
+
+	UI_Image* control_helper_image = nullptr;
+	UI_Label* control_helper_label = nullptr;
+
+	// Main screen --------------------------------
+
+	UI_Label* pause_menu = nullptr;
+	UI_Button* options_menu = nullptr;
+	UI_Button* main_menu = nullptr;
+
+	// Sfx --------------------------------------------
+
+	uint button_enter_sfx = 0u;
+	uint button_select_sfx = 0u;
+	uint button_error_sfx = 0u;
+	uint selection_finished_sfx = 0u;
+
+	Options_Menu* options = nullptr;
+};
+
+#endif 
