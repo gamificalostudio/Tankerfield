@@ -61,6 +61,7 @@ void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, It
 	{
 		type_of_pick_up = RandomPickUp();
 	}
+	ret->type_of_pick_up = type_of_pick_up;
 
 	if (type_of_pick_up == PICKUP_TYPE::WEAPON)
 	{
@@ -86,7 +87,7 @@ void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, It
 		}
 	}
 
-	ret->CreatePickUpUI(type_of_pick_up);
+	ret->CreatePickUpUI();
 }
 
 PICKUP_TYPE M_PickManager::RandomPickUp() const

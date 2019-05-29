@@ -37,7 +37,7 @@ public:
 
 	~Obj_PickUp();
 
-	void CreatePickUpUI(PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE);
+	void CreatePickUpUI();
 
 	bool Update(float dt) override;
 

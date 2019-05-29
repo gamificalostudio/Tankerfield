@@ -29,12 +29,12 @@ Obj_PickUp::~Obj_PickUp()
 {
 }
 
-void Obj_PickUp::CreatePickUpUI(PICKUP_TYPE type_of_pick_up)
+void Obj_PickUp::CreatePickUpUI()
 {
 	UI_InGameElementDef element_def;
 	element_def.pointed_obj = this;
 
-	switch (this->type_of_pick_up)
+	switch (type_of_pick_up)
 	{
 	case PICKUP_TYPE::ITEM:
 		in_game_element = app->ui->CreateInGameItem(pos_map, element_def);
