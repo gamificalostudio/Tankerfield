@@ -12,6 +12,7 @@
 #include "M_Scene.h"
 #include "M_Fonts.h"
 #include "M_AnimationBank.h"
+#include "M_Debug.h"
 
 #include "Player_GUI.h"
 
@@ -203,12 +204,6 @@ bool M_UI::PreUpdate()
 {
 	BROFILER_CATEGORY("M_UI_Preupdate", Profiler::Color::Brown);
 
-	// Debug ===================================================
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
-	{
-		debug = !debug;
-	}
-
 	int x = 0, y = 0;
 	app->input->GetMousePosition(x,y);
 	mouse_position = fPoint( x,y );
@@ -251,7 +246,7 @@ bool M_UI::PostUpdate(float dt)
 
 	// Debug Positions  =======================================
 
-	if (debug)
+	if (app->debug->debug_ui)
 	{
 		for (list<UI_Element*>::iterator item = elements_list.begin(); item != elements_list.end(); ++item)
 		{
@@ -619,7 +614,7 @@ void M_UI::DrawUI(UI_Element * object)
 		}
 	}
 	
-	if (debug && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
+	if (app->debug->debug_ui && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
 	{
 		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
@@ -693,7 +688,7 @@ UI_Element * M_UI::CreateElement(const fPoint position, const UI_ElementDef defi
 {
 	UI_Element* object = DBG_NEW UI_Element(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -710,7 +705,7 @@ UI_Quad * M_UI::CreateQuad(const fPoint position, const UI_QuadDef definition, U
 {
 	UI_Quad* object = DBG_NEW UI_Quad(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -728,7 +723,7 @@ UI_Label* M_UI::CreateLabel(const fPoint position, UI_LabelDef definition, UI_Li
 
 	UI_Label* object = DBG_NEW UI_Label(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -747,7 +742,7 @@ UI_Image* M_UI::CreateImage(const fPoint position, const UI_ImageDef definition,
 {
 	UI_Image* object = DBG_NEW UI_Image(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -765,7 +760,7 @@ UI_Button* M_UI::CreateButton(const fPoint position, const UI_ButtonDef definiti
 {
 	UI_Button* object = DBG_NEW UI_Button(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -783,7 +778,7 @@ UI_Slider * M_UI::CreateSlider(const fPoint position, const UI_SliderDef definit
 {
 	UI_Slider* object = DBG_NEW UI_Slider(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -801,7 +796,7 @@ UI_Checkbox * M_UI::CreateCheckbox(const fPoint position, const UI_CheckboxDef d
 {
 	UI_Checkbox* object = DBG_NEW UI_Checkbox(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -819,7 +814,7 @@ UI_TextPanel * M_UI::CreateTextPanel(const fPoint position, const UI_TextPanelDe
 {
 	UI_TextPanel* object = DBG_NEW UI_TextPanel(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);
@@ -836,7 +831,7 @@ UI_Bar * M_UI::CreateBar(const fPoint position, const UI_BarDef definition, UI_L
 {
 	UI_Bar* object = DBG_NEW UI_Bar(position, definition, listener);
 
-	if (definition.is_in_game == true)
+	if (definition.is_in_game)
 	{
 		object->SetParent(main_in_game_element);
 		ig_elements_list.push_back(object);

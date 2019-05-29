@@ -48,34 +48,26 @@ https://github.com/AitorVelez
 
 # Debug functionality:
 - F1: Show / hide grid
-- F2: Activate / deactivate splitscreen
+- F2: Change tank weapon
 - F3: Show / hide sprite sorting rects and pivots
-- F3: Show pathfinding lines
 - F4: Show / hide tank crosshairs
 - F5: Reset level
+- F6: Show pathfinding lines
 - F7: Activate/ Deactivate God Mode
+- F8: Debug UI
 - F9: Show colliders
 - F10: Show information on screen
 - F11: Switch between map and test map
-- 6: Kill all player
-- 0: Kill all enemies
-- B: See enemy attack range
-
-
-Hold, type a number and then release
-
+- N: Kill all player
+- , (COMMA): Kill all enemies
+- B: Create pick up
+- M: Go to next round
 - Z: Select player
-
 - X: Select weapon level
-Note: List of weapons
 https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/WeaponInfo.h#L7
-
 - V: Change enemy level
-
 - C: Select object
-Note: List of objects
 https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/M_ObjManager.h#L15
-
 
 ## Keyboard controls:
 - Move mouse: Aim

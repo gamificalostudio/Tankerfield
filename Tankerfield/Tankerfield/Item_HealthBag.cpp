@@ -33,7 +33,7 @@ bool Item_HealthBag::Use()
 
 	if (caster != nullptr)
 	{
-		caster->SetLife(caster->GetMaxLife());
+		caster->IncreaseLife(caster->GetMaxLife());
 	}
 
 	anim.frames = app->anim_bank->LoadFrames(health_bag_node.child("animations").child("rotate"));

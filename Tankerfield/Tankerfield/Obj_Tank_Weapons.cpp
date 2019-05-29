@@ -137,7 +137,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
 		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 100;
-		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::MAX;
 		weapon_info.shot1.recoil = 25;
 		break;
 	case WEAPON::FLAMETHROWER:
@@ -194,7 +194,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 250;
 		weapon_info.shot2.bullet_healing = 15 + level;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
-		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot2.smoke_particle = ObjectType::MAX;
 		weapon_info.shot1.recoil = 25;
 		weapon_info.shot2.recoil = 0;
 		break;
@@ -212,8 +212,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
-		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.smoke_particle = ObjectType::MAX;
+		weapon_info.shot2.smoke_particle = ObjectType::MAX;
 		weapon_info.shot1.recoil = 0;
 		weapon_info.shot2.recoil = 0;
 		break;
@@ -230,7 +230,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::MAX;
 		weapon_info.shot1.recoil = 25;
 		weapon_info.shot2.recoil = 50;
 		break;
@@ -248,8 +248,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
-		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.smoke_particle = ObjectType::MAX;
+		weapon_info.shot2.smoke_particle = ObjectType::MAX;
 		weapon_info.shot1.recoil = 0;
 		weapon_info.shot2.recoil = 0;
 

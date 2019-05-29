@@ -220,6 +220,7 @@
     <ClCompile Include="Bullet_RocketLauncher.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="M_Debug.cpp">
     <ClCompile Include="HealingShot_Area.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -471,6 +472,7 @@
     <ClInclude Include="Bullet_RocketLauncher.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
+    <ClInclude Include="M_Debug.h">
     <ClInclude Include="HealingShot_Area.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>

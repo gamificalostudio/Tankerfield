@@ -5,7 +5,7 @@
   <property name="offset_y" type="int" value="0"/>
  </properties>
  <tileset firstgid="1" name="flat" tilewidth="60" tileheight="30" tilecount="144" columns="8">
-  <image source="test/flatTiles.png" trans="ff00ff" width="480" height="540"/>
+  <image source="flatTiles.png" trans="ff00ff" width="480" height="540"/>
  </tileset>
  <tileset firstgid="145" name="Cliff60x90" tilewidth="60" tileheight="90" tilecount="16" columns="4">
   <image source="Cliff separated/Cliff60x90.png" width="240" height="368"/>
@@ -37,7 +37,7 @@
   <image source="Cliff separated/Cliff90x98l.png" width="90" height="196"/>
  </tileset>
  <tileset firstgid="197" name="flat" tilewidth="60" tileheight="30" tilecount="144" columns="8">
-  <image source="test/flatTiles.png" trans="ff00ff" width="480" height="540"/>
+  <image source="flatTiles.png" trans="ff00ff" width="480" height="540"/>
  </tileset>
  <tileset firstgid="341" name="Path210x140r" tilewidth="210" tileheight="147" tilecount="2" columns="1">
   <image source="Roads and paths separated/Path210x140r.png" width="210" height="294"/>

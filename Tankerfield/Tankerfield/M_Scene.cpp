@@ -39,6 +39,8 @@
 #include "Obj_TeslaTrooper.h"
 #include "Obj_Brute.h"
 #include "Obj_RocketLauncher.h"
+#include "Obj_Suicidal.h"
+
 #include "Object.h"
 #include "Obj_RewardBox.h"
 
@@ -58,12 +60,6 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	// Rounds to win the game
-	rounds_to_win = config.child("rounds_to_win").attribute("value").as_int();
-
-	time_round_check_frequency = config.child("time_round_check_frequency").attribute("value").as_float();
-
-	
 	//MUSIC
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
 
@@ -72,22 +68,13 @@ bool M_Scene::Awake(pugi::xml_node& config)
 
 	srand(time(NULL));
 
-	// Wave System setup
-	pugi::xml_node subround_node = config.child("subrounds").child("subround");
-	for (uint i = 0; i < MAX_SUBROUNDS; ++i)
-	{
-		percentage_enemies_subround[i] = subround_node.attribute("percent").as_float(0);
-		time_between_rounds[i] = subround_node.attribute("time").as_int(0);
-		subround_node = subround_node.next_sibling("subround");
-	}
-
 	return ret;
 }
 
 // Called before the first frame
 bool M_Scene::Start()
 {
-	path_tex = app->tex->Load("maps/path.png");
+	//path_tex = app->tex->Load("maps/path.png");
 
 	// Load Fxs
 	finish_wave_sound_uint = app->audio->LoadFx(finish_wave_sound_string);
@@ -165,81 +152,9 @@ bool M_Scene::PreUpdate()
 {
 	//LOG("Enemy number %i", number_of_enemies);
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)//TODO: Go to pause screen
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KeyState::KEY_DOWN)
-	{
-		app->scmanager->FadeToBlack(this, this, 2.f, 2.f);
-	}
-
-	iPoint mouse_pos;
-	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
-	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
-
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::BRUTE, (fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::SUICIDAL, (fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
-	{
-		app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, (fPoint)mouse_pos);
-
-	}
-	if (app->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
-	{
-		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
-	{
-		app->objectmanager->obj_tanks[0]->SetLife(0);
-		app->objectmanager->obj_tanks[1]->SetLife(0);
-		app->objectmanager->obj_tanks[2]->SetLife(0);
-		app->objectmanager->obj_tanks[3]->SetLife(0);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
-	{
-		iPoint mouse_pos;
-		app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-		mouse_pos += iPoint(app->render->cameras[0]->rect.x, app->render->cameras[0]->rect.y);
-		fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
-		app->objectmanager->CreateObject(ObjectType::EXPLOSION, map_mouse_pos);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
-	{
-		++this->round;
-		general_gui->SetRoundNumber(round);
-	}
-	if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
-	{
-		game_state = GAME_STATE::GAME_WON;
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		int new_weapon = (int)app->objectmanager->obj_tanks[0]->GetWeaponInfo().weapon;
-		++new_weapon;
-		if (new_weapon == (int)WEAPON::MAX_WEAPONS)
-		{
-			new_weapon = (int)WEAPON::DOUBLE_MISSILE;
-		}
-		app->objectmanager->obj_tanks[0]->SetWeapon((WEAPON)new_weapon, round);
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
-	{
-		app->objectmanager->delete_all_enemies = true;
 	}
 
 	return true;
@@ -251,9 +166,6 @@ bool M_Scene::Update(float dt)
 	BROFILER_CATEGORY("M_SceneUpdate", Profiler::Color::Blue);
 
 	bool input_accept = false;
-
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-		draw_debug = !draw_debug;
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
@@ -274,13 +186,6 @@ bool M_Scene::Update(float dt)
 	{
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
-		/* Generate new wave, restart the vars and increase units number */
-		//++subround;
-		//if (subround > MAX_SUBROUNDS)
-		//{
-		//	subround = 0;
-		//	++round;
-		//}
 		++round;
 		NewWave();
 		game_state = GAME_STATE::IN_WAVE;
@@ -327,18 +232,6 @@ bool M_Scene::Update(float dt)
 		general_gui->FadeGeneralHUD(false);
 		general_gui->FadeGameOverScreen(true, round);
 		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
-		break;
-
-	case GAME_STATE::GAME_WON:
-
-		for (int i = 0; i < MAX_PLAYERS; ++i) {
-			app->objectmanager->obj_tanks[i]->gui->Fade_GUI(false);
-		}
-
-		general_gui->FadeGeneralHUD(false);
-		general_gui->FadeWinScreen(true);
-		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
-
 		break;
 
 	case GAME_STATE::WAIT_PLAYER_INPUT_1:
@@ -391,24 +284,9 @@ bool M_Scene::Update(float dt)
 bool M_Scene::PostUpdate(float dt)
 {
 	bool ret = true;
-	//
+
 	//DebugPathfinding();
 
-	/* Keep track if we reached the maximum round and, therefore, win the game */
-	this->accumulated_time += dt * 1000.0f;
-	if (accumulated_time >= time_round_check_frequency * 1000.0f)
-	{
-		perform_round_check = true;
-	}
-
-
-	if (perform_round_check
-		&& this->round >= rounds_to_win + 1
-		&& !win_game)
-	{
-		game_state = GAME_STATE::GAME_WON;
-		win_game = true;
-	}
 	return ret;
 }
 
@@ -545,9 +423,8 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
-
-			
+			Obj_TeslaTrooper * enemy = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+			enemy->SetStats(app->scene->round);
 		}
 	
 	}
@@ -558,8 +435,8 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
-
+			Obj_Brute * enemy = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+			enemy->SetStats(app->scene->round);
 		}
 	}
 
@@ -569,21 +446,21 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
-
+			Obj_RocketLauncher * enemy = (Obj_RocketLauncher*) app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
+			enemy->SetStats(app->scene->round);
 		}
 	}
 
-	//for (int i = 0; i < Suicidal_units; i++)
-	//{
-	//	if (app->map->data.spawners_position_enemy.size() != 0)
-	//	{
-	//		uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
-	//		fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-	//		app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
-
-	//	}
-	//}
+	for (int i = 0; i < Suicidal_units; i++)
+	{
+		if (app->map->data.spawners_position_enemy.size() != 0)
+		{
+			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
+			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
+			Obj_Suicidal * enemy = (Obj_Suicidal*)app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
+			enemy->SetStats(app->scene->round);
+		}
+	}
 
 
 }
@@ -591,7 +468,6 @@ void M_Scene::CreateEnemyWave()
 void M_Scene::NewWave()
 {
 	Tesla_trooper_units = 30 + 40 * round;
-	//Tesla_trooper_units *= percentage_enemies_subround[subround];
 
 	if (round >= 2)
 	{
