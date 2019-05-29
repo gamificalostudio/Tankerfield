@@ -809,7 +809,7 @@ void Obj_Enemy::DebugPathfinding(Camera * camera)
 		{
 			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
 			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
+			app->render->DrawIsometricLine(point1, point2, { 255,0,0,255 }, camera);
 		}
 	}
 }

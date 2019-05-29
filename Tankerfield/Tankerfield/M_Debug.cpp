@@ -199,6 +199,11 @@ bool M_Debug::PreUpdate()
 		app->objectmanager->delete_all_enemies = true;
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_PERIOD) == KEY_DOWN)
+	{
+		debug_pathfinding = !debug_pathfinding;
+	}
+
 	return true;
 }
 

@@ -48,17 +48,17 @@ https://github.com/AitorVelez
 
 # Debug functionality:
 - F1: Show / hide grid
-- F2: Activate / deactivate splitscreen
+- F2: Change tank weapon
 - F3: Show / hide sprite sorting rects and pivots
-- F3: Show pathfinding lines
 - F4: Show / hide tank crosshairs
 - F5: Reset level
 - F7: Activate/ Deactivate God Mode
 - F9: Show colliders
 - F10: Show information on screen
 - F11: Switch between map and test map
+- . (PERIOD): Show pathfinding lines
 - N: Kill all player
-- , (comma): Kill all enemies
+- , (COMMA): Kill all enemies
 - B: Create pick up
 - M: Go to next round
 
