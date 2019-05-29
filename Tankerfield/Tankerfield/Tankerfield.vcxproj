@@ -131,6 +131,7 @@
     <ClCompile Include="Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="M_Debug.cpp" />
+    <ClCompile Include="Options_Menu.cpp" />
     <ClCompile Include="Obj_ElectroShotAnimation.cpp" />
     <ClCompile Include="General_HUD.cpp" />
     <ClCompile Include="HealingShot_Area.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Bullet_RocketLauncher.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="M_Debug.h" />
+    <ClInclude Include="Options_Menu.h" />
     <ClInclude Include="Obj_ElectroShotAnimation.h" />
     <ClInclude Include="General_HUD.h" />
     <ClInclude Include="HealingShot_Area.h" />

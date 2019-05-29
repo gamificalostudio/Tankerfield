@@ -8,6 +8,7 @@
 #include "M_Window.h"
 #include "M_Audio.h"
 #include "M_Scene.h"
+#include "Options_Menu.h"
 
 #include "UI_Image.h"
 #include "UI_Button.h"
@@ -19,6 +20,10 @@
 
 bool M_MainMenu::Start()
 {
+	// Menus
+
+	options = new Options_Menu();
+
 	// Load assets ===========================================
 
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
@@ -49,22 +54,30 @@ bool M_MainMenu::Start()
 	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, -200.f), UI_ImageDef({10, 710, 915, 260}));
 	logo_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 40), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 0), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 150.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	leaderboard_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 120.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	leaderboard_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Leaderboard", app->font->button_font_22, { 50, 50, 50, 255 }));
+
+	options_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 240.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	options_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Options", app->font->button_font_22, { 50, 50, 50, 255 }));
+
+	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 360.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v .1.0.0", app->font->label_font_38, {255,255,255,180}));
+	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v 1.0.0", app->font->label_font_38, {255,255,255,180}));
 	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 
 	UI_InteractiveGroupDef menu_panel_def;
 	menu_panel_def.columns = 1;
-	menu_panel_def.rows = 2;
+	menu_panel_def.rows = 4;
 
 	menu_panel = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
 	menu_panel->SetElement(multi_player_button, iPoint(0,0));
-	menu_panel->SetElement(exit_button, iPoint(0, 1));
+	menu_panel->SetElement(leaderboard_menu_button, iPoint(0, 1));
+	menu_panel->SetElement(options_menu_button, iPoint(0, 2));
+	menu_panel->SetElement(exit_button, iPoint(0, 3));
 
 	// Selection screen ------------------------
 	player_labels_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
@@ -132,7 +145,8 @@ bool M_MainMenu::Start()
 
 	
 	// Set values ==========================================
-
+	app->ui->HideAllUI();
+	SetPlayerObjectsState(false);
 	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
 	
@@ -224,78 +238,15 @@ bool M_MainMenu::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-void M_MainMenu::SetState(MENU_STATE new_state)
-{
-	fRect screen = app->win->GetWindowRect();
-	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-
-	switch (new_state)
-	{
-	case MENU_STATE::INIT_MENU:
-		menu_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		logo_image->SetState(ELEMENT_STATE::VISIBLE);
-		version_label->SetState(ELEMENT_STATE::VISIBLE);
-
-		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
-		control_helper_label->SetText("Accept");
-		control_helper_image->SetPos(screen_center + fPoint(-380, 260));
-
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			players[i].tank->active = false;
-		}
-
-		break;
-
-	case MENU_STATE::SELECTION:
-		//Set Values -------------------------------------------
-
-		current_player = 0;
-		ResetPanelColors();
-
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			players[i].tank->active = true;
-		}
-
-		player_labels[0]->color_mod = { 250, 20, 20, 255 };
-		player_labels[1]->color_mod = { 220, 220, 220, 255 };
-		player_labels[2]->color_mod = { 220, 220, 220, 255 };
-		player_labels[3]->color_mod = { 220, 220, 220, 255 };
-
-		// Set visible elements --------------------------------
-		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		logo_image->SetState(ELEMENT_STATE::HIDDEN);
-		version_label->SetState(ELEMENT_STATE::HIDDEN);
-
-		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		control_helper_label->SetPos(screen_center + fPoint( 40, 350));
-		control_helper_label->SetText("Select Color");
-		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
-
-		break;
-	}
-
-	menu_state = new_state;
-
-}
-
 void M_MainMenu::InputNavigate()
 {
-
-	int player_num = -1;
-	UI_InteractiveGroup* panel = nullptr;
-
 	if (menu_state == MENU_STATE::INIT_MENU)
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			if (players[i].controller != nullptr)
 			{
-				if (menu_panel->HandleControllerINavigation((*players[i].controller)))
+				if (menu_panel->HandleControllerINavigation(players[i].controller))
 				{
 					app->audio->PlayFx(button_enter_sfx);
 				}
@@ -306,14 +257,13 @@ void M_MainMenu::InputNavigate()
 		{
 			app->audio->PlayFx(button_enter_sfx);
 		}
-		
 
 	}
 	else if (menu_state == MENU_STATE::SELECTION)
 	{
 		if (players[current_player].controller != nullptr)
 		{
-			if (selection_panel->HandleControllerINavigation((*players[current_player].controller)))
+			if (selection_panel->HandleControllerINavigation(players[current_player].controller))
 			{
 				app->audio->PlayFx(button_enter_sfx);
 			}
@@ -323,6 +273,11 @@ void M_MainMenu::InputNavigate()
 		{
 			app->audio->PlayFx(button_enter_sfx);
 		}
+	}
+
+	else if (menu_state == MENU_STATE::OPTIONS)
+	{
+		options->InputNavigate();
 	}
 }
 
@@ -334,15 +289,15 @@ void M_MainMenu::InputSelect()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != nullptr && (*players[i].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if (players[i].controller != nullptr && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 			{
 				input_select_controller = true;
 			}
 		}
 	}
-	else if (menu_state == MENU_STATE::SELECTION)
+	else if (menu_state == MENU_STATE::SELECTION || menu_state == MENU_STATE::OPTIONS)
 	{
-		if (players[current_player].controller != nullptr &&  (*players[current_player].controller)->GetButtonState(SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (players[current_player].controller != nullptr &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			input_select_controller = true;
 		}
@@ -373,6 +328,7 @@ void M_MainMenu::InputSelect()
 				app->audio->PlayFx(button_error_sfx);
 			}
 		}
+
 		else if ( menu_state == MENU_STATE::INIT_MENU && app->ui->GetFocusedElement() != nullptr)
 		{
 			UI_Element*  menu_element = menu_panel->GetFocusedElement();
@@ -382,12 +338,26 @@ void M_MainMenu::InputSelect()
 				SetState(MENU_STATE::SELECTION);
 				app->audio->PlayFx(button_select_sfx);
 			}
+			else if (menu_element == leaderboard_menu_button)
+			{
+				SetState(MENU_STATE::SELECTION);
+				app->audio->PlayFx(button_select_sfx);
+			}
+			else if (menu_element == options_menu_button)
+			{
+				app->audio->PlayFx(button_select_sfx);
+				SetState(MENU_STATE::OPTIONS);
+			}
 			else if (menu_element == exit_button)
 			{
 				exit_game = true;
 				app->audio->PlayFx(button_select_sfx);
 			}
 			
+		}
+		else if (menu_state == MENU_STATE::OPTIONS && app->ui->GetFocusedElement() != nullptr)
+		{
+			options->InputSelect();
 		}
 	}
 
@@ -433,6 +403,7 @@ bool M_MainMenu::SetPlayerProperties()
 	return true;
 }
 
+
 void M_MainMenu::ResetPanelColors()
 {
 	if (selection_panel == nullptr)
@@ -452,6 +423,93 @@ void M_MainMenu::ResetPanelColors()
 	}
 
 	selection_panel->SetFocusImage(iPoint(0, 0));
+}
+
+void M_MainMenu::SetState(MENU_STATE new_state)
+{
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
+
+	// If state is equal to current state ========================
+
+	if (new_state == menu_state)
+	{
+		return;
+	}
+
+	// Desactive current state ==================================
+
+	switch (menu_state)
+	{
+	case MENU_STATE::INIT_MENU:
+
+		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		logo_image->SetState(ELEMENT_STATE::HIDDEN);
+		version_label->SetState(ELEMENT_STATE::HIDDEN);
+
+		break;
+
+	case MENU_STATE::SELECTION:
+		
+		current_player = 0;
+		ResetPanelColors();
+		SetPlayerObjectsState(false);
+
+		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+
+		player_labels[0]->color_mod = { 250, 20, 20, 255 };
+		player_labels[1]->color_mod = { 220, 220, 220, 255 };
+		player_labels[2]->color_mod = { 220, 220, 220, 255 };
+		player_labels[3]->color_mod = { 220, 220, 220, 255 };
+
+		break;
+
+	case MENU_STATE::OPTIONS:
+
+		options->HideOptionsMenu();
+		break;
+	}
+
+	// Active new state ======================================
+
+	switch (new_state)
+	{
+	case MENU_STATE::INIT_MENU:
+
+		menu_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		logo_image->SetState(ELEMENT_STATE::VISIBLE);
+		version_label->SetState(ELEMENT_STATE::VISIBLE);
+
+		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
+		control_helper_label->SetText("Accept");
+		control_helper_image->SetPos(screen_center + fPoint(-380, 260));
+		break;
+
+	case MENU_STATE::SELECTION:
+
+		//Set Values -------------------------------------------
+
+		SetPlayerObjectsState(true);
+
+		// Set elements state --------------------------------
+
+		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		control_helper_label->SetPos(screen_center + fPoint(40, 350));
+		control_helper_label->SetText("Select Color");
+		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
+
+		break;
+
+	case MENU_STATE::OPTIONS:
+
+		options->ShowOptionsMenu();
+		break;
+	}
+
+	menu_state = new_state;
+
 }
 
 SDL_Color M_MainMenu::GetColor(float value)
@@ -477,8 +535,15 @@ SDL_Color M_MainMenu::GetColor(float value)
 	float g_value = lerp(G_Color[src], G_Color[target], float_part);
 	float b_value = lerp(B_Color[src], B_Color[target], float_part);
 
-	SDL_Color ret = { (uint)r_value,  (uint)g_value, (uint)b_value, 255u};
+	SDL_Color ret = { (uint)r_value,  (uint)g_value, (uint)b_value, 255u };
 
 	return ret;
+}
 
+void M_MainMenu::SetPlayerObjectsState(bool new_value)
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		players[i].tank->active = new_value;
+	}
 }

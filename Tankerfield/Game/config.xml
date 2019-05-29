@@ -85,7 +85,8 @@
 
   <object>
     <reward_box>
-      <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
+      <hit_sound value="audio/Fx/objects/reward_box/box_hit.wav"/>
+      <crash_sound value="audio/Fx/objects/reward_box/box_destroyed.wav"/>
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
     <enemies>
@@ -208,8 +209,9 @@
         
       </spritesheets>
       <sounds>
-        <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
-        <laser_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+        <basic_shot sound ="audio/Fx/tank/weapons/tank_basic_shot.wav"/>
+        <laser_shot sound ="audio/Fx/tank/weapons/tank_laser_shot.wav"/>
+        <heal_shot sound ="audio/Fx/tank/weapons/tank_heal_shot.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">

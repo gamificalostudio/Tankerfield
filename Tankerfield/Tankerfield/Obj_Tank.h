@@ -200,7 +200,9 @@ private:
 	PerfTimer shot_timer_basic_bullet;
 	float charge_time						= 0.f;//Charge time in ms
 	float quick_shot_time					= 0.f;//If time is bigger than this, you will start to use the sustained shot and won't use a qucik shot
-	uint shot_sound							= 0u;
+	uint shot_sound = 0u;
+	uint heal_sound = 0u;
+	uint laser_sound = 0u;
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot

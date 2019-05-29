@@ -242,7 +242,115 @@ void M_Input::GetMouseMotion(int& x, int& y)
 	y = mouse_motion_y;
 }
 
+KeyState M_Input::GetControllerButtonState(Controller ** controller, SDL_GameControllerButton button)
+{
+	if (controller != nullptr && (*controller)!=nullptr)
+	{
+		return (*controller)->GetButtonState(button);
+	}
+	else if(controller!=nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+	}
+	return KeyState::KEY_IDLE;
+}
 
+iPoint M_Input::GetControllerJoystick(Controller ** controller, Joystick joystick, int dead_zone)
+{
+	if (controller != nullptr && (*controller) != nullptr)
+	{
+		return (*controller)->GetJoystick(joystick, dead_zone);
+	}
+	else if (controller != nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+	}
+	return  iPoint(0, 0);
+
+}
+
+Sint16 M_Input::GetControllerAxis(Controller** controller, SDL_GameControllerAxis axis, int dead_zone)
+{
+	if (controller != nullptr && (*controller) != nullptr)
+	{
+		return (*controller)->GetAxis(axis, dead_zone);
+	}
+	else if (controller != nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+	}
+	return 0;
+
+}
+
+KeyState M_Input::GetControllerJoystickState(Controller ** controller, Joystick joystick, INPUT_DIR joystick_button)
+{
+	if (controller != nullptr && (*controller) != nullptr)
+	{
+		return (*controller)->GetJoystickState(joystick, joystick_button);
+	}
+	else if (controller != nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+	}
+	return KeyState::KEY_IDLE;
+
+}
+
+KeyState M_Input::GetControllerTriggerState(Controller ** controller, SDL_GameControllerAxis axis)
+{
+	if (controller != nullptr && (*controller) != nullptr)
+	{
+		return (*controller)->GetTriggerState(axis);
+	}
+	else if (controller != nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+	}
+	return KeyState::KEY_IDLE;
+
+}
+
+int M_Input::ControllerPlayRumble(Controller ** controller, float strengh, Uint32 length)
+{
+	if (controller != nullptr && (*controller) != nullptr && (*controller)->haptic!=nullptr)
+	{
+		return (*controller)->PlayRumble(strengh, length);
+	}
+	else if (controller != nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+	}
+	return 0;
+
+}
+
+int M_Input::ControllerStopRumble(Controller ** controller)
+{
+	if (controller != nullptr && (*controller) != nullptr && (*controller)->haptic != nullptr)
+	{
+		return (*controller)->StopRumble();
+	}
+	else if (controller != nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+		return 0;
+	}
+	return 0;
+}
+
+void M_Input::DetachController(Controller ** controller)
+{
+	if (controller != nullptr && (*controller) != nullptr)
+	{
+		(*controller)->attached = false;
+	}
+	else if (controller != nullptr && (*controller) == nullptr)
+	{
+		controller = nullptr;
+	}
+
+}
 
 iPoint M_Input::GetMousePos_Tiles(const Camera * camera)
 {
@@ -399,32 +507,21 @@ Controller::Controller()
 
 KeyState Controller::GetButtonState(SDL_GameControllerButton button)
 {
-	if (this != nullptr)
 		return button_state[button];
-	else
-		return KeyState::KEY_IDLE;
 }
 
 KeyState Controller::GetJoystickState(Joystick joystick, INPUT_DIR joystick_button)
 {
-	if (this != nullptr)
-		return joystick_state[(uint)joystick * (uint)(INPUT_DIR::MAX) + (uint)joystick_button];
-	else
-		return KeyState::KEY_IDLE;
+	return joystick_state[(uint)joystick * (uint)(INPUT_DIR::MAX) + (uint)joystick_button];
 }
 
 KeyState Controller::GetTriggerState(SDL_GameControllerAxis axis)
 {
-	if (this != nullptr)
 		return trigger_state[axis - SDL_CONTROLLER_AXIS_TRIGGERLEFT];
-	else
-		return KeyState::KEY_IDLE;
 }
 
 iPoint Controller::GetJoystick(Joystick joystick, int dead_zone)
 {
-	if (this == nullptr)
-		return iPoint(0, 0);
 	switch (joystick)
 	{
 	case Joystick::LEFT:
@@ -436,7 +533,7 @@ iPoint Controller::GetJoystick(Joystick joystick, int dead_zone)
 
 Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
 {
-	if (this == nullptr || ctr_pointer == nullptr)
+	if (ctr_pointer == nullptr)
 		return 0;
 
 	Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
@@ -456,17 +553,11 @@ Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
 //length  -> time of the rumble in milliseconds
 int Controller::PlayRumble(float strengh, Uint32 length)
 {
-	if (this == nullptr || haptic == nullptr)
-		return 0;
-
 	return SDL_HapticRumblePlay(haptic, strengh, length);
 	
 }
 
 int Controller::StopRumble()
 {
-	if (this == nullptr || haptic == nullptr)
-		return 0;
-
 	return SDL_HapticRumbleStop(haptic);
 }
