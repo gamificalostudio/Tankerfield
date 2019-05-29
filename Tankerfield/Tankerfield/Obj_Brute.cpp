@@ -60,17 +60,17 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 
 	state = ENEMY_STATE::SPAWN; 
 
-	spawn_draw_offset = { 260, 274 };
-	normal_draw_offset = { 132, 75 };
-	electrocuted_draw_offset = { 60,28 };
-	draw_offset = spawn_draw_offset;
+	scale = 2.f;
+	//INFO: Draw offset depends on the scale
+	draw_offset = spawn_draw_offset = (iPoint)(fPoint(130.f,153.f)*scale);
+	normal_draw_offset = (iPoint)(fPoint(66.f, 49.f)*scale);
+	electrocuted_draw_offset = (iPoint)(fPoint(30.f,14.f)*scale);
   
 	coll_w = 0.5f;
 	coll_h = 0.5f;
   
 	damaged_sprite_time = 75;
 
-	scale = 2.f;
 	app->audio->PlayFx(sfx_spawn);
 }
 
