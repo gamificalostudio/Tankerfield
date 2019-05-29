@@ -37,6 +37,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("suicidal").child("animation");
 
 	tex = app->tex->Load(suicidal_node.child("tex_path").child_value());
+	tex_damaged = app->tex->Load(suicidal_node.child("tex_damaged_path").child_value());
 	curr_tex = tex;
 
 	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));

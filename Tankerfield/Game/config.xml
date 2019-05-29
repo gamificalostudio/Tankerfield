@@ -110,6 +110,7 @@
       </rocket_launcher>
       <suicidal>
         <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
+        <tex_damaged_path>textures/Objects/enemies/civ22-sheet-white.png</tex_damaged_path>
       </suicidal>
     </enemies>
 
