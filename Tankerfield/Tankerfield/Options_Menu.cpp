@@ -67,10 +67,10 @@ Options_Menu::Options_Menu()
 	fullscreen_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	fullscreen_value->SetParent(panel_background);
 
-	fullscreen_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 350 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	fullscreen_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 350 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	fullscreen_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	fullscreen_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 350 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	fullscreen_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 350 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	fullscreen_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		//Master Volume
@@ -79,10 +79,10 @@ Options_Menu::Options_Menu()
 	master_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	master_volume_label->SetParent(panel_background);
 
-	master_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 450 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	master_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 450 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	master_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	master_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 450 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	master_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 450 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	master_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	master_multiplier_string = std::to_string(int(app->audio->master_volume * 100));
@@ -97,10 +97,10 @@ Options_Menu::Options_Menu()
 	music_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	music_volume_label->SetParent(panel_background);
 
-	music_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 550 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	music_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 550 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	music_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	music_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 550 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	music_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 550 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	music_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	music_volume_string = std::to_string(app->audio->GetMusicVolume());
@@ -115,10 +115,10 @@ Options_Menu::Options_Menu()
 	sfx_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	sfx_volume_label->SetParent(panel_background);
 
-	sfx_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 650 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 495,970,50 ,10 }, { 785 ,970,50,10 }), this);
+	sfx_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 650 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	sfx_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sfx_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 650 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 495,970,10 ,10 }, { 785 ,970,10,10 }), this);
+	sfx_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 650 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	sfx_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	sfx_volume_string=std::to_string(app->audio->GetSfxVolume());
