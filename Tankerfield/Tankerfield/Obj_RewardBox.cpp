@@ -98,24 +98,20 @@ void Obj_RewardBox::Dead()
 		{
 			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::ITEM);
 		}
-
 		else if (probability < 25)
 		{
 			fPoint offset{ 0.5f,0 };
 			app->pick_manager->CreatePickUp(pos_map - offset, PICKUP_TYPE::ITEM);
 			app->pick_manager->CreatePickUp(pos_map + offset, PICKUP_TYPE::ITEM);
 		}
-
 		else if (probability < 75)
 		{
 			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON);
 		}
-
 		else if (probability < 100)
 		{
-			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, 1);
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, WEAPON::MAX_WEAPONS, 1u);
 		}
-
 		if (my_spawn_point != nullptr)
 		{
 			my_spawn_point->occupied = false;

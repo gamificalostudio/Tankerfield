@@ -53,7 +53,7 @@ void M_PickManager::PickUpFromEnemy(fPoint pos_map, PICKUP_TYPE type_of_pick_up)
 	}
 }
 
-void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, uint levels_to_add)
+void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, ItemType item_type, WEAPON weapon_type, uint levels_to_add)
 {
 	Obj_PickUp* ret = (Obj_PickUp*)app->objectmanager->CreateObject(ObjectType::PICK_UP, pos_map);
 
@@ -64,12 +64,26 @@ void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, ui
 
 	if (type_of_pick_up == PICKUP_TYPE::WEAPON)
 	{
-		ret->type_of_weapon = RandomWeapon();
+		if (weapon_type == WEAPON::MAX_WEAPONS)
+		{
+			ret->type_of_weapon = RandomWeapon();
+		}
+		else
+		{
+			ret->type_of_weapon = weapon_type;
+		}
 		ret->level_of_weapon += app->scene->round + levels_to_add;
 	}
 	else if (type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
-		ret->type_of_item = RandomItem();
+		if (item_type == ItemType::MAX_ITEMS)
+		{
+			ret->type_of_item = RandomItem();
+		}
+		else
+		{
+			ret->type_of_item = item_type;
+		}
 	}
 
 	ret->CreatePickUpUI(type_of_pick_up);
