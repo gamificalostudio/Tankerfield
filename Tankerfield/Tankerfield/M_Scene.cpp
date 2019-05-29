@@ -60,12 +60,6 @@ bool M_Scene::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 
-	// Rounds to win the game
-	rounds_to_win = config.child("rounds_to_win").attribute("value").as_int();
-
-	time_round_check_frequency = config.child("time_round_check_frequency").attribute("value").as_float();
-
-	
 	//MUSIC
 	main_music = config.child("music").child("main_music").attribute("music").as_string();
 
@@ -259,18 +253,6 @@ bool M_Scene::Update(float dt)
 		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
 		break;
 
-	case GAME_STATE::GAME_WON:
-
-		for (int i = 0; i < MAX_PLAYERS; ++i) {
-			app->objectmanager->obj_tanks[i]->gui->Fade_GUI(false);
-		}
-
-		general_gui->FadeGeneralHUD(false);
-		general_gui->FadeWinScreen(true);
-		game_state = GAME_STATE::WAIT_PLAYER_INPUT_1;
-
-		break;
-
 	case GAME_STATE::WAIT_PLAYER_INPUT_1:
 
 		if (input_accept == true)
@@ -321,24 +303,9 @@ bool M_Scene::Update(float dt)
 bool M_Scene::PostUpdate(float dt)
 {
 	bool ret = true;
-	//
+
 	//DebugPathfinding();
 
-	/* Keep track if we reached the maximum round and, therefore, win the game */
-	this->accumulated_time += dt * 1000.0f;
-	if (accumulated_time >= time_round_check_frequency * 1000.0f)
-	{
-		perform_round_check = true;
-	}
-
-
-	if (perform_round_check
-		&& this->round >= rounds_to_win + 1
-		&& !win_game)
-	{
-		game_state = GAME_STATE::GAME_WON;
-		win_game = true;
-	}
 	return ret;
 }
 

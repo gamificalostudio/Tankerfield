@@ -25,15 +25,12 @@
   <object_manager>balance.xml</object_manager>
 
     <scene>
-      <rounds_to_win value="10"/>
-    
+      
       <subrounds>
         <subround percent="0.4" time="2"/>
         <subround percent="0.6" time="3"/>
         <subround percent="1.0" time="5"/>
       </subrounds>
-    
-      <time_round_check_frequency value="2"/>
   
       <music>
         <main_music music ="audio/Music/indeep.ogg"/>

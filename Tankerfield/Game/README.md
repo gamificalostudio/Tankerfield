@@ -57,9 +57,10 @@ https://github.com/AitorVelez
 - F9: Show colliders
 - F10: Show information on screen
 - F11: Switch between map and test map
-- 6: Kill all player
-- 0: Kill all enemies
-
+- N: Kill all player
+- , (comma): Kill all enemies
+- B: Create pick up
+- M: Go to next round
 
 Hold, type a number and then release
 
@@ -74,6 +75,8 @@ https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tan
 - C: Select object
 Note: List of objects
 https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/M_ObjManager.h#L15
+
+
 
 
 ## Keyboard controls:

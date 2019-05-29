@@ -27,7 +27,7 @@ public:
 	WEAPON      type_of_weapon					= WEAPON::BASIC;
 	ItemType  type_of_item						= ItemType::NO_TYPE;
 
-	uint level_of_weapon						= NULL;
+	uint level_of_weapon						= 0u;
 
 	Timer Timer_to_delete;
 

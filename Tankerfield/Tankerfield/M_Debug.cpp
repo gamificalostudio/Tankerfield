@@ -171,37 +171,28 @@ bool M_Debug::PreUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 	{
+		//Currently is random, but you could pass any WEAPON or ItemType to make it spawn the item you need (they are non-obligatory paramenters)
 		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
 	}
-	//if (app->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
-	//{
-	//	app->objectmanager->obj_tanks[0]->SetLife(0);
-	//	app->objectmanager->obj_tanks[1]->SetLife(0);
-	//	app->objectmanager->obj_tanks[2]->SetLife(0);
-	//	app->objectmanager->obj_tanks[3]->SetLife(0);
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
-	//{
-	//	iPoint mouse_pos;
-	//	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
-	//	mouse_pos += iPoint(app->render->cameras[0]->rect.x, app->render->cameras[0]->rect.y);
-	//	fPoint map_mouse_pos = app->map->ScreenToMapF(mouse_pos.x, mouse_pos.y);
-	//	app->objectmanager->CreateObject(ObjectType::EXPLOSION, map_mouse_pos);
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
-	//{
-	//	++this->round;
-	//	general_gui->SetRoundNumber(round);
-	//}
-	//if (app->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
-	//{
-	//	game_state = GAME_STATE::GAME_WON;
-	//}
 
-	//if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
-	//{
-	//	app->objectmanager->delete_all_enemies = true;
-	//}
+	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+	{
+		app->objectmanager->obj_tanks[0]->SetLife(0);
+		app->objectmanager->obj_tanks[1]->SetLife(0);
+		app->objectmanager->obj_tanks[2]->SetLife(0);
+		app->objectmanager->obj_tanks[3]->SetLife(0);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+	{
+		++app->scene->round;
+		app->scene->general_gui->SetRoundNumber(app->scene->round);
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
+	{
+		app->objectmanager->delete_all_enemies = true;
+	}
 
 	return true;
 }

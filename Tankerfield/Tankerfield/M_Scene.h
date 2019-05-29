@@ -29,7 +29,6 @@ enum class GAME_STATE
 	EXIT_OF_WAVE,
 	OUT_WAVE,
 	GAME_OVER,
-	GAME_WON,
 	WAIT_PLAYER_INPUT_1,
 	LEADER_BOARD,
 	WAIT_PLAYER_INPUT_2
@@ -115,14 +114,6 @@ private:
 
 	/* Game variables*/
 	bool game_over = false;
-	bool win_game = false;
-
-	int rounds_to_win = 0;
-	float accumulated_time = 0.0f;
-
-	// Every two seconds we check
-	float time_round_check_frequency = 0.0f;
-	bool perform_round_check = false;
 
 	/* Wave System */
 	int time_between_rounds[MAX_SUBROUNDS] = { 0,0,0 };
