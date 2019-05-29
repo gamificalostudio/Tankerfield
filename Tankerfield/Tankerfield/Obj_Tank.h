@@ -303,6 +303,9 @@ private:
 	bool picking = false;
 
 	bool picked_weapon = false;
+	bool started_ep_timer = false;
+	fPoint electric_particle_initial_pos = { 0.0f, 0.0f };
+	Timer ep_timer;
 
 public:
 	Camera* camera_player				= nullptr;

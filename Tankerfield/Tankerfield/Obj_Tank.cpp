@@ -238,6 +238,9 @@ bool Obj_Tank::Start()
 	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
+	if(this->gui->electric_particle != nullptr)
+		electric_particle_initial_pos = this->gui->electric_particle->position;
+
 	//Flamethrower
 	coll_flame = app->collision->AddCollider(
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
@@ -394,6 +397,37 @@ void Obj_Tank::Movement(float dt)
 		fPoint wf_offset = { 58.0f, 30.0f };
 		this->gui->electric_particle->SetState(ELEMENT_STATE::VISIBLE);
 		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 0.2f));
+		
+		if (!started_ep_timer)
+		{
+			ep_timer.Start();
+			started_ep_timer = true;
+		}
+
+		if (ep_timer.Read() > 2000.0f)
+		{
+			started_ep_timer = false;
+			this->gui->electric_particle->SetState(ELEMENT_STATE::HIDDEN);
+			picked_weapon = false;
+			this->gui->electric_particle->SetPos(electric_particle_initial_pos);
+		}
+
+		/*if ((iPoint)this->gui->electric_particle->position == (iPoint)this->gui->GetWeaponFramePos() - (iPoint)wf_offset)
+		{
+			int i = 0;
+			//this->velocity_recoil_final_lerp = { 0, 0 };
+			this->gui->electric_particle->SetState(ELEMENT_STATE::HIDDEN);
+			picked_weapon = false;
+			this->gui->electric_particle->SetPos(electric_particle_initial_pos);
+		}*/
+		/*if (lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 0.2f) == this->gui->GetWeaponFramePos() - wf_offset)
+		{
+			int i = 0;
+			//this->velocity_recoil_final_lerp = { 0, 0 };
+			this->gui->electric_particle->SetState(ELEMENT_STATE::HIDDEN);
+			picked_weapon = false;
+			this->gui->electric_particle->SetPos(electric_particle_initial_pos);
+		}*/
 	}
 }
 
