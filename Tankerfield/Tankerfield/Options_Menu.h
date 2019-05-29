@@ -26,9 +26,9 @@ public:
 
 	bool OnHoverEnter(UI_Element * element);
 
-	void ShowMenu();
+	void ShowOptionsMenu();
 
-	void HideMenu();
+	void HideOptionsMenu();
 
 	void InputNavigate();
 

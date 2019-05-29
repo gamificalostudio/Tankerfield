@@ -464,7 +464,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 	case MENU_STATE::OPTIONS:
 
-		options->HideMenu();
+		options->HideOptionsMenu();
 		break;
 	}
 
@@ -501,7 +501,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 	case MENU_STATE::OPTIONS:
 
-		options->ShowMenu();
+		options->ShowOptionsMenu();
 		break;
 	}
 

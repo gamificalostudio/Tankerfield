@@ -137,7 +137,7 @@ Options_Menu::Options_Menu()
 
 	UI_InteractiveGroupDef options_panel_def;
 	options_panel_def.columns = 2;
-	options_panel_def.rows = 6;
+	options_panel_def.rows = 5;
 
 
 	global_navigation_panel = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
@@ -149,8 +149,8 @@ Options_Menu::Options_Menu()
 	global_navigation_panel->SetElement(music_volume_R, iPoint(1, 2));
 	global_navigation_panel->SetElement(sfx_volume_L, iPoint(0, 3));
 	global_navigation_panel->SetElement(sfx_volume_R, iPoint(1, 3));
-	global_navigation_panel->SetElement(individual_settings, iPoint(0, 5));
-	global_navigation_panel->SetElement(individual_settings, iPoint(1, 5));
+	global_navigation_panel->SetElement(individual_settings, iPoint(0, 4));
+	global_navigation_panel->SetElement(individual_settings, iPoint(1, 4));
 
 	// Set values ==========================================
 	SDL_ShowCursor(SDL_ENABLE);
@@ -162,7 +162,7 @@ bool Options_Menu::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-void Options_Menu::ShowMenu()
+void Options_Menu::ShowOptionsMenu()
 {
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
@@ -175,7 +175,7 @@ void Options_Menu::ShowMenu()
 	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
 
-void Options_Menu::HideMenu()
+void Options_Menu::HideOptionsMenu()
 {
 	panel_background->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
@@ -275,6 +275,9 @@ void Options_Menu::InputSelect()
 				app->audio->SetSfxVolume(5);
 			}
 		}
-
+		else if (menu_element == individual_settings)
+		{
+			HideOptionsMenu();
+		}
 		app->audio->PlayFx(button_select_sfx);
 }
