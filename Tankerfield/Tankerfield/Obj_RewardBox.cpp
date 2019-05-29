@@ -28,14 +28,16 @@ Obj_RewardBox::Obj_RewardBox(fPoint pos) : Object(pos)
 	texture = app->tex->Load(reward_box_node.child("image_path").attribute("value").as_string());
 	curr_tex = texture;
 	
-	shadow_frame = { 56, 0, 30, 18 };
-	draw_shadow_offset = {-2 , -4 };
-	frame = { 0, 0, 28,34 };
-	frame_white = { 28,0,28,34 };
-	draw_offset = { -14,-17 };
-	curr_frame = &frame;
+	default_frame = {  0, 0, 45, 34 };
+	frame_white   = { 45, 0, 45, 34 };
+	shadow_frame  = { 90, 0, 45, 34 };
 
-	coll = app->collision->AddCollider(pos, 0.5f ,0.5f , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);//width and height hardcoded
+	draw_offset   = { 14, 27 };
+
+	float coll_w = 0.5f;
+	float coll_h = 0.5f;
+	coll = app->collision->AddCollider(pos, coll_w ,coll_h , TAG::REWARD_BOX, BODY_TYPE::STATIC ,0.f, this);
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 }
 
 Obj_RewardBox::~Obj_RewardBox()
@@ -45,13 +47,11 @@ Obj_RewardBox::~Obj_RewardBox()
 
 bool Obj_RewardBox::Update(float dt)
 {
-	if (is_white)
+	if (is_white
+		&& timer_white.ReadSec() >= max_time_in_white)
 	{
-		if (timer_white.ReadSec() >= max_time_in_white)
-		{
-			curr_frame = &frame;
-			is_white = false;
-		}
+		frame = default_frame;
+		is_white = false;
 	}
 	return true;
 }
@@ -66,25 +66,12 @@ void Obj_RewardBox::OnTrigger(Collider * collider)
 	TakeDamage(collider);
 }
 
-bool Obj_RewardBox::Draw(float dt, Camera * camera)
-{
-	if (curr_frame != nullptr)
-		app->render->Blit(
-			curr_tex,
-			pos_screen.x + draw_offset.x,
-			pos_screen.y + draw_offset.y,
-			camera,
-			curr_frame);
-
-	return true;
-}
-
 bool Obj_RewardBox::DrawShadow(Camera * camera, float dt)
 {
 	app->render->Blit(
 		curr_tex,
-		pos_screen.x + draw_shadow_offset.x,
-		pos_screen.y + draw_shadow_offset.y,
+		pos_screen.x - draw_offset.x,
+		pos_screen.y - draw_offset.y,
 		camera,
 		&shadow_frame);
 
@@ -146,7 +133,7 @@ void Obj_RewardBox::TakeDamage(Collider* collider)
 		else
 		{
 			is_white = true;
-			curr_frame = &frame_white;
+			frame = frame_white;
 			timer_white.Start();
 		}
 
@@ -163,7 +150,7 @@ void Obj_RewardBox::TakeDamage(Collider* collider)
 		else
 		{
 			is_white = true;
-			curr_frame = &frame_white;
+			frame = frame_white;
 			timer_white.Start();
 		}
 		Obj_Tank* player = (Obj_Tank*)collider->GetObj();

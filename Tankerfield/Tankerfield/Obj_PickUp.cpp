@@ -31,7 +31,6 @@ Obj_PickUp::~Obj_PickUp()
 
 void Obj_PickUp::CreatePickUpUI(PICKUP_TYPE type_of_pick_up)
 {
-
 	UI_InGameElementDef element_def;
 	element_def.pointed_obj = this;
 
@@ -47,7 +46,6 @@ void Obj_PickUp::CreatePickUpUI(PICKUP_TYPE type_of_pick_up)
 		LOG("Pick up type not set correctly.");
 		break;
 	}
-	
 }
 
 bool Obj_PickUp::Update(float dt)

@@ -161,9 +161,6 @@ bool M_Debug::PreUpdate()
 		debug_enemy_attack_range = !debug_enemy_attack_range;
 	}
 
-	//GOD MODE
-	//+ Add label that says "God Mode"
-
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 	{
 		//Currently is random, but you could pass any WEAPON or ItemType to make it spawn the item you need (they are non-obligatory paramenters)
@@ -207,6 +204,7 @@ bool M_Debug::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
 	{
 		god_mode = !god_mode;
+		//TODO: Add label that says "God Mode"
 	}
 
 	//TODO: Debug Window with any variable you want to put in (you can add a parameter and it will be printed there with the string and the number you pass it)
