@@ -32,7 +32,7 @@ Obj_Tank_MainMenu::~Obj_Tank_MainMenu()
 {
 	if (controller != nullptr)
 	{
-		(*controller)->DetachController();
+		app->input->DetachController(controller);
 	}
 }
 
@@ -90,7 +90,7 @@ void Obj_Tank_MainMenu::InputController(fPoint & input)
 {
 	if (controller != nullptr)
 	{
-		input = (fPoint)(*controller)->GetJoystick(gamepad_rotate, dead_zone);
+		input = (fPoint)app->input->GetControllerJoystick(controller, gamepad_rotate, dead_zone);
 	}
 	else
 	{

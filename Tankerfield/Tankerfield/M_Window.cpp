@@ -34,8 +34,8 @@ bool M_Window::Awake(pugi::xml_node& config)
 	else
 	{
 		//Create window
-		Uint32 flags = SDL_WINDOW_SHOWN;
-		bool fullscreen = config.child("fullscreen").attribute("value").as_bool(false);
+		uint32 flags = SDL_WINDOW_SHOWN;
+		fullscreen = config.child("fullscreen").attribute("value").as_bool(false);
 		bool borderless = config.child("borderless").attribute("value").as_bool(false);
 		bool resizable = config.child("resizable").attribute("value").as_bool(false);
 		bool fullscreen_window = config.child("fullscreen_window").attribute("value").as_bool(false);
@@ -129,4 +129,18 @@ fRect M_Window::GetWindowRect()
 uint M_Window::GetScale() const
 {
 	return scale;
+}
+
+void M_Window::SetFullscreen()
+{
+	if (fullscreen)
+	{
+		fullscreen = false;
+		SDL_SetWindowFullscreen(window, 0);
+	}
+	else
+	{
+		fullscreen = true;
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
 }

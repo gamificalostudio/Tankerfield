@@ -25,16 +25,7 @@
   <object_manager>balance.xml</object_manager>
 
     <scene>
-      <rounds_to_win value="10"/>
-    
-      <subrounds>
-        <subround percent="0.4" time="2"/>
-        <subround percent="0.6" time="3"/>
-        <subround percent="1.0" time="5"/>
-      </subrounds>
-    
-      <time_round_check_frequency value="2"/>
-  
+      
       <music>
         <main_music music ="audio/Music/indeep.ogg"/>
       </music>
@@ -44,11 +35,12 @@
         <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
       </sounds>
   </scene>
+  
   <map>
     <folder>Maps/</folder>
     <levels>
       <level name="Map2.tmx"/>
-      <!--<level name="test.tmx"/>-->
+      <level name="test.tmx"/>
     </levels>
   </map>
   
@@ -93,7 +85,8 @@
 
   <object>
     <reward_box>
-      <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
+      <hit_sound value="audio/Fx/objects/reward_box/box_hit.wav"/>
+      <crash_sound value="audio/Fx/objects/reward_box/box_destroyed.wav"/>
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
     <enemies>
@@ -109,6 +102,7 @@
       </rocket_launcher>
       <suicidal>
         <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
+        <tex_damaged_path>textures/Objects/enemies/civ22-sheet-white.png</tex_damaged_path>
       </suicidal>
     </enemies>
 
@@ -215,8 +209,9 @@
         
       </spritesheets>
       <sounds>
-        <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
-        <laser_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+        <basic_shot sound ="audio/Fx/tank/weapons/tank_basic_shot.wav"/>
+        <laser_shot sound ="audio/Fx/tank/weapons/tank_laser_shot.wav"/>
+        <heal_shot sound ="audio/Fx/tank/weapons/tank_heal_shot.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">

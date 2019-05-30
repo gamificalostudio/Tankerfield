@@ -15,14 +15,17 @@ private:
 
 	//SOUND ===================================
 	const char* reward_box_dead_sound_string;
-	uint reward_box_dead_sound_int	= 0u;
+	const char* reward_box_hit_sound_string;
+	uint reward_box_dead_sound_int = 0u;
+	uint reward_box_hit_sound_int = 0u;
+
 
 	//IMAGE ==================================
 	SDL_Texture* texture;
-	iPoint draw_shadow_offset;
+	//frame will be taking the values of these frames depending on the state
+	SDL_Rect default_frame  = { 0, 0, 0, 0 };
 	SDL_Rect shadow_frame	= { 0, 0, 0, 0 };
 	SDL_Rect frame_white	= { 0, 0, 0, 0 };
-	SDL_Rect* curr_frame	= nullptr;
 	
 	//LOGIC ==================================
 	uint hits_taken = 0;
@@ -46,8 +49,6 @@ public:
 	void OnTriggerEnter(Collider * collider);
 
 	void OnTrigger(Collider * collider);
-
-	bool Draw(float dt, Camera * camera) override;
 
 	bool DrawShadow(Camera* camera, float dt) override;
 
