@@ -122,6 +122,11 @@ void Pause_Menu::InputSelect()
 		HidePauseMenu();
 		options->ShowOptionsMenu();
 	}
+	else if (menu_element == main_menu)
+	{
+		HidePauseMenu();
+		app->scmanager->FadeToBlack(app->scene, app->main_menu, 2.f, 2.f);
+	}
 
 	app->audio->PlayFx(button_select_sfx);
 }
