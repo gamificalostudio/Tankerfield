@@ -134,14 +134,18 @@ private:
 	UI_Image * panel_background = nullptr;
 	UI_Label * credits_title = nullptr;
 
-	UI_Button* jaume = nullptr;
-	UI_Button* aurelio = nullptr;
-	UI_Button* víctor = nullptr;
-	UI_Button* yessica = nullptr;
-	UI_Button* aitor = nullptr;
-	UI_Button* sergio = nullptr;
-	UI_Button* gerard = nullptr;
-	UI_Button* jorge = nullptr;
+	UI_Label* jaume_label = nullptr;
+	UI_Label* aurelio_label = nullptr;
+	UI_Label* yessica_label = nullptr;
+	UI_Label* víctor_label = nullptr;
+	UI_Label* jorge_label = nullptr;
+	UI_Label* aitor_label = nullptr;
+	UI_Label* sergio_label = nullptr;
+	UI_Label* gerard_label = nullptr;
+
+	UI_Button* jaume_github = nullptr;
+
+	UI_Button* jaume_linkedin = nullptr;
 
 	UI_Button* return_credits = nullptr;
 

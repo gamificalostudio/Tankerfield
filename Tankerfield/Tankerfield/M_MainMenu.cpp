@@ -145,17 +145,44 @@ bool M_MainMenu::Start()
 
 	// Credits Menu
 
-	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
+	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 35,1225,1650,880 }), this);
 	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	credits_title = app->ui->CreateLabel({ screen.w *0.5f, 250 }, UI_LabelDef("Credits", app->font->label_font_38, { 255,255,255,180 }));
+	credits_title = app->ui->CreateLabel({ screen.w *0.5f, 150 }, UI_LabelDef("Credits", app->font->label_font_38, { 255,255,255,180 }));
 	credits_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	credits_title->SetParent(panel_background);
 
-	jaume = app->ui->CreateButton({screen.w*0.25f,screen.h*0.2f}, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	jaume->SetLabel({ 0.f,2.f }, UI_LabelDef("Jaume", app->font->button_font_22, { 50, 50, 50, 255 }));
-	jaume->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	
+	jaume_label = app->ui->CreateLabel({ screen.w *0.333f, 436 }, UI_LabelDef("Jaume Montagut - Leader", app->font->label_font_38, { 255,255,255,180 }));
+	jaume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	jaume_label->SetParent(panel_background);
+
+	aurelio_label = app->ui->CreateLabel({ screen.w *0.666f,  436}, UI_LabelDef("Aurelio Gamarra - UI", app->font->label_font_38, { 255,255,255,180 }));
+	aurelio_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	aurelio_label->SetParent(panel_background);
+
+	víctor_label = app->ui->CreateLabel({ screen.w *0.333f, 572 }, UI_LabelDef("Víctor Segura - Designer", app->font->label_font_38, { 255,255,255,180 }));
+	víctor_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	víctor_label->SetParent(panel_background);
+
+	jorge_label = app->ui->CreateLabel({ screen.w *0.666f, 572 }, UI_LabelDef("Jorge Gemas - Management", app->font->label_font_38, { 255,255,255,180 }));
+	jorge_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	jorge_label->SetParent(panel_background);
+
+	yessica_label = app->ui->CreateLabel({ screen.w *0.333f, 708 }, UI_LabelDef("Yessica Servin - Lead Programmer 1", app->font->label_font_38, { 255,255,255,180 }));
+	yessica_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	yessica_label->SetParent(panel_background);
+
+	gerard_label = app->ui->CreateLabel({ screen.w *0.666f, 708 }, UI_LabelDef("Gerard Marcos - Lead Programmer 2", app->font->label_font_38, { 255,255,255,180 }));
+	gerard_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	gerard_label->SetParent(panel_background);
+
+	sergio_label = app->ui->CreateLabel({ screen.w *0.333f, 844 }, UI_LabelDef("Sergio Gómez - Art & Audio", app->font->label_font_38, { 255,255,255,180 }));
+	sergio_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	sergio_label->SetParent(panel_background);
+
+	aitor_label = app->ui->CreateLabel({ screen.w *0.666f, 844 }, UI_LabelDef("Aitor Vélez - QA", app->font->label_font_38, { 255,255,255,180 }));
+	aitor_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	aitor_label->SetParent(panel_background);
 
 	return_credits = app->ui->CreateButton({screen.w*0.5f,900},UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	return_credits->SetLabel({ 0.f,2.f }, UI_LabelDef("Return", app->font->button_font_22, { 50, 50, 50, 255 }));
@@ -163,12 +190,11 @@ bool M_MainMenu::Start()
 
 
 	UI_InteractiveGroupDef credits_navigation_def;
-	credits_navigation_def.columns = 3;
-	credits_navigation_def.rows = 4;
+	credits_navigation_def.columns = 1;
+	credits_navigation_def.rows = 1;
 
 	credits_navigation = app->ui->CreateIntearctiveGroup(screen_center,credits_navigation_def,this);
-	credits_navigation->SetElement(jaume, iPoint(0,0));
-	credits_navigation->SetElement(return_credits, iPoint(0, 1));
+	credits_navigation->SetElement(return_credits, iPoint(0, 0));
 
 	// Set values ==========================================
 	app->ui->HideAllUI();
@@ -285,7 +311,7 @@ void M_MainMenu::InputNavigate()
 		}
 
 	}
-	else if (menu_state == MENU_STATE::SELECTION||menu_state==MENU_STATE::CREDITS)
+	else if (menu_state == MENU_STATE::SELECTION)
 	{
 		if (players[current_player].controller != nullptr)
 		{
@@ -300,7 +326,21 @@ void M_MainMenu::InputNavigate()
 			app->audio->PlayFx(button_enter_sfx);
 		}
 	}
+	else if (menu_state == MENU_STATE::CREDITS)
+	{
+		if (players[current_player].controller != nullptr)
+		{
+			if (credits_navigation->HandleControllerINavigation(players[current_player].controller))
+			{
+				app->audio->PlayFx(button_enter_sfx);
+			}
+		}
 
+		if (credits_navigation->HandleKeyboardNavigation())
+		{
+			app->audio->PlayFx(button_enter_sfx);
+		}
+	}
 	else if (menu_state == MENU_STATE::OPTIONS)
 	{
 		options->InputNavigate();
@@ -389,7 +429,7 @@ void M_MainMenu::InputSelect()
 		{
 			UI_Element*  menu_element = credits_navigation->GetFocusedElement();
 
-			if (menu_element == jaume)
+			if (menu_element == jaume_linkedin)
 			{
 				ShellExecute(NULL, "open", "https://www.linkedin.com/in/jaume-montagut-guix-7389a4166/", NULL, NULL, SW_SHOWNORMAL);
 			}
