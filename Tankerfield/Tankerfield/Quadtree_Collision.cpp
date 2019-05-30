@@ -9,12 +9,10 @@
 QuadTree_Collision::QuadTree_Collision(fRect quad_area, uint max_elements, QuadTree_Collision * prev) :
 	rect_area(quad_area), max_elements(max_elements) , parent_node(prev)
 { 
-
 }
 
 QuadTree_Collision::~QuadTree_Collision()
 {
-	CleanUp();
 }
 
 void QuadTree_Collision::AddCollider(Collider* collider)
@@ -51,6 +49,8 @@ void QuadTree_Collision::DistrbuteColliders()
 
 		for (uint i = 0; i < 4; ++i)
 		{
+			(*iter)->subdivision_intersection[i] = false;
+
 			if (child_nodes[i]->rect_area.CheckIntersection((*iter)->GetRect()))
 			{
 				++intersections;
@@ -83,8 +83,11 @@ void QuadTree_Collision::PlaceCollider(Collider * col)
 
 		for (int i = 0; i < 4; ++i)
 		{
+			col->subdivision_intersection[i] = false;
+
 			if (child_nodes[i]->rect_area.CheckIntersection(col->GetRect()))
 			{
+				col->subdivision_intersection[i] = true;
 				++intersections;
 				last_intersection = i;
 			}
@@ -113,35 +116,35 @@ void QuadTree_Collision::CheckCollisions()
 	
 	BROFILER_CATEGORY("QuadTreeCollisions", Profiler::Color::Red);
 
-	Collider* c1 = nullptr;
-	Collider* c2 = nullptr;
+	Collider* collider_1 = nullptr;
+	Collider* collider_2 = nullptr;
 
 	if (is_divided)
 	{
-		for (std::list<Collider*>::iterator item = multi_check_colliders.begin(); item != multi_check_colliders.end(); ++item)
+		for (std::list<Collider*>::iterator itr_1 = multi_check_colliders.begin(); itr_1 != multi_check_colliders.end(); ++itr_1)
 		{
-			c1 = (*item);
+			collider_1 = (*itr_1);
 
-			std::list<Collider*>::iterator item2 = ++item;
-			--item;
+			std::list<Collider*>::iterator itr_2 = itr_1;
+			++itr_2;
 
-			for (; item2 != multi_check_colliders.end(); ++item2)
+			for (; itr_2 != multi_check_colliders.end(); ++itr_2)
 			{
-				c2 = *item2;
+				collider_2 = *itr_2;
 
 				++app->collision->collisions_per_frame;
 
-				if (c1->CheckCollision(c2) == true)
+				if (collider_1->CheckCollision(collider_2) == true)
 				{
-					
+					app->collision->AddCollisionInfo(collider_1, collider_2);
 				}
 			}
 
 			for (int i = 0; i < 4; ++i)
 			{
-				if (c1->subdivision_intersection[i] == true)
+				if (collider_1->subdivision_intersection[i] == true)
 				{
-					child_nodes[i]->CheckCollisionsSubdivisions(c1);
+					child_nodes[i]->CheckCollisionsSubdivisions(collider_1);
 				}
 			}
 		}
@@ -155,20 +158,20 @@ void QuadTree_Collision::CheckCollisions()
 	{
 		for (std::list<Collider*>::iterator item = colliders.begin(); item != colliders.end(); ++item)
 		{
-			c1 = (*item);
+			collider_1 = (*item);
 
 			std::list<Collider*>::iterator item2 = ++item;
 			--item;
 
 			for (; item2 != colliders.end(); ++item2)
 			{
-				c2 = *item2;
+				collider_2 = *item2;
 
 				++app->collision->collisions_per_frame;
 
-				if (c1->CheckCollision(c2) == true)
+				if (collider_1->CheckCollision(collider_2) == true)
 				{
-					
+					app->collision->AddCollisionInfo(collider_1, collider_2);
 				}
 			}
 		}
@@ -177,16 +180,6 @@ void QuadTree_Collision::CheckCollisions()
 
 void QuadTree_Collision::CheckCollisionsSubdivisions(Collider* collider)
 {
-	for (std::list<Collider*>::iterator iter = colliders.begin(); iter != colliders.end(); ++iter)
-	{
-		++app->collision->collisions_per_frame;
-
-		if ( (*iter)->CheckCollision(collider) == true)
-		{
-			
-		}
-	}
-
 	if (is_divided)
 	{
 		for (std::list<Collider*>::iterator iter = multi_check_colliders.begin(); iter != multi_check_colliders.end(); ++iter)
@@ -195,13 +188,25 @@ void QuadTree_Collision::CheckCollisionsSubdivisions(Collider* collider)
 
 			if ((*iter)->CheckCollision(collider) == true)
 			{
-				
+				app->collision->AddCollisionInfo((*iter), collider);
 			}
 		}
 
 		for (int i = 0; i < 4; ++i)
 		{
 			child_nodes[i]->CheckCollisionsSubdivisions(collider);
+		}
+	}
+	else
+	{
+		for (std::list<Collider*>::iterator iter = colliders.begin(); iter != colliders.end(); ++iter)
+		{
+			++app->collision->collisions_per_frame;
+
+			if ((*iter)->CheckCollision(collider) == true)
+			{
+				app->collision->AddCollisionInfo((*iter), collider);
+			}
 		}
 	}
 }
@@ -213,15 +218,22 @@ void QuadTree_Collision::CleanUp()
 	{
 		for (int i = 0; i < 4; ++i)
 		{
-			if (child_nodes[i] != nullptr)
-			{
-				child_nodes[i]->CleanUp();
-				RELEASE(child_nodes[i]);
-			}
+			child_nodes[i]->CleanUp();
+			RELEASE(child_nodes[i]);
 		}
-		is_divided = false;
 	}
+}
 
-	colliders.clear();
-	multi_check_colliders.clear();
+
+void QuadTree_Collision::Draw(Camera* camera)
+{
+	app->render->DrawIsometricQuad(rect_area.pos.x, rect_area.pos.y, rect_area.w, rect_area.h, { 0, 255, 0, 255 }, camera);
+
+	if (is_divided)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			child_nodes[i]->Draw(camera);
+		}
+	}
 }

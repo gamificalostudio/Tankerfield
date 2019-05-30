@@ -115,17 +115,15 @@ public:
 		return !(coll->rect.pos.x >= (rect.pos.x + rect.w) || (coll->rect.pos.x + coll->rect.w) <= rect.pos.x || coll->rect.pos.y >= (rect.pos.y + rect.h) || (coll->rect.pos.y + coll->rect.h) <= rect.pos.y);
 	}
 
-	void ActiveOnTrigger(bool value);
+	void SetIsTrigger(bool value);
 
 	void Destroy();
 
-	bool GetIsActivated() const;
+	bool GetIsTrigger() const;
 
 public:
 
 	float damage = 0.f;
-
-	bool to_destroy = false;
   
 	bool is_sensor = false; // True = Avoid overlap resolve || Only in dynamic bodies
 
@@ -137,19 +135,23 @@ private:
 
 	// Collision vars ==============================================
 
-	bool active_on_trigger = true;
+	bool to_destroy = false;
+
+	bool is_trigger = true;
 
 	TAG tag = TAG::NONE;
 
 	std::list<Collider*> collisions_list;
 
-	std::map<Collider*, bool> triggers_list;
+	std::list<Collider*> triggers_list;
 
 	Object * object = nullptr;
 
 	OVERLAP_DIR last_overlap = OVERLAP_DIR::NONE;
 
 	BODY_TYPE body_type = BODY_TYPE::STATIC;
+
+	std::list<Collider*>::iterator iterator;
 
 	// Quadtree ===================================================
 
@@ -162,7 +164,10 @@ private:
 
 struct Collision_Info
 {
-	int type = 0;             // 1. Dynamic-Dynamic   2. Dynamic-Static
+	Collision_Info() {};
+	Collision_Info( Collider* collider_1 , Collider* collider_2, int flag ) : collider_1(collider_1), collider_2(collider_2) , flag(flag){}
+
+	int flag = 0;             // 1. Dynamic-Dynamic   2. Dynamic-Static
 	Collider* collider_1 = nullptr;
 	Collider* collider_2 = nullptr;
 };
@@ -173,13 +178,7 @@ public:
 
 	M_Collision();
 
-	virtual ~M_Collision();
-
-	bool Start();
-
 	bool Update(float dt) override;
-
-	bool UpdateQuadtreeMethod(float dt);
 
 	bool UpdateForcedMethod(float dt);
 
@@ -192,6 +191,8 @@ public:
 	Collider* AddCollider(fPoint pos, float width, float height, TAG tag, BODY_TYPE body ,float damage=0.f, Object* object = nullptr);
 
 private:
+
+	void AddCollisionInfo(Collider* collider_1, Collider* collider_2);
 
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
@@ -216,23 +217,24 @@ private:
 
 	// Collider lists ========================================================
 
-	std::list<Collider*> static_colliders;
-
-	std::list<Collider*> dynamic_colliders;
+	std::list<Collider*> colliders_list;
 
 	std::list<Collider*> colliders_to_add;
 
+	std::list<Collider*> colliders_to_destroy;
+
+	std::vector<Collision_Info> collisions_info;
+
 	// Collider matrix ======================================================
 
-	bool on_trigger_matrix[(int)TAG::MAX][(int)TAG::MAX];
+	bool trigger_matrix[(int)TAG::MAX][(int)TAG::MAX];
 
-	bool solve_overlap_matrix[(int)TAG::MAX][(int)TAG::MAX];
-
-	bool is_updating = false;
+	bool physics_matrix[(int)TAG::MAX][(int)TAG::MAX];
 
 	bool debug = false;
 
 	friend Collider;
+	friend QuadTree_Collision;
 };
 
 #endif // __j1Collision_H__

@@ -5,7 +5,7 @@
 #include "Rect.h"
 
 class Collider;
-
+class Camera;
 
 class QuadTree_Collision
 {
@@ -28,6 +28,8 @@ public:
 
 	void CleanUp();
 
+	void Draw(Camera* camera);
+
 private:
 
 	fRect						rect_area;
@@ -39,10 +41,6 @@ private:
 	std::list<Collider*>		colliders;				// Colliders that NOT intersect with more than one child node
 
 	std::list<Collider*>		multi_check_colliders;  // Colliders that intersect with more than one child node
-
-	
-
-
 
 	bool is_divided = false;		
 

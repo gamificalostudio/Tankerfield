@@ -3,6 +3,8 @@
 #include "Log.h"
 #include "Defs.h"
 #include <math.h>
+#include <algorithm>
+
 
 #include "App.h"
 #include "M_Map.h"
@@ -21,27 +23,23 @@ void Collider::SetPosToObj()
 	}
 }
 
-void Collider::ActiveOnTrigger( bool value)
+void Collider::SetIsTrigger( bool value)
 {
-	if (app->collision->is_updating)
-	{
-		app->collision->mod_on_trigger_colliders[this] = value;
-	}
-	else
-	{
-		active_on_trigger = value;
-	}
+	is_trigger = value;
+}
+
+bool Collider::GetIsTrigger() const
+{
+	return is_trigger;
 }
 
 void Collider::Destroy()
 {
-	to_destroy = true;
-}
-
-
-bool Collider::GetIsActivated() const
-{
-	return active_on_trigger;
+	if (to_destroy == false)
+	{
+		to_destroy = true;
+		app->collision->colliders_to_destroy.push_back(this);
+	}
 }
 
 M_Collision::M_Collision()
@@ -52,100 +50,94 @@ M_Collision::M_Collision()
 	{
 		for (int j = 0; j < (int)TAG::MAX; ++j)
 		{
-			on_trigger_matrix[i][j] = false;
+			trigger_matrix[i][j] = false;
+			physics_matrix[i][j] = false;
 		}
 	}
 
-	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::ENEMY] = true;
-	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::FRIENDLY_BULLET] = true;
-	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::PICK_UP] = true;
-	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
-	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
-	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::HEALING_AREA_SHOT] = true;
+	// Set trigger compatinility =======================================================
 
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET_LASER] = true;
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::ELECTRO_SHOT] = true;
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET_OIL] = true;
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::OIL_POOL] = true;
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::FLAMETHROWER] = true;
-	on_trigger_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::ENEMY] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::FRIENDLY_BULLET] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::PICK_UP] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::HEALING_AREA_SHOT] = true;
 
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET_LASER] = true;
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::ELECTRO_SHOT] = true;
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET_OIL] = true;
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::OIL_POOL] = true;
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::FLAMETHROWER] = true;
+	trigger_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
 
-	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
-	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
-	on_trigger_matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
-	on_trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::WALL] = true;
-	on_trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::ENEMY] = true;
-	on_trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::REWARD_BOX] = true;
+	trigger_matrix[(int)TAG::BULLET][(int)TAG::WALL] = true;
+	trigger_matrix[(int)TAG::BULLET][(int)TAG::ENEMY] = true;
+	trigger_matrix[(int)TAG::BULLET][(int)TAG::REWARD_BOX] = true;
+	trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::WALL] = true;
+	trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::ENEMY] = true;
+	trigger_matrix[(int)TAG::BULLET_OIL][(int)TAG::REWARD_BOX] = true;
 
-	on_trigger_matrix[(int)TAG::REWARD_ZONE][(int)TAG::PLAYER] = true;
+	trigger_matrix[(int)TAG::REWARD_ZONE][(int)TAG::PLAYER] = true;
 
-	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET] = true;
-	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::FRIENDLY_BULLET] = true;
-	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_LASER] = true;
-	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::ELECTRO_SHOT] = true;
-	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_OIL] = true;
-	on_trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::FLAMETHROWER] = true;
+	trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET] = true;
+	trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::FRIENDLY_BULLET] = true;
+	trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_LASER] = true;
+	trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::ELECTRO_SHOT] = true;
+	trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::BULLET_OIL] = true;
+	trigger_matrix[(int)TAG::REWARD_BOX][(int)TAG::FLAMETHROWER] = true;
 
+	trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::WALL] = true;
+	trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::ENEMY] = true; 
+	trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::PLAYER] = true;
+	trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::REWARD_BOX] = true;
+	trigger_matrix[(int)TAG::PICK_UP][(int)TAG::PLAYER] = true;
+	trigger_matrix[(int)TAG::BULLET_LASER][(int)TAG::WALL] = true;
+	trigger_matrix[(int)TAG::GOD][(int)TAG::PICK_UP] = true;
+	trigger_matrix[(int)TAG::GOD][(int)TAG::ROAD] = true;
 
-	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::WALL] = true;
-	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::ENEMY] = true; 
-	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::PLAYER] = true;
-	on_trigger_matrix[(int)TAG::FRIENDLY_BULLET][(int)TAG::REWARD_BOX] = true;
-	on_trigger_matrix[(int)TAG::PICK_UP][(int)TAG::PLAYER] = true;
-	on_trigger_matrix[(int)TAG::BULLET_LASER][(int)TAG::WALL] = true;
-	on_trigger_matrix[(int)TAG::GOD][(int)TAG::PICK_UP] = true;
-	on_trigger_matrix[(int)TAG::GOD][(int)TAG::ROAD] = true;
+	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::WALL] = true;
+	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::PLAYER] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::BULLET_ENEMY] = true;
+	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::ENEMY] = false;
+	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::REWARD_BOX] = false;
 
-	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::WALL] = true;
-	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::PLAYER] = true;
-	on_trigger_matrix[(int)TAG::PLAYER][(int)TAG::BULLET_ENEMY] = true;
-	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::ENEMY] = false;
-	on_trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::REWARD_BOX] = false;
+	// Set rigid body physics compatinility =============================================
 
-	for (int i = 0; i < (int)TAG::MAX; ++i)
-	{
-		for (int j = 0; j < (int)TAG::MAX; ++j)
-		{
-			solve_overlap_matrix[i][j] = false;
-		}
-	}
+	physics_matrix[(int)TAG::PLAYER][(int)TAG::PLAYER]      = true;
+	physics_matrix[(int)TAG::PLAYER][(int)TAG::WALL]	      = true;
+	physics_matrix[(int)TAG::PLAYER][(int)TAG::WATER]		  = true;
+	physics_matrix[(int)TAG::PLAYER][(int)TAG::REWARD_BOX]  = true;
+	physics_matrix[(int)TAG::PLAYER][(int)TAG::ENEMY]       = true;
 
-	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::PLAYER]      = true;
-	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::WALL]	      = true;
-	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::WATER]		  = true;
-	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::REWARD_BOX]  = true;
-	solve_overlap_matrix[(int)TAG::PLAYER][(int)TAG::ENEMY]       = true;
+	physics_matrix[(int)TAG::ENEMY][(int)TAG::ENEMY] = true;
+	physics_matrix[(int)TAG::ENEMY][(int)TAG::PLAYER] = true;
+	physics_matrix[(int)TAG::ENEMY][(int)TAG::WALL] = true;
+	physics_matrix[(int)TAG::ENEMY][(int)TAG::WATER] = true;
+	physics_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
 
-	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::ENEMY] = true;
-	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::PLAYER] = true;
-	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::WALL] = true;
-	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::WATER] = true;
-	solve_overlap_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
-
-}
-
-M_Collision::~M_Collision()
-{}
-
-bool M_Collision::Start()
-{
-	
-
-	return true;
 }
 
 bool M_Collision::CleanUp()
 {
 	LOG("Freeing all colliders");
 
+	if (quad_tree_collision != nullptr)
+	{
+		quad_tree_collision->CleanUp();
+		RELEASE(quad_tree_collision);
+		quad_tree_collision = nullptr;
+	}
+
 	// Remove all colliders =====================
 
+	collisions_info.clear();
 	colliders_to_add.clear();
+	colliders_to_destroy.clear();
 
-	for (std::list<Collider*>::iterator item = dynamic_colliders.begin(); item != dynamic_colliders.end(); ++item)
+	for (std::list<Collider*>::iterator item = colliders_list.begin(); item != colliders_list.end(); ++item)
 	{
 		if (*item != nullptr)
 		{
@@ -153,38 +145,18 @@ bool M_Collision::CleanUp()
 		}
 	}
 
-	dynamic_colliders.clear();
-
-	for (std::list<Collider*>::iterator item = static_colliders.begin(); item != static_colliders.end(); ++item)
-	{
-		if (*item != nullptr)
-		{
-			RELEASE(*item);
-		}
-	}
-
-	static_colliders.clear();
+	colliders_list.clear();
 
 	return true;
 }
 
 bool M_Collision::Reset()
 {
-
 	CleanUp();
-
 	return true;
 }
 
 bool M_Collision::Update(float dt)
-{
-	UpdateQuadtreeMethod(dt);
-	/*UpdateForcedMethod(dt);*/
-	return true;
-}
-
-
-bool M_Collision::UpdateQuadtreeMethod(float dt)
 {
 	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange);
 
@@ -198,33 +170,26 @@ bool M_Collision::UpdateQuadtreeMethod(float dt)
 		debug = !debug;
 	}
 
-	is_updating = true;
+	// Destroy Colliders =====================================================
 
-	// Fill body types lists ==================================================
+	DestroyColliders();
+
+	// Add colliders ========================================================
 
 	if (!colliders_to_add.empty())
 	{
 		for (std::list<Collider*>::iterator itr = colliders_to_add.begin(); itr != colliders_to_add.end(); ++itr)
 		{
-			switch ((*itr)->body_type)
-			{
-			case BODY_TYPE::STATIC:
-				static_colliders.push_back(*itr);
-				break;
-			case BODY_TYPE::DYNAMIC:
-				dynamic_colliders.push_back(*itr);
-				break;
-			}
+			std::list<Collider*>::iterator new_iterator = colliders_list.emplace(colliders_list.begin(), (*itr));
+			(*itr)->iterator = new_iterator;
 		}
+
 		colliders_to_add.clear();
 	}
 
-	std::list<Collider*> colliders_list(dynamic_colliders);
-	colliders_list.merge(static_colliders);
-	colliders_list.sort()
-	// Update Quadtree Collision =============================================
+	// Create Quadtree Collision =============================================
 
-	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns *  app->map->data.tile_width, app->map->data.rows *  app->map->data.tile_height), 5, nullptr);
+	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns, app->map->data.rows), 15, nullptr);
 
 	for (std::list<Collider*>::iterator itr = colliders_list.begin(); itr != colliders_list.end(); ++itr)
 	{
@@ -233,284 +198,221 @@ bool M_Collision::UpdateQuadtreeMethod(float dt)
 
 	quad_tree_collision->CheckCollisions();
 
-	LOG("%i" , collisions_per_frame);
-	collisions_per_frame = 0;
-
 	// Triggers ==============================================================
 
-	for (std::list<Collider*>::iterator collider_to_check = colliders_list.begin(); collider_to_check != colliders_list.end(); ++collider_to_check)
+	for (std::list<Collider*>::iterator collider = colliders_list.begin(); collider != colliders_list.end(); ++collider)
 	{
-		for (std::list<Collider*>::iterator collider_colliding = (*collider_to_check)->collisions_list.begin(); collider_colliding != (*collider_to_check)->collisions_list.end(); ++collider_colliding)
+		if ((*collider)->collisions_list.empty() == true && (*collider)->triggers_list.empty() == true)
 		{
-			(*itr)->collisions_list.clear();
+			continue;
+		}
+
+		std::list< Collider*>::iterator trigger_found;
+
+		for (std::list<Collider*>::iterator iter = (*collider)->collisions_list.begin(); iter != (*collider)->collisions_list.end(); ++iter)
+		{
+			trigger_found = std::find( (*collider)->triggers_list.begin() , (*collider)->triggers_list.end() , (*iter));
+
+			if (trigger_found == (*collider)->triggers_list.end())
+			{
+				if ((*iter)->object != nullptr && trigger_matrix[(int)(*iter)->tag][(int)(*collider)->tag] && (*iter)->to_destroy == false && (*collider)->to_destroy == false)
+				{
+					(*iter)->object->OnTriggerEnter((*collider));
+				}
+
+				(*collider)->triggers_list.push_back(*iter);
+			}
+			else
+			{
+				if ((*iter)->object != nullptr && trigger_matrix[(int)(*iter)->tag][(int)(*collider)->tag] && (*iter)->to_destroy == false && (*collider)->to_destroy == false)
+				{
+					(*iter)->object->OnTrigger((*collider));
+				}
+			}
+		}
+
+		std::list< Collider*>::iterator collider_found;
+
+		for (std::list<Collider*>::iterator trigger = (*collider)->triggers_list.begin(); trigger != (*collider)->triggers_list.end(); )
+		{
+			collider_found = std::find((*collider)->collisions_list.begin(), (*collider)->collisions_list.end(), (*trigger));
+
+			if (collider_found == (*collider)->collisions_list.end())
+			{
+				if ((*trigger)->object != nullptr && trigger_matrix[(int)(*trigger)->tag][(int)(*collider)->tag] && (*trigger)->to_destroy == false && (*collider)->to_destroy == false)
+				{
+					(*trigger)->object->OnTriggerExit((*collider));
+				}
+				trigger = (*collider)->triggers_list.erase(trigger);
+			}
+			else
+			{
+				++trigger;
+			}
+		}
+		(*collider)->collisions_list.clear();
+	}
+
+	// Solve Overlaps =========================================================
+
+	std::sort(collisions_info.begin(),collisions_info.end(), [](Collision_Info a, Collision_Info b){ return a.flag > b.flag; });
+
+	for (std::vector<Collision_Info>::iterator info = collisions_info.begin(); info != collisions_info.end(); ++info)
+	{
+		if ((*info).collider_1->to_destroy == true || (*info).collider_2->to_destroy == true)
+		{
+			continue;
+		}
+
+		if ((*info).flag == 1)
+		{
+			if ((int)(*info).collider_1->tag > (int)(*info).collider_2->tag)
+			{
+				SolveOverlapDS((*info).collider_2, (*info).collider_1);
+			}
+			else if ((int)(*info).collider_1->tag < (int)(*info).collider_2->tag)
+			{
+				SolveOverlapDS((*info).collider_1, (*info).collider_2);
+			}
+			else
+			{
+				SolveOverlapDD((*info).collider_1, (*info).collider_2);
+			}
+		}
+		if ((*info).flag == 2)
+		{
+			if ((*info).collider_1->body_type == BODY_TYPE::STATIC)
+			{
+				SolveOverlapDS((*info).collider_2, (*info).collider_1);
+			}
+			else
+			{
+				SolveOverlapDS((*info).collider_1, (*info).collider_2);
+			}
+
 		}
 	}
 
-	// Solve Overlaps ==============================================================
+	collisions_info.clear();
 
-
-
-
-	// Destroy Colliders =====================================================
-
-	for (std::list<Collider*>::iterator itr = colliders_list.begin(); itr != colliders_list.end(); ++itr)
-	{
-		(*itr)->collisions_list.clear();
-	}
+	//// Destroy Colliders =====================================================
 
 	DestroyColliders();
 
-	delete quad_tree_collision;
-
-	is_updating = false;
+	// =========================================================================
 
 	return true;
 }
-
-bool M_Collision::UpdateForcedMethod(float dt)
-{
-	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange);
-
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
-	{
-		debug = !debug;
-	}
-
-	is_updating = true;
-
-	// Fill body types lists ====================================================================
-
-	if (!colliders_to_add.empty())
-	{
-		for (std::list<Collider*>::iterator itr = colliders_to_add.begin(); itr != colliders_to_add.end(); ++itr)
-		{
-			switch ((*itr)->body_type)
-			{
-			case BODY_TYPE::STATIC:
-				static_colliders.push_back(*itr);
-				break;
-			case BODY_TYPE::DYNAMIC:
-				dynamic_colliders.push_back(*itr);
-				break;
-			}
-		}
-		colliders_to_add.clear();
-	}
-
-
-	// Check collisions =========================================================================
-
-	std::list<Collider*>::iterator iterator;
-
-	Collider* collider_1 = nullptr;
-	Collider* collider_2 = nullptr;
-
-	bool on_collision = false;
-
-	// Dynamic VS Dynamic ========================================
-
-	for (std::list<Collider*>::iterator itr_1 = dynamic_colliders.begin(); itr_1 != dynamic_colliders.end(); ++itr_1)
-	{
-		collider_1 = *itr_1;
-		iterator = itr_1;
-		++iterator;
-
-		for (std::list<Collider*>::iterator itr_2 = iterator; itr_2 != dynamic_colliders.end(); ++itr_2)
-		{
-			collider_2 = *itr_2;
-
-			if (collider_1->to_destroy == true || collider_2->to_destroy == true)
-			{
-				continue;
-			}
-
-			on_collision = collider_1->CheckCollision(collider_2);
-
-			// Solve Overlap  ==================================================================
-
-			if (on_collision && (solve_overlap_matrix[(int)collider_1->tag][(int)collider_2->tag] || solve_overlap_matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_1->is_sensor == false && collider_2->is_sensor == false)
-			{
-				if ((int)collider_1->tag > (int)collider_2->tag)
-				{
-					SolveOverlapDS(collider_2, collider_1);
-				}
-				else if ((int)collider_1->tag < (int)collider_2->tag)
-				{
-					SolveOverlapDS(collider_1, collider_2);
-				}
-				else
-				{
-					SolveOverlapDD(collider_1, collider_2);
-				}
-			}
-
-			// Do OnTrigger Functions ===========================================================
-
-			if (collider_1->active_on_trigger == true && collider_2->active_on_trigger == true)
-			{
-				if (on_collision == true)
-				{
-					DoOnTrigger(collider_1, collider_2);
-				}
-				else
-				{
-					DoOnTriggerExit(collider_1, collider_2);
-				}
-			}
-		}
-	}
-
-	// Dynamic VS Static ========================================
-
-	for (std::list<Collider*>::iterator itr_1 = static_colliders.begin(); itr_1 != static_colliders.end(); ++itr_1)
-	{
-		collider_1 = (*itr_1);
-
-		for (std::list<Collider*>::iterator itr_2 = dynamic_colliders.begin(); itr_2 != dynamic_colliders.end(); ++itr_2)
-		{
-			collider_2 = (*itr_2);
-
-			if (collider_1->to_destroy == true || collider_2->to_destroy == true)
-			{
-				continue;
-			}
-
-			on_collision = collider_1->CheckCollision(collider_2);
-
-			// Solve Overlap  ==================================================================
-
-			if (on_collision && (solve_overlap_matrix[(int)collider_1->tag][(int)collider_2->tag] || solve_overlap_matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_2->is_sensor == false)
-			{
-				SolveOverlapDS(collider_2, collider_1);
-			}
-
-			// Do OnTrigger Functions ===========================================================
-
-			if (collider_1->active_on_trigger == true && collider_2->active_on_trigger == true)
-			{
-				if (on_collision == true)
-				{
-					DoOnTrigger(collider_1, collider_2);
-				}
-				else
-				{
-					DoOnTriggerExit(collider_1, collider_2);
-				}
-			}
-		}
-	}
-
-	// Destroy Colliders =============================================
-
-	DestroyColliders();
-
-	is_updating = false;
-
-	return true;
-}
-
 
 bool M_Collision::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("M_CollisionPostUpdate", Profiler::Color::Orange);
 
-	if (debug == false)
+	if (debug == true  && app->map->MapIsLoaded() == true)
 	{
-		return true;
-	}
-
-	for (std::vector<Camera*>::iterator item_cam = app->render->cameras.begin(); item_cam != app->render->cameras.end(); ++item_cam)
-	{
-		for (std::list<Collider*>::iterator item = static_colliders.begin(); item != static_colliders.end(); ++item)
+		for (std::vector<Camera*>::iterator camera = app->render->cameras.begin(); camera != app->render->cameras.end(); ++camera)
 		{
-			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
+			SDL_RenderSetClipRect(app->render->renderer, &(*camera)->screen_section);
 
-			app->render->DrawIsometricQuad((*item)->rect.pos.x, (*item)->rect.pos.y, (*item)->rect.w, (*item)->rect.h, { 255, 0, 0 , 255 }, (*item_cam));
+			for (std::list<Collider*>::iterator collider = colliders_list.begin(); collider != colliders_list.end(); ++collider)
+			{
+
+
+				if ((*collider)->body_type == BODY_TYPE::DYNAMIC)
+				{
+					app->render->DrawIsometricQuad((*collider)->rect.pos.x, (*collider)->rect.pos.y, (*collider)->rect.w, (*collider)->rect.h, { 255, 0, 255 , 255 }, (*camera));
+				}
+				else
+				{
+					app->render->DrawIsometricQuad((*collider)->rect.pos.x, (*collider)->rect.pos.y, (*collider)->rect.w, (*collider)->rect.h, { 255, 0, 0 , 255 }, (*camera));
+				}
+			}
+
+			quad_tree_collision->Draw((*camera));
 
 			SDL_RenderSetClipRect(app->render->renderer, nullptr);
 		}
 
-		for (std::list<Collider*>::iterator item = dynamic_colliders.begin(); item != dynamic_colliders.end(); ++item)
-		{
-			SDL_RenderSetClipRect(app->render->renderer, &(*item_cam)->screen_section);
-
-			app->render->DrawIsometricQuad((*item)->rect.pos.x, (*item)->rect.pos.y, (*item)->rect.w, (*item)->rect.h, { 255, 0, 255 , 255 }, (*item_cam));
-
-			SDL_RenderSetClipRect(app->render->renderer, nullptr);
-		}
-
+		LOG("%i", collisions_per_frame);
+		collisions_per_frame = 0;
 	}
+
+
+
+	if (quad_tree_collision != nullptr)
+	{
+		quad_tree_collision->CleanUp();
+		RELEASE(quad_tree_collision);
+		quad_tree_collision = nullptr;
+	}
+
 	return true;
 }
-
-void M_Collision::DestroyColliders()
-{
-	std::list<Collider*>::iterator iterator = static_colliders.begin();
-
-	while (iterator != static_colliders.end())
-	{
-		if ((*iterator)->to_destroy == true)
-		{
-			// Destroy from current colliders on collision ==============
-
-			for (std::map<Collider*, bool>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
-			{
-				std::map<Collider*, bool>::iterator to_destroy = (*itr).first->triggers_list.find( (*itr).first );
-
-				if (to_destroy != (*itr).first->triggers_list.end())
-				{
-					(*itr).first->triggers_list.erase(to_destroy);
-				}
-			}
-
-			// Destroy ==================================================
-
-			RELEASE(*iterator);
-			iterator = static_colliders.erase(iterator);
-
-			continue;
-		}
-		++iterator;
-	}
-
-	iterator = dynamic_colliders.begin();
-
-	while (iterator != dynamic_colliders.end())
-	{
-		if ((*iterator)->to_destroy == true)
-		{
-			// Destroy from current colliders on collision ==============
-
-			for (std::map<Collider*, bool>::iterator itr = (*iterator)->triggers_list.begin(); itr != (*iterator)->triggers_list.end(); ++itr)
-			{
-				std::map<Collider*, bool>::iterator to_destroy = (*itr).first->triggers_list.find((*itr).first);
-
-				if (to_destroy != (*itr).first->triggers_list.end())
-				{
-					(*itr).first->triggers_list.erase(to_destroy);
-				}
-			}
-
-			// Destroy ==================================================
-
-			RELEASE(*iterator);
-			iterator = static_colliders.erase(iterator);
-
-			continue;
-		}
-		++iterator;
-	}
-}
-
-
-
-
 
 Collider * M_Collision::AddCollider(fPoint pos, float width, float height, TAG tag, BODY_TYPE body, float damage, Object* object)
 {
 	Collider* collider = new Collider(pos, width, height, damage, tag, body, object);
 	colliders_to_add.push_back(collider);
 	return  collider;
+}
+
+void M_Collision::AddCollisionInfo(Collider * collider_1, Collider * collider_2)
+{
+	// Add collider to its collisions list ============================================
+
+	if (collider_1->body_type == BODY_TYPE::STATIC && collider_2->body_type == BODY_TYPE::STATIC)
+	{
+		return;
+	}
+
+	if (collider_1->is_trigger == true && collider_2->is_trigger == true)
+	{
+
+		collider_1->collisions_list.push_back(collider_2);
+		collider_2->collisions_list.push_back(collider_1);
+	}
+
+	// Add info to Collision Info list =================================================
+
+	if ( (physics_matrix[(int)collider_1->tag] [(int)collider_2->tag] || physics_matrix[(int)collider_2->tag][(int)collider_1->tag]) && collider_1->is_sensor == false && collider_2->is_sensor == false)
+	{
+		if (collider_1->body_type == BODY_TYPE::DYNAMIC && collider_2->body_type == BODY_TYPE::DYNAMIC)
+		{
+			collisions_info.push_back(Collision_Info(collider_1, collider_2, 1));
+		}
+		else if (collider_1->body_type == BODY_TYPE::STATIC && collider_2->body_type == BODY_TYPE::DYNAMIC)
+		{
+			collisions_info.push_back(Collision_Info(collider_1, collider_2, 2));
+		}
+		else if (collider_2->body_type == BODY_TYPE::STATIC && collider_1->body_type == BODY_TYPE::DYNAMIC)
+		{
+			collisions_info.push_back(Collision_Info(collider_1, collider_2, 2));
+		}
+	}
+}
+
+void M_Collision::DestroyColliders()
+{
+	for (std::list<Collider*>::iterator collider_to_destroy = colliders_to_destroy.begin(); collider_to_destroy != colliders_to_destroy.end(); ++collider_to_destroy)
+	{
+		for (std::list<Collider*>::iterator itr = (*collider_to_destroy)->triggers_list.begin(); itr != (*collider_to_destroy)->triggers_list.end(); ++itr)
+		{
+			std::list<Collider*>::iterator to_destroy = std::find((*itr)->triggers_list.begin(), (*itr)->triggers_list.end(), (*collider_to_destroy));
+
+			if (to_destroy != (*itr)->triggers_list.end())
+			{
+				(*itr)->triggers_list.erase(to_destroy);
+			}
+		}
+
+		// Destroy ==================================================
+
+		colliders_list.erase((*collider_to_destroy)->iterator);
+		RELEASE(*collider_to_destroy);
+	}
+
+	colliders_to_destroy.clear();
+
 }
 
 void M_Collision::SolveOverlapDS(Collider * dynamic_col, Collider * static_col)
@@ -609,82 +511,3 @@ void M_Collision::SolveOverlapDD(Collider * c1, Collider * c2)
 	c1->object->pos_map = c1->rect.pos - c1->obj_offset;
 	c2->object->pos_map = c2->rect.pos - c2->obj_offset;
 }
-
-inline void M_Collision::DoOnTrigger(Collider * c1, Collider * c2)
-{
-	
-	if (std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2) != c1->triggers_list.end())
-	{
-		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
-		{
-			c1->object->OnTrigger(c2);
-		}
-	}
-	else
-	{
-		c1->triggers_list.push_back(c2);
-
-		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
-		{
-			c1->object->OnTriggerEnter(c2);
-		}
-	}
-
-	std::swap(c1, c2);
-
-	if (std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2) != c1->triggers_list.end())
-	{
-		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
-		{
-			c1->object->OnTrigger(c2);
-		}
-	}
-	else
-	{
-		c1->triggers_list.push_back(c2);
-
-		if (c1->object != nullptr && on_trigger_matrix[(int)c1->tag][(int)c2->tag] && c1->to_destroy == false && c2->to_destroy == false)
-		{
-			c1->object->OnTriggerEnter(c2);
-		}
-	}
-
-
-}
-
-inline void M_Collision::DoOnTriggerExit(Collider * c1, Collider * c2)
-{
-	std::list<Collider*>::iterator iter = std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2);
-
-	if (c1->triggers_list.empty() == false)
-	{
-		if (iter != c1->triggers_list.end())
-		{
-			c1->triggers_list.erase(iter);
-
-			if (c1->object != nullptr)
-			{
-				c1->object->OnTriggerExit(c2);
-			}
-		}
-	}
-
-	std::swap(c1, c2);
-
-	iter = std::find(c1->triggers_list.begin(), c1->triggers_list.end(), c2);
-
-	if (c1->triggers_list.empty() == false)
-	{
-		if (iter != c1->triggers_list.end())
-		{
-			c1->triggers_list.erase(iter);
-
-			if (c1->object != nullptr)
-			{
-				c1->object->OnTriggerExit(c2);
-			}
-		}
-	}
-}
-
-

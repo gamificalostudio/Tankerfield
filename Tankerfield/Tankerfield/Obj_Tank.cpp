@@ -246,7 +246,7 @@ bool Obj_Tank::Start()
 		this);
 
 	coll_flame->is_sensor = true;
-	coll_flame->ActiveOnTrigger(false);
+	coll_flame->SetIsTrigger(false);
 
 	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
 	flame->tank = this;
