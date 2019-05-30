@@ -33,14 +33,14 @@ M_Input::~M_Input()
 		delete[] keyboard;
 		keyboard = nullptr;
 	}
-	for (std::vector<Controller*>::iterator controll = controllers.begin(); controll != controllers.end(); ++controll)
-	{
-		if ((*controll) != nullptr)
-		{
-			delete (*controll);
-			(*controll) = nullptr;
-		}
-	}
+	//for (uint i=0; i<MAX_CONTROLLERS;++i)
+	//{
+	//	if (controllers[i])
+	//	{
+	//		delete (*controll);
+	//		(*controll) = nullptr;
+	//	}
+	//}
 }
 
 // Called before render is available
@@ -142,21 +142,13 @@ bool M_Input::PreUpdate()
 			}
 			case SDL_CONTROLLERDEVICEADDED:
 			{
-				if (controllers.size() < MAX_CONTROLLERS)
+				if (number_controllers_connected < MAX_CONTROLLERS)
 				{
-					int num_joystincks = SDL_NumJoysticks();
-					for (int i = 0; i < num_joystincks; ++i)
+					for (uint i = 0u; i < MAX_CONTROLLERS; ++i)
 					{
-						bool is_joystick = false;
-						for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+						if (controllers[i].active == false)
 						{
-							if ((*iter)->index_number == i)
-							{
-								is_joystick = true;
-							}
-						}
-						if (!is_joystick)
-						{
+							++number_controllers_connected;
 							CreateController(i);
 						}
 					}
@@ -165,7 +157,7 @@ bool M_Input::PreUpdate()
 			}
 			case SDL_CONTROLLERDEVICEREMOVED:
 			{
-				RemoveController();
+				RemoveController(event);
 				break;
 			}
 			case SDL_TEXTINPUT:
@@ -312,7 +304,6 @@ void M_Input::DetachController(Controller ** controller)
 		}
 
 		(*controller)->player = nullptr;
-		free_controllers.push_back((*controller));
 	}
 	else if (controller != nullptr && (*controller) == nullptr)
 	{
@@ -468,7 +459,6 @@ void M_Input::AddControllerToPlayer(Controller ** controller)
 				(*iterator)->SetController(controller);
 				(*controller)->player = (*iterator);
 				(*controller)->attached = true;
-				free_controllers.remove((*controller));
 			}
 		}
 	}
@@ -476,73 +466,63 @@ void M_Input::AddControllerToPlayer(Controller ** controller)
 
 void M_Input::CreateController(int i)
 {
-	Controller* controller = DBG_NEW Controller();
-	controller->ctr_pointer = SDL_GameControllerOpen(i);
-	SDL_Joystick* j = SDL_GameControllerGetJoystick(controller->ctr_pointer);
-	controller->joyId = SDL_JoystickInstanceID(j);
-	controller->index_number = i;
-	controller->haptic = SDL_HapticOpen(i);
+	controllers[i].active = true;
+	controllers[i].ctr_pointer = SDL_GameControllerOpen(i);
+	SDL_Joystick* j = SDL_GameControllerGetJoystick(controllers[i].ctr_pointer);
+	controllers[i].joyId = SDL_JoystickInstanceID(j);
+	controllers[i].index_number = i;
+	controllers[i].haptic = SDL_HapticOpen(i);
 	LOG("Joys stick is aptic: %i", SDL_JoystickIsHaptic(j));
 
-	if (controller->haptic == NULL)
+	if (controllers[i].haptic == nullptr)
 	{
 		LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
 	}
 	else
 	{
-		SDL_HapticRumbleInit(controller->haptic);
+		SDL_HapticRumbleInit(controllers[i].haptic);
 	}
-	controllers.push_back(controller);
-
-	AddControllerToPlayer(&controller);
+	
+	//AddControllerToPlayer(&controller);
 }
 
-void M_Input::RemoveController()
+void M_Input::RemoveController(const SDL_Event& event)
 {
-	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end();)
+	for (uint i = 0u; i< MAX_CONTROLLERS; ++i)
 	{
-		if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
+		if (SDL_GameControllerGetAttached(controllers[i].ctr_pointer) == false)
 		{
-			if ((*iter)->haptic != nullptr)
+			controllers[i].active = false;
+
+			if (controllers[i].ctr_pointer != nullptr)
 			{
-				SDL_HapticClose((*iter)->haptic);
-				(*iter)->haptic = nullptr;
+				SDL_GameControllerClose(controllers[i].ctr_pointer);
+				controllers[i].ctr_pointer = nullptr;
 			}
 
-
-			if ((*iter)->ctr_pointer != nullptr)
+			if (controllers[i].haptic != nullptr)
 			{
-				SDL_GameControllerClose((*iter)->ctr_pointer);
-				(*iter)->ctr_pointer = nullptr;
+				SDL_HapticClose(controllers[i].haptic);
+				controllers[i].haptic = nullptr;
 			}
-
-			DetachController(&(*iter));
-
-			delete (*iter);
-			(*iter) = nullptr;
-			iter = controllers.erase(iter);
-		}
-		else
-		{
-			++iter;
+			//DetachController(&(*iter));
 		}
 	}
 }
 
 
 
-Controller** M_Input::GetAbleController()
+int M_Input::GetAbleController()
 {
-	Controller** ret = nullptr;
-	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+	for (uint i = 0u; i < MAX_CONTROLLERS; ++i)
 	{
-		if (!(*iter)->attached)
+		if (!controllers[i].attached)
 		{
-			(*iter)->attached = true;
-			return &(*iter);
+			controllers[i].attached = true;
+			return i;
 		}
 	}
-	return ret;
+	return -1;
 }
 
 Controller::Controller()

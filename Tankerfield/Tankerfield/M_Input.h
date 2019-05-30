@@ -61,6 +61,7 @@ class Obj_Tank;
 struct Controller
 {
 private:
+	bool active = false;
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
@@ -187,9 +188,9 @@ private:
 
 	void AddControllerToPlayer(Controller** controller);
 
-	void CreateController(int i);
+	inline void CreateController(int i);
 
-	void RemoveController();
+	inline void RemoveController(const SDL_Event& event);
 
 private:
 	bool		window_events[WE_COUNT];
@@ -200,11 +201,13 @@ private:
 	int			mouse_x = NULL;
 	int			mouse_y = NULL;
 
+	uint number_controllers_connected = 0u;
+	Controller controllers[MAX_CONTROLLERS];
+
 public:
 	std::string input_text;
-	std::vector<Controller*> controllers;
-	std::list<Controller*> free_controllers;
-	Controller** GetAbleController();
+	
+	int GetAbleController();
 };
 
 #endif // __j1INPUT_H__
