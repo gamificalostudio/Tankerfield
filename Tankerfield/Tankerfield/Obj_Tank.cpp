@@ -387,8 +387,10 @@ void Obj_Tank::Movement(float dt)
 	{
 		fPoint wf_offset = { 58.0f, 30.0f };
 		this->gui->electric_particle->SetState(ELEMENT_STATE::VISIBLE);
-		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 0.5f * dt));
+		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 1.75f * dt));
 		
+		/* TODO: origin -> TANK_POS, ADD FADE EFFECTS TO THE PARTICLE + CONSIDER ANIMATION*/
+
 		if (!started_ep_timer)
 		{
 			ep_timer.Start();
