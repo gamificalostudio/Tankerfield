@@ -178,7 +178,8 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	switch (tank_num)
 	{
 	case 0:
-		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + margin.x + 30.f, viewport.GetTop() + margin.y + 30.f }, anim_image_def);
+		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + viewport.w / 2.0f - anim_image_def.sprite_section.w / 2.0f,
+			viewport.GetTop() + viewport.h / 2.0f - anim_image_def.sprite_section.h / 2.0f }, anim_image_def);
 		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
 		electric_particle->SetState(ELEMENT_STATE::HIDDEN);
 		break;
