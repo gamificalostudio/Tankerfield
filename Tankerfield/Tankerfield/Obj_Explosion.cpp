@@ -58,9 +58,9 @@ bool Obj_Explosion::Update(float dt)
 		coll->SetObjOffset(fPoint(coll_w*0.5f, coll_h*0.5f));
 
 	}
-	else if (frame_num == frame_damage + 1)
+	else if (coll != nullptr && frame_num == frame_damage + 1)
 	{
-		coll->to_destroy = true;
+		coll->Destroy();
 		coll = nullptr;
 	}
 	frame_num++;

@@ -35,6 +35,7 @@
 #include "Obj_Portal.h"
 #include "HealingShot_Area.h"
 #include "Obj_FlamethrowerFlame.h"
+#include "M_Debug.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -252,7 +253,7 @@ bool Obj_Tank::Start()
 		this);
 
 	coll_flame->is_sensor = true;
-	coll_flame->ActiveOnTrigger(false);
+	coll_flame->SetIsTrigger(false);
 
 	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
 	flame->tank = this;
@@ -282,17 +283,7 @@ bool Obj_Tank::PreUpdate()
 	{
 		show_crosshairs = !show_crosshairs;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
-	{
-		if (coll->GetTag() == TAG::PLAYER)
-		{
-			coll->SetTag(TAG::GOD);
-		}
-		else
-		{
-			coll->SetTag(TAG::PLAYER);
-		}
-	}
+
 	return true;
 }
 
@@ -754,32 +745,36 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 
 void Obj_Tank::SetLife(int life)
 {
-
-	if (life > GetMaxLife())
-	{
-		this->life = GetMaxLife();
-	}
-
-	else if (life <= 0)
-	{
-		this->life = 0;
-		app->audio->PlayFx(die_sfx);
-		StopTank();
-	}
-	else
-	{
-		this->life = life;
-	}
-
+	this->life = life;
 	gui->SetLifeBar(this->life);
+}
+
+void Obj_Tank::IncreaseLife(int heal)
+{
+	int new_life = life + heal;
+	if (new_life > GetMaxLife())
+	{
+		new_life = GetMaxLife();
+	}
+	SetLife(new_life);
 }
 
 void Obj_Tank::ReduceLife(int damage)
 {
-	life -= damage;
-	SetLife(life);
-	damaged_timer.Start();
-	damaged = true;
+	//Don't reduce life if we're in god mode
+	if (!app->debug->god_mode)
+	{
+		int new_life = life - damage;
+		//Tank death
+		if (new_life <= 0)
+		{
+			new_life = 0;
+			Die();
+		}
+		SetLife(new_life);
+		damaged_timer.Start();
+		damaged = true;
+	}
 }
 
 void Obj_Tank::SetItem(ItemType type)
@@ -1160,7 +1155,6 @@ void Obj_Tank::ReviveTank(float dt)
 			{
 				(*iter)->SetLife(revive_life);
 				reviving_tank[(*iter)->tank_num] = false;
-				(*iter)->fire_dead = false;
 				app->audio->PlayFx(revive_sfx);
 				(*iter)->draw_revive_cycle_bar = false;
 				(*iter)->cycle_bar_anim.Reset();
@@ -1191,17 +1185,17 @@ bool Obj_Tank::ReleaseInteract()
 	return (controller != nullptr && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
-void Obj_Tank::StopTank()
+void Obj_Tank::Die()
 {
-	if (this->fire_dead==false)
+	//If life was over 0 die (otherwise no need to die again)
+	if (life > 0)
 	{
+		app->audio->PlayFx(die_sfx);
 		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 		dead_fire->tank = this;
-		this->fire_dead = true;
+		SetWeapon(WEAPON::BASIC, 1);
+		SetItem(ItemType::NO_TYPE);
 	}
-
-	this->SetWeapon(WEAPON::BASIC, 1);
-	this->SetItem(ItemType::NO_TYPE);
 }
 
 bool Obj_Tank::Alive() const

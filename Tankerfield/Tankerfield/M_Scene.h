@@ -1,8 +1,6 @@
 #ifndef __M_SCENE_H__
 #define __M_SCENE_H__
 
-#define MAX_SUBROUNDS 3
-
 #include <vector>
 
 #include "SDL/include/SDL_rect.h"
@@ -29,10 +27,9 @@ enum class GAME_STATE
 	EXIT_OF_WAVE,
 	OUT_WAVE,
 	GAME_OVER,
-	GAME_WON,
-	WAIT_PLAYER_INPUT_1,
+	WAITING_GAMEOVER,//Waiting for player input
 	LEADER_BOARD,
-	WAIT_PLAYER_INPUT_2
+	WAITING_LEADERBOARD//Waiting for player input
 };
 
 class PerfTimer;
@@ -86,7 +83,6 @@ public:
 	// Called before quitting
 	bool CleanUp() override;
 
-	bool draw_debug = false;
 	// ---------
 
 	void DebugPathfinding();
@@ -115,28 +111,13 @@ private:
 
 	/* Game variables*/
 	bool game_over = false;
-	bool win_game = false;
-
-	int rounds_to_win = 0;
-	float accumulated_time = 0.0f;
-
-	// Every two seconds we check
-	float time_round_check_frequency = 0.0f;
-	bool perform_round_check = false;
 
 	/* Wave System */
-	int time_between_rounds[MAX_SUBROUNDS] = { 0,0,0 };
 
 	uint Tesla_trooper_units			= 0u;
 	uint Brute_units					= 0u;
 	uint Suicidal_units					= 0u;
 	uint RocketLauncher_units			= 0u;
-
-	float percentage_enemies_subround[MAX_SUBROUNDS] = { 0.f,0.f,0.f };
-
-	float wait_time[MAX_SUBROUNDS] = { 0.f,0.f,0.f };
-
-	uint subround = 0;
 
 
 	// Fx and Music

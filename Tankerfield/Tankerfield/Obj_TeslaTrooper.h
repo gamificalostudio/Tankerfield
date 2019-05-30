@@ -35,6 +35,8 @@ public:
 
 	bool Draw(float dt, Camera * camera) override;
 
+	void SetStats(int level) override;
+
 private:
 
 	inline void UpdateVelocity();
