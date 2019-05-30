@@ -368,7 +368,7 @@ inline void Obj_Enemy::GetTeleportPoint()
 	float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
 	SpawnPoint* nearest_spawners_points = nullptr;
 	float last_distance_to_spawnpoint = 0.f;
-	uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
+	uint number_of_enemies = app->scene->GetNumberOfEnemies();
 	float min_num_instant_teleport_enemies = 10;
 	if (number_of_enemies <= min_num_instant_teleport_enemies)
 	{

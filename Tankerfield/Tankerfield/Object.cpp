@@ -57,6 +57,12 @@ bool Object::Desactivate()
 	return true;
 }
 
+void Object::SetMapPos(fPoint map_pos)
+{
+	this->pos_map = map_pos;
+	this->pos_screen = app->map->MapToScreenF(pos_map);
+}
+
 void Object::SetDamage(float damage)
 {
 	if (coll != nullptr)

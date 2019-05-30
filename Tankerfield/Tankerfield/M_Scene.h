@@ -93,6 +93,11 @@ public:
 
 	void ReduceNumEnemies();
 
+	int GetNumberOfEnemies()
+	{
+		return number_of_enemies;
+	}
+
 private:
 	void CreateEnemyWave();
 
