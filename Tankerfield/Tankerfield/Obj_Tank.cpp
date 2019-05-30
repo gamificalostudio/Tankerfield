@@ -387,7 +387,7 @@ void Obj_Tank::Movement(float dt)
 	{
 		fPoint wf_offset = { 58.0f, 30.0f };
 		this->gui->electric_particle->SetState(ELEMENT_STATE::VISIBLE);
-		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 0.2f));
+		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 0.5f * dt));
 		
 		if (!started_ep_timer)
 		{
