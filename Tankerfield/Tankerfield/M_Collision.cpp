@@ -189,7 +189,7 @@ bool M_Collision::Update(float dt)
 
 	// Create Quadtree Collision =============================================
 
-	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns, app->map->data.rows), 15, nullptr);
+	quad_tree_collision = DBG_NEW QuadTree_Collision(fRect(0, 0, app->map->data.columns, app->map->data.rows), 8, nullptr);
 
 	for (std::list<Collider*>::iterator itr = colliders_list.begin(); itr != colliders_list.end(); ++itr)
 	{
