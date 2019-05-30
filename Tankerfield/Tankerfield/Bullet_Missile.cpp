@@ -10,7 +10,7 @@ Bullet_Missile::Bullet_Missile(fPoint pos) : Obj_Bullet(pos)
 {
 }
 
-void Bullet_Missile::OnTriggerEnter(Collider * collider_1)
+void Bullet_Missile::OnTriggerEnter(Collider * collider_1, float dt)
 {
 	if (player != nullptr)
 	{

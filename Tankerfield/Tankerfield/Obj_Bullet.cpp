@@ -49,7 +49,7 @@ bool Obj_Bullet::Update(float dt)
 	return true;
 }
 
-void Obj_Bullet::OnTriggerEnter(Collider * collider_1)
+void Obj_Bullet::OnTriggerEnter(Collider * collider_1, float dt)
 {
 	to_remove = true;
 }

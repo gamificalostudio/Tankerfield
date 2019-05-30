@@ -633,7 +633,7 @@ inline void Obj_Enemy::Stunned()
 }
 
 
-void Obj_Enemy::OnTriggerEnter(Collider * collider)
+void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 {
 	if (state != ENEMY_STATE::BURN)
 	{
@@ -675,7 +675,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 		{
-			ReduceLife(collider);
+			ReduceLife(collider, dt);
 		}
 		else if (collider->GetTag() == TAG::BULLET_OIL)
 		{
@@ -710,14 +710,14 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			}
 			else
 			{
-				ReduceLife(collider);
+				ReduceLife(collider, dt);
 			}
 		}
 	}
 	
 }
 
-void Obj_Enemy::OnTrigger(Collider * collider)
+void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 {
 	if (state != ENEMY_STATE::BURN)
 	{
@@ -789,7 +789,7 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 			}
 			else
 			{
-				ReduceLife(collider);
+				ReduceLife(collider, dt);
 			}
 		}
 	}
@@ -835,9 +835,16 @@ void Obj_Enemy::Oiled()
 		}
 }
 
-inline void Obj_Enemy::ReduceLife(Collider * collider)
+inline void Obj_Enemy::ReduceLife(Collider * collider, float dt)
 {
-	life -= collider->damage;
+	if (collider->GetTag() != TAG::FLAMETHROWER)
+	{
+		life -= collider->damage;
+	}
+	else
+	{
+		life -= collider->damage * dt;
+	}
 
 	damaged_sprite_timer.Start();
 	last_texture = curr_tex;

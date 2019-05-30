@@ -30,7 +30,7 @@ bool Healing_Bullet::Start()
 		return true;
 }
 
-void Healing_Bullet::OnTriggerEnter(Collider * collider)
+void Healing_Bullet::OnTriggerEnter(Collider * collider, float dt)
 {
 	if (collider->GetObj() != player)
 	{

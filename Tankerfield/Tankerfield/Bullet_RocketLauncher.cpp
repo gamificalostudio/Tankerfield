@@ -16,11 +16,7 @@ Bullet_RocketLauncher::~Bullet_RocketLauncher()
 {
 }
 
-/*void Laser_Bullet::OnTrigger(Collider * collider_1)
-{
-	app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
-	to_remove = true;
-}*/
+
 
 bool Bullet_RocketLauncher::Start()
 {

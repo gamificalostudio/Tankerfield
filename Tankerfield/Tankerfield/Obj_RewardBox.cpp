@@ -56,12 +56,12 @@ bool Obj_RewardBox::Update(float dt)
 	return true;
 }
 
-void Obj_RewardBox::OnTriggerEnter(Collider * collider)
+void Obj_RewardBox::OnTriggerEnter(Collider * collider, float dt)
 {
 	TakeDamage(collider);
 }
 
-void Obj_RewardBox::OnTrigger(Collider * collider)
+void Obj_RewardBox::OnTrigger(Collider * collider, float dt)
 {
 	TakeDamage(collider);
 }

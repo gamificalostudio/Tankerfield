@@ -16,8 +16,7 @@ public:
 	~Laser_Bullet();
 
 public:
-	//Add functions that are overriden
-	//void OnTrigger(Collider* collider_1);
+
 
 public:
 	bool Start();
