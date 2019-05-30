@@ -211,6 +211,8 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HealingShot_Area.cpp">
+    </ClCompile>
     <ClCompile Include="Obj_ElectroShotAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -220,12 +222,8 @@
     <ClCompile Include="Bullet_RocketLauncher.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="M_Debug.cpp">
-    <ClCompile Include="HealingShot_Area.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
-    <ClCompile Include="Options_Menu.cpp">
-      <Filter>Modules</Filter>
+    <ClCompile Include="Quadtree_Collision.cpp">
+      <Filter>Tools\QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -463,6 +461,8 @@
     <ClInclude Include="Obj_Portal.h">
       <Filter>Objects\Player</Filter>
     </ClInclude>
+    <ClInclude Include="HealingShot_Area.h">
+    </ClInclude>
     <ClInclude Include="Obj_ElectroShotAnimation.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -472,12 +472,8 @@
     <ClInclude Include="Bullet_RocketLauncher.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="M_Debug.h">
-    <ClInclude Include="HealingShot_Area.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
-    <ClInclude Include="Options_Menu.h">
-      <Filter>Modules</Filter>
+    <ClInclude Include="Quadtree_Collision.h">
+      <Filter>Tools\QuadTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

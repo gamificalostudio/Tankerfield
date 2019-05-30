@@ -48,7 +48,7 @@ void Obj_Tank::InitWeapons()
 		electro_shot_collider = app->collision->AddCollider(pos_map, coll_size, coll_size, TAG::ELECTRO_SHOT, BODY_TYPE::DYNAMIC, 100, this);
 		electro_shot_collider->is_sensor = true;
 		//electro_shot_collider->Disactivate();
-		electro_shot_collider->ActiveOnTrigger(false);
+		electro_shot_collider->SetIsTrigger(false);
 
 		electric_shot_colliders_vector.push_back(electro_shot_collider);
 	}
@@ -64,7 +64,7 @@ void Obj_Tank::InitWeapons()
 		electro_shot_collider_charged = app->collision->AddCollider(pos_map, coll_size, coll_size, TAG::ELECTRO_SHOT, BODY_TYPE::DYNAMIC, 100, this);
 		electro_shot_collider_charged->is_sensor = true;
 		//electro_shot_collider_charged->Disactivate();
-		electro_shot_collider_charged->ActiveOnTrigger(false);
+		electro_shot_collider_charged->SetIsTrigger(false);
 
 		electric_shot_colliders_charged_vector.push_back(electro_shot_collider_charged);
 	}
@@ -89,18 +89,18 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 	if (weapon_info.weapon == WEAPON::ELECTRO_SHOT)
 	{
 		//with the animation get frame?? only 1 frame
-		if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_vector.begin())->GetIsActivated())
+		if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_vector.begin())->GetIsTrigger())
 		{
 			for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
 			{
-				(*iter)->ActiveOnTrigger(false);
+				(*iter)->SetIsTrigger(false);
 			}
 		}
-		else if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_charged_vector.begin())->GetIsActivated())
+		else if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_charged_vector.begin())->GetIsTrigger())
 		{
 			for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
 			{
-				(*iter)->ActiveOnTrigger(false);
+				(*iter)->SetIsTrigger(false);
 			}
 		}
 
@@ -436,9 +436,9 @@ void Obj_Tank::ShootFlameThrower()
 	flame->is_holding = true;
 	flame_release_time.Start();
 
-	if(coll_flame->GetIsActivated() == false)
+	if(coll_flame->GetIsTrigger() == false)
 	{
-		coll_flame->ActiveOnTrigger(true);
+		coll_flame->SetIsTrigger(true);
 	}
 
 	float coll_w_init;
@@ -460,7 +460,7 @@ void Obj_Tank::ShootFlameThrower()
 	coll_flame->SetObjOffset(offset + dir_distance);
 	coll_flame->SetPosToObj();
 
-	coll_flame->ActiveOnTrigger(true);
+	coll_flame->SetIsTrigger(true);
 }
 
 void Obj_Tank::ShootOil()
@@ -512,7 +512,7 @@ void Obj_Tank::ShootElectroShot()
 		(*iter)->SetObjOffset(offset + dir_distance);
 		(*iter)->SetPosToObj();
 
-		(*iter)->ActiveOnTrigger(true);
+		(*iter)->SetIsTrigger(true);
 	}
 	electro_shot_timer.Start();
 	is_electro_shot_charged = false;
@@ -545,7 +545,7 @@ void Obj_Tank::ShootElectroShotCharged()
 		(*iter)->SetObjOffset(offset + dir_distance);
 		(*iter)->SetPosToObj();
 
-		(*iter)->ActiveOnTrigger(true);
+		(*iter)->SetIsTrigger(true);
 	}
 	electro_shot_timer.Start();
 	is_electro_shot_charged = true;

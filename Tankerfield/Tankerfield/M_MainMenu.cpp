@@ -442,7 +442,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	switch (menu_state)
 	{
 	case MENU_STATE::INIT_MENU:
-
+		current_player = 0;
 		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		logo_image->SetState(ELEMENT_STATE::HIDDEN);
 		version_label->SetState(ELEMENT_STATE::HIDDEN);
