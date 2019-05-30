@@ -33,6 +33,11 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
+	//burning texture
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("enemies").child("tesla_trooper");
 	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
@@ -43,8 +48,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	oiled_tex	= app->tex->Load(tesla_trooper_node.child("tex_oiled_path").child_value());
 	
-	curr_tex = tex;
-	last_texture = tex;
+	
 
 
 	//ANIMATIONS =============================================
@@ -52,12 +56,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
-	curr_anim = &idle;
 
-
-
-	//curr_anim = &idle;
-	curr_anim = &walk;
 	spawn_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("spawn"));
 
 
@@ -67,8 +66,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
 	app->audio->PlayFx(sfx_spawn);
-	draw = false;
-	state = ENEMY_STATE::SPAWN; //enemy
+
 
 	original_speed = speed = app->objectmanager->tesla_trooper_info.speed;
 
@@ -89,7 +87,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	attack_range = app->objectmanager->tesla_trooper_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->tesla_trooper_info.attack_frequency;
-	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
+	
 
 	//Timers ----------------
 	check_path_time = 2.f; // 10s
@@ -98,7 +96,20 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 	scale = 0.75f;
 
+	
+}
+
+bool Obj_TeslaTrooper::Start()
+{
+	curr_tex = tex;
+	last_texture = tex;
+	curr_anim = &walk;
+	draw = false;
+	state = ENEMY_STATE::SPAWN; //enemy
+	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
 	app->audio->PlayFx(sfx_spawn);
+
+	return true;
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()

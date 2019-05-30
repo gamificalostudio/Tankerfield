@@ -96,6 +96,8 @@ public:
 
 	Object* GetObjectFromPool(ObjectType type, fPoint map_pos);
 
+	void ReturnToPool(Object* object);
+
 	static bool SortByYPos(Object * obj1, Object * obj2);
 
 	void DeleteObjects();
@@ -140,7 +142,7 @@ public:
 private:
 	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
-
+	std::list<Object*> enemies;
 	std::map<ObjectType, std::list<Object*>> pool_of_objects;
 };
 

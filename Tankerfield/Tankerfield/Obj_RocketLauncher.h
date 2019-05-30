@@ -32,6 +32,8 @@ public:
 	void Attack() override;
 	void Move(const float & dt) override;
 
+	bool Start() override;
+
 private:
 	void ShootMissile();
 

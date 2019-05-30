@@ -27,6 +27,7 @@ class Obj_Brute : public Obj_Enemy
 {
 public:
 	Obj_Brute(fPoint pos);
+	bool Start();
 	~Obj_Brute();
 	void ChangeTexture();
 

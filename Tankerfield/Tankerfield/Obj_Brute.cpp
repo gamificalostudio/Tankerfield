@@ -33,16 +33,21 @@
 
 Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("enemies").child("brute");
 
+	//burning texture
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+
+
+	//loading texture
 	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
 	oiled_tex = app->tex->Load("textures/Objects/enemies/brute-sheet_oiled.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
-	curr_tex = spawn_tex;
-	last_texture = tex;
 
+	//loading animation
 	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
 	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
 	idle.frames = app->anim_bank->LoadFrames(animation_node.child("idle"));
@@ -50,17 +55,15 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	attack.frames = app->anim_bank->LoadFrames(animation_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(animation_node.child("death"));
 	spawn.frames = app->anim_bank->LoadFrames(animation_node.child("spawn"));
-	curr_anim = &spawn;
-
-
+	
+	//Loading sfx
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
-	state = ENEMY_STATE::SPAWN; 
 	detection_range = app->objectmanager->brute_info.detection_range;
-	original_speed= speed = app->objectmanager->brute_info.speed;
+	original_speed = speed = app->objectmanager->brute_info.speed;
 	range_pos.radius = 1.f;
 
 	spawn_draw_offset = { 260, 274 };
@@ -68,21 +71,34 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	electrocuted_draw_offset = { 60,28 };
 	draw_offset = spawn_draw_offset;
 
-	angle = 180;//REMOVE
-  
 	attack_damage = app->objectmanager->brute_info.attack_damage;
 	attack_range = app->objectmanager->brute_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->brute_info.attack_frequency;
-  
+
 	coll_w = 0.5f;
 	coll_h = 0.5f;
-  
+
 	damaged_sprite_time = 75;
-	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round - 1);
 
 	scale = 2.f;
+
+}
+
+bool Obj_Brute::Start()
+{
+	curr_tex = spawn_tex;
+	last_texture = tex;
+
+	curr_anim = &spawn;
+
+	state = ENEMY_STATE::SPAWN;
+	
+	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round - 1);
+
 	app->audio->PlayFx(sfx_spawn);
+
+	return true;
 }
 
 Obj_Brute::~Obj_Brute()

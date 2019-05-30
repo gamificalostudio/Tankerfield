@@ -33,18 +33,24 @@
 
 Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 {
+	//burning texture
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+
+
 	pugi::xml_node suicidal_node = app->config.child("object").child("enemies").child("suicidal");
 	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("suicidal").child("animation");
 
 	tex = app->tex->Load(suicidal_node.child("tex_path").child_value());
-	curr_tex = tex;
+
 
 	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 
-	state = ENEMY_STATE::SPAWN;
+	
 	original_speed = speed = app->objectmanager->suicidal_info.speed;
 	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width) * 1.33f;
 
@@ -61,13 +67,21 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	attack_range = app->objectmanager->suicidal_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->suicidal_info.attack_frequency;
-	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
+	
 
 	check_path_time = 2.0f;
 
-	curr_anim = &idle;
-
 	scale = 0.75f;
+}
+
+bool Obj_Suicidal::Start()
+{
+	curr_tex = tex;
+	state = ENEMY_STATE::SPAWN;
+	curr_anim = &idle;
+	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
+
+	return true;
 }
 
 Obj_Suicidal::~Obj_Suicidal()

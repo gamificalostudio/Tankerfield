@@ -19,6 +19,9 @@ class Obj_TeslaTrooper : public Obj_Enemy
 {
 public:
 	Obj_TeslaTrooper(fPoint pos);
+
+	bool Start() override;
+
 	~Obj_TeslaTrooper();
 
 	inline void TeleportOut(float & dt) override;

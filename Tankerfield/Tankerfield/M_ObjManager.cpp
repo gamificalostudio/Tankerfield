@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <map>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml/src/pugiconfig.hpp"
@@ -235,14 +236,18 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		case ObjectType::TESLA_TROOPER:
 			ret = DBG_NEW Obj_TeslaTrooper(pos);
 			ret->type = ObjectType::TESLA_TROOPER;
+			enemies.push_back(ret);
 			break;
 		case ObjectType::SUICIDAL:
 			ret = DBG_NEW Obj_Suicidal(pos);
 			ret->type = ObjectType::SUICIDAL;
+			enemies.push_back(ret);
 			break;
 		case ObjectType::ROCKETLAUNCHER:
 			ret = DBG_NEW Obj_RocketLauncher(pos);
 			ret->type = ObjectType::ROCKETLAUNCHER;
+			enemies.push_back(ret);
+
 			break;
 		case ObjectType::TANK:
 			ret = DBG_NEW Obj_Tank(pos);
@@ -377,6 +382,7 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 Object* M_ObjManager::GetObjectFromPool(ObjectType type, fPoint map_pos)
 {
 	Object* ret = nullptr;
+	
 	std::map<ObjectType, std::list<Object*>>::iterator iterator = pool_of_objects.find(type);
 	if (iterator != pool_of_objects.end())
 	{
@@ -387,10 +393,12 @@ Object* M_ObjManager::GetObjectFromPool(ObjectType type, fPoint map_pos)
 			list->pop_front();
 		}
 	}
-	else
-	{
 
+	if (ret == nullptr)
+	{
+		ret = CreateObject(type, map_pos);
 	}
+
 	if (ret != nullptr)
 	{
 		ret->SetMapPos(map_pos);
@@ -398,6 +406,21 @@ Object* M_ObjManager::GetObjectFromPool(ObjectType type, fPoint map_pos)
 		return ret;
 	}
 	return nullptr;
+}
+
+void M_ObjManager::ReturnToPool(Object * object)
+{
+	std::map<ObjectType, std::list<Object*>>::iterator iter = pool_of_objects.find(object->type);
+	if (iter != pool_of_objects.end())
+	{
+		(*iter).second.push_back(object);
+	}
+	else
+	{
+		std::list<Object*> list_obj;
+		list_obj.push_back(object);
+		pool_of_objects[object->type] = list_obj;
+	}
 }
 
 
@@ -513,9 +536,9 @@ inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & itera
 	(*iterator)->active = false;
 	if ((*iterator)->type >= ObjectType::TESLA_TROOPER && (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
 	{
-		
 		enemies.remove((*iterator));
 	}
+	ReturnToPool((*iterator));
 }
 
 inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, const float& dt)

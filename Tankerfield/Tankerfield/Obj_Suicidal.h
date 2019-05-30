@@ -16,6 +16,7 @@ class Obj_Suicidal : public Obj_Enemy
 {
 public:
 	Obj_Suicidal(fPoint pos);
+	bool Start() override;
 	~Obj_Suicidal();
 
 	void Spawn(const float& dt) override;
