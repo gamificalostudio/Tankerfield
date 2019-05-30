@@ -130,8 +130,20 @@ private:
 
 	// Credits Menu
 
+	UI_InteractiveGroup * credits_navigation = nullptr;
 	UI_Image * panel_background = nullptr;
 	UI_Label * credits_title = nullptr;
+
+	UI_Button* jaume = nullptr;
+	UI_Button* aurelio = nullptr;
+	UI_Button* víctor = nullptr;
+	UI_Button* yessica = nullptr;
+	UI_Button* aitor = nullptr;
+	UI_Button* sergio = nullptr;
+	UI_Button* gerard = nullptr;
+	UI_Button* jorge = nullptr;
+
+	UI_Button* return_credits = nullptr;
 
 	// Sfx --------------------------------------------
 

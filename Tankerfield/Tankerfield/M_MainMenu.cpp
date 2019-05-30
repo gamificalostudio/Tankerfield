@@ -152,6 +152,24 @@ bool M_MainMenu::Start()
 	credits_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	credits_title->SetParent(panel_background);
 
+	jaume = app->ui->CreateButton({screen.w*0.25f,screen.h*0.2f}, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	jaume->SetLabel({ 0.f,2.f }, UI_LabelDef("Jaume", app->font->button_font_22, { 50, 50, 50, 255 }));
+	jaume->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	
+
+	return_credits = app->ui->CreateButton({screen.w*0.5f,900},UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	return_credits->SetLabel({ 0.f,2.f }, UI_LabelDef("Return", app->font->button_font_22, { 50, 50, 50, 255 }));
+	return_credits->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+
+	UI_InteractiveGroupDef credits_navigation_def;
+	credits_navigation_def.columns = 3;
+	credits_navigation_def.rows = 4;
+
+	credits_navigation = app->ui->CreateIntearctiveGroup(screen_center,credits_navigation_def,this);
+	credits_navigation->SetElement(jaume, iPoint(0,0));
+	credits_navigation->SetElement(return_credits, iPoint(0, 1));
+
 	// Set values ==========================================
 	app->ui->HideAllUI();
 	SetPlayerObjectsState(false);
@@ -267,7 +285,7 @@ void M_MainMenu::InputNavigate()
 		}
 
 	}
-	else if (menu_state == MENU_STATE::SELECTION)
+	else if (menu_state == MENU_STATE::SELECTION||menu_state==MENU_STATE::CREDITS)
 	{
 		if (players[current_player].controller != nullptr)
 		{
@@ -366,6 +384,21 @@ void M_MainMenu::InputSelect()
 		else if (menu_state == MENU_STATE::OPTIONS && app->ui->GetFocusedElement() != nullptr)
 		{
 			options->InputSelect();
+		}
+		else if (menu_state == MENU_STATE::CREDITS && app->ui->GetFocusedElement() != nullptr)
+		{
+			UI_Element*  menu_element = credits_navigation->GetFocusedElement();
+
+			if (menu_element == jaume)
+			{
+				ShellExecute(NULL, "open", "https://www.linkedin.com/in/jaume-montagut-guix-7389a4166/", NULL, NULL, SW_SHOWNORMAL);
+			}
+
+			else if (menu_element == return_credits)
+			{
+				SetState(MENU_STATE::INIT_MENU);
+				app->audio->PlayFx(button_select_sfx);
+			}
 		}
 	}
 
@@ -475,6 +508,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	case MENU_STATE::CREDITS:
 		current_player = 0;
 		panel_background->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		credits_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		break;
 	case MENU_STATE::OPTIONS:
 
@@ -514,6 +548,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 	case MENU_STATE::CREDITS:
 		panel_background->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		credits_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		break;
 	case MENU_STATE::OPTIONS:
 
