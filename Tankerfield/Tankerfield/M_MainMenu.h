@@ -60,9 +60,9 @@ public:
 
 	bool OnHoverEnter(UI_Element * element);
 
-private:
-
 	void SetState(MENU_STATE new_state);
+
+private:
 
 	bool SetPlayerProperties();
 
@@ -107,6 +107,7 @@ private:
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
 	UI_Button		* multi_player_button = nullptr;
+	UI_Button		* credits_menu_button = nullptr;
 	UI_Button		* leaderboard_menu_button = nullptr;
 	UI_Button		* options_menu_button = nullptr;
 	UI_Button		* exit_button = nullptr;
@@ -126,6 +127,11 @@ private:
 	float color_percent = 0.f;
 	SDL_Color colors[DEFAULT_PANEL_COLUMNS][DEFAULT_PANEL_ROWS];
 	UI_InteractiveGroup * selection_panel = nullptr;
+
+	// Credits Menu
+
+	UI_Image * panel_background = nullptr;
+	UI_Label * credits_title = nullptr;
 
 	// Sfx --------------------------------------------
 
