@@ -132,8 +132,7 @@ Options_Menu::Options_Menu()
 	individual_settings = app->ui->CreateButton({ screen.w * 0.5f,735 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	individual_settings->SetLabel({ 0.f,2.f }, UI_LabelDef("Settings", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	return_button = app->ui->CreateButton({ screen.w * 0.5f-150,850 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	return_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Return", app->font->button_font_22, { 50, 50, 50, 255 }));
+	return_button = app->ui->CreateButton({ screen.w * 0.38f,850 }, UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 
 		// Navigation Matrix
 

@@ -145,101 +145,98 @@ bool M_MainMenu::Start()
 
 	// Credits Menu
 
-	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 35,1225,1650,880 }), this);
+	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 10,1324,1650,880 }), this);
 	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	credits_title = app->ui->CreateLabel({ screen.w *0.5f, 150 }, UI_LabelDef("Credits", app->font->label_font_38, { 255,255,255,180 }));
+	credits_title = app->ui->CreateLabel({ screen.w *0.5f, 165 }, UI_LabelDef("TANKERFIELD", app->font->label_font_38, { 255,255,255,180 }));
 	credits_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	credits_title->SetParent(panel_background);
 
 		// Labels
 
-	jaume_label = app->ui->CreateLabel({ screen.w *0.333f, 425 }, UI_LabelDef("Jaume Montagut - Leader", app->font->label_font_38, { 255,255,255,180 }));
+	jaume_label = app->ui->CreateLabel({ screen.w *0.333f, 340 }, UI_LabelDef("Jaume Montagut - Leader", app->font->label_font_38, { 255,255,255,180 }));
 	jaume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	jaume_label->SetParent(panel_background);
 
-	aurelio_label = app->ui->CreateLabel({ screen.w *0.666f,  425}, UI_LabelDef("Aurelio Gamarra - UI", app->font->label_font_38, { 255,255,255,180 }));
+	aurelio_label = app->ui->CreateLabel({ screen.w *0.666f,  340}, UI_LabelDef("Aurelio Gamarra - UI", app->font->label_font_38, { 255,255,255,180 }));
 	aurelio_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	aurelio_label->SetParent(panel_background);
 
-	víctor_label = app->ui->CreateLabel({ screen.w *0.333f, 550 }, UI_LabelDef("Víctor Segura - Designer", app->font->label_font_38, { 255,255,255,180 }));
+	víctor_label = app->ui->CreateLabel({ screen.w *0.333f, 495 }, UI_LabelDef("Víctor Segura - Designer", app->font->label_font_38, { 255,255,255,180 }));
 	víctor_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	víctor_label->SetParent(panel_background);
 
-	jorge_label = app->ui->CreateLabel({ screen.w *0.666f, 550 }, UI_LabelDef("Jorge Gemas - Management", app->font->label_font_38, { 255,255,255,180 }));
+	jorge_label = app->ui->CreateLabel({ screen.w *0.666f, 495 }, UI_LabelDef("Jorge Gemas - Management", app->font->label_font_38, { 255,255,255,180 }));
 	jorge_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	jorge_label->SetParent(panel_background);
 
-	yessica_label = app->ui->CreateLabel({ screen.w *0.333f, 675 }, UI_LabelDef("Yessica Servin - Lead Programmer 1", app->font->label_font_38, { 255,255,255,180 }));
+	yessica_label = app->ui->CreateLabel({ screen.w *0.333f, 650 }, UI_LabelDef("Yessica Servin - Lead Programmer 1", app->font->label_font_38, { 255,255,255,180 }));
 	yessica_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	yessica_label->SetParent(panel_background);
 
-	gerard_label = app->ui->CreateLabel({ screen.w *0.666f, 675 }, UI_LabelDef("Gerard Marcos - Lead Programmer 2", app->font->label_font_38, { 255,255,255,180 }));
+	gerard_label = app->ui->CreateLabel({ screen.w *0.666f, 650 }, UI_LabelDef("Gerard Marcos - Lead Programmer 2", app->font->label_font_38, { 255,255,255,180 }));
 	gerard_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	gerard_label->SetParent(panel_background);
 
-	sergio_label = app->ui->CreateLabel({ screen.w *0.333f, 800 }, UI_LabelDef("Sergio Gómez - Art & Audio", app->font->label_font_38, { 255,255,255,180 }));
+	sergio_label = app->ui->CreateLabel({ screen.w *0.333f, 805 }, UI_LabelDef("Sergio Gómez - Art & Audio", app->font->label_font_38, { 255,255,255,180 }));
 	sergio_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	sergio_label->SetParent(panel_background);
 
-	aitor_label = app->ui->CreateLabel({ screen.w *0.666f, 800 }, UI_LabelDef("Aitor Vélez - QA", app->font->label_font_38, { 255,255,255,180 }));
+	aitor_label = app->ui->CreateLabel({ screen.w *0.666f, 805 }, UI_LabelDef("Aitor Vélez - QA", app->font->label_font_38, { 255,255,255,180 }));
 	aitor_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	aitor_label->SetParent(panel_background);
 			
 		// Links Buttons
 
-	website = app->ui->CreateButton({ screen.w*0.333f,250 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	website->SetLabel({ 0.f,2.f }, UI_LabelDef("Website", app->font->button_font_22, { 50, 50, 50, 255 }));
+	website = app->ui->CreateButton({ screen.w*0.45f,250 }, UI_ButtonDef({ 450,1185,99,97 }, { 560, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	website->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	github = app->ui->CreateButton({ screen.w*0.666f,250 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	github->SetLabel({ 0.f,2.f }, UI_LabelDef("Github", app->font->button_font_22, { 50, 50, 50, 255 }));
+	github = app->ui->CreateButton({ screen.w*0.55f,250 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	jaume_github = app->ui->CreateButton({ screen.w * 0.3f, 475 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	jaume_github = app->ui->CreateButton({ screen.w * 0.28888f, 415 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	jaume_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	jaume_linkedin = app->ui->CreateButton({ screen.w * 0.35f , 475 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	jaume_linkedin = app->ui->CreateButton({ screen.w * 0.38888f , 415 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	jaume_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	aurelio_github = app->ui->CreateButton({ screen.w * 0.65f, 475 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	aurelio_github = app->ui->CreateButton({ screen.w * 0.611111f, 415 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	aurelio_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	aurelio_linkedin = app->ui->CreateButton({ screen.w * 0.7f , 475 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	aurelio_linkedin = app->ui->CreateButton({ screen.w * 0.711111f , 415 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	aurelio_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	víctor_github = app->ui->CreateButton({ screen.w * 0.3f, 600 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	víctor_github = app->ui->CreateButton({ screen.w * 0.2888888f, 570 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	víctor_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	víctor_linkedin = app->ui->CreateButton({ screen.w * 0.35f , 600 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	víctor_linkedin = app->ui->CreateButton({ screen.w * 0.388888f , 570 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	víctor_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	jorge_github = app->ui->CreateButton({ screen.w * 0.65f, 600 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	jorge_github = app->ui->CreateButton({ screen.w * 0.611111111f, 570 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	jorge_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	jorge_linkedin = app->ui->CreateButton({ screen.w * 0.7f , 600 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	jorge_linkedin = app->ui->CreateButton({ screen.w * 0.7111111f , 570 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	jorge_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	yessica_github = app->ui->CreateButton({ screen.w * 0.3f, 725 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	yessica_github = app->ui->CreateButton({ screen.w * 0.2888888f, 725 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	yessica_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	yessica_linkedin = app->ui->CreateButton({ screen.w * 0.35f , 725 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	yessica_linkedin = app->ui->CreateButton({ screen.w * 0.3888888f , 725 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	yessica_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	gerard_github = app->ui->CreateButton({ screen.w * 0.65f, 725 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	gerard_github = app->ui->CreateButton({ screen.w * 0.6111111f, 725 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	gerard_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	gerard_linkedin = app->ui->CreateButton({ screen.w * 0.7f , 725 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	gerard_linkedin = app->ui->CreateButton({ screen.w * 0.7111111f , 725 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	gerard_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sergio_github = app->ui->CreateButton({ screen.w * 0.3f, 850 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	sergio_github = app->ui->CreateButton({ screen.w * 0.28888888f, 880 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	sergio_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	sergio_linkedin = app->ui->CreateButton({ screen.w * 0.35f , 850 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	sergio_linkedin = app->ui->CreateButton({ screen.w * 0.38888888f , 880 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	sergio_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	aitor_github = app->ui->CreateButton({ screen.w * 0.65f, 850 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	aitor_github = app->ui->CreateButton({ screen.w * 0.6111111f, 880 }, UI_ButtonDef({ 10,1185,99,97 }, { 120, 1185,98,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	aitor_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	aitor_linkedin = app->ui->CreateButton({ screen.w * 0.7f , 850 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	aitor_linkedin = app->ui->CreateButton({ screen.w * 0.71111111f , 880 }, UI_ButtonDef({ 230,1185,99,97 }, { 340, 1185,99,97 }, { 667 ,1185,137,130 }, { 808 ,1185,137,130 }), this);
 	aitor_linkedin->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		// Else
 
-	return_credits = app->ui->CreateButton({screen.w*0.16f,900},UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	return_credits->SetLabel({ 0.f,2.f }, UI_LabelDef("Return", app->font->button_font_22, { 50, 50, 50, 255 }));
+	return_credits = app->ui->CreateButton({screen.w*0.13f,905},UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 	return_credits->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	UI_InteractiveGroupDef credits_navigation_def;
@@ -250,7 +247,7 @@ bool M_MainMenu::Start()
 	credits_navigation->SetElement(website, iPoint(0, 0));
 	credits_navigation->SetElement(website, iPoint(1, 0));
 	credits_navigation->SetElement(github, iPoint(2, 0));
-	credits_navigation->SetElement(website, iPoint(3, 0));
+	credits_navigation->SetElement(github, iPoint(3, 0));
 	credits_navigation->SetElement(jaume_github, iPoint(0, 1));
 	credits_navigation->SetElement(jaume_linkedin, iPoint(1, 1));
 	credits_navigation->SetElement(aurelio_github, iPoint(2, 1));
