@@ -188,6 +188,14 @@ bool M_MainMenu::Start()
 			
 		// Links Buttons
 
+	website = app->ui->CreateButton({ screen.w*0.333f,250 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	website->SetLabel({ 0.f,2.f }, UI_LabelDef("Website", app->font->button_font_22, { 50, 50, 50, 255 }));
+	website->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+	github = app->ui->CreateButton({ screen.w*0.666f,250 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	github->SetLabel({ 0.f,2.f }, UI_LabelDef("Github", app->font->button_font_22, { 50, 50, 50, 255 }));
+	github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
 	jaume_github = app->ui->CreateButton({ screen.w * 0.3f, 475 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	jaume_github->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	jaume_linkedin = app->ui->CreateButton({ screen.w * 0.35f , 475 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
@@ -236,29 +244,33 @@ bool M_MainMenu::Start()
 
 	UI_InteractiveGroupDef credits_navigation_def;
 	credits_navigation_def.columns = 4;
-	credits_navigation_def.rows = 5;
+	credits_navigation_def.rows = 6;
 
 	credits_navigation = app->ui->CreateIntearctiveGroup(screen_center,credits_navigation_def,this);
-	credits_navigation->SetElement(jaume_github, iPoint(0, 0));
-	credits_navigation->SetElement(jaume_linkedin, iPoint(1, 0));
-	credits_navigation->SetElement(aurelio_github, iPoint(2, 0));
-	credits_navigation->SetElement(aurelio_linkedin, iPoint(3, 0));
-	credits_navigation->SetElement(víctor_github, iPoint(0, 1));
-	credits_navigation->SetElement(víctor_linkedin, iPoint(1, 1));
-	credits_navigation->SetElement(jorge_github, iPoint(2, 1));
-	credits_navigation->SetElement(jorge_linkedin, iPoint(3, 1));
-	credits_navigation->SetElement(yessica_github, iPoint(0, 2));
-	credits_navigation->SetElement(yessica_linkedin, iPoint(1, 2));
-	credits_navigation->SetElement(gerard_github, iPoint(2, 2));
-	credits_navigation->SetElement(gerard_linkedin, iPoint(3, 2));
-	credits_navigation->SetElement(sergio_github, iPoint(0, 3));
-	credits_navigation->SetElement(sergio_linkedin, iPoint(1, 3));
-	credits_navigation->SetElement(aitor_github, iPoint(2, 3));
-	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 3));
-	credits_navigation->SetElement(return_credits, iPoint(0, 4));
-	credits_navigation->SetElement(return_credits, iPoint(1, 4));
-	credits_navigation->SetElement(return_credits, iPoint(2, 4));
-	credits_navigation->SetElement(return_credits, iPoint(3, 4));
+	credits_navigation->SetElement(website, iPoint(0, 0));
+	credits_navigation->SetElement(website, iPoint(1, 0));
+	credits_navigation->SetElement(github, iPoint(2, 0));
+	credits_navigation->SetElement(website, iPoint(3, 0));
+	credits_navigation->SetElement(jaume_github, iPoint(0, 1));
+	credits_navigation->SetElement(jaume_linkedin, iPoint(1, 1));
+	credits_navigation->SetElement(aurelio_github, iPoint(2, 1));
+	credits_navigation->SetElement(aurelio_linkedin, iPoint(3, 1));
+	credits_navigation->SetElement(víctor_github, iPoint(0, 2));
+	credits_navigation->SetElement(víctor_linkedin, iPoint(1, 2));
+	credits_navigation->SetElement(jorge_github, iPoint(2, 2));
+	credits_navigation->SetElement(jorge_linkedin, iPoint(3, 2));
+	credits_navigation->SetElement(yessica_github, iPoint(0, 3));
+	credits_navigation->SetElement(yessica_linkedin, iPoint(1, 3));
+	credits_navigation->SetElement(gerard_github, iPoint(2, 3));
+	credits_navigation->SetElement(gerard_linkedin, iPoint(3, 3));
+	credits_navigation->SetElement(sergio_github, iPoint(0, 4));
+	credits_navigation->SetElement(sergio_linkedin, iPoint(1, 4));
+	credits_navigation->SetElement(aitor_github, iPoint(2, 4));
+	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 4));
+	credits_navigation->SetElement(return_credits, iPoint(0, 5));
+	credits_navigation->SetElement(return_credits, iPoint(1, 5));
+	credits_navigation->SetElement(return_credits, iPoint(2, 5));
+	credits_navigation->SetElement(return_credits, iPoint(3, 5));
 
 	// Set values ==========================================
 	app->ui->HideAllUI();
@@ -493,7 +505,17 @@ void M_MainMenu::InputSelect()
 		{
 			UI_Element*  menu_element = credits_navigation->GetFocusedElement();
 
-			if (menu_element == jaume_linkedin)
+			if (menu_element == github)
+			{
+				ShellExecute(NULL, "open", "https://github.com/gamificalostudio/Tankerfield", NULL, NULL, SW_SHOWNORMAL);
+			}
+
+			else if (menu_element == website)
+			{
+				ShellExecute(NULL, "open", "https://google.es", NULL, NULL, SW_SHOWNORMAL);
+			}
+
+			else if (menu_element == jaume_linkedin)
 			{
 				ShellExecute(NULL, "open", "https://www.linkedin.com/in/jaume-montagut-guix-7389a4166/", NULL, NULL, SW_SHOWNORMAL);
 			}
