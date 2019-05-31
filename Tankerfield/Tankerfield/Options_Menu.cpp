@@ -24,12 +24,9 @@ Options_Menu::Options_Menu()
 	button_error_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_error.wav", 35);
 	selection_finished_sfx = app->audio->LoadFx("audio/Fx/main_menu/selection_finished.wav", 40);
 
-
 	// Create UI Elements ====================================
-
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
 
 	// Controll helper ------------------------
 
