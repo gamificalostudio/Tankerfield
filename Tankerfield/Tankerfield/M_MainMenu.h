@@ -60,9 +60,9 @@ public:
 
 	bool OnHoverEnter(UI_Element * element);
 
-private:
-
 	void SetState(MENU_STATE new_state);
+
+private:
 
 	bool SetPlayerProperties();
 
@@ -107,6 +107,7 @@ private:
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
 	UI_Button		* multi_player_button = nullptr;
+	UI_Button		* credits_menu_button = nullptr;
 	UI_Button		* leaderboard_menu_button = nullptr;
 	UI_Button		* options_menu_button = nullptr;
 	UI_Button		* exit_button = nullptr;
@@ -126,6 +127,53 @@ private:
 	float color_percent = 0.f;
 	SDL_Color colors[DEFAULT_PANEL_COLUMNS][DEFAULT_PANEL_ROWS];
 	UI_InteractiveGroup * selection_panel = nullptr;
+
+	// Credits Menu
+
+	UI_InteractiveGroup * credits_navigation = nullptr;
+	UI_Image * panel_background = nullptr;
+	UI_Label * credits_title = nullptr;
+
+	UI_Button* website = nullptr;
+	UI_Button* github= nullptr;
+
+	UI_Label* jaume_label = nullptr;
+	UI_Label* aurelio_label = nullptr;
+	UI_Label* yessica_label = nullptr;
+	UI_Label* víctor_label = nullptr;
+	UI_Label* jorge_label = nullptr;
+	UI_Label* aitor_label = nullptr;
+	UI_Label* sergio_label = nullptr;
+	UI_Label* gerard_label = nullptr;
+
+	UI_Label* leader_label = nullptr;
+	UI_Label* designer_label = nullptr;
+	UI_Label* art_label = nullptr;
+	UI_Label* coder_label_yess = nullptr;
+	UI_Label* coder_label_g = nullptr;
+	UI_Label* ui_label = nullptr;
+	UI_Label* management_label = nullptr;
+	UI_Label* QA_label = nullptr;
+
+	UI_Button* jaume_github = nullptr;
+	UI_Button* aurelio_github = nullptr;
+	UI_Button* yessica_github = nullptr;
+	UI_Button* víctor_github = nullptr;
+	UI_Button* jorge_github = nullptr;
+	UI_Button* aitor_github = nullptr;
+	UI_Button* sergio_github = nullptr;
+	UI_Button* gerard_github = nullptr;
+
+	UI_Button* jaume_linkedin = nullptr;
+	UI_Button* aurelio_linkedin = nullptr;
+	UI_Button* yessica_linkedin = nullptr;
+	UI_Button* víctor_linkedin = nullptr;
+	UI_Button* jorge_linkedin = nullptr;
+	UI_Button* aitor_linkedin = nullptr;
+	UI_Button* sergio_linkedin = nullptr;
+	UI_Button* gerard_linkedin = nullptr;
+
+	UI_Button* return_credits = nullptr;
 
 	// Sfx --------------------------------------------
 

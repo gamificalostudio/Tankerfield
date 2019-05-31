@@ -78,6 +78,8 @@ private:
 
 	UI_Button* individual_settings = nullptr;
 
+	UI_Button* return_button = nullptr;
+
 	// Sfx --------------------------------------------
 
 	uint button_enter_sfx = 0u;
