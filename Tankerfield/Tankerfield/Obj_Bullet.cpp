@@ -44,11 +44,6 @@ bool Obj_Bullet::Update(float dt)
 	{
 		to_remove = true;
 
-		if (coll != nullptr)
-		{
-			coll->to_destroy = true;
-		}
-
 	}
 
 

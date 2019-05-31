@@ -182,7 +182,7 @@ bool M_Scene::PreUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
+		app->objectmanager->GetObjectFromPool(ObjectType::TESLA_TROOPER, (fPoint)mouse_pos);
 	}
 	if (app->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
@@ -545,9 +545,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
-
-			
+			app->objectmanager->GetObjectFromPool(ObjectType::TESLA_TROOPER, pos);
 		}
 	
 	}

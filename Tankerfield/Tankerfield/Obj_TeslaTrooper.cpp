@@ -108,7 +108,7 @@ bool Obj_TeslaTrooper::Start()
 	state = ENEMY_STATE::SPAWN; //enemy
 	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
 	app->audio->PlayFx(sfx_spawn);
-
+	coll->ActiveOnTrigger(true);
 	return true;
 }
 
@@ -309,3 +309,32 @@ inline void Obj_TeslaTrooper::UpdateVelocity()
 	}
 }
 
+
+void Obj_TeslaTrooper::Dead()
+{
+	if (curr_anim != &death)
+	{
+		// DROP A PICK UP ITEM 
+		app->pick_manager->PickUpFromEnemy(pos_map);
+		//curr_tex = tex;
+		curr_anim = &death;
+		app->audio->PlayFx(sfx_death);
+		if (coll != nullptr)
+		{
+			coll->ActiveOnTrigger(false);
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->Destroy();
+			life_collider = nullptr;
+		}
+	}
+	else
+	{
+		if (death.Finished())
+		{
+			this->to_desactivate = true;
+			death.Reset();
+		}
+	}
+}

@@ -58,6 +58,11 @@ Obj_Enemy::~Obj_Enemy()
 		life_collider->to_destroy = true;
 		life_collider = nullptr;
 	}
+	if (coll != nullptr)
+	{
+		coll->Destroy();
+		coll = nullptr;
+	}
 }
 
 bool Obj_Enemy::Update(float dt)
@@ -227,21 +232,19 @@ void Obj_Enemy::Dead()
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			coll->ActiveOnTrigger(false);
 		}
 		if (life_collider != nullptr)
 		{
-			life_collider->Destroy();
-			life_collider = nullptr;
+			life_collider->ActiveOnTrigger(false);
 		}
 	}
 	else
 	{
 		if (death.Finished())
 		{
-			to_remove = true;
-
+			return_to_pool = true;
+			death.Reset();
 		}
 	}
 }
@@ -260,16 +263,20 @@ void Obj_Enemy::ElectroDead()
 		draw_offset = electrocuted_draw_offset;
 		if (coll != nullptr)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			coll->ActiveOnTrigger(false);
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->ActiveOnTrigger(false);
 		}
 	}
 	else
 	{
 		if (electro_dead.Finished())
 		{
-			to_remove = true;
+			return_to_pool = true;
 			app->audio->PauseFx(channel_electrocuted);
+			electro_dead.Reset();
 
 		}
 	}

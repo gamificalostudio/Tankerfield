@@ -14,7 +14,7 @@
   </renderer>
 
   <window>
-    <resolution width="1920" height="1080" scale="1"/>
+    <resolution width="1920" height="1000" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -45,9 +45,9 @@
       </sounds>
   </scene>
   <map>
-    <folder>Maps/</folder>
+    <folder>Maps/test/</folder>
     <levels>
-      <level name="Map2.tmx"/>
+      <level name="test.tmx"/>
       <!--<level name="test.tmx"/>-->
     </levels>
   </map>
