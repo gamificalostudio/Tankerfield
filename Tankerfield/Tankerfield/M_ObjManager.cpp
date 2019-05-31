@@ -136,7 +136,7 @@ bool M_ObjManager::Update(float dt)
 	{
 		if ((*iterator) != nullptr)
 		{
-			if ((*iterator)->to_desactivate)
+			if ((*iterator)->return_to_pool)
 			{
 				DesactivateObject(iterator);
 			}
@@ -535,7 +535,7 @@ inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator& iterator)
 inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & iterator)
 {
 	(*iterator)->Desactivate();
-	(*iterator)->to_desactivate = false;
+	(*iterator)->return_to_pool = false;
 	(*iterator)->active = false;
 	if ((*iterator)->type >= ObjectType::TESLA_TROOPER && (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
 	{

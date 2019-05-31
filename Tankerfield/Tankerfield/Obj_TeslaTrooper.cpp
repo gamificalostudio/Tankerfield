@@ -310,31 +310,3 @@ inline void Obj_TeslaTrooper::UpdateVelocity()
 }
 
 
-void Obj_TeslaTrooper::Dead()
-{
-	if (curr_anim != &death)
-	{
-		// DROP A PICK UP ITEM 
-		app->pick_manager->PickUpFromEnemy(pos_map);
-		//curr_tex = tex;
-		curr_anim = &death;
-		app->audio->PlayFx(sfx_death);
-		if (coll != nullptr)
-		{
-			coll->ActiveOnTrigger(false);
-		}
-		if (life_collider != nullptr)
-		{
-			life_collider->Destroy();
-			life_collider = nullptr;
-		}
-	}
-	else
-	{
-		if (death.Finished())
-		{
-			this->to_desactivate = true;
-			death.Reset();
-		}
-	}
-}

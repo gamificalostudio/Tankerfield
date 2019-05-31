@@ -90,7 +90,7 @@ public:
 public:
 	bool			active = true;
 	bool			to_remove = false;						//Set it to true if you want the object to be removed
-	bool			to_desactivate = false;
+	bool			return_to_pool = false;
 	bool            is_isometric = true;
 
 	ObjectType		type = ObjectType::NO_TYPE;
