@@ -99,6 +99,8 @@ bool Obj_Brute::Start()
 	app->audio->PlayFx(sfx_spawn);
 	
 	ResetAllAnimations();
+	if (coll != nullptr)
+		coll->ActiveOnTrigger(true);
 
 	return true;
 }

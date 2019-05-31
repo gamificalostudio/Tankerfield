@@ -108,7 +108,8 @@ bool Obj_TeslaTrooper::Start()
 	state = ENEMY_STATE::SPAWN; //enemy
 	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
 	app->audio->PlayFx(sfx_spawn);
-	coll->ActiveOnTrigger(true);
+	if(coll!=nullptr)
+		coll->ActiveOnTrigger(true);
 	ResetAllAnimations();
 
 	return true;

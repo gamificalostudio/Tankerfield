@@ -121,7 +121,7 @@ bool M_ObjManager::PreUpdate()
 		}
 	
 	}
-	LOG("%i", objects.size());
+	//LOG("%i", objects.size());
 	
 
 

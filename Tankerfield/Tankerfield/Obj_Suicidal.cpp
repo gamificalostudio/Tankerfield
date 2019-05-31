@@ -80,7 +80,8 @@ bool Obj_Suicidal::Start()
 	curr_anim = &idle;
 	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
 	ResetAllAnimations();
-
+	if (coll != nullptr)
+		coll->ActiveOnTrigger(true);
 	return true;
 }
 
