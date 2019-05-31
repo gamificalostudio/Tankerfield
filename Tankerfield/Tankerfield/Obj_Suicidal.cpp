@@ -38,7 +38,6 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 
-
 	pugi::xml_node suicidal_node = app->config.child("object").child("enemies").child("suicidal");
 	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("suicidal").child("animation");
 
@@ -80,6 +79,7 @@ bool Obj_Suicidal::Start()
 	state = ENEMY_STATE::SPAWN;
 	curr_anim = &idle;
 	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
+	ResetAllAnimations();
 
 	return true;
 }

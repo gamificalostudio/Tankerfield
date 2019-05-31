@@ -83,7 +83,7 @@ bool Obj_RocketLauncher::Start()
 	state = ENEMY_STATE::IDLE;
 	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, app->scene->round - 1);
 	can_attack = false;
-
+	ResetAllAnimations();
 	return true;
 }
 

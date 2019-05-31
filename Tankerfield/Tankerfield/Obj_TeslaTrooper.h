@@ -42,8 +42,6 @@ private:
 
 	inline void UpdateVelocity();
 
-	void Dead();
-
 	Animation spawn_anim;
 	
 	SDL_Texture * explosion_apper_tex	= nullptr;

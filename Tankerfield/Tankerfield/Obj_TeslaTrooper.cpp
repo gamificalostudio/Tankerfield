@@ -109,6 +109,8 @@ bool Obj_TeslaTrooper::Start()
 	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
 	app->audio->PlayFx(sfx_spawn);
 	coll->ActiveOnTrigger(true);
+	ResetAllAnimations();
+
 	return true;
 }
 

@@ -97,6 +97,8 @@ bool Obj_Brute::Start()
 	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round - 1);
 
 	app->audio->PlayFx(sfx_spawn);
+	
+	ResetAllAnimations();
 
 	return true;
 }

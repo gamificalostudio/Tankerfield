@@ -556,7 +556,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+			app->objectmanager->GetObjectFromPool(ObjectType::BRUTE, pos);
 
 		}
 	}
@@ -567,7 +567,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
+			app->objectmanager->GetObjectFromPool(ObjectType::ROCKETLAUNCHER, pos);
 
 		}
 	}

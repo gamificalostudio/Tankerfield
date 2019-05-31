@@ -244,7 +244,6 @@ void Obj_Enemy::Dead()
 		if (death.Finished())
 		{
 			return_to_pool = true;
-			death.Reset();
 		}
 	}
 }
@@ -276,7 +275,6 @@ void Obj_Enemy::ElectroDead()
 		{
 			return_to_pool = true;
 			app->audio->PauseFx(channel_electrocuted);
-			electro_dead.Reset();
 
 		}
 	}
@@ -853,4 +851,17 @@ inline void Obj_Enemy::ReduceLife(Collider * collider)
 	{
 		app->audio->PlayFx(sfx_hit);
 	}
+}
+
+void Obj_Enemy::ResetAllAnimations()
+{
+	idle.Reset();
+	walk.Reset();
+	attack.Reset();
+	death.Reset();
+	burn.Reset();
+	dying_burn.Reset();
+	electro_dead.Reset();
+	portal_animation.Reset();
+	portal_close_anim.Reset();
 }

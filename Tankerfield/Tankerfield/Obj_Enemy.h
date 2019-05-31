@@ -84,6 +84,8 @@ protected:
 
 	inline void ReduceLife(Collider* collider);
 
+	void ResetAllAnimations();
+
 protected:
 
 	//VARIABLES ================================
