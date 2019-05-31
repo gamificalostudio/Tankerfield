@@ -146,6 +146,15 @@ private:
 	UI_Label* sergio_label = nullptr;
 	UI_Label* gerard_label = nullptr;
 
+	UI_Label* leader_label = nullptr;
+	UI_Label* designer_label = nullptr;
+	UI_Label* art_label = nullptr;
+	UI_Label* coder_label_yess = nullptr;
+	UI_Label* coder_label_g = nullptr;
+	UI_Label* ui_label = nullptr;
+	UI_Label* management_label = nullptr;
+	UI_Label* QA_label = nullptr;
+
 	UI_Button* jaume_github = nullptr;
 	UI_Button* aurelio_github = nullptr;
 	UI_Button* yessica_github = nullptr;
