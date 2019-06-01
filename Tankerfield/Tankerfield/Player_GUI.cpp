@@ -204,7 +204,7 @@ void Player_GUI::Update(float dt)
 	// Update charged shot value ======================================== ???
 	// Check if picked weapon and update the GUI if true
 	
-	for (std::list<UI_Image*>::const_iterator item = this->particles_list.begin(); item != this->particles_list.end();)
+	for (std::list<UI_Image*>::const_iterator item = this->particles_weapon_frame_list.begin(); item != this->particles_weapon_frame_list.end();)
 	{
 		fPoint w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
 
@@ -213,7 +213,24 @@ void Player_GUI::Update(float dt)
 		if ((iPoint)(*item)->position == (iPoint)w_pos - (iPoint)w_offset)
 		{
 			(*item)->Destroy();
-			item = particles_list.erase(item);
+			item = particles_weapon_frame_list.erase(item);
+		}
+		else
+		{
+			++item;
+		}
+	}
+
+	for (std::list<UI_Image*>::const_iterator item = this->particles_item_frame_list.begin(); item != this->particles_item_frame_list.end();)
+	{
+		fPoint i_offset = { 0.0f, 0.0f }; // TODO: Get Item rect to avoid these magic numbers
+
+		fPoint i_pos = GetItemFramePos();
+		(*item)->SetPos(lerp((*item)->position, i_pos - i_offset, 3.25f * dt));
+		if ((iPoint)(*item)->position == (iPoint)i_pos - (iPoint)i_offset)
+		{
+			(*item)->Destroy();
+			item = particles_item_frame_list.erase(item);
 		}
 		else
 		{
@@ -324,7 +341,7 @@ void Player_GUI::AddTextHelper(const std::string text)
 	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->font->font_open_sants_bold_12));
 }
 
-void Player_GUI::CreateParticle()
+void Player_GUI::CreateParticleToWeaponFrame()
 {
 	UI_ImageDef anim_image_def;
 	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
@@ -333,12 +350,29 @@ void Player_GUI::CreateParticle()
 	particle_image->SetState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	particle_image->alpha = 175.0f;
-	this->particles_list.push_back(particle_image);
+	this->particles_weapon_frame_list.push_back(particle_image);
+}
+
+void Player_GUI::CreateParticleToItemFrame()
+{
+	UI_ImageDef anim_image_def;
+	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
+
+	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
+	particle_image->SetState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	particle_image->alpha = 175.0f;
+	this->particles_item_frame_list.push_back(particle_image);
 }
 
 fPoint Player_GUI::GetWeaponFramePos() const
 {
 	return this->weapon_icon->position;
+}
+
+fPoint Player_GUI::GetItemFramePos() const
+{
+	return this->item_icon->position;
 }
 
 Player_GUI::~Player_GUI()

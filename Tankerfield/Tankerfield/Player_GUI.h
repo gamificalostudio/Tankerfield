@@ -51,9 +51,11 @@ public:
 
 	/* UI Elements getters */
 
-	void CreateParticle();
+	void CreateParticleToWeaponFrame();
+	void CreateParticleToItemFrame();
 
 	fPoint GetWeaponFramePos() const;
+	fPoint GetItemFramePos() const;
 
 	~Player_GUI();
 
@@ -68,7 +70,8 @@ public:
 
 	// HUD Particles ===================
 
-	std::list<UI_Image*> particles_list;
+	std::list<UI_Image*> particles_weapon_frame_list;
+	std::list<UI_Image*> particles_item_frame_list;
 
 private:
 

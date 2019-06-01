@@ -1199,11 +1199,12 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
 		SetItem(pick_up->type_of_item);
+		gui->CreateParticleToItemFrame();
 	}
 	else
 	{
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
-		gui->CreateParticle();
+		gui->CreateParticleToWeaponFrame();
 	}
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();
