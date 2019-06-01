@@ -240,6 +240,7 @@ bool M_Scene::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
 	{
 		app->objectmanager->delete_all_enemies = true;
+		number_of_enemies = 0;
 	}
 
 	return true;

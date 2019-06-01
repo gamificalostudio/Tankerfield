@@ -104,21 +104,35 @@ bool M_ObjManager::PreUpdate()
 	{
 		for (std::list<Object*>::iterator iterator = enemies.begin(); iterator != enemies.end(); ++iterator)
 		{
-			(*iterator)->to_remove = true;
+			(*iterator)->return_to_pool = true;
 		}
 		delete_all_enemies = false;
+		enemies.clear();
 	}
 
 	std::list<Object*>::iterator iterator;
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
+	for (iterator = objects.begin(); iterator != objects.end();)
 	{
 		if ((*iterator) != nullptr)
 		{
-			if ((*iterator)->active == true)
+			if ((*iterator)->return_to_pool)
+			{
+				DesactivateObject(iterator);
+			}
+			if ((*iterator)->to_remove)
+			{
+				RemoveObject(iterator);
+			}
+			else if ((*iterator)->active == true)
 			{
 				(*iterator)->PreUpdate();
+				++iterator;
 			}
+			else
+				++iterator;
 		}
+		else
+			++iterator;
 	
 	}
 	//LOG("%i", objects.size());
@@ -136,19 +150,12 @@ bool M_ObjManager::Update(float dt)
 	{
 		if ((*iterator) != nullptr)
 		{
-			if ((*iterator)->return_to_pool)
-			{
-				DesactivateObject(iterator);
-			}
-			if ((*iterator)->to_remove)
-			{
-				RemoveObject(iterator);
-			}
-			else if ((*iterator)->active == true)
+			
+			if ((*iterator)->active == true)
 			{
 				UpdateObject(iterator, dt);
 			}
-			else
+		
 				++iterator;
 		}
 		else
@@ -298,6 +305,7 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		case ObjectType::BRUTE:
 			ret = DBG_NEW Obj_Brute(pos);
 			ret->type = ObjectType::BRUTE;
+			enemies.push_back(ret);
 			break;
 		case ObjectType::EXPLOSION:
 			ret = DBG_NEW Obj_Explosion(pos);
@@ -398,7 +406,10 @@ Object* M_ObjManager::GetObjectFromPool(ObjectType type, fPoint map_pos)
 			list->pop_front();
 		}
 	}
-
+	if (ret != nullptr && type>=ObjectType::TESLA_TROOPER && type<= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.push_back(ret);
+	}
 	if (ret == nullptr)
 	{
 		ret = CreateObject(type, map_pos);
@@ -559,7 +570,6 @@ inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, 
 	{
 		(*iterator)->curr_anim->NextFrame(dt);
 	}
-	++iterator;
 }
 
 bool M_ObjManager::SortByYPos(Object * obj1, Object * obj2)
