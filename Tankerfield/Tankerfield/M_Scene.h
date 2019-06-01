@@ -1,10 +1,11 @@
 #ifndef __M_SCENE_H__
 #define __M_SCENE_H__
 
+#define NEW_ROUND_PARTICLE_NUM 50
+
 #include <vector>
 
 #include "SDL/include/SDL_rect.h"
-
 
 #include "Module.h"
 
@@ -17,7 +18,7 @@ class Object;
 class Player_GUI;
 class General_GUI;
 class UI_Label;
-
+class UI_Image;
 
 enum class GAME_STATE
 {
@@ -32,7 +33,14 @@ enum class GAME_STATE
 	WAITING_LEADERBOARD//Waiting for player input
 };
 
-class PerfTimer;
+struct NewRoundUIParticles
+{
+	UI_Image * ui_image	= nullptr;
+	fPoint direction	= { 0.f, 0.f };
+	float curr_scale	=  1.f;
+	uint curr_alpha		= 255;//TODO: Change to uint8
+	bool reached_target = false;
+};
 
 class M_Scene : public Module
 {
@@ -69,6 +77,8 @@ public:
 	// Called before the first frame
 	bool Start() override;
 
+	void CreateNewRoundParticles();
+
 	// Called before all Updates
 	bool PreUpdate() override;
 
@@ -90,6 +100,11 @@ public:
 	void ReduceNumEnemies();
 
 private:
+
+	//New round animation
+	void PlaceNewRoundUIParticles();
+	void UpdateNewRoundUIParticles(float dt);
+
 	void CreateEnemyWave();
 
 	void NewWave();
@@ -130,12 +145,17 @@ private:
 	int wind_sound_channel = -1;
 
 	const char* main_music;
-	
 
 private:
 	/* Reward Zones */
 	RewardZone* reward_zone_01 = nullptr;
 	RewardZone* reward_zone_02 = nullptr;
+
+	//New round animation
+	NewRoundUIParticles new_round_ui_particles[NEW_ROUND_PARTICLE_NUM];
+	float max_particle_scale = 0.f;
+	float particle_speed = 0.f;
+	float particle_speed_squared = 0.f;
 };
 
 #endif // __j1SCENE_H__

@@ -34,8 +34,6 @@ public:
 
 	void FadeGameOverScreen(bool fade_on, int round = -1);
 
-	void FadeWinScreen(bool fade_on);
-
 	void FadeLeaderBoardScreen(bool fade_on);
 
 	bool UpdateLeaderBoard( std::string path, int round);

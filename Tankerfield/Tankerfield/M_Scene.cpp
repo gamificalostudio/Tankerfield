@@ -44,6 +44,8 @@
 #include "Object.h"
 #include "Obj_RewardBox.h"
 
+#include "UI_Image.h"
+
 
 M_Scene::M_Scene() : Module()
 {
@@ -138,13 +140,64 @@ bool M_Scene::Start()
 	Suicidal_units = 0u;
 	RocketLauncher_units = 0u;
 
-	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
-
 	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
 	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
 	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
+	max_particle_scale = 3.f;
+	particle_speed = 60.f;
+	particle_speed_squared = particle_speed * particle_speed;
+	CreateNewRoundParticles();
+
 	return true;
+}
+
+void M_Scene::CreateNewRoundParticles()
+{
+	UI_ImageDef image_def(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]);
+	fPoint default_pos(0.f, 0.f);
+	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
+	{
+		new_round_ui_particles[i].ui_image = app->ui->CreateImage(default_pos, image_def);
+		new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+	}
+}
+
+void M_Scene::PlaceNewRoundUIParticles()
+{
+	fRect screen = app->win->GetWindowRect();
+	fPoint target_pos = { screen.w * 0.5f, screen.h * 0.5f };
+	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
+	{
+		fPoint position = (fPoint)iPoint(rand() % (int)screen.w, rand() % (int)screen.h);
+		new_round_ui_particles[i].ui_image->SetPos(position);
+		new_round_ui_particles[i].direction = position - target_pos;
+		new_round_ui_particles[i].direction.Normalize();
+		new_round_ui_particles[i].curr_scale = rand() % (int)max_particle_scale;
+		new_round_ui_particles[i].reached_target = false;
+	}
+}
+
+void M_Scene::UpdateNewRoundUIParticles(float dt)
+{
+	fRect screen = app->win->GetWindowRect();
+	fPoint target_pos = { screen.w * 0.5f, screen.h * 0.5f };
+	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
+	{
+		if (!new_round_ui_particles[i].reached_target)
+		{
+			//Stop when they reach the center
+			if (new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= particle_speed_squared)
+			{
+				new_round_ui_particles[i].ui_image->SetPos(target_pos);
+				new_round_ui_particles[i].reached_target = true;
+			}
+			else
+			{
+				new_round_ui_particles[i].ui_image->SetPos(new_round_ui_particles[i].ui_image->position + new_round_ui_particles[i].direction * particle_speed * dt);
+			}
+		}
+	}
 }
 
 // Called each loop iteration
