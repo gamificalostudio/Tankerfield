@@ -135,10 +135,7 @@ bool M_ObjManager::PreUpdate()
 			++iterator;
 	
 	}
-	//LOG("%i", objects.size());
 	
-
-
 	return true;
 }
 
@@ -155,8 +152,7 @@ bool M_ObjManager::Update(float dt)
 			{
 				UpdateObject(iterator, dt);
 			}
-		
-				++iterator;
+			++iterator;
 		}
 		else
 		{
@@ -165,6 +161,11 @@ bool M_ObjManager::Update(float dt)
 	}
 	
 	return true;
+}
+
+bool M_ObjManager::IsEnemy(ObjectType type)
+{
+	return (type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER);//Change this enemy for the last enemy on the ObjectType enum
 }
 
 bool M_ObjManager::PostUpdate(float dt)
@@ -198,7 +199,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-			if ((*item) != nullptr )
+			if ((*item) != nullptr)
 			{
 				(*item)->DrawShadow((*item_cam), dt);
 			}
@@ -210,10 +211,29 @@ bool M_ObjManager::PostUpdate(float dt)
 			if ((*item) != nullptr)
 			{
 				(*item)->Draw(dt, (*item_cam));
+			}
+		}
 
-				if (app->scene->draw_debug)
+		//Draw debug over the objects
+
+		if (app->debug->debug_sprite_sorting)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
 				{
-					(*item)->DrawDebug((*item_cam));
+					(*item)->DebugSpriteSorting((*item_cam));
+				}
+			}
+		}
+
+		if (app->debug->debug_pathfinding)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
+				{
+					(*item)->DebugPathfinding((*item_cam));
 				}
 			}
 		}
@@ -493,6 +513,7 @@ std::list<Object*> M_ObjManager::GetObjects() const
 {
 	return this->objects;
 }
+
 
 void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
 {

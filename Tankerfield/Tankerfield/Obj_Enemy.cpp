@@ -55,7 +55,7 @@ Obj_Enemy::~Obj_Enemy()
 {
 	if (life_collider != nullptr)
 	{
-		life_collider->to_destroy = true;
+		life_collider->Destroy();
 		life_collider = nullptr;
 	}
 	if (coll != nullptr)
@@ -117,9 +117,6 @@ void Obj_Enemy::Attack()
 				perf_timer.Start();
 				app->audio->PlayFx(sfx_attack);
 			}
-	
-
-		
 	}
 }
 void Obj_Enemy::Movement(float &dt)
@@ -202,8 +199,6 @@ void Obj_Enemy::Movement(float &dt)
 		assert(true && "The enemy have no state");
 		break;
 	}
-
-
 }
 
 void Obj_Enemy::RecheadPoint()
@@ -232,11 +227,11 @@ void Obj_Enemy::Dead()
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
 		{
-			coll->ActiveOnTrigger(false);
+			coll->SetIsTrigger(false);
 		}
 		if (life_collider != nullptr)
 		{
-			life_collider->ActiveOnTrigger(false);
+			life_collider->SetIsTrigger(false);
 		}
 	}
 	else
@@ -262,11 +257,11 @@ void Obj_Enemy::ElectroDead()
 		draw_offset = electrocuted_draw_offset;
 		if (coll != nullptr)
 		{
-			coll->ActiveOnTrigger(false);
+			coll->SetIsTrigger(false);
 		}
 		if (life_collider != nullptr)
 		{
-			life_collider->ActiveOnTrigger(false);
+			life_collider->SetIsTrigger(false);
 		}
 	}
 	else
@@ -499,7 +494,7 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 			scale,
 			scale);
 
-	
+	DrawAttackRange(camera);
 
 	return true;
 }
@@ -511,6 +506,19 @@ bool Obj_Enemy::Start()
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	return true;
+}
+
+void Obj_Enemy::SetStats(int level)//Executes just after creation
+{
+
+}
+
+void Obj_Enemy::DrawAttackRange(Camera * camera)
+{
+	if (app->debug->debug_enemy_attack_range)
+	{
+		app->render->DrawIsoCircle(pos_screen.x, pos_screen.y, attack_range * app->map->data.tile_height, camera, 255, 0, 0, 255);
+	}
 }
 
 bool Obj_Enemy::CleanUp()
@@ -536,20 +544,6 @@ inline void Obj_Enemy::UpdatePos(const float& dt)
 {
 	pos_map += move_vect * speed * dt;
 	range_pos.center = pos_map;
-}
-
-void Obj_Enemy::DrawDebug(const Camera* camera)
-{
-	if (path.size() >= 2)
-	{
-		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
-		{
-			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
-			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
-		}
-	}
-
 }
 
 inline void Obj_Enemy::Burn(const float & dt)
@@ -810,6 +804,19 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 bool Obj_Enemy::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
+}
+
+void Obj_Enemy::DebugPathfinding(Camera * camera)
+{
+	if (path.size() >= 2)
+	{
+		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		{
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, { 255,0,0,255 }, camera);
+		}
+	}
 }
 
 

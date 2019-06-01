@@ -32,6 +32,7 @@ enum class ObjectType
 	BRUTE,
 	SUICIDAL,
 	ROCKETLAUNCHER,
+	//Modify bool M_ObjManager::IsEnemy() if you add an enemy or it won't delete enemies correctly
 
 	//BULLETS
 	BASIC_BULLET,
@@ -49,7 +50,7 @@ enum class ObjectType
 	ELECTRO_SHOT_ANIMATION,
 	FLAMETHROWER_FLAME,
 
-	NO_TYPE
+	MAX
 };
 
 enum class ItemType
@@ -57,9 +58,8 @@ enum class ItemType
 	NO_TYPE = -1,
 	HEALTH_BAG ,
 	HAPPY_HOUR_ITEM,
-	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
 	INSTANT_HELP,
-	
+	MAX_ITEMS, //must be in the last position of the types of items.Needed from the creation of pickUps.
 };
 
 class Object;
@@ -108,6 +108,7 @@ public:
 
 	inline void DrawDebug(const Object* obj, Camera* camera);
 
+	bool IsEnemy(ObjectType type);
 	
 
 private:
@@ -116,6 +117,8 @@ private:
 	inline void DesactivateObject(std::list<Object*>::iterator& iterator);
 
 	inline void UpdateObject(std::list<Object*>::iterator& iterator, const float& dt);
+
+
 
 public:
 	bool delete_all_enemies = false;
@@ -144,6 +147,8 @@ private:
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
 	std::map<ObjectType, std::list<Object*>> pool_of_objects;
+
+
 };
 
 #endif

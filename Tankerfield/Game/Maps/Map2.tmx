@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3751">
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3751">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
  </properties>
  <tileset firstgid="1" name="flat" tilewidth="60" tileheight="30" tilecount="144" columns="8">
-  <image source="test/flatTiles.png" trans="ff00ff" width="480" height="540"/>
+  <image source="flatTiles.png" trans="ff00ff" width="480" height="540"/>
  </tileset>
  <tileset firstgid="145" name="Cliff60x90" tilewidth="60" tileheight="90" tilecount="16" columns="4">
   <image source="Cliff separated/Cliff60x90.png" width="240" height="368"/>
@@ -37,7 +37,7 @@
   <image source="Cliff separated/Cliff90x98l.png" width="90" height="196"/>
  </tileset>
  <tileset firstgid="197" name="flat" tilewidth="60" tileheight="30" tilecount="144" columns="8">
-  <image source="test/flatTiles.png" trans="ff00ff" width="480" height="540"/>
+  <image source="flatTiles.png" trans="ff00ff" width="480" height="540"/>
  </tileset>
  <tileset firstgid="341" name="Path210x140r" tilewidth="210" tileheight="147" tilecount="2" columns="1">
   <image source="Roads and paths separated/Path210x140r.png" width="210" height="294"/>
@@ -66217,7 +66217,7 @@
    <tile gid="33"/>
    <tile gid="33"/>
    <tile gid="33"/>
-   <tile/>
+   <tile gid="33"/>
    <tile gid="33"/>
    <tile gid="33"/>
    <tile gid="33"/>
@@ -200173,7 +200173,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="5" name="Colliders" visible="0">
+ <objectgroup id="5" name="Colliders">
   <object id="55" type="WATER" x="4080" y="6420" width="390" height="30"/>
   <object id="328" type="WATER" x="3420" y="3870" width="330" height="1410"/>
   <object id="329" type="WATER" x="4260" y="3360" width="240" height="1650"/>
@@ -205067,15 +205067,6 @@
    </properties>
   </object>
   <object id="3238" name="tree1" x="1440" y="2250" width="60" height="60">
-   <properties>
-    <property name="has_collider" type="bool" value="false"/>
-    <property name="offset_x" type="int" value="60"/>
-    <property name="offset_y" type="int" value="80"/>
-    <property name="path" value="Maps/Buildings/Trees1.png"/>
-    <property name="pivot_y" type="float" value="25"/>
-   </properties>
-  </object>
-  <object id="3239" name="tree1" x="1590" y="2430" width="60" height="60">
    <properties>
     <property name="has_collider" type="bool" value="false"/>
     <property name="offset_x" type="int" value="60"/>

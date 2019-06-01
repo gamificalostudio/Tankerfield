@@ -40,6 +40,11 @@ public:
 		return(*this);
 	}
 
+	bool CheckIntersection( const Rect rect)
+	{
+		return !(rect.pos.x > (pos.x + w) || (rect.pos.x + rect.w) <pos.x || rect.pos.y > (pos.y + h) || (rect.pos.y + rect.h) < pos.y);
+	}
+
 	const Rect& operator = (const Rect &r)
 	{
 		pos.x = r.pos.x;

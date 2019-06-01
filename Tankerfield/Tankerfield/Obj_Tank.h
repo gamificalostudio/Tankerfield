@@ -46,8 +46,8 @@ public:
 
 public:
 	//- Logic
-	void SetLife(int life);
 	void ReduceLife(int damage);
+	void IncreaseLife(int heal);
 	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	void SetColor(const SDL_Color new_color);
@@ -80,6 +80,9 @@ public:
 	fPoint GetTurrPos() const;
 
 private:
+	//- Logic
+	void SetLife(int life);//Don't use SetLife directly from other classes, use ReduceLife() or IncreaseLife()
+
 	//- Movement
 	void Movement(float dt);
 	void ShotRecoilMovement(float &dt);
@@ -126,7 +129,7 @@ private:
 
 	//- TankDeath
 	void ReviveTank(float dt);
-	void StopTank();
+	void Die();
 
 	//- Item
 	void Item();
@@ -140,8 +143,6 @@ private:
 	static int number_of_tanks;
 
 	bool ready								= false;
-	bool fire_dead							= false;
-
 
 	//- Movement
 	float curr_speed						= 0.f;
@@ -199,7 +200,9 @@ private:
 	PerfTimer shot_timer_basic_bullet;
 	float charge_time						= 0.f;//Charge time in ms
 	float quick_shot_time					= 0.f;//If time is bigger than this, you will start to use the sustained shot and won't use a qucik shot
-	uint shot_sound							= 0u;
+	uint shot_sound = 0u;
+	uint heal_sound = 0u;
+	uint laser_sound = 0u;
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot

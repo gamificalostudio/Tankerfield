@@ -43,7 +43,6 @@ bool Obj_Bullet::Update(float dt)
 	if (bullet_life_ms_timer.ReadMs() >= bullet_life_ms)
 	{
 		to_remove = true;
-
 	}
 
 

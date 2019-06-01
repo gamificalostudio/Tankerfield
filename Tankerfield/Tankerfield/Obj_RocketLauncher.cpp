@@ -48,8 +48,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
 	original_speed = speed = app->objectmanager->rocket_launcher_info.speed;
 
 	//spawn_draw_offset = { 49, 50 };
@@ -61,11 +61,16 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	attack_range = app->objectmanager->rocket_launcher_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->rocket_launcher_info.attack_frequency;
-	
+
+	//spawn_draw_offset = { 49, 50 };
+	scale = 1.5f;
+	//NOTE: Draw offset depends on the scale
+	draw_offset = normal_draw_offset = (iPoint)(fPoint(49.f, 48.f) * scale);
+	electrocuted_draw_offset = (iPoint)(fPoint(35.f, 30.f) * scale);
+
 	
 	check_path_time = 2.0f;
 	damaged_sprite_time = 75;
-	scale = 1.f;
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
@@ -85,8 +90,20 @@ bool Obj_RocketLauncher::Start()
 	can_attack = false;
 	ResetAllAnimations();
 	if (coll != nullptr)
-		coll->ActiveOnTrigger(true);
+		coll->SetIsTrigger(true);
 	return true;
+}
+
+void Obj_RocketLauncher::SetStats(int level)
+{
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f;
+	original_speed = speed = app->objectmanager->rocket_launcher_info.speed;
+	attack_damage = app->objectmanager->rocket_launcher_info.attack_damage;
+	attack_range = app->objectmanager->rocket_launcher_info.attack_range;
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = app->objectmanager->rocket_launcher_info.attack_frequency;
+	life = app->objectmanager->rocket_launcher_info.life_multiplier * pow(app->objectmanager->rocket_launcher_info.life_exponential_base, level - 1);
+
 }
 
 Obj_RocketLauncher::~Obj_RocketLauncher()

@@ -27,8 +27,10 @@ class Obj_Brute : public Obj_Enemy
 {
 public:
 	Obj_Brute(fPoint pos);
-	bool Start();
 	~Obj_Brute();
+
+	bool Start() override;
+
 	void ChangeTexture();
 
 	void Spawn(const float& dt) override;
@@ -42,6 +44,8 @@ public:
 	inline void Dead() override;
 
 	inline void ElectroDead() override;
+
+	void SetStats(int level) override;
 
 
 private:

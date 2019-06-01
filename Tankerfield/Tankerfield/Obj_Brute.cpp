@@ -62,19 +62,12 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
 
-	detection_range = app->objectmanager->brute_info.detection_range;
-	original_speed = speed = app->objectmanager->brute_info.speed;
-	range_pos.radius = 1.f;
-
-	spawn_draw_offset = { 260, 274 };
-	normal_draw_offset = { 132, 75 };
-	electrocuted_draw_offset = { 60,28 };
-	draw_offset = spawn_draw_offset;
-
-	attack_damage = app->objectmanager->brute_info.attack_damage;
-	attack_range = app->objectmanager->brute_info.attack_range;
-	attack_range_squared = attack_range * attack_range;
-	attack_frequency = app->objectmanager->brute_info.attack_frequency;
+	scale = 2.f;
+	//INFO: Draw offset depends on the scale
+	draw_offset = spawn_draw_offset = (iPoint)(fPoint(130.f,153.f)*scale);
+	normal_draw_offset = (iPoint)(fPoint(66.f, 49.f)*scale);
+	electrocuted_draw_offset = (iPoint)(fPoint(30.f,14.f)*scale);
+  
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
@@ -100,16 +93,28 @@ bool Obj_Brute::Start()
 	
 	ResetAllAnimations();
 	if (coll != nullptr)
-		coll->ActiveOnTrigger(true);
+	
 
 	return true;
+}
+
+void Obj_Brute::SetStats(int level)
+{
+	detection_range = app->objectmanager->brute_info.detection_range;
+	original_speed = speed = app->objectmanager->brute_info.speed;
+	range_pos.radius = 1.f;
+	attack_damage = app->objectmanager->brute_info.attack_damage;
+	attack_range = app->objectmanager->brute_info.attack_range;
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = app->objectmanager->brute_info.attack_frequency;
+	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, level - 1);
 }
 
 Obj_Brute::~Obj_Brute()
 {
 	if (life_collider != nullptr)
 	{
-		life_collider->to_destroy = true;
+		life_collider->Destroy();
 		life_collider = nullptr;
 	}
 }
@@ -135,9 +140,21 @@ void Obj_Brute::Spawn(const float& dt)
 	if (curr_anim->Finished())
 	{
 		curr_tex = tex;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::NONE, BODY_TYPE::DYNAMIC, 0.f, this);
+		if (coll == nullptr)
+		{
+			coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::NONE, BODY_TYPE::DYNAMIC, 0.f, this);
+		}
+		else
+		{
+			coll->SetIsTrigger(true);
+		}
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
-		life_collider = app->collision->AddCollider(pos_map, 2, 2, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+
+		if (life_collider == nullptr)
+			life_collider = app->collision->AddCollider(pos_map, 2, 2, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		else
+			life_collider->SetIsTrigger(true);
+
 		life_collider->is_sensor = true;
 		life_collider->SetObjOffset(fPoint(-1.f, -1.f));
 		draw_offset = normal_draw_offset;
@@ -214,6 +231,9 @@ bool Obj_Brute::Draw(float dt, Camera * camera)
 		SDL_Rect fire_frame = fire3.GetFrame(0);
 		app->render->Blit(fire_tex, pos_screen.x - fire_frame.w*0.5f, pos_screen.y, camera, &fire_frame);
 	}
+
+	DrawAttackRange(camera);
+
 	return true;
 }
 
