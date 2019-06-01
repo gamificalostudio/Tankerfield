@@ -572,9 +572,14 @@ inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & itera
 	(*iterator)->Desactivate();
 	(*iterator)->return_to_pool = false;
 	(*iterator)->active = false;
+
 	if ((*iterator)->type >= ObjectType::TESLA_TROOPER && (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
 	{
 		enemies.remove((*iterator));
+	}
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->SetIsTrigger(false);
 	}
 	ReturnToPool((*iterator));
 	++iterator;

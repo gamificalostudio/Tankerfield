@@ -279,7 +279,7 @@ void Obj_Tank::ShootBasic()
 {
 	if (shot_timer_basic_bullet.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
-		Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
+		Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BASIC_BULLET, turr_pos);
 		bullet->SetBulletProperties(
 			weapon_info.shot1.bullet_speed,
 			weapon_info.shot1.bullet_life_ms,
@@ -300,7 +300,7 @@ void Obj_Tank::ShootDoubleMissile()
 	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
 	Bullet_Missile * missile_ptr = nullptr;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -310,7 +310,7 @@ void Obj_Tank::ShootDoubleMissile()
 		bullet_angle);
 	missile_ptr->explosion_damage = weapon_info.shot1.explosion_damage;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
