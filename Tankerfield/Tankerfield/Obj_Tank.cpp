@@ -239,9 +239,6 @@ bool Obj_Tank::Start()
 	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
-	if(this->gui->electric_particle != nullptr)
-		electric_particle_initial_pos = this->gui->electric_particle->position;
-
 	//Flamethrower
 	coll_flame = app->collision->AddCollider(
 		pos_map - fPoint(coll_w*0.5f, coll_h*0.5f),
@@ -324,7 +321,7 @@ void Obj_Tank::Movement(float dt)
 {
 	if (!tutorial_move_pressed)
 		tutorial_move_timer.Start();
-
+	
 	tutorial_move_pressed = true;
 
 	//Don't move if tank is dead
@@ -389,7 +386,7 @@ void Obj_Tank::Movement(float dt)
 		this->gui->electric_particle->SetState(ELEMENT_STATE::VISIBLE);
 		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 1.75f * dt));
 		
-		/* TODO: origin -> TANK_POS, ADD FADE EFFECTS TO THE PARTICLE + CONSIDER ANIMATION*/
+		// TODO: origin -> TANK_POS, ADD FADE EFFECTS TO THE PARTICLE + CONSIDER ANIMATION
 
 		if (!started_ep_timer)
 		{
@@ -402,7 +399,7 @@ void Obj_Tank::Movement(float dt)
 			started_ep_timer = false;
 			this->gui->electric_particle->SetState(ELEMENT_STATE::HIDDEN);
 			picked_weapon = false;
-			this->gui->electric_particle->SetPos(electric_particle_initial_pos);
+			this->gui->electric_particle->SetPos(app->map->MapToCamera(this->pos_map, this->camera_player));
 		}
 	}
 }
