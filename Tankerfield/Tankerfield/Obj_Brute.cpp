@@ -268,13 +268,11 @@ void Obj_Brute::Dead()
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			coll->SetIsTrigger(false);
 		}
 		if (life_collider != nullptr)
 		{
-			life_collider->Destroy();
-			life_collider = nullptr;
+			life_collider->SetIsTrigger(false);
 		}
 	}
 	else

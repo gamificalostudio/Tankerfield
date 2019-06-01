@@ -94,6 +94,11 @@ public:
 		return number_of_enemies;
 	}
 
+	void SetToZeroNumEnemies()
+	{
+		number_of_enemies = 0;
+	}
+
 private:
 	void CreateEnemyWave();
 

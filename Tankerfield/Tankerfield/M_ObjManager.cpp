@@ -119,7 +119,7 @@ bool M_ObjManager::PreUpdate()
 			{
 				DesactivateObject(iterator);
 			}
-			if ((*iterator)->to_remove)
+			else if ((*iterator)->to_remove)
 			{
 				RemoveObject(iterator);
 			}
@@ -551,7 +551,10 @@ inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator& iterator)
 		enemies.remove((*iterator));
 	}
 	
+	if ((*iterator)->active == false)
+	{
 
+	}
 	if ((*iterator)->coll != nullptr)
 	{
 		(*iterator)->coll->object = nullptr;
