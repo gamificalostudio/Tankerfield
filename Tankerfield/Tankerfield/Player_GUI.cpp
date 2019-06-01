@@ -198,6 +198,14 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	life_bar			->SetFX(type, 3.f);
 }
 
+void Player_GUI::DamageFlash()
+{
+}
+
+void Player_GUI::HealingFlash()
+{
+}
+
 
 void Player_GUI::Update(float dt)
 {
@@ -330,6 +338,7 @@ void Player_GUI::SetHelper()
 
 }
 
+
 void Player_GUI::AddButtonHelper( const CONTROLLER_BUTTON button_type)
 {
 	app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)button_type]));
@@ -378,18 +387,3 @@ fPoint Player_GUI::GetItemFramePos() const
 Player_GUI::~Player_GUI()
 {
 }
-
-
-//
-//if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
-//{
-//	image_def.sprite_section = { 10, 70, 50, 20 };
-//	ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetTop() + 50.f + margin.y }, image_def);
-//	ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
-//}
-//else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
-//{
-//	image_def.sprite_section = { 10, 100, 50, 20 };
-//	ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetBottom() - 50.f - margin.y }, image_def);
-//	ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
-//}
