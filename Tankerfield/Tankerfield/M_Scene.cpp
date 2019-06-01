@@ -145,8 +145,12 @@ bool M_Scene::Start()
 	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
 	max_particle_scale = 3.f;
-	particle_speed = -60.f;
-	particle_speed_squared = particle_speed * particle_speed;
+	min_particle_speed = -60.f;
+	max_particle_speed = -240.f;
+
+	min_particle_alpha_speed = 30.f;
+	max_particle_alpha_speed = 120.f;
+
 	CreateNewRoundParticles();
 	PrepareNewRoundUIParticles();
 
@@ -178,7 +182,10 @@ void M_Scene::PrepareNewRoundUIParticles()
 		new_round_ui_particles[i].reached_target = false;
 		new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
 		new_round_ui_particles[i].ui_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-		new_round_ui_particles[i].ui_image->alpha = 0;
+		new_round_ui_particles[i].ui_image->alpha = 0.f;
+		new_round_ui_particles[i].alpha_speed = min_particle_alpha_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_alpha_speed - min_particle_alpha_speed)));
+		new_round_ui_particles[i].speed = min_particle_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_speed - min_particle_speed)));
+		new_round_ui_particles[i].speed_squared = new_round_ui_particles[i].speed * new_round_ui_particles[i].speed;
 	}
 	particles_reached_trg = 0;
 }
@@ -191,7 +198,7 @@ void M_Scene::UpdateNewRoundUIParticles(float dt)
 	{
 		if (!new_round_ui_particles[i].reached_target)
 		{
-			if (new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= particle_speed_squared * dt * dt)
+			if (new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= new_round_ui_particles[i].speed_squared * dt * dt)
 			{
 				//INFO: Reach the target
 				new_round_ui_particles[i].ui_image->SetPos(target_pos);
@@ -202,8 +209,15 @@ void M_Scene::UpdateNewRoundUIParticles(float dt)
 			else
 			{
 				//INFO: Move to the target
-				new_round_ui_particles[i].ui_image->SetPos(new_round_ui_particles[i].ui_image->position + new_round_ui_particles[i].direction * particle_speed * dt);
-				++new_round_ui_particles[i].ui_image->alpha;
+				new_round_ui_particles[i].ui_image->SetPos(new_round_ui_particles[i].ui_image->position + new_round_ui_particles[i].direction * new_round_ui_particles[i].speed * dt);
+				if (new_round_ui_particles[i].ui_image->alpha + new_round_ui_particles[i].alpha_speed * dt >= 255.f)
+				{
+					new_round_ui_particles[i].ui_image->alpha = 255.f;
+				}
+				else
+				{
+					new_round_ui_particles[i].ui_image->alpha += new_round_ui_particles[i].alpha_speed * dt;
+				}
 			}
 		}
 	}

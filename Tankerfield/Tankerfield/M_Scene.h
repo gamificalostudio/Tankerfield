@@ -37,9 +37,11 @@ struct NewRoundUIParticles
 {
 	UI_Image * ui_image	= nullptr;
 	fPoint direction	= { 0.f, 0.f };
-	float curr_scale	=  1.f;
-	uint curr_alpha		= 255;//TODO: Change to uint8
+	float curr_scale	= 1.f;
+	float speed			= 0.f;
+	float speed_squared = 0.f;
 	bool reached_target = false;
+	float alpha_speed	= 0.f;
 };
 
 class M_Scene : public Module
@@ -154,8 +156,13 @@ private:
 	//New round animation
 	NewRoundUIParticles new_round_ui_particles[NEW_ROUND_PARTICLE_NUM];
 	float max_particle_scale = 0.f;
-	float particle_speed = 0.f;
-	float particle_speed_squared = 0.f;
+
+	float min_particle_speed = 0.f;
+	float max_particle_speed = 0.f;
+
+	float min_particle_alpha_speed = 0.f;
+	float max_particle_alpha_speed = 0.f;
+
 	int particles_reached_trg = 0;
 };
 
