@@ -177,8 +177,10 @@ void M_Scene::PrepareNewRoundUIParticles()
 		new_round_ui_particles[i].curr_scale = rand() % (int)max_particle_scale;
 		new_round_ui_particles[i].reached_target = false;
 		new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
-		//TODO: Set alpha to 255
+		new_round_ui_particles[i].ui_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+		new_round_ui_particles[i].ui_image->alpha = 0;
 	}
+	particles_reached_trg = 0;
 }
 
 void M_Scene::UpdateNewRoundUIParticles(float dt)
@@ -189,17 +191,20 @@ void M_Scene::UpdateNewRoundUIParticles(float dt)
 	{
 		if (!new_round_ui_particles[i].reached_target)
 		{
-			//Stop when they reach the center
-			if (new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= particle_speed_squared)
+			if (new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= particle_speed_squared * dt * dt)
 			{
+				//INFO: Reach the target
 				new_round_ui_particles[i].ui_image->SetPos(target_pos);
 				new_round_ui_particles[i].reached_target = true;
+				new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+				++particles_reached_trg;
 			}
 			else
 			{
+				//INFO: Move to the target
 				new_round_ui_particles[i].ui_image->SetPos(new_round_ui_particles[i].ui_image->position + new_round_ui_particles[i].direction * particle_speed * dt);
+				++new_round_ui_particles[i].ui_image->alpha;
 			}
-			//TODO: Increase alpha
 		}
 	}
 }

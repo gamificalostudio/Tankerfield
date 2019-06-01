@@ -156,6 +156,7 @@ private:
 	float max_particle_scale = 0.f;
 	float particle_speed = 0.f;
 	float particle_speed_squared = 0.f;
+	int particles_reached_trg = 0;
 };
 
 #endif // __j1SCENE_H__
