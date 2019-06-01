@@ -133,6 +133,7 @@ private:
 	UI_InteractiveGroup * credits_navigation = nullptr;
 	UI_Image * panel_background = nullptr;
 	UI_Label * credits_title = nullptr;
+	UI_Image* credits_logo = nullptr;
 
 	UI_Button* website = nullptr;
 	UI_Button* github= nullptr;
