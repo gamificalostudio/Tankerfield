@@ -174,38 +174,6 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 
 	// Animated images ================================================
 
-	UI_ImageDef anim_image_def;
-	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
-	switch (tank_num)
-	{
-	case 0:
-		electric_particle = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
-		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
-		electric_particle->SetState(ELEMENT_STATE::HIDDEN);
-		break;
-	case 1:
-		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + viewport.w / 2.0f - anim_image_def.sprite_section.w / 2.0f,
-			viewport.GetTop() + viewport.h / 2.0f - anim_image_def.sprite_section.h / 2.0f }, anim_image_def);
-		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
-		electric_particle->SetState(ELEMENT_STATE::HIDDEN);
-		break;
-	case 2:
-		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + viewport.w / 2.0f - anim_image_def.sprite_section.w / 2.0f,
-			viewport.GetTop() + viewport.h / 2.0f - anim_image_def.sprite_section.h / 2.0f }, anim_image_def);
-		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
-		electric_particle->SetState(ELEMENT_STATE::HIDDEN);
-		break;
-	case 3:
-		electric_particle = app->ui->CreateImage({ viewport.GetLeft() + viewport.w / 2.0f - anim_image_def.sprite_section.w / 2.0f,
-			viewport.GetTop() + viewport.h / 2.0f - anim_image_def.sprite_section.h / 2.0f }, anim_image_def);
-		electric_particle->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
-		electric_particle->SetState(ELEMENT_STATE::HIDDEN);
-		break;
-	default:
-		break;
-	}
-
-
 	Fade_GUI(true);
 }
 
@@ -230,13 +198,22 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	item_icon			->SetFX(type, 3.f);
 	charged_shot_bar	->SetFX(type, 3.f);
 	life_bar			->SetFX(type, 3.f);
-	electric_particle   ->SetFX(type, 3.f);
 }
 
 
 void Player_GUI::Update(float dt)
 {
 	// Update charged shot value ========================================
+		// Check if picked weapon and update the GUI if true
+	if (particle_created)
+	{
+		electric_particle->SetPos(lerp(electric_particle->position, GetWeaponFramePos(), 1.75f * dt));
+
+		if ((iPoint)electric_particle->position == (iPoint)GetWeaponFramePos())
+		{
+			electric_particle->SetState(ELEMENT_STATE::HIDDEN);
+		}
+	}
 
 }
 
@@ -340,6 +317,17 @@ void Player_GUI::AddButtonHelper( const CONTROLLER_BUTTON button_type)
 void Player_GUI::AddTextHelper(const std::string text)
 {
 	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->font->font_open_sants_bold_12));
+}
+
+void Player_GUI::CreateParticle()
+{
+	particle_created = true;
+	UI_ImageDef anim_image_def;
+	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
+	electric_particle = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
+	electric_particle->SetState(ELEMENT_STATE::VISIBLE);
+	electric_particle->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
 }
 
 fPoint Player_GUI::GetWeaponFramePos() const

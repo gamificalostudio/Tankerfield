@@ -50,6 +50,9 @@ public:
 	void Fade_GUI(bool fade_on);
 
 	/* UI Elements getters */
+
+	void CreateParticle();
+
 	fPoint GetWeaponFramePos() const;
 
 	~Player_GUI();
@@ -93,7 +96,7 @@ private:
 
 	UI_InGameElement* player_arrow = nullptr;
 
-
+	bool particle_created = false;
 
 	friend M_UI;
 };

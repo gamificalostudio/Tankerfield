@@ -377,31 +377,6 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
-
-
-	// Check if picked weapon and update the GUI if true
-	if (picked_weapon)
-	{
-		fPoint wf_offset = { 58.0f, 30.0f };
-		this->gui->electric_particle->SetState(ELEMENT_STATE::VISIBLE);
-		this->gui->electric_particle->SetPos(lerp(this->gui->electric_particle->position, this->gui->GetWeaponFramePos() - wf_offset, 1.75f * dt));
-		
-		// TODO: origin -> TANK_POS, ADD FADE EFFECTS TO THE PARTICLE + CONSIDER ANIMATION
-
-		if (!started_ep_timer)
-		{
-			ep_timer.Start();
-			started_ep_timer = true;
-		}
-
-		if (ep_timer.Read() > 2000.0f)
-		{
-			started_ep_timer = false;
-			this->gui->electric_particle->SetState(ELEMENT_STATE::HIDDEN);
-			picked_weapon = false;
-			this->gui->electric_particle->SetPos(app->map->MapToCamera(this->pos_map, this->camera_player));
-		}
-	}
 }
 
 void Obj_Tank::ShotRecoilMovement(float &dt)
@@ -714,7 +689,6 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
 				
-				this->picked_weapon = true;
 				SetPickUp(pick_up);
 			}
 		}
@@ -1229,6 +1203,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	else
 	{
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
+		gui->CreateParticle();
 	}
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();
