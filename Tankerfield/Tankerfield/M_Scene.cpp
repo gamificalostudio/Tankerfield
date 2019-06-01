@@ -181,7 +181,13 @@ void M_Scene::PrepareNewRoundUIParticles()
 	fPoint target_pos = { screen.w * 0.5f, screen.h * 0.5f };
 	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
 	{
-		fPoint position = (fPoint)iPoint(rand() % (int)screen.w, rand() % (int)screen.h);
+		fPoint position;
+		do 
+		{
+			position = fPoint(
+				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.w)),
+				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.h)));
+		} while (position == target_pos);
 		new_round_ui_particles[i].ui_image->SetPos(position);
 		new_round_ui_particles[i].direction = position - target_pos;
 		new_round_ui_particles[i].direction.Normalize();
