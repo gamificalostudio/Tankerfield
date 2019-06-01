@@ -354,14 +354,17 @@ void Obj_Tank::Movement(float dt)
 
 	if (no_input)
 	{
-		if (velocity_map.ModuleF() < velocity_to_stop)
+		if (!velocity_map.IsZero())
 		{
-			acceleration_map.SetToZero();
-			velocity_map.SetToZero();
-		}
-		else
-		{
-			acceleration_map = brake_vector;
+			if (velocity_map.ModuleF() <= brake_power * dt)
+			{
+				acceleration_map.SetToZero();
+				velocity_map.SetToZero();
+			}
+			else
+			{
+				acceleration_map = brake_vector;
+			}
 		}
 	}
 	else
