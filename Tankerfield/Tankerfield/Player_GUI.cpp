@@ -206,10 +206,10 @@ void Player_GUI::Update(float dt)
 	
 	for (std::list<UI_Image*>::const_iterator item = this->particles_list.begin(); item != this->particles_list.end(); ++item)
 	{
-		fPoint w_offset = { 58.0f, 38.0f };
-		//fPoint w_offset2 = 
+		fPoint w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
+
 		fPoint w_pos = GetWeaponFramePos();
-		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 1.75f * dt));
+		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 3.25f * dt));
 		if ((iPoint)(*item)->position == (iPoint)w_pos - (iPoint)w_offset)
 		{
 			(*item)->Destroy();
