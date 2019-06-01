@@ -7,9 +7,10 @@
     
     <max_speed value ="6.5"/>
     <charged_shot_max_speed value="6.5"/>
-    <road_max_speed value ="10"/>
+    <road_max_speed value ="6.5"/>
 
-    <recoil_speed value ="1000"/>
+    <recoil_speed value ="100"/>
+    <brake_power  value="17.25"/>
   </tank>
   
   <!--Weapons-->

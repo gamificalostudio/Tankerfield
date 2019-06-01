@@ -168,6 +168,7 @@ bool Obj_Tank::Start()
 	road_max_speed = tank_stats_node.child("road_max_speed").attribute("value").as_float();
 
 	acceleration_power = tank_stats_node.child("acceleration_power").attribute("value").as_float();
+	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
 	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
 
 	cos_45 = cosf(-45 * DEGTORAD);
@@ -344,58 +345,33 @@ void Obj_Tank::Movement(float dt)
 		no_input = true;
 	}
 
-	//TODO: Remove hardcoded variables
-	float velocity_to_stop = 1.f;
-	float brake_power = 11.5f;
-
 	fPoint brake_vector = -velocity_map;
 	brake_vector.Normalize();
 	brake_vector *= brake_power;
 
 	if (no_input)
 	{
-		if (!velocity_map.IsZero())
+		if (velocity_map.ModuleF() <= brake_power * dt)//If the velocity is less than the velocity we're going to substract, directly set it to zero
 		{
-			if (velocity_map.ModuleF() <= brake_power * dt)
-			{
-				acceleration_map.SetToZero();
-				velocity_map.SetToZero();
-			}
-			else
-			{
-				acceleration_map = brake_vector;
-			}
+			acceleration_map.SetToZero();
+			velocity_map.SetToZero();
+		}
+		else
+		{
+			acceleration_map = brake_vector;
 		}
 	}
 	else
 	{
 		acceleration_map = iso_dir * acceleration_power;
 	}
-
-	//if (tank_num == 0)
-	//{
-	//	LOG("acceleration map %f, %f", acceleration_map.x, acceleration_map.y);
-	//}
-	velocity_map	+= acceleration_map * dt;
+	velocity_map += acceleration_map * dt;
 	if (velocity_map.ModuleF() > max_speed)//If the module of the velocity is bigger than the speed
 	{
 		velocity_map.Normalize();
 		velocity_map *= max_speed;
 	}
-	pos_map			+= velocity_map * dt;
-
-	////DEBUG
-	if(tank_num == 0)
-	{
-	//	fPoint input_debug(iso_dir);
-	//	input_debug.Normalize();
-	//	LOG("input     x: %f, y:%f", input_debug.x, input_debug.y);
-	//	fPoint velocity_debug(velocity_map);
-	//	velocity_debug.Normalize();
-	//	LOG("velocity  x: %f, y:%f", velocity_debug.x, velocity_debug.y);
-	//	LOG("Max speed %f", max_speed);
-	//	LOG("Curr speed %f", velocity_map.ModuleF());
-	}
+	pos_map += velocity_map * dt;
 
 	if (!no_input)
 	{

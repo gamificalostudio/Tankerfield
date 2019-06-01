@@ -197,6 +197,7 @@ private:
 	bool show_crosshairs					= false;
 	bool shot_automatically					= false;
 	float recoil_speed						= 0.f;
+	float brake_power						= 0.f;
 
 	//Electro shot
 	PerfTimer electro_shot_timer;
