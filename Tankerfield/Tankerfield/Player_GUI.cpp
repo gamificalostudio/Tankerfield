@@ -172,8 +172,6 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		weapon_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 
-	// Animated images ================================================
-
 	Fade_GUI(true);
 }
 
@@ -203,18 +201,19 @@ void Player_GUI::Fade_GUI(bool fade_on)
 
 void Player_GUI::Update(float dt)
 {
-	// Update charged shot value ========================================
-		// Check if picked weapon and update the GUI if true
-	if (particle_created)
+	// Update charged shot value ======================================== ???
+	// Check if picked weapon and update the GUI if true
+	
+	for (std::list<UI_Image*>::const_iterator item = this->particles_list.begin(); item != this->particles_list.end(); ++item)
 	{
-		electric_particle->SetPos(lerp(electric_particle->position, GetWeaponFramePos(), 1.75f * dt));
-
-		if ((iPoint)electric_particle->position == (iPoint)GetWeaponFramePos())
+		(*item)->SetPos(lerp((*item)->position, GetWeaponFramePos(), 1.75f * dt));
+		fPoint w_pos = GetWeaponFramePos();
+		if ((iPoint)(*item)->position == (iPoint)w_pos)
 		{
-			electric_particle->SetState(ELEMENT_STATE::HIDDEN);
+			//delete *item;
+			particles_list.pop_back();
 		}
 	}
-
 }
 
 void Player_GUI::SetLifeBar(float life)
@@ -321,13 +320,13 @@ void Player_GUI::AddTextHelper(const std::string text)
 
 void Player_GUI::CreateParticle()
 {
-	particle_created = true;
 	UI_ImageDef anim_image_def;
 	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
-	electric_particle = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
-	electric_particle->SetState(ELEMENT_STATE::VISIBLE);
-	electric_particle->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
+	
+	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
+	particle_image->SetState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	this->particles_list.push_back(particle_image);
 }
 
 fPoint Player_GUI::GetWeaponFramePos() const

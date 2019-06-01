@@ -66,9 +66,9 @@ public:
 
 	SDL_Rect viewport_with_margin = { 0,0,0,0 };
 
-	// HUD Animated images ===================
+	// HUD Particles ===================
 
-	UI_Image* electric_particle = nullptr;
+	std::list<UI_Image*> particles_list;
 
 private:
 
