@@ -154,6 +154,13 @@ bool M_Scene::Start()
 	CreateNewRoundParticles();
 	PrepareNewRoundUIParticles();
 
+	fRect screen = app->win->GetWindowRect();
+	UI_ImageDef image_def({114, 508, 191, 191});
+	center_energy = app->ui->CreateImage({ screen.w * 0.5f, screen.h * 0.5f }, image_def);
+	center_energy->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	center_energy->alpha = 0.f;
+	center_energy_alpha_fill_amount = 255.f / NEW_ROUND_PARTICLE_NUM; 
+
 	return true;
 }
 
@@ -204,6 +211,7 @@ void M_Scene::UpdateNewRoundUIParticles(float dt)
 				new_round_ui_particles[i].ui_image->SetPos(target_pos);
 				new_round_ui_particles[i].reached_target = true;
 				new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+				center_energy->alpha += center_energy_alpha_fill_amount;
 				++particles_reached_trg;
 			}
 			else

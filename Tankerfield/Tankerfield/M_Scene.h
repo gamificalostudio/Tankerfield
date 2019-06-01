@@ -153,6 +153,7 @@ private:
 	RewardZone* reward_zone_01 = nullptr;
 	RewardZone* reward_zone_02 = nullptr;
 
+
 	//New round animation
 	NewRoundUIParticles new_round_ui_particles[NEW_ROUND_PARTICLE_NUM];
 	float max_particle_scale = 0.f;
@@ -164,6 +165,9 @@ private:
 	float max_particle_alpha_speed = 0.f;
 
 	int particles_reached_trg = 0;
+
+	UI_Image * center_energy = nullptr;
+	float center_energy_alpha_fill_amount = 0.f;
 };
 
 #endif // __j1SCENE_H__
