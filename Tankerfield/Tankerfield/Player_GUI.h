@@ -33,10 +33,6 @@ public:
 
 	void SetHelper();
 
-	void AddButtonHelper(const CONTROLLER_BUTTON button_type);
-
-	void AddTextHelper(const std::string text);
-
 	void SetLifeBar( float life);
 
 	void SetChargedShotBar(float percent);
@@ -49,7 +45,9 @@ public:
 
 	void Fade_GUI(bool fade_on);
 
-	~Player_GUI();
+	void DamageFlash();
+
+	void HealingFlash();
 
 public:
 	Obj_Tank* player = nullptr;
