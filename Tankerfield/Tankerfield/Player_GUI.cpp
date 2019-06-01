@@ -328,6 +328,7 @@ void Player_GUI::CreateParticle()
 	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
 	particle_image->SetState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	particle_image->alpha = 175.0f;
 	this->particles_list.push_back(particle_image);
 }
 
