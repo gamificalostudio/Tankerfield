@@ -264,34 +264,34 @@ bool M_MainMenu::Start()
 	return_credits->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	UI_InteractiveGroupDef credits_navigation_def;
-	credits_navigation_def.columns = 4;
-	credits_navigation_def.rows = 6;
+	credits_navigation_def.columns = 6;
+	credits_navigation_def.rows = 4;
 
 	credits_navigation = app->ui->CreateIntearctiveGroup(screen_center,credits_navigation_def,this);
 	credits_navigation->SetElement(return_credits, iPoint(0, 0));
-	credits_navigation->SetElement(website, iPoint(1, 0));
-	credits_navigation->SetElement(github, iPoint(2, 0));
+	credits_navigation->SetElement(return_credits, iPoint(1, 0));
+	credits_navigation->SetElement(return_credits, iPoint(2, 0));
 	credits_navigation->SetElement(return_credits, iPoint(3, 0));
+	credits_navigation->SetElement(return_credits, iPoint(4, 0));
+	credits_navigation->SetElement(return_credits, iPoint(5, 0));
 	credits_navigation->SetElement(jaume_github, iPoint(0, 1));
 	credits_navigation->SetElement(jaume_linkedin, iPoint(1, 1));
-	credits_navigation->SetElement(aurelio_github, iPoint(2, 1));
-	credits_navigation->SetElement(aurelio_linkedin, iPoint(3, 1));
-	credits_navigation->SetElement(víctor_github, iPoint(0, 3));
-	credits_navigation->SetElement(víctor_linkedin, iPoint(1, 3));
-	credits_navigation->SetElement(jorge_github, iPoint(2, 3));
-	credits_navigation->SetElement(jorge_linkedin, iPoint(3, 3));
-	credits_navigation->SetElement(yessica_github, iPoint(0, 2));
-	credits_navigation->SetElement(yessica_linkedin, iPoint(1, 2));
+	credits_navigation->SetElement(website, iPoint(2, 1));
+	credits_navigation->SetElement(github, iPoint(3, 1));
+	credits_navigation->SetElement(aurelio_github, iPoint(4, 1));
+	credits_navigation->SetElement(aurelio_linkedin, iPoint(5, 1));
+	credits_navigation->SetElement(víctor_github, iPoint(0, 2));
+	credits_navigation->SetElement(víctor_linkedin, iPoint(1, 2));
 	credits_navigation->SetElement(yessica_github, iPoint(2, 2));
 	credits_navigation->SetElement(yessica_linkedin, iPoint(3, 2));
-	credits_navigation->SetElement(gerard_github, iPoint(0, 4));
-	credits_navigation->SetElement(gerard_linkedin, iPoint(2, 4));
-	credits_navigation->SetElement(gerard_github, iPoint(1, 4));
-	credits_navigation->SetElement(gerard_linkedin, iPoint(3, 4));
-	credits_navigation->SetElement(sergio_github, iPoint(0, 5));
-	credits_navigation->SetElement(sergio_linkedin, iPoint(1 ,5));
-	credits_navigation->SetElement(aitor_github, iPoint(2, 5));
-	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 5));
+	credits_navigation->SetElement(jorge_github, iPoint(4, 2));
+	credits_navigation->SetElement(jorge_linkedin, iPoint(5, 2));
+	credits_navigation->SetElement(sergio_github, iPoint(0, 3));
+	credits_navigation->SetElement(sergio_linkedin, iPoint(1, 3));
+	credits_navigation->SetElement(gerard_github, iPoint(2, 3));
+	credits_navigation->SetElement(gerard_linkedin, iPoint(3, 3));
+	credits_navigation->SetElement(aitor_github, iPoint(4, 3));
+	credits_navigation->SetElement(aitor_linkedin, iPoint(5, 3));
 
 	// Set values ==========================================
 	app->ui->HideAllUI();
