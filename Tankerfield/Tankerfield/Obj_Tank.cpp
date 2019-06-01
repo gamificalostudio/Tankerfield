@@ -368,7 +368,8 @@ void Obj_Tank::Movement(float dt)
 	//	fPoint velocity_debug(velocity_map);
 	//	velocity_debug.Normalize();
 	//	LOG("velocity  x: %f, y:%f", velocity_debug.x, velocity_debug.y);
-		LOG("Max speed %f", max_speed);
+	//	LOG("Max speed %f", max_speed);
+		LOG("Curr speed %f", velocity_map.ModuleF());
 	}
 
 	if (!no_input)
