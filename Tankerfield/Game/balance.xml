@@ -3,7 +3,7 @@
   <!--Player-->
   <tank>
     <life value =""/>
-    <acceleration_power value="1400"/>
+    <acceleration_power value="23"/>
     
     <max_speed value ="6.5"/>
     <charged_shot_max_speed value="6.5"/>

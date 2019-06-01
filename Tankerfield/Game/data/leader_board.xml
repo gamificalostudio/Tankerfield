@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <leader_board>
-	<data rank="1" round="1" name="ffvsfvdfv" />
-	<data rank="2" round="1" name="Minions" />
+	<data rank="1" round="1" name="" />
+	<data rank="2" round="1" name="ffvsfvdfv" />
 	<data rank="3" round="1" name="Minions" />
 	<data rank="4" round="1" name="Minions" />
 	<data rank="5" round="1" name="Minions" />
@@ -11,4 +11,5 @@
 	<data rank="9" round="1" name="Minions" />
 	<data rank="10" round="1" name="Minions" />
 	<data rank="11" round="1" name="Minions" />
+	<data rank="12" round="1" name="Minions" />
 </leader_board>

@@ -45,9 +45,9 @@
       </sounds>
   </scene>
   <map>
-    <folder>Maps/</folder>
+    <folder>Maps/test/</folder>
     <levels>
-      <level name="Map2.tmx"/>
+      <level name="test.tmx"/>
     </levels>
   </map>
   

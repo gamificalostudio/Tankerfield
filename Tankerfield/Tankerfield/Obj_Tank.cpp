@@ -344,13 +344,35 @@ void Obj_Tank::Movement(float dt)
 		no_input = true;
 	}
 
+	//TODO: Remove hardcoded variables
+	float velocity_to_stop = 1.f;
+	float brake_power = 11.5f;
+
+	fPoint brake_vector = -velocity_map;
+	brake_vector.Normalize();
+	brake_vector *= brake_power;
+
 	if (no_input)
 	{
-		acceleration_map.SetToZero();
-		velocity_map.SetToZero();
+		if (velocity_map.ModuleF() < velocity_to_stop)
+		{
+			acceleration_map.SetToZero();
+			velocity_map.SetToZero();
+		}
+		else
+		{
+			acceleration_map = brake_vector;
+		}
+	}
+	else
+	{
+		acceleration_map = iso_dir * acceleration_power;
 	}
 
-	acceleration_map = iso_dir * acceleration_power * dt;//5.f = acceleration power
+	//if (tank_num == 0)
+	//{
+	//	LOG("acceleration map %f, %f", acceleration_map.x, acceleration_map.y);
+	//}
 	velocity_map	+= acceleration_map * dt;
 	if (velocity_map.ModuleF() > max_speed)//If the module of the velocity is bigger than the speed
 	{
@@ -369,7 +391,7 @@ void Obj_Tank::Movement(float dt)
 	//	velocity_debug.Normalize();
 	//	LOG("velocity  x: %f, y:%f", velocity_debug.x, velocity_debug.y);
 	//	LOG("Max speed %f", max_speed);
-		LOG("Curr speed %f", velocity_map.ModuleF());
+	//	LOG("Curr speed %f", velocity_map.ModuleF());
 	}
 
 	if (!no_input)
