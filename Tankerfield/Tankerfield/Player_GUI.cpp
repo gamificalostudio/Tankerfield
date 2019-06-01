@@ -204,7 +204,7 @@ void Player_GUI::Update(float dt)
 	// Update charged shot value ======================================== ???
 	// Check if picked weapon and update the GUI if true
 	
-	for (std::list<UI_Image*>::const_iterator item = this->particles_list.begin(); item != this->particles_list.end(); ++item)
+	for (std::list<UI_Image*>::const_iterator item = this->particles_list.begin(); item != this->particles_list.end();)
 	{
 		fPoint w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
 
@@ -213,7 +213,11 @@ void Player_GUI::Update(float dt)
 		if ((iPoint)(*item)->position == (iPoint)w_pos - (iPoint)w_offset)
 		{
 			(*item)->Destroy();
-			particles_list.remove(*item);
+			item = particles_list.erase(item);
+		}
+		else
+		{
+			++item;
 		}
 	}
 }
