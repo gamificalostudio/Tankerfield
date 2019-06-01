@@ -7,7 +7,7 @@
     
     <max_speed value ="6.5"/>
     <charged_shot_max_speed value="6.5"/>
-    <road_max_speed value ="8"/>
+    <road_max_speed value ="10"/>
 
     <recoil_speed value ="1000"/>
   </tank>
