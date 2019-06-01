@@ -210,8 +210,8 @@ void Player_GUI::Update(float dt)
 		fPoint w_pos = GetWeaponFramePos();
 		if ((iPoint)(*item)->position == (iPoint)w_pos)
 		{
-			//delete *item;
-			particles_list.pop_back();
+			delete *item;
+			particles_list.remove(*item);
 		}
 	}
 }
