@@ -206,9 +206,11 @@ void Player_GUI::Update(float dt)
 	
 	for (std::list<UI_Image*>::const_iterator item = this->particles_list.begin(); item != this->particles_list.end(); ++item)
 	{
-		(*item)->SetPos(lerp((*item)->position, GetWeaponFramePos(), 1.75f * dt));
+		fPoint w_offset = { 58.0f, 38.0f };
+		//fPoint w_offset2 = 
 		fPoint w_pos = GetWeaponFramePos();
-		if ((iPoint)(*item)->position == (iPoint)w_pos)
+		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 1.75f * dt));
+		if ((iPoint)(*item)->position == (iPoint)w_pos - (iPoint)w_offset)
 		{
 			(*item)->Destroy();
 			particles_list.remove(*item);
