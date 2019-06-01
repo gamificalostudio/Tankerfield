@@ -102,7 +102,7 @@ public:
 private:
 
 	//New round animation
-	void PlaceNewRoundUIParticles();
+	void PrepareNewRoundUIParticles();
 	void UpdateNewRoundUIParticles(float dt);
 
 	void CreateEnemyWave();

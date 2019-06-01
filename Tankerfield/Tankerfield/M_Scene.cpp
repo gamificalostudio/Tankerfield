@@ -148,6 +148,7 @@ bool M_Scene::Start()
 	particle_speed = 60.f;
 	particle_speed_squared = particle_speed * particle_speed;
 	CreateNewRoundParticles();
+	PrepareNewRoundUIParticles();
 
 	return true;
 }
@@ -163,7 +164,7 @@ void M_Scene::CreateNewRoundParticles()
 	}
 }
 
-void M_Scene::PlaceNewRoundUIParticles()
+void M_Scene::PrepareNewRoundUIParticles()
 {
 	fRect screen = app->win->GetWindowRect();
 	fPoint target_pos = { screen.w * 0.5f, screen.h * 0.5f };
@@ -175,6 +176,8 @@ void M_Scene::PlaceNewRoundUIParticles()
 		new_round_ui_particles[i].direction.Normalize();
 		new_round_ui_particles[i].curr_scale = rand() % (int)max_particle_scale;
 		new_round_ui_particles[i].reached_target = false;
+		new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
+		//TODO: Set alpha to 255
 	}
 }
 
@@ -196,6 +199,7 @@ void M_Scene::UpdateNewRoundUIParticles(float dt)
 			{
 				new_round_ui_particles[i].ui_image->SetPos(new_round_ui_particles[i].ui_image->position + new_round_ui_particles[i].direction * particle_speed * dt);
 			}
+			//TODO: Increase alpha
 		}
 	}
 }
@@ -330,6 +334,8 @@ bool M_Scene::Update(float dt)
 		game_over = true;
 	}
 	
+	UpdateNewRoundUIParticles(dt);
+
 	return true;
 }
 
