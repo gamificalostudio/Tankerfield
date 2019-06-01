@@ -3,11 +3,13 @@
   <!--Player-->
   <tank>
     <life value =""/>
-    <acceleration_power value="650"/>
+    <acceleration_power value="1400"/>
     
     <max_speed value ="6.5"/>
     <charged_shot_max_speed value="6.5"/>
     <road_max_speed value ="6.5"/>
+
+    <recoil_speed value ="1000"/>
   </tank>
   
   <!--Weapons-->

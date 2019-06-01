@@ -168,7 +168,7 @@ bool Obj_Tank::Start()
 	road_max_speed = tank_stats_node.child("road_max_speed").attribute("value").as_float();
 
 	acceleration_power = tank_stats_node.child("acceleration_power").attribute("value").as_float();
-
+	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -802,6 +802,7 @@ void Obj_Tank::ShootChargedWeapon()
 			camera_player->AddTrauma(weapon_info.shot1.trauma);
 			if (controller != nullptr) { (*controller)->PlayRumble(weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
+			velocity_map -= shot_dir * recoil_speed;
 		}
 		//- Charged shot
 		else
