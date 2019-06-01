@@ -145,7 +145,7 @@ bool M_Scene::Start()
 	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
 	max_particle_scale = 3.f;
-	particle_speed = 60.f;
+	particle_speed = -60.f;
 	particle_speed_squared = particle_speed * particle_speed;
 	CreateNewRoundParticles();
 	PrepareNewRoundUIParticles();
