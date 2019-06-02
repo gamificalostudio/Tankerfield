@@ -31,7 +31,7 @@ bool Item_InstantHelp::Use()
 
 	fPoint tank_look = caster->GetShotDir();
 
-	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + tank_look * 5);
+	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + tank_look * 3);
 	portal1->instant_help = this;
 
 	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - tank_look * 5);
