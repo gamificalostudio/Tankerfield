@@ -33,6 +33,11 @@
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 {
+	//burning texture
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+
 	pugi::xml_node tesla_trooper_node = app->config.child("object").child("enemies").child("tesla_trooper");
 	pugi::xml_node anim_node			= app->anim_bank->animations_xml_node.child("tesla").child("animations");
 
@@ -43,18 +48,15 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	tex_damaged = app->tex->Load(tesla_trooper_node.child("tex_damaged_path").child_value());
 	oiled_tex	= app->tex->Load(tesla_trooper_node.child("tex_oiled_path").child_value());
 	
-	curr_tex = tex;
-	last_texture = tex;
+	
 
 	//ANIMATIONS =============================================
 	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
-	curr_anim = &idle;
-
-	//curr_anim = &idle;
 	curr_anim = &walk;
+
 	spawn_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("portal").child("animations").child("spawn"));
 
 
@@ -64,8 +66,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
 	app->audio->PlayFx(sfx_spawn);
-	draw = false;
-	state = ENEMY_STATE::SPAWN; //enemy
+
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
@@ -73,16 +74,37 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	scale = 0.8f;
+
 	//INFO: Offset depends on the scale of the sprite.
 	//INFO: In the case of Tesla Trooper, all the draw_offsets are the same
 	draw_offset	= normal_draw_offset = electrocuted_draw_offset= (iPoint)(fPoint(32.f, 38.f) * scale);
+
 
 	//Timers ----------------
 	check_path_time = 2.f; // 10s
 
 	damaged_sprite_time = 75;
 
+
+	
+}
+
+bool Obj_TeslaTrooper::Start()
+{
+	curr_tex = tex;
+	last_texture = tex;
+	curr_anim = &walk;
+	draw = false;
+	state = ENEMY_STATE::SPAWN; //enemy
+	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
 	app->audio->PlayFx(sfx_spawn);
+
+	if(coll!=nullptr)
+		coll->SetIsTrigger(true);
+
+	ResetAllAnimations();
+
+	return true;
 }
 
 void Obj_TeslaTrooper::SetStats(int level)
@@ -160,8 +182,6 @@ void Obj_TeslaTrooper::Idle()
 }
 void Obj_TeslaTrooper::Move(const float & dt)
 {
-	
-
 	if (IsOnGoal(next_pos))
 	{
 		update_velocity_vec.Start();
@@ -294,4 +314,5 @@ inline void Obj_TeslaTrooper::UpdateVelocity()
 		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
 	}
 }
+
 

@@ -141,6 +141,8 @@ bool M_Collision::CleanUp()
 	{
 		if (*item != nullptr)
 		{
+			//if ((*item)->object != nullptr)
+			//	(*item)->object->coll = nullptr;
 			RELEASE(*item);
 		}
 	}
@@ -351,7 +353,7 @@ bool M_Collision::PostUpdate(float dt)
 
 Collider * M_Collision::AddCollider(fPoint pos, float width, float height, TAG tag, BODY_TYPE body, float damage, Object* object)
 {
-	Collider* collider = new Collider(pos, width, height, damage, tag, body, object);
+	Collider* collider = DBG_NEW Collider(pos, width, height, damage, tag, body, object);
 	colliders_to_add.push_back(collider);
 	return  collider;
 }
@@ -406,7 +408,10 @@ void M_Collision::DestroyColliders()
 		}
 
 		// Destroy ==================================================
-
+		if ((*collider_to_destroy)->object != nullptr)
+		{
+			(*collider_to_destroy)->object = nullptr;
+		}
 		colliders_list.erase((*collider_to_destroy)->iterator);
 		RELEASE(*collider_to_destroy);
 	}

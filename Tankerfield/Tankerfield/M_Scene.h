@@ -36,9 +36,6 @@ class PerfTimer;
 
 class M_Scene : public Module
 {
-private:
-
-	int number_of_enemies = 0;
 
 public:
 
@@ -86,8 +83,6 @@ public:
 	// ---------
 
 	void DebugPathfinding();
-
-	void ReduceNumEnemies();
 
 private:
 	void CreateEnemyWave();

@@ -31,7 +31,7 @@ public:
 	void Spawn(const float& dt) override;
 	void Attack() override;
 	void Move(const float & dt) override;
-
+	bool Start() override;
 	void SetStats(int level) override;
 
 private:

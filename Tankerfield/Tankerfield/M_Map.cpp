@@ -438,7 +438,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		//	SpawnPoints
 		if (object_group->name == "SpawnPoints")
 		{
-			SpawnPoint* ret = new SpawnPoint;
+			SpawnPoint* ret = DBG_NEW SpawnPoint;
 			ret->pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
 
 			std::string type = obj_node.attribute("type").as_string("");
