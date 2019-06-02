@@ -16,6 +16,7 @@ class UI_Element;
 class UI_InGameElement;
 class M_UI;
 
+struct SDL_Texture;
 enum class CONTROLLER_BUTTON;
 enum class WEAPON;
 enum class ObjectType;
@@ -64,22 +65,24 @@ public:
 
 
 public:
+
 	Obj_Tank* player = nullptr;
 
 	fRect viewport;
 
-	fPoint margin = { 80.f, 80.f };
-
 	SDL_Rect viewport_with_margin = { 0,0,0,0 };
 
-	// HUD Particles ===================
-
-	std::list<UI_Image*> particles_weapon_frame_list;
-	std::list<UI_Image*> particles_item_frame_list;
+	fPoint margin = { 80.f, 80.f };
 
 private:
 
+	// Assets ===============================
+
+	SDL_Texture* flash_texture = nullptr;
+
 	// HUD Elements =========================
+
+	UI_Image* flash = nullptr;
 
 	UI_Image* weapon_frame = nullptr;
 
@@ -98,6 +101,12 @@ private:
 	UI_Image*  weapon_helper = nullptr;
 
 	std::vector<UI_Element*> helper_elements;
+
+	// HUD Particles ===================
+
+	std::list<UI_Image*> particles_weapon_frame_list;
+
+	std::list<UI_Image*> particles_item_frame_list;
 
 	// In Game Elements ======================
 

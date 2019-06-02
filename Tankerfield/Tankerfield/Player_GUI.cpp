@@ -25,8 +25,12 @@
 
 Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 {
-	int tank_num = player->GetTankNum();
+	// Assets ===============================================================
 
+	flash_texture = app->tex->Load("textures/ui/flash.png");
+
+	int tank_num = player->GetTankNum();
+	 
 	viewport.create(
 		player_object->camera_player->screen_section.x,
 		player_object->camera_player->screen_section.y,
@@ -50,6 +54,12 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	// HUD  Elements ========================================================
 
 	UI_ImageDef image_def;
+	image_def.sprite_section = { 0, 0, 1280, 720 };
+
+	flash = app->ui->CreateImage( fPoint( viewport.GetLeft() ,viewport.GetTop()), image_def);
+	flash->SetTexture(flash_texture);
+	flash->SetDrawRect((SDL_Rect)viewport);
+	flash->alpha = 0.f;
 
 	image_def.sprite_section = { 80, 10, 65, 65 };        
 
@@ -200,10 +210,14 @@ void Player_GUI::Fade_GUI(bool fade_on)
 
 void Player_GUI::DamageFlash()
 {
+	flash->color_mod = { 255, 0 , 0 ,255 };
+	flash->SetFX( UI_Fade_FX::FX_TYPE::INTERMITTENT,0.5F, 1);
 }
 
 void Player_GUI::HealingFlash()
 {
+	flash->color_mod = { 0, 255 , 0 ,255 };
+	flash->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.8F, 1);
 }
 
 
