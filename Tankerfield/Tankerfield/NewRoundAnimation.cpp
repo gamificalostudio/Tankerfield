@@ -26,10 +26,15 @@ void NewRoundAnimation::Start()
 	center_energy->alpha = 0.f;
 	center_energy_alpha_fill_amount = 255.f / NEW_ROUND_PARTICLE_NUM;
 	max_particle_time = 10000u;//10 seconds max time to transition for all the particles
-	time_to_transition = 10.f;
+	color_transition_time = 0.5f;
 
 	source_color = { 255, 255, 255, 255 };//White
 	target_color = {  75, 180,   0, 255 };//Same green as the health bars in full life
+
+	color_r = source_color.r;
+	color_g = source_color.g;
+	color_b = source_color.b;
+	color_a = source_color.a;
 }
 
 bool NewRoundAnimation::Update(float dt)
@@ -50,10 +55,10 @@ bool NewRoundAnimation::Update(float dt)
 
 	case NEW_ROUND_ANIMATION_PHASE::PREPARE_COLOR_TRANSITION:
 	{
-		r_increment = (target_color.r - source_color.r) / time_to_transition;
-		g_increment = (target_color.g - source_color.g) / time_to_transition;
-		b_increment = (target_color.b - source_color.b) / time_to_transition;
-		a_increment = (target_color.a - source_color.a) / time_to_transition;
+		r_increment = (target_color.r - source_color.r) / color_transition_time;
+		g_increment = (target_color.g - source_color.g) / color_transition_time;
+		b_increment = (target_color.b - source_color.b) / color_transition_time;
+		a_increment = (target_color.a - source_color.a) / color_transition_time;
 		color_transition_timer.Start();
 		phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
 	}break;
@@ -70,8 +75,9 @@ bool NewRoundAnimation::Update(float dt)
 		center_energy->color_mod.b = (uint)color_b;
 		center_energy->color_mod.a = (uint)color_a;
 
-		if (color_transition_timer.ReadSec() > time_to_transition)
+		if (color_transition_timer.ReadSec() > color_transition_time)
 		{
+			center_energy->color_mod = target_color;
 			phase = NEW_ROUND_ANIMATION_PHASE::HEAL;
 		}
 	}break;

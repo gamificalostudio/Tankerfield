@@ -74,7 +74,7 @@ private:
 	SDL_Color source_color = { 0, 0, 0, 255 };
 	SDL_Color target_color = { 0, 0, 0, 255 };
 
-	float time_to_transition = 0.f;
+	float color_transition_time = 0.f;
 	Timer color_transition_timer;
 
 	NEW_ROUND_ANIMATION_PHASE phase = NEW_ROUND_ANIMATION_PHASE::PARTICLES;
