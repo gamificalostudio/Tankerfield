@@ -27,6 +27,7 @@
 #include "M_AnimationBank.h"
 #include "Player_GUI.h"
 #include "UI_InGameElement.h"
+#include "UI_Image.h"
 #include "M_UI.h"
 #include "M_ObjManager.h"
 #include "Camera.h"
@@ -320,7 +321,7 @@ void Obj_Tank::Movement(float dt)
 {
 	if (!tutorial_move_pressed)
 		tutorial_move_timer.Start();
-
+	
 	tutorial_move_pressed = true;
 
 	//Don't move if tank is dead
@@ -687,6 +688,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+				
 				SetPickUp(pick_up);
 			}
 		}
@@ -728,6 +730,8 @@ void Obj_Tank::IncreaseLife(int heal)
 		new_life = GetMaxLife();
 	}
 	SetLife(new_life);
+
+	gui->HealingFlash();
 }
 
 void Obj_Tank::ReduceLife(int damage)
@@ -745,6 +749,9 @@ void Obj_Tank::ReduceLife(int damage)
 		SetLife(new_life);
 		damaged_timer.Start();
 		damaged = true;
+
+		gui->DamageFlash();
+
 	}
 }
 
@@ -1186,8 +1193,8 @@ void Obj_Tank::Item()
 		new_item->Use();
 		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
-		
 	}
+
 	picking = false;
 }
 
@@ -1197,10 +1204,12 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
 		SetItem(pick_up->type_of_item);
+		gui->CreateParticleToItemFrame();
 	}
 	else
 	{
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
+		gui->CreateParticleToWeaponFrame();
 	}
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();

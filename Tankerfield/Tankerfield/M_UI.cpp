@@ -215,8 +215,12 @@ bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
 
-	UpdateElements(dt);
+	for (std::list<Player_GUI*>::iterator iter = players_guis.begin(); iter != players_guis.end(); ++iter)
+	{
+		(*iter)->Update(dt);
+	}
 
+	UpdateElements(dt);
 	FocusMouse();
 
 	return true;

@@ -73,12 +73,8 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
-	draw_offset			= { 24, 28 };
-	normal_draw_offset = { 24, 28 };
-	electrocuted_draw_offset = { 24, 28 };
+	scale = 0.8f;
 
-
-	scale = 0.75f;
 	//INFO: Offset depends on the scale of the sprite.
 	//INFO: In the case of Tesla Trooper, all the draw_offsets are the same
 	draw_offset	= normal_draw_offset = electrocuted_draw_offset= (iPoint)(fPoint(32.f, 38.f) * scale);
