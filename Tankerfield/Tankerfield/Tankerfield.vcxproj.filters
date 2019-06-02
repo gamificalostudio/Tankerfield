@@ -225,6 +225,9 @@
     <ClCompile Include="Quadtree_Collision.cpp">
       <Filter>Tools\QuadTree</Filter>
     </ClCompile>
+    <ClCompile Include="M_Debug.cpp" />
+    <ClCompile Include="Options_Menu.cpp" />
+    <ClCompile Include="NewRoundAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -475,6 +478,9 @@
     <ClInclude Include="Quadtree_Collision.h">
       <Filter>Tools\QuadTree</Filter>
     </ClInclude>
+    <ClInclude Include="M_Debug.h" />
+    <ClInclude Include="Options_Menu.h" />
+    <ClInclude Include="NewRoundAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">
