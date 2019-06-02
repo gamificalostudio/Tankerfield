@@ -54,13 +54,6 @@ bool M_Debug::Start()
 		INT_MAX,
 		"Selecting enemy level: ");
 
-	debug_numeric[(int)DebugNumericType::SELECT_ITEM].SetValues(
-		DebugNumericType::SELECT_ITEM,
-		SDL_SCANCODE_RSHIFT,
-		(int)ItemType::HEALTH_BAG,
-		(int)ItemType::MAX_ITEMS,
-		"Selecting item: ");
-
 	CreateLabel();
 
 	return true;
@@ -143,13 +136,6 @@ void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 				enemy->SetStats(debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].num);
 			}
 		}	break;
-
-		case DebugNumericType::SELECT_ITEM: {
-			int selected_tank = debug_numeric[(int)DebugNumericType::SELECT_TANK].num;
-			app->objectmanager->obj_tanks[selected_tank]->SetItem(
-				(ItemType)debug_numeric[(int)DebugNumericType::SELECT_ITEM].num);
-			
-		} break;
 
 		default: {
 			LOG("Debug type not set correctly.");

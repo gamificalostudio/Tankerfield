@@ -43,7 +43,6 @@ bool Laser_Bullet::Start()
 	{
 		kill_counter_max = bullet_node.child("kill_counter_max").attribute("value").as_int();
 	}
-	bullet_life_ms_timer.Start();
 	return true;
 }
 

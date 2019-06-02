@@ -55,6 +55,8 @@ public:
 
 	virtual bool Update(float dt);
 
+	//SDL_Rect * GetRect();
+
 	virtual bool Draw(float dt, Camera * camera);
 
 	virtual void DebugSpriteSorting(Camera* camera);
@@ -65,15 +67,11 @@ public:
 
 	virtual bool CleanUp() { return true; };
 
-	virtual bool Desactivate();
-
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
 	virtual bool Load(pugi::xml_node&) { return true; };
 
 	virtual bool Save(pugi::xml_node&) const { return true; };
-
-	virtual void SetMapPos(fPoint map_pos);
 
 	// Collision callbacks & methods ========================================
 
@@ -87,21 +85,15 @@ public:
 
 	void CalculateDrawVariables();//Avoids calculating variables multiple times during a single update. Only called on M_ObjManager::PostUpdate().
 
-	
-
 public:
 	bool			active = true;
-	bool			to_remove = false;						//Set it to true if you want the object to be removed
-	bool			return_to_pool = false;
-	bool            is_isometric = true;
-
 	ObjectType		type = ObjectType::MAX;
-
 	fPoint			pos_map		= { 0.f, 0.f };			//The position in the isometric grid. Use app->map->MapToScreenF() to get the position in which to Blit() the object.
 	fPoint			pos_screen	= { 0.f, 0.f };			//The position in the screen. Is measured with pixels. Modifying this value wil have no effect because is overwritten in every frame. Use this instead of calling MapToScreenF.
 	fPoint			velocity		= { 0.f, 0.f };
 	fPoint			acceleration = { 0.f, 0.f };
-	
+	bool			to_remove = false;						//Set it to true if you want the object to be removed
+	bool            is_isometric = true;
 	ObjectInfo		data;
 	Collider*		coll = nullptr;
 

@@ -27,20 +27,12 @@ bool Obj_Bullet::Start()
 
 	draw_offset = { 35, 14 };
 
-	
-	if (coll == nullptr)
-	{
-		float coll_w = 0.5f;
-		float coll_h = 0.5f;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::BULLET, BODY_TYPE::DYNAMIC, 0.f, this);
-		coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
-		coll->is_sensor = true;
-	}
-	else
-	{
-		coll->SetIsTrigger(true);
-	}
-	bullet_life_ms_timer.Start();
+	float coll_w = 0.5f;
+	float coll_h = 0.5f;
+	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::BULLET , BODY_TYPE::DYNAMIC ,0.f,this);
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	coll->is_sensor = true;
+
 	return true;
 }
 
@@ -50,7 +42,7 @@ bool Obj_Bullet::Update(float dt)
 	
 	if (bullet_life_ms_timer.ReadMs() >= bullet_life_ms)
 	{
-		return_to_pool = true;
+		to_remove = true;
 	}
 
 
@@ -59,7 +51,7 @@ bool Obj_Bullet::Update(float dt)
 
 void Obj_Bullet::OnTriggerEnter(Collider * collider_1)
 {
-	return_to_pool = true;
+	to_remove = true;
 }
 
 void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle, bool charged)
@@ -75,13 +67,4 @@ void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float da
 void Obj_Bullet::SetPlayer(Obj_Tank * player)
 {
 	this->player = player;
-}
-
-bool Obj_Bullet::Desactivate()
-{
-	if (coll != nullptr)
-	{
-		coll->SetIsTrigger(false);
-	}
-	return true;
 }

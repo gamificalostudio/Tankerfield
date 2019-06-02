@@ -28,8 +28,6 @@ public:
 
 	void SetPlayer(Obj_Tank* player);
 
-	bool Desactivate() override;
-
 public:
 
 	float speed = 0.f;

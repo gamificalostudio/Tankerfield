@@ -58,11 +58,6 @@ Obj_Enemy::~Obj_Enemy()
 		life_collider->Destroy();
 		life_collider = nullptr;
 	}
-	if (coll != nullptr)
-	{
-		coll->Destroy();
-		coll = nullptr;
-	}
 }
 
 bool Obj_Enemy::Update(float dt)
@@ -227,18 +222,21 @@ void Obj_Enemy::Dead()
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
 		{
-			coll->SetIsTrigger(false);
+			coll->Destroy();
+			coll = nullptr;
 		}
 		if (life_collider != nullptr)
 		{
-			life_collider->SetIsTrigger(false);
+			life_collider->Destroy();
+			life_collider = nullptr;
 		}
 	}
 	else
 	{
 		if (death.Finished())
 		{
-			return_to_pool = true;
+			to_remove = true;
+
 		}
 	}
 }
@@ -257,18 +255,15 @@ void Obj_Enemy::ElectroDead()
 		draw_offset = electrocuted_draw_offset;
 		if (coll != nullptr)
 		{
-			coll->SetIsTrigger(false);
-		}
-		if (life_collider != nullptr)
-		{
-			life_collider->SetIsTrigger(false);
+			coll->Destroy();
+			coll = nullptr;
 		}
 	}
 	else
 	{
 		if (electro_dead.Finished())
 		{
-			return_to_pool = true;
+			to_remove = true;
 			app->audio->PauseFx(channel_electrocuted);
 
 		}
@@ -368,7 +363,7 @@ inline void Obj_Enemy::GetTeleportPoint()
 	float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
 	SpawnPoint* nearest_spawners_points = nullptr;
 	float last_distance_to_spawnpoint = 0.f;
-	uint number_of_enemies = app->objectmanager->GetNumEnemies();
+	uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
 	float min_num_instant_teleport_enemies = 10;
 	if (number_of_enemies <= min_num_instant_teleport_enemies)
 	{
@@ -523,7 +518,9 @@ void Obj_Enemy::DrawAttackRange(Camera * camera)
 
 bool Obj_Enemy::CleanUp()
 {
-	return_to_pool = true;
+	app->scene->ReduceNumEnemies();
+
+	to_remove = true;
 	return true;
 }
 
@@ -856,17 +853,4 @@ inline void Obj_Enemy::ReduceLife(Collider * collider)
 	{
 		app->audio->PlayFx(sfx_hit);
 	}
-}
-
-void Obj_Enemy::ResetAllAnimations()
-{
-	idle.Reset();
-	walk.Reset();
-	attack.Reset();
-	death.Reset();
-	burn.Reset();
-	dying_burn.Reset();
-	electro_dead.Reset();
-	portal_animation.Reset();
-	portal_close_anim.Reset();
 }

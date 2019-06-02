@@ -2,7 +2,6 @@
 #define __M_OBJMANAGER_H__
 
 #include <list>
-#include <map>
 
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
@@ -27,7 +26,6 @@ enum class ObjectType
 	HEALING_AREA_SHOT,
 
 	//ENEMIES
-	//add enemies between tesla and rocketlauncher
 	TESLA_TROOPER,
 	BRUTE,
 	SUICIDAL,
@@ -86,6 +84,10 @@ public:
 
 	bool PostUpdate(float dt) override;
 
+	bool Load(pugi::xml_node&);
+
+	bool Save(pugi::xml_node&) const;
+
 	bool CleanUp() override;
 
 	bool Reset();
@@ -93,10 +95,6 @@ public:
 	Object* CreateObject(ObjectType type, fPoint map_pos);
 
 	Obj_Item* CreateItem(ItemType type, fPoint map_pos);
-
-	Object* GetObjectFromPool(ObjectType type, fPoint map_pos);
-
-	void ReturnToPool(Object* object);
 
 	static bool SortByYPos(Object * obj1, Object * obj2);
 
@@ -106,24 +104,12 @@ public:
 
 	std::list<Object*> GetObjects() const;
 
-	inline void DrawDebug(const Object* obj, Camera* camera);
-
-	bool IsEnemy(ObjectType type);
-
-	int GetNumEnemies()
+	uint GetNumberOfEnemies()
 	{
 		return enemies.size();
 	}
-	
 
-private:
-	inline void RemoveObject(std::list<Object*>::iterator& iterator);
-
-	inline void DesactivateObject(std::list<Object*>::iterator& iterator);
-
-	inline void UpdateObject(std::list<Object*>::iterator& iterator, const float& dt);
-
-
+	bool IsEnemy(ObjectType type);
 
 public:
 	bool delete_all_enemies = false;
@@ -151,9 +137,6 @@ private:
 	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
-	std::map<ObjectType, std::list<Object*>> pool_of_objects;
-
-
 };
 
 #endif

@@ -33,11 +33,6 @@
 
 Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 {
-	//burning texture
-	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
-	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
-	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
-
 	pugi::xml_node suicidal_node = app->config.child("object").child("enemies").child("suicidal");
 	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("suicidal").child("animation");
 
@@ -52,7 +47,6 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 
 	state = ENEMY_STATE::SPAWN;
 
-
 	scale = 1.5f;
 	//INFO: Draw offset depends on the scale
 	draw_offset = normal_draw_offset = (iPoint)(fPoint(32.f, 36.f) * scale);
@@ -64,7 +58,6 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	coll->SetObjOffset({ -coll_w * 2.25f, -coll_h * 1.75f });
 
 	check_path_time = 2.0f;
-
 
 	curr_anim = &idle;
 }
@@ -79,19 +72,6 @@ void Obj_Suicidal::SetStats(int level)
 	attack_range_squared = attack_range * attack_range;
 	attack_frequency = app->objectmanager->suicidal_info.attack_frequency;
 	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, level - 1);
-
-}
-
-bool Obj_Suicidal::Start()
-{
-	curr_tex = tex;
-	state = ENEMY_STATE::SPAWN;
-	curr_anim = &idle;
-	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
-	ResetAllAnimations();
-	if (coll != nullptr)
-		coll->SetIsTrigger(true);
-	return true;
 }
 
 Obj_Suicidal::~Obj_Suicidal()
