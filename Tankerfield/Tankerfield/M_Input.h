@@ -60,6 +60,7 @@ class M_Input;
 struct Controller
 {
 private:
+	bool connected = false;
 	int index_number = -1;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
@@ -67,7 +68,7 @@ private:
 	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis (they only have 1 and 0)
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
-
+	Object* attached_obj = nullptr;
 public:
 	Controller();
 
@@ -192,8 +193,8 @@ private:
 
 public:
 	std::string input_text;
-	std::vector<Controller*> controllers;
-	Controller** GetAbleController();
+	Controller controllers[MAX_CONTROLLERS];
+	int GetAbleController();
 };
 
 #endif // __j1INPUT_H__
