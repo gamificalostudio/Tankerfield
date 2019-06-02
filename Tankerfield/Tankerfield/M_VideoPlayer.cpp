@@ -22,6 +22,8 @@ extern "C" {
 #include "M_Window.h"
 #include "Log.h"
 #include "M_VideoPlayer.h"
+#include "M_SceneManager.h"
+#include "M_MainMenu.h"
 
 #define DEFAULT_AUDIO_BUF_SIZE 1024
 #define MAX_AUDIOQ_SIZE (5 * 256 * 1024)
@@ -115,6 +117,7 @@ int ReadThread(void *param) {
 
 Video::Video()
 {
+	
 }
 
 
@@ -129,6 +132,11 @@ bool Video::Awake(pugi::xml_node&)
 
 bool Video::Start()
 {
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
+	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
+
+	PlayVideo("videos/IntroLogo.mp4");
 	return true;
 }
 
@@ -151,19 +159,22 @@ bool Video::Update(float dt)
 	return true;
 }
 
-bool Video::PostUpdate()
+bool Video::PostUpdate(float dt)
 {
 	if (playing)
 	{
-		app->render->Blit(texture, 0, 0, nullptr);
+		app->render->Blit(texture, 0, 0, camera);
 	}
+
 	return true;
 }
 
 bool Video::CleanUp()
 {
-	if(playing)
+	if (playing)
+	{
 		CloseVideo();
+	}
 
 	return true;
 }
@@ -367,6 +378,8 @@ void Video::CloseVideo()
 	audio_buf_index = 0;
 	audio_buf_size = 0;
 	quit = false;
+
+	app->scmanager->FadeToBlack(this, app->main_menu, 0.f, 2.f);
 
 	LOG("Video closed");
 }

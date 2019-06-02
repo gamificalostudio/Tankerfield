@@ -51,7 +51,7 @@ public:
 	bool Start();
 	bool PreUpdate();
 	bool Update(float dt);
-	bool PostUpdate();
+	bool PostUpdate(float dt);
 	bool CleanUp();
 
 	int PlayVideo(std::string file_path);
@@ -70,7 +70,7 @@ public:
 	StreamComponent video;
 	AVFormatContext* format = nullptr;
 
-	bool refresh = false;
+	bool refresh = true;
 	bool playing = false;
 	bool paused = false;
 	bool quit = false;
@@ -88,6 +88,7 @@ private:
 	SwrContext* swr_context = nullptr;
 
 	SDL_Thread* parse_thread_id;
+	Camera* camera = nullptr;
 };
 
 #endif

@@ -67,12 +67,12 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(scene);
 	AddModule(main_menu);
-	AddModule(video);
 	AddModule(objectmanager);
 	AddModule(pick_manager);
 	AddModule(reward_zone_manager);
 	AddModule(collision);
 	AddModule(ui);
+	AddModule(video);
 	AddModule(anim_bank);
 	AddModule(scmanager);
 	AddModule(debug);
@@ -124,6 +124,7 @@ bool App::Awake()
 		case 0:
 			mode = APP_MODE::RELEASE;
 			scene->active = false;
+			main_menu->active = false;
 			break;
 		case 1:
 			mode = APP_MODE::DEBUG_MULTIPLAYER;
