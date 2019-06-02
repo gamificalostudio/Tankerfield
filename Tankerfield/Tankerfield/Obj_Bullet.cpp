@@ -40,7 +40,7 @@ bool Obj_Bullet::Start()
 	{
 		coll->SetIsTrigger(true);
 	}
-
+	bullet_life_ms_timer.Start();
 	return true;
 }
 
