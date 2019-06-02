@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <map>
 
 #include "Brofiler/Brofiler.h"
 #include "PugiXml/src/pugiconfig.hpp"
@@ -99,29 +100,42 @@ bool M_ObjManager::Start()
 bool M_ObjManager::PreUpdate()
 {
 	BROFILER_CATEGORY("Object Manager: PreUpdate", Profiler::Color::Lavender);
-	std::list<Object*>::iterator iterator;
-
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
-	{
-		if ((*iterator) != nullptr && (*iterator)->active == true)
-		{
-			(*iterator)->PreUpdate();
-		}
-	}
-
 	if (delete_all_enemies == true)
 	{
-		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+		for (std::list<Object*>::iterator iterator = enemies.begin(); iterator != enemies.end(); ++iterator)
 		{
-			if (IsEnemy((*iterator)->type))
-			{
-				(*iterator)->to_remove = true;
-			}
+			(*iterator)->return_to_pool = true;
 		}
-
 		delete_all_enemies = false;
+		enemies.clear();
 	}
 
+	std::list<Object*>::iterator iterator;
+	for (iterator = objects.begin(); iterator != objects.end();)
+	{
+		if ((*iterator) != nullptr)
+		{
+			if ((*iterator)->return_to_pool)
+			{
+				DesactivateObject(iterator);
+			}
+			else if ((*iterator)->to_remove)
+			{
+				RemoveObject(iterator);
+			}
+			else if ((*iterator)->active == true)
+			{
+				(*iterator)->PreUpdate();
+				++iterator;
+			}
+			else
+				++iterator;
+		}
+		else
+			++iterator;
+	
+	}
+	
 	return true;
 }
 
@@ -131,49 +145,14 @@ bool M_ObjManager::Update(float dt)
 
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
-		if ((*iterator) != nullptr )
+		if ((*iterator) != nullptr)
 		{
+			
 			if ((*iterator)->active == true)
 			{
-				(*iterator)->Update(dt);
+				UpdateObject(iterator, dt);
 			}
-
-			if ((*iterator)->to_remove)
-			{
-			
-				(*iterator)->CleanUp();
-
-				if (IsEnemy((*iterator)->type))
-				{
-					enemies.remove((*iterator));
-				}
-
-				if ((*iterator)->coll != nullptr)
-				{
-					(*iterator)->coll->object = nullptr;
-					(*iterator)->coll->Destroy();
-					(*iterator)->coll = nullptr;
-				}
-
-				delete((*iterator));
-				(*iterator) = nullptr;
-				iterator = objects.erase(iterator);
-			}
-			else
-			{
-				// Update Components ======================================
-				if ((*iterator)->coll != nullptr)
-				{
-					(*iterator)->coll->SetPosToObj();
-				}
-
-				if ((*iterator)->curr_anim != nullptr)
-				{
-					(*iterator)->curr_anim->NextFrame(dt);
-				}
-
-				++iterator;
-			}
+			++iterator;
 		}
 		else
 		{
@@ -276,22 +255,7 @@ bool M_ObjManager::CleanUp()
 
 bool M_ObjManager::Reset()
 {
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
-	{
-		(*iterator)->CleanUp();
-		if ((*iterator)->coll != nullptr)
-		{
-			(*iterator)->coll->Destroy();
-			(*iterator)->coll = nullptr;
-		}
-
-		delete((*iterator));
-		(*iterator) = nullptr;
-		iterator = objects.erase(iterator);
-	}
-
-	obj_tanks.clear();
-	objects.clear();
+	DeleteObjects();
 
 	return true;
 }
@@ -299,125 +263,124 @@ bool M_ObjManager::Reset()
 Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 {
 	Object* ret = nullptr;
-	switch (type)
-	{
-	case ObjectType::TESLA_TROOPER:
-		ret = DBG_NEW Obj_TeslaTrooper(pos);
-		ret->type = ObjectType::TESLA_TROOPER;
-		enemies.push_back(ret);
-		break;
-	case ObjectType::SUICIDAL:
-		ret = DBG_NEW Obj_Suicidal(pos);
-		ret->type = ObjectType::SUICIDAL;
-		enemies.push_back(ret);
-		break;
-	case ObjectType::ROCKETLAUNCHER:
-		ret = DBG_NEW Obj_RocketLauncher(pos);
-		ret->type = ObjectType::ROCKETLAUNCHER;
-		enemies.push_back(ret);
-		break;
-	case ObjectType::TANK:
-		ret = DBG_NEW Obj_Tank(pos);
-		ret->type = ObjectType::TANK;
-		obj_tanks.push_back((Obj_Tank*)ret);
-		break;
-	case ObjectType::BASIC_BULLET:
-		ret = DBG_NEW Bullet_Basic(pos);
-		ret->type = ObjectType::BASIC_BULLET;
-		break;
-	case ObjectType::BULLET_MISSILE:
-		ret = DBG_NEW Bullet_Missile(pos);
-		ret->type = ObjectType::BULLET_MISSILE;
-		break;
-	case ObjectType::BULLET_LASER:
-		ret = DBG_NEW Laser_Bullet(pos);
-		ret->type = ObjectType::BULLET_LASER;
-		break;
-	case ObjectType::HEALING_BULLET:
-		ret = DBG_NEW Healing_Bullet(pos);
-		ret->type = ObjectType::HEALING_BULLET;
-		break;
-	case ObjectType::BULLET_OIL:
-		ret = DBG_NEW Bullet_Oil(pos);
-		ret->type = ObjectType::BULLET_OIL;
-		break;
-	case ObjectType::BULLET_ROCKETLAUNCHER:
-		ret = DBG_NEW Bullet_RocketLauncher(pos);
-		ret->type = ObjectType::BULLET_ROCKETLAUNCHER;
-		break;
-	case ObjectType::STATIC:
-		ret = DBG_NEW Obj_Building(pos);
-		ret->type = ObjectType::STATIC;
-		break;
-	case ObjectType::REWARD_ZONE:
-		ret = DBG_NEW Reward_Zone(pos);
-		ret->type = ObjectType::REWARD_ZONE;
-		break;
-	case ObjectType::OIL_POOL:
-		ret = DBG_NEW Obj_OilPool(pos);
-		ret->type = ObjectType::OIL_POOL;
-		break;
-	case ObjectType::BRUTE:
-		ret = DBG_NEW Obj_Brute(pos);
-		ret->type = ObjectType::BRUTE;
-		enemies.push_back(ret);
-		break;
-	case ObjectType::EXPLOSION:
-		ret = DBG_NEW Obj_Explosion(pos);
-		ret->type = ObjectType::EXPLOSION;
-		break;
-	case ObjectType::CANNON_FIRE:
-		ret = DBG_NEW Obj_CannonFire(pos);
-		ret->type = ObjectType::CANNON_FIRE;
-		break;
-	case ObjectType::HEALING_ANIMATION:
-		ret = DBG_NEW Obj_Healing_Animation(pos);
-		ret->type = ObjectType::HEALING_ANIMATION;
-		break;
-	case ObjectType::FIRE_DEAD:
-		ret = DBG_NEW Obj_Fire(pos);
-		ret->type = ObjectType::FIRE_DEAD;
-		break;
-	case ObjectType::PORTAL:
-		ret = DBG_NEW Obj_Portal(pos);
-		ret->type = ObjectType::PORTAL;
-		break;
-	case ObjectType::PICK_UP:
-		ret = DBG_NEW Obj_PickUp(pos);
-		ret->type = ObjectType::PICK_UP;
-		break;
-	case ObjectType::REWARD_BOX:
-		ret = DBG_NEW Obj_RewardBox(pos);
-		ret->type = ObjectType::REWARD_BOX;
-		break;
-	case ObjectType::TANK_MAIN_MENU:
-		ret = DBG_NEW Obj_Tank_MainMenu(pos);
-		ret->type = ObjectType::REWARD_BOX;
-		break;
-	case ObjectType::ELECTRO_SHOT_ANIMATION:
-		ret = DBG_NEW Eletro_Shot_Animation(pos);
-		ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
-		break;
-	case ObjectType::FLAMETHROWER_FLAME:
-		ret = DBG_NEW Obj_FlamethrowerFlame(pos);
-		ret->type = ObjectType::FLAMETHROWER_FLAME;
-		break;
-	case ObjectType::HEALING_AREA_SHOT:
-		ret = DBG_NEW HealingShot_Area(pos);
-		ret->type = ObjectType::HEALING_AREA_SHOT;
-		break;
-	default:
-		LOG("Object could not be created. Type not detected correctly or hasn't a case.");
+		switch (type)
+		{
+		case ObjectType::TESLA_TROOPER:
+			ret = DBG_NEW Obj_TeslaTrooper(pos);
+			ret->type = ObjectType::TESLA_TROOPER;
+			enemies.push_back(ret);
+			break;
+		case ObjectType::SUICIDAL:
+			ret = DBG_NEW Obj_Suicidal(pos);
+			ret->type = ObjectType::SUICIDAL;
+			enemies.push_back(ret);
+			break;
+		case ObjectType::ROCKETLAUNCHER:
+			ret = DBG_NEW Obj_RocketLauncher(pos);
+			ret->type = ObjectType::ROCKETLAUNCHER;
+			enemies.push_back(ret);
 
-	}
-	
-  
-	if (ret != nullptr)
-	{
-		ret->Start();
-		objects.push_back(ret);
-	}
-  
+			break;
+		case ObjectType::TANK:
+			ret = DBG_NEW Obj_Tank(pos);
+			ret->type = ObjectType::TANK;
+			obj_tanks.push_back((Obj_Tank*)ret);
+			break;
+		case ObjectType::BASIC_BULLET:
+			ret = DBG_NEW Bullet_Basic(pos);
+			ret->type = ObjectType::BASIC_BULLET;
+			break;
+		case ObjectType::BULLET_MISSILE:
+			ret = DBG_NEW Bullet_Missile(pos);
+			ret->type = ObjectType::BULLET_MISSILE;
+			break;
+		case ObjectType::BULLET_LASER:
+			ret = DBG_NEW Laser_Bullet(pos);
+			ret->type = ObjectType::BULLET_LASER;
+			break;
+		case ObjectType::HEALING_BULLET:
+			ret = DBG_NEW Healing_Bullet(pos);
+			ret->type = ObjectType::HEALING_BULLET;
+			break;
+		case ObjectType::BULLET_OIL:
+			ret = DBG_NEW Bullet_Oil(pos);
+			ret->type = ObjectType::BULLET_OIL;
+			break;
+		case ObjectType::BULLET_ROCKETLAUNCHER:
+			ret = DBG_NEW Bullet_RocketLauncher(pos);
+			ret->type = ObjectType::BULLET_ROCKETLAUNCHER;
+			break;
+		case ObjectType::STATIC:
+			ret = DBG_NEW Obj_Building(pos);
+			ret->type = ObjectType::STATIC;
+			break;
+		case ObjectType::REWARD_ZONE:
+			ret = DBG_NEW Reward_Zone(pos);
+			ret->type = ObjectType::REWARD_ZONE;
+			break;
+		case ObjectType::OIL_POOL:
+			ret = DBG_NEW Obj_OilPool(pos);
+			ret->type = ObjectType::OIL_POOL;
+			break;
+		case ObjectType::BRUTE:
+			ret = DBG_NEW Obj_Brute(pos);
+			ret->type = ObjectType::BRUTE;
+			enemies.push_back(ret);
+			break;
+		case ObjectType::EXPLOSION:
+			ret = DBG_NEW Obj_Explosion(pos);
+			ret->type = ObjectType::EXPLOSION;
+			break;
+		case ObjectType::CANNON_FIRE:
+			ret = DBG_NEW Obj_CannonFire(pos);
+			ret->type = ObjectType::CANNON_FIRE;
+			break;
+		case ObjectType::HEALING_ANIMATION:
+			ret = DBG_NEW Obj_Healing_Animation(pos);
+			ret->type = ObjectType::HEALING_ANIMATION;
+			break;
+		case ObjectType::FIRE_DEAD:
+			ret = DBG_NEW Obj_Fire(pos);
+			ret->type = ObjectType::FIRE_DEAD;
+			break;
+		case ObjectType::PORTAL:
+			ret = DBG_NEW Obj_Portal(pos);
+			ret->type = ObjectType::PORTAL;
+			break;
+		case ObjectType::PICK_UP:
+			ret = DBG_NEW Obj_PickUp(pos);
+			ret->type = ObjectType::PICK_UP;
+			break;
+		case ObjectType::REWARD_BOX:
+			ret = DBG_NEW Obj_RewardBox(pos);
+			ret->type = ObjectType::REWARD_BOX;
+			break;
+		case ObjectType::TANK_MAIN_MENU:
+			ret = DBG_NEW Obj_Tank_MainMenu(pos);
+			ret->type = ObjectType::REWARD_BOX;
+			break;
+		case ObjectType::ELECTRO_SHOT_ANIMATION:
+			ret = DBG_NEW Eletro_Shot_Animation(pos);
+			ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
+			break;
+		case ObjectType::FLAMETHROWER_FLAME:
+			ret = DBG_NEW Obj_FlamethrowerFlame(pos);
+			ret->type = ObjectType::FLAMETHROWER_FLAME;
+			break;
+		case ObjectType::HEALING_AREA_SHOT:
+			ret = DBG_NEW HealingShot_Area(pos);
+			ret->type = ObjectType::HEALING_AREA_SHOT;
+			break;
+		default:
+			LOG("Object could not be created. Type not detected correctly or hasn't a case.");
+
+		}
+		if (ret != nullptr)
+		{
+			ret->Start();
+			objects.push_back(ret);
+		}
+
 	return ret;
 }
 
@@ -449,6 +412,54 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 	return ret;
 }
 
+Object* M_ObjManager::GetObjectFromPool(ObjectType type, fPoint map_pos)
+{
+	Object* ret = nullptr;
+	
+	std::map<ObjectType, std::list<Object*>>::iterator iterator = pool_of_objects.find(type);
+	if (iterator != pool_of_objects.end())
+	{
+		std::list<Object*>* list = &(*iterator).second;
+		if (list->size() > 0)
+		{
+			ret = (*list->begin());
+			list->pop_front();
+		}
+	}
+	if (ret != nullptr && type>=ObjectType::TESLA_TROOPER && type<= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.push_back(ret);
+	}
+	if (ret == nullptr)
+	{
+		ret = CreateObject(type, map_pos);
+	}
+
+	if (ret != nullptr)
+	{
+		ret->active = true;
+		ret->SetMapPos(map_pos);
+		ret->Start();
+		return ret;
+	}
+	return nullptr;
+}
+
+void M_ObjManager::ReturnToPool(Object * object)
+{
+	std::map<ObjectType, std::list<Object*>>::iterator iter = pool_of_objects.find(object->type);
+	if (iter != pool_of_objects.end())
+	{
+		(*iter).second.push_back(object);
+	}
+	else
+	{
+		std::list<Object*> list_obj;
+		list_obj.push_back(object);
+		pool_of_objects[object->type] = list_obj;
+	}
+}
+
 
 void M_ObjManager::DeleteObjects()
 {
@@ -465,6 +476,7 @@ void M_ObjManager::DeleteObjects()
 	objects.clear();
 	obj_tanks.clear();
 	enemies.clear();
+	pool_of_objects.clear();
 }
 
 
@@ -502,20 +514,92 @@ std::list<Object*> M_ObjManager::GetObjects() const
 	return this->objects;
 }
 
-bool M_ObjManager::Load(pugi::xml_node& load)
-{
-	bool ret = true;
 
-	return ret;
+void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
+{
+	SDL_Rect section = { obj->pos_screen.x - obj->draw_offset.x, obj->pos_screen.y - obj->draw_offset.y, obj->frame.w, obj->frame.h };
+
+	Uint8 alpha = 0;
+	switch (obj->type)
+	{
+	case ObjectType::TANK:
+		app->render->DrawQuad(section, 255, 0, 0, alpha);
+		break;
+	case ObjectType::STATIC:
+		app->render->DrawQuad(section, 0, 255, 0, alpha);
+		break;
+	case ObjectType::TESLA_TROOPER:
+		app->render->DrawQuad(section, 0, 0, 255, alpha);
+		break;
+	case ObjectType::EXPLOSION:
+		app->render->DrawQuad(section, 255, 0, 255, alpha);
+
+	default:
+		break;
+	}
+
+	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
 }
 
-bool M_ObjManager::Save(pugi::xml_node& save) const
+inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator& iterator)
 {
-	bool ret = true;
+	(*iterator)->CleanUp();
 
-	return ret;
+	if ((*iterator)->type >= ObjectType::TESLA_TROOPER
+		&& (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.remove((*iterator));
+	}
+	
+	if ((*iterator)->active == false)
+	{
+
+	}
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->object = nullptr;
+		(*iterator)->coll->Destroy();
+		(*iterator)->coll = nullptr;
+	}
+
+	delete((*iterator));
+	(*iterator) = nullptr;
+	iterator = objects.erase(iterator);
 }
 
+inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & iterator)
+{
+	(*iterator)->Desactivate();
+	(*iterator)->return_to_pool = false;
+	(*iterator)->active = false;
+
+	if ((*iterator)->type >= ObjectType::TESLA_TROOPER && (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.remove((*iterator));
+	}
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->SetIsTrigger(false);
+	}
+	ReturnToPool((*iterator));
+	++iterator;
+}
+
+inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, const float& dt)
+{
+	(*iterator)->Update(dt);
+
+	// Update Components ======================================
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->SetPosToObj();
+	}
+
+	if ((*iterator)->curr_anim != nullptr)
+	{
+		(*iterator)->curr_anim->NextFrame(dt);
+	}
+}
 
 bool M_ObjManager::SortByYPos(Object * obj1, Object * obj2)
 {

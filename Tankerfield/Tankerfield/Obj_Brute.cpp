@@ -33,16 +33,21 @@
 
 Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 {
-	pugi::xml_node brute_node = app->config.child("object").child("enemies").child("brute");
 
+	//burning texture
+	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
+	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
+	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+
+
+	//loading texture
 	fire_tex = app->tex->Load(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3").attribute("texture").as_string(""));
 	tex = app->tex->Load("textures/Objects/enemies/brute-sheet.png");
 	tex_damaged = app->tex->Load("textures/Objects/enemies/brute-sheet-white-1.png");
 	oiled_tex = app->tex->Load("textures/Objects/enemies/brute-sheet_oiled.png");
 	spawn_tex = app->tex->Load("textures/Objects/enemies/spawn_brute.png");
-	curr_tex = spawn_tex;
-	last_texture = tex;
 
+	//loading animation
 	pugi::xml_node animation_node = app->anim_bank->animations_xml_node.child("brute").child("animation");
 	fire3.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("fires").child("animations").child("fire3"));
 	idle.frames = app->anim_bank->LoadFrames(animation_node.child("idle"));
@@ -50,15 +55,12 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	attack.frames = app->anim_bank->LoadFrames(animation_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(animation_node.child("death"));
 	spawn.frames = app->anim_bank->LoadFrames(animation_node.child("spawn"));
-	curr_anim = &spawn;
-
-
+	
+	//Loading sfx
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/brute/hit.wav", 50);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/brute/death.wav", 50);
 	sfx_attack = app->audio->LoadFx("audio/Fx/entities/enemies/brute/brute_attack.wav", 50);
 	sfx_spawn = app->audio->LoadFx("audio/Fx/entities/enemies/brute/spawn.wav", 50);
-
-	state = ENEMY_STATE::SPAWN; 
 
 	scale = 2.f;
 	//INFO: Draw offset depends on the scale
@@ -66,12 +68,34 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 	normal_draw_offset = (iPoint)(fPoint(66.f, 49.f)*scale);
 	electrocuted_draw_offset = (iPoint)(fPoint(30.f,14.f)*scale);
   
+
 	coll_w = 0.5f;
 	coll_h = 0.5f;
-  
+
 	damaged_sprite_time = 75;
 
+	scale = 2.f;
+
+}
+
+bool Obj_Brute::Start()
+{
+	curr_tex = spawn_tex;
+	last_texture = tex;
+
+	curr_anim = &spawn;
+
+	state = ENEMY_STATE::SPAWN;
+	
+	life = app->objectmanager->brute_info.life_multiplier * pow(app->objectmanager->brute_info.life_exponential_base, app->scene->round - 1);
+
 	app->audio->PlayFx(sfx_spawn);
+	
+	ResetAllAnimations();
+	if (coll != nullptr)
+	
+
+	return true;
 }
 
 void Obj_Brute::SetStats(int level)
@@ -116,9 +140,21 @@ void Obj_Brute::Spawn(const float& dt)
 	if (curr_anim->Finished())
 	{
 		curr_tex = tex;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::NONE, BODY_TYPE::DYNAMIC, 0.f, this);
+		if (coll == nullptr)
+		{
+			coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::NONE, BODY_TYPE::DYNAMIC, 0.f, this);
+		}
+		else
+		{
+			coll->SetIsTrigger(true);
+		}
 		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
-		life_collider = app->collision->AddCollider(pos_map, 2, 2, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+
+		if (life_collider == nullptr)
+			life_collider = app->collision->AddCollider(pos_map, 2, 2, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		else
+			life_collider->SetIsTrigger(true);
+
 		life_collider->is_sensor = true;
 		life_collider->SetObjOffset(fPoint(-1.f, -1.f));
 		draw_offset = normal_draw_offset;
@@ -232,13 +268,11 @@ void Obj_Brute::Dead()
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			coll->SetIsTrigger(false);
 		}
 		if (life_collider != nullptr)
 		{
-			life_collider->Destroy();
-			life_collider = nullptr;
+			life_collider->SetIsTrigger(false);
 		}
 	}
 	else
