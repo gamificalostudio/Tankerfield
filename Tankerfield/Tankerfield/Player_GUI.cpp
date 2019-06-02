@@ -228,7 +228,11 @@ void Player_GUI::Update(float dt)
 	
 	for (std::list<UI_Image*>::const_iterator item = this->particles_weapon_frame_list.begin(); item != this->particles_weapon_frame_list.end();)
 	{
-		fPoint w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
+		fPoint w_offset = { 0, 0 };
+		if(this->player->GetTankNum() == 0 || this->player->GetTankNum() == 1)
+			w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
+		else if(this->player->GetTankNum() == 2 || this->player->GetTankNum() == 3)
+			w_offset = { 22.0f, 20.0f };
 
 		fPoint w_pos = GetWeaponFramePos();
 		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 3.25f * dt));

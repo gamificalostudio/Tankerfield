@@ -34,7 +34,7 @@ public:
 
 	void SetHelper();
 
-	void SetLifeBar( float life);
+	void SetLifeBar(float life);
 
 	void SetChargedShotBar(float percent);
 
