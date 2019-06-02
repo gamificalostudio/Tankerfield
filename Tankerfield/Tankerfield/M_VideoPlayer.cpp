@@ -381,7 +381,7 @@ void Video::CloseVideo()
 	audio_buf_size = 0;
 	quit = false;
 
-	app->scmanager->FadeToBlack(this, app->main_menu, 0.f, 2.f);
+	app->scmanager->FadeToBlack(this, app->main_menu, 0.5f, 2.f);
 
 	LOG("Video closed");
 }
