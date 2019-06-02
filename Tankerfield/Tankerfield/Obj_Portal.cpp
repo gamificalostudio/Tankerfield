@@ -24,6 +24,8 @@ Obj_Portal::Obj_Portal(fPoint pos):Object(pos)
 
 	coll=app->collision->AddCollider(pos_map, 1, 1, TAG::PORTAL, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->is_sensor = true;
+
+	pivot = {20,30};
 }
 
 Obj_Portal::~Obj_Portal()
@@ -32,12 +34,12 @@ Obj_Portal::~Obj_Portal()
 
 bool Obj_Portal::Update(float dt)
 {
-	//if (time.ReadMs() >= 10000 && coll != nullptr)
-	//{
-	//	to_remove = true;
-	//	coll->Destroy();
-	//	coll = nullptr;
-	//}
+	if (time.ReadMs() >= 10000 && coll != nullptr)
+	{
+		to_remove = true;
+		coll->Destroy();
+		coll = nullptr;
+	}
 
 	return true;
 }

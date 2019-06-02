@@ -5,7 +5,8 @@
 #include "App.h"
 #include "M_ObjManager.h"
 #include "M_Collision.h"
-
+#include "M_Map.h"
+#include "M_Pathfinding.h"
 Item_InstantHelp::Item_InstantHelp(fPoint pos):Obj_Item(pos)
 {
 }
@@ -31,10 +32,17 @@ bool Item_InstantHelp::Use()
 
 	fPoint tank_look = caster->GetShotDir();
 
-	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + tank_look * 5);
+	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + tank_look * 3);
 	portal1->instant_help = this;
 
-	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - tank_look * 5);
+	iPoint point_to_spawn;
+
+	do 
+	{
+		 point_to_spawn = { rand() % app->map->data.rows + 1,rand() % app->map->data.columns + 1 };
+	} while (!app->pathfinding->IsWalkable(point_to_spawn));
+
+	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, (fPoint)point_to_spawn);
 	portal2->instant_help = this;
 
 	return true;

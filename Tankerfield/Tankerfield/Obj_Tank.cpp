@@ -266,6 +266,8 @@ bool Obj_Tank::Start()
 
 	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
 
+	this->time_between_portal_tp.Start();
+
 	return true;
 }
 
@@ -650,9 +652,13 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 
 	else if (c1->GetTag() == TAG::PORTAL)
 	{
-		Obj_Portal * portal = (Obj_Portal*)c1->GetObj();
-		Item_InstantHelp * instant_help = portal->instant_help;
-		instant_help->Teleport(this, portal);
+		if (this->time_between_portal_tp.ReadMs() >= 1000)
+		{
+			Obj_Portal * portal = (Obj_Portal*)c1->GetObj();
+			Item_InstantHelp * instant_help = portal->instant_help;
+			instant_help->Teleport(this, portal);
+			this->time_between_portal_tp.Start();
+		}
 	}
 
 	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
