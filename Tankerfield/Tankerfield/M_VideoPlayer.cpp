@@ -136,6 +136,8 @@ bool Video::Start()
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
 
+	first_time = true;
+
 	PlayVideo("videos/IntroLogo.mp4");
 	return true;
 }
@@ -152,7 +154,9 @@ bool Video::Update(float dt)
 	{
 		DecodeVideo();
 		refresh = false;
+		first_time = false;
 	}
+
 	if (quit && audio.finished && video.finished)
 		CloseVideo();
 
@@ -161,7 +165,7 @@ bool Video::Update(float dt)
 
 bool Video::PostUpdate(float dt)
 {
-	if (playing)
+	if (playing&&!first_time)
 	{
 		app->render->Blit(texture, 0, 0, camera);
 	}

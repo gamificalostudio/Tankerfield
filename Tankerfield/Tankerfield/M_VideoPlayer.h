@@ -70,7 +70,8 @@ public:
 	StreamComponent video;
 	AVFormatContext* format = nullptr;
 
-	bool refresh = true;
+	bool first_time = false;
+	bool refresh = false;
 	bool playing = false;
 	bool paused = false;
 	bool quit = false;
