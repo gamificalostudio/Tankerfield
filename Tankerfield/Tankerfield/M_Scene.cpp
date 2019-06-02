@@ -198,7 +198,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::IN_WAVE:
 	{
-		if (number_of_enemies<=5)//Hardcode to go to next round when there are less enemies
+		if (number_of_enemies <= 0)
 		{
 			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}

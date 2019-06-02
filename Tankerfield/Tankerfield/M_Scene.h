@@ -68,8 +68,6 @@ public:
 	// Called before the first frame
 	bool Start() override;
 
-	void CreateNewRoundParticles();
-
 	// Called before all Updates
 	bool PreUpdate() override;
 
@@ -91,11 +89,6 @@ public:
 	void ReduceNumEnemies();
 
 private:
-
-	//New round animation
-	void PrepareNewRoundUIParticles();
-	void UpdateNewRoundUIParticles(float dt);
-
 	void CreateEnemyWave();
 
 	void NewWave();

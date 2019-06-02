@@ -6,6 +6,9 @@
 #include "UI_Element.h"
 #include "UI_Image.h"
 #include "Log.h"
+#include "M_Scene.h"
+#include "General_HUD.h"
+#include "UI_Label.h"
 
 void NewRoundAnimation::Start()
 {
@@ -27,7 +30,7 @@ void NewRoundAnimation::Start()
 	center_energy->alpha = 0.f;
 	center_energy_alpha_fill_amount = 255.f / NEW_ROUND_PARTICLE_NUM;
 	max_particle_time = 10000u;//10 seconds max time to transition for all the particles
-	color_transition_time = 0.5f;
+	color_transition_time = 1.f;
 
 	color_r = source_color.r;
 	color_g = source_color.g;
@@ -46,7 +49,10 @@ void NewRoundAnimation::Start()
 		heal_particle[i]->color_mod = target_color;
 	}
 
-	heal_particle_speed = 10.f;
+	heal_particle_speed = 20.f;
+
+	center_energy->SetParent(app->scene->general_gui->round_element);
+	app->scene->general_gui->round_number_label->SetParent(center_energy);
 }
 
 void NewRoundAnimation::CreateNewRoundParticles()
