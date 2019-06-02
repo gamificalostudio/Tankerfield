@@ -16,7 +16,6 @@ enum class DebugNumericType
 	SELECT_WEAPON_LEVEL,
 	SELECT_ENEMY_LEVEL,
 	SELECT_OBJECT,
-	SELECT_ITEM,
 	MAX
 };
 

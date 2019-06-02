@@ -279,7 +279,7 @@ void Obj_Tank::ShootBasic()
 {
 	if (shot_timer_basic_bullet.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
-		Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BASIC_BULLET, turr_pos);
+		Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
 		bullet->SetBulletProperties(
 			weapon_info.shot1.bullet_speed,
 			weapon_info.shot1.bullet_life_ms,
@@ -300,7 +300,7 @@ void Obj_Tank::ShootDoubleMissile()
 	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
 	Bullet_Missile * missile_ptr = nullptr;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -310,7 +310,7 @@ void Obj_Tank::ShootDoubleMissile()
 		bullet_angle);
 	missile_ptr->explosion_damage = weapon_info.shot1.explosion_damage;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -329,7 +329,7 @@ void Obj_Tank::ShootDoubleMissileCharged()
 	float bullet_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45;
 	Bullet_Missile * missile_ptr = nullptr;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -339,7 +339,7 @@ void Obj_Tank::ShootDoubleMissileCharged()
 		bullet_angle);
 	missile_ptr->explosion_damage = weapon_info.shot1.explosion_damage;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -349,7 +349,7 @@ void Obj_Tank::ShootDoubleMissileCharged()
 		bullet_angle);
 	missile_ptr->explosion_damage = weapon_info.shot1.explosion_damage;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos + double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -359,7 +359,7 @@ void Obj_Tank::ShootDoubleMissileCharged()
 		bullet_angle);
 	missile_ptr->explosion_damage = weapon_info.shot1.explosion_damage;
 
-	missile_ptr = (Bullet_Missile*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
+	missile_ptr = (Bullet_Missile*)app->objectmanager->CreateObject(ObjectType::BULLET_MISSILE, turr_pos - double_missiles_offset * missiles_offset * 3 - shot_dir * 1.5);
 	missile_ptr->SetPlayer(this);
 	missile_ptr->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -372,7 +372,7 @@ void Obj_Tank::ShootDoubleMissileCharged()
 
 void Obj_Tank::ShootHealingShot()
 {
-	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::HEALING_BULLET, turr_pos + shot_dir);
+	Healing_Bullet * heal_bullet = (Healing_Bullet*)app->objectmanager->CreateObject(ObjectType::HEALING_BULLET, turr_pos + shot_dir);
 
 	heal_bullet->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -386,7 +386,7 @@ void Obj_Tank::ShootHealingShot()
 
 void Obj_Tank::ShootHealingShotCharged()
 {
-	HealingShot_Area * heal_area = (HealingShot_Area*)app->objectmanager->GetObjectFromPool(ObjectType::HEALING_AREA_SHOT, pos_map);
+	HealingShot_Area * heal_area = (HealingShot_Area*)app->objectmanager->CreateObject(ObjectType::HEALING_AREA_SHOT, pos_map);
 
 	heal_area->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -402,7 +402,7 @@ void Obj_Tank::ShootHealingShotCharged()
 void Obj_Tank::ShootLaserShot()
 {
 
-	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_LASER, turr_pos + shot_dir);
+	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir);
 
 	laser_bullet->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -417,7 +417,7 @@ void Obj_Tank::ShootLaserShot()
 void Obj_Tank::ShootLaserShotCharged()
 {
 
-	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_LASER, turr_pos + shot_dir);
+	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->CreateObject(ObjectType::BULLET_LASER, turr_pos + shot_dir);
 
 	laser_bullet->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -465,7 +465,7 @@ void Obj_Tank::ShootFlameThrower()
 
 void Obj_Tank::ShootOil()
 {
-	Bullet_Oil * bullet = (Bullet_Oil*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_OIL, turr_pos + shot_dir);
+	Bullet_Oil * bullet = (Bullet_Oil*)app->objectmanager->CreateObject(ObjectType::BULLET_OIL, turr_pos + shot_dir);
 
 	bullet->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
@@ -482,7 +482,7 @@ void Obj_Tank::ShootOilCharged()
 {
 	fPoint pool_pos = turr_pos + shot_dir * 2.5F;
 	pool_pos -= fPoint(2.5f, 2.5f);
-	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->GetObjectFromPool(ObjectType::OIL_POOL, pool_pos);
+	Obj_OilPool* pool = (Obj_OilPool*)app->objectmanager->CreateObject(ObjectType::OIL_POOL, pool_pos);
 }
 
 void Obj_Tank::ShootElectroShot()
