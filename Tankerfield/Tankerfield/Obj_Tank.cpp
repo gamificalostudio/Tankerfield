@@ -730,6 +730,8 @@ void Obj_Tank::IncreaseLife(int heal)
 		new_life = GetMaxLife();
 	}
 	SetLife(new_life);
+
+	gui->HealingFlash();
 }
 
 void Obj_Tank::ReduceLife(int damage)
@@ -747,6 +749,9 @@ void Obj_Tank::ReduceLife(int damage)
 		SetLife(new_life);
 		damaged_timer.Start();
 		damaged = true;
+
+		gui->DamageFlash();
+
 	}
 }
 

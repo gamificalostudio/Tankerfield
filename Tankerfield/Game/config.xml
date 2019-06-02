@@ -5,7 +5,7 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="2" />
+    <mode value ="1" />
 
   </app>
 
