@@ -36,6 +36,7 @@
 #include "HealingShot_Area.h"
 #include "Obj_FlamethrowerFlame.h"
 #include "M_Debug.h"
+#include "Item_InstantHelp.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -264,6 +265,8 @@ bool Obj_Tank::Start()
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
 	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+
+	this->time_between_portal_tp.Start();
 
 	return true;
 }
@@ -649,14 +652,12 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 
 	else if (c1->GetTag() == TAG::PORTAL)
 	{
-		if (time_between_portal_tp.ReadMs() > 2000) {
-			if (c1 == portal1->coll) {
-				pos_map = portal2->pos_map;
-			}
-			else if (c1 == portal2->coll) {
-				pos_map = portal1->pos_map;
-			}
-			time_between_portal_tp.Start();
+		if (this->time_between_portal_tp.ReadMs() >= 1000)
+		{
+			Obj_Portal * portal = (Obj_Portal*)c1->GetObj();
+			Item_InstantHelp * instant_help = portal->instant_help;
+			instant_help->Teleport(this, portal);
+			this->time_between_portal_tp.Start();
 		}
 	}
 
@@ -1251,13 +1252,6 @@ void Obj_Tank::InputReadyKeyboard()
 fPoint Obj_Tank::GetShotDir() const
 {
 	return shot_dir;
-}
-
-void Obj_Tank::CreatePortals()
-{
-	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
-
-	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
 }
 
 float Obj_Tank::GetTurrAngle() const

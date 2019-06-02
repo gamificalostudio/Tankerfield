@@ -14,9 +14,13 @@ class Item_InstantHelp : public Obj_Item
 public:
 	Item_InstantHelp(fPoint pos);
 
-	bool Update(float dt) override;
-
 	bool Use() override;
+	void Teleport(Obj_Tank* tank_to_teleport, Obj_Portal * portal_from);
+
+public:
+	Obj_Portal * portal1 = nullptr;
+	Obj_Portal * portal2 = nullptr;
+
 
 private:
 	SDL_Texture * tex = nullptr;
