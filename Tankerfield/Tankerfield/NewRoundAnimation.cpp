@@ -20,6 +20,7 @@ void NewRoundAnimation::Start()
 	PrepareNewRoundUIParticles();
 
 	fRect screen = app->win->GetWindowRect();
+
 	UI_ImageDef image_def({ 1725, 1129, 385, 385 });
 	center_energy = app->ui->CreateImage({ screen.w * 0.5f, screen.h * 0.5f }, image_def);
 	center_energy->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -28,13 +29,63 @@ void NewRoundAnimation::Start()
 	max_particle_time = 10000u;//10 seconds max time to transition for all the particles
 	color_transition_time = 0.5f;
 
-	source_color = { 255, 255, 255, 255 };//White
-	target_color = {  75, 180,   0, 255 };//Same green as the health bars in full life
-
 	color_r = source_color.r;
 	color_g = source_color.g;
 	color_b = source_color.b;
 	color_a = source_color.a;
+
+	source_color = { 255, 255, 255, 255 };//White
+	target_color = { 75, 180,   0, 255 };//Same green as the health bars in full life
+
+	image_def.sprite_section = { 1725, 1514, 55, 55 };
+	for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
+	{
+		heal_particle[i] = app->ui->CreateImage({ screen.w * 0.5f, screen.h * 0.5f }, image_def);
+		heal_particle[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+		heal_particle[i]->SetState(ELEMENT_STATE::HIDDEN);
+		heal_particle[i]->color_mod = target_color;
+	}
+
+	heal_particle_speed = 10.f;
+}
+
+void NewRoundAnimation::CreateNewRoundParticles()
+{
+	UI_ImageDef image_def({ 1725, 1514, 55, 55 });
+	fPoint default_pos(0.f, 0.f);
+	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
+	{
+		particles[i].ui_image = app->ui->CreateImage(default_pos, image_def);
+		particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+	}
+}
+
+void NewRoundAnimation::PrepareNewRoundUIParticles()
+{
+	fRect screen = app->win->GetWindowRect();
+	fPoint target_pos = { screen.w * 0.5f, screen.h * 0.5f };
+	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
+	{
+		fPoint position;
+		do
+		{
+			position = fPoint(
+				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.w)),
+				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.h)));
+		} while (position == target_pos);
+		particles[i].ui_image->SetPos(position);
+		particles[i].direction = position - target_pos;
+		particles[i].direction.Normalize();
+		particles[i].curr_scale = rand() % (int)max_particle_scale;
+		particles[i].reached_target = false;
+		particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
+		particles[i].ui_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+		particles[i].ui_image->alpha = 0.f;
+		particles[i].alpha_speed = min_particle_alpha_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_alpha_speed - min_particle_alpha_speed)));
+		particles[i].speed = min_particle_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_speed - min_particle_speed)));
+		particles[i].speed_squared = particles[i].speed * particles[i].speed;
+	}
+	particles_reached_trg = 0;
 }
 
 bool NewRoundAnimation::Update(float dt)
@@ -46,24 +97,25 @@ bool NewRoundAnimation::Update(float dt)
 	{
 		UpdateNewRoundUIParticles(dt);
 
-		if (particles_reached_trg == NEW_ROUND_PARTICLE_NUM ||
-			particles_timer.Read() > max_particle_time)
+		if (particles_reached_trg == NEW_ROUND_PARTICLE_NUM)
 		{
-			phase = NEW_ROUND_ANIMATION_PHASE::PREPARE_COLOR_TRANSITION;
+			PrepareColorTransition();
+			phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
+		}
+		//If for any reasons all particles don't reach the center
+		else if (particles_timer.Read() > max_particle_time)
+		{
+			center_energy->alpha = 255.f;
+			for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
+			{
+				particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+			}
+			PrepareColorTransition();
+			phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
 		}
 	}break;
 
-	case NEW_ROUND_ANIMATION_PHASE::PREPARE_COLOR_TRANSITION:
-	{
-		r_increment = (target_color.r - source_color.r) / color_transition_time;
-		g_increment = (target_color.g - source_color.g) / color_transition_time;
-		b_increment = (target_color.b - source_color.b) / color_transition_time;
-		a_increment = (target_color.a - source_color.a) / color_transition_time;
-		color_transition_timer.Start();
-		phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
-	}break;
-
-	case::NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION:
+	case NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION:
 	{
 		color_r += r_increment * dt;
 		color_g += g_increment * dt;
@@ -77,14 +129,33 @@ bool NewRoundAnimation::Update(float dt)
 
 		if (color_transition_timer.ReadSec() > color_transition_time)
 		{
-			center_energy->color_mod = target_color;
+			//TODO: Change the number
+			center_energy->SetState(ELEMENT_STATE::HIDDEN);
+			//center_energy->color_mod = source_color;
+			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
+			{
+				heal_particle[i]->SetState(ELEMENT_STATE::VISIBLE);
+			}
 			phase = NEW_ROUND_ANIMATION_PHASE::HEAL;
 		}
 	}break;
 
 	case NEW_ROUND_ANIMATION_PHASE::HEAL:
 	{
-
+		fRect screen = app->win->GetWindowRect();
+		heal_particle[(int)HEAL_PARTICLE::LEFT]->SetPos(heal_particle[(int)HEAL_PARTICLE::LEFT]->position - fPoint(heal_particle_speed, 0.f));
+		heal_particle[(int)HEAL_PARTICLE::RIGHT]->SetPos(heal_particle[(int)HEAL_PARTICLE::RIGHT]->position + fPoint(heal_particle_speed, 0.f));
+		if (heal_particle[(int)HEAL_PARTICLE::LEFT]->position.x < 0.f
+			|| heal_particle [(int)HEAL_PARTICLE::RIGHT]->position.x > screen.w)
+		{
+			//TODO: Heal players
+			//TODO: Start next round
+			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
+			{
+				heal_particle[i]->SetState(ELEMENT_STATE::HIDDEN);
+			}
+			phase = NEW_ROUND_ANIMATION_PHASE::IN_ROUND;
+		}
 	}break;
 
 	//case NEW_ROUND_ANIMATION_PHASE::IN_ROUND: Doesn't do anything, simply returns true
@@ -97,6 +168,15 @@ bool NewRoundAnimation::Update(float dt)
 	}
 
 	return true;
+}
+
+void NewRoundAnimation::PrepareColorTransition()
+{
+	r_increment = (target_color.r - source_color.r) / color_transition_time;
+	g_increment = (target_color.g - source_color.g) / color_transition_time;
+	b_increment = (target_color.b - source_color.b) / color_transition_time;
+	a_increment = (target_color.a - source_color.a) / color_transition_time;
+	color_transition_timer.Start();
 }
 
 void NewRoundAnimation::UpdateNewRoundUIParticles(float dt)
@@ -131,44 +211,5 @@ void NewRoundAnimation::UpdateNewRoundUIParticles(float dt)
 				}
 			}
 		}
-	}
-}
-
-void NewRoundAnimation::PrepareNewRoundUIParticles()
-{
-	fRect screen = app->win->GetWindowRect();
-	fPoint target_pos = { screen.w * 0.5f, screen.h * 0.5f };
-	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
-	{
-		fPoint position;
-		do
-		{
-			position = fPoint(
-				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.w)),
-				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.h)));
-		} while (position == target_pos);
-		particles[i].ui_image->SetPos(position);
-		particles[i].direction = position - target_pos;
-		particles[i].direction.Normalize();
-		particles[i].curr_scale = rand() % (int)max_particle_scale;
-		particles[i].reached_target = false;
-		particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
-		particles[i].ui_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-		particles[i].ui_image->alpha = 0.f;
-		particles[i].alpha_speed = min_particle_alpha_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_alpha_speed - min_particle_alpha_speed)));
-		particles[i].speed = min_particle_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_speed - min_particle_speed)));
-		particles[i].speed_squared = particles[i].speed * particles[i].speed;
-	}
-	particles_reached_trg = 0;
-}
-
-void NewRoundAnimation::CreateNewRoundParticles()
-{
-	UI_ImageDef image_def({ 1725, 1514, 55, 55 });
-	fPoint default_pos(0.f, 0.f);
-	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
-	{
-		particles[i].ui_image = app->ui->CreateImage(default_pos, image_def);
-		particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
 	}
 }

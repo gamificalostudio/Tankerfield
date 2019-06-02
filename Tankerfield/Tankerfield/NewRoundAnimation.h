@@ -9,15 +9,6 @@
 
 class UI_Image;
 
-enum class NEW_ROUND_ANIMATION_PHASE
-{
-	PARTICLES,
-	PREPARE_COLOR_TRANSITION,//Only one frame to prepare the variables
-	COLOR_TRANSITION,
-	HEAL,
-	IN_ROUND,
-};
-
 struct NewRoundUIParticles
 {
 	UI_Image * ui_image = nullptr;
@@ -34,6 +25,8 @@ struct NewRoundAnimation
 public:
 	void Start();
 	bool Update(float dt);
+
+	void PrepareColorTransition();
 
 private:
 	void CreateNewRoundParticles();
@@ -77,11 +70,29 @@ private:
 	float color_transition_time = 0.f;
 	Timer color_transition_timer;
 
-	NEW_ROUND_ANIMATION_PHASE phase = NEW_ROUND_ANIMATION_PHASE::PARTICLES;
+	UI_Image * heal_particle[2] = { nullptr };
+	float heal_particle_speed = 0.f;
 
 	//TODO: Create Start method (fill variables)
 	//TODO: Create void Reset method
 	//TODO: Put methods in here
+
+	enum class HEAL_PARTICLE
+	{
+		LEFT,
+		RIGHT,
+		MAX
+	};
+
+	enum class NEW_ROUND_ANIMATION_PHASE
+	{
+		PARTICLES,
+		COLOR_TRANSITION,
+		HEAL,
+		IN_ROUND,
+	};
+
+	NEW_ROUND_ANIMATION_PHASE phase = NEW_ROUND_ANIMATION_PHASE::PARTICLES;
 };
 
 #endif
