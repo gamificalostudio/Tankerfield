@@ -144,22 +144,24 @@ bool M_Scene::Start()
 	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
 	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
-	max_particle_scale = 3.f;
-	min_particle_speed = -120.f;
-	max_particle_speed = -240.f;
+	new_round_animation.max_particle_scale = 3.f;
+	new_round_animation.min_particle_speed = -120.f;
+	new_round_animation.max_particle_speed = -240.f;
 
-	min_particle_alpha_speed = 30.f;
-	max_particle_alpha_speed = 120.f;
+	new_round_animation.min_particle_alpha_speed = 30.f;
+	new_round_animation.max_particle_alpha_speed = 120.f;
 
 	CreateNewRoundParticles();
 	PrepareNewRoundUIParticles();
 
 	fRect screen = app->win->GetWindowRect();
 	UI_ImageDef image_def({ 1725, 1129, 385, 385 });
-	center_energy = app->ui->CreateImage({ screen.w * 0.5f, screen.h * 0.5f }, image_def);
-	center_energy->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	center_energy->alpha = 0.f;
-	center_energy_alpha_fill_amount = 255.f / NEW_ROUND_PARTICLE_NUM; 
+	new_round_animation.center_energy = app->ui->CreateImage({ screen.w * 0.5f, screen.h * 0.5f }, image_def);
+	new_round_animation.center_energy->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	new_round_animation.center_energy->alpha = 0.f;
+	new_round_animation.center_energy_alpha_fill_amount = 255.f / NEW_ROUND_PARTICLE_NUM;
+	new_round_animation.max_particle_time = 10000u;//10 seconds max time to transition for all the particles
+	new_round_animation.time_to_transition = 3000u;
 
 	return true;
 }
@@ -170,8 +172,8 @@ void M_Scene::CreateNewRoundParticles()
 	fPoint default_pos(0.f, 0.f);
 	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
 	{
-		new_round_ui_particles[i].ui_image = app->ui->CreateImage(default_pos, image_def);
-		new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+		new_round_animation.particles[i].ui_image = app->ui->CreateImage(default_pos, image_def);
+		new_round_animation.particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
 	}
 }
 
@@ -188,19 +190,19 @@ void M_Scene::PrepareNewRoundUIParticles()
 				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.w)),
 				static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / screen.h)));
 		} while (position == target_pos);
-		new_round_ui_particles[i].ui_image->SetPos(position);
-		new_round_ui_particles[i].direction = position - target_pos;
-		new_round_ui_particles[i].direction.Normalize();
-		new_round_ui_particles[i].curr_scale = rand() % (int)max_particle_scale;
-		new_round_ui_particles[i].reached_target = false;
-		new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
-		new_round_ui_particles[i].ui_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-		new_round_ui_particles[i].ui_image->alpha = 0.f;
-		new_round_ui_particles[i].alpha_speed = min_particle_alpha_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_alpha_speed - min_particle_alpha_speed)));
-		new_round_ui_particles[i].speed = min_particle_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_speed - min_particle_speed)));
-		new_round_ui_particles[i].speed_squared = new_round_ui_particles[i].speed * new_round_ui_particles[i].speed;
+		new_round_animation.particles[i].ui_image->SetPos(position);
+		new_round_animation.particles[i].direction = position - target_pos;
+		new_round_animation.particles[i].direction.Normalize();
+		new_round_animation.particles[i].curr_scale = rand() % (int)new_round_animation.max_particle_scale;
+		new_round_animation.particles[i].reached_target = false;
+		new_round_animation.particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
+		new_round_animation.particles[i].ui_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+		new_round_animation.particles[i].ui_image->alpha = 0.f;
+		new_round_animation.particles[i].alpha_speed = new_round_animation.min_particle_alpha_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (new_round_animation.max_particle_alpha_speed - new_round_animation.min_particle_alpha_speed)));
+		new_round_animation.particles[i].speed = new_round_animation.min_particle_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (new_round_animation.max_particle_speed - new_round_animation.min_particle_speed)));
+		new_round_animation.particles[i].speed_squared = new_round_animation.particles[i].speed * new_round_animation.particles[i].speed;
 	}
-	particles_reached_trg = 0;
+	new_round_animation.particles_reached_trg = 0;
 }
 
 void M_Scene::UpdateNewRoundUIParticles(float dt)
@@ -209,29 +211,29 @@ void M_Scene::UpdateNewRoundUIParticles(float dt)
 	fPoint target_pos = { screen.w * 0.5f, screen.h * 0.5f };
 	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
 	{
-		if (!new_round_ui_particles[i].reached_target)
+		if (!new_round_animation.particles[i].reached_target)
 		{
-			if (new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= dt * new_round_ui_particles[i].speed_squared * dt
+			if (new_round_animation.particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= dt * new_round_animation.particles[i].speed_squared * dt
 				/*new_round_ui_particles[i].ui_image->position.DistanceTo(target_pos) <= abs(new_round_ui_particles[i].speed * dt)*/)//It's the same but the above one is more optimized because it doens't calculate a square root
 			{
 				//INFO: Reach the target
-				new_round_ui_particles[i].ui_image->SetPos(target_pos);
-				new_round_ui_particles[i].reached_target = true;
-				new_round_ui_particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
-				center_energy->alpha += center_energy_alpha_fill_amount;
-				++particles_reached_trg;
+				new_round_animation.particles[i].ui_image->SetPos(target_pos);
+				new_round_animation.particles[i].reached_target = true;
+				new_round_animation.particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+				new_round_animation.center_energy->alpha += new_round_animation.center_energy_alpha_fill_amount;
+				++new_round_animation.particles_reached_trg;
 			}
 			else
 			{
 				//INFO: Move to the target
-				new_round_ui_particles[i].ui_image->SetPos(new_round_ui_particles[i].ui_image->position + new_round_ui_particles[i].direction * new_round_ui_particles[i].speed * dt);
-				if (new_round_ui_particles[i].ui_image->alpha + new_round_ui_particles[i].alpha_speed * dt >= 255.f)
+				new_round_animation.particles[i].ui_image->SetPos(new_round_animation.particles[i].ui_image->position + new_round_animation.particles[i].direction * new_round_animation.particles[i].speed * dt);
+				if (new_round_animation.particles[i].ui_image->alpha + new_round_animation.particles[i].alpha_speed * dt >= 255.f)
 				{
-					new_round_ui_particles[i].ui_image->alpha = 255.f;
+					new_round_animation.particles[i].ui_image->alpha = 255.f;
 				}
 				else
 				{
-					new_round_ui_particles[i].ui_image->alpha += new_round_ui_particles[i].alpha_speed * dt;
+					new_round_animation.particles[i].ui_image->alpha += new_round_animation.particles[i].alpha_speed * dt;
 				}
 			}
 		}
@@ -368,7 +370,43 @@ bool M_Scene::Update(float dt)
 		game_over = true;
 	}
 	
-	UpdateNewRoundUIParticles(dt);
+	switch (new_round_animation.phase)
+	{
+	case NEW_ROUND_ANIMATION_PHASE::PARTICLES:
+	{
+		UpdateNewRoundUIParticles(dt);
+
+		if (new_round_animation.particles_reached_trg == NEW_ROUND_PARTICLE_NUM ||
+			new_round_animation.particles_timer.Read() > new_round_animation.max_particle_time)
+		{
+			new_round_animation.phase = NEW_ROUND_ANIMATION_PHASE::PARTICLES_REACH;
+		}
+	}break;
+
+	case NEW_ROUND_ANIMATION_PHASE::PARTICLES_REACH:
+	{
+		//Start changing color
+		//From 255 to 75
+		new_round_animation.r_increment = (255.f - 75.f) / new_round_animation.time_to_transition;
+		new_round_animation.center_energy->color_mod.r = new_round_animation.r_increment * dt;
+		//From 255 to 180
+		new_round_animation.center_energy->color_mod.g = 180.f;
+		//From 255 to 0
+		new_round_animation.center_energy->color_mod.b = 0.f;
+		new_round_animation.center_energy->color_mod.a = 255.f;
+		new_round_animation.color_transition_timer.Start();
+		new_round_animation.phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
+	}break;
+
+	case::NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION:
+	{
+		if (new_round_animation.color_transition_timer.Read() > new_round_animation.time_to_transition)
+		{
+			//Start next animation
+		}
+	}break;
+
+	}
 
 	return true;
 }

@@ -709,9 +709,9 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
 	if (c1->GetTag() == TAG::ROAD && curr_speed >= speed + road_buff)
-		{
-			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
-		}
+	{
+		curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
+	}
 }
 
 void Obj_Tank::SetLife(int life)
