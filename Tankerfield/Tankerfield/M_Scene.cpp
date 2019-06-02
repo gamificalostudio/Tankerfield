@@ -145,7 +145,7 @@ bool M_Scene::Start()
 	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
 
 	max_particle_scale = 3.f;
-	min_particle_speed = -60.f;
+	min_particle_speed = -120.f;
 	max_particle_speed = -240.f;
 
 	min_particle_alpha_speed = 30.f;
