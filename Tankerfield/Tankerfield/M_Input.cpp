@@ -31,12 +31,12 @@ M_Input::~M_Input()
 		delete[] keyboard;
 		keyboard = nullptr;
 	}
-	for (std::vector<Controller*>::iterator controll = controllers.begin(); controll != controllers.end(); ++controll)
+	
+	for (int i = 0; i < SDL_NumJoysticks(); ++i) 
 	{
-		if ((*controll) != nullptr)
+		if (SDL_IsGameController(i))
 		{
-			delete (*controll);
-			(*controll) = nullptr;
+			SDL_GameControllerClose(controllers[i].ctr_pointer);
 		}
 	}
 }
@@ -139,37 +139,33 @@ bool M_Input::PreUpdate()
 			}
 			case SDL_CONTROLLERDEVICEADDED:
 			{
-				if (controllers.size() < MAX_CONTROLLERS)
+				if (SDL_NumJoysticks() < MAX_CONTROLLERS)
 				{
-					int num_joystincks = SDL_NumJoysticks();
-					for (int i = 0; i < num_joystincks; ++i)
+					for (uint i = 0; i < MAX_CONTROLLERS; ++i)
 					{
-						bool is_joystick = false;
-						for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+						if (!controllers[i].connected && SDL_IsGameController(i))
 						{
-							if ((*iter)->index_number == i)
+							controllers[i].ctr_pointer= SDL_GameControllerOpen(i);
+							if (!controllers[i].ctr_pointer)
 							{
-								is_joystick = true;
+								LOG("Could not open gamecontroller %i: %s\n", i, SDL_GetError());
+								break;
 							}
-						}
-						if (!is_joystick)
-						{
-							Controller* controller = DBG_NEW Controller();
-							controller->ctr_pointer = SDL_GameControllerOpen(i);
-							SDL_Joystick* j = SDL_GameControllerGetJoystick(controller->ctr_pointer);
-							controller->joyId = SDL_JoystickInstanceID(j);
-							controller->index_number = i;
-							controller->haptic = SDL_HapticOpen(i);
+							controllers[i].connected = true;
+							SDL_Joystick* j = SDL_GameControllerGetJoystick(controllers[i].ctr_pointer);
+							controllers[i].joyId = SDL_JoystickInstanceID(j);
+							controllers[i].index_number = i;
+							controllers[i].haptic = SDL_HapticOpen(i);
 							LOG("Joys stick is aptic: %i", SDL_JoystickIsHaptic(j));
-							if (controller->haptic == NULL)
+							if (controllers[i].haptic == nullptr)
 							{
 								LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
 							}
 							else
 							{
-								SDL_HapticRumbleInit(controller->haptic);
+								SDL_HapticRumbleInit(controllers[i].haptic);
+								controllers[i].PlayRumble(0.5, 100);
 							}
-							controllers.push_back(controller);
 						}
 					}
 				}
@@ -177,31 +173,26 @@ bool M_Input::PreUpdate()
 			}
 			case SDL_CONTROLLERDEVICEREMOVED:
 			{
-				for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end();)
+				for (uint i = 0; i < MAX_CONTROLLERS; i++)
 				{
-					if (SDL_GameControllerGetAttached((*iter)->ctr_pointer) == false)
+					if (controllers[i].joyId == event.cdevice.which)
 					{
-						if ((*iter)->haptic != nullptr)
+						if (controllers[i].haptic != nullptr)
 						{
-							SDL_HapticClose((*iter)->haptic);
-							(*iter)->haptic = nullptr;
+							SDL_HapticClose(controllers[i].haptic);
+							controllers[i].haptic = nullptr;
 						}
-							
-
-						if ((*iter)->ctr_pointer != nullptr)
+						if (controllers[i].ctr_pointer != nullptr)
 						{
-							SDL_GameControllerClose((*iter)->ctr_pointer);
-							(*iter)->ctr_pointer = nullptr;
+							SDL_GameControllerClose(controllers[i].ctr_pointer);
+							controllers[i].ctr_pointer = nullptr;
 						}
 						
+						controllers[i].joyId = -1;
+						controllers[i].connected = false;
 
-						delete (*iter);
-						(*iter) = nullptr;
-						iter = controllers.erase(iter);
-					}
-					else
-					{
-						++iter;
+						LOG("Disconnected gamepad index: %d", i);
+						break;
 					}
 				}
 				break;
@@ -242,114 +233,86 @@ void M_Input::GetMouseMotion(int& x, int& y)
 	y = mouse_motion_y;
 }
 
-KeyState M_Input::GetControllerButtonState(Controller ** controller, SDL_GameControllerButton button)
+KeyState M_Input::GetControllerButtonState(int i, SDL_GameControllerButton button)
 {
-	if (controller != nullptr && (*controller)!=nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		return (*controller)->GetButtonState(button);
-	}
-	else if(controller!=nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
+		return controllers[i].GetButtonState(button);
 	}
 	return KeyState::KEY_IDLE;
 }
 
-iPoint M_Input::GetControllerJoystick(Controller ** controller, Joystick joystick, int dead_zone)
+iPoint M_Input::GetControllerJoystick(int i, Joystick joystick, int dead_zone)
 {
-	if (controller != nullptr && (*controller) != nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		return (*controller)->GetJoystick(joystick, dead_zone);
-	}
-	else if (controller != nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
+		return controllers[i].GetJoystick(joystick, dead_zone);
 	}
 	return  iPoint(0, 0);
 
 }
 
-Sint16 M_Input::GetControllerAxis(Controller** controller, SDL_GameControllerAxis axis, int dead_zone)
+Sint16 M_Input::GetControllerAxis(int i, SDL_GameControllerAxis axis, int dead_zone)
 {
-	if (controller != nullptr && (*controller) != nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		return (*controller)->GetAxis(axis, dead_zone);
-	}
-	else if (controller != nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
+		return controllers[i].GetAxis(axis, dead_zone);
 	}
 	return 0;
 
 }
 
-KeyState M_Input::GetControllerJoystickState(Controller ** controller, Joystick joystick, INPUT_DIR joystick_button)
+KeyState M_Input::GetControllerJoystickState(int i, Joystick joystick, INPUT_DIR joystick_button)
 {
-	if (controller != nullptr && (*controller) != nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		return (*controller)->GetJoystickState(joystick, joystick_button);
-	}
-	else if (controller != nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
+		return controllers[i].GetJoystickState(joystick, joystick_button);
 	}
 	return KeyState::KEY_IDLE;
 
 }
 
-KeyState M_Input::GetControllerTriggerState(Controller ** controller, SDL_GameControllerAxis axis)
+KeyState M_Input::GetControllerTriggerState(int i , SDL_GameControllerAxis axis)
 {
-	if (controller != nullptr && (*controller) != nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		return (*controller)->GetTriggerState(axis);
-	}
-	else if (controller != nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
+		return controllers[i].GetTriggerState(axis);
 	}
 	return KeyState::KEY_IDLE;
 
 }
 
-int M_Input::ControllerPlayRumble(Controller ** controller, float strengh, Uint32 length)
+void M_Input::ControllerPlayRumble(int i, float strengh, Uint32 length)
 {
-	if (controller != nullptr && (*controller) != nullptr && (*controller)->haptic!=nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		return (*controller)->PlayRumble(strengh, length);
+		controllers[i].PlayRumble(strengh, length);
 	}
-	else if (controller != nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
-	}
-	return 0;
-
 }
 
-int M_Input::ControllerStopRumble(Controller ** controller)
+void M_Input::ControllerStopRumble(int i)
 {
-	if (controller != nullptr && (*controller) != nullptr && (*controller)->haptic != nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		return (*controller)->StopRumble();
+		controllers[i].StopRumble();
 	}
-	else if (controller != nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
-		return 0;
-	}
-	return 0;
 }
 
-void M_Input::DetachController(Controller ** controller)
+void M_Input::DetachController(int i)
 {
-	if (controller != nullptr && (*controller) != nullptr)
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
-		(*controller)->attached = false;
+		controllers[i].attached = false;
 	}
-	else if (controller != nullptr && (*controller) == nullptr)
-	{
-		controller = nullptr;
-	}
+}
 
+bool M_Input::IsConnectedControllet(int i)
+{
+	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
+	{
+		return true;
+	}
+	return false;
 }
 
 iPoint M_Input::GetMousePos_Tiles(const Camera * camera)
@@ -402,100 +365,103 @@ void M_Input::UpdateMouseState()
 
 void M_Input::UpdateControllers()
 {
-	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+	for (uint i = 0; i < MAX_CONTROLLERS; ++i)
 	{
-		for (int button = SDL_CONTROLLER_BUTTON_A; button < SDL_CONTROLLER_BUTTON_MAX; ++button)
+		if (controllers[i].connected)
 		{
-			if (SDL_GameControllerGetButton((*iter)->ctr_pointer, (SDL_GameControllerButton)button))
+			for (int button = SDL_CONTROLLER_BUTTON_A; button < SDL_CONTROLLER_BUTTON_MAX; ++button)
 			{
-				
-				if ((*iter)->button_state[button] == KEY_IDLE)
-					(*iter)->button_state[button] = KEY_DOWN;
-				else
-					(*iter)->button_state[button] = KEY_REPEAT;
-			}
-			else
-			{
-				if ((*iter)->button_state[button] == KEY_REPEAT || (*iter)->button_state[button] == KEY_DOWN)
-					(*iter)->button_state[button] = KEY_UP;
-				else
-					(*iter)->button_state[button] = KEY_IDLE;
-			}
-		}
+				if (SDL_GameControllerGetButton(controllers[i].ctr_pointer, (SDL_GameControllerButton)button))
+				{
 
-		for (int trigger = SDL_CONTROLLER_AXIS_TRIGGERLEFT; trigger < SDL_CONTROLLER_AXIS_MAX; ++trigger)
-		{
-			int trigger_pos_on_array = trigger - SDL_CONTROLLER_AXIS_TRIGGERLEFT;
-			if ((*iter)->GetAxis((SDL_GameControllerAxis)trigger) > 0)
-			{
-				if ((*iter)->trigger_state[trigger_pos_on_array] == KEY_IDLE)
-					(*iter)->trigger_state[trigger_pos_on_array] = KEY_DOWN;
+					if (controllers[i].button_state[button] == KEY_IDLE)
+						controllers[i].button_state[button] = KEY_DOWN;
+					else
+						controllers[i].button_state[button] = KEY_REPEAT;
+				}
 				else
-					(*iter)->trigger_state[trigger_pos_on_array] = KEY_REPEAT;
+				{
+					if (controllers[i].button_state[button] == KEY_REPEAT || controllers[i].button_state[button] == KEY_DOWN)
+						controllers[i].button_state[button] = KEY_UP;
+					else
+						controllers[i].button_state[button] = KEY_IDLE;
+				}
 			}
-			else
-			{
-				if ((*iter)->trigger_state[trigger_pos_on_array] == KEY_REPEAT || (*iter)->trigger_state[trigger_pos_on_array] == KEY_DOWN)
-					(*iter)->trigger_state[trigger_pos_on_array] = KEY_UP;
-				else
-					(*iter)->trigger_state[trigger_pos_on_array] = KEY_IDLE;
-			}
-		}
 
-		//Joysticks
-		//for joysticks
-		int joystick_enum = 0;
-		for (int sdl_joystick = SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX; sdl_joystick < SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT; ++sdl_joystick)
-		{
-			int joystick_value = (*iter)->GetAxis((SDL_GameControllerAxis)(sdl_joystick));
-			//1 value
-			if (joystick_value > 0)
+			for (int trigger = SDL_CONTROLLER_AXIS_TRIGGERLEFT; trigger < SDL_CONTROLLER_AXIS_MAX; ++trigger)
 			{
-				if ((*iter)->joystick_state[joystick_enum] == KEY_IDLE)
-					(*iter)->joystick_state[joystick_enum] = KEY_DOWN;
+				int trigger_pos_on_array = trigger - SDL_CONTROLLER_AXIS_TRIGGERLEFT;
+				if (controllers[i].GetAxis((SDL_GameControllerAxis)trigger) > 0)
+				{
+					if (controllers[i].trigger_state[trigger_pos_on_array] == KEY_IDLE)
+						controllers[i].trigger_state[trigger_pos_on_array] = KEY_DOWN;
+					else
+						controllers[i].trigger_state[trigger_pos_on_array] = KEY_REPEAT;
+				}
 				else
-					(*iter)->joystick_state[joystick_enum] = KEY_REPEAT;
+				{
+					if (controllers[i].trigger_state[trigger_pos_on_array] == KEY_REPEAT || controllers[i].trigger_state[trigger_pos_on_array] == KEY_DOWN)
+						controllers[i].trigger_state[trigger_pos_on_array] = KEY_UP;
+					else
+						controllers[i].trigger_state[trigger_pos_on_array] = KEY_IDLE;
+				}
 			}
-			else
+
+			//Joysticks
+			//for joysticks
+			int joystick_enum = 0;
+			for (int sdl_joystick = SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_LEFTX; sdl_joystick < SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT; ++sdl_joystick)
 			{
-				if ((*iter)->joystick_state[joystick_enum] == KEY_REPEAT || (*iter)->joystick_state[joystick_enum] == KEY_DOWN)
-					(*iter)->joystick_state[joystick_enum] = KEY_UP;
+				int joystick_value = controllers[i].GetAxis((SDL_GameControllerAxis)(sdl_joystick));
+				//1 value
+				if (joystick_value > 0)
+				{
+					if (controllers[i].joystick_state[joystick_enum] == KEY_IDLE)
+						controllers[i].joystick_state[joystick_enum] = KEY_DOWN;
+					else
+						controllers[i].joystick_state[joystick_enum] = KEY_REPEAT;
+				}
 				else
-					(*iter)->joystick_state[joystick_enum] = KEY_IDLE;
-			}
-			++joystick_enum;
-			//-1 value
-			if (joystick_value < 0)
-			{
-				if ((*iter)->joystick_state[joystick_enum] == KEY_IDLE)
-					(*iter)->joystick_state[joystick_enum] = KEY_DOWN;
+				{
+					if (controllers[i].joystick_state[joystick_enum] == KEY_REPEAT || controllers[i].joystick_state[joystick_enum] == KEY_DOWN)
+						controllers[i].joystick_state[joystick_enum] = KEY_UP;
+					else
+						controllers[i].joystick_state[joystick_enum] = KEY_IDLE;
+				}
+				++joystick_enum;
+				//-1 value
+				if (joystick_value < 0)
+				{
+					if (controllers[i].joystick_state[joystick_enum] == KEY_IDLE)
+						controllers[i].joystick_state[joystick_enum] = KEY_DOWN;
+					else
+						controllers[i].joystick_state[joystick_enum] = KEY_REPEAT;
+				}
 				else
-					(*iter)->joystick_state[joystick_enum] = KEY_REPEAT;
+				{
+					if (controllers[i].joystick_state[joystick_enum] == KEY_REPEAT || controllers[i].joystick_state[joystick_enum] == KEY_DOWN)
+						controllers[i].joystick_state[joystick_enum] = KEY_UP;
+					else
+						controllers[i].joystick_state[joystick_enum] = KEY_IDLE;
+				}
+				++joystick_enum;
 			}
-			else
-			{
-				if ((*iter)->joystick_state[joystick_enum] == KEY_REPEAT || (*iter)->joystick_state[joystick_enum] == KEY_DOWN)
-					(*iter)->joystick_state[joystick_enum] = KEY_UP;
-				else
-					(*iter)->joystick_state[joystick_enum] = KEY_IDLE;
-			}
-			++joystick_enum;
 		}
+		
 	}
 }
 
-Controller** M_Input::GetAbleController()
+int M_Input::GetAbleController()
 {
-	Controller** ret = nullptr;
-	for (std::vector<Controller*>::iterator iter = controllers.begin(); iter != controllers.end(); ++iter)
+	for (uint i=0; i<MAX_CONTROLLERS;++i)
 	{
-		if (!(*iter)->attached)
+		if (controllers[i].connected && !controllers[i].attached)
 		{
-			(*iter)->attached = true;
-			return &(*iter);
+			controllers[i].attached = true;
+			return i;
 		}
 	}
-	return ret;
+	return -1;
 }
 
 Controller::Controller()

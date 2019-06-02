@@ -38,7 +38,7 @@ bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-bool UI_InteractiveGroup::HandleControllerINavigation(Controller** controller )
+bool UI_InteractiveGroup::HandleControllerINavigation(int controller )
 {
 	bool ret = false;
 

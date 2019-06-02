@@ -24,7 +24,7 @@ public:
 
 	bool OnHoverEnter(UI_Element* object);
 
-	bool HandleControllerINavigation(Controller** controller);
+	bool HandleControllerINavigation(int controller);
 
 	bool HandleKeyboardNavigation();
 

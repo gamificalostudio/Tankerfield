@@ -57,7 +57,7 @@ public:
 	int GetMaxLife() const;
 	int GetTimeBetweenBullets() const;
 	int GetTankNum() const;
-	Controller ** GetController();
+	int GetController();
 	bool GetShotAutomatically() const;
 	bool GetIsElectroShotCharged() const;
 	fPoint GetShotDir() const;
@@ -240,7 +240,7 @@ private:
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
 	INPUT_METHOD shot_input					= INPUT_METHOD::KEYBOARD_MOUSE;
-	Controller ** controller = nullptr;
+	int controller = -1;
 
 	//-- Keyboard inputs
 	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;

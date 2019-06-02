@@ -35,7 +35,7 @@ struct Player_Selection
 {
 	int id = 0;
 	SDL_Color color = { 255,255,255,255 };
-	Controller** controller = nullptr;
+	int controller = -1;
 	Obj_Tank_MainMenu*  tank = nullptr;
 	fPoint tank_pos = { 0,0 };
 };
