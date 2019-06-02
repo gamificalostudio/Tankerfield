@@ -129,10 +129,12 @@ bool App::Awake()
 		case 1:
 			mode = APP_MODE::DEBUG_MULTIPLAYER;
 			main_menu->active = false;
+			video->active = false;
 			break;
 		case 2:
 			mode = APP_MODE::DEBUG_MAIN_MENU;
 			scene->active = false;
+			video->active = false;
 			break;
 		}
 		debug->enabled = false;
