@@ -14,7 +14,7 @@ struct AVPacketList;
 #include "Module.h"
 
 struct PacketQueue {
-	AVPacketList *first_pkt, *last_pkt;
+	AVPacketList *first_pkt=nullptr, *last_pkt=nullptr;
 	int nb_packets;
 	int size;
 	SDL_mutex* mutex = nullptr;
@@ -70,7 +70,7 @@ public:
 	StreamComponent video;
 	AVFormatContext* format = nullptr;
 
-	bool first_time = false;
+	bool texture_created = false;
 	bool refresh = false;
 	bool playing = false;
 	bool paused = false;

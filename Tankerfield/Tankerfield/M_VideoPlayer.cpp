@@ -136,8 +136,6 @@ bool Video::Start()
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
 
-	first_time = true;
-
 	PlayVideo("videos/IntroLogo.mp4");
 	return true;
 }
@@ -154,7 +152,6 @@ bool Video::Update(float dt)
 	{
 		DecodeVideo();
 		refresh = false;
-		first_time = false;
 	}
 
 	if (quit && audio.finished && video.finished)
@@ -165,7 +162,7 @@ bool Video::Update(float dt)
 
 bool Video::PostUpdate(float dt)
 {
-	if (playing&&!first_time)
+	if (playing&&texture_created)
 	{
 		app->render->Blit(texture, 0, 0, camera);
 	}
@@ -378,6 +375,7 @@ void Video::CloseVideo()
 
 	SDL_DestroyTexture(texture);
 	texture = nullptr;
+	texture_created = false;
 	SDL_CloseAudio();
 	audio_buf_index = 0;
 	audio_buf_size = 0;
@@ -422,8 +420,20 @@ void Video::DecodeVideo()
 		0, video.frame->height, video.converted_frame->data, video.converted_frame->linesize);
 
 	//Update video texture
-	SDL_UpdateYUVTexture(texture, nullptr, video.converted_frame->data[0], video.converted_frame->linesize[0], video.converted_frame->data[1],
-		video.converted_frame->linesize[1], video.converted_frame->data[2], video.converted_frame->linesize[2]);
+
+	if (texture == nullptr)
+	{
+		uint screen_w, screen_h;
+		app->win->GetWindowSize(screen_w, screen_h);
+		texture = SDL_CreateTexture(app->render->renderer, SDL_PIXELFORMAT_YV12, SDL_TEXTUREACCESS_STREAMING,
+			screen_w, screen_h);
+	}
+	else
+	{
+		texture_created = true;
+		SDL_UpdateYUVTexture(texture, nullptr, video.converted_frame->data[0], video.converted_frame->linesize[0], video.converted_frame->data[1],
+			video.converted_frame->linesize[1], video.converted_frame->data[2], video.converted_frame->linesize[2]);
+	}
 
 	// TODO 5: Synching the video to the audio.
 	// First we need to get the PTS from the FRAME that we just received.
