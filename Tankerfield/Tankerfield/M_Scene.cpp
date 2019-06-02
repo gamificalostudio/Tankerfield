@@ -211,8 +211,8 @@ void M_Scene::UpdateNewRoundUIParticles(float dt)
 	{
 		if (!new_round_ui_particles[i].reached_target)
 		{
-			if (/*new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= dt * new_round_ui_particles[i].speed_squared * dt*/
-				new_round_ui_particles[i].ui_image->position.DistanceTo(target_pos) <= abs(new_round_ui_particles[i].speed * dt))
+			if (new_round_ui_particles[i].ui_image->position.DistanceNoSqrt(target_pos) <= dt * new_round_ui_particles[i].speed_squared * dt
+				/*new_round_ui_particles[i].ui_image->position.DistanceTo(target_pos) <= abs(new_round_ui_particles[i].speed * dt)*/)//It's the same but the above one is more optimized because it doens't calculate a square root
 			{
 				//INFO: Reach the target
 				new_round_ui_particles[i].ui_image->SetPos(target_pos);
