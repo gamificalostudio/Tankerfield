@@ -18,11 +18,24 @@ public:
 
 	bool Use() override;
 
+public:
+
+	Obj_Tank* tank_to_tp = nullptr;
+
+	Obj_Portal* current_portal = nullptr;
+
+
+	Obj_Portal * portal1;
+	Obj_Portal * portal2;
+
+
 private:
 	SDL_Texture * tex = nullptr;
 	Animation anim;
 
 	PerfTimer time;
+
+
 };
 
 #endif

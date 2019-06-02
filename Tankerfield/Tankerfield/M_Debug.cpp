@@ -169,7 +169,7 @@ bool M_Debug::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
 	{
 		//Currently is random, but you could pass any WEAPON or ItemType to make it spawn the item you need (they are non-obligatory paramenters)
-		app->pick_manager->CreatePickUp((fPoint)mouse_pos);
+		app->pick_manager->CreatePickUp((fPoint)mouse_pos,PICKUP_TYPE::ITEM,ItemType::INSTANT_HELP);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
