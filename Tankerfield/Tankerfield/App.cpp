@@ -28,6 +28,7 @@
 #include "M_MainMenu.h"
 #include "M_Debug.h"
 #include "Options_Menu.h"
+#include "M_VideoPlayer.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -53,6 +54,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	reward_zone_manager = DBG_NEW M_RewardZoneManager();
 	main_menu = DBG_NEW M_MainMenu();
 	debug = DBG_NEW M_Debug();
+	video = DBG_NEW Video();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
@@ -65,6 +67,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(scene);
 	AddModule(main_menu);
+	AddModule(video);
 	AddModule(objectmanager);
 	AddModule(pick_manager);
 	AddModule(reward_zone_manager);
