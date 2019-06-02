@@ -155,7 +155,7 @@ bool M_Scene::Start()
 	PrepareNewRoundUIParticles();
 
 	fRect screen = app->win->GetWindowRect();
-	UI_ImageDef image_def({114, 508, 191, 191});
+	UI_ImageDef image_def({ 1725, 1129, 385, 385 });
 	center_energy = app->ui->CreateImage({ screen.w * 0.5f, screen.h * 0.5f }, image_def);
 	center_energy->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	center_energy->alpha = 0.f;
@@ -166,7 +166,7 @@ bool M_Scene::Start()
 
 void M_Scene::CreateNewRoundParticles()
 {
-	UI_ImageDef image_def(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]);
+	UI_ImageDef image_def({1725, 1514, 55, 55});
 	fPoint default_pos(0.f, 0.f);
 	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
 	{
