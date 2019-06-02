@@ -10,37 +10,32 @@ Item_InstantHelp::Item_InstantHelp(fPoint pos):Obj_Item(pos)
 {
 }
 
-bool Item_InstantHelp::Update(float dt)
+void Item_InstantHelp::Teleport(Obj_Tank* tank_to_teleport, Obj_Portal * portal_from)
 {
-	if(caster!=nullptr)
+	if (portal_from == portal1)
 	{
-		pos_map = caster->pos_map;
+		tank_to_teleport->pos_map = portal2->pos_map;
 	}
-
-	if (tank_to_tp != nullptr)
+	else if (portal_from == portal2)
 	{
-		if (current_portal == portal1)
-		{
-			tank_to_tp->pos_map = portal2->pos_map;
-		}
-
-		else if (current_portal == portal2)
-		{
-			tank_to_tp->pos_map = portal1->pos_map;
-		}
-		
+		tank_to_teleport->pos_map = portal1->pos_map;
 	}
-
-	return true;
 }
 
 bool Item_InstantHelp::Use()
 {
+	if (caster != nullptr)
+	{
+		pos_map = caster->pos_map;
+	}
+
 	fPoint tank_look = caster->GetShotDir();
 
 	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + tank_look * 5);
+	portal1->instant_help = this;
 
 	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - tank_look * 5);
+	portal2->instant_help = this;
 
 	return true;
 }

@@ -14,19 +14,12 @@ class Item_InstantHelp : public Obj_Item
 public:
 	Item_InstantHelp(fPoint pos);
 
-	bool Update(float dt) override;
-
 	bool Use() override;
+	void Teleport(Obj_Tank* tank_to_teleport, Obj_Portal * portal_from);
 
 public:
-
-	Obj_Tank* tank_to_tp = nullptr;
-
-	Obj_Portal* current_portal = nullptr;
-
-
-	Obj_Portal * portal1;
-	Obj_Portal * portal2;
+	Obj_Portal * portal1 = nullptr;
+	Obj_Portal * portal2 = nullptr;
 
 
 private:
@@ -34,8 +27,6 @@ private:
 	Animation anim;
 
 	PerfTimer time;
-
-
 };
 
 #endif

@@ -650,9 +650,9 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 
 	else if (c1->GetTag() == TAG::PORTAL)
 	{
-		Item_InstantHelp* teleport=(Item_InstantHelp*)app->objectmanager->CreateItem(ItemType::INSTANT_HELP,pos_map);
-		teleport->current_portal = (Obj_Portal*)c1->GetObj();
-		teleport->tank_to_tp = this;
+		Obj_Portal * portal = (Obj_Portal*)c1->GetObj();
+		Item_InstantHelp * instant_help = portal->instant_help;
+		instant_help->Teleport(this, portal);
 	}
 
 	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
