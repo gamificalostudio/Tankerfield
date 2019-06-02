@@ -30,7 +30,9 @@ bool Bullet_Basic::Start()
 	{
 		coll->SetIsTrigger(true);
 	}
+
 	bullet_life_ms_timer.Start();
+
 	return true;
 }
 Bullet_Basic::~Bullet_Basic()
