@@ -186,8 +186,6 @@ void Obj_TeslaTrooper::Idle()
 }
 void Obj_TeslaTrooper::Move(const float & dt)
 {
-	
-
 	if (IsOnGoal(next_pos))
 	{
 		update_velocity_vec.Start();

@@ -196,7 +196,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::IN_WAVE:
 	{
-		if (number_of_enemies<=5)//Hardcode to go to next round when there are less enemies
+		if (app->objectmanager->GetNumEnemies()<=5)//Hardcode to go to next round when there are less enemies
 		{
 			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}
@@ -395,28 +395,9 @@ void M_Scene::DebugPathfinding()
 	}
 }
 
-void M_Scene::ReduceNumEnemies()
-{
-	number_of_enemies -= 1;
-	if (number_of_enemies < 0)
-	{
-		number_of_enemies = 0;
-	}
-	//if (label_number_of_enemies != nullptr)
-	//	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
-
-}
 
 void M_Scene::CreateEnemyWave()
 {
-	number_of_enemies = 0;
-	number_of_enemies += Tesla_trooper_units;
-	number_of_enemies += Brute_units;
-
-	//number_of_enemies += Suicidal_units;
-
-	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
-
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)

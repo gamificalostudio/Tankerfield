@@ -213,7 +213,6 @@ bool M_Debug::PreUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_COMMA) == KEY_DOWN)
 	{
 		app->objectmanager->delete_all_enemies = true;
-		app->scene->SetToZeroNumEnemies();
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)

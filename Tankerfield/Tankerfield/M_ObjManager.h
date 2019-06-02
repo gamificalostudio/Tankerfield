@@ -109,6 +109,11 @@ public:
 	inline void DrawDebug(const Object* obj, Camera* camera);
 
 	bool IsEnemy(ObjectType type);
+
+	int GetNumEnemies()
+	{
+		return enemies.size();
+	}
 	
 
 private:
