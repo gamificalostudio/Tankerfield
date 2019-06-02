@@ -39,8 +39,8 @@
   <map>
     <folder>Maps/</folder>
     <levels>
-      <level name="test.tmx"/>
       <level name="Map2.tmx"/>
+      <level name="test.tmx"/>
     </levels>
   </map>
   
