@@ -11,7 +11,7 @@
     <recoil_speed value ="100"/>
     <!--Max speed bonuses-->
     <charged_shot_buff value="-3"/>
-    <road_buff value ="1.75"/>
+    <road_buff value ="1.5"/>
     <road_buff_decay_rate value="3"/>
     <recoil_buff value ="100"/>
 

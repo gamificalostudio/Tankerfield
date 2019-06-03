@@ -80,8 +80,6 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	pugi::xml_node anim_tank_node = app->anim_bank->animations_xml_node.child("tank");
-
 	pugi::xml_node tank_stats_node = app->objectmanager->balance_xml_node.child("tank");
 
 	// Textures ================================================
@@ -103,7 +101,7 @@ bool Obj_Tank::Start()
 	// Revive ------------------------ 
 	revive_range = 2.5f;
 	revive_range_squared = revive_range * revive_range;
-	revive_life = 25;
+	revive_life = 50;
 	revive_time = 2.f;
 	cycle_bar_tex = app->tex->Load(tank_node.child("spritesheets").child("cycle_bar_tex").text().as_string());
 	cycle_bar_anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("cycle-progress-bar"));
@@ -165,10 +163,10 @@ bool Obj_Tank::Start()
 	}
 	kb_shoot = SDL_BUTTON_LEFT;
 
-	rotate_base.frames = app->anim_bank->LoadFrames(anim_tank_node.child("rotate_base"));
+	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
 	curr_anim = &rotate_base;
 
-	rotate_turr.frames = app->anim_bank->LoadFrames(anim_tank_node.child("rotate_turr"));
+	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
 	base_max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
 
