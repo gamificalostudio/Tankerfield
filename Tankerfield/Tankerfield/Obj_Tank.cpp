@@ -634,7 +634,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
-		if (bullet->player != this) // he does not heal himself
+		if (bullet->player && Alive()) // he does not heal himself
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
