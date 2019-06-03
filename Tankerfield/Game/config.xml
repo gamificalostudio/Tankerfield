@@ -119,13 +119,6 @@
     
 
     <tank>
-      <speed value ="1"/>
-      <recoil>
-        <velocity_recoil_decay value="900"/>
-        <velocity_recoil_speed_max value="25"/>
-        <velocity_recoil_speed_max_charged value="50"/>
-      </recoil>
-
       <electro_shot>
         <collider_size value="1"/> <!--Width and height in tiles-->
         <electro_shot_sound>audio/Fx/tank/weapons/electric_shot/no_enemies_attack.wav</electro_shot_sound>

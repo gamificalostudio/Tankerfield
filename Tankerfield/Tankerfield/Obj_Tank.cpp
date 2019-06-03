@@ -76,7 +76,6 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
 	pugi::xml_node tank_stats_node = app->objectmanager->balance_xml_node.child("tank");
 
 	// Textures ================================================
@@ -280,6 +279,7 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
+	UpdateMovementBuffs(dt);
 	Movement(dt);
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
 	Shoot();
@@ -421,6 +421,54 @@ void Obj_Tank::InputMovementKeyboard(fPoint & input)
 void Obj_Tank::InputMovementController(fPoint & input)
 {
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move, dead_zone);
+}
+
+bool Obj_Tank::UpdateMovementBuffs(float dt)
+{
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end();)
+	{
+		(*iter).bonus_speed -= (*iter).decay_rate * dt;
+		if ((*iter).has_decay && (*iter).bonus_speed <= 0.f)
+		{
+			iter = movement_buffs.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
+//Returns true if the buff has been added, returns false if there was already a buff of the same type and the new buff didn't have any effect
+bool Obj_Tank::AddMaxSpeedBuff(MovementBuff & buff)
+{
+	bool ret = false;
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
+	{
+		if (buff.source == (*iter).source)
+		{
+			//Assumes that buffs from the same source will always have the same bonus
+			(*iter).bonus_speed = buff.bonus_speed;
+			ret = true;
+			break;
+		}
+	}
+	if (ret != true)
+	{
+		movement_buffs.push_back(buff);
+		ret = true;
+	}
+	return ret;
+}
+
+float Obj_Tank::GetMaxSpeed()
+{
+	float total_bonus;
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
+	{
+		total_bonus += (*iter).bonus_speed;
+	}
+	return max_speed + total_bonus;
 }
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
