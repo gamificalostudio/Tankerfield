@@ -101,25 +101,40 @@ bool M_ObjManager::PreUpdate()
 	BROFILER_CATEGORY("Object Manager: PreUpdate", Profiler::Color::Lavender);
 	std::list<Object*>::iterator iterator;
 
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
-	{
-		if ((*iterator) != nullptr && (*iterator)->active == true)
-		{
-			(*iterator)->PreUpdate();
-		}
-	}
-
 	if (delete_all_enemies == true)
 	{
-		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+		for (std::list<Object*>::iterator iterator = enemies.begin(); iterator != enemies.end(); ++iterator)
 		{
-			if (IsEnemy((*iterator)->type))
-			{
-				(*iterator)->to_remove = true;
-			}
+			(*iterator)->return_to_pool = true;
 		}
-
 		delete_all_enemies = false;
+		enemies.clear();
+	}
+
+	std::list<Object*>::iterator iterator;
+	for (iterator = objects.begin(); iterator != objects.end();)
+	{
+		if ((*iterator) != nullptr)
+		{
+			if ((*iterator)->return_to_pool)
+			{
+				DesactivateObject(iterator);
+			}
+			else if ((*iterator)->to_remove)
+			{
+				RemoveObject(iterator);
+			}
+			else if ((*iterator)->active == true)
+			{
+				(*iterator)->PreUpdate();
+				++iterator;
+			}
+			else
+				++iterator;
+		}
+		else
+			++iterator;
+
 	}
 
 	return true;
@@ -131,49 +146,14 @@ bool M_ObjManager::Update(float dt)
 
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
-		if ((*iterator) != nullptr )
+		if ((*iterator) != nullptr)
 		{
+
 			if ((*iterator)->active == true)
 			{
-				(*iterator)->Update(dt);
+				UpdateObject(iterator, dt);
 			}
-
-			if ((*iterator)->to_remove)
-			{
-			
-				(*iterator)->CleanUp();
-
-				if (IsEnemy((*iterator)->type))
-				{
-					enemies.remove((*iterator));
-				}
-
-				if ((*iterator)->coll != nullptr)
-				{
-					(*iterator)->coll->object = nullptr;
-					(*iterator)->coll->Destroy();
-					(*iterator)->coll = nullptr;
-				}
-
-				delete((*iterator));
-				(*iterator) = nullptr;
-				iterator = objects.erase(iterator);
-			}
-			else
-			{
-				// Update Components ======================================
-				if ((*iterator)->coll != nullptr)
-				{
-					(*iterator)->coll->SetPosToObj();
-				}
-
-				if ((*iterator)->curr_anim != nullptr)
-				{
-					(*iterator)->curr_anim->NextFrame(dt);
-				}
-
-				++iterator;
-			}
+			++iterator;
 		}
 		else
 		{
@@ -187,6 +167,66 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::IsEnemy(ObjectType type)
 {
 	return (type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER);//Change this enemy for the last enemy on the ObjectType enum
+}
+
+inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator & iterator)
+{
+	(*iterator)->CleanUp();
+
+	if ((*iterator)->type >= ObjectType::TESLA_TROOPER
+		&& (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.remove((*iterator));
+	}
+
+	if ((*iterator)->active == false)
+	{
+
+	}
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->object = nullptr;
+		(*iterator)->coll->Destroy();
+		(*iterator)->coll = nullptr;
+	}
+
+	delete((*iterator));
+	(*iterator) = nullptr;
+	iterator = objects.erase(iterator);
+}
+
+inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & iterator)
+{
+	(*iterator)->Desactivate();
+	(*iterator)->return_to_pool = false;
+	(*iterator)->active = false;
+
+	if ((*iterator)->type >= ObjectType::TESLA_TROOPER && (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.remove((*iterator));
+	}
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->SetIsTrigger(false);
+	}
+	ReturnToPool((*iterator));
+	++iterator;
+}
+
+inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, const float & dt)
+{
+	(*iterator)->Update(dt);
+
+	// Update Components ======================================
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->SetPosToObj();
+	}
+
+	if ((*iterator)->curr_anim != nullptr)
+	{
+		(*iterator)->curr_anim->NextFrame(dt);
+	}
 }
 
 bool M_ObjManager::PostUpdate(float dt)
@@ -447,6 +487,54 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 	}
 
 	return ret;
+}
+
+Object * M_ObjManager::GetObjectFromPool(ObjectType type, fPoint map_pos)
+{
+	Object* ret = nullptr;
+
+	std::map<ObjectType, std::list<Object*>>::iterator iterator = pool_of_objects.find(type);
+	if (iterator != pool_of_objects.end())
+	{
+		std::list<Object*>* list = &(*iterator).second;
+		if (list->size() > 0)
+		{
+			ret = (*list->begin());
+			list->pop_front();
+		}
+	}
+	if (ret != nullptr && type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.push_back(ret);
+	}
+	if (ret == nullptr)
+	{
+		ret = CreateObject(type, map_pos);
+	}
+
+	if (ret != nullptr)
+	{
+		ret->active = true;
+		ret->SetMapPos(map_pos);
+		ret->Start();
+		return ret;
+	}
+	return nullptr;
+}
+
+void M_ObjManager::ReturnToPool(Object * object)
+{
+	std::map<ObjectType, std::list<Object*>>::iterator iter = pool_of_objects.find(object->type);
+	if (iter != pool_of_objects.end())
+	{
+		(*iter).second.push_back(object);
+	}
+	else
+	{
+		std::list<Object*> list_obj;
+		list_obj.push_back(object);
+		pool_of_objects[object->type] = list_obj;
+	}
 }
 
 
