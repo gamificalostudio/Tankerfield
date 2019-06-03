@@ -22,7 +22,7 @@ bool M_MainMenu::Start()
 {
 	// Menus
 
-	options = DBG_NEW Options_Menu();
+	options = new Options_Menu();
 
 	// Load assets ===========================================
 

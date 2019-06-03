@@ -40,6 +40,6 @@ bool Bullet_RocketLauncher::Start()
 	coll->SetObjOffset({ -0.25f, -0.25f });
 
 	attack_damage = app->objectmanager->rocket_launcher_info.attack_damage;
-	bullet_life_ms_timer.Start();
+
 	return true;
 }

@@ -28,6 +28,7 @@
 #include "M_MainMenu.h"
 #include "M_Debug.h"
 #include "Options_Menu.h"
+#include "M_VideoPlayer.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -53,6 +54,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	reward_zone_manager = DBG_NEW M_RewardZoneManager();
 	main_menu = DBG_NEW M_MainMenu();
 	debug = DBG_NEW M_Debug();
+	video = DBG_NEW Video();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
@@ -70,6 +72,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(reward_zone_manager);
 	AddModule(collision);
 	AddModule(ui);
+	AddModule(video);
 	AddModule(anim_bank);
 	AddModule(scmanager);
 	AddModule(debug);
@@ -121,14 +124,17 @@ bool App::Awake()
 		case 0:
 			mode = APP_MODE::RELEASE;
 			scene->active = false;
+			main_menu->active = false;
 			break;
 		case 1:
 			mode = APP_MODE::DEBUG_MULTIPLAYER;
 			main_menu->active = false;
+			video->active = false;
 			break;
 		case 2:
 			mode = APP_MODE::DEBUG_MAIN_MENU;
 			scene->active = false;
+			video->active = false;
 			break;
 		}
 		debug->enabled = false;

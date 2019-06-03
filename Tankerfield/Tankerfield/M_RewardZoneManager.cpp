@@ -113,7 +113,7 @@ bool M_RewardZoneManager::CleanUp()
 
 RewardZone* M_RewardZoneManager::CreateRewardZone(fPoint map_center_pos, uint size)
 {
-	RewardZone* temp_rz = DBG_NEW RewardZone();
+	RewardZone* temp_rz = new RewardZone();
 	temp_rz->SetPos(map_center_pos);
 	temp_rz->SetSize(size);
 	// The parameter is the tesla troopers plus the additional reward zone unit

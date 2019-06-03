@@ -36,6 +36,8 @@
 #include "HealingShot_Area.h"
 #include "Obj_FlamethrowerFlame.h"
 #include "M_Debug.h"
+#include "Item_InstantHelp.h"
+#include "M_PickManager.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -236,7 +238,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HEALTH_BAG);
+	SetItem(ItemType::HAPPY_HOUR_ITEM);
 	time_between_portal_tp.Start();
 
 	//Flamethrower
@@ -264,6 +266,8 @@ bool Obj_Tank::Start()
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
 	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+
+	this->time_between_portal_tp.Start();
 
 	return true;
 }
@@ -631,7 +635,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
-		if (bullet->player != this) // he does not heal himself
+		if (bullet->player && Alive()) // he does not heal himself
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
@@ -649,14 +653,12 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 
 	else if (c1->GetTag() == TAG::PORTAL)
 	{
-		if (time_between_portal_tp.ReadMs() > 2000) {
-			if (c1 == portal1->coll) {
-				pos_map = portal2->pos_map;
-			}
-			else if (c1 == portal2->coll) {
-				pos_map = portal1->pos_map;
-			}
-			time_between_portal_tp.Start();
+		if (this->time_between_portal_tp.ReadMs() >= 1000)
+		{
+			Obj_Portal * portal = (Obj_Portal*)c1->GetObj();
+			Item_InstantHelp * instant_help = portal->instant_help;
+			instant_help->Teleport(this, portal);
+			this->time_between_portal_tp.Start();
 		}
 	}
 
@@ -1203,11 +1205,17 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
+		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
+		
 	}
 	else
 	{
+		if (weapon_info.weapon != WEAPON::BASIC)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
+		}
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 		gui->CreateParticleToWeaponFrame();
 	}
@@ -1251,13 +1259,6 @@ void Obj_Tank::InputReadyKeyboard()
 fPoint Obj_Tank::GetShotDir() const
 {
 	return shot_dir;
-}
-
-void Obj_Tank::CreatePortals()
-{
-	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
-
-	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
 }
 
 float Obj_Tank::GetTurrAngle() const

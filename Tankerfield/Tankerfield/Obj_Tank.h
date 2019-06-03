@@ -68,9 +68,6 @@ public:
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	std::vector<Object*>* GetEnemiesHitted();
-
-	void CreatePortals();
-
 public:
 
 	//- Pick ups
@@ -312,8 +309,6 @@ public:
 	Player_GUI*  gui = nullptr;
 
 public:
-	Obj_Portal * portal1;
-	Obj_Portal * portal2;
 	bool hit_no_enemie = false;
 };
 
