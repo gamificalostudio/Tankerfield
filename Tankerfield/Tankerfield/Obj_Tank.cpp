@@ -527,6 +527,8 @@ bool Obj_Tank::RemoveMaxSpeedBuff(std::string source)
 			}
 			ret = true;
 		}
+		else
+			++iter;
 	}
 	return ret;
 }
