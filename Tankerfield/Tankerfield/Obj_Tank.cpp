@@ -1136,15 +1136,15 @@ void Obj_Tank::SelectInputMethod()
 	//Move input
 	if (move_input != INPUT_METHOD::KEYBOARD_MOUSE
 		&& (app->input->GetKey(kb_up) != KEY_IDLE
-		|| app->input->GetKey(kb_left) != KEY_IDLE
-		|| app->input->GetKey(kb_down) != KEY_IDLE
-		|| app->input->GetKey(kb_right) != KEY_IDLE))
+			|| app->input->GetKey(kb_left) != KEY_IDLE
+			|| app->input->GetKey(kb_down) != KEY_IDLE
+			|| app->input->GetKey(kb_right) != KEY_IDLE))
 	{
 		move_input = INPUT_METHOD::KEYBOARD_MOUSE;
 	}
 	if (move_input != INPUT_METHOD::CONTROLLER
 		&& (app->input->IsConnectedControllet(controller)
-		&& !app->input->GetControllerJoystick(controller, gamepad_move, dead_zone).IsZero()))
+			&& !app->input->GetControllerJoystick(controller, gamepad_move, dead_zone).IsZero()))
 	{
 		move_input = INPUT_METHOD::CONTROLLER;
 	}
@@ -1183,45 +1183,52 @@ void Obj_Tank::ReviveTank(float dt)
 		iter != app->objectmanager->obj_tanks.end();
 		++iter)
 	{
-		if (this != (*iter)
-			&& pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
-			&& !(*iter)->Alive()
-			&& Alive())
+		if (this != (*iter))
 		{
-			if (!can_revive)
-			{
-				can_revive = true;
-			}
+			if (pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
+				&& !(*iter)->Alive()
+				&& Alive())
+				{
+					if (!can_revive)
+					{
+						can_revive = true;
+					}
 
-			//Presses the button
-			if (!reviving_tank[(*iter)->tank_num] && PressInteract())
-			{
-				reviving_tank[(*iter)->tank_num] = true;
-				revive_timer[(*iter)->tank_num].Start();
-				(*iter)->cycle_bar_anim.Reset();
-				(*iter)->draw_revive_cycle_bar = true;
-			}
-			//Releases the button
-			else if (ReleaseInteract())
-			{
-				reviving_tank[(*iter)->tank_num] = false;
-				(*iter)->draw_revive_cycle_bar = false;
-				(*iter)->cycle_bar_anim.Reset();
-			}
+					//Presses the button
+					if (!reviving_tank[(*iter)->tank_num] && PressInteract())
+					{
 
-			//Finishes reviving the tank
-			if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
+						reviving_tank[(*iter)->tank_num] = true;
+						revive_timer[(*iter)->tank_num].Start();
+						(*iter)->cycle_bar_anim.Reset();
+						(*iter)->draw_revive_cycle_bar = true;
+					}
+					//Releases the button
+					else if (ReleaseInteract())
+					{
+						reviving_tank[(*iter)->tank_num] = false;
+						(*iter)->draw_revive_cycle_bar = false;
+						(*iter)->cycle_bar_anim.Reset();
+					}
+
+					//Finishes reviving the tank
+					if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
+					{
+						(*iter)->SetLife(revive_life);
+						reviving_tank[(*iter)->tank_num] = false;
+						app->audio->PlayFx(revive_sfx);
+						(*iter)->draw_revive_cycle_bar = false;
+						(*iter)->cycle_bar_anim.Reset();
+					}
+				}
+			else
 			{
-				(*iter)->SetLife(revive_life);
-				reviving_tank[(*iter)->tank_num] = false;
-				app->audio->PlayFx(revive_sfx);
-				(*iter)->draw_revive_cycle_bar = false;
-				(*iter)->cycle_bar_anim.Reset();
+				if (reviving_tank[(*iter)->tank_num])
+				{
+					reviving_tank[(*iter)->tank_num] = false;
+					(*iter)->draw_revive_cycle_bar = false;
+				}
 			}
-		}
-		else
-		{
-			reviving_tank[(*iter)->tank_num] = false;
 		}
 	}
 
