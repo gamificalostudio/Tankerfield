@@ -460,7 +460,8 @@ bool Obj_Tank::UpdateMaxSpeedBuffs(float dt)
 
 //Returns true if the buff has been added, returns false if there was already a buff of the same type and the new buff didn't have any effect
 //Assumes that buffs from the same source will always have the same bonus
-bool Obj_Tank::AddMaxSpeedBuff(MovementBuff & buff)
+//We pass movement buff as a copy so we don't override the movement buff on Obj_Tank
+bool Obj_Tank::AddMaxSpeedBuff(MovementBuff buff)
 {
 	bool ret = false;
 	const char * source_char_ptr = buff.source.c_str();
@@ -686,7 +687,6 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
 	}
-
 	else if (c1->GetTag() == TAG::PORTAL)
 	{
 		if (time_between_portal_tp.ReadMs() > 2000) {
@@ -699,7 +699,6 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			time_between_portal_tp.Start();
 		}
 	}
-
 	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
 	{
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
@@ -709,6 +708,10 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			new_particle->tank = this;
 			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
+	}
+	else if (c1->GetTag() == TAG::ROAD)
+	{
+		AddMaxSpeedBuff(road_buff);
 	}
 }
 
@@ -731,10 +734,9 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
 	}
-
-	if (c1->GetTag() == TAG::ROAD && max_speed != road_max_speed)
+	else if (c1->GetTag() == TAG::ROAD)
 	{
-		max_speed = road_max_speed;
+		AddMaxSpeedBuff(road_buff);
 	}
 }
 
@@ -744,9 +746,9 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
-	if (c1->GetTag() == TAG::ROAD && max_speed != default_max_speed)
+	if (c1->GetTag() == TAG::ROAD)
 	{
-		max_speed = default_max_speed;
+		RemoveMaxSpeedBuff(road_buff.source);
 	}
 }
 
