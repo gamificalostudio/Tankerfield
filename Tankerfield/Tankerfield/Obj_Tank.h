@@ -29,7 +29,7 @@ struct MovementBuff
 	std::string source = "";
 	float bonus_speed = 0.f;
 	bool has_decay = false;
-	bool decaying = false;//If the buff is being reduced by the decay rate. For example this is set to true when the tank exits a road.
+	bool decaying = false;//If the buff is being reduced by the decay rate. For example this is set to true when the tank exits a road
 	//The decay that the bonus will have each second
 	float decay_rate = 0.f;
 };
@@ -95,7 +95,7 @@ private:
 	void Movement(float dt);
 	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
-	bool UpdateMovementBuffs(float dt);
+	bool UpdateMaxSpeedBuffs(float dt);
 	bool AddMaxSpeedBuff(MovementBuff & buff);
 	bool RemoveMaxSpeedBuff(std::string source);
 	float GetMaxSpeed();//Returns the maximum speed of the tank, tanking into account the bonuses it has
@@ -157,6 +157,9 @@ private:
 
 	//- Movement
 	float max_speed							= 0.f;
+	MovementBuff road_buff;
+	MovementBuff charged_shot_buff;
+	MovementBuff recoil_buff;
 
 	float acceleration_power				= 0.f;
 	fPoint velocity_map						= { 0.f, 0.f };

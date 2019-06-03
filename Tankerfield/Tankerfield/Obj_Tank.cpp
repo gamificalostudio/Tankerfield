@@ -162,13 +162,23 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	max_speed = default_max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
-	charged_shot_max_speed = tank_stats_node.child("charged_shot_max_speed").attribute("value").as_float();
-	road_max_speed = tank_stats_node.child("road_max_speed").attribute("value").as_float();
+	max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
+
+	charged_shot_buff.bonus_speed = tank_stats_node.child("charged_shot_buff").attribute("value").as_float();
+	charged_shot_buff.has_decay = false;
+
+	road_buff.bonus_speed = tank_stats_node.child("road_buff").attribute("value").as_float();
+	road_buff.has_decay = true;
+	road_buff.decay_rate = tank_stats_node.child("road_buff_decay_rate").attribute("value").as_float();
+
+	recoil_buff.bonus_speed = tank_stats_node.child("recoil_buff").attribute("value").as_float();
+	recoil_buff.has_decay = false;
 
 	acceleration_power = tank_stats_node.child("acceleration_power").attribute("value").as_float();
 	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
 	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
+
+
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -279,7 +289,7 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
-	UpdateMovementBuffs(dt);
+	UpdateMaxSpeedBuffs(dt);
 	Movement(dt);
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
 	Shoot();
@@ -423,31 +433,43 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)(*controller)->GetJoystick(gamepad_move, dead_zone);
 }
 
-bool Obj_Tank::UpdateMovementBuffs(float dt)
+bool Obj_Tank::UpdateMaxSpeedBuffs(float dt)
 {
+	bool ret = true;
 	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end();)
 	{
-		(*iter).bonus_speed -= (*iter).decay_rate * dt;
-		if ((*iter).has_decay && (*iter).bonus_speed <= 0.f)
+		if ((*iter).decaying)
 		{
-			iter = movement_buffs.erase(iter);
+			(*iter).bonus_speed -= (*iter).decay_rate * dt;
+			if ((*iter).bonus_speed <= 0.f)
+			{
+				iter = movement_buffs.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
 		}
 		else
 		{
 			++iter;
 		}
 	}
+	return ret;
 }
 
 //Returns true if the buff has been added, returns false if there was already a buff of the same type and the new buff didn't have any effect
+//Assumes that buffs from the same source will always have the same bonus
 bool Obj_Tank::AddMaxSpeedBuff(MovementBuff & buff)
 {
 	bool ret = false;
+	const char * source_char_ptr = buff.source.c_str();
 	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
 	{
-		if (buff.source == (*iter).source)
+		if (strcmp(source_char_ptr,(*iter).source.c_str()) == 0
+			&& (*iter).decaying)
 		{
-			//Assumes that buffs from the same source will always have the same bonus
+			(*iter).decaying = false;
 			(*iter).bonus_speed = buff.bonus_speed;
 			ret = true;
 			break;
@@ -457,6 +479,29 @@ bool Obj_Tank::AddMaxSpeedBuff(MovementBuff & buff)
 	{
 		movement_buffs.push_back(buff);
 		ret = true;
+	}
+	return ret;
+}
+
+//Assumes all buffs have the same has_decay property
+bool Obj_Tank::RemoveMaxSpeedBuff(std::string source)
+{
+	bool ret = false;
+	const char * source_char_ptr = source.c_str();
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end();)
+	{
+		if (strcmp((*iter).source.c_str(), source_char_ptr) == 0)
+		{
+			if ((*iter).has_decay)
+			{
+				(*iter).decaying = true;
+			}
+			else
+			{
+				iter = movement_buffs.erase(iter);
+			}
+			ret = true;
+		}
 	}
 	return ret;
 }
