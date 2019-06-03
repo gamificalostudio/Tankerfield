@@ -39,7 +39,7 @@ bool M_PickManager::Start()
 
 void M_PickManager::PickUpFromEnemy(fPoint pos_map, PICKUP_TYPE type_of_pick_up)
 {
-	uint probability = rand() % 100;
+	uint probability = rand() % 100 + 1;
 	if (type_of_pick_up == PICKUP_TYPE::MAX_TYPES) // if you do not pass a type of pickUp, create an item with the probability defined in the config.
 	{
 		if (probability < percentage_spawn_item_from_enemy)
