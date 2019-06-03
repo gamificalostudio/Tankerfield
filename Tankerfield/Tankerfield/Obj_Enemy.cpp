@@ -754,7 +754,10 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 				{
 					app->audio->PlayFx(sfx_hit);
 					channel_electrocuted = app->audio->PlayFx(electocuted);
-					state_saved = state;
+					if (state != ENEMY_STATE::STUNNED)
+					{
+						state_saved = state;
+					}
 
 					anim_saved = curr_anim;
 
