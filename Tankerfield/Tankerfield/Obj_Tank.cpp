@@ -37,6 +37,7 @@
 #include "Obj_FlamethrowerFlame.h"
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
+#include "M_PickManager.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -1204,11 +1205,17 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
+		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
+		
 	}
 	else
 	{
+		if (weapon_info.weapon != WEAPON::BASIC)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
+		}
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 		gui->CreateParticleToWeaponFrame();
 	}
