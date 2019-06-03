@@ -80,12 +80,7 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
-
-	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
-	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
-	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
-	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
+	pugi::xml_node tank_stats_node = app->objectmanager->balance_xml_node.child("tank");
 
 	// Textures ================================================
 
@@ -173,8 +168,27 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	curr_speed = speed = 5.f;//TODO: Load from xml
-	road_buff = 3.f;
+	base_max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
+
+	charged_shot_buff.source = "charged_shot";
+	charged_shot_buff.bonus_speed = tank_stats_node.child("charged_shot_buff").attribute("value").as_float();
+	charged_shot_buff.has_decay = false;
+
+	road_buff.source = "road";
+	road_buff.bonus_speed = tank_stats_node.child("road_buff").attribute("value").as_float();
+	road_buff.has_decay = true;
+	road_buff.decay_rate = tank_stats_node.child("road_buff_decay_rate").attribute("value").as_float();
+
+	recoil_buff.source = "recoil";
+	recoil_buff.bonus_speed = tank_stats_node.child("recoil_buff").attribute("value").as_float();
+	recoil_buff.has_decay = false;
+
+	acceleration_power = tank_stats_node.child("acceleration_power").attribute("value").as_float();
+	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
+	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
+
+
+
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
 
@@ -209,8 +223,6 @@ bool Obj_Tank::Start()
 	max_life = 100;
 	SetLife(100);
 
-	charged_shot_speed = 1.0f;
-
 	turr_scale = 1.2f;
 
 	//- Tutorial
@@ -223,7 +235,6 @@ bool Obj_Tank::Start()
 	tutorial_move->AddButtonHelper(CONTROLLER_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
 	tutorial_move_time = 4500;
-	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
@@ -290,6 +301,7 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
+	UpdateMaxSpeedBuffs(dt);
 	Movement(dt);
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
 	Shoot(dt);
@@ -297,7 +309,6 @@ bool Obj_Tank::Update(float dt)
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
 	InputReadyKeyboard();
-	
 
 	UpdateWeaponsWithoutBullets(dt);
 
@@ -324,12 +335,14 @@ fPoint Obj_Tank::GetTurrPos() const
 void Obj_Tank::Movement(float dt)
 {
 	if (!tutorial_move_pressed)
+	{
 		tutorial_move_timer.Start();
-	
+	}
 	tutorial_move_pressed = true;
 
 	//Don't move if tank is dead
-	if (life <= 0) {
+	if (life <= 0)
+	{
 		return;
 	}
 
@@ -350,31 +363,56 @@ void Obj_Tank::Movement(float dt)
 	iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 	iso_dir.Normalize();
 
-	if (!iso_dir.IsZero())
+	//TODO: Instead of setting it to zero, add very high friction which makes it stop quickly
+	bool no_input = false;
+	if (input_dir.IsZero())
 	{
-		if (movement_timer.ReadSec() >= 0.7f)
-		{
-			movement_timer.Start();
-		}
+		no_input = true;
+	}
 
-		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
+	fPoint brake_vector = -velocity_map;
+	brake_vector.Normalize();
+	brake_vector *= brake_power;
+
+	if (no_input)
+	{
+		if (velocity_map.ModuleF() <= brake_power * dt)//If the velocity is less than the velocity we're going to substract, directly set it to zero
+		{
+			acceleration_map.SetToZero();
+			velocity_map.SetToZero();
+		}
+		else
+		{
+			acceleration_map = brake_vector;
+		}
+	}
+	else
+	{
+		acceleration_map = iso_dir * acceleration_power;
+	}
+	velocity_map += acceleration_map * dt;
+	float max_speed = GetMaxSpeed();
+	if (velocity_map.ModuleF() > max_speed)//If the module of the velocity is bigger than the speed
+	{
+		velocity_map.Normalize();
+		velocity_map *= max_speed;
+	}
+	pos_map += velocity_map * dt;
+
+	if (!no_input)
+	{
+		//CALCULATE ANGLE
+		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
-		target_angle += 360.f * turns;
+		target_angle += 360.f * turns - ISO_COMPENSATION;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
+		if (abs((target_angle + 360.f)) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
 		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
-
 	}
-
-	velocity = iso_dir * curr_speed * dt;  
-
-	ShotRecoilMovement(dt);
-
-	pos_map += velocity;
 
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
 	{
@@ -382,61 +420,6 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move = nullptr;
 	}
 }
-
-void Obj_Tank::ShotRecoilMovement(float &dt)
-{
-	if (life == 0) {
-		return;
-	}
-
-	//if the player shot
-	if ((ReleaseShot()
-		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-		&& weapon_info.type == WEAPON_TYPE::CHARGED)
-	{
-		//- Basic shot
-		if (charged_shot_timer.ReadMs() < charge_time)
-		{
-			//set the max velocity in a basic shot
-			velocity_recoil_curr_speed = weapon_info.shot1.recoil;
-		}
-
-		//Item Happy hour activated
-		else if (GetShotAutomatically())
-		{
-			velocity_recoil_curr_speed = weapon_info.shot1.recoil * 0.75f;
-		}
-
-		//- Charged shot
-		else
-		{
-			//set the max velocity in a charged shot
-			velocity_recoil_curr_speed = weapon_info.shot2.recoil;
-		}
-		// set the direction when shot
-		recoil_dir = -GetShotDir();
-	}
-	else
-	{
-		//reduce the velocity to 0 with decay
-		if (velocity_recoil_curr_speed > 0)
-		{
-			velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
-			if (velocity_recoil_curr_speed < 0)
-			{
-				velocity_recoil_curr_speed = 0;
-			}
-		}
-	}
-	//calculate the max position of the lerp
-	velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
-
-	//calculate the velocity in lerp
-	//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
-	velocity += velocity_recoil_final_lerp;
-}
-
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
@@ -465,10 +448,100 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)app->input->GetControllerJoystick(controller, gamepad_move, dead_zone);;
 }
 
+bool Obj_Tank::UpdateMaxSpeedBuffs(float dt)
+{
+	bool ret = true;
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end();)
+	{
+		if ((*iter).decaying)
+		{
+			(*iter).bonus_speed -= (*iter).decay_rate * dt;
+			if ((*iter).bonus_speed <= 0.f)
+			{
+				iter = movement_buffs.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
+		else
+		{
+			++iter;
+		}
+	}
+	return ret;
+}
+
+//Returns true if the buff has been added, returns false if there was already a buff of the same type and the new buff didn't have any effect
+//Assumes that buffs from the same source will always have the same bonus
+//We pass movement buff as a copy so we don't override the movement buff on Obj_Tank
+bool Obj_Tank::AddMaxSpeedBuff(MovementBuff buff)
+{
+	bool ret = false;
+	const char * source_char_ptr = buff.source.c_str();
+	if (tank_num == 0)
+	{
+		LOG("this breakpoint shouldn't hit");
+	}
+
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
+	{
+		if (strcmp(source_char_ptr,(*iter).source.c_str()) == 0)
+		{
+			if ((*iter).decaying)
+			{
+				(*iter).decaying = false;
+				(*iter).bonus_speed = buff.bonus_speed;
+			}
+			ret = true;
+			break;
+		}
+	}
+	if (ret != true)
+	{
+		movement_buffs.push_back(buff);
+		ret = true;
+	}
+	return ret;
+}
+
+//Assumes all buffs have the same has_decay property
+bool Obj_Tank::RemoveMaxSpeedBuff(std::string source)
+{
+	bool ret = false;
+	const char * source_char_ptr = source.c_str();
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end();)
+	{
+		if (strcmp((*iter).source.c_str(), source_char_ptr) == 0)
+		{
+			if ((*iter).has_decay)
+			{
+				(*iter).decaying = true;
+				++iter;
+			}
+			else
+			{
+				iter = movement_buffs.erase(iter);
+			}
+			ret = true;
+		}
+	}
+	return ret;
+}
+
+float Obj_Tank::GetMaxSpeed()
+{
+	float total_bonus = 0.f;
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
+	{
+		total_bonus += (*iter).bonus_speed;
+	}
+	return base_max_speed + total_bonus;
+}
+
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
-
-
 	if (!damaged)
 	{
 		// Base common ========================================
@@ -650,7 +723,6 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
 	}
-
 	else if (c1->GetTag() == TAG::PORTAL)
 	{
 		if (this->time_between_portal_tp.ReadMs() >= 1000)
@@ -661,7 +733,6 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			this->time_between_portal_tp.Start();
 		}
 	}
-
 	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
 	{
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
@@ -672,7 +743,10 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
 	}
-
+	else if (c1->GetTag() == TAG::ROAD)
+	{
+		AddMaxSpeedBuff(road_buff);
+	}
 	else if (c1->GetTag() == TAG::BULLET_ENEMY)
 	{
 		this->SetLife(GetLife() - c1->damage);
@@ -699,10 +773,9 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
 	}
-
-	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
+	else if (c1->GetTag() == TAG::ROAD)
 	{
-			curr_speed += road_buff;
+		AddMaxSpeedBuff(road_buff);
 	}
 }
 
@@ -712,10 +785,10 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
-	if (c1->GetTag() == TAG::ROAD && curr_speed >= speed + road_buff)
-		{
-			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
-		}
+	if (c1->GetTag() == TAG::ROAD)
+	{
+		RemoveMaxSpeedBuff(road_buff.source);
+	}
 }
 
 void Obj_Tank::SetLife(int life)
@@ -861,7 +934,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 	{
 		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
-			this->curr_speed = charged_shot_speed;
+			AddMaxSpeedBuff(charged_shot_buff);
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 			if (camera_player->GetShakeAmount() <= 0.05f)
 			{
@@ -898,8 +971,8 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
+		RemoveMaxSpeedBuff(charged_shot_buff.source);
 		anim_charging.Reset();
-		this->curr_speed = speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time || GetShotAutomatically())
 		{
@@ -911,6 +984,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
+			velocity_map -= shot_dir * recoil_speed;
 		}
 		//- Charged shot
 		else

@@ -1,6 +1,9 @@
 #ifndef __OBJ_TANK_H__
 #define __OBJ_TANK_H__
 
+#include <string>
+#include <list>
+
 #include "Object.h"
 #include "WeaponInfo.h"
 #include "M_Input.h"
@@ -19,6 +22,16 @@ class Obj_FlamethrowerFlame;
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
+};
+
+struct MovementBuff
+{
+	std::string source = "";
+	float bonus_speed = 0.f;
+	bool has_decay = false;
+	bool decaying = false;//If the buff is being reduced by the decay rate. For example this is set to true when the tank exits a road
+	//The decay that the bonus will have each second
+	float decay_rate = 0.f;
 };
 
 
@@ -68,8 +81,8 @@ public:
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	std::vector<Object*>* GetEnemiesHitted();
-public:
-
+	void CreatePortals();
+	
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
@@ -82,9 +95,12 @@ private:
 
 	//- Movement
 	void Movement(float dt);
-	void ShotRecoilMovement(float &dt);
 	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
+	bool UpdateMaxSpeedBuffs(float dt);
+	bool AddMaxSpeedBuff(MovementBuff buff);
+	bool RemoveMaxSpeedBuff(std::string source);
+	float GetMaxSpeed();//Returns the maximum speed of the tank, tanking into account the bonuses it has
 
 	//- Camera
 	void CameraMovement(float dt);
@@ -142,31 +158,25 @@ private:
 	bool ready								= false;
 
 	//- Movement
-	float curr_speed						= 0.f;
-	float speed								= 0.f;
-	float road_buff							= 0.f;
-	fPoint velocity							= { 0.f, 0.f };
-	fPoint max_velocity						= { 0.f, 0.f };
-	fPoint velocity_recoil_lerp				= { 0.f, 0.f };
-	fPoint velocity_recoil_final_lerp		= { 0.f, 0.f };
-	fPoint recoil_dir						= { 0.f, 0.f };
-	float velocity_recoil_curr_speed		= 0.f;
-	float velocity_recoil_decay				= 0.f;
-	float velocity_recoil_speed_max			= 0.f;
-	float velocity_recoil_speed_max_charged = 0.f;
-	float charged_shot_speed				= 0.0f;
-	float lerp_factor_recoil				= 0.f;
-	Timer movement_timer;
-	PerfTimer time_between_portal_tp;
+	float base_max_speed							= 0.f;
+	MovementBuff road_buff;
+	MovementBuff charged_shot_buff;
+	MovementBuff recoil_buff;
 
+	float acceleration_power				= 0.f;
+	fPoint velocity_map						= { 0.f, 0.f };
+	fPoint acceleration_map					= { 0.f, 0.f};
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
 	float base_angle_lerp_factor			= 0.f;
+	std::list<MovementBuff> movement_buffs;
+
 	//-- Move tutorial
 	Timer tutorial_move_timer;
 	UI_IG_Helper * tutorial_move			= nullptr;
 	int tutorial_move_time					= 0;//The time the tutorial move image will appear on screen (ms)
 	bool tutorial_move_pressed				= false;
+
 
 	//- Shooting
 	fPoint turr_pos							= { 0.f, 0.f };//The position of the turret in the map
@@ -205,6 +215,11 @@ private:
 	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot
 	bool show_crosshairs					= false;
 	bool shot_automatically					= false;
+	float recoil_speed						= 0.f;
+	float brake_power						= 0.f;
+
+	//Teleport
+	PerfTimer time_between_portal_tp;
 
 	//Electro shot
 	PerfTimer electro_shot_timer;
