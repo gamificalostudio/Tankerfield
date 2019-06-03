@@ -156,7 +156,6 @@ bool M_Input::PreUpdate()
 							controllers[i].connected = true;
 							SDL_Joystick* j = SDL_GameControllerGetJoystick(controllers[i].ctr_pointer);
 							controllers[i].joyId = SDL_JoystickInstanceID(j);
-							controllers[i].index_number = i;
 							controllers[i].haptic = SDL_HapticOpenFromJoystick(j);
 							const char* ret_is_hap = (SDL_JoystickIsHaptic(j) == 1) ? "true" : "false";
 							LOG("Joys stick is aptic: %s", ret_is_hap);

@@ -61,7 +61,6 @@ struct Controller
 {
 private:
 	bool connected = false;
-	int index_number = -1;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
 	KeyState joystick_state[(uint)Joystick::MAX * (uint)INPUT_DIR::MAX];//Only used for joysticks, not for triggers (they have 1, 0 and -1)
