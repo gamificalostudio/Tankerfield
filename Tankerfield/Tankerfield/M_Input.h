@@ -60,7 +60,7 @@ class M_Input;
 struct Controller
 {
 private:
-	int index_number = -1;
+	bool connected = false;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
 	KeyState joystick_state[(uint)Joystick::MAX * (uint)INPUT_DIR::MAX];//Only used for joysticks, not for triggers (they have 1, 0 and -1)
@@ -154,26 +154,27 @@ public:
 
 
 	//Controller funtions===================================================================================================
+	KeyState GetControllerButtonState(int controller, SDL_GameControllerButton button);
 
-	KeyState GetControllerButtonState(Controller** controller, SDL_GameControllerButton button);
-
-	iPoint GetControllerJoystick(Controller** controller, Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
+	iPoint GetControllerJoystick(int controller, Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetControllerAxis(Controller** controller, SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
+	Sint16 GetControllerAxis(int controller, SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
 
 	//Treat joysticks like buttons or keys to more easily manage them
-	KeyState GetControllerJoystickState(Controller** controller, Joystick joystick, INPUT_DIR joystick_button);
+	KeyState GetControllerJoystickState(int controller, Joystick joystick, INPUT_DIR joystick_button);
 	//Treat triggers like buttons or keys to more easily manage them
-	KeyState GetControllerTriggerState(Controller** controller, SDL_GameControllerAxis axis);
+	KeyState GetControllerTriggerState(int controller, SDL_GameControllerAxis axis);
 
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
-	int ControllerPlayRumble(Controller** controller, float strengh, Uint32 length);
+	void ControllerPlayRumble(int controller, float strengh, Uint32 length);
 
-	int ControllerStopRumble(Controller** controller);
+	void ControllerStopRumble(int controller);
 
-	void DetachController(Controller** controller);
+	void DetachController(int controller);
+
+	bool IsConnectedControllet(int i);
 
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
@@ -189,11 +190,12 @@ private:
 	int			mouse_motion_y = NULL;
 	int			mouse_x = NULL;
 	int			mouse_y = NULL;
+	uint		num_controller_connected = 0;
 
 public:
 	std::string input_text;
-	std::vector<Controller*> controllers;
-	Controller** GetAbleController();
+	Controller controllers[MAX_CONTROLLERS];
+	int GetAbleController();
 };
 
 #endif // __j1INPUT_H__
