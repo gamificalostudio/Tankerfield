@@ -139,33 +139,38 @@ bool M_Input::PreUpdate()
 			}
 			case SDL_CONTROLLERDEVICEADDED:
 			{
-				if (SDL_NumJoysticks() < MAX_CONTROLLERS)
+				if (num_controller_connected < MAX_CONTROLLERS)
 				{
 					for (uint i = 0; i < MAX_CONTROLLERS; ++i)
 					{
 						if (!controllers[i].connected && SDL_IsGameController(i))
 						{
+							
 							controllers[i].ctr_pointer= SDL_GameControllerOpen(i);
 							if (!controllers[i].ctr_pointer)
 							{
 								LOG("Could not open gamecontroller %i: %s\n", i, SDL_GetError());
 								break;
 							}
+							++num_controller_connected;
 							controllers[i].connected = true;
 							SDL_Joystick* j = SDL_GameControllerGetJoystick(controllers[i].ctr_pointer);
 							controllers[i].joyId = SDL_JoystickInstanceID(j);
 							controllers[i].index_number = i;
 							controllers[i].haptic = SDL_HapticOpen(i);
-							LOG("Joys stick is aptic: %i", SDL_JoystickIsHaptic(j));
+							const char* ret_is_hap = (SDL_JoystickIsHaptic(j) == 1) ? "true" : "false";
+							LOG("Joys stick is aptic: %s", ret_is_hap);
 							if (controllers[i].haptic == nullptr)
 							{
 								LOG("SDL_HAPTIC ERROR: %s", SDL_GetError());
 							}
 							else
 							{
-								SDL_HapticRumbleInit(controllers[i].haptic);
-								controllers[i].PlayRumble(0.5, 100);
+								LOG("Rumble init %i",SDL_HapticRumbleInit(controllers[i].haptic));
+								LOG("Play rumble return %i", controllers[i].PlayRumble(0.5, 100));
+							
 							}
+							break;
 						}
 					}
 				}
@@ -190,7 +195,7 @@ bool M_Input::PreUpdate()
 						
 						controllers[i].joyId = -1;
 						controllers[i].connected = false;
-
+						--num_controller_connected;
 						LOG("Disconnected gamepad index: %d", i);
 						break;
 					}

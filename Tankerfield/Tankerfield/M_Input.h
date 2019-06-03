@@ -191,6 +191,7 @@ private:
 	int			mouse_motion_y = NULL;
 	int			mouse_x = NULL;
 	int			mouse_y = NULL;
+	uint		num_controller_connected = 0;
 
 public:
 	std::string input_text;
