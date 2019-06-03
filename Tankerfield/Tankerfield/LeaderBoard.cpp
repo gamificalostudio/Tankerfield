@@ -38,7 +38,6 @@ LeaderBoard::LeaderBoard(std::string doc_path, bool only_read) :doc_path(doc_pat
 
 	leader_board_table = app->ui->CreateTable(screen_center, table_def, widths, heights);
 	leader_board_table->SetState(ELEMENT_STATE::HIDDEN);
-
 }
 
 void LeaderBoard::ShowLeaderBoard()
@@ -74,11 +73,10 @@ void LeaderBoard::FadeLeaderBoardScreen(bool fade_on)
 	else
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
-
-			input_text->DesactiveInputText();
-			control_helper_image->SetFX(type, 2.F);
-			control_helper_label->SetFX(type, 2.F);
-			input_text->SetFX(type, 2.F);
+		input_text->DesactiveInputText();
+		control_helper_image->SetFX(type, 2.F);
+		control_helper_label->SetFX(type, 2.F);
+		input_text->SetFX(type, 2.F);
 	}
 
 	leader_board_table->SetFX(type, 2.F);

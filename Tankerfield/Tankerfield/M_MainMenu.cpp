@@ -310,7 +310,10 @@ bool M_MainMenu::CleanUp()
 	app->tex->UnLoad(background_texture);
 	app->audio->PauseMusic(2);
 	app->render->DestroyCamera(camera);
-
+	delete(options);
+	options = nullptr;
+	delete(leaderboard);
+	leaderboard = nullptr;
 	for (int i = 0; i < 4; ++i)
 	{
 		players[i].tank = nullptr;
