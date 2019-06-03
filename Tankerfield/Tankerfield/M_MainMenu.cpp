@@ -48,20 +48,20 @@ bool M_MainMenu::Start()
 
 	// Main menu ------------------------------
 
-	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, -200.f), UI_ImageDef({10, 710, 915, 260}));
+	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, - 320.f), UI_ImageDef({10, 710, 915, 260}));
 	logo_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	multi_player_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 0), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	multi_player_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font_22, { 50, 50, 50, 255 }));
+	play_button = app->ui->CreateButton(screen_center + fPoint(-350.f, -120.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	play_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Play", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	credits_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 240.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	credits_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Credits", app->font->button_font_22, { 50, 50, 50, 255 }));
+	leaderboard_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 0.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	leaderboard_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Leaderboard", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 	options_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 120.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	options_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Options", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	leaderboard_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 500.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	leaderboard_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Leaderboard", app->font->button_font_22, { 50, 50, 50, 255 }));
+	credits_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 240.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	credits_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Credits", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 360.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font_22, { 50, 50, 50, 255 }));
@@ -74,7 +74,7 @@ bool M_MainMenu::Start()
 	menu_panel_def.rows = 5;
 
 	menu_panel = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
-	menu_panel->SetElement(multi_player_button, iPoint(0,0));
+	menu_panel->SetElement(play_button, iPoint(0,0));
 	menu_panel->SetElement(options_menu_button, iPoint(0, 1));
 	menu_panel->SetElement(credits_menu_button, iPoint(0, 2));
 	menu_panel->SetElement(exit_button, iPoint(0, 3));
@@ -146,70 +146,70 @@ bool M_MainMenu::Start()
 
 	// Credits Menu
 
-	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 10,1324,1650,880 }), this);
-	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	panel_credits = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 10,1324,1650,880 }), this);
+	panel_credits->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	credits_logo = app->ui->CreateImage({ screen.w * 0.5f+6,225 }, UI_ImageDef({ 10,2215,580,165 }), this);
 	credits_logo->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	credits_logo->SetParent(panel_background);
+	credits_logo->SetParent(panel_credits);
 
 		// Labels
 
 	jaume_label = app->ui->CreateLabel({ 540, 355 }, UI_LabelDef("Jaume Montagut", app->font->label_font_38, { 255,255,255,180 }));
 	jaume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	jaume_label->SetParent(panel_background);
+	jaume_label->SetParent(panel_credits);
 	leader_label = app->ui->CreateLabel({ 540, 405 }, UI_LabelDef("Leader", app->font->label_font_38, { 255,255,255,180 }));
 	leader_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	leader_label->SetParent(panel_background);
+	leader_label->SetParent(panel_credits);
 
 	aurelio_label = app->ui->CreateLabel({ 1380, 355}, UI_LabelDef("Aurelio Gamarra", app->font->label_font_38, { 255,255,255,180 }));
 	aurelio_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	aurelio_label->SetParent(panel_background);
+	aurelio_label->SetParent(panel_credits);
 	ui_label = app->ui->CreateLabel({ 1380, 405 }, UI_LabelDef("UI", app->font->label_font_38, { 255,255,255,180 }));
 	ui_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	ui_label->SetParent(panel_background);
+	ui_label->SetParent(panel_credits);
 
 	víctor_label = app->ui->CreateLabel({ 540, 505 }, UI_LabelDef("Víctor Segura", app->font->label_font_38, { 255,255,255,180 }));
 	víctor_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	víctor_label->SetParent(panel_background);
+	víctor_label->SetParent(panel_credits);
 	designer_label = app->ui->CreateLabel({ 540, 555 }, UI_LabelDef("Game Designer", app->font->label_font_38, { 255,255,255,180 }));
 	designer_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	designer_label->SetParent(panel_background);
+	designer_label->SetParent(panel_credits);
 
 	jorge_label = app->ui->CreateLabel({ 1380, 505 }, UI_LabelDef("Jorge Gemas", app->font->label_font_38, { 255,255,255,180 }));
 	jorge_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	jorge_label->SetParent(panel_background);
+	jorge_label->SetParent(panel_credits);
 	management_label = app->ui->CreateLabel({ 1380, 555 }, UI_LabelDef("Management", app->font->label_font_38, { 255,255,255,180 }));
 	management_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	management_label->SetParent(panel_background);
+	management_label->SetParent(panel_credits);
 
 	yessica_label = app->ui->CreateLabel({ 540, 655 }, UI_LabelDef("Yessica Servin", app->font->label_font_38, { 255,255,255,180 }));
 	yessica_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	yessica_label->SetParent(panel_background);
+	yessica_label->SetParent(panel_credits);
 	coder_label_yess = app->ui->CreateLabel({ 540, 705}, UI_LabelDef("Coder", app->font->label_font_38, { 255,255,255,180 }));
 	coder_label_yess->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	coder_label_yess->SetParent(panel_background);
+	coder_label_yess->SetParent(panel_credits);
 
 	gerard_label = app->ui->CreateLabel({ 1380, 655 }, UI_LabelDef("Gerard Marcos", app->font->label_font_38, { 255,255,255,180 }));
 	gerard_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	gerard_label->SetParent(panel_background);
+	gerard_label->SetParent(panel_credits);
 	coder_label_g = app->ui->CreateLabel({ 1380, 705 }, UI_LabelDef("Coder", app->font->label_font_38, { 255,255,255,180 }));
 	coder_label_g->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	coder_label_g->SetParent(panel_background);
+	coder_label_g->SetParent(panel_credits);
 
 	sergio_label = app->ui->CreateLabel({ 540, 805 }, UI_LabelDef("Sergio Gómez", app->font->label_font_38, { 255,255,255,180 }));
 	sergio_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	sergio_label->SetParent(panel_background);
+	sergio_label->SetParent(panel_credits);
 	art_label = app->ui->CreateLabel({ 540, 855 }, UI_LabelDef("Art & Audio", app->font->label_font_38, { 255,255,255,180 }));
 	art_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	art_label->SetParent(panel_background);
+	art_label->SetParent(panel_credits);
 
 	aitor_label = app->ui->CreateLabel({ 1380, 805 }, UI_LabelDef("Aitor Vélez", app->font->label_font_38, { 255,255,255,180 }));
 	aitor_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	aitor_label->SetParent(panel_background);
+	aitor_label->SetParent(panel_credits);
 	QA_label = app->ui->CreateLabel({ 1380, 855 }, UI_LabelDef("QA", app->font->label_font_38, { 255,255,255,180 }));
 	QA_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	QA_label->SetParent(panel_background);
+	QA_label->SetParent(panel_credits);
 
 		// Links Buttons
 
@@ -290,10 +290,16 @@ bool M_MainMenu::Start()
 	credits_navigation->SetElement(aitor_github, iPoint(2, 4));
 	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 4));
 
-	// Set values ==========================================
+	// Leaderboard =========================================
+
 	options = new Options_Menu();
-	leaderboard = new LeaderBoard("data/leader_board.xml", true);
+	panel_leaderboard = app->ui->CreateImage(screen_center, UI_ImageDef({ 1075,395,606,771 }), this);
+	panel_leaderboard->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+	leaderboard = new LeaderBoard( screen_center + fPoint( 0, 60),"data/leader_board.xml", true);
 	leaderboard->FillLeaderBoardTable();
+
+	// Set values ==========================================
 
 	SetPlayerObjectsState(false);
 	app->ui->HideAllUI();
@@ -502,7 +508,7 @@ void M_MainMenu::InputSelect()
 		{
 			UI_Element*  menu_element = menu_panel->GetFocusedElement();
 
-			if (menu_element == multi_player_button)
+			if (menu_element == play_button)
 			{
 				SetState(MENU_STATE::SELECTION);
 				app->audio->PlayFx(button_select_sfx);
@@ -738,13 +744,14 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 	case MENU_STATE::CREDITS:
 		current_player = 0;
-		panel_background->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		panel_credits->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		break;
 	case MENU_STATE::OPTIONS:
 		options->HideOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
+		panel_leaderboard->SetState(ELEMENT_STATE::HIDDEN);
 		leaderboard->HideLeaderBoard();
 		break;
 	}
@@ -780,13 +787,14 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 		break;
 	case MENU_STATE::CREDITS:
-		panel_background->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		panel_credits->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		break;
 	case MENU_STATE::OPTIONS:
 		options->ShowOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
+		panel_leaderboard->SetState(ELEMENT_STATE::VISIBLE);
 		leaderboard->ShowLeaderBoard();
 		break;
 	}

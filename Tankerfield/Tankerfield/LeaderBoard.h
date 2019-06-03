@@ -23,7 +23,7 @@ class LeaderBoard :public UI_Listener
 {
 public:
 
-	LeaderBoard(std::string doc, bool only_read);
+	LeaderBoard( fPoint position , std::string doc, bool only_read);
 
 	void ShowLeaderBoard();
 
@@ -43,17 +43,9 @@ private:
 
 	bool	only_read = false;
 
-	// Elements ================================================
+	// LeaderBoard ----------------------------------
 
-	Camera*		camera = nullptr;
-
-	// Control helpers --------------------------------------
-
-	UI_Image* control_helper_image = nullptr;
-	UI_Label* control_helper_label = nullptr;
-	UI_Image* panel_background = nullptr;
-
-	// LeaderBoard Screen ----------------------------------
+	fPoint position = { 0.f, 0.f };
 
 	int current_rank = 0;
 

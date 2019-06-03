@@ -108,7 +108,7 @@ private:
 
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
-	UI_Button		* multi_player_button = nullptr;
+	UI_Button		* play_button = nullptr;
 	UI_Button		* credits_menu_button = nullptr;
 	UI_Button		* leaderboard_button = nullptr;
 	UI_Button		* options_menu_button = nullptr;
@@ -133,8 +133,8 @@ private:
 	// Credits Menu
 
 	UI_InteractiveGroup * credits_navigation = nullptr;
-	UI_Image * panel_background = nullptr;
-	UI_Image * panel_background2 = nullptr;
+	UI_Image * panel_credits = nullptr;
+	UI_Image * panel_leaderboard = nullptr;
 	UI_Label * credits_title = nullptr;
 	UI_Image* credits_logo = nullptr;
 

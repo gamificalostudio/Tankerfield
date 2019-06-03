@@ -10,13 +10,11 @@
 #include "UI_Label.h"
 #include "UI_Image.h"
 
-LeaderBoard::LeaderBoard(std::string doc_path, bool only_read) :doc_path(doc_path), only_read(only_read)
+LeaderBoard::LeaderBoard(fPoint position, std::string doc_path, bool only_read) : position(position) ,doc_path(doc_path), only_read(only_read)
 {
 	leader_board_doc.load_file(doc_path.c_str());
 
 	// Create UI Elements ====================================
-	fRect screen = app->win->GetWindowRect();
-	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
 	UI_TableDef table_def;
 	table_def.columns = 3;
@@ -33,10 +31,10 @@ LeaderBoard::LeaderBoard(std::string doc_path, bool only_read) :doc_path(doc_pat
 		input_def.max_characters = 10;
 		input_def.default_text_color = { 200, 200,200,255 };
 		input_def.default_text = "Enter your squad name";
-		input_text = app->ui->CreateInputText(screen_center - fPoint(0, 400.f), input_def);
+		input_text = app->ui->CreateInputText(position - fPoint(0, 400.f), input_def);
 	}
 
-	leader_board_table = app->ui->CreateTable(screen_center, table_def, widths, heights);
+	leader_board_table = app->ui->CreateTable(position, table_def, widths, heights);
 	leader_board_table->SetState(ELEMENT_STATE::HIDDEN);
 }
 
@@ -74,8 +72,6 @@ void LeaderBoard::FadeLeaderBoardScreen(bool fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
 		input_text->DesactiveInputText();
-		control_helper_image->SetFX(type, 2.F);
-		control_helper_label->SetFX(type, 2.F);
 		input_text->SetFX(type, 2.F);
 	}
 

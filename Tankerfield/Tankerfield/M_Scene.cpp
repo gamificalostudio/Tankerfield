@@ -137,14 +137,11 @@ bool M_Scene::Start()
 	Suicidal_units = 0u;
 	RocketLauncher_units = 0u;
 
-	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
-
-	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
-	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
-	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
 	general_gui = DBG_NEW General_GUI();
-	leaderboard = DBG_NEW LeaderBoard("data/leader_board.xml",false);
+	leaderboard = DBG_NEW LeaderBoard(screen_center,"data/leader_board.xml",false);
 
 	return true;
 }
