@@ -16,12 +16,6 @@ Laser_Bullet::~Laser_Bullet()
 {
 }
 
-/*void Laser_Bullet::OnTrigger(Collider * collider_1)
-{
-	app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
-	to_remove = true;
-}*/
-
 bool Laser_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("laser_bullet");
@@ -34,15 +28,22 @@ bool Laser_Bullet::Start()
 
 	draw_offset = { 35, 14 };
 
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_LASER, BODY_TYPE::DYNAMIC, 0.f, this);
-	coll->is_sensor = true;
+	if (coll)
+	{
+		coll->SetIsTrigger(true);
+	}
+	else
+	{
+		coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_LASER, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->is_sensor = true;
 
-	coll->SetObjOffset({ -0.25f, -0.25f });
-
+		coll->SetObjOffset({ -0.25f, -0.25f });
+	}
 	if (!charged)
 	{
 		kill_counter_max = bullet_node.child("kill_counter_max").attribute("value").as_int();
 	}
+	bullet_life_ms_timer.Start();
 	return true;
 }
 

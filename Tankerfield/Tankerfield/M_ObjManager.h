@@ -2,6 +2,7 @@
 #define __M_OBJMANAGER_H__
 
 #include <list>
+#include <map>
 
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"

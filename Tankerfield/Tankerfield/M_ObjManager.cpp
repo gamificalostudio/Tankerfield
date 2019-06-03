@@ -99,7 +99,6 @@ bool M_ObjManager::Start()
 bool M_ObjManager::PreUpdate()
 {
 	BROFILER_CATEGORY("Object Manager: PreUpdate", Profiler::Color::Lavender);
-	std::list<Object*>::iterator iterator;
 
 	if (delete_all_enemies == true)
 	{

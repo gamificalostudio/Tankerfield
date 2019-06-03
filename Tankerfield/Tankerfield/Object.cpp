@@ -48,6 +48,15 @@ void Object::DebugSpriteSorting(Camera* camera)
 	app->render->DrawQuad(pivot_section, 0, 255, 0, 255, true);
 }
 
+bool Object::Desactivate()
+{
+	if (coll != nullptr)
+	{
+		coll->SetIsTrigger(false);
+	}
+	return true;
+}
+
 bool Object::Draw(float dt, Camera * camera)
 {
 	app->render->Blit(
@@ -82,4 +91,10 @@ void Object::CalculateDrawVariables()
 	if (curr_anim != nullptr) {
 		frame = curr_anim->GetFrame(angle);
 	}
+}
+
+void Object::SetMapPos(fPoint map_pos)
+{
+	this->pos_map = map_pos;
+	this->pos_screen = app->map->MapToScreenF(pos_map);
 }

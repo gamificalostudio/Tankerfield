@@ -55,8 +55,6 @@ public:
 
 	virtual bool Update(float dt);
 
-	//SDL_Rect * GetRect();
-
 	virtual bool Draw(float dt, Camera * camera);
 
 	virtual void DebugSpriteSorting(Camera* camera);
@@ -66,6 +64,8 @@ public:
 	virtual bool DrawShadow(Camera * camera, float dt) { return true; }
 
 	virtual bool CleanUp() { return true; };
+
+	virtual bool Desactivate();
 
 	virtual bool Awake(pugi::xml_node&) { return true; };
 
@@ -85,6 +85,7 @@ public:
 
 	void CalculateDrawVariables();//Avoids calculating variables multiple times during a single update. Only called on M_ObjManager::PostUpdate().
 
+	virtual void SetMapPos(fPoint map_pos);
 public:
 	bool			active = true;
 	ObjectType		type = ObjectType::MAX;

@@ -8,7 +8,10 @@
 
 Obj_Bullet::Obj_Bullet(fPoint pos) : Object(pos)
 {
-	bullet_life_ms_timer.Start();
+	pugi::xml_node bullet_node = app->config.child("object").child("bullet");
+	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
+	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
+	draw_offset = { 35, 14 };
 }
 
 Obj_Bullet::~Obj_Bullet()
@@ -17,21 +20,23 @@ Obj_Bullet::~Obj_Bullet()
 
 bool Obj_Bullet::Start()
 {
-	pugi::xml_node bullet_node = app->config.child("object").child("bullet");
-
-	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
 	curr_anim = &anim;
-
-	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	curr_tex = tex;
+	
 
-	draw_offset = { 35, 14 };
-
-	float coll_w = 0.5f;
-	float coll_h = 0.5f;
-	coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::BULLET , BODY_TYPE::DYNAMIC ,0.f,this);
-	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
-	coll->is_sensor = true;
+	if (coll == nullptr)
+	{
+		float coll_w = 0.5f;
+		float coll_h = 0.5f;
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::BULLET, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+		coll->is_sensor = true;
+	}
+	else
+	{
+		coll->SetIsTrigger(true);
+	}
+	bullet_life_ms_timer.Start();
 
 	return true;
 }
@@ -42,16 +47,15 @@ bool Obj_Bullet::Update(float dt)
 	
 	if (bullet_life_ms_timer.ReadMs() >= bullet_life_ms)
 	{
-		to_remove = true;
+		return_to_pool = true;
 	}
-
 
 	return true;
 }
 
 void Obj_Bullet::OnTriggerEnter(Collider * collider_1)
 {
-	to_remove = true;
+	return_to_pool = true;
 }
 
 void Obj_Bullet::SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle, bool charged)

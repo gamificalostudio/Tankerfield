@@ -36,9 +36,15 @@ bool Obj_OilPool::Start()
 	draw_offset = { 150,0 };
 
 	time.Start();
-
-	coll = app->collision->AddCollider(pos_map, 5, 5, TAG::OIL_POOL, BODY_TYPE::DYNAMIC);
-	coll->is_sensor = true;
-
+	if (coll)
+	{
+		coll->SetIsTrigger(true);
+	}
+	else
+	{
+		coll = app->collision->AddCollider(pos_map, 5, 5, TAG::OIL_POOL, BODY_TYPE::DYNAMIC);
+		coll->is_sensor = true;
+	}
+	bullet_life_ms_timer.Start();
 	return true;
 }
