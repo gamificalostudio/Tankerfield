@@ -9,6 +9,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "Options_Menu.h"
+#include "LeaderBoard.h"
 
 #include "UI_Image.h"
 #include "UI_Button.h"
@@ -23,6 +24,7 @@ bool M_MainMenu::Start()
 	// Menus
 
 	options = new Options_Menu();
+	leaderboard = new LeaderBoard();
 
 	// Load assets ===========================================
 
@@ -63,6 +65,9 @@ bool M_MainMenu::Start()
 	options_menu_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 120.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	options_menu_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Options", app->font->button_font_22, { 50, 50, 50, 255 }));
 
+	leaderboard_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 500.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	leaderboard_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Leaderboard", app->font->button_font_22, { 50, 50, 50, 255 }));
+
 	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 360.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font_22, { 50, 50, 50, 255 }));
 
@@ -71,13 +76,14 @@ bool M_MainMenu::Start()
 
 	UI_InteractiveGroupDef menu_panel_def;
 	menu_panel_def.columns = 1;
-	menu_panel_def.rows = 4;
+	menu_panel_def.rows = 5;
 
 	menu_panel = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
 	menu_panel->SetElement(multi_player_button, iPoint(0,0));
 	menu_panel->SetElement(options_menu_button, iPoint(0, 1));
 	menu_panel->SetElement(credits_menu_button, iPoint(0, 2));
 	menu_panel->SetElement(exit_button, iPoint(0, 3));
+	menu_panel->SetElement(leaderboard_button, iPoint(0, 4));
 
 	// Selection screen ------------------------
 	player_labels_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
@@ -290,6 +296,10 @@ bool M_MainMenu::Start()
 	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 4));
 
 	// Set values ==========================================
+
+	panel_background2 = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
+	panel_background2->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
 	app->ui->HideAllUI();
 	SetPlayerObjectsState(false);
 	SetState(MENU_STATE::INIT_MENU);
@@ -512,7 +522,15 @@ void M_MainMenu::InputSelect()
 				exit_game = true;
 				app->audio->PlayFx(button_select_sfx);
 			}
-			
+			else if (menu_element == leaderboard_button)
+			{
+				SetState(MENU_STATE::LEADERBOARD);
+				if (leaderboard->UpdateLeaderBoard("data/leader_board.xml", 0) == true)
+				{
+					leaderboard->FillLeaderBoardTable();
+				}
+				leaderboard->FadeLeaderBoardScreen(true);
+			}
 		}
 		else if (menu_state == MENU_STATE::OPTIONS && app->ui->GetFocusedElement() != nullptr)
 		{
@@ -729,8 +747,11 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		break;
 	case MENU_STATE::OPTIONS:
-
 		options->HideOptionsMenu();
+		break;
+	case MENU_STATE::LEADERBOARD:
+		panel_background2->SetState(ELEMENT_STATE::HIDDEN);
+		leaderboard->FadeLeaderBoardScreen(false);
 		break;
 	}
 
@@ -769,8 +790,11 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		break;
 	case MENU_STATE::OPTIONS:
-
 		options->ShowOptionsMenu();
+		break;
+	case MENU_STATE::LEADERBOARD:
+		panel_background2->SetState(ELEMENT_STATE::VISIBLE);
+		leaderboard->FadeLeaderBoardScreen(true);
 		break;
 	}
 

@@ -18,6 +18,7 @@ class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
 class Options_Menu;
+class LeaderBoard;
 
 class Obj_Tank_MainMenu;
 
@@ -27,6 +28,7 @@ enum class MENU_STATE
 	OPTIONS,
 	CREDITS,
 	SELECTION,
+	LEADERBOARD,
 	CHANGE_SCENE,
 	NO_TYPE
 };
@@ -108,7 +110,7 @@ private:
 	UI_Button		* single_player_button = nullptr;
 	UI_Button		* multi_player_button = nullptr;
 	UI_Button		* credits_menu_button = nullptr;
-	UI_Button		* leaderboard_menu_button = nullptr;
+	UI_Button		* leaderboard_button = nullptr;
 	UI_Button		* options_menu_button = nullptr;
 	UI_Button		* exit_button = nullptr;
 	UI_Label        * version_label = nullptr;
@@ -132,6 +134,7 @@ private:
 
 	UI_InteractiveGroup * credits_navigation = nullptr;
 	UI_Image * panel_background = nullptr;
+	UI_Image * panel_background2 = nullptr;
 	UI_Label * credits_title = nullptr;
 	UI_Image* credits_logo = nullptr;
 
@@ -186,6 +189,7 @@ private:
 	// Menus ------------------------------------------
 
 	Options_Menu* options = nullptr;
+	LeaderBoard* leaderboard = nullptr;
 };
 
 #endif // __j1SCENE_H__

@@ -24,6 +24,7 @@
 #include "M_MainMenu.h"
 #include "M_PickManager.h"
 #include "M_RewardZoneManager.h"
+#include "LeaderBoard.h"
 
 #include "UI_Label.h"
 
@@ -74,6 +75,8 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
+	leaderboard = new LeaderBoard();
+
 	//path_tex = app->tex->Load("maps/path.png");
 
 	// Load Fxs
@@ -245,24 +248,24 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::LEADER_BOARD:
 
-		if (general_gui->UpdateLeaderBoard("data/leader_board.xml", round) == true)
+		if (leaderboard->UpdateLeaderBoard("data/leader_board.xml", round) == true)
 		{
-			general_gui->FillLeaderBoardTable();
+			leaderboard->FillLeaderBoardTable();
 		}
 		
 		general_gui->FadeGameOverScreen(false);
-		general_gui->FadeLeaderBoardScreen(true);
+		leaderboard->FadeLeaderBoardScreen(true);
 		game_state = GAME_STATE::WAITING_LEADERBOARD;
 
 		break;
 
 	case GAME_STATE::WAITING_LEADERBOARD:
 
-		general_gui->SetInputTextToNameLabel();
+		leaderboard->SetInputTextToNameLabel();
 
 		if (input_accept == true)
 		{
-			general_gui->UpdateLeaderBoardSquadName();
+			leaderboard->UpdateLeaderBoardSquadName();
 			app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f);
 		}
 	}
