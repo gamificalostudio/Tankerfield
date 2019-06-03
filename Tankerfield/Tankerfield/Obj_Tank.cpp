@@ -480,13 +480,20 @@ bool Obj_Tank::AddMaxSpeedBuff(MovementBuff buff)
 {
 	bool ret = false;
 	const char * source_char_ptr = buff.source.c_str();
+	if (tank_num == 0)
+	{
+		LOG("this breakpoint shouldn't hit");
+	}
+
 	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
 	{
-		if (strcmp(source_char_ptr,(*iter).source.c_str()) == 0
-			&& (*iter).decaying)
+		if (strcmp(source_char_ptr,(*iter).source.c_str()) == 0)
 		{
-			(*iter).decaying = false;
-			(*iter).bonus_speed = buff.bonus_speed;
+			if ((*iter).decaying)
+			{
+				(*iter).decaying = false;
+				(*iter).bonus_speed = buff.bonus_speed;
+			}
 			ret = true;
 			break;
 		}
@@ -511,6 +518,7 @@ bool Obj_Tank::RemoveMaxSpeedBuff(std::string source)
 			if ((*iter).has_decay)
 			{
 				(*iter).decaying = true;
+				++iter;
 			}
 			else
 			{
