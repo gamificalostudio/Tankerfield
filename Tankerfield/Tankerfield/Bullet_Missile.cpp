@@ -17,7 +17,7 @@ void Bullet_Missile::OnTriggerEnter(Collider * collider_1)
 		Obj_Explosion* explosion_obj = (Obj_Explosion*)app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
 		explosion_obj->SetExplosionDamage(explosion_damage);
 	}
-	to_remove = true;
+	return_to_pool = true;
 }
 
 bool Bullet_Missile::Update(float dt)
@@ -29,7 +29,7 @@ bool Bullet_Missile::Update(float dt)
 		Obj_Explosion* explosion_obj = (Obj_Explosion*)app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
 		explosion_obj->SetExplosionDamage(explosion_damage);
 
-		to_remove = true;
+		return_to_pool = true;
 	}
 
 

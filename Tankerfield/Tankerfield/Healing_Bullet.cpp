@@ -7,7 +7,13 @@
 
 Healing_Bullet::Healing_Bullet(fPoint pos) : Obj_Bullet(pos)
 {
+	anim.frames = app->anim_bank->LoadFrames(app->config.child("object").child("bullet").child("animations").child("rotate"));
+	curr_anim = &anim;
 
+	tex = app->tex->Load(app->config.child("object").child("healing_bullet").child("tex").attribute("path").as_string());
+	curr_tex = tex;
+
+	draw_offset = { 35, 14 };
 }
 
 Healing_Bullet::~Healing_Bullet()
@@ -16,16 +22,16 @@ Healing_Bullet::~Healing_Bullet()
 
 bool Healing_Bullet::Start()
 {
-		anim.frames=app->anim_bank->LoadFrames(app->config.child("object").child("bullet").child("animations").child("rotate"));
-		curr_anim = &anim;
-
-		tex = app->tex->Load(app->config.child("object").child("healing_bullet").child("tex").attribute("path").as_string());
-		curr_tex = tex;
-
-		draw_offset = { 35, 14 };
-
+	if (coll)
+	{
+		coll->SetIsTrigger(true);
+	}
+	else
+	{
 		coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::FRIENDLY_BULLET, BODY_TYPE::DYNAMIC, 0.f, this);
-		coll->SetObjOffset({-0.25f, -0.25f});
+		coll->SetObjOffset({ -0.25f, -0.25f });
+	}
+	bullet_life_ms_timer.Start();
 
 		return true;
 }
