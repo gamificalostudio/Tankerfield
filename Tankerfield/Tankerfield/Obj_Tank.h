@@ -156,7 +156,7 @@ private:
 	bool fire_dead							= false;
 
 	//- Movement
-	float max_speed							= 0.f;
+	float base_max_speed							= 0.f;
 	MovementBuff road_buff;
 	MovementBuff charged_shot_buff;
 	MovementBuff recoil_buff;

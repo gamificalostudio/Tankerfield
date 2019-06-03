@@ -162,7 +162,7 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
+	base_max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
 
 	charged_shot_buff.bonus_speed = tank_stats_node.child("charged_shot_buff").attribute("value").as_float();
 	charged_shot_buff.has_decay = false;
@@ -322,12 +322,14 @@ fPoint Obj_Tank::GetTurrPos() const
 void Obj_Tank::Movement(float dt)
 {
 	if (!tutorial_move_pressed)
+	{
 		tutorial_move_timer.Start();
-
+	}
 	tutorial_move_pressed = true;
 
 	//Don't move if tank is dead
-	if (life <= 0) {
+	if (life <= 0)
+	{
 		return;
 	}
 
@@ -376,6 +378,7 @@ void Obj_Tank::Movement(float dt)
 		acceleration_map = iso_dir * acceleration_power;
 	}
 	velocity_map += acceleration_map * dt;
+	float max_speed = GetMaxSpeed();
 	if (velocity_map.ModuleF() > max_speed)//If the module of the velocity is bigger than the speed
 	{
 		velocity_map.Normalize();
@@ -509,12 +512,12 @@ bool Obj_Tank::RemoveMaxSpeedBuff(std::string source)
 
 float Obj_Tank::GetMaxSpeed()
 {
-	float total_bonus;
+	float total_bonus = 0.f;
 	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
 	{
 		total_bonus += (*iter).bonus_speed;
 	}
-	return max_speed + total_bonus;
+	return base_max_speed + total_bonus;
 }
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
@@ -880,7 +883,7 @@ void Obj_Tank::ShootChargedWeapon()
 	{
 		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
-			max_speed = charged_shot_max_speed;
+			AddMaxSpeedBuff(charged_shot_buff);
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 		}
 	}
@@ -889,7 +892,7 @@ void Obj_Tank::ShootChargedWeapon()
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
-		max_speed = charged_shot_max_speed;
+		RemoveMaxSpeedBuff(charged_shot_buff.source);
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time)
 		{
