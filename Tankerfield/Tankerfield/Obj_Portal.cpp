@@ -11,6 +11,7 @@ Obj_Portal::Obj_Portal(fPoint pos):Object(pos)
 {
 	pugi::xml_node portal_node = app->config.child("object").child("portal_TP");
 
+
 	anim.frames = app->anim_bank->LoadFrames(portal_node.child("animations").child("portal"));
 	curr_anim = &anim;
 

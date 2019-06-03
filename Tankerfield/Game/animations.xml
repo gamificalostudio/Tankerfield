@@ -24,28 +24,28 @@
     <animation>
       <charging speed="20" rotation="counter-clockwise" first_dir_angle="0">
         <dir>
-          
-            <frame x="0"   y="0"   w="77" h="51"></frame>
-            <frame x="77"  y="0"   w="77" h="51"></frame>
-            <frame x="154" y="0"   w="77" h="51"></frame>
-            <frame x="0"   y="51"  w="77" h="51"></frame>
-            <frame x="77"  y="51"  w="77" h="51"></frame>
-            <frame x="154" y="51"  w="77" h="51"></frame>
-            <frame x="0"   y="102" w="77" h="51"></frame>
-            <frame x="77"  y="102" w="77" h="51"></frame>
-            <frame x="154" y="102" w="77" h="51"></frame>
-         
+
+          <frame x="0"   y="0"   w="77" h="51"></frame>
+          <frame x="77"  y="0"   w="77" h="51"></frame>
+          <frame x="154" y="0"   w="77" h="51"></frame>
+          <frame x="0"   y="51"  w="77" h="51"></frame>
+          <frame x="77"  y="51"  w="77" h="51"></frame>
+          <frame x="154" y="51"  w="77" h="51"></frame>
+          <frame x="0"   y="102" w="77" h="51"></frame>
+          <frame x="77"  y="102" w="77" h="51"></frame>
+          <frame x="154" y="102" w="77" h="51"></frame>
+
         </dir>
       </charging>
       <finish_charged speed="20" rotation="counter-clockwise" first_dir_angle="0">
         <dir>
-        <frame x="0"   y="0"   w="100" h="100"></frame>
-        <frame x="100" y="0"   w="100" h="100"></frame>
-        <frame x="200" y="0"   w="100" h="100"></frame>
-        <frame x="0"   y="100" w="100" h="100"></frame>
-        <frame x="100" y="100" w="100" h="100"></frame>
-        <frame x="200" y="100" w="100" h="100"></frame>
-        <frame x="0  " y="200" w="100" h="100"></frame>
+          <frame x="0"   y="0"   w="100" h="100"></frame>
+          <frame x="100" y="0"   w="100" h="100"></frame>
+          <frame x="200" y="0"   w="100" h="100"></frame>
+          <frame x="0"   y="100" w="100" h="100"></frame>
+          <frame x="100" y="100" w="100" h="100"></frame>
+          <frame x="200" y="100" w="100" h="100"></frame>
+          <frame x="0  " y="200" w="100" h="100"></frame>
         </dir>
       </finish_charged>
     </animation>
@@ -75,147 +75,147 @@
   </portal>
   <cycle-progress-bar speed="60" rotation="counter-clockwise" first_dir_angle ="0">
     <dir>
-        <frame name="sprite1"   x="0"    y="0"    w="308" h="314"></frame>
-        <frame name="sprite2"   x="308"  y="0"    w="308" h="314"></frame>
-        <frame name="sprite3"   x="616"  y="0"    w="308" h="314"></frame>
-        <frame name="sprite4"   x="924"  y="0"    w="308" h="314"></frame>
-        <frame name="sprite5"   x="1232" y="0"    w="308" h="314"></frame>
-        <frame name="sprite6"   x="0"    y="314"  w="308" h="314"></frame>
-        <frame name="sprite7"   x="308"  y="314"  w="308" h="314"></frame>
-        <frame name="sprite8"   x="616"  y="314"  w="308" h="314"></frame>
-        <frame name="sprite9"   x="924"  y="314"  w="308" h="314"></frame>
-        <frame name="sprite10"  x="1232" y="314"  w="308" h="314"></frame>
-        <frame name="sprite11"  x="0"    y="628"  w="308" h="314"></frame>
-        <frame name="sprite12"  x="308"  y="628"  w="308" h="314"></frame>
-        <frame name="sprite13"  x="616"  y="628"  w="308" h="314"></frame>
-        <frame name="sprite14"  x="924"  y="628"  w="308" h="314"></frame>
-        <frame name="sprite15"  x="1232" y="628"  w="308" h="314"></frame>
-        <frame name="sprite16"  x="0"    y="942"  w="308" h="314"></frame>
-        <frame name="sprite17"  x="308"  y="942"  w="308" h="314"></frame>
-        <frame name="sprite18"  x="616"  y="942"  w="308" h="314"></frame>
-        <frame name="sprite19"  x="924"  y="942"  w="308" h="314"></frame>
-        <frame name="sprite20"  x="1232" y="942"  w="308" h="314"></frame>
-        <frame name="sprite21"  x="0"    y="1256" w="308" h="314"></frame>
-        <frame name="sprite22"  x="308"  y="1256" w="308" h="314"></frame>
-        <frame name="sprite23"  x="616"  y="1256" w="308" h="314"></frame>
-        <frame name="sprite24"  x="924"  y="1256" w="308" h="314"></frame>
-        <frame name="sprite25"  x="1232" y="1256" w="308" h="314"></frame>
-        <frame name="sprite26"  x="0"    y="1570" w="308" h="314"></frame>
-        <frame name="sprite27"  x="308"  y="1570" w="308" h="314"></frame>
-        <frame name="sprite28"  x="616"  y="1570" w="308" h="314"></frame>
-        <frame name="sprite29"  x="924"  y="1570" w="308" h="314"></frame>
-        <frame name="sprite30"  x="1232" y="1570" w="308" h="314"></frame>
-        <frame name="sprite31"  x="0"    y="1884" w="308" h="314"></frame>
-        <frame name="sprite32"  x="308"  y="1884" w="308" h="314"></frame>
-        <frame name="sprite33"  x="616"  y="1884" w="308" h="314"></frame>
-        <frame name="sprite34"  x="924"  y="1884" w="308" h="314"></frame>
-        <frame name="sprite35"  x="1232" y="1884" w="308" h="314"></frame>
-        <frame name="sprite36"  x="0"    y="2198" w="308" h="314"></frame>
-        <frame name="sprite37"  x="308"  y="2198" w="308" h="314"></frame>
-        <frame name="sprite38"  x="616"  y="2198" w="308" h="314"></frame>
-        <frame name="sprite39"  x="924"  y="2198" w="308" h="314"></frame>
-        <frame name="sprite40"  x="1232" y="2198" w="308" h="314"></frame>
-        <frame name="sprite41"  x="0"    y="2512" w="308" h="314"></frame>
-        <frame name="sprite42"  x="308"  y="2512" w="308" h="314"></frame>
-        <frame name="sprite43"  x="616"  y="2512" w="308" h="314"></frame>
-        <frame name="sprite44"  x="924"  y="2512" w="308" h="314"></frame>
-        <frame name="sprite45"  x="1232" y="2512" w="308" h="314"></frame>
-        <frame name="sprite46"  x="0"    y="2826" w="308" h="314"></frame>
-        <frame name="sprite47"  x="308"  y="2826" w="308" h="314"></frame>
-        <frame name="sprite48"  x="616"  y="2826" w="308" h="314"></frame>
-        <frame name="sprite49"  x="924"  y="2826" w="308" h="314"></frame>
-        <frame name="sprite50"  x="1232" y="2826" w="308" h="314"></frame>
-        <frame name="sprite51"  x="0"    y="3140" w="308" h="314"></frame>
-        <frame name="sprite52"  x="308"  y="3140" w="308" h="314"></frame>
-        <frame name="sprite53"  x="616"  y="3140" w="308" h="314"></frame>
-        <frame name="sprite54"  x="924"  y="3140" w="308" h="314"></frame>
-        <frame name="sprite55"  x="1232" y="3140" w="308" h="314"></frame>
-        <frame name="sprite56"  x="0"    y="3454" w="308" h="314"></frame>
-        <frame name="sprite57"  x="308"  y="3454" w="308" h="314"></frame>
-        <frame name="sprite58"  x="616"  y="3454" w="308" h="314"></frame>
-        <frame name="sprite59"  x="924"  y="3454" w="308" h="314"></frame>
-        <frame name="sprite60"  x="1232" y="3454" w="308" h="314"></frame>
-        <frame name="sprite61"  x="0"    y="3768" w="308" h="314"></frame>
-        <frame name="sprite62"  x="308"  y="3768" w="308" h="314"></frame>
-        <frame name="sprite63"  x="616"  y="3768" w="308" h="314"></frame>
-        <frame name="sprite64"  x="924"  y="3768" w="308" h="314"></frame>
-        <frame name="sprite65"  x="1232" y="3768" w="308" h="314"></frame>
-        <frame name="sprite66"  x="0"    y="4082" w="308" h="314"></frame>
-        <frame name="sprite67"  x="308"  y="4082" w="308" h="314"></frame>
-        <frame name="sprite68"  x="616"  y="4082" w="308" h="314"></frame>
-        <frame name="sprite69"  x="924"  y="4082" w="308" h="314"></frame>
-        <frame name="sprite70"  x="1232" y="4082" w="308" h="314"></frame>
-        <frame name="sprite71"  x="0"    y="4396" w="308" h="314"></frame>
-        <frame name="sprite72"  x="308"  y="4396" w="308" h="314"></frame>
-        <frame name="sprite73"  x="616"  y="4396" w="308" h="314"></frame>
-        <frame name="sprite74"  x="924"  y="4396" w="308" h="314"></frame>
-        <frame name="sprite75"  x="1232" y="4396" w="308" h="314"></frame>
-        <frame name="sprite76"  x="0"    y="4710" w="308" h="314"></frame>
-        <frame name="sprite77"  x="308"  y="4710" w="308" h="314"></frame>
-        <frame name="sprite78"  x="616"  y="4710" w="308" h="314"></frame>
-        <frame name="sprite79"  x="924"  y="4710" w="308" h="314"></frame>
-        <frame name="sprite80"  x="1232" y="4710" w="308" h="314"></frame>
-        <frame name="sprite81"  x="0"    y="5024" w="308" h="314"></frame>
-        <frame name="sprite82"  x="308"  y="5024" w="308" h="314"></frame>
-        <frame name="sprite83"  x="616"  y="5024" w="308" h="314"></frame>
-        <frame name="sprite84"  x="924"  y="5024" w="308" h="314"></frame>
-        <frame name="sprite85"  x="1232" y="5024" w="308" h="314"></frame>
-        <frame name="sprite86"  x="0"    y="5338" w="308" h="314"></frame>
-        <frame name="sprite87"  x="308"  y="5338" w="308" h="314"></frame>
-        <frame name="sprite88"  x="616"  y="5338" w="308" h="314"></frame>
-        <frame name="sprite89"  x="924"  y="5338" w="308" h="314"></frame>
-        <frame name="sprite90"  x="1232" y="5338" w="308" h="314"></frame>
-        <frame name="sprite91"  x="0"    y="5652" w="308" h="314"></frame>
-        <frame name="sprite92"  x="308"  y="5652" w="308" h="314"></frame>
-        <frame name="sprite93"  x="616"  y="5652" w="308" h="314"></frame>
-        <frame name="sprite94"  x="924"  y="5652" w="308" h="314"></frame>
-        <frame name="sprite95"  x="1232" y="5652" w="308" h="314"></frame>
-        <frame name="sprite96"  x="0"    y="5966" w="308" h="314"></frame>
-        <frame name="sprite97"  x="308"  y="5966" w="308" h="314"></frame>
-        <frame name="sprite98"  x="616"  y="5966" w="308" h="314"></frame>
-        <frame name="sprite99"  x="924"  y="5966" w="308" h="314"></frame>
-        <frame name="sprite100" x="1232" y="5966" w="308" h="314"></frame>
-        <frame name="sprite101" x="0"    y="6280" w="308" h="314"></frame>
-        <frame name="sprite102" x="308"  y="6280" w="308" h="314"></frame>
-        <frame name="sprite103" x="616"  y="6280" w="308" h="314"></frame>
-        <frame name="sprite104" x="924"  y="6280" w="308" h="314"></frame>
-        <frame name="sprite105" x="1232" y="6280" w="308" h="314"></frame>
-        <frame name="sprite106" x="0"    y="6594" w="308" h="314"></frame>
-        <frame name="sprite107" x="308"  y="6594" w="308" h="314"></frame>
-        <frame name="sprite108" x="616"  y="6594" w="308" h="314"></frame>
-        <frame name="sprite109" x="924"  y="6594" w="308" h="314"></frame>
-        <frame name="sprite110" x="1232" y="6594" w="308" h="314"></frame>
-        <frame name="sprite111" x="0"    y="6908" w="308" h="314"></frame>
-        <frame name="sprite112" x="308"  y="6908" w="308" h="314"></frame>
-        <frame name="sprite113" x="616"  y="6908" w="308" h="314"></frame>
-        <frame name="sprite114" x="924"  y="6908" w="308" h="314"></frame>
-        <frame name="sprite115" x="1232" y="6908" w="308" h="314"></frame>
-        <frame name="sprite116" x="0"    y="7222" w="308" h="314"></frame>
-        <frame name="sprite117" x="308"  y="7222" w="308" h="314"></frame>
-        <frame name="sprite118" x="616"  y="7222" w="308" h="314"></frame>
+      <frame name="sprite1"   x="0"    y="0"    w="308" h="314"></frame>
+      <frame name="sprite2"   x="308"  y="0"    w="308" h="314"></frame>
+      <frame name="sprite3"   x="616"  y="0"    w="308" h="314"></frame>
+      <frame name="sprite4"   x="924"  y="0"    w="308" h="314"></frame>
+      <frame name="sprite5"   x="1232" y="0"    w="308" h="314"></frame>
+      <frame name="sprite6"   x="0"    y="314"  w="308" h="314"></frame>
+      <frame name="sprite7"   x="308"  y="314"  w="308" h="314"></frame>
+      <frame name="sprite8"   x="616"  y="314"  w="308" h="314"></frame>
+      <frame name="sprite9"   x="924"  y="314"  w="308" h="314"></frame>
+      <frame name="sprite10"  x="1232" y="314"  w="308" h="314"></frame>
+      <frame name="sprite11"  x="0"    y="628"  w="308" h="314"></frame>
+      <frame name="sprite12"  x="308"  y="628"  w="308" h="314"></frame>
+      <frame name="sprite13"  x="616"  y="628"  w="308" h="314"></frame>
+      <frame name="sprite14"  x="924"  y="628"  w="308" h="314"></frame>
+      <frame name="sprite15"  x="1232" y="628"  w="308" h="314"></frame>
+      <frame name="sprite16"  x="0"    y="942"  w="308" h="314"></frame>
+      <frame name="sprite17"  x="308"  y="942"  w="308" h="314"></frame>
+      <frame name="sprite18"  x="616"  y="942"  w="308" h="314"></frame>
+      <frame name="sprite19"  x="924"  y="942"  w="308" h="314"></frame>
+      <frame name="sprite20"  x="1232" y="942"  w="308" h="314"></frame>
+      <frame name="sprite21"  x="0"    y="1256" w="308" h="314"></frame>
+      <frame name="sprite22"  x="308"  y="1256" w="308" h="314"></frame>
+      <frame name="sprite23"  x="616"  y="1256" w="308" h="314"></frame>
+      <frame name="sprite24"  x="924"  y="1256" w="308" h="314"></frame>
+      <frame name="sprite25"  x="1232" y="1256" w="308" h="314"></frame>
+      <frame name="sprite26"  x="0"    y="1570" w="308" h="314"></frame>
+      <frame name="sprite27"  x="308"  y="1570" w="308" h="314"></frame>
+      <frame name="sprite28"  x="616"  y="1570" w="308" h="314"></frame>
+      <frame name="sprite29"  x="924"  y="1570" w="308" h="314"></frame>
+      <frame name="sprite30"  x="1232" y="1570" w="308" h="314"></frame>
+      <frame name="sprite31"  x="0"    y="1884" w="308" h="314"></frame>
+      <frame name="sprite32"  x="308"  y="1884" w="308" h="314"></frame>
+      <frame name="sprite33"  x="616"  y="1884" w="308" h="314"></frame>
+      <frame name="sprite34"  x="924"  y="1884" w="308" h="314"></frame>
+      <frame name="sprite35"  x="1232" y="1884" w="308" h="314"></frame>
+      <frame name="sprite36"  x="0"    y="2198" w="308" h="314"></frame>
+      <frame name="sprite37"  x="308"  y="2198" w="308" h="314"></frame>
+      <frame name="sprite38"  x="616"  y="2198" w="308" h="314"></frame>
+      <frame name="sprite39"  x="924"  y="2198" w="308" h="314"></frame>
+      <frame name="sprite40"  x="1232" y="2198" w="308" h="314"></frame>
+      <frame name="sprite41"  x="0"    y="2512" w="308" h="314"></frame>
+      <frame name="sprite42"  x="308"  y="2512" w="308" h="314"></frame>
+      <frame name="sprite43"  x="616"  y="2512" w="308" h="314"></frame>
+      <frame name="sprite44"  x="924"  y="2512" w="308" h="314"></frame>
+      <frame name="sprite45"  x="1232" y="2512" w="308" h="314"></frame>
+      <frame name="sprite46"  x="0"    y="2826" w="308" h="314"></frame>
+      <frame name="sprite47"  x="308"  y="2826" w="308" h="314"></frame>
+      <frame name="sprite48"  x="616"  y="2826" w="308" h="314"></frame>
+      <frame name="sprite49"  x="924"  y="2826" w="308" h="314"></frame>
+      <frame name="sprite50"  x="1232" y="2826" w="308" h="314"></frame>
+      <frame name="sprite51"  x="0"    y="3140" w="308" h="314"></frame>
+      <frame name="sprite52"  x="308"  y="3140" w="308" h="314"></frame>
+      <frame name="sprite53"  x="616"  y="3140" w="308" h="314"></frame>
+      <frame name="sprite54"  x="924"  y="3140" w="308" h="314"></frame>
+      <frame name="sprite55"  x="1232" y="3140" w="308" h="314"></frame>
+      <frame name="sprite56"  x="0"    y="3454" w="308" h="314"></frame>
+      <frame name="sprite57"  x="308"  y="3454" w="308" h="314"></frame>
+      <frame name="sprite58"  x="616"  y="3454" w="308" h="314"></frame>
+      <frame name="sprite59"  x="924"  y="3454" w="308" h="314"></frame>
+      <frame name="sprite60"  x="1232" y="3454" w="308" h="314"></frame>
+      <frame name="sprite61"  x="0"    y="3768" w="308" h="314"></frame>
+      <frame name="sprite62"  x="308"  y="3768" w="308" h="314"></frame>
+      <frame name="sprite63"  x="616"  y="3768" w="308" h="314"></frame>
+      <frame name="sprite64"  x="924"  y="3768" w="308" h="314"></frame>
+      <frame name="sprite65"  x="1232" y="3768" w="308" h="314"></frame>
+      <frame name="sprite66"  x="0"    y="4082" w="308" h="314"></frame>
+      <frame name="sprite67"  x="308"  y="4082" w="308" h="314"></frame>
+      <frame name="sprite68"  x="616"  y="4082" w="308" h="314"></frame>
+      <frame name="sprite69"  x="924"  y="4082" w="308" h="314"></frame>
+      <frame name="sprite70"  x="1232" y="4082" w="308" h="314"></frame>
+      <frame name="sprite71"  x="0"    y="4396" w="308" h="314"></frame>
+      <frame name="sprite72"  x="308"  y="4396" w="308" h="314"></frame>
+      <frame name="sprite73"  x="616"  y="4396" w="308" h="314"></frame>
+      <frame name="sprite74"  x="924"  y="4396" w="308" h="314"></frame>
+      <frame name="sprite75"  x="1232" y="4396" w="308" h="314"></frame>
+      <frame name="sprite76"  x="0"    y="4710" w="308" h="314"></frame>
+      <frame name="sprite77"  x="308"  y="4710" w="308" h="314"></frame>
+      <frame name="sprite78"  x="616"  y="4710" w="308" h="314"></frame>
+      <frame name="sprite79"  x="924"  y="4710" w="308" h="314"></frame>
+      <frame name="sprite80"  x="1232" y="4710" w="308" h="314"></frame>
+      <frame name="sprite81"  x="0"    y="5024" w="308" h="314"></frame>
+      <frame name="sprite82"  x="308"  y="5024" w="308" h="314"></frame>
+      <frame name="sprite83"  x="616"  y="5024" w="308" h="314"></frame>
+      <frame name="sprite84"  x="924"  y="5024" w="308" h="314"></frame>
+      <frame name="sprite85"  x="1232" y="5024" w="308" h="314"></frame>
+      <frame name="sprite86"  x="0"    y="5338" w="308" h="314"></frame>
+      <frame name="sprite87"  x="308"  y="5338" w="308" h="314"></frame>
+      <frame name="sprite88"  x="616"  y="5338" w="308" h="314"></frame>
+      <frame name="sprite89"  x="924"  y="5338" w="308" h="314"></frame>
+      <frame name="sprite90"  x="1232" y="5338" w="308" h="314"></frame>
+      <frame name="sprite91"  x="0"    y="5652" w="308" h="314"></frame>
+      <frame name="sprite92"  x="308"  y="5652" w="308" h="314"></frame>
+      <frame name="sprite93"  x="616"  y="5652" w="308" h="314"></frame>
+      <frame name="sprite94"  x="924"  y="5652" w="308" h="314"></frame>
+      <frame name="sprite95"  x="1232" y="5652" w="308" h="314"></frame>
+      <frame name="sprite96"  x="0"    y="5966" w="308" h="314"></frame>
+      <frame name="sprite97"  x="308"  y="5966" w="308" h="314"></frame>
+      <frame name="sprite98"  x="616"  y="5966" w="308" h="314"></frame>
+      <frame name="sprite99"  x="924"  y="5966" w="308" h="314"></frame>
+      <frame name="sprite100" x="1232" y="5966" w="308" h="314"></frame>
+      <frame name="sprite101" x="0"    y="6280" w="308" h="314"></frame>
+      <frame name="sprite102" x="308"  y="6280" w="308" h="314"></frame>
+      <frame name="sprite103" x="616"  y="6280" w="308" h="314"></frame>
+      <frame name="sprite104" x="924"  y="6280" w="308" h="314"></frame>
+      <frame name="sprite105" x="1232" y="6280" w="308" h="314"></frame>
+      <frame name="sprite106" x="0"    y="6594" w="308" h="314"></frame>
+      <frame name="sprite107" x="308"  y="6594" w="308" h="314"></frame>
+      <frame name="sprite108" x="616"  y="6594" w="308" h="314"></frame>
+      <frame name="sprite109" x="924"  y="6594" w="308" h="314"></frame>
+      <frame name="sprite110" x="1232" y="6594" w="308" h="314"></frame>
+      <frame name="sprite111" x="0"    y="6908" w="308" h="314"></frame>
+      <frame name="sprite112" x="308"  y="6908" w="308" h="314"></frame>
+      <frame name="sprite113" x="616"  y="6908" w="308" h="314"></frame>
+      <frame name="sprite114" x="924"  y="6908" w="308" h="314"></frame>
+      <frame name="sprite115" x="1232" y="6908" w="308" h="314"></frame>
+      <frame name="sprite116" x="0"    y="7222" w="308" h="314"></frame>
+      <frame name="sprite117" x="308"  y="7222" w="308" h="314"></frame>
+      <frame name="sprite118" x="616"  y="7222" w="308" h="314"></frame>
     </dir>
-    
+
   </cycle-progress-bar>
 
-    <electro_dead speed ="10" loop="false" rotation="counter-clockwise" first_dir_angle="-90">
-      <dir>
-        <frame x="0"   y="0" w="60" h="56"/>
-        <frame x="60"  y="0" w="60" h="56"/>
-        <frame x="120" y="0" w="60" h="56"/>
-        <frame x="180" y="0" w="60" h="56"/>
-        <frame x="240" y="0" w="60" h="56"/>
-        <frame x="300" y="0" w="60" h="56"/>
-        <frame x="360" y="0" w="60" h="56"/>
-        <frame x="420" y="0" w="60" h="56"/>
-        <frame x="480" y="0" w="60" h="56"/>
-        <frame x="540" y="0" w="60" h="56"/>
-        <frame x="600" y="0" w="60" h="56"/>
-        <frame x="660" y="0" w="60" h="56"/>
-        <frame x="720" y="0" w="60" h="56"/>
-        <frame x="780" y="0" w="60" h="56"/>
-      </dir>
-    </electro_dead>
-  
+  <electro_dead speed ="10" loop="false" rotation="counter-clockwise" first_dir_angle="-90">
+    <dir>
+      <frame x="0"   y="0" w="60" h="56"/>
+      <frame x="60"  y="0" w="60" h="56"/>
+      <frame x="120" y="0" w="60" h="56"/>
+      <frame x="180" y="0" w="60" h="56"/>
+      <frame x="240" y="0" w="60" h="56"/>
+      <frame x="300" y="0" w="60" h="56"/>
+      <frame x="360" y="0" w="60" h="56"/>
+      <frame x="420" y="0" w="60" h="56"/>
+      <frame x="480" y="0" w="60" h="56"/>
+      <frame x="540" y="0" w="60" h="56"/>
+      <frame x="600" y="0" w="60" h="56"/>
+      <frame x="660" y="0" w="60" h="56"/>
+      <frame x="720" y="0" w="60" h="56"/>
+      <frame x="780" y="0" w="60" h="56"/>
+    </dir>
+  </electro_dead>
+
   <tesla>
     <animations>
       <idle speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
@@ -402,153 +402,153 @@
     </animations>
   </tesla>
   <burn>
-      <animations>
-        <burn  speed="10" rotation="counter-clockwise" first_dir_angle ="-90" texture="textures/Objects/enemies/teslaTrooper/flameguy.png">
-          <dir>
-            <frame name="sprite1" x="0" y="0" w="52" h="102"></frame>
-            <frame name="sprite2" x="52" y="0" w="52" h="102"></frame>
-            <frame name="sprite3" x="104" y="0" w="52" h="102"></frame>
-            <frame name="sprite4" x="156" y="0" w="52" h="102"></frame>
-            <frame name="sprite5" x="208" y="0" w="52" h="102"></frame>
-            <frame name="sprite6" x="260" y="0" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite7" x="312" y="0" w="52" h="102"></frame>
-            <frame name="sprite8" x="364" y="0" w="52" h="102"></frame>
-            <frame name="sprite9" x="416" y="0" w="52" h="102"></frame>
-            <frame name="sprite10" x="468" y="0" w="52" h="102"></frame>
-            <frame name="sprite11" x="520" y="0" w="52" h="102"></frame>
-            <frame name="sprite12" x="572" y="0" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite13" x="624" y="0" w="52" h="102"></frame>
-            <frame name="sprite14" x="676" y="0" w="52" h="102"></frame>
-            <frame name="sprite15" x="728" y="0" w="52" h="102"></frame>
-            <frame name="sprite16" x="780" y="0" w="52" h="102"></frame>
-            <frame name="sprite17" x="832" y="0" w="52" h="102"></frame>
-            <frame name="sprite18" x="884" y="0" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite19" x="936" y="0" w="52" h="102"></frame>
-            <frame name="sprite20" x="0" y="102" w="52" h="102"></frame>
-            <frame name="sprite21" x="52" y="102" w="52" h="102"></frame>
-            <frame name="sprite22" x="104" y="102" w="52" h="102"></frame>
-            <frame name="sprite23" x="156" y="102" w="52" h="102"></frame>
-            <frame name="sprite24" x="208" y="102" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite25" x="260" y="102" w="52" h="102"></frame>
-            <frame name="sprite26" x="312" y="102" w="52" h="102"></frame>
-            <frame name="sprite27" x="364" y="102" w="52" h="102"></frame>
-            <frame name="sprite28" x="416" y="102" w="52" h="102"></frame>
-            <frame name="sprite29" x="468" y="102" w="52" h="102"></frame>
-            <frame name="sprite30" x="520" y="102" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite31" x="572" y="102" w="52" h="102"></frame>
-            <frame name="sprite32" x="624" y="102" w="52" h="102"></frame>
-            <frame name="sprite33" x="676" y="102" w="52" h="102"></frame>
-            <frame name="sprite34" x="728" y="102" w="52" h="102"></frame>
-            <frame name="sprite35" x="780" y="102" w="52" h="102"></frame>
-            <frame name="sprite36" x="832" y="102" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite37" x="884" y="102" w="52" h="102"></frame>
-            <frame name="sprite38" x="936" y="102" w="52" h="102"></frame>
-            <frame name="sprite39" x="0" y="204" w="52" h="102"></frame>
-            <frame name="sprite40" x="52" y="204" w="52" h="102"></frame>
-            <frame name="sprite41" x="104" y="204" w="52" h="102"></frame>
-            <frame name="sprite42" x="156" y="204" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite43" x="208" y="204" w="52" h="102"></frame>
-            <frame name="sprite44" x="260" y="204" w="52" h="102"></frame>
-            <frame name="sprite45" x="312" y="204" w="52" h="102"></frame>
-            <frame name="sprite46" x="364" y="204" w="52" h="102"></frame>
-            <frame name="sprite47" x="416" y="204" w="52" h="102"></frame>
-            <frame name="sprite48" x="468" y="204" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite49" x="520" y="204" w="52" h="102"></frame>
-            <frame name="sprite50" x="572" y="204" w="52" h="102"></frame>
-            <frame name="sprite51" x="624" y="204" w="52" h="102"></frame>
-            <frame name="sprite52" x="676" y="204" w="52" h="102"></frame>
-            <frame name="sprite53" x="728" y="204" w="52" h="102"></frame>
-            <frame name="sprite54" x="780" y="204" w="52" h="102"></frame>
-          </dir>
-          <dir>
-            <frame name="sprite55" x="832" y="204" w="52" h="102"></frame>
-            <frame name="sprite56" x="884" y="204" w="52" h="102"></frame>
-            <frame name="sprite57" x="936" y="204" w="52" h="102"></frame>
-            <frame name="sprite58" x="0" y="306" w="52" h="102"></frame>
-            <frame name="sprite59" x="52" y="306" w="52" h="102"></frame>
-            <frame name="sprite60" x="104" y="306" w="52" h="102"></frame>
-          </dir>
-        </burn>
-        <dying_burn speed="10" loop =" false" rotation="counter-clockwise">
-          <dir>
-            <frame name="sprite50"  x="572" y="204" w="52" h="102"></frame>
-            <frame name="sprite51"  x="624" y="204" w="52" h="102"></frame>
-            <frame name="sprite52"  x="676" y="204" w="52" h="102"></frame>
-            <frame name="sprite53"  x="728" y="204" w="52" h="102"></frame>
-            <frame name="sprite54"  x="780" y="204" w="52" h="102"></frame>
-            <frame name="sprite55"  x="832" y="204" w="52" h="102"></frame>
-            <frame name="sprite56"  x="884" y="204" w="52" h="102"></frame>
-            <frame name="sprite57"  x="936" y="204" w="52" h="102"></frame>
-            <frame name="sprite58"  x="0"   y="306" w="52" h="102"></frame>
-            <frame name="sprite59"  x="52"  y="306" w="52" h="102"></frame>
-            <frame name="sprite60"  x="104" y="306" w="52" h="102"></frame>
-            <frame name="sprite61"  x="156" y="306" w="52" h="102"></frame>
-            <frame name="sprite62"  x="208" y="306" w="52" h="102"></frame>
-            <frame name="sprite63"  x="260" y="306" w="52" h="102"></frame>
-            <frame name="sprite64"  x="312" y="306" w="52" h="102"></frame>
-            <frame name="sprite65"  x="364" y="306" w="52" h="102"></frame>
-            <frame name="sprite66"  x="416" y="306" w="52" h="102"></frame>
-            <frame name="sprite67"  x="468" y="306" w="52" h="102"></frame>
-            <frame name="sprite68"  x="520" y="306" w="52" h="102"></frame>
-            <frame name="sprite69"  x="572" y="306" w="52" h="102"></frame>
-            <frame name="sprite70"  x="624" y="306" w="52" h="102"></frame>
-            <frame name="sprite71"  x="676" y="306" w="52" h="102"></frame>
-            <frame name="sprite72"  x="728" y="306" w="52" h="102"></frame>
-            <frame name="sprite73"  x="780" y="306" w="52" h="102"></frame>
-            <frame name="sprite74"  x="832" y="306" w="52" h="102"></frame>
-            <frame name="sprite75"  x="884" y="306" w="52" h="102"></frame>
-            <frame name="sprite76"  x="936" y="306" w="52" h="102"></frame>
-            <frame name="sprite77"  x="0"   y="408" w="52" h="102"></frame>
-            <frame name="sprite78"  x="52"  y="408" w="52" h="102"></frame>
-            <frame name="sprite79"  x="104" y="408" w="52" h="102"></frame>
-            <frame name="sprite80"  x="156" y="408" w="52" h="102"></frame>
-            <frame name="sprite81"  x="208" y="408" w="52" h="102"></frame>
-            <frame name="sprite82"  x="260" y="408" w="52" h="102"></frame>
-            <frame name="sprite83"  x="312" y="408" w="52" h="102"></frame>
-            <frame name="sprite84"  x="364" y="408" w="52" h="102"></frame>
-            <frame name="sprite85"  x="416" y="408" w="52" h="102"></frame>
-            <frame name="sprite86"  x="468" y="408" w="52" h="102"></frame>
-            <frame name="sprite87"  x="520" y="408" w="52" h="102"></frame>
-            <frame name="sprite88"  x="572" y="408" w="52" h="102"></frame>
-            <frame name="sprite89"  x="624" y="408" w="52" h="102"></frame>
-            <frame name="sprite90"  x="676" y="408" w="52" h="102"></frame>
-            <frame name="sprite91"  x="728" y="408" w="52" h="102"></frame>
-            <frame name="sprite92"  x="780" y="408" w="52" h="102"></frame>
-            <frame name="sprite93"  x="832" y="408" w="52" h="102"></frame>
-            <frame name="sprite94"  x="884" y="408" w="52" h="102"></frame>
-            <frame name="sprite95"  x="936" y="408" w="52" h="102"></frame>
-            <frame name="sprite96"  x="0"   y="510" w="52" h="102"></frame>
-            <frame name="sprite97"  x="52"  y="510" w="52" h="102"></frame>
-            <frame name="sprite98"  x="104" y="510" w="52" h="102"></frame>
-            <frame name="sprite99"  x="156" y="510" w="52" h="102"></frame>
-            <frame name="sprite100" x="208" y="510" w="52" h="102"></frame>
-            <frame name="sprite101" x="260" y="510" w="52" h="102"></frame>
-            <frame name="sprite102" x="312" y="510" w="52" h="102"></frame>
-            <frame name="sprite103" x="364" y="510" w="52" h="102"></frame>
-            <frame name="sprite104" x="416" y="510" w="52" h="102"></frame>
-            <frame name="sprite105" x="468" y="510" w="52" h="102"></frame>
-            <frame name="sprite106" x="520" y="510" w="52" h="102"></frame>
-            <frame name="sprite107" x="572" y="510" w="52" h="102"></frame>
-          </dir>
-        </dying_burn>
-      </animations>
- 
+    <animations>
+      <burn  speed="10" rotation="counter-clockwise" first_dir_angle ="-90" texture="textures/Objects/enemies/teslaTrooper/flameguy.png">
+        <dir>
+          <frame name="sprite1" x="0" y="0" w="52" h="102"></frame>
+          <frame name="sprite2" x="52" y="0" w="52" h="102"></frame>
+          <frame name="sprite3" x="104" y="0" w="52" h="102"></frame>
+          <frame name="sprite4" x="156" y="0" w="52" h="102"></frame>
+          <frame name="sprite5" x="208" y="0" w="52" h="102"></frame>
+          <frame name="sprite6" x="260" y="0" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite7" x="312" y="0" w="52" h="102"></frame>
+          <frame name="sprite8" x="364" y="0" w="52" h="102"></frame>
+          <frame name="sprite9" x="416" y="0" w="52" h="102"></frame>
+          <frame name="sprite10" x="468" y="0" w="52" h="102"></frame>
+          <frame name="sprite11" x="520" y="0" w="52" h="102"></frame>
+          <frame name="sprite12" x="572" y="0" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite13" x="624" y="0" w="52" h="102"></frame>
+          <frame name="sprite14" x="676" y="0" w="52" h="102"></frame>
+          <frame name="sprite15" x="728" y="0" w="52" h="102"></frame>
+          <frame name="sprite16" x="780" y="0" w="52" h="102"></frame>
+          <frame name="sprite17" x="832" y="0" w="52" h="102"></frame>
+          <frame name="sprite18" x="884" y="0" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite19" x="936" y="0" w="52" h="102"></frame>
+          <frame name="sprite20" x="0" y="102" w="52" h="102"></frame>
+          <frame name="sprite21" x="52" y="102" w="52" h="102"></frame>
+          <frame name="sprite22" x="104" y="102" w="52" h="102"></frame>
+          <frame name="sprite23" x="156" y="102" w="52" h="102"></frame>
+          <frame name="sprite24" x="208" y="102" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite25" x="260" y="102" w="52" h="102"></frame>
+          <frame name="sprite26" x="312" y="102" w="52" h="102"></frame>
+          <frame name="sprite27" x="364" y="102" w="52" h="102"></frame>
+          <frame name="sprite28" x="416" y="102" w="52" h="102"></frame>
+          <frame name="sprite29" x="468" y="102" w="52" h="102"></frame>
+          <frame name="sprite30" x="520" y="102" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite31" x="572" y="102" w="52" h="102"></frame>
+          <frame name="sprite32" x="624" y="102" w="52" h="102"></frame>
+          <frame name="sprite33" x="676" y="102" w="52" h="102"></frame>
+          <frame name="sprite34" x="728" y="102" w="52" h="102"></frame>
+          <frame name="sprite35" x="780" y="102" w="52" h="102"></frame>
+          <frame name="sprite36" x="832" y="102" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite37" x="884" y="102" w="52" h="102"></frame>
+          <frame name="sprite38" x="936" y="102" w="52" h="102"></frame>
+          <frame name="sprite39" x="0" y="204" w="52" h="102"></frame>
+          <frame name="sprite40" x="52" y="204" w="52" h="102"></frame>
+          <frame name="sprite41" x="104" y="204" w="52" h="102"></frame>
+          <frame name="sprite42" x="156" y="204" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite43" x="208" y="204" w="52" h="102"></frame>
+          <frame name="sprite44" x="260" y="204" w="52" h="102"></frame>
+          <frame name="sprite45" x="312" y="204" w="52" h="102"></frame>
+          <frame name="sprite46" x="364" y="204" w="52" h="102"></frame>
+          <frame name="sprite47" x="416" y="204" w="52" h="102"></frame>
+          <frame name="sprite48" x="468" y="204" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite49" x="520" y="204" w="52" h="102"></frame>
+          <frame name="sprite50" x="572" y="204" w="52" h="102"></frame>
+          <frame name="sprite51" x="624" y="204" w="52" h="102"></frame>
+          <frame name="sprite52" x="676" y="204" w="52" h="102"></frame>
+          <frame name="sprite53" x="728" y="204" w="52" h="102"></frame>
+          <frame name="sprite54" x="780" y="204" w="52" h="102"></frame>
+        </dir>
+        <dir>
+          <frame name="sprite55" x="832" y="204" w="52" h="102"></frame>
+          <frame name="sprite56" x="884" y="204" w="52" h="102"></frame>
+          <frame name="sprite57" x="936" y="204" w="52" h="102"></frame>
+          <frame name="sprite58" x="0" y="306" w="52" h="102"></frame>
+          <frame name="sprite59" x="52" y="306" w="52" h="102"></frame>
+          <frame name="sprite60" x="104" y="306" w="52" h="102"></frame>
+        </dir>
+      </burn>
+      <dying_burn speed="10" loop =" false" rotation="counter-clockwise">
+        <dir>
+          <frame name="sprite50"  x="572" y="204" w="52" h="102"></frame>
+          <frame name="sprite51"  x="624" y="204" w="52" h="102"></frame>
+          <frame name="sprite52"  x="676" y="204" w="52" h="102"></frame>
+          <frame name="sprite53"  x="728" y="204" w="52" h="102"></frame>
+          <frame name="sprite54"  x="780" y="204" w="52" h="102"></frame>
+          <frame name="sprite55"  x="832" y="204" w="52" h="102"></frame>
+          <frame name="sprite56"  x="884" y="204" w="52" h="102"></frame>
+          <frame name="sprite57"  x="936" y="204" w="52" h="102"></frame>
+          <frame name="sprite58"  x="0"   y="306" w="52" h="102"></frame>
+          <frame name="sprite59"  x="52"  y="306" w="52" h="102"></frame>
+          <frame name="sprite60"  x="104" y="306" w="52" h="102"></frame>
+          <frame name="sprite61"  x="156" y="306" w="52" h="102"></frame>
+          <frame name="sprite62"  x="208" y="306" w="52" h="102"></frame>
+          <frame name="sprite63"  x="260" y="306" w="52" h="102"></frame>
+          <frame name="sprite64"  x="312" y="306" w="52" h="102"></frame>
+          <frame name="sprite65"  x="364" y="306" w="52" h="102"></frame>
+          <frame name="sprite66"  x="416" y="306" w="52" h="102"></frame>
+          <frame name="sprite67"  x="468" y="306" w="52" h="102"></frame>
+          <frame name="sprite68"  x="520" y="306" w="52" h="102"></frame>
+          <frame name="sprite69"  x="572" y="306" w="52" h="102"></frame>
+          <frame name="sprite70"  x="624" y="306" w="52" h="102"></frame>
+          <frame name="sprite71"  x="676" y="306" w="52" h="102"></frame>
+          <frame name="sprite72"  x="728" y="306" w="52" h="102"></frame>
+          <frame name="sprite73"  x="780" y="306" w="52" h="102"></frame>
+          <frame name="sprite74"  x="832" y="306" w="52" h="102"></frame>
+          <frame name="sprite75"  x="884" y="306" w="52" h="102"></frame>
+          <frame name="sprite76"  x="936" y="306" w="52" h="102"></frame>
+          <frame name="sprite77"  x="0"   y="408" w="52" h="102"></frame>
+          <frame name="sprite78"  x="52"  y="408" w="52" h="102"></frame>
+          <frame name="sprite79"  x="104" y="408" w="52" h="102"></frame>
+          <frame name="sprite80"  x="156" y="408" w="52" h="102"></frame>
+          <frame name="sprite81"  x="208" y="408" w="52" h="102"></frame>
+          <frame name="sprite82"  x="260" y="408" w="52" h="102"></frame>
+          <frame name="sprite83"  x="312" y="408" w="52" h="102"></frame>
+          <frame name="sprite84"  x="364" y="408" w="52" h="102"></frame>
+          <frame name="sprite85"  x="416" y="408" w="52" h="102"></frame>
+          <frame name="sprite86"  x="468" y="408" w="52" h="102"></frame>
+          <frame name="sprite87"  x="520" y="408" w="52" h="102"></frame>
+          <frame name="sprite88"  x="572" y="408" w="52" h="102"></frame>
+          <frame name="sprite89"  x="624" y="408" w="52" h="102"></frame>
+          <frame name="sprite90"  x="676" y="408" w="52" h="102"></frame>
+          <frame name="sprite91"  x="728" y="408" w="52" h="102"></frame>
+          <frame name="sprite92"  x="780" y="408" w="52" h="102"></frame>
+          <frame name="sprite93"  x="832" y="408" w="52" h="102"></frame>
+          <frame name="sprite94"  x="884" y="408" w="52" h="102"></frame>
+          <frame name="sprite95"  x="936" y="408" w="52" h="102"></frame>
+          <frame name="sprite96"  x="0"   y="510" w="52" h="102"></frame>
+          <frame name="sprite97"  x="52"  y="510" w="52" h="102"></frame>
+          <frame name="sprite98"  x="104" y="510" w="52" h="102"></frame>
+          <frame name="sprite99"  x="156" y="510" w="52" h="102"></frame>
+          <frame name="sprite100" x="208" y="510" w="52" h="102"></frame>
+          <frame name="sprite101" x="260" y="510" w="52" h="102"></frame>
+          <frame name="sprite102" x="312" y="510" w="52" h="102"></frame>
+          <frame name="sprite103" x="364" y="510" w="52" h="102"></frame>
+          <frame name="sprite104" x="416" y="510" w="52" h="102"></frame>
+          <frame name="sprite105" x="468" y="510" w="52" h="102"></frame>
+          <frame name="sprite106" x="520" y="510" w="52" h="102"></frame>
+          <frame name="sprite107" x="572" y="510" w="52" h="102"></frame>
+        </dir>
+      </dying_burn>
+    </animations>
+
   </burn>
   <fires>
     <animations>
@@ -1236,7 +1236,839 @@
         </dir>
       </death>
     </animation>
-  
+
   </suicidal>
 
+  <anim_electro_shot speed="5" rotation="counter-clockwise" first_dir_angle ="-90">
+    <dir>
+      <frame x="0"   y="0" w="108" h="187"/>
+      <frame x="108" y="0" w="108" h="187"/>
+      <frame x="216" y="0" w="108" h="187"/>
+    </dir>
+  </anim_electro_shot>
+
+  <flamethrower>
+      <fire_start speed="15">
+        <dir>
+          <frame x="0"   y="0"   w="154" h="112"/>
+          <frame x="154" y="0"   w="154" h="112"/>
+          <frame x="308" y="0"   w="154" h="112"/>
+          <frame x="462" y="0"   w="154" h="112"/>
+          <frame x="616" y="0"   w="154" h="112"/>
+          <frame x="770" y="0"   w="154" h="112"/>
+          <frame x="0"   y="112" w="154" h="112"/>
+        </dir>
+      </fire_start>
+      <fire speed="15">
+        <dir>
+          <frame x="154" y="112" w="154" h="112"/>
+          <frame x="308" y="112" w="154" h="112"/>
+          <frame x="462" y="112" w="154" h="112"/>
+          <frame x="616" y="112" w="154" h="112"/>
+        </dir>
+      </fire>
+      <fire_reverse speed="15">
+        <dir>
+          <frame x="462" y="112" w="154" h="112"/>
+          <frame x="308" y="112" w="154" h="112"/>
+        </dir>
+      </fire_reverse>
+      <fire_end speed="15">
+        <dir>
+          <frame x="770" y="112" w="154" h="112"/>
+          <frame x="0"   y="224" w="154" h="112"/>
+          <frame x="154" y="224" w="154" h="112"/>
+          <frame x="308" y="224" w="154" h="112"/>
+          <frame x="462" y="224" w="154" h="112"/>
+          <frame x="616" y="224" w="154" h="112"/>
+          <frame x="770" y="224" w="154" h="112"/>
+          <frame x="0"   y="336" w="154" h="112"/>
+          <frame x="154" y="336" w="154" h="112"/>
+          <frame x="308" y="336" w="154" h="112"/>
+          <frame x="462" y="336" w="154" h="112"/>
+          <frame x="616" y="336" w="154" h="112"/>
+          <frame x="770" y="336" w="154" h="112"/>
+        </dir>
+      </fire_end>
+  </flamethrower>
+
+  <tank>
+    <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
+      <dir>
+        <frame num="000" x="0"   y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="001" x="112" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="002" x="224" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="003" x="336" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="004" x="448" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="005" x="560" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="006" x="672" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="007" x="784" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="008" x="896" y="0"   w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="009" x="0"   y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="010" x="112" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="011" x="224" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="012" x="336" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="013" x="448" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="014" x="560" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="015" x="672" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="016" x="784" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="017" x="896" y="67"  w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="018" x="0"   y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="019" x="112" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="020" x="224" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="021" x="336" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="022" x="448" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="023" x="560" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="024" x="672" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="025" x="784" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="026" x="896" y="134" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="027" x="0"   y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="028" x="112" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="029" x="224" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="030" x="336" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="031" x="448" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="032" x="560" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="033" x="672" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="034" x="784" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="035" x="896" y="201" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="036" x="0"   y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="037" x="112" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="038" x="224" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="039" x="336" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="040" x="448" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="041" x="560" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="042" x="672" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="043" x="784" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="044" x="896" y="268" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="045" x="0"   y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="046" x="112" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="047" x="224" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="048" x="336" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="049" x="448" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="050" x="560" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="051" x="672" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="052" x="784" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="053" x="896" y="335" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="054" x="0"   y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="055" x="112" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="056" x="224" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="057" x="336" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="058" x="448" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="059" x="560" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="060" x="672" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="061" x="784" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="062" x="896" y="402" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="063" x="0"   y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="064" x="112" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="065" x="224" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="066" x="336" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="067" x="448" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="068" x="560" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="069" x="672" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="070" x="784" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="071" x="896" y="469" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="072" x="0"   y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="073" x="112" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="074" x="224" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="075" x="336" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="076" x="448" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="077" x="560" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="078" x="672" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="079" x="784" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="080" x="896" y="536" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="081" x="0"   y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="082" x="112" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="083" x="224" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="084" x="336" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="085" x="448" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="086" x="560" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="087" x="672" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="088" x="784" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="089" x="896" y="603" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="090" x="0"   y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="091" x="112" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="092" x="224" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="093" x="336" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="094" x="448" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="095" x="560" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="096" x="672" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="097" x="784" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="098" x="896" y="670" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="099" x="0"   y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="100" x="112" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="101" x="224" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="102" x="336" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="103" x="448" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="104" x="560" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="105" x="672" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="106" x="784" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="107" x="896" y="737" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="108" x="0"   y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="109" x="112" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="110" x="224" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="111" x="336" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="112" x="448" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="113" x="560" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="114" x="672" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="115" x="784" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="116" x="896" y="804" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="117" x="0"   y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="118" x="112" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="119" x="224" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="120" x="336" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="121" x="448" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="122" x="560" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="123" x="672" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="124" x="784" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="125" x="896" y="871" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="126" x="0"   y="938" w="112" h="67"/>
+      </dir>
+      <dir>
+        <frame num="127" x="112" y="938" w="112" h="67"/>
+      </dir>
+    </rotate_base>
+    <rotate_turr speed="0" rotation="counter-clockwise" first_dir_angle ="315">
+      <dir>
+        <frame num="000" x="0"   y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="001" x="114" y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="002" x="228" y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="003" x="342" y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="004" x="456" y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="005" x="570" y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="006" x="684" y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="007" x="798" y="0"    w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="008" x="0"   y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="009" x="114" y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="010" x="228" y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="011" x="342" y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="012" x="456" y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="013" x="570" y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="014" x="684" y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="015" x="798" y="68"   w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="016" x="0"   y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="017" x="114" y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="018" x="228" y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="019" x="342" y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="020" x="456" y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="021" x="570" y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="022" x="684" y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="023" x="798" y="136"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="024" x="0"   y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="025" x="114" y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="026" x="228" y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="027" x="342" y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="028" x="456" y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="029" x="570" y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="030" x="684" y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="031" x="798" y="204"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="032" x="0"   y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="033" x="114" y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="034" x="228" y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="035" x="342" y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="036" x="456" y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="037" x="570" y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="038" x="684" y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="039" x="798" y="272"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="040" x="0"   y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="041" x="114" y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="042" x="228" y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="043" x="342" y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="044" x="456" y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="045" x="570" y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="046" x="684" y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="047" x="798" y="340"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="048" x="0"   y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="049" x="114" y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="050" x="228" y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="051" x="342" y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="052" x="456" y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="053" x="570" y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="054" x="684" y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="055" x="798" y="408"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="056" x="0"   y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="057" x="114" y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="058" x="228" y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="059" x="342" y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="060" x="456" y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="061" x="570" y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="062" x="684" y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="063" x="798" y="476"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="064" x="0"   y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="065" x="114" y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="066" x="228" y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="067" x="342" y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="068" x="456" y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="069" x="570" y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="070" x="684" y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="071" x="798" y="544"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="072" x="0"   y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="073" x="114" y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="074" x="228" y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="075" x="342" y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="076" x="456" y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="077" x="570" y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="078" x="684" y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="079" x="798" y="612"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="080" x="0"   y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="081" x="114" y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="082" x="228" y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="083" x="342" y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="084" x="456" y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="085" x="570" y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="086" x="684" y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="087" x="798" y="680"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="088" x="0"   y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="089" x="114" y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="090" x="228" y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="091" x="342" y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="092" x="456" y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="093" x="570" y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="094" x="684" y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="095" x="798" y="748"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="096" x="0"   y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="097" x="114" y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="098" x="228" y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="099" x="342" y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="100" x="456" y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="101" x="570" y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="102" x="684" y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="103" x="798" y="816"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="104" x="0"   y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="105" x="114" y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="106" x="228" y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="107" x="342" y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="108" x="456" y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="109" x="570" y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="110" x="684" y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="111" x="798" y="884"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="112" x="0"   y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="113" x="114" y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="114" x="228" y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="115" x="342" y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="116" x="456" y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="117" x="570" y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="118" x="684" y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="119" x="798" y="952"  w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="120" x="0"   y="1020" w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="121" x="114" y="1020" w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="122" x="228" y="1020" w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="123" x="342" y="1020" w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="124" x="456" y="1020" w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="125" x="570" y="1020" w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="126" x="684" y="1020" w="114" h="68"/>
+      </dir>
+      <dir>
+        <frame num="127" x="798" y="1020" w="114" h="68"/>
+      </dir>
+    </rotate_turr>
+  </tank>
+
+  <portal>
+    
+  </portal>
+  
 </animations>
