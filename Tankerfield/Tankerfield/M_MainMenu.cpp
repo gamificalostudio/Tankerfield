@@ -569,7 +569,7 @@ void M_MainMenu::InputSelect()
 
 			else if (menu_element == jorge_linkedin)
 			{
-				ShellExecute(NULL, "open", "https://github.com/alejandro61299", NULL, NULL, SW_SHOWNORMAL);
+				ShellExecute(NULL, "open", "https://www.linkedin.com/in/jorge-gemas-herencia-28140b188/", NULL, NULL, SW_SHOWNORMAL);
 			}
 
 			else if(menu_element == yessica_github)
