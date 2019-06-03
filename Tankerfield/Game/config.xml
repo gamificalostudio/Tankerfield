@@ -19,6 +19,7 @@
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
+    <icon path="textures/ui/icon.png"/>
   </window>
 
   <animations_bank>animations.xml</animations_bank>
