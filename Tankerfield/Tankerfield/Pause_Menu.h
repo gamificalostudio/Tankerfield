@@ -13,7 +13,7 @@ struct SDL_Texture;
 struct Controller;
 
 class UI_Element;
-class UI_Image;
+class UI_Image;	
 class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
@@ -55,6 +55,7 @@ private:
 	UI_Label* pause_menu = nullptr;
 	UI_Button* options_menu = nullptr;
 	UI_Button* main_menu = nullptr;
+	UI_Button* continue_button = nullptr;
 
 	// Sfx --------------------------------------------
 

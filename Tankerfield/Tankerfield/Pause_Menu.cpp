@@ -46,15 +46,21 @@ Pause_Menu::Pause_Menu()
 	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
 	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
+	/* Labels */
 	pause_menu = app->ui->CreateLabel({ screen.w*0.5f, 250 }, UI_LabelDef("Pause", app->font->label_font_38));
 	pause_menu->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	pause_menu->SetParent(panel_background);
 
+	/* Buttons */
+	continue_button = app->ui->CreateButton({ screen.w*0.5f,350 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	continue_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Continue", app->font->button_font_22, { 50, 50, 50, 255 }));
+
+	options_menu = app->ui->CreateButton({ screen.w*0.5f,500 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	options_menu->SetLabel({ 0.f,2.f }, UI_LabelDef("Options Menu", app->font->button_font_22, { 50, 50, 50, 255 }));
+
 	main_menu = app->ui->CreateButton({ screen.w * 0.5f,650 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	main_menu->SetLabel({ 0.f,2.f }, UI_LabelDef("Main Menu", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	options_menu = app->ui->CreateButton({screen.w*0.5f,500}, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	options_menu->SetLabel({ 0.f,2.f }, UI_LabelDef("Options Menu", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 	UI_InteractiveGroupDef pause_panel_def;
 	pause_panel_def.columns = 1;
@@ -62,8 +68,10 @@ Pause_Menu::Pause_Menu()
 
 
 	global_navigation_panel = app->ui->CreateIntearctiveGroup(screen_center, pause_panel_def, this);
-	global_navigation_panel->SetElement(options_menu, iPoint(0, 1));
-	global_navigation_panel->SetElement(main_menu, iPoint(0, 2));
+	global_navigation_panel->SetElement(continue_button, iPoint(0, 1));
+	global_navigation_panel->SetElement(options_menu, iPoint(0, 2));
+	global_navigation_panel->SetElement(main_menu, iPoint(0, 3));
+
 	// Set values ==========================================
 	SDL_ShowCursor(SDL_ENABLE);
 }
@@ -98,12 +106,16 @@ void Pause_Menu::InputNavigate()
 {
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (app->main_menu->players[i].controller != nullptr)
+		/*if (app->main_menu->players[i].controller != nullptr)
 		{
 			if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
 			{
 				app->audio->PlayFx(button_enter_sfx);
 			}
+		}*/
+		if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
+		{
+			app->audio->PlayFx(button_enter_sfx);
 		}
 	}
 
@@ -126,6 +138,11 @@ void Pause_Menu::InputSelect()
 	{
 		HidePauseMenu();
 		app->scmanager->FadeToBlack(app->scene, app->main_menu, 2.f, 2.f);
+	}
+	else if (menu_element == continue_button)
+	{
+		HidePauseMenu();
+		
 	}
 
 	app->audio->PlayFx(button_select_sfx);
