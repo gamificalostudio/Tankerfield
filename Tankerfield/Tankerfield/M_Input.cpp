@@ -143,7 +143,7 @@ bool M_Input::PreUpdate()
 				{
 					for (uint i = 0; i < MAX_CONTROLLERS; ++i)
 					{
-						if (!controllers[i].connected && SDL_IsGameController(i))
+						if (!controllers[i].connected)
 						{
 							
 							controllers[i].ctr_pointer= SDL_GameControllerOpen(i);
@@ -157,7 +157,7 @@ bool M_Input::PreUpdate()
 							SDL_Joystick* j = SDL_GameControllerGetJoystick(controllers[i].ctr_pointer);
 							controllers[i].joyId = SDL_JoystickInstanceID(j);
 							controllers[i].index_number = i;
-							controllers[i].haptic = SDL_HapticOpen(i);
+							controllers[i].haptic = SDL_HapticOpenFromJoystick(j);
 							const char* ret_is_hap = (SDL_JoystickIsHaptic(j) == 1) ? "true" : "false";
 							LOG("Joys stick is aptic: %s", ret_is_hap);
 							if (controllers[i].haptic == nullptr)
@@ -195,6 +195,7 @@ bool M_Input::PreUpdate()
 						
 						controllers[i].joyId = -1;
 						controllers[i].connected = false;
+						controllers[i].attached = false;
 						--num_controller_connected;
 						LOG("Disconnected gamepad index: %d", i);
 						break;

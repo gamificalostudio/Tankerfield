@@ -68,7 +68,7 @@ Obj_Tank::~Obj_Tank()
 		app->render->DestroyCamera(camera_player);
 	}
 
-	if (controller != -1)
+	if (app->input->IsConnectedControllet(controller))
 	{
 		app->input->DetachController(controller);
 	}
@@ -270,7 +270,7 @@ bool Obj_Tank::Start()
 
 bool Obj_Tank::PreUpdate()
 {
-	if (controller == -1)
+	if (!app->input->IsConnectedControllet(controller))
 	{
 		controller = app->input->GetAbleController();
 	}
