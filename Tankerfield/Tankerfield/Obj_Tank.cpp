@@ -419,6 +419,11 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
+
+	if (tank_num == 0)
+	{
+		LOG("Current speed: %f", velocity_map.ModuleF());
+	}
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -480,10 +485,6 @@ bool Obj_Tank::AddMaxSpeedBuff(MovementBuff buff)
 {
 	bool ret = false;
 	const char * source_char_ptr = buff.source.c_str();
-	if (tank_num == 0)
-	{
-		LOG("this breakpoint shouldn't hit");
-	}
 
 	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
 	{
