@@ -170,13 +170,16 @@ bool Obj_Tank::Start()
 
 	base_max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
 
+	charged_shot_buff.source = "charged_shot";
 	charged_shot_buff.bonus_speed = tank_stats_node.child("charged_shot_buff").attribute("value").as_float();
 	charged_shot_buff.has_decay = false;
 
+	road_buff.source = "road";
 	road_buff.bonus_speed = tank_stats_node.child("road_buff").attribute("value").as_float();
 	road_buff.has_decay = true;
 	road_buff.decay_rate = tank_stats_node.child("road_buff_decay_rate").attribute("value").as_float();
 
+	recoil_buff.source = "recoil";
 	recoil_buff.bonus_speed = tank_stats_node.child("recoil_buff").attribute("value").as_float();
 	recoil_buff.has_decay = false;
 
