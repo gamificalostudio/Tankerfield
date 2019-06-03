@@ -25,7 +25,7 @@ LeaderBoard::LeaderBoard()
 	int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
 
 	leader_board_table = app->ui->CreateTable(screen_center, table_def, widths, heights);
-	leader_board_table->SetParent(panel_background);
+	//leader_board_table->SetParent(panel_background);
 	leader_board_table->alpha = 0;
 
 	UI_InputTextDef input_def;
@@ -49,7 +49,7 @@ void LeaderBoard::FadeLeaderBoardScreen(bool fade_on)
 	else
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
-		panel_background->SetFX(type, 2.F);
+		/*panel_background->SetFX(type, 2.F);*/
 		input_text->DesactiveInputText();
 		control_helper_image->SetFX(type, 2.F);
 		control_helper_label->SetFX(type, 2.F);

@@ -319,6 +319,9 @@ bool M_Scene::CleanUp()
 		(*i)->gui = nullptr;
 	}
 
+	delete(leaderboard);
+	leaderboard = nullptr;
+
 	return true;
 }
 
