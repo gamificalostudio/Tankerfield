@@ -37,6 +37,7 @@
 #include "Obj_FlamethrowerFlame.h"
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
+#include "M_PickManager.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -237,7 +238,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HEALTH_BAG);
+	SetItem(ItemType::HAPPY_HOUR_ITEM);
 	time_between_portal_tp.Start();
 
 	//Flamethrower
@@ -634,7 +635,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
-		if (bullet->player != this) // he does not heal himself
+		if (bullet->player && Alive()) // he does not heal himself
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
@@ -1204,11 +1205,17 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
+		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
+		
 	}
 	else
 	{
+		if (weapon_info.weapon != WEAPON::BASIC)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
+		}
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 		gui->CreateParticleToWeaponFrame();
 	}
