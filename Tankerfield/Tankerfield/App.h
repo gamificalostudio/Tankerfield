@@ -74,6 +74,13 @@ public:
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
 
+	bool IsPaused();
+
+	void PauseGame();
+
+	void ResumeGame();
+
+
 private:
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
@@ -121,7 +128,6 @@ public:
 	M_RewardZoneManager*    reward_zone_manager = nullptr;
 	M_MainMenu*             main_menu = nullptr;
 	M_Debug*				debug = nullptr;
-	M_Options_Menu*			options_menu = nullptr;
 	Video*					video = nullptr;
 
 	//XML document

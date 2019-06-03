@@ -27,6 +27,7 @@ Pause_Menu::Pause_Menu()
 
 	options = new Options_Menu();
 	options->HideOptionsMenu();
+
 	// Create UI Elements ====================================
 
 	fRect screen = app->win->GetWindowRect();
@@ -106,13 +107,6 @@ void Pause_Menu::InputNavigate()
 {
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		/*if (app->main_menu->players[i].controller != nullptr)
-		{
-			if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
-			{
-				app->audio->PlayFx(button_enter_sfx);
-			}
-		}*/
 		if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
 		{
 			app->audio->PlayFx(button_enter_sfx);
@@ -142,7 +136,6 @@ void Pause_Menu::InputSelect()
 	else if (menu_element == continue_button)
 	{
 		HidePauseMenu();
-		
 	}
 
 	app->audio->PlayFx(button_select_sfx);

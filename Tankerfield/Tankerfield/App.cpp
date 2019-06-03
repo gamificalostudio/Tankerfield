@@ -209,19 +209,7 @@ bool App::Update()
 {
 	bool ret = true;
 	PrepareUpdate();
-	if (input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
-	{
-		pause = !pause;
-		if (pause == true)
-		{
-			app->scene->pause_menu->ShowPauseMenu();
-		}
-		else
-		{
-			app->scene->pause_menu->HidePauseMenu();
-		}
-		frame_time.Start();
-	}
+
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
@@ -439,6 +427,22 @@ void App::SaveGame(const char* file) const
 
 	want_to_save = true;
 	save_game.assign(file);
+}
+
+bool App::IsPaused()
+{
+	return pause;
+}
+
+void App::PauseGame()
+{
+	pause = true;
+}
+
+void App::ResumeGame()
+{
+	pause = false;
+	frame_time.Start();
 }
 
 // ---------------------------------------

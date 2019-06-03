@@ -160,6 +160,14 @@ bool M_Scene::PreUpdate()
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
 	}
 
+	if (app->IsPaused() == true)
+	{
+		pause_menu->InputNavigate();
+		pause_menu->InputSelect();
+	}
+
+
+
 	return true;
 }
 
@@ -173,6 +181,20 @@ bool M_Scene::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		input_accept = true;
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
+	{
+		if (app->IsPaused() == true)
+		{
+			app->ResumeGame();
+			pause_menu->HidePauseMenu();
+		}
+		else
+		{
+			app->PauseGame();
+			pause_menu->ShowPauseMenu();
+		}
 	}
 
 	for (int i = 0; i < MAX_PLAYERS && input_accept == false; ++i) {

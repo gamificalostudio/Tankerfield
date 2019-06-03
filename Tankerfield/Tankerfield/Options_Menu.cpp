@@ -205,7 +205,7 @@ void Options_Menu::InputSelect()
 {
 		UI_Element*  menu_element = global_navigation_panel->GetFocusedElement();
 
-		if (menu_element == fullscreen_L||menu_element==fullscreen_R)
+		if (menu_element == fullscreen_L || menu_element==fullscreen_R)
 		{
 			app->win->SetFullscreen();
 			fullscreen_value_info = !fullscreen_value_info;
