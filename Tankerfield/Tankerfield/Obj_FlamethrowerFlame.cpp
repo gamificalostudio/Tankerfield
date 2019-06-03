@@ -22,15 +22,14 @@
 Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) : Object(pos)
 {
 	pugi::xml_node flamethrower_node = app->config.child("object").child("tank").child("flamethrower");
-	pugi::xml_node anim_flame_node = app->anim_bank->animations_xml_node.child("flamethrower");
 
 	tex = app->tex->Load(flamethrower_node.child("tex_flamethrower").text().as_string());
 	curr_tex = tex;
 
-	fire_start.frames = app->anim_bank->LoadFrames(anim_flame_node.child("fire_start"));
-	fire.frames = app->anim_bank->LoadFrames(anim_flame_node.child("fire"));
-	fire_reverse.frames = app->anim_bank->LoadFrames(anim_flame_node.child("fire_reverse"));
-	fire_end.frames = app->anim_bank->LoadFrames(anim_flame_node.child("fire_end"));
+	fire_start.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire_start"));
+	fire.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire"));
+	fire_reverse.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire_reverse"));
+	fire_end.frames = app->anim_bank->LoadFrames(flamethrower_node.child("animations").child("fire_end"));
 	
 	curr_anim = nullptr;
 
