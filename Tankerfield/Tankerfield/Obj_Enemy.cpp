@@ -51,17 +51,27 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	
 }
 
+Obj_Enemy::~Obj_Enemy()
+{
+	if (life_collider != nullptr)
+	{
+		life_collider->Destroy();
+		life_collider = nullptr;
+	}
+}
+
 bool Obj_Enemy::Update(float dt)
 {
 	Movement(dt);
-	Attack();
-	if(oiled)
+
+	if(can_attack)
+		Attack();
+
+
+	if(oiled && state != ENEMY_STATE::BURN)
 		Oiled();
 
-	if (damaged)
-	{
-		ChangeTexture();
-	}
+	ChangeTexture();
 
 	if (life_collider != nullptr)
 		life_collider->SetPosToObj();
@@ -71,14 +81,14 @@ bool Obj_Enemy::Update(float dt)
 
 void Obj_Enemy::ChangeTexture()
 {
-	if (damaged_sprite_timer.Read() > damaged_sprite_time && 
-		curr_tex != tex && 
+	if (damaged && state != ENEMY_STATE::BURN &&
 		state != ENEMY_STATE::STUNNED &&
 		state != ENEMY_STATE::STUNNED_CHARGED &&
-		!oiled &&
+		!oiled && damaged_sprite_timer.Read() > damaged_sprite_time &&
+		curr_tex != tex &&
 		bool_electro_dead == false)
 	{
-		curr_tex = last_texture;
+		curr_tex = tex;
 		damaged = false;
 	}
 }
@@ -102,9 +112,6 @@ void Obj_Enemy::Attack()
 				perf_timer.Start();
 				app->audio->PlayFx(sfx_attack);
 			}
-	
-
-		
 	}
 }
 void Obj_Enemy::Movement(float &dt)
@@ -132,8 +139,7 @@ void Obj_Enemy::Movement(float &dt)
 	break;
 	case ENEMY_STATE::MOVE:
 	{
-		int retflag = Move(dt);
-		if (retflag == 2) break;
+		Move(dt);
 
 	}
 	break;
@@ -188,8 +194,6 @@ void Obj_Enemy::Movement(float &dt)
 		assert(true && "The enemy have no state");
 		break;
 	}
-
-
 }
 
 void Obj_Enemy::RecheadPoint()
@@ -213,7 +217,7 @@ void Obj_Enemy::Dead()
 	{
 		// DROP A PICK UP ITEM 
 		app->pick_manager->PickUpFromEnemy(pos_map);
-
+		//curr_tex = tex;
 		curr_anim = &death;
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
@@ -282,7 +286,7 @@ void Obj_Enemy::Idle()
 	}
 }
 
-int Obj_Enemy::Move(float & dt)
+void Obj_Enemy::Move(const float & dt)
 {
 	if (IsOnGoal(next_pos))
 	{
@@ -293,8 +297,6 @@ int Obj_Enemy::Move(float & dt)
 
 		state = ENEMY_STATE::RECHEAD_POINT;
 	}
-
-	
 
 	if (update_velocity_vec.ReadSec() > 1)
 	{
@@ -308,10 +310,8 @@ int Obj_Enemy::Move(float & dt)
 		state = ENEMY_STATE::GET_PATH;
 
 	UpdatePos(dt);
-	return 0;
+
 }
-
-
 
 void Obj_Enemy::GetPath()
 {
@@ -320,7 +320,6 @@ void Obj_Enemy::GetPath()
 	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
 	if (target != nullptr)
 	{
-
 		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 		{
 			path.clear();
@@ -351,7 +350,6 @@ void Obj_Enemy::GetPath()
 				path_timer.Start();
 			}
 		}
-
 	}
 	else
 	{
@@ -365,28 +363,54 @@ inline void Obj_Enemy::GetTeleportPoint()
 	float distance_to_tank = this->pos_map.DistanceManhattan(target->pos_map);
 	SpawnPoint* nearest_spawners_points = nullptr;
 	float last_distance_to_spawnpoint = 0.f;
-
-	for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
+	uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
+	float min_num_instant_teleport_enemies = 10;
+	if (number_of_enemies <= min_num_instant_teleport_enemies)
 	{
-		float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
-
-		if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
-			/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
-			&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
-			&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
+		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
 		{
-			nearest_spawners_points = (*spawn_point);
-			last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			float distance_to_this_spawnpoint = (target->pos_map.DistanceManhattan((*spawn_point)->pos));
+
+			if (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+			{
+				nearest_spawners_points = (*spawn_point);
+				last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			}
+		}
+	}
+	else
+	{
+		for (std::vector<SpawnPoint*>::iterator spawn_point = app->map->data.spawners_position_enemy.begin(); spawn_point != app->map->data.spawners_position_enemy.end(); ++spawn_point)
+		{
+			float distance_to_this_spawnpoint = this->pos_map.DistanceManhattan((*spawn_point)->pos);
+
+			if ((target->pos_map.DistanceManhattan((*spawn_point)->pos) <= distance_to_tank
+				/*&& distance_to_this_spawnpoint <= distance_to_tank*/)
+				&& (nearest_spawners_points == nullptr || distance_to_this_spawnpoint < last_distance_to_spawnpoint)
+				&& (teleport_spawnpoint == nullptr || teleport_spawnpoint != (*spawn_point)))
+			{
+				nearest_spawners_points = (*spawn_point);
+				last_distance_to_spawnpoint = distance_to_this_spawnpoint;
+			}
 		}
 	}
 
+
 	if (nearest_spawners_points != nullptr && distance_to_tank > target->pos_map.DistanceManhattan(nearest_spawners_points->pos))
 	{
-		check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
-		uint number_of_enemies = app->objectmanager->GetNumberOfEnemies();
-		if (number_of_enemies <= teleport_enemies_max)
+		
+		if (number_of_enemies <= min_num_instant_teleport_enemies)
 		{
-			check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+			check_teleport_time = 0;
+		}
+		else
+		{
+			check_teleport_time = nearest_spawners_points->pos.DistanceTo(pos_map) / speed;
+			if (number_of_enemies <= teleport_enemies_max)
+			{
+				check_teleport_time = check_teleport_time * ((number_of_enemies) / teleport_enemies_max);
+			}
+
 		}
 		teleport_spawnpoint = nearest_spawners_points;
 		state = ENEMY_STATE::TELEPORT_IN;
@@ -465,7 +489,7 @@ bool Obj_Enemy::Draw(float dt, Camera * camera)
 			scale,
 			scale);
 
-	
+	DrawAttackRange(camera);
 
 	return true;
 }
@@ -477,6 +501,19 @@ bool Obj_Enemy::Start()
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	return true;
+}
+
+void Obj_Enemy::SetStats(int level)//Executes just after creation
+{
+
+}
+
+void Obj_Enemy::DrawAttackRange(Camera * camera)
+{
+	if (app->debug->debug_enemy_attack_range)
+	{
+		app->render->DrawIsoCircle(pos_screen.x, pos_screen.y, attack_range * app->map->data.tile_height, camera, 255, 0, 0, 255);
+	}
 }
 
 bool Obj_Enemy::CleanUp()
@@ -504,20 +541,6 @@ inline void Obj_Enemy::UpdatePos(const float& dt)
 	range_pos.center = pos_map;
 }
 
-void Obj_Enemy::DrawDebug(const Camera* camera)
-{
-	if (path.size() >= 2)
-	{
-		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
-		{
-			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
-			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
-			app->render->DrawIsometricLine(point1, point2, { 255,255,255,255 }, camera);
-		}
-	}
-
-}
-
 inline void Obj_Enemy::Burn(const float & dt)
 {
 	if (burn_fist_enter)
@@ -526,7 +549,16 @@ inline void Obj_Enemy::Burn(const float & dt)
 		fire_damage = life / 3;
 		if (burn_texture != nullptr)
 			curr_tex = burn_texture;
-
+		oiled = false;
+		speed = original_speed;
+	/*	if (coll != nullptr)
+		{
+			coll->to_destroy = true;
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->to_destroy = true;
+		}*/
 	
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
@@ -603,142 +635,165 @@ inline void Obj_Enemy::Stunned()
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider)
 {
-	if (collider->GetTag() == TAG::BULLET_LASER)
+	if (state != ENEMY_STATE::BURN)
 	{
-		Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
-		if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
+		if (collider->GetTag() == TAG::BULLET_LASER)
 		{
-			life -= collider->damage;
+			Laser_Bullet* obj = (Laser_Bullet*)collider->GetObj();
+			if (obj->kill_counter < obj->kill_counter_max)		//sometimes in a frame does onCollision more times than it should if the enemies are together before the object is removed.
+			{
+				life -= collider->damage;
 
+				damaged_sprite_timer.Start();
+			//	last_texture = curr_tex;
+				curr_tex = tex_damaged;
+				damaged = true;
+
+				if (life <= 0)
+				{
+
+					state = ENEMY_STATE::DEAD;
+				}
+				else
+				{
+					app->audio->PlayFx(sfx_hit);
+				}
+
+
+				if (!obj->charged)
+				{
+					++obj->kill_counter;
+					if (obj->kill_counter >= obj->kill_counter_max)
+					{
+						obj->to_remove = true;
+
+					}
+				}
+			}
+
+		}
+
+		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
+		{
+			ReduceLife(collider);
+		}
+		else if (collider->GetTag() == TAG::BULLET_OIL)
+		{
+
+			life -= collider->damage;
+			oiled = true;
+			oiled_timer.Start();
 			damaged_sprite_timer.Start();
-			last_texture = curr_tex;
 			curr_tex = tex_damaged;
-			damaged = true;
 
 			if (life <= 0)
 			{
-				
+				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = ENEMY_STATE::DEAD;
 			}
 			else
 			{
 				app->audio->PlayFx(sfx_hit);
 			}
+		}
 
-
-			if (!obj->charged)
+		else if (collider->GetTag() == TAG::OIL_POOL)
+		{
+			oiled = true;
+			oiled_timer.Start();
+		}
+		else if (collider->GetTag() == TAG::FLAMETHROWER)
+		{
+			if (oiled)
 			{
-				++obj->kill_counter;
-				if (obj->kill_counter >= obj->kill_counter_max)
-				{
-					obj->to_remove = true;
-
-				}
+				state = ENEMY_STATE::BURN;
+			}
+			else
+			{
+				ReduceLife(collider);
 			}
 		}
-
 	}
-
 	
-	
-	if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
-	{
-		damaged = true;
-		life -= collider->damage;
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
-		{
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = ENEMY_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}
-	}
-	else if (collider->GetTag() == TAG::BULLET_OIL)
-	{
-		
-		life -= collider->damage;
-		oiled = true;
-		oiled_timer.Start();
-		damaged_sprite_timer.Start();
-		curr_tex = tex_damaged;
-
-		if (life <= 0)
-		{
-			app->pick_manager->PickUpFromEnemy(pos_map);
-			state = ENEMY_STATE::DEAD;
-		}
-		else
-		{
-			app->audio->PlayFx(sfx_hit);
-		}
-	}
-
-	else if (collider->GetTag() == TAG::OIL_POOL)
-	{
-		oiled = true;
-		oiled_timer.Start();
-	}
 }
 
 void Obj_Enemy::OnTrigger(Collider * collider)
 {
-	if (collider->GetTag() == TAG::ELECTRO_SHOT)
+	if (state != ENEMY_STATE::BURN)
 	{
-		Obj_Tank* player = (Obj_Tank*)collider->GetObj();
-
-		if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
+		if (collider->GetTag() == TAG::ELECTRO_SHOT)
 		{
-			Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
+			Obj_Tank* player = (Obj_Tank*)collider->GetObj();
 
-			electro_anim->tank = player;
-			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
-			electro_anim->enemy_pos_screen = pos_screen;
-			electro_anim->enemy_pos_map = pos_map;
-			electro_anim->hit_no_enemie = false;
-
-			player->GetEnemiesHitted()->push_back(this);
-			player->hit_no_enemie = false;
-
-			life -= collider->damage;
-
-			damaged_sprite_timer.Start();
-
-
-			if (life <= 0)
+			if (std::find(player->GetEnemiesHitted()->begin(), player->GetEnemiesHitted()->end(), this) == player->GetEnemiesHitted()->end())
 			{
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				state = ENEMY_STATE::DEAD;
-				is_electro_dead = true;
+				Eletro_Shot_Animation* electro_anim = (Eletro_Shot_Animation*)app->objectmanager->CreateObject(ObjectType::ELECTRO_SHOT_ANIMATION, player->pos_map);
 
-			}
-			else
-			{
-				app->audio->PlayFx(sfx_hit);
-				channel_electrocuted = app->audio->PlayFx(electocuted);
-				state_saved = state;
+				electro_anim->tank = player;
+				electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(player->GetShotDir());
+				electro_anim->enemy_pos_screen = pos_screen;
+				electro_anim->enemy_pos_map = pos_map;
+				electro_anim->hit_no_enemie = false;
 
-				anim_saved = curr_anim;
+				player->GetEnemiesHitted()->push_back(this);
+				player->hit_no_enemie = false;
 
-				state = ENEMY_STATE::STUNNED;
-				if (player->GetIsElectroShotCharged())
+				life -= collider->damage;
+
+				damaged_sprite_timer.Start();
+
+
+				if (life <= 0)
 				{
-					stun_charged = true;
+					channel_electrocuted = app->audio->PlayFx(electocuted);
+					state = ENEMY_STATE::DEAD;
+					is_electro_dead = true;
+
 				}
 				else
 				{
-					stun_charged = false;
+					app->audio->PlayFx(sfx_hit);
+					channel_electrocuted = app->audio->PlayFx(electocuted);
+					if (state != ENEMY_STATE::STUNNED)
+					{
+						state_saved = state;
+					}
+
+					anim_saved = curr_anim;
+
+					state = ENEMY_STATE::STUNNED;
+					if (player->GetIsElectroShotCharged())
+					{
+						stun_charged = true;
+					}
+					else
+					{
+						stun_charged = false;
+					}
 				}
 			}
-		}
 
-		else
+			else
+			{
+				LOG("inside");
+			}
+		}
+		else if (collider->GetTag() == TAG::BULLET)
 		{
-			LOG("inside");
+			Obj_Tank* player = (Obj_Tank*)collider->GetObj();
+			WeaponInfo weapon_info = player->GetWeaponInfo();
+
+		}
+		else if (collider->GetTag() == TAG::FLAMETHROWER)
+		{
+			if (oiled)
+			{
+				state = ENEMY_STATE::BURN;
+			}
+			else
+			{
+				ReduceLife(collider);
+			}
 		}
 	}
 }
@@ -747,6 +802,19 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 bool Obj_Enemy::IsOnGoal(fPoint goal)
 {
 	return range_pos.IsPointIn(goal);
+}
+
+void Obj_Enemy::DebugPathfinding(Camera * camera)
+{
+	if (path.size() >= 2)
+	{
+		for (std::vector<iPoint>::iterator iter = path.begin(); iter != path.end() - 1; ++iter)
+		{
+			fPoint point1 = { (*iter).x + 0.5F, (*iter).y + 0.5F };
+			fPoint point2 = { (*(iter + 1)).x + 0.5F, (*(iter + 1)).y + 0.5F };
+			app->render->DrawIsometricLine(point1, point2, { 255,0,0,255 }, camera);
+		}
+	}
 }
 
 
@@ -761,12 +829,31 @@ void Obj_Enemy::Oiled()
 			curr_tex = oiled_tex;
 			damaged = true;
 		}
-		speed = original_speed*0.5f;
+		speed = original_speed*0.25f;
 
 		if (oiled_timer.Read() >= 5000)
 		{
 			oiled = false;
 			speed = original_speed;
 		}
+}
 
+inline void Obj_Enemy::ReduceLife(Collider * collider)
+{
+	life -= collider->damage;
+
+	damaged_sprite_timer.Start();
+	last_texture = curr_tex;
+	curr_tex = tex_damaged;
+	damaged = true;
+
+	if (life <= 0)
+	{
+		app->pick_manager->PickUpFromEnemy(pos_map);
+		state = ENEMY_STATE::DEAD;
+	}
+	else
+	{
+		app->audio->PlayFx(sfx_hit);
+	}
 }

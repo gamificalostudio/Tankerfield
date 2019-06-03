@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Circle.h"
 #include "Timer.h"
+#include "M_Debug.h"
 
 struct SpawnPoint;
 
@@ -27,10 +28,11 @@ class Obj_Enemy : public Object
 {
 public:
 	Obj_Enemy(fPoint pos);
+	~Obj_Enemy();
 
 	bool Update(float dt) ;
 
-	virtual void ChangeTexture();
+	inline virtual void ChangeTexture();
 
 	virtual void Attack();
 
@@ -40,11 +42,15 @@ public:
 
 	inline bool IsOnGoal(fPoint goal); //const?
 
-	void DrawDebug(const Camera* camera)override;
+	void DebugPathfinding (Camera* camera)override;
 
 	virtual bool Draw(float dt, Camera* camera)override;
 
-	virtual  bool Start() override;
+	virtual bool Start() override;
+
+	virtual void SetStats(int level);
+
+	void DrawAttackRange(Camera * camera);
 
 protected:
 	inline void UpdateMoveVec();
@@ -63,7 +69,7 @@ protected:
 
 	inline virtual void Idle();
 
-	inline virtual int Move(float & dt);
+	inline virtual void Move(const float & dt);
 
 	inline virtual void GetPath();
 
@@ -80,6 +86,8 @@ protected:
 	bool CleanUp() override;
 
 	void Oiled();
+
+	inline void ReduceLife(Collider* collider);
 
 protected:
 
@@ -138,8 +146,6 @@ protected:
 
 	bool oiled = false;
 
-	
-
 	float scale = 0.f;
 
 	float coll_w = 0.f;
@@ -185,6 +191,9 @@ protected:
 	SpawnPoint* teleport_spawnpoint = nullptr;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
+
+	bool can_attack = true;
+
 
 };
 

@@ -9,6 +9,7 @@
 #include "M_Textures.h"
 #include "M_Map.h"
 #include "M_Audio.h"
+#include "M_Input.h"
 
 //Bullets
 #include "Bullet_Missile.h"
@@ -47,7 +48,7 @@ void Obj_Tank::InitWeapons()
 		electro_shot_collider = app->collision->AddCollider(pos_map, coll_size, coll_size, TAG::ELECTRO_SHOT, BODY_TYPE::DYNAMIC, 100, this);
 		electro_shot_collider->is_sensor = true;
 		//electro_shot_collider->Disactivate();
-		electro_shot_collider->ActiveOnTrigger(false);
+		electro_shot_collider->SetIsTrigger(false);
 
 		electric_shot_colliders_vector.push_back(electro_shot_collider);
 	}
@@ -63,13 +64,12 @@ void Obj_Tank::InitWeapons()
 		electro_shot_collider_charged = app->collision->AddCollider(pos_map, coll_size, coll_size, TAG::ELECTRO_SHOT, BODY_TYPE::DYNAMIC, 100, this);
 		electro_shot_collider_charged->is_sensor = true;
 		//electro_shot_collider_charged->Disactivate();
-		electro_shot_collider_charged->ActiveOnTrigger(false);
+		electro_shot_collider_charged->SetIsTrigger(false);
 
 		electric_shot_colliders_charged_vector.push_back(electro_shot_collider_charged);
 	}
   
 	charge_time = 2500.f; // Same for all bullets (player gets used to it)
-	quick_shot_time = 500.f;
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
@@ -79,6 +79,9 @@ void Obj_Tank::InitWeapons()
 	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 
 	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
+	release_shot[(uint)WEAPON::BASIC] = &Obj_Tank::ReleaseBasicShot;
+
+	
 }
 
 void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
@@ -86,18 +89,18 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 	if (weapon_info.weapon == WEAPON::ELECTRO_SHOT)
 	{
 		//with the animation get frame?? only 1 frame
-		if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_vector.begin())->GetIsActivated())
+		if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_vector.begin())->GetIsTrigger())
 		{
 			for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
 			{
-				(*iter)->ActiveOnTrigger(false);
+				(*iter)->SetIsTrigger(false);
 			}
 		}
-		else if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_charged_vector.begin())->GetIsActivated())
+		else if (electro_shot_timer.ReadMs() >= weapon_info.shot1.bullet_life_ms && (*electric_shot_colliders_charged_vector.begin())->GetIsTrigger())
 		{
 			for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
 			{
-				(*iter)->ActiveOnTrigger(false);
+				(*iter)->SetIsTrigger(false);
 			}
 		}
 
@@ -123,27 +126,30 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	switch (type)
 	{
 	case WEAPON::BASIC:
-		weapon_info.type = WEAPON_TYPE::CHARGED;
+		weapon_info.type = WEAPON_TYPE::SUSTAINED;
+		weapon_info.quick_shot_time = 0.f;
 		weapon_info.shot1.bullet_damage = app->objectmanager->basic_weapon_info.damage_multiplier * pow(app->objectmanager->basic_weapon_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = app->objectmanager->basic_weapon_info.speed;
-		weapon_info.shot1.time_between_bullets = 250;
-		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.54f;
-		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.3f;
-		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 250;
-		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.time_between_bullets = 100;
+		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.f;
+		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
+		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 100;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::MAX;
+		weapon_info.shot1.recoil = 25;
 		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
+		weapon_info.quick_shot_time = 500.f;
 		weapon_info.shot1.bullet_damage = app->objectmanager->flamethrower_info.damage_multiplier * pow(app->objectmanager->flamethrower_info.damage_exponential_base, level - 1);;
 		weapon_info.shot1.explosion_damage = 0;
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 10;
 		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.56f;
+		weapon_info.shot1.trauma = 0.0f;
 		weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = 0.92f;
 		weapon_info.shot1.rumble_duration = 250;
@@ -151,6 +157,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.recoil = 0;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -168,6 +175,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 400;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.recoil = 25;
+		weapon_info.shot2.recoil = 50;
 		break;
 	case WEAPON::HEALING_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -185,7 +194,9 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot2.rumble_duration = 250;
 		weapon_info.shot2.bullet_healing = 15 + level;
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
-		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot2.smoke_particle = ObjectType::MAX;
+		weapon_info.shot1.recoil = 25;
+		weapon_info.shot2.recoil = 0;
 		break;
 	case WEAPON::LASER_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -195,14 +206,16 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = 25;
 		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.405f;
-		weapon_info.shot2.trauma = 0.57f;
+		weapon_info.shot1.trauma = 0.f;
+		weapon_info.shot2.trauma = 0.f;
 		weapon_info.shot1.rumble_strength = 0.92f;
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
-		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
+		weapon_info.shot1.smoke_particle = ObjectType::MAX;
+		weapon_info.shot2.smoke_particle = ObjectType::MAX;
+		weapon_info.shot1.recoil = 0;
+		weapon_info.shot2.recoil = 0;
 		break;
 	case WEAPON::OIL:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -217,7 +230,9 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::MAX;
+		weapon_info.shot1.recoil = 25;
+		weapon_info.shot2.recoil = 50;
 		break;
 	case WEAPON::ELECTRO_SHOT:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -233,15 +248,16 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.rumble_duration = 250;
 		weapon_info.shot2.rumble_strength = 1.0f;
 		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::NO_TYPE;
-		weapon_info.shot2.smoke_particle = ObjectType::NO_TYPE;
-		//electro_shot_collider->damage = weapon_info.bullet_damage;
+		weapon_info.shot1.smoke_particle = ObjectType::MAX;
+		weapon_info.shot2.smoke_particle = ObjectType::MAX;
+		weapon_info.shot1.recoil = 0;
+		weapon_info.shot2.recoil = 0;
+
 		//add width and height here?
 		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_vector.begin(); iter != electric_shot_colliders_vector.end(); ++iter)
 		{
 			(*iter)->damage = weapon_info.shot1.bullet_damage;
 		}
-
 
 		for (std::vector<Collider*>::iterator iter = electric_shot_colliders_charged_vector.begin(); iter != electric_shot_colliders_charged_vector.end(); ++iter)
 		{
@@ -249,20 +265,31 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		}
 		break;
 	}
+
+		if (weapon_info.type == WEAPON_TYPE::CHARGED)
+		{
+			curr_text_charging = text_charging;
+			curr_anim_charging = anim_charging;
+		}
+	
 	
 }
 
 void Obj_Tank::ShootBasic()
 {
-	Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
-	bullet->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
+	if (shot_timer_basic_bullet.ReadMs() >= weapon_info.shot1.time_between_bullets)
+	{
+		Obj_Bullet * bullet = (Obj_Bullet*)app->objectmanager->CreateObject(ObjectType::BASIC_BULLET, turr_pos);
+		bullet->SetBulletProperties(
+			weapon_info.shot1.bullet_speed,
+			weapon_info.shot1.bullet_life_ms,
+			weapon_info.shot1.bullet_damage,
+			shot_dir,
+			atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
-	bullet->SetPlayer(this);
+		bullet->SetPlayer(this);
+		shot_timer_basic_bullet.Start();
+	}
 }
 
 void Obj_Tank::ShootDoubleMissile()
@@ -369,6 +396,7 @@ void Obj_Tank::ShootHealingShotCharged()
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
 	heal_area->tank_parent = this;
+
 }
 
 void Obj_Tank::ShootLaserShot()
@@ -408,9 +436,9 @@ void Obj_Tank::ShootFlameThrower()
 	flame->is_holding = true;
 	flame_release_time.Start();
 
-	if(coll_flame->GetIsActivated() == false)
+	if(coll_flame->GetIsTrigger() == false)
 	{
-		coll_flame->ActiveOnTrigger(true);
+		coll_flame->SetIsTrigger(true);
 	}
 
 	float coll_w_init;
@@ -432,7 +460,7 @@ void Obj_Tank::ShootFlameThrower()
 	coll_flame->SetObjOffset(offset + dir_distance);
 	coll_flame->SetPosToObj();
 
-	coll_flame->ActiveOnTrigger(true);
+	coll_flame->SetIsTrigger(true);
 }
 
 void Obj_Tank::ShootOil()
@@ -484,7 +512,7 @@ void Obj_Tank::ShootElectroShot()
 		(*iter)->SetObjOffset(offset + dir_distance);
 		(*iter)->SetPosToObj();
 
-		(*iter)->ActiveOnTrigger(true);
+		(*iter)->SetIsTrigger(true);
 	}
 	electro_shot_timer.Start();
 	is_electro_shot_charged = false;
@@ -517,7 +545,7 @@ void Obj_Tank::ShootElectroShotCharged()
 		(*iter)->SetObjOffset(offset + dir_distance);
 		(*iter)->SetPosToObj();
 
-		(*iter)->ActiveOnTrigger(true);
+		(*iter)->SetIsTrigger(true);
 	}
 	electro_shot_timer.Start();
 	is_electro_shot_charged = true;

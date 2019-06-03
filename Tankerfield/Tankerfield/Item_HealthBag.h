@@ -17,6 +17,8 @@ public:
 private:
 	SDL_Texture * tex = nullptr;
 	Animation anim;
+
+	uint health_bag = 0u;
 };
 
 #endif

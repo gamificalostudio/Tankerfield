@@ -26,6 +26,9 @@
 #include "M_AnimationBank.h"
 #include "M_RewardZoneManager.h"
 #include "M_MainMenu.h"
+#include "M_Debug.h"
+#include "Options_Menu.h"
+#include "M_VideoPlayer.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -50,7 +53,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	anim_bank = DBG_NEW M_AnimationBank();
 	reward_zone_manager = DBG_NEW M_RewardZoneManager();
 	main_menu = DBG_NEW M_MainMenu();
-  
+	debug = DBG_NEW M_Debug();
+	video = DBG_NEW Video();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
@@ -68,8 +72,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(reward_zone_manager);
 	AddModule(collision);
 	AddModule(ui);
+	AddModule(video);
 	AddModule(anim_bank);
 	AddModule(scmanager);
+	AddModule(debug);
 	AddModule(render);      // Render last to swap buffer
 
 	PERF_PEEK(ptimer);
@@ -117,28 +123,21 @@ bool App::Awake()
 		{
 		case 0:
 			mode = APP_MODE::RELEASE;
+			scene->active = false;
+			main_menu->active = false;
 			break;
 		case 1:
 			mode = APP_MODE::DEBUG_MULTIPLAYER;
+			main_menu->active = false;
+			video->active = false;
 			break;
 		case 2:
 			mode = APP_MODE::DEBUG_MAIN_MENU;
+			scene->active = false;
+			video->active = false;
 			break;
 		}
-
-		switch (mode)
-		{
-		case APP_MODE::RELEASE:
-			scene->active = false;
-			break;
-		case APP_MODE::DEBUG_MAIN_MENU:
-			scene->active = false;
-			break;
-		case APP_MODE::DEBUG_MULTIPLAYER:
-			main_menu->active = false;
-			break;
-		}
-
+		debug->enabled = false;
 
 		int cap = app_config.attribute("framerate_cap").as_int(-1);
 
@@ -275,27 +274,27 @@ void App::FinishUpdate()
 	if (want_to_load == true)
 		LoadGameNow();
 
-// Framerate calculations --
-if (last_sec_frame_time.Read() > 1000)
-{
-	last_sec_frame_time.Start();
-	prev_last_sec_frame_count = last_sec_frame_count;
-	last_sec_frame_count = 0;
-}
-
-float avg_fps = float(frame_count) / startup_time.ReadSec();
-float seconds_since_startup = startup_time.ReadSec();
-uint32 last_frame_ms = frame_time.Read();
-uint32 frames_on_last_update = prev_last_sec_frame_count;
-
-static char title[256];
-sprintf_s(title, 256, "Tankerfield | FPS: %u", frames_on_last_update);
-app->win->SetTitle(title);
-
-//if (capped_ms > 0 && last_frame_ms < capped_ms)
-//{
-//	SDL_Delay(capped_ms - last_frame_ms);
-//}
+	// Framerate calculations --
+	if (last_sec_frame_time.Read() > 1000)
+	{
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
+	
+	float avg_fps = float(frame_count) / startup_time.ReadSec();
+	float seconds_since_startup = startup_time.ReadSec();
+	uint32 last_frame_ms = frame_time.Read();
+	uint32 frames_on_last_update = prev_last_sec_frame_count;
+	
+	static char title[256];
+	sprintf_s(title, 256, "Tankerfield | FPS: %u", frames_on_last_update);
+	app->win->SetTitle(title);
+	
+	//if (capped_ms > 0 && last_frame_ms < capped_ms)
+	//{
+	//	SDL_Delay(capped_ms - last_frame_ms);
+	//}
 }
 
 // Call modules before each loop iteration

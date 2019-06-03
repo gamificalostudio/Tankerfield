@@ -2,9 +2,10 @@
 #define __OBJ_OILPOOL__
 
 #include "Object.h"
+#include "Obj_Bullet.h"
 #include "PerfTimer.h"
 
-class Obj_OilPool : public Object
+class Obj_OilPool : public Obj_Bullet
 {
 
 public:
@@ -14,7 +15,9 @@ public:
 
 public:
 
-	bool Update(float dt);
+	bool Start() override;
+
+	bool Update(float dt) override;
 
 private:
 

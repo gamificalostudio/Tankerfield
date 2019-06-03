@@ -22,10 +22,21 @@ public:
 
 	virtual ~UI_Image();
 
-public:
+	bool Draw();
+
+	void SetTexture(SDL_Texture* texture );
+
+	void SetDrawRect(SDL_Rect draw_rect);
+
+	SDL_Texture* GetTexture();
+
+private:
 
 	Animation* image_animation = nullptr;
 
+	SDL_Texture* texture = nullptr;
+
+	SDL_Rect custom_draw_rect = { 0,0,0,0 };
 };
 
 #endif // _IMAGE_H__

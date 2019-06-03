@@ -54,6 +54,8 @@ struct UI_TableDef;
 struct UI_InGameElementDef;
 struct UI_InteractiveGroupDef;
 
+enum class INPUT_DIR;
+
 enum class FocusState
 {
 	ENTER,
@@ -75,15 +77,6 @@ enum class UI_INPUT_TYPE
 	CONTROLLER,
 	MOUSE,
 	KEYBOARD
-};
-
-enum class INPUT_DIR
-{
-	NO_DIR,
-	UP,
-	DOWN,
-	RIGHT,
-	LEFT
 };
 
 enum class CONTROLLER_BUTTON : int
@@ -249,6 +242,7 @@ public:
 
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
+	void HideAllUI();
 
 private:
 
@@ -267,8 +261,6 @@ private:
 
 
 private:
-
-	bool debug = false;
 
 	bool reset = false;
 

@@ -40,6 +40,7 @@
 #include "Obj_PickUp.h"
 #include "Obj_RewardBox.h"
 #include "Obj_CannonFire.h"
+#include "Bullet_RocketLauncher.h"
 #include "Obj_Item.h"
 #include "Obj_Portal.h"
 #include "Obj_ElectroShotAnimation.h"
@@ -107,6 +108,20 @@ bool M_ObjManager::PreUpdate()
 			(*iterator)->PreUpdate();
 		}
 	}
+
+	if (delete_all_enemies == true)
+	{
+		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+		{
+			if (IsEnemy((*iterator)->type))
+			{
+				(*iterator)->to_remove = true;
+			}
+		}
+
+		delete_all_enemies = false;
+	}
+
 	return true;
 }
 
@@ -128,8 +143,7 @@ bool M_ObjManager::Update(float dt)
 			
 				(*iterator)->CleanUp();
 
-				if ((*iterator)->type == ObjectType::TESLA_TROOPER
-					|| (*iterator)->type == ObjectType::BRUTE)
+				if (IsEnemy((*iterator)->type))
 				{
 					enemies.remove((*iterator));
 				}
@@ -170,6 +184,11 @@ bool M_ObjManager::Update(float dt)
 	return true;
 }
 
+bool M_ObjManager::IsEnemy(ObjectType type)
+{
+	return (type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER);//Change this enemy for the last enemy on the ObjectType enum
+}
+
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
@@ -201,7 +220,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-			if ((*item) != nullptr )
+			if ((*item) != nullptr)
 			{
 				(*item)->DrawShadow((*item_cam), dt);
 			}
@@ -213,10 +232,29 @@ bool M_ObjManager::PostUpdate(float dt)
 			if ((*item) != nullptr)
 			{
 				(*item)->Draw(dt, (*item_cam));
+			}
+		}
 
-				if (app->scene->draw_debug)
+		//Draw debug over the objects
+
+		if (app->debug->debug_sprite_sorting)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
 				{
-					(*item)->DrawDebug((*item_cam));
+					(*item)->DebugSpriteSorting((*item_cam));
+				}
+			}
+		}
+
+		if (app->debug->debug_pathfinding)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
+				{
+					(*item)->DebugPathfinding((*item_cam));
 				}
 			}
 		}
@@ -302,6 +340,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::BULLET_OIL:
 		ret = DBG_NEW Bullet_Oil(pos);
 		ret->type = ObjectType::BULLET_OIL;
+		break;
+	case ObjectType::BULLET_ROCKETLAUNCHER:
+		ret = DBG_NEW Bullet_RocketLauncher(pos);
+		ret->type = ObjectType::BULLET_ROCKETLAUNCHER;
 		break;
 	case ObjectType::STATIC:
 		ret = DBG_NEW Obj_Building(pos);
@@ -460,36 +502,6 @@ std::list<Object*> M_ObjManager::GetObjects() const
 	return this->objects;
 }
 
-void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
-{
-	SDL_Rect section = { obj->pos_screen.x - obj->draw_offset.x, obj->pos_screen.y - obj->draw_offset.y, obj->frame.w, obj->frame.h };
-
-	Uint8 alpha = 0;
-	switch (obj->type)
-	{
-	case ObjectType::TANK:
-		app->render->DrawQuad(section, 255, 0, 0, alpha);
-		break;
-	case ObjectType::STATIC:
-		app->render->DrawQuad(section, 0, 255, 0, alpha);
-		break;
-	case ObjectType::TESLA_TROOPER:
-		app->render->DrawQuad(section, 0, 0, 255, alpha);
-		break;
-	case ObjectType::EXPLOSION:
-		app->render->DrawQuad(section, 255, 0, 255, alpha);
-
-	default:
-		break;
-	}
-
-	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
-}
-
-
-
-
-
 bool M_ObjManager::Load(pugi::xml_node& load)
 {
 	bool ret = true;
@@ -592,4 +604,8 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	oil_weapon_info.damage_exponential_base = oil_weapon_node.child("damage_exponential_base").attribute("num").as_float();
 	oil_weapon_info.speed = oil_weapon_node.child("speed").attribute("num").as_float();
 
+	// (Enemy Rocket Launcher) weapon
+	pugi::xml_node rl_weapon_node = balance_node.child("weapons").child("rocket_launcher_weapon");
+	rocketlauncher_weapon_info.damage_multiplier = rl_weapon_node.child("damage_multiplier").attribute("num").as_float();
+	rocketlauncher_weapon_info.damage_exponential_base = rl_weapon_node.child("damage_exponential_base").attribute("num").as_float();
 }

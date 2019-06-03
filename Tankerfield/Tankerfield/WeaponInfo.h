@@ -36,11 +36,11 @@ struct ShotInfo
 	float bullet_life_ms			= 0.f;
 	float time_between_bullets		= 0.f;
 	uint sfx						= 0u;
-	uint recoil						= 0u;
+	float recoil					= 0.f;
 	float rumble_strength			= 0.f;
 	Uint32 rumble_duration			= 0u;
 	float trauma					= 0.f;//The amount of trauma that it will create when you press use the basic shot, related to the screen shake
-	ObjectType smoke_particle		= ObjectType::NO_TYPE;
+	ObjectType smoke_particle		= ObjectType::MAX;
 };
 
 //Class which ONLY holds information about the weapons.
@@ -51,6 +51,7 @@ public:
 	WEAPON weapon					= WEAPON::BASIC;
 	WEAPON_TYPE type				= WEAPON_TYPE::CHARGED;
 	int level_weapon				= 0;
+	float quick_shot_time			= 0.f;
 
 	ShotInfo shot1;//Basic shot on charged weapons and quick shot on sustained weapons
 	ShotInfo shot2;//Charged shot on charged weapons and sustained shot on sustained weapons

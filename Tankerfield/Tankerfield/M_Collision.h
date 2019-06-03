@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <typeinfo>
+#include "Rect.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -14,6 +15,8 @@
 
 class Object;
 class M_Collision;
+class M_ObjManager;
+class QuadTree_Collision;
 
 enum class TAG : int
 {
@@ -21,6 +24,7 @@ enum class TAG : int
 	WALL,
 	WATER,
 	BULLET,
+	BULLET_ENEMY,
 	FRIENDLY_BULLET,
 	BULLET_LASER,
 	BULLET_OIL,
@@ -35,6 +39,7 @@ enum class TAG : int
 	PLAYER,
 	ROAD,
 	OIL_POOL,
+	FLAMETHROWER,
 	MAX
 };
 
@@ -48,16 +53,6 @@ class Collider
 {
 public:
 
-	enum class ON_TRIGGER_STATE
-	{
-		NONE,
-		ENTER,
-		STAY,
-		EXIT
-	};
-
-
-
 	enum class OVERLAP_DIR : int
 	{
 		NONE = -1,
@@ -69,23 +64,32 @@ public:
 	};
 
 	Collider(const fPoint pos, const  float width, const  float height, const float damage, const TAG tag, BODY_TYPE body, Object* object = nullptr) :
-		position(pos),
-		width(width),
-		height(height),
 		damage(damage),
 		tag(tag),
 		body_type(body),
 		object(object)
-	{}
+	{
+		rect.create(pos.x, pos.y, width, height);
+	}
+
+	fRect GetRect() const
+	{
+		return rect;
+	}
 
 	void SetPos(const fPoint pos)
 	{
-		position = pos;
+		rect.pos = pos;
 	}
 
 	void SetObjOffset(const fPoint offset)
 	{
 		obj_offset = offset;
+	}
+
+	void SetTag(TAG new_tag)
+	{
+		tag = new_tag;
 	}
 
 	void SetPosToObj();
@@ -97,57 +101,49 @@ public:
 
 	void GetSize(float & w, float & h) 
 	{
-		w = width;
-		h = height;
+		w = rect.w;
+		h = rect.h;
 	}
-
-	inline bool CheckCollision(Collider*  coll) const;
 
 	TAG GetTag() const
 	{
 		return tag;
 	}
 
-	void SetTag(TAG new_tag)
+	inline bool CheckCollision(Collider*  coll) const
 	{
-		tag = new_tag;
+		return !(coll->rect.pos.x >= (rect.pos.x + rect.w) || (coll->rect.pos.x + coll->rect.w) <= rect.pos.x || coll->rect.pos.y >= (rect.pos.y + rect.h) || (coll->rect.pos.y + coll->rect.h) <= rect.pos.y);
 	}
 
-	void ActiveOnTrigger(bool value);
+	void SetIsTrigger(bool value);
 
 	void Destroy();
 
-
-	bool GetIsActivated() const;
+	bool GetIsTrigger() const;
 
 public:
 
 	float damage = 0.f;
-
-	bool to_destroy = false;
   
 	bool is_sensor = false; // True = Avoid overlap resolve || Only in dynamic bodies
 
 private:
 
-	fPoint position = { 0.f , 0.f };
+	fRect  rect;
 
 	fPoint obj_offset = { 0.f, 0.f };
 
-	float width = 0.f;
-		
-	float height = 0.f;
-
 	// Collision vars ==============================================
 
-	bool active_on_trigger = true;
+	bool to_destroy = false;
+
+	bool is_trigger = true;
 
 	TAG tag = TAG::NONE;
 
 	std::list<Collider*> collisions_list;
 
-
-
+	std::list<Collider*> triggers_list;
 
 	Object * object = nullptr;
 
@@ -155,8 +151,25 @@ private:
 
 	BODY_TYPE body_type = BODY_TYPE::STATIC;
 
+	std::list<Collider*>::iterator iterator;
+
+	// Quadtree ===================================================
+
+	bool subdivision_intersection[4];
+
 	friend M_Collision;
 	friend M_ObjManager;
+	friend QuadTree_Collision;
+};
+
+struct Collision_Info
+{
+	Collision_Info() {};
+	Collision_Info( Collider* collider_1 , Collider* collider_2, int flag ) : collider_1(collider_1), collider_2(collider_2) , flag(flag){}
+
+	int flag = 0;             // 1. Dynamic-Dynamic   2. Dynamic-Static
+	Collider* collider_1 = nullptr;
+	Collider* collider_2 = nullptr;
 };
 
 class M_Collision : public Module
@@ -165,9 +178,9 @@ public:
 
 	M_Collision();
 
-	virtual ~M_Collision();
-
 	bool Update(float dt) override;
+
+	bool UpdateForcedMethod(float dt);
 
 	bool PostUpdate(float dt) override;
 
@@ -179,6 +192,8 @@ public:
 
 private:
 
+	void AddCollisionInfo(Collider* collider_1, Collider* collider_2);
+
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
@@ -189,25 +204,37 @@ private:
 
 	void DestroyColliders();
 
+public:
+
+	int collisions_per_frame = 0;
+
 private:
 
-	std::list<Collider*> static_colliders;
+	
+	// Collision quadtree ====================================================
 
-	std::list<Collider*> dynamic_colliders;
+	QuadTree_Collision* quad_tree_collision = nullptr;
+
+	// Collider lists ========================================================
+
+	std::list<Collider*> colliders_list;
 
 	std::list<Collider*> colliders_to_add;
 
-	std::map<Collider* ,bool> mod_on_trigger_colliders;
+	std::list<Collider*> colliders_to_destroy;
 
-	bool on_trigger_matrix[(int)TAG::MAX][(int)TAG::MAX];
+	std::vector<Collision_Info> collisions_info;
 
-	bool solve_overlap_matrix[(int)TAG::MAX][(int)TAG::MAX];
+	// Collider matrix ======================================================
 
-	bool is_updating = false;
+	bool trigger_matrix[(int)TAG::MAX][(int)TAG::MAX];
+
+	bool physics_matrix[(int)TAG::MAX][(int)TAG::MAX];
 
 	bool debug = false;
 
 	friend Collider;
+	friend QuadTree_Collision;
 };
 
 #endif // __j1Collision_H__

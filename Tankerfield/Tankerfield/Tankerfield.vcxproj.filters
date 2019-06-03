@@ -211,16 +211,29 @@
     <ClCompile Include="Obj_Portal.cpp">
       <Filter>Objects\Player</Filter>
     </ClCompile>
-    <ClCompile Include="HealingShot_Area.cpp">
-    </ClCompile>
     <ClCompile Include="Obj_ElectroShotAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="Obj_CannonFire.cpp">
       <Filter>Objects\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Bullet_RocketLauncher.cpp">
+    <ClCompile Include="Bullet_RocketLauncher.cpp">
       <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="Quadtree_Collision.cpp">
+      <Filter>Tools\QuadTree</Filter>
+    </ClCompile>
+    <ClCompile Include="M_Debug.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="HealingShot_Area.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Options_Menu.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="M_VideoPlayer.cpp">
+      <Filter>Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -458,16 +471,29 @@
     <ClInclude Include="Obj_Portal.h">
       <Filter>Objects\Player</Filter>
     </ClInclude>
-    <ClInclude Include="HealingShot_Area.h">
-    </ClInclude>
     <ClInclude Include="Obj_ElectroShotAnimation.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Obj_CannonFire.h">
       <Filter>Objects\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Bullet_RocketLauncher.h">
+    <ClInclude Include="Bullet_RocketLauncher.h">
       <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="Quadtree_Collision.h">
+      <Filter>Tools\QuadTree</Filter>
+    </ClInclude>
+    <ClInclude Include="M_Debug.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="HealingShot_Area.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Options_Menu.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="M_VideoPlayer.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

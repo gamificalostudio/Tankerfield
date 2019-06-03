@@ -33,53 +33,73 @@ enum KeyState
 	KEY_IDLE = 0,
 	KEY_DOWN,
 	KEY_REPEAT,
-	KEY_UP
+	KEY_UP,
 };
 
+//Order is based on SDL_GameControllerAxis, if changed, it will stop working
 enum class Joystick
 {
 	LEFT,
 	RIGHT,
-	INVALID
+	MAX
 };
+
+//Order is based on SDL_GameControllerAxis, if changed, it will stop working
+enum class INPUT_DIR
+{
+	RIGHT,
+	LEFT,
+	DOWN,
+	UP,
+	MAX
+};
+
 
 class M_Input;
 
 struct Controller
 {
 private:
-	int index_number = -1;
+	bool connected = false;
 	SDL_JoystickID joyId = -1;
 	KeyState button_state[SDL_CONTROLLER_BUTTON_MAX];
-	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis
+	KeyState joystick_state[(uint)Joystick::MAX * (uint)INPUT_DIR::MAX];//Only used for joysticks, not for triggers (they have 1, 0 and -1)
+	KeyState trigger_state[SDL_CONTROLLER_AXIS_MAX - SDL_CONTROLLER_AXIS_TRIGGERLEFT];//Only used for triggers, not for other axis (they only have 1 and 0)
 	SDL_GameController* ctr_pointer = nullptr;
 	SDL_Haptic* haptic = nullptr;
 
 public:
 	Controller();
 
-	KeyState GetButtonState(SDL_GameControllerButton button);
 	
-	iPoint GetJoystick(Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
 
-	//Treat triggers like buttons or keys to more easily manage them
-	KeyState GetTriggerState(SDL_GameControllerAxis axis);
+private:
+	bool attached = false;
+
+	inline KeyState GetButtonState(SDL_GameControllerButton button);
+
+	inline iPoint GetJoystick(Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
 
 	//This funtion returns axis and triggers state value
 	// The state is a value ranging from -32768 to 32767.
-	Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
-	
+	inline Sint16 GetAxis(SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
+
+	//Treat joysticks like buttons or keys to more easily manage them
+	inline KeyState GetJoystickState(Joystick joystick, INPUT_DIR joystick_button);
+
+	//Treat triggers like buttons or keys to more easily manage them
+	inline KeyState GetTriggerState(SDL_GameControllerAxis axis);
+
 	//strengh -> from 0 to 1
 	//length  -> strength of the rumble to play as a 0-1 float value
-	int PlayRumble(float strengh, Uint32 length);
-	int StopRumble();
+	inline int PlayRumble(float strengh, Uint32 length);
+
+	inline int StopRumble();
+
 	void DetachController()
 	{
-		if(this != nullptr)
-			attached = false;
+		attached = false;
 	}
-private:
-	bool attached = false;
 
 	friend class M_Input;
 };
@@ -132,6 +152,30 @@ public:
 
 	void GetMouseMotion(int& x, int& y);
 
+
+	//Controller funtions===================================================================================================
+	KeyState GetControllerButtonState(int controller, SDL_GameControllerButton button);
+
+	iPoint GetControllerJoystick(int controller, Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
+	//This funtion returns axis and triggers state value
+	// The state is a value ranging from -32768 to 32767.
+	Sint16 GetControllerAxis(int controller, SDL_GameControllerAxis axis, int dead_zone = DEFAULT_DEAD_ZONE);
+
+	//Treat joysticks like buttons or keys to more easily manage them
+	KeyState GetControllerJoystickState(int controller, Joystick joystick, INPUT_DIR joystick_button);
+	//Treat triggers like buttons or keys to more easily manage them
+	KeyState GetControllerTriggerState(int controller, SDL_GameControllerAxis axis);
+
+	//strengh -> from 0 to 1
+	//length  -> strength of the rumble to play as a 0-1 float value
+	void ControllerPlayRumble(int controller, float strengh, Uint32 length);
+
+	void ControllerStopRumble(int controller);
+
+	void DetachController(int controller);
+
+	bool IsConnectedControllet(int i);
+
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
 	void UpdateKeyboardState();
@@ -146,11 +190,12 @@ private:
 	int			mouse_motion_y = NULL;
 	int			mouse_x = NULL;
 	int			mouse_y = NULL;
+	uint		num_controller_connected = 0;
 
 public:
 	std::string input_text;
-	std::vector<Controller*> controllers;
-	Controller** GetAbleController();
+	Controller controllers[MAX_CONTROLLERS];
+	int GetAbleController();
 };
 
 #endif // __j1INPUT_H__

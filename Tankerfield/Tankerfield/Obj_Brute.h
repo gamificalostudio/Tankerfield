@@ -42,6 +42,8 @@ public:
 
 	inline void ElectroDead() override;
 
+	void SetStats(int level) override;
+
 
 private:
 

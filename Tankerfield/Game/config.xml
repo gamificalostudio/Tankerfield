@@ -5,16 +5,16 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="1" />
+    <mode value ="0" />
 
   </app>
 
   <renderer>
-    <vsync value="true"/>
+    <vsync value="false"/>
   </renderer>
 
   <window>
-    <resolution width="1920" height="1000" scale="1"/>
+    <resolution width="1920" height="1080" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -25,16 +25,7 @@
   <object_manager>balance.xml</object_manager>
 
     <scene>
-      <rounds_to_win value="10"/>
-    
-      <subrounds>
-        <subround percent="0.4" time="2"/>
-        <subround percent="0.6" time="3"/>
-        <subround percent="1.0" time="5"/>
-      </subrounds>
-    
-      <time_round_check_frequency value="2"/>
-  
+      
       <music>
         <main_music music ="audio/Music/indeep.ogg"/>
       </music>
@@ -44,10 +35,12 @@
         <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
       </sounds>
   </scene>
+  
   <map>
     <folder>Maps/</folder>
     <levels>
       <level name="Map2.tmx"/>
+      <level name="test.tmx"/>
     </levels>
   </map>
   
@@ -82,23 +75,18 @@
       </arrow>
     </animations>
   </ui>
-  
-  <map>
-    <folder>Maps/</folder>
-    <levels>
-      <level name="Map2.tmx"/>
-      <!--<level name="test/test.tmx"/>-->
-    </levels>
-  </map>
+
+
   
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="5"/>
+    <percentage_spawn_item_from_enemy value="3"/>
     <percentage_spawn_reward_box value="80"/>
   </pick_manager>
 
   <object>
     <reward_box>
-      <sound value="audio/Fx/objects/reward_box/Crash_box.wav"/>
+      <hit_sound value="audio/Fx/objects/reward_box/box_hit.wav"/>
+      <crash_sound value="audio/Fx/objects/reward_box/box_destroyed.wav"/>
       <image_path value="textures/Objects/reward_box/reward_box.png"/>
     </reward_box>
     <enemies>
@@ -114,10 +102,23 @@
       </rocket_launcher>
       <suicidal>
         <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
+        <tex_damaged_path>textures/Objects/enemies/civ22-sheet-white.png</tex_damaged_path>
       </suicidal>
     </enemies>
-    
 
+    <oil>
+      <speed value ="0"/>
+      <life value ="1000"/>
+      <tex path="textures/objects/bullets/oil_pool.png"/>
+      <animations>
+        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame x="0"   y="0"   w="300" h="151"/>
+          </dir>
+        </rotate>
+      </animations>
+    </oil>
+    
     <tank>
       <electro_shot>
         <collider_size value="1"/> <!--Width and height in tiles-->
@@ -201,8 +202,9 @@
         
       </spritesheets>
       <sounds>
-        <basic_shot sound ="audio/Fx/tank_basic_shot.wav"/>
-        <laser_shot sound ="audio/Fx/tank_basic_shot.wav"/>
+        <basic_shot sound ="audio/Fx/tank/weapons/tank_basic_shot.wav"/>
+        <laser_shot sound ="audio/Fx/tank/weapons/tank_laser_shot.wav"/>
+        <heal_shot sound ="audio/Fx/tank/weapons/tank_heal_shot.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
@@ -587,7 +589,7 @@
         </fire>
       </animations>
     </fire_dead_tank>
-    <basic_bullet>
+    <bullet>
       <speed value ="0.5"/>
       <life value ="1000"/>
       <tex path="textures/objects/bullets/bullet.png"/>
@@ -785,6 +787,204 @@
           <dir>
             <frame x="0"   y="378" w="67" h="42"/>
           </dir>
+        </rotate>
+      </animations>
+    </bullet>
+    <basic_bullet>
+      <speed value ="0.5"/>
+      <life value ="1000"/>
+      <tex path="textures/objects/bullets/basic_bullet.png"/>
+      <animations>
+        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="315">
+          <dir>
+            <frame x="0"   y="0"   w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="0"   w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="0"   w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="0"   w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="0"   w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="0"   w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="0"   w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="21"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="21"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="21"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="21"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="21"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="21"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="21"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="42"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="42"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="42"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="42"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="42"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="42"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="42"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="63"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="63"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="63"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="63"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="63"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="63"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="63"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="84"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="84"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="84"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="84"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="84"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="84"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="84"  w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="105" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="105" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="105" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="105" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="105" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="105" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="105" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="126" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="126" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="126" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="126" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="126" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="126" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="126" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="147" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="147" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="147" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="147" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="136" y="147" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="147" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="147" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="0"   y="168" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="34"  y="168" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="68"  y="168" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="102" y="168" w="34" h="21"/>
+             </dir>
+          <dir>
+            <frame x="136" y="168" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="170" y="168" w="34" h="21"/>
+          </dir>
+          <dir>
+            <frame x="204" y="168" w="34" h="21"/>
+          </dir>         
         </rotate>
       </animations>
     </basic_bullet>

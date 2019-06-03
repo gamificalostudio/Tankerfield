@@ -27,7 +27,9 @@ class M_PickManager;
 class M_AnimationBank;
 class M_RewardZoneManager;
 class M_MainMenu;
-
+class M_Debug;
+class M_Options_Menu;
+class Video;
 
 enum class APP_MODE
 {
@@ -116,6 +118,9 @@ public:
 	M_AnimationBank*		anim_bank = nullptr;
 	M_RewardZoneManager*    reward_zone_manager = nullptr;
 	M_MainMenu*             main_menu = nullptr;
+	M_Debug*				debug = nullptr;
+	M_Options_Menu*			options_menu = nullptr;
+	Video*					video = nullptr;
 
 	//XML document
 	pugi::xml_node		   config;

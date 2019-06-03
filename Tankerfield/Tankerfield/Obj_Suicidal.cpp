@@ -34,9 +34,10 @@
 Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 {
 	pugi::xml_node suicidal_node = app->config.child("object").child("enemies").child("suicidal");
-	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("suicidal");
+	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("suicidal").child("animation");
 
 	tex = app->tex->Load(suicidal_node.child("tex_path").child_value());
+	tex_damaged = app->tex->Load(suicidal_node.child("tex_damaged_path").child_value());
 	curr_tex = tex;
 
 	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
@@ -45,29 +46,32 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 
 	state = ENEMY_STATE::SPAWN;
-	original_speed = speed = app->objectmanager->suicidal_info.speed;
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width) * 1.33f;
 
-	normal_draw_offset = { 33, 50 };
-	draw_offset = normal_draw_offset;
+	scale = 1.5f;
+	//INFO: Draw offset depends on the scale
+	draw_offset = normal_draw_offset = (iPoint)(fPoint(32.f, 36.f) * scale);
 
 	coll_w = 0.5f;
 	coll_h = 0.5f;
 
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
-	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.5f });
-
-	attack_damage = app->objectmanager->suicidal_info.attack_damage;
-	attack_range = app->objectmanager->suicidal_info.attack_range;
-	attack_range_squared = attack_range * attack_range;
-	attack_frequency = app->objectmanager->suicidal_info.attack_frequency;
-	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, app->scene->round - 1);
+	coll->SetObjOffset({ -coll_w * 2.25f, -coll_h * 1.75f });
 
 	check_path_time = 2.0f;
 
 	curr_anim = &idle;
+}
 
-	scale = 0.75f;
+//Called after creating the enemy
+void Obj_Suicidal::SetStats(int level)
+{
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width) * 1.33f;
+	original_speed = speed = app->objectmanager->suicidal_info.speed;
+	attack_damage = app->objectmanager->suicidal_info.attack_damage;
+	attack_range = app->objectmanager->suicidal_info.attack_range;
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = app->objectmanager->suicidal_info.attack_frequency;
+	life = app->objectmanager->suicidal_info.life_multiplier * pow(app->objectmanager->suicidal_info.life_exponential_base, level - 1);
 }
 
 Obj_Suicidal::~Obj_Suicidal()

@@ -59,8 +59,8 @@ public:
 
 public:
 	//- Logic
-	void SetLife(int life);
 	void ReduceLife(int damage);
+	void IncreaseLife(int heal);
 	void SetItem(ItemType Type);
 	void SetWeapon(WEAPON type, uint level);
 	void SetColor(const SDL_Color new_color);
@@ -70,7 +70,7 @@ public:
 	int GetMaxLife() const;
 	int GetTimeBetweenBullets() const;
 	int GetTankNum() const;
-	Controller ** GetController();
+	int GetController();
 	bool GetShotAutomatically() const;
 	bool GetIsElectroShotCharged() const;
 	fPoint GetShotDir() const;
@@ -81,9 +81,8 @@ public:
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	std::vector<Object*>* GetEnemiesHitted();
-
 	void CreatePortals();
-
+	
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
@@ -91,6 +90,9 @@ public:
 	fPoint GetTurrPos() const;
 
 private:
+	//- Logic
+	void SetLife(int life);//Don't use SetLife directly from other classes, use ReduceLife() or IncreaseLife()
+
 	//- Movement
 	void Movement(float dt);
 	void InputMovementKeyboard(fPoint & input);
@@ -105,8 +107,8 @@ private:
 
 	//- Shooting
 	void Aim(float dt);
-	void Shoot();
-	void ShootChargedWeapon();
+	void Shoot(float dt);
+	void ShootChargedWeapon(float dt);
 	void ShootSustainedWeapon();
 	void InputShotMouse(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir);
 	void InputShotController(const fPoint & shot_pos, fPoint & input, fPoint & iso_dir);
@@ -136,10 +138,11 @@ private:
 	void ShootElectroShotCharged();
 
 	void ReleaseFlameThrower();
+	void ReleaseBasicShot() {};
 
 	//- TankDeath
 	void ReviveTank(float dt);
-	void StopTank();
+	void Die();
 
 	//- Item
 	void Item();
@@ -153,7 +156,6 @@ private:
 	static int number_of_tanks;
 
 	bool ready								= false;
-	bool fire_dead							= false;
 
 	//- Movement
 	float base_max_speed							= 0.f;
@@ -202,9 +204,12 @@ private:
 	PerfTimer shot_timer;				//Determines how much time it must pass to be albe to shoot another shot again
 	PerfTimer charged_shot_timer;
 	PerfTimer sustained_shot_timer;
+	PerfTimer shot_timer_basic_bullet;
 	float charge_time						= 0.f;//Charge time in ms
 	float quick_shot_time					= 0.f;//If time is bigger than this, you will start to use the sustained shot and won't use a qucik shot
-	uint shot_sound							= 0u;
+	uint shot_sound = 0u;
+	uint heal_sound = 0u;
+	uint laser_sound = 0u;
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot
@@ -242,12 +247,12 @@ private:
 
 	//- Items
 	ItemType item							= ItemType::NO_TYPE;
-	UI_IG_Helper * tutorial_pick_up			= nullptr;
+	
 
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
 	INPUT_METHOD shot_input					= INPUT_METHOD::KEYBOARD_MOUSE;
-	Controller ** controller = nullptr;
+	int controller = -1;
 
 	//-- Keyboard inputs
 	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
@@ -260,8 +265,8 @@ private:
 	SDL_Scancode kb_ready					= SDL_SCANCODE_UNKNOWN;
 
 	//-- Controller inputs
-	Joystick gamepad_move							= Joystick::INVALID;
-	Joystick gamepad_aim							= Joystick::INVALID;
+	Joystick gamepad_move							= Joystick::MAX;
+	Joystick gamepad_aim							= Joystick::MAX;
 	int dead_zone									= 0;
 	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
 	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
@@ -286,6 +291,17 @@ private:
 	SDL_Texture * turret_common_tex			= nullptr;
 	SDL_Texture * turret_shadow_tex			= nullptr;
 
+	SDL_Texture * text_charging				= nullptr;
+	Animation anim_charging;
+	SDL_Texture * text_finished_charged		= nullptr;
+	Animation anim_finished_charged;
+	SDL_Texture * curr_text_charging = nullptr;
+	Animation curr_anim_charging;
+	int alpha = 0;
+	float charging_scale = 0.f;
+	uint charging_ready = 0u;
+	bool charging = false;
+
 	iPoint turr_draw_offset						= { 0,0 };
 	float turr_scale							= 1.f;
 
@@ -297,15 +313,17 @@ private:
 	//sfx 
 	uint die_sfx						= 0u;
 
+	bool picking = false;
+
 public:
 	Camera* camera_player				= nullptr;
+
+	UI_IG_Helper * tutorial_pick_up = nullptr;
 
 	//- GUI
 	Player_GUI*  gui = nullptr;
 
 public:
-	Obj_Portal * portal1;
-	Obj_Portal * portal2;
 	bool hit_no_enemie = false;
 };
 

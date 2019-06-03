@@ -55,8 +55,11 @@ bool M_Audio::Start()
 	}
 	else
 	{
-		Mix_VolumeMusic(20);
-		Mix_AllocateChannels(16);
+		sfx_volume = 25;
+		music_volume = 75;
+
+		Mix_VolumeMusic(music_volume);
+		Mix_AllocateChannels(100);
 	}
 	explosion_fx = LoadFx("audio/Fx/explosion.wav");
 
@@ -103,7 +106,7 @@ bool M_Audio::PlayMusic(const char* path, float fade_time)
 	{
 		if (fade_time > 0.0f)
 		{
-			Mix_FadeOutMusic(int(fade_time * 1000.0f));
+			Mix_FadeOutMusic(0);
 		}
 		else
 		{
@@ -161,7 +164,7 @@ unsigned int M_Audio::LoadFx(const char* path, int volume)
 	}
 	else
 	{
-		Mix_Chunk* chunk = Mix_LoadWAV(path);
+		chunk = Mix_LoadWAV(path);
 		//set volume in a range of 0 to MIX_MAX_VOLUME (128)
 		Mix_VolumeChunk(chunk, volume);
 		if (chunk == NULL)
@@ -215,3 +218,38 @@ unsigned int M_Audio::GetExplosionFx()
 	return explosion_fx;
 }
 
+int M_Audio::GetSfxVolume()
+{
+	return sfx_volume;
+}
+
+int M_Audio::GetMusicVolume()
+{
+	return music_volume;
+}
+
+void M_Audio::SetMasterVolume(float master_multiplier)
+{
+	master_volume = master_multiplier;
+
+	Mix_VolumeMusic(music_volume*master_multiplier);
+
+	for (std::list<Mix_Chunk*>::const_iterator iter = fx.begin(); iter != fx.end(); ++iter)
+	{
+		Mix_VolumeChunk((*iter), (*iter)->volume*master_multiplier);
+	}
+}
+
+
+void M_Audio::SetMusicVolume(int volume)
+{
+	Mix_VolumeMusic(volume*master_volume);
+}
+
+void M_Audio::SetSfxVolume(int volume)
+{
+	for (std::list<Mix_Chunk*>::const_iterator iter = fx.begin(); iter != fx.end(); ++iter)
+	{
+		Mix_VolumeChunk((*iter), ((*iter)->volume + volume)*master_volume);
+	}
+}

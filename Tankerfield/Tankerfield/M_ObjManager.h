@@ -30,10 +30,12 @@ enum class ObjectType
 	BRUTE,
 	SUICIDAL,
 	ROCKETLAUNCHER,
+	//Modify bool M_ObjManager::IsEnemy() if you add an enemy or it won't delete enemies correctly
 
 	//BULLETS
 	BASIC_BULLET,
 	BULLET_MISSILE,
+	BULLET_ROCKETLAUNCHER,
 	HEALING_BULLET,
 	BULLET_LASER,
 	EXPLOSION,
@@ -46,7 +48,7 @@ enum class ObjectType
 	ELECTRO_SHOT_ANIMATION,
 	FLAMETHROWER_FLAME,
 
-	NO_TYPE
+	MAX
 };
 
 enum class ItemType
@@ -91,6 +93,7 @@ public:
 	bool Reset();
 
 	Object* CreateObject(ObjectType type, fPoint map_pos);
+
 	Obj_Item* CreateItem(ItemType type, fPoint map_pos);
 
 	static bool SortByYPos(Object * obj1, Object * obj2);
@@ -101,14 +104,15 @@ public:
 
 	std::list<Object*> GetObjects() const;
 
-	inline void DrawDebug(const Object* obj, Camera* camera);
-
 	uint GetNumberOfEnemies()
 	{
 		return enemies.size();
-	 }
+	}
+
+	bool IsEnemy(ObjectType type);
 
 public:
+	bool delete_all_enemies = false;
 	pugi::xml_node balance_xml_node;
 	std::vector<Obj_Tank*> obj_tanks;
 
@@ -117,6 +121,8 @@ public:
 	BruteInfo brute_info;
 	RocketLauncherInfo rocket_launcher_info;
 	SuicidalInfo suicidal_info;
+
+	RocketLauncherWeaponInfo rocketlauncher_weapon_info;
 
 	//WeaponInfo
 	BasicWeaponInfo basic_weapon_info;

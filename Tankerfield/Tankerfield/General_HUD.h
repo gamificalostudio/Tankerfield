@@ -28,6 +28,8 @@ public:
 
 	void SetRoundNumber(int round);
 
+	void RoundFX();
+
 	void SetInputTextToNameLabel();
 
 	void FadeGameOverScreen(bool fade_on, int round = -1);
@@ -41,6 +43,8 @@ public:
 	void FillLeaderBoardTable();
 
 	void UpdateLeaderBoardSquadName();
+
+	void MakeChildOfRoundElement(UI_Element* elem);//To be painted over the rhombus on the center, it needs to be a child of round element
 
 private:
 
