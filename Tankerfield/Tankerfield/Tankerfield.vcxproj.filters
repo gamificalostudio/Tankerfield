@@ -235,6 +235,9 @@
     <ClCompile Include="M_VideoPlayer.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Controllers_Settings.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -494,6 +497,9 @@
     </ClInclude>
     <ClInclude Include="M_VideoPlayer.h">
       <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Controllers_Settings.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
