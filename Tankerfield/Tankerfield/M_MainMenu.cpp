@@ -321,7 +321,7 @@ bool M_MainMenu::PreUpdate()
 
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (players[i].controller == nullptr)
+		if (players[i].controller == -1)
 		{
 			players[i].controller = app->input->GetAbleController();
 			players[i].tank->SetController(players[i].controller);
@@ -389,7 +389,7 @@ void M_MainMenu::InputNavigate()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != nullptr)
+			if (players[i].controller != -1)
 			{
 				if (menu_panel->HandleControllerINavigation(players[i].controller))
 				{
@@ -406,7 +406,7 @@ void M_MainMenu::InputNavigate()
 	}
 	else if (menu_state == MENU_STATE::SELECTION)
 	{
-		if (players[current_player].controller != nullptr)
+		if (players[current_player].controller != -1)
 		{
 			if (selection_panel->HandleControllerINavigation(players[current_player].controller))
 			{
@@ -421,7 +421,7 @@ void M_MainMenu::InputNavigate()
 	}
 	else if (menu_state == MENU_STATE::CREDITS)
 	{
-		if (players[current_player].controller != nullptr)
+		if (players[current_player].controller != -1)
 		{
 			if (credits_navigation->HandleControllerINavigation(players[current_player].controller))
 			{
@@ -448,7 +448,7 @@ void M_MainMenu::InputSelect()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != nullptr && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if (players[i].controller != -1 && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 			{
 				input_select_controller = true;
 			}
@@ -456,7 +456,7 @@ void M_MainMenu::InputSelect()
 	}
 	else if (menu_state == MENU_STATE::SELECTION || menu_state == MENU_STATE::OPTIONS||menu_state==MENU_STATE::CREDITS)
 	{
-		if (players[current_player].controller != nullptr &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (players[current_player].controller != -1 &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			input_select_controller = true;
 		}

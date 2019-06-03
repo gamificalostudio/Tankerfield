@@ -177,9 +177,9 @@ bool M_Scene::Update(float dt)
 
 	for (int i = 0; i < MAX_PLAYERS && input_accept == false; ++i) {
 
-		Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
+		int controller = app->objectmanager->obj_tanks[i]->GetController();
 
-		if (controller != nullptr && app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (controller != -1 && app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			input_accept = true;
 		}

@@ -176,7 +176,10 @@ bool Video::CleanUp()
 	{
 		CloseVideo();
 	}
-
+	if (camera)
+	{
+		app->render->DestroyCamera(camera);
+	}
 	return true;
 }
 

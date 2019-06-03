@@ -186,7 +186,7 @@ void Options_Menu::InputNavigate()
 {
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (app->main_menu->players[i].controller != nullptr)
+		if (app->main_menu->players[i].controller != -1)
 		{
 			if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
 			{
