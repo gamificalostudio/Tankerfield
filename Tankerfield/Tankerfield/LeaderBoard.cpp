@@ -10,8 +10,10 @@
 #include "UI_Label.h"
 #include "UI_Image.h"
 
-LeaderBoard::LeaderBoard()
+LeaderBoard::LeaderBoard(std::string doc_path, bool only_read) :doc_path(doc_path), only_read(only_read)
 {
+	leader_board_doc.load_file(doc_path.c_str());
+
 	// Create UI Elements ====================================
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
@@ -21,20 +23,42 @@ LeaderBoard::LeaderBoard()
 	table_def.rows = 11;
 	table_def.line_width = 2;
 
-	int widths[3] = { 100, 300 , 300 };
+	int widths[3] = { 100, 300 , 100 };
 	int heights[11] = { 50, 50 , 50 , 50, 50, 50 , 50 , 50, 50 ,50, 50 };
 
-	leader_board_table = app->ui->CreateTable(screen_center, table_def, widths, heights);
-	leader_board_table->SetParent(panel_background);
-	leader_board_table->alpha = 0;
+	if (only_read == false)
+	{
+		UI_InputTextDef input_def;
+		input_def.font = app->font->label_font_24;
+		input_def.max_characters = 10;
+		input_def.default_text_color = { 200, 200,200,255 };
+		input_def.default_text = "Enter your squad name";
+		input_text = app->ui->CreateInputText(screen_center - fPoint(0, 400.f), input_def);
+	}
 
-	UI_InputTextDef input_def;
-	input_def.font = app->font->label_font_24;
-	input_def.max_characters = 10;
-	input_def.default_text_color = { 200, 200,200,255 };
-	input_def.default_text = "Enter your squad name";
-	input_text = app->ui->CreateInputText(screen_center - fPoint(0, 400.f), input_def);
-	input_text->alpha = 0.f;
+	leader_board_table = app->ui->CreateTable(screen_center, table_def, widths, heights);
+	leader_board_table->SetState(ELEMENT_STATE::HIDDEN);
+
+}
+
+void LeaderBoard::ShowLeaderBoard()
+{
+	leader_board_table->SetState(ELEMENT_STATE::VISIBLE);
+
+	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
+	{
+		(*iter)->SetState(ELEMENT_STATE::VISIBLE);
+	}
+}
+
+void LeaderBoard::HideLeaderBoard()
+{
+	leader_board_table->SetState(ELEMENT_STATE::HIDDEN);
+
+	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
+	{
+		(*iter)->SetState(ELEMENT_STATE::HIDDEN);
+	}
 }
 
 void LeaderBoard::FadeLeaderBoardScreen(bool fade_on)
@@ -45,30 +69,31 @@ void LeaderBoard::FadeLeaderBoardScreen(bool fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_ON;
 		input_text->ActiveInputText();
+		leader_board_table->SetState(ELEMENT_STATE::VISIBLE);
 	}
 	else
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
-		panel_background->SetFX(type, 2.F);
-		input_text->DesactiveInputText();
-		control_helper_image->SetFX(type, 2.F);
-		control_helper_label->SetFX(type, 2.F);
+
+			input_text->DesactiveInputText();
+			control_helper_image->SetFX(type, 2.F);
+			control_helper_label->SetFX(type, 2.F);
+			input_text->SetFX(type, 2.F);
 	}
 
 	leader_board_table->SetFX(type, 2.F);
-	input_text->SetFX(type, 2.F);
-
+	
 	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
 	{
 		(*iter)->SetFX(type, 2.F);
 	}
 }
 
-bool LeaderBoard::UpdateLeaderBoard(std::string path, int round)
+bool LeaderBoard::UpdateLeaderBoard(int round)
 {
 	bool ret = false;
 
-	leader_board_doc.load_file(path.c_str());
+	
 
 	if (leader_board_doc == NULL)
 	{
@@ -76,7 +101,6 @@ bool LeaderBoard::UpdateLeaderBoard(std::string path, int round)
 		return false;
 	}
 
-	doc_path = path;
 	pugi::xml_node leader_board_node = leader_board_doc.child("leader_board");
 	int rank_pos = 1;
 
@@ -138,7 +162,7 @@ bool LeaderBoard::UpdateLeaderBoard(std::string path, int round)
 			++rank_pos;
 		}
 
-		leader_board_doc.save_file(path.c_str());
+		leader_board_doc.save_file(doc_path.c_str());
 	}
 
 	return ret;
@@ -176,7 +200,7 @@ void LeaderBoard::FillLeaderBoardTable()
 		leader_board_elements.push_back(round);
 		leader_board_table->AssortElementToTable(round, iPoint(2, rank_pos));
 
-		if (rank_pos == current_rank)
+		if (rank_pos == current_rank && only_read == false)
 		{
 			current_name = name;
 

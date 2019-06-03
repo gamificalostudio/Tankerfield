@@ -21,11 +21,6 @@
 
 bool M_MainMenu::Start()
 {
-	// Menus
-
-	options = new Options_Menu();
-	leaderboard = new LeaderBoard();
-
 	// Load assets ===========================================
 
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
@@ -296,15 +291,17 @@ bool M_MainMenu::Start()
 	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 4));
 
 	// Set values ==========================================
+	options = new Options_Menu();
+	leaderboard = new LeaderBoard("data/leader_board.xml", true);
+	leaderboard->FillLeaderBoardTable();
 
-	panel_background2 = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
-	panel_background2->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
-	app->ui->HideAllUI();
 	SetPlayerObjectsState(false);
+	app->ui->HideAllUI();
+
 	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
-	
+
+
 	return true;
 }
 
@@ -359,7 +356,7 @@ bool M_MainMenu::Update(float dt)
 
 bool M_MainMenu::PostUpdate(float dt)
 {
-	LOG("Current  player : %i",current_player );
+	//LOG("Current  player : %i",current_player );
 	// Blit background ===================================
 
 	SDL_RenderCopy(app->render->renderer, background_texture, NULL, &(SDL_Rect)app->win->GetWindowRect());
@@ -525,11 +522,6 @@ void M_MainMenu::InputSelect()
 			else if (menu_element == leaderboard_button)
 			{
 				SetState(MENU_STATE::LEADERBOARD);
-				if (leaderboard->UpdateLeaderBoard("data/leader_board.xml", 0) == true)
-				{
-					leaderboard->FillLeaderBoardTable();
-				}
-				leaderboard->FadeLeaderBoardScreen(true);
 			}
 		}
 		else if (menu_state == MENU_STATE::OPTIONS && app->ui->GetFocusedElement() != nullptr)
@@ -750,8 +742,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		options->HideOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
-		panel_background2->SetState(ELEMENT_STATE::HIDDEN);
-		leaderboard->FadeLeaderBoardScreen(false);
+		leaderboard->HideLeaderBoard();
 		break;
 	}
 
@@ -793,8 +784,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		options->ShowOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
-		panel_background2->SetState(ELEMENT_STATE::VISIBLE);
-		leaderboard->FadeLeaderBoardScreen(true);
+		leaderboard->ShowLeaderBoard();
 		break;
 	}
 

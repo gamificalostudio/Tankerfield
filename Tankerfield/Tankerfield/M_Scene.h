@@ -48,6 +48,8 @@ public:
 
 	General_GUI * general_gui		= nullptr;
 
+	LeaderBoard * leaderboard		= nullptr;
+
 	uint round		= 0u;
 
 	GAME_STATE game_state			= GAME_STATE::NO_TYPE;
@@ -107,8 +109,6 @@ private:
 
 	iPoint path_tex_offset = { -30, 0 };
 	uint initial_num_enemies = 0u;
-
-	LeaderBoard* leaderboard = nullptr;
 
 private:
 

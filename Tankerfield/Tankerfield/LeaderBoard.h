@@ -23,19 +23,15 @@ class LeaderBoard :public UI_Listener
 {
 public:
 
-	LeaderBoard();
+	LeaderBoard(std::string doc, bool only_read);
 
 	void ShowLeaderBoard();
 
 	void HideLeaderBoard();
 
-	void InputNavigate();
-
-	void InputSelect();
-
 	void FadeLeaderBoardScreen(bool fade_on);
 
-	bool UpdateLeaderBoard(std::string path, int round);
+	bool UpdateLeaderBoard(int round);
 
 	void FillLeaderBoardTable();
 
@@ -45,15 +41,16 @@ public:
 
 private:
 
+	bool	only_read = false;
+
 	// Elements ================================================
 
-	Camera*			       camera = nullptr;
+	Camera*		camera = nullptr;
 
 	// Control helpers --------------------------------------
 
 	UI_Image* control_helper_image = nullptr;
 	UI_Label* control_helper_label = nullptr;
-
 	UI_Image* panel_background = nullptr;
 
 	// LeaderBoard Screen ----------------------------------
@@ -73,7 +70,6 @@ private:
 	pugi::xml_document leader_board_doc;
 
 	pugi::xml_node new_score_node;
-
 
 };
 

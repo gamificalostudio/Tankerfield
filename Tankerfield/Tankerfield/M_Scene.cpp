@@ -75,8 +75,6 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
-	leaderboard = new LeaderBoard();
-
 	//path_tex = app->tex->Load("maps/path.png");
 
 	// Load Fxs
@@ -129,8 +127,6 @@ bool M_Scene::Start()
 		Obj_RewardBox* box = app->pick_manager->CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{ 2.f, -2.f });
 		box->SetTypeBox(PICKUP_TYPE::WEAPON);
 	}
-	
-	general_gui = DBG_NEW General_GUI();
 
 	round = 0u;
 	game_state = GAME_STATE::ENTER_IN_WAVE;
@@ -146,6 +142,9 @@ bool M_Scene::Start()
 	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
 	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
 	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+
+	general_gui = DBG_NEW General_GUI();
+	leaderboard = DBG_NEW LeaderBoard("data/leader_board.xml",false);
 
 	return true;
 }
@@ -248,7 +247,7 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::LEADER_BOARD:
 
-		if (leaderboard->UpdateLeaderBoard("data/leader_board.xml", round) == true)
+		if (leaderboard->UpdateLeaderBoard(round) == true)
 		{
 			leaderboard->FillLeaderBoardTable();
 		}
