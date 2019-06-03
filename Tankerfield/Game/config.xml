@@ -5,12 +5,12 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="0" />
+    <mode value ="1" />
 
   </app>
 
   <renderer>
-    <vsync value="true"/>
+    <vsync value="false"/>
   </renderer>
 
   <window>
@@ -25,16 +25,7 @@
   <object_manager>balance.xml</object_manager>
 
     <scene>
-      <rounds_to_win value="10"/>
-    
-      <subrounds>
-        <subround percent="0.4" time="2"/>
-        <subround percent="0.6" time="3"/>
-        <subround percent="1.0" time="5"/>
-      </subrounds>
-    
-      <time_round_check_frequency value="2"/>
-  
+      
       <music>
         <main_music music ="audio/Music/indeep.ogg"/>
       </music>
@@ -44,11 +35,12 @@
         <wind_sound sound ="audio/Fx/Scene/wind_sound.wav"/>
       </sounds>
   </scene>
+  
   <map>
     <folder>Maps/</folder>
     <levels>
       <level name="Map2.tmx"/>
-      <!--<level name="test.tmx"/>-->
+      <level name="test.tmx"/>
     </levels>
   </map>
   
@@ -87,7 +79,7 @@
 
   
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="5"/>
+    <percentage_spawn_item_from_enemy value="3"/>
     <percentage_spawn_reward_box value="80"/>
   </pick_manager>
 
@@ -110,6 +102,7 @@
       </rocket_launcher>
       <suicidal>
         <tex_path>textures/Objects/enemies/civ22-sheet.png</tex_path>
+        <tex_damaged_path>textures/Objects/enemies/civ22-sheet-white.png</tex_damaged_path>
       </suicidal>
     </enemies>
 

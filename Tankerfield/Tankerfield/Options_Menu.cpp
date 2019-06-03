@@ -24,12 +24,9 @@ Options_Menu::Options_Menu()
 	button_error_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_error.wav", 35);
 	selection_finished_sfx = app->audio->LoadFx("audio/Fx/main_menu/selection_finished.wav", 40);
 
-
 	// Create UI Elements ====================================
-
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
 
 	// Controll helper ------------------------
 
@@ -50,94 +47,95 @@ Options_Menu::Options_Menu()
 
 		// Fullscreen Options
 
-	fullscreen_label = app->ui->CreateLabel({ screen.w*0.5f-100,350 }, UI_LabelDef("Fullscreen", app->font->label_font_38, { 255,255,255,180 }));
+	fullscreen_label = app->ui->CreateLabel({ screen.w*0.5f-100,325 }, UI_LabelDef("Fullscreen", app->font->label_font_38, { 255,255,255,180 }));
 	fullscreen_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	fullscreen_label->SetParent(panel_background);
 
 	if (app->win->fullscreen == true) 
 	{
-		fullscreen_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 350 }, UI_LabelDef("Yes", app->font->label_font_38), this);
+		fullscreen_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 325 }, UI_LabelDef("Yes", app->font->label_font_38), this);
 		fullscreen_value_info = true;
 	}
 	else if (app->win->fullscreen == false)
 	{
-		fullscreen_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 350 }, UI_LabelDef("No", app->font->label_font_38), this);
+		fullscreen_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 325 }, UI_LabelDef("No", app->font->label_font_38), this);
 		fullscreen_value_info = false;
 	}
 	fullscreen_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	fullscreen_value->SetParent(panel_background);
 
-	fullscreen_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 350 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
+	fullscreen_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 325 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	fullscreen_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	fullscreen_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 350 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	fullscreen_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 325 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	fullscreen_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 		//Master Volume
 
-	master_volume_label=app->ui->CreateLabel({ screen.w * 0.5f -100, 450 }, UI_LabelDef("Master Volume", app->font->label_font_38, { 255,255,255,180 }));
+	master_volume_label=app->ui->CreateLabel({ screen.w * 0.5f -100, 425 }, UI_LabelDef("Master Volume", app->font->label_font_38, { 255,255,255,180 }));
 	master_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	master_volume_label->SetParent(panel_background);
 
-	master_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 450 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
+	master_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 425 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	master_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	master_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 450 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	master_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 425 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	master_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	master_multiplier_string = std::to_string(int(app->audio->master_volume * 100));
 
-	master_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 450 }, UI_LabelDef(master_multiplier_string,app->font->label_font_38), this);
+	master_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 425 }, UI_LabelDef(master_multiplier_string,app->font->label_font_38), this);
 	master_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	master_volume_value->SetParent(panel_background);
 
 		//Music Volume
 
-	music_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 550 }, UI_LabelDef("Music Volume", app->font->label_font_38, { 255,255,255,180 }));
+	music_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 525 }, UI_LabelDef("Music Volume", app->font->label_font_38, { 255,255,255,180 }));
 	music_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	music_volume_label->SetParent(panel_background);
 
-	music_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 550 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
+	music_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 525 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	music_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	music_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 550 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	music_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 525 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	music_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	music_volume_string = std::to_string(app->audio->GetMusicVolume());
 
-	music_volume_value = app->ui->CreateLabel({ screen.w* 0.5f + 110, 550 }, UI_LabelDef(music_volume_string, app->font->label_font_38), this);
+	music_volume_value = app->ui->CreateLabel({ screen.w* 0.5f + 110, 525 }, UI_LabelDef(music_volume_string, app->font->label_font_38), this);
 	music_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	music_volume_value->SetParent(panel_background);
 
 		// Sfx Volume
 
-	sfx_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 650 }, UI_LabelDef("SFX Volume", app->font->label_font_38, { 255,255,255,180 }));
+	sfx_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 625 }, UI_LabelDef("SFX Volume", app->font->label_font_38, { 255,255,255,180 }));
 	sfx_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	sfx_volume_label->SetParent(panel_background);
 
-	sfx_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 650 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
+	sfx_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 625 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	sfx_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	sfx_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 650 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
+	sfx_volume_R = app->ui->CreateButton({ screen.w * 0.5f + 170, 625 }, UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), this);
 	sfx_volume_R->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	sfx_volume_string=std::to_string(app->audio->GetSfxVolume());
 
-	sfx_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 650 }, UI_LabelDef(sfx_volume_string, app->font->label_font_38), this);
+	sfx_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 625 }, UI_LabelDef(sfx_volume_string, app->font->label_font_38), this);
 	sfx_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	sfx_volume_value->SetParent(panel_background);
 
 		// Else
 
-	individual_settings = app->ui->CreateButton({ screen.w * 0.5f,800 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	individual_settings = app->ui->CreateButton({ screen.w * 0.5f,735 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	individual_settings->SetLabel({ 0.f,2.f }, UI_LabelDef("Settings", app->font->button_font_22, { 50, 50, 50, 255 }));
 
+	return_button = app->ui->CreateButton({ screen.w * 0.38f,850 }, UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 
 		// Navigation Matrix
 
 	UI_InteractiveGroupDef options_panel_def;
 	options_panel_def.columns = 2;
-	options_panel_def.rows = 5;
+	options_panel_def.rows = 6;
 
 
 	global_navigation_panel = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
@@ -151,6 +149,8 @@ Options_Menu::Options_Menu()
 	global_navigation_panel->SetElement(sfx_volume_R, iPoint(1, 3));
 	global_navigation_panel->SetElement(individual_settings, iPoint(0, 4));
 	global_navigation_panel->SetElement(individual_settings, iPoint(1, 4));
+	global_navigation_panel->SetElement(return_button, iPoint(0, 5));
+	global_navigation_panel->SetElement(return_button, iPoint(1, 5));
 
 	// Set values ==========================================
 	SDL_ShowCursor(SDL_ENABLE);
@@ -277,6 +277,11 @@ void Options_Menu::InputSelect()
 		}
 		else if (menu_element == individual_settings)
 		{
+			HideOptionsMenu();
+		}
+		else if (menu_element == return_button)
+		{
+			app->main_menu->SetState(MENU_STATE::INIT_MENU);
 			HideOptionsMenu();
 		}
 		app->audio->PlayFx(button_select_sfx);

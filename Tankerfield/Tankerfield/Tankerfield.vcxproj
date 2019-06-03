@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{D28EC4A2-2CAA-4064-BA3E-536EFE802979}</ProjectGuid>
     <RootNamespace>Tankerfield</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -79,6 +79,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,6 +108,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,6 +132,7 @@
     <ClCompile Include="Bullet_Oil.cpp" />
     <ClCompile Include="Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="M_Debug.cpp" />
     <ClCompile Include="Options_Menu.cpp" />
     <ClCompile Include="Obj_ElectroShotAnimation.cpp" />
     <ClCompile Include="General_HUD.cpp" />
@@ -138,6 +141,9 @@
     <ClCompile Include="Item_InstantHelp.cpp" />
     <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
     <ClCompile Include="Pause_Menu.cpp" />
+
+    <ClCompile Include="Quadtree_Collision.cpp" />
+
     <ClCompile Include="UI_InputText.cpp" />
     <ClCompile Include="UI_Table.cpp" />
     <ClCompile Include="M_AnimationBank.cpp" />
@@ -202,6 +208,7 @@
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
+    <ClCompile Include="M_VideoPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -210,6 +217,7 @@
     <ClInclude Include="Bullet_Oil.h" />
     <ClInclude Include="Bullet_RocketLauncher.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="M_Debug.h" />
     <ClInclude Include="Options_Menu.h" />
     <ClInclude Include="Obj_ElectroShotAnimation.h" />
     <ClInclude Include="General_HUD.h" />
@@ -218,6 +226,7 @@
     <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="Obj_FlamethrowerFlame.h" />
     <ClInclude Include="Pause_Menu.h" />
+    <ClInclude Include="Quadtree_Collision.h" />
     <ClInclude Include="UI_InputText.h" />
     <ClInclude Include="UI_Table.h" />
     <ClInclude Include="M_AnimationBank.h" />
@@ -287,6 +296,7 @@
     <ClInclude Include="UI_Slider.h" />
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />
+    <ClInclude Include="M_VideoPlayer.h" />
     <ClInclude Include="WeaponInfo.h" />
   </ItemGroup>
   <ItemGroup>

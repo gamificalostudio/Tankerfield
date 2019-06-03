@@ -27,6 +27,7 @@
 #include "M_AnimationBank.h"
 #include "Player_GUI.h"
 #include "UI_InGameElement.h"
+#include "UI_Image.h"
 #include "M_UI.h"
 #include "M_ObjManager.h"
 #include "Camera.h"
@@ -34,6 +35,9 @@
 #include "Obj_Portal.h"
 #include "HealingShot_Area.h"
 #include "Obj_FlamethrowerFlame.h"
+#include "M_Debug.h"
+#include "Item_InstantHelp.h"
+#include "M_PickManager.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -234,7 +238,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HEALTH_BAG);
+	SetItem(ItemType::HAPPY_HOUR_ITEM);
 	time_between_portal_tp.Start();
 
 	//Flamethrower
@@ -248,7 +252,7 @@ bool Obj_Tank::Start()
 		this);
 
 	coll_flame->is_sensor = true;
-	coll_flame->ActiveOnTrigger(false);
+	coll_flame->SetIsTrigger(false);
 
 	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
 	flame->tank = this;
@@ -262,6 +266,8 @@ bool Obj_Tank::Start()
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
 	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+
+	this->time_between_portal_tp.Start();
 
 	return true;
 }
@@ -278,17 +284,7 @@ bool Obj_Tank::PreUpdate()
 	{
 		show_crosshairs = !show_crosshairs;
 	}
-	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN)
-	{
-		if (coll->GetTag() == TAG::PLAYER)
-		{
-			coll->SetTag(TAG::GOD);
-		}
-		else
-		{
-			coll->SetTag(TAG::PLAYER);
-		}
-	}
+
 	return true;
 }
 
@@ -329,7 +325,7 @@ void Obj_Tank::Movement(float dt)
 {
 	if (!tutorial_move_pressed)
 		tutorial_move_timer.Start();
-
+	
 	tutorial_move_pressed = true;
 
 	//Don't move if tank is dead
@@ -639,7 +635,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
 	{
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
-		if (bullet->player != this) // he does not heal himself
+		if (bullet->player && Alive()) // he does not heal himself
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
@@ -657,14 +653,12 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 
 	else if (c1->GetTag() == TAG::PORTAL)
 	{
-		if (time_between_portal_tp.ReadMs() > 2000) {
-			if (c1 == portal1->coll) {
-				pos_map = portal2->pos_map;
-			}
-			else if (c1 == portal2->coll) {
-				pos_map = portal1->pos_map;
-			}
-			time_between_portal_tp.Start();
+		if (this->time_between_portal_tp.ReadMs() >= 1000)
+		{
+			Obj_Portal * portal = (Obj_Portal*)c1->GetObj();
+			Item_InstantHelp * instant_help = portal->instant_help;
+			instant_help->Teleport(this, portal);
+			this->time_between_portal_tp.Start();
 		}
 	}
 
@@ -696,6 +690,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
+				
 				SetPickUp(pick_up);
 			}
 		}
@@ -725,32 +720,41 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 
 void Obj_Tank::SetLife(int life)
 {
-
-	if (life > GetMaxLife())
-	{
-		this->life = GetMaxLife();
-	}
-
-	else if (life <= 0)
-	{
-		this->life = 0;
-		app->audio->PlayFx(die_sfx);
-		StopTank();
-	}
-	else
-	{
-		this->life = life;
-	}
-
+	this->life = life;
 	gui->SetLifeBar(this->life);
+}
+
+void Obj_Tank::IncreaseLife(int heal)
+{
+	int new_life = life + heal;
+	if (new_life > GetMaxLife())
+	{
+		new_life = GetMaxLife();
+	}
+	SetLife(new_life);
+
+	gui->HealingFlash();
 }
 
 void Obj_Tank::ReduceLife(int damage)
 {
-	life -= damage;
-	SetLife(life);
-	damaged_timer.Start();
-	damaged = true;
+	//Don't reduce life if we're in god mode
+	if (!app->debug->god_mode)
+	{
+		int new_life = life - damage;
+		//Tank death
+		if (new_life <= 0)
+		{
+			new_life = 0;
+			Die();
+		}
+		SetLife(new_life);
+		damaged_timer.Start();
+		damaged = true;
+
+		gui->DamageFlash();
+
+	}
 }
 
 void Obj_Tank::SetItem(ItemType type)
@@ -1131,7 +1135,6 @@ void Obj_Tank::ReviveTank(float dt)
 			{
 				(*iter)->SetLife(revive_life);
 				reviving_tank[(*iter)->tank_num] = false;
-				(*iter)->fire_dead = false;
 				app->audio->PlayFx(revive_sfx);
 				(*iter)->draw_revive_cycle_bar = false;
 				(*iter)->cycle_bar_anim.Reset();
@@ -1162,17 +1165,17 @@ bool Obj_Tank::ReleaseInteract()
 	return (controller != nullptr && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
-void Obj_Tank::StopTank()
+void Obj_Tank::Die()
 {
-	if (this->fire_dead==false)
+	//If life was over 0 die (otherwise no need to die again)
+	if (life > 0)
 	{
+		app->audio->PlayFx(die_sfx);
 		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 		dead_fire->tank = this;
-		this->fire_dead = true;
+		SetWeapon(WEAPON::BASIC, 1);
+		SetItem(ItemType::NO_TYPE);
 	}
-
-	this->SetWeapon(WEAPON::BASIC, 1);
-	this->SetItem(ItemType::NO_TYPE);
 }
 
 bool Obj_Tank::Alive() const
@@ -1192,8 +1195,8 @@ void Obj_Tank::Item()
 		new_item->Use();
 		item = ItemType::NO_TYPE;
 		gui->SetItemIcon(item);
-		
 	}
+
 	picking = false;
 }
 
@@ -1202,11 +1205,19 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
+		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
 		SetItem(pick_up->type_of_item);
+		gui->CreateParticleToItemFrame();
+		
 	}
 	else
 	{
+		if (weapon_info.weapon != WEAPON::BASIC)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
+		}
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
+		gui->CreateParticleToWeaponFrame();
 	}
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pick_up->DeletePickUp();
@@ -1248,13 +1259,6 @@ void Obj_Tank::InputReadyKeyboard()
 fPoint Obj_Tank::GetShotDir() const
 {
 	return shot_dir;
-}
-
-void Obj_Tank::CreatePortals()
-{
-	portal1 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map + shot_dir * 5);
-
-	portal2 = (Obj_Portal*)app->objectmanager->CreateObject(ObjectType::PORTAL, pos_map - shot_dir * 5);
 }
 
 float Obj_Tank::GetTurrAngle() const

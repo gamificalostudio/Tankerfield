@@ -23,7 +23,8 @@ public:
 	bool Start();
 
 	//Create a Pick up 
-	void CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, uint levels_to_add = NULL);
+	//Put type_of_pickup = PICKUP_TYPE::NO_TYPE, weapon = WEAPON::MAX_WEAPONS and ItemType item_type = ItemType::MAX_ITEM
+	void CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up = PICKUP_TYPE::NO_TYPE, ItemType item_type = ItemType::MAX_ITEMS, WEAPON weapon_type = WEAPON::MAX_WEAPONS, uint levels_to_add = 0u);
 
 	//Create a reward box
 	Obj_RewardBox* CreateRewardBox(fPoint pos_map);
@@ -33,7 +34,9 @@ public:
 
 	void CreateRewardBoxWave();
 
-
+	PICKUP_TYPE RandomPickUp() const;
+	WEAPON RandomWeapon() const;
+	ItemType RandomItem() const;
 
 private:
 	uint percentage_spawn_item_from_enemy = NULL;

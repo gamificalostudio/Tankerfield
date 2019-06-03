@@ -39,7 +39,7 @@ bool M_PickManager::Start()
 
 void M_PickManager::PickUpFromEnemy(fPoint pos_map, PICKUP_TYPE type_of_pick_up)
 {
-	uint probability = rand() % 100;
+	uint probability = rand() % 100 + 1;
 	if (type_of_pick_up == PICKUP_TYPE::MAX_TYPES) // if you do not pass a type of pickUp, create an item with the probability defined in the config.
 	{
 		if (probability < percentage_spawn_item_from_enemy)
@@ -53,12 +53,63 @@ void M_PickManager::PickUpFromEnemy(fPoint pos_map, PICKUP_TYPE type_of_pick_up)
 	}
 }
 
-void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, uint levels_to_add)
+void M_PickManager::CreatePickUp(fPoint pos_map, PICKUP_TYPE type_of_pick_up, ItemType item_type, WEAPON weapon_type, uint level)
 {
 	Obj_PickUp* ret = (Obj_PickUp*)app->objectmanager->CreateObject(ObjectType::PICK_UP, pos_map);
 
-	ret->GenerationOfPickUp(type_of_pick_up, levels_to_add);
+	if (type_of_pick_up == PICKUP_TYPE::NO_TYPE)
+	{
+		type_of_pick_up = RandomPickUp();
+	}
+	ret->type_of_pick_up = type_of_pick_up;
 
+	if (type_of_pick_up == PICKUP_TYPE::WEAPON)
+	{
+		if (weapon_type == WEAPON::MAX_WEAPONS)
+		{
+			ret->type_of_weapon = RandomWeapon();
+		}
+		else
+		{
+			ret->type_of_weapon = weapon_type;
+		}
+		if (level != 0u)
+		{
+			ret->level_of_weapon = level;
+		}
+		else
+		{
+			ret->level_of_weapon = app->scene->round;
+		}
+	}
+	else if (type_of_pick_up == PICKUP_TYPE::ITEM)
+	{
+		if (item_type == ItemType::MAX_ITEMS)
+		{
+			ret->type_of_item = RandomItem();
+		}
+		else
+		{
+			ret->type_of_item = item_type;
+		}
+	}
+
+	ret->CreatePickUpUI();
+}
+
+PICKUP_TYPE M_PickManager::RandomPickUp() const
+{
+	return (PICKUP_TYPE)(rand() % (uint)PICKUP_TYPE::MAX_TYPES);
+}
+
+WEAPON M_PickManager::RandomWeapon() const
+{
+	return (WEAPON)(rand() % ((uint)WEAPON::MAX_WEAPONS - 1) + 1 /*The plus 1 is because the basic shoot is the number 0, and it can't be created, and the -1 is because the max weapon include the basic bullet*/);
+}
+
+ItemType M_PickManager::RandomItem() const
+{
+	return (ItemType)(rand() % (uint)ItemType::MAX_ITEMS);
 }
 
 Obj_RewardBox* M_PickManager::CreateRewardBox(fPoint pos_map)

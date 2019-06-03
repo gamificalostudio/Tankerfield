@@ -36,6 +36,18 @@ bool Object::Update(float dt)
 	return true;
 }
 
+void Object::DebugSpriteSorting(Camera* camera)
+{
+	//Draw frame
+	SDL_Rect section = { pos_screen.x - draw_offset.x, pos_screen.y - draw_offset.y, frame.w, frame.h };
+	app->render->DrawQuad(section, 255, 0, 0, 255, false);
+
+	//Draw pivot
+	int width = 4;
+	SDL_Rect pivot_section = { pos_screen.x + pivot.x - width * 0.5f, pos_screen.y + pivot.y - width * 0.5f, width, width};
+	app->render->DrawQuad(pivot_section, 0, 255, 0, 255, true);
+}
+
 bool Object::Draw(float dt, Camera * camera)
 {
 	app->render->Blit(

@@ -113,9 +113,7 @@ bool M_ObjManager::PreUpdate()
 	{
 		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
 		{
-			ObjectType o_t = (*iterator)->type;
-
-			if (o_t == ObjectType::TESLA_TROOPER || o_t == ObjectType::BRUTE || o_t == ObjectType::SUICIDAL || o_t == ObjectType::ROCKETLAUNCHER)
+			if (IsEnemy((*iterator)->type))
 			{
 				(*iterator)->to_remove = true;
 			}
@@ -145,8 +143,7 @@ bool M_ObjManager::Update(float dt)
 			
 				(*iterator)->CleanUp();
 
-				if ((*iterator)->type == ObjectType::TESLA_TROOPER
-					|| (*iterator)->type == ObjectType::BRUTE)
+				if (IsEnemy((*iterator)->type))
 				{
 					enemies.remove((*iterator));
 				}
@@ -187,6 +184,11 @@ bool M_ObjManager::Update(float dt)
 	return true;
 }
 
+bool M_ObjManager::IsEnemy(ObjectType type)
+{
+	return (type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER);//Change this enemy for the last enemy on the ObjectType enum
+}
+
 bool M_ObjManager::PostUpdate(float dt)
 {
 	BROFILER_CATEGORY("Object Manger: PostUpdate", Profiler::Color::ForestGreen);
@@ -218,7 +220,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		//Draw all the shadows first
 		for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
 		{
-			if ((*item) != nullptr )
+			if ((*item) != nullptr)
 			{
 				(*item)->DrawShadow((*item_cam), dt);
 			}
@@ -230,10 +232,29 @@ bool M_ObjManager::PostUpdate(float dt)
 			if ((*item) != nullptr)
 			{
 				(*item)->Draw(dt, (*item_cam));
+			}
+		}
 
-				if (app->scene->draw_debug)
+		//Draw debug over the objects
+
+		if (app->debug->debug_sprite_sorting)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
 				{
-					(*item)->DrawDebug((*item_cam));
+					(*item)->DebugSpriteSorting((*item_cam));
+				}
+			}
+		}
+
+		if (app->debug->debug_pathfinding)
+		{
+			for (std::vector<Object*>::iterator item = draw_objects.begin(); item != draw_objects.end(); ++item)
+			{
+				if ((*item) != nullptr)
+				{
+					(*item)->DebugPathfinding((*item_cam));
 				}
 			}
 		}
@@ -480,36 +501,6 @@ std::list<Object*> M_ObjManager::GetObjects() const
 {
 	return this->objects;
 }
-
-void M_ObjManager::DrawDebug(const Object* obj, Camera* camera)
-{
-	SDL_Rect section = { obj->pos_screen.x - obj->draw_offset.x, obj->pos_screen.y - obj->draw_offset.y, obj->frame.w, obj->frame.h };
-
-	Uint8 alpha = 0;
-	switch (obj->type)
-	{
-	case ObjectType::TANK:
-		app->render->DrawQuad(section, 255, 0, 0, alpha);
-		break;
-	case ObjectType::STATIC:
-		app->render->DrawQuad(section, 0, 255, 0, alpha);
-		break;
-	case ObjectType::TESLA_TROOPER:
-		app->render->DrawQuad(section, 0, 0, 255, alpha);
-		break;
-	case ObjectType::EXPLOSION:
-		app->render->DrawQuad(section, 255, 0, 255, alpha);
-
-	default:
-		break;
-	}
-
-	app->render->DrawCircle(obj->pos_screen.x + obj->pivot.x, obj->pos_screen.y + obj->pivot.y, 3, camera, 0, 255, 0);
-}
-
-
-
-
 
 bool M_ObjManager::Load(pugi::xml_node& load)
 {

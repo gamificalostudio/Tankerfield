@@ -204,28 +204,6 @@ void General_GUI::FadeGameOverScreen(bool fade_on, int rounds_survived)
 	over_word->SetFX(type, 2.F); 
 }
 
-void General_GUI::FadeWinScreen(bool fade_on)
-{
-	UI_Fade_FX::FX_TYPE type;
-
-	if (fade_on)
-	{
-		type = UI_Fade_FX::FX_TYPE::FADE_ON;
-		background->SetFX(type, 2.F);
-	}
-	else
-	{
-		type = UI_Fade_FX::FX_TYPE::FADE_OUT;
-	}
-
-	String round_str = "NOT BAD AT ALL FOR A ROOKIES...";
-   
-	you_survived->SetText(round_str);
-	you_survived->SetFX(type, 2.F);
-	you_word->SetFX(type, 2.F);
-	survived_word->SetFX(type, 2.F);
-}
-
 void General_GUI::FadeLeaderBoardScreen(bool fade_on)
 {
 	UI_Fade_FX::FX_TYPE type;
@@ -386,4 +364,12 @@ void General_GUI::UpdateLeaderBoardSquadName()
 		new_score_node.attribute("name") = input_text->GetText().c_str();
 		leader_board_doc.save_file(doc_path.c_str());
 	}
+}
+
+void General_GUI::MakeChildOfRoundElement(UI_Element * elem)
+{
+	//if (round_element != nullptr)
+	//{
+	//	elem->SetParent(round_element);
+	//}
 }

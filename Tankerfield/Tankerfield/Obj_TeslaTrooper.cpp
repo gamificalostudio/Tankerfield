@@ -46,15 +46,12 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	curr_tex = tex;
 	last_texture = tex;
 
-
 	//ANIMATIONS =============================================
 	idle.frames = app->anim_bank->LoadFrames(anim_node.child("idle"));
 	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 	curr_anim = &idle;
-
-
 
 	//curr_anim = &idle;
 	curr_anim = &walk;
@@ -70,35 +67,34 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	draw = false;
 	state = ENEMY_STATE::SPAWN; //enemy
 
-	original_speed = speed = app->objectmanager->tesla_trooper_info.speed;
-
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 are 4/3
-	squared_detection_range = detection_range * detection_range;
 	coll_w = 0.5f;
 	coll_h = 0.5f;
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
-	draw_offset			= { 24, 28 };
-	normal_draw_offset = { 24, 28 };
-	electrocuted_draw_offset = { 24, 28 };
-
-
-	//parameters-------------------------------------------
-	attack_damage = app->objectmanager->tesla_trooper_info.attack_damage;
-	attack_range = app->objectmanager->tesla_trooper_info.attack_range;
-	attack_range_squared = attack_range * attack_range;
-	attack_frequency = app->objectmanager->tesla_trooper_info.attack_frequency;
-	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, app->scene->round - 1);
+	scale = 0.8f;
+	//INFO: Offset depends on the scale of the sprite.
+	//INFO: In the case of Tesla Trooper, all the draw_offsets are the same
+	draw_offset	= normal_draw_offset = electrocuted_draw_offset= (iPoint)(fPoint(32.f, 38.f) * scale);
 
 	//Timers ----------------
 	check_path_time = 2.f; // 10s
 
 	damaged_sprite_time = 75;
 
-	scale = 0.75f;
-
 	app->audio->PlayFx(sfx_spawn);
+}
+
+void Obj_TeslaTrooper::SetStats(int level)
+{
+	original_speed = speed = app->objectmanager->tesla_trooper_info.speed;
+	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 are 4/3
+	squared_detection_range = detection_range * detection_range;
+	attack_damage = app->objectmanager->tesla_trooper_info.attack_damage;
+	attack_range = app->objectmanager->tesla_trooper_info.attack_range;
+	attack_range_squared = attack_range * attack_range;
+	attack_frequency = app->objectmanager->tesla_trooper_info.attack_frequency;
+	life = app->objectmanager->tesla_trooper_info.life_multiplier * pow(app->objectmanager->tesla_trooper_info.life_exponential_base, level - 1);
 }
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
@@ -271,6 +267,7 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			scale,
 			scale);
 	}
+
 	if (state == ENEMY_STATE::SPAWN)
 	{
 		SDL_Rect rect = spawn_anim.GetFrame(0);
@@ -280,9 +277,9 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 			pos_screen.y - rect.h,
 			camera,
 			&rect);
-
 	}
 
+	DrawAttackRange(camera);
 
 	return true;
 }

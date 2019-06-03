@@ -32,6 +32,8 @@ public:
 	void Attack() override;
 	void Move(const float & dt) override;
 
+	void SetStats(int level) override;
+
 private:
 	void ShootMissile();
 

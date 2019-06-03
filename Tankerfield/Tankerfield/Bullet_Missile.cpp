@@ -29,10 +29,6 @@ bool Bullet_Missile::Update(float dt)
 		Obj_Explosion* explosion_obj = (Obj_Explosion*)app->objectmanager->CreateObject(ObjectType::EXPLOSION, pos_map);
 		explosion_obj->SetExplosionDamage(explosion_damage);
 
-		if (coll != nullptr)
-		{
-			coll->to_destroy = true;
-		}
 		to_remove = true;
 	}
 
