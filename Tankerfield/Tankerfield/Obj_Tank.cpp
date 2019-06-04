@@ -189,7 +189,7 @@ bool Obj_Tank::Start()
 	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
 	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
 
-
+	speed_colliding_with_building = 3.25f;
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
@@ -551,6 +551,12 @@ void Obj_Tank::ReduceSpeed(float reduction)
 	velocity_map *= MAX(0.f, curr_speed - reduction);
 }
 
+void Obj_Tank::SetSpeed(float speed)
+{
+	velocity_map.Normalize();
+	velocity_map *= speed;
+}
+
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
 	if (!damaged)
@@ -765,13 +771,22 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		ReduceLife(c1->damage);
 	}break;
 
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+		SetSpeed(0.f);
+		break;
+
+	case TAG::WALL:
+		SetSpeed(0.f);
+		break;
+
 	}
 }
 
 void Obj_Tank::OnTrigger(Collider * c1)
 {
-	if (c1->GetTag() == TAG::PICK_UP)
-	{
+	switch (c1->GetTag()) {
+	case TAG::PICK_UP: {
 		if (this->Alive())
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
@@ -779,7 +794,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-				
+
 				SetPickUp(pick_up);
 			}
 		}
@@ -787,11 +802,23 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
-	}
-	else if (c1->GetTag() == TAG::ROAD)
-	{
+	}break;
+
+	case TAG::ROAD: {
 		AddMaxSpeedBuff(road_buff);
+	}break;
+
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+		SetSpeed(speed_colliding_with_building);
+		break;
+
+	case TAG::WALL:
+		SetSpeed(speed_colliding_with_building);
+		break;
+
 	}
+
 }
 
 void Obj_Tank::OnTriggerExit(Collider * c1)

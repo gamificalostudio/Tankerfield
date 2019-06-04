@@ -63,6 +63,8 @@ M_Collision::M_Collision()
 	trigger_matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
 	trigger_matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
 	trigger_matrix[(int)TAG::PLAYER][(int)TAG::HEALING_AREA_SHOT] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::WALL] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::WATER] = true;
 
 	trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
 	trigger_matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
@@ -103,6 +105,8 @@ M_Collision::M_Collision()
 	trigger_matrix[(int)TAG::PLAYER][(int)TAG::BULLET_ENEMY] = true;
 	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::ENEMY] = false;
 	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::REWARD_BOX] = false;
+
+	trigger_matrix[(int)TAG::WATER][(int)TAG::PLAYER] = true;
 
 	// Set rigid body physics compatinility =============================================
 

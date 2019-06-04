@@ -99,6 +99,7 @@ private:
 	bool RemoveMaxSpeedBuff(std::string source);
 	float GetMaxSpeed();//Returns the maximum speed of the tank, tanking into account the bonuses it has
 	void ReduceSpeed(float reduction);
+	void SetSpeed(float speed);
 
 	//- Camera
 	void CameraMovement(float dt);
@@ -157,6 +158,7 @@ private:
 
 	//- Movement
 	float base_max_speed							= 0.f;
+	float speed_colliding_with_building				= 0.f;
 	MovementBuff road_buff;
 	MovementBuff charged_shot_buff;
 	MovementBuff recoil_buff;
