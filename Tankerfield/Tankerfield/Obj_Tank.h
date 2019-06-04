@@ -53,8 +53,8 @@ public:
 
 	bool CleanUp() override;
 
-	void OnTrigger(Collider* c1);
-	void OnTriggerEnter(Collider* c1);
+	void OnTrigger(Collider* c1, float dt);
+	void OnTriggerEnter(Collider* c1, float dt);
 	void OnTriggerExit(Collider* c1);
 
 public:

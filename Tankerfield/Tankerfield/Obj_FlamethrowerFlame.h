@@ -33,6 +33,7 @@ private:
 	SDL_Texture * tex	= nullptr;
 	float scale = 1.f;
 	SDL_Point pivot;
+	iPoint			draw_offset_original = { 0, 0 }; //the original offset without de offset of the direction.
 };
 
 #endif

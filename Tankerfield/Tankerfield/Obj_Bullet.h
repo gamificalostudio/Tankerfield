@@ -22,7 +22,7 @@ public:
 
 	bool Update(float dt);
 	
-	void OnTriggerEnter(Collider* collider_1);
+	void OnTriggerEnter(Collider* collider_1, float dt);
 
 	void SetBulletProperties(float speed, float bullet_life_ms, float damage, fPoint direction, float angle, bool charged = false);
 

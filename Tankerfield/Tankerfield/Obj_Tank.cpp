@@ -714,7 +714,7 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-void Obj_Tank::OnTriggerEnter(Collider * c1)
+void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 {
 	switch (c1->GetTag())
 	{
@@ -768,7 +768,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 	}
 }
 
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTrigger(Collider * c1, float dt)
 {
 	if (c1->GetTag() == TAG::PICK_UP)
 	{
