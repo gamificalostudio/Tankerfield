@@ -38,6 +38,7 @@
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
 #include "M_PickManager.h"
+#include "Obj_Enemy.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -189,10 +190,13 @@ bool Obj_Tank::Start()
 	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
 	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
 
-
+	speed_colliding_with_building = 2.5f;
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
+
+	run_over_damage_multiplier = 31.f;
+	run_over_speed_reduction = 3.5f;
 
 	camera_player = app->render->CreateCamera(this);
 	app->ui->AddPlayerGUI(this);
@@ -403,12 +407,12 @@ void Obj_Tank::Movement(float dt)
 	if (!no_input)
 	{
 		//CALCULATE ANGLE
-		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG;
+		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG - ISO_COMPENSATION;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
-		target_angle += 360.f * turns - ISO_COMPENSATION;
+		target_angle += 360.f * turns;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f)) < abs(target_angle - angle))
+		if (abs(target_angle + 360.f - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
@@ -419,11 +423,6 @@ void Obj_Tank::Movement(float dt)
 	{
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
-	}
-
-	if (tank_num == 0)
-	{
-		LOG("Current speed: %f", velocity_map.ModuleF());
 	}
 }
 
@@ -549,6 +548,12 @@ void Obj_Tank::ReduceSpeed(float reduction)
 	float curr_speed = velocity_map.ModuleF();
 	velocity_map.Normalize();
 	velocity_map *= MAX(0.f, curr_speed - reduction);
+}
+
+void Obj_Tank::SetSpeed(float speed)
+{
+	velocity_map.Normalize();
+	velocity_map *= speed;
 }
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
@@ -714,6 +719,11 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
+float Obj_Tank::GetCurrSpeed()
+{
+	return velocity_map.ModuleF();
+}
+
 void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 {
 	switch (c1->GetTag())
@@ -765,13 +775,26 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 		ReduceLife(c1->damage);
 	}break;
 
+	case TAG::ENEMY: {
+		//If you collide against an enemy, you run over it, dealing damage and slowing you
+		Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
+		enemy->ReduceLife(GetCurrSpeed() * run_over_damage_multiplier);
+		ReduceSpeed(run_over_speed_reduction);
+	}break;
+
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+	case TAG::WALL:
+		SetSpeed(0.f);
+		break;
+
 	}
 }
 
 void Obj_Tank::OnTrigger(Collider * c1, float dt)
 {
-	if (c1->GetTag() == TAG::PICK_UP)
-	{
+	switch (c1->GetTag()) {
+	case TAG::PICK_UP: {
 		if (this->Alive())
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
@@ -779,7 +802,7 @@ void Obj_Tank::OnTrigger(Collider * c1, float dt)
 			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-				
+
 				SetPickUp(pick_up);
 			}
 		}
@@ -787,11 +810,20 @@ void Obj_Tank::OnTrigger(Collider * c1, float dt)
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
-	}
-	else if (c1->GetTag() == TAG::ROAD)
-	{
+	}break;
+
+	case TAG::ROAD: {
 		AddMaxSpeedBuff(road_buff);
+	}break;
+
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+		SetSpeed(speed_colliding_with_building);
+		SetSpeed(speed_colliding_with_building);
+		break;
+
 	}
+
 }
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
@@ -1065,7 +1097,7 @@ void Obj_Tank::Aim(float dt)
 		float turns = floor(turr_angle / 360.f);
 		turr_target_angle += 360.f * turns;
 		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
+		if (abs(turr_target_angle + 360.f - turr_angle) < abs(turr_target_angle - turr_angle))
 		{
 			turr_target_angle += 360.f;
 		}

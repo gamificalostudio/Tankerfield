@@ -52,6 +52,8 @@ public:
 
 	void DrawAttackRange(Camera * camera);
 
+	inline void ReduceLife(int damage);
+
 protected:
 	inline void UpdateMoveVec();
 
