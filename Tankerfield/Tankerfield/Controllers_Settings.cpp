@@ -18,7 +18,7 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	panel->SetParent(Canvas);
 	SDL_Rect draw_rect = { (int)(relative_pos.x) + 20, (int)(relative_pos.y + 20), 920, 499 };
 	//panel->SetDrawRect(draw_rect);
-	return_button = app->ui->CreateButton(fPoint(relative_pos.x + 59, relative_pos.y + 426), UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
+	return_button = app->ui->CreateButton(fPoint(relative_pos.x + 89, relative_pos.y + 456), UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 	return_button->SetParent(panel);
 
 	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(1, 1, nullptr), this);
