@@ -777,9 +777,13 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 
 	case TAG::ENEMY: {
 		//If you collide against an enemy, you run over it, dealing damage and slowing you
-		Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
-		enemy->ReduceLife(GetCurrSpeed() * run_over_damage_multiplier, dt);
-		ReduceSpeed(run_over_speed_reduction);
+		float curr_speed = GetCurrSpeed();
+		if (curr_speed > 0.f)
+		{
+			Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
+			enemy->ReduceLife(curr_speed * run_over_damage_multiplier, dt);
+			ReduceSpeed(run_over_speed_reduction);
+		}
 	}break;
 
 	//This two cases without a break are intentional. DO NOT CHANGE THIS.
