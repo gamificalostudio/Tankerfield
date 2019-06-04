@@ -219,7 +219,7 @@ bool M_Collision::Update(float dt)
 			{
 				if ((*iter)->object != nullptr && trigger_matrix[(int)(*iter)->tag][(int)(*collider)->tag] && (*iter)->to_destroy == false && (*collider)->to_destroy == false)
 				{
-					(*iter)->object->OnTriggerEnter((*collider));
+					(*iter)->object->OnTriggerEnter((*collider), dt);
 				}
 
 				(*collider)->triggers_list.push_back(*iter);
@@ -228,7 +228,7 @@ bool M_Collision::Update(float dt)
 			{
 				if ((*iter)->object != nullptr && trigger_matrix[(int)(*iter)->tag][(int)(*collider)->tag] && (*iter)->to_destroy == false && (*collider)->to_destroy == false)
 				{
-					(*iter)->object->OnTrigger((*collider));
+					(*iter)->object->OnTrigger((*collider), dt);
 				}
 			}
 		}

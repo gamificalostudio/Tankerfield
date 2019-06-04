@@ -454,7 +454,7 @@ void Obj_Tank::ShootFlameThrower()
 
 	fPoint offset{ -coll_w * 0.5f, -coll_h * 0.5f };
 
-	fPoint dir_distance = GetShotDir() * distance;
+	fPoint dir_distance = GetShotDir() * distance * fPoint{2,2};
 	distance += increment;
 
 	coll_flame->SetObjOffset(offset + dir_distance);
@@ -564,6 +564,7 @@ std::vector<Object*>* Obj_Tank::GetEnemiesHitted()
 void Obj_Tank::ReleaseFlameThrower()
 {
 	flame->is_holding = false;
+	coll_flame->SetIsTrigger(false);
 }
 
 

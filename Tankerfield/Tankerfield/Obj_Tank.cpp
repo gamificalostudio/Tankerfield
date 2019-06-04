@@ -724,7 +724,7 @@ float Obj_Tank::GetCurrSpeed()
 	return velocity_map.ModuleF();
 }
 
-void Obj_Tank::OnTriggerEnter(Collider * c1)
+void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 {
 	switch (c1->GetTag())
 	{
@@ -791,7 +791,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 	}
 }
 
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTrigger(Collider * c1, float dt)
 {
 	switch (c1->GetTag()) {
 	case TAG::PICK_UP: {

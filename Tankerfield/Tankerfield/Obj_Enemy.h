@@ -36,9 +36,9 @@ public:
 
 	virtual void Attack();
 
-	void OnTriggerEnter(Collider * collider);
+	void OnTriggerEnter(Collider * collider, float dt);
 
-	void OnTrigger(Collider * collider);
+	void OnTrigger(Collider * collider, float dt);
 
 	inline bool IsOnGoal(fPoint goal); //const?
 
@@ -88,6 +88,8 @@ protected:
 	bool CleanUp() override;
 
 	void Oiled();
+
+	inline void ReduceLife(Collider* collider, float dt);
 
 	void ResetAllAnimations();
 

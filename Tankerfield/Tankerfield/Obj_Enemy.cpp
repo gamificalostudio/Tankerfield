@@ -632,7 +632,7 @@ inline void Obj_Enemy::Stunned()
 }
 
 
-void Obj_Enemy::OnTriggerEnter(Collider * collider)
+void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 {
 	if (state != ENEMY_STATE::BURN)
 	{
@@ -674,7 +674,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 		{
-			ReduceLife(collider->damage);
+			ReduceLife(collider->damage, dt);
 		}
 		else if (collider->GetTag() == TAG::BULLET_OIL)
 		{
@@ -709,14 +709,14 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			}
 			else
 			{
-				ReduceLife(collider->damage);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
 	
 }
 
-void Obj_Enemy::OnTrigger(Collider * collider)
+void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 {
 	if (state != ENEMY_STATE::BURN)
 	{
@@ -791,7 +791,7 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 			}
 			else
 			{
-				ReduceLife(collider->damage);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
@@ -837,7 +837,7 @@ void Obj_Enemy::Oiled()
 		}
 }
 
-inline void Obj_Enemy::ReduceLife(int damage)
+inline void Obj_Enemy::ReduceLife(int damage, float dt)
 {
 	life -= damage;
 

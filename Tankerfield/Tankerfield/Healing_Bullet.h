@@ -18,7 +18,7 @@ public:
 	//Add functions that are overriden
 	bool Start();
 
-	void OnTriggerEnter(Collider* collider);
+	void OnTriggerEnter(Collider* collider, float dt);
 };
 
 #endif
