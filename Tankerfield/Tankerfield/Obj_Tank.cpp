@@ -403,12 +403,12 @@ void Obj_Tank::Movement(float dt)
 	if (!no_input)
 	{
 		//CALCULATE ANGLE
-		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG;
+		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG - ISO_COMPENSATION;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
-		target_angle += 360.f * turns - ISO_COMPENSATION;
+		target_angle += 360.f * turns;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f)) < abs(target_angle - angle))
+		if (abs(target_angle + 360.f - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
@@ -419,12 +419,6 @@ void Obj_Tank::Movement(float dt)
 	{
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
-	}
-
-	if (tank_num == 0)
-	{
-		LOG("Angle: %f", angle);
-	//	LOG("Current speed: %f", velocity_map.ModuleF());
 	}
 }
 
@@ -1093,7 +1087,7 @@ void Obj_Tank::Aim(float dt)
 		float turns = floor(turr_angle / 360.f);
 		turr_target_angle += 360.f * turns;
 		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
+		if (abs(turr_target_angle + 360.f - turr_angle) < abs(turr_target_angle - turr_angle))
 		{
 			turr_target_angle += 360.f;
 		}
