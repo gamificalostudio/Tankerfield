@@ -90,9 +90,6 @@ public:
 	fPoint GetTurrPos() const;
 
 private:
-	//- Logic
-	void SetLife(int life);//Don't use SetLife directly from other classes, use ReduceLife() or IncreaseLife()
-
 	//- Movement
 	void Movement(float dt);
 	void InputMovementKeyboard(fPoint & input);

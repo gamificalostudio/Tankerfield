@@ -222,8 +222,7 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	max_life = 100;
-	SetLife(100);
+	max_life = life = 100;
 
 	turr_scale = 1.2f;
 
@@ -727,7 +726,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
+				IncreaseLife(bullet->player->weapon_info.shot1.bullet_healing);
 				app->audio->PlayFx(heal_sound);
 			}
 		}
@@ -754,7 +753,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
-			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
+			IncreaseLife(area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
 	}break;
 
@@ -807,42 +806,30 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	}
 }
 
-void Obj_Tank::SetLife(int life)
-{
-	this->life = life;
-	gui->SetLifeBar(this->life);
-}
-
 void Obj_Tank::IncreaseLife(int heal)
 {
-	int new_life = life + heal;
-	if (new_life > GetMaxLife())
-	{
-		new_life = GetMaxLife();
-	}
-	SetLife(new_life);
-
+	life = MIN(max_life, life + heal);
+	gui->SetLifeBar(this->life);
 	gui->HealingFlash();
 }
 
 void Obj_Tank::ReduceLife(int damage)
 {
-	//Don't reduce life if we're in god mode
-	if (!app->debug->god_mode)
+	//Don't reduce life if we're in god mode or we're already dead
+	if (!app->debug->god_mode
+		&& life > 0)
 	{
-		int new_life = life - damage;
+		life -= damage;
 		//Tank death
-		if (new_life <= 0)
+		if (life <= 0)
 		{
-			new_life = 0;
+			life = 0;
 			Die();
 		}
-		SetLife(new_life);
+		gui->SetLifeBar(this->life);
 		damaged_timer.Start();
 		damaged = true;
-
 		gui->DamageFlash();
-
 	}
 }
 
@@ -1225,7 +1212,7 @@ void Obj_Tank::ReviveTank(float dt)
 					//Finishes reviving the tank
 					if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
 					{
-						(*iter)->SetLife(revive_life);
+						(*iter)->IncreaseLife(revive_life);
 						reviving_tank[(*iter)->tank_num] = false;
 						app->audio->PlayFx(revive_sfx);
 						(*iter)->draw_revive_cycle_bar = false;
