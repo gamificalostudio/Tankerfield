@@ -197,6 +197,8 @@ SDL_Rect UI_Element::GetDrawRect()
 	fPoint mod_pos = { 0.f,0.f };
 	fPoint rect_pos;
 	SDL_Rect  ret;
+	float final_w = (float)sprite_rect.w * scale_w;
+	float final_h = (float)sprite_rect.h * scale_h;
 
 	if (is_in_game == true)
 	{
@@ -210,30 +212,30 @@ SDL_Rect UI_Element::GetDrawRect()
 	switch (pivot.pos_x)
 	{
 	case Pivot::X::CENTER:
-		rect_pos.x = mod_pos.x - (float)sprite_rect.w * .5f;
+		rect_pos.x = mod_pos.x - final_w * .5f;
 		break;
 	case Pivot::X::LEFT:
 		rect_pos.x = mod_pos.x;
 		break;
 	case Pivot::X::RIGHT:
-		rect_pos.x = mod_pos.x - (float)sprite_rect.w;
+		rect_pos.x = mod_pos.x - final_w;
 		break;
 	}
 
 	switch (pivot.pos_y)
 	{
 	case Pivot::Y::CENTER:
-		rect_pos.y = mod_pos.y - (float)sprite_rect.h * .5f;
+		rect_pos.y = mod_pos.y - final_h * .5f;
 		break;
 	case Pivot::Y::TOP:
 		rect_pos.y = mod_pos.y;
 		break;
 	case Pivot::Y::BOTTOM:
-		rect_pos.y = mod_pos.y - (float)sprite_rect.h;
+		rect_pos.y = mod_pos.y - final_h;
 		break;
 	}
 
-	ret = { (int)rect_pos.x, (int) rect_pos.y, sprite_rect.w, sprite_rect.h };
+	ret = { (int)rect_pos.x, (int) rect_pos.y, (int)final_w, (int)final_h };
 
 	return ret;
 }

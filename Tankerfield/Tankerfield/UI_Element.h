@@ -156,6 +156,9 @@ protected:
 	UI_Element           * element_parent = nullptr;
 	list<UI_Element*>      element_sons;
 
+	float				scale_w = 1.f;
+	float				scale_h = 1.f;
+
 	friend class M_UI;
 };
 
