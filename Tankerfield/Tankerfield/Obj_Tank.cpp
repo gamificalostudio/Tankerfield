@@ -250,7 +250,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HAPPY_HOUR_ITEM);
+	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
 	//Flamethrower
@@ -1289,7 +1289,10 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
-		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		if (item != ItemType::NO_TYPE)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		}
 		app->audio->PlayFx(pick_item_sound);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
