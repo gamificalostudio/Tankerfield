@@ -11,7 +11,7 @@
     <!-- ICON FRAGMENT-->
 
     <!-- TODO 4: Implement Control Panel Icon + Shortcut Icons. -->
-    <Icon Id="icon.ico" SourceFile="assets\iconTwitter.ico" />
+    <Icon Id="icon.ico" SourceFile="assets\icon_tankerfield.ico" />
     <Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
 
