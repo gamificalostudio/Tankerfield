@@ -195,7 +195,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::IN_WAVE:
 	{
-		if (number_of_enemies<=5)//Hardcode to go to next round when there are less enemies
+		if (app->objectmanager->GetNumberOfEnemies()<=5)//Hardcode to go to next round when there are less enemies
 		{
 			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}
@@ -397,35 +397,15 @@ void M_Scene::DebugPathfinding()
 	}
 }
 
-void M_Scene::ReduceNumEnemies()
-{
-	number_of_enemies -= 1;
-	if (number_of_enemies < 0)
-	{
-		number_of_enemies = 0;
-	}
-	//if (label_number_of_enemies != nullptr)
-	//	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
-
-}
-
 void M_Scene::CreateEnemyWave()
 {
-	number_of_enemies = 0;
-	number_of_enemies += Tesla_trooper_units;
-	number_of_enemies += Brute_units;
-
-	//number_of_enemies += Suicidal_units;
-
-	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
-
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_TeslaTrooper * enemy = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+			Obj_TeslaTrooper * enemy = (Obj_TeslaTrooper*)app->objectmanager->GetObjectFromPool(ObjectType::TESLA_TROOPER, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	
@@ -437,7 +417,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_Brute * enemy = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+			Obj_Brute * enemy = (Obj_Brute*)app->objectmanager->GetObjectFromPool(ObjectType::BRUTE, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	}
@@ -448,7 +428,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_RocketLauncher * enemy = (Obj_RocketLauncher*) app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
+			Obj_RocketLauncher * enemy = (Obj_RocketLauncher*) app->objectmanager->GetObjectFromPool(ObjectType::ROCKETLAUNCHER, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	}
@@ -459,7 +439,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_Suicidal * enemy = (Obj_Suicidal*)app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
+			Obj_Suicidal * enemy = (Obj_Suicidal*)app->objectmanager->GetObjectFromPool(ObjectType::SUICIDAL, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	}
@@ -475,7 +455,7 @@ void M_Scene::NewWave()
 	{
 		Brute_units += round - 1;
 		RocketLauncher_units += round - 1;
-		//Suicidal_units += round - 1;
+		Suicidal_units += round - 1;
 	}
 
 	CreateEnemyWave();

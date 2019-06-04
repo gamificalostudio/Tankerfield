@@ -5,7 +5,7 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="2" />
+    <mode value ="0" />
 
   </app>
 
@@ -19,6 +19,7 @@
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
+    <icon path="textures/ui/icon.png"/>
   </window>
 
   <animations_bank>animations.xml</animations_bank>

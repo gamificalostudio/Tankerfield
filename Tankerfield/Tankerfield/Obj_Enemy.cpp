@@ -500,6 +500,7 @@ bool Obj_Enemy::Start()
 
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+	ResetAllAnimations();
 	return true;
 }
 
@@ -518,8 +519,6 @@ void Obj_Enemy::DrawAttackRange(Camera * camera)
 
 bool Obj_Enemy::CleanUp()
 {
-	app->scene->ReduceNumEnemies();
-
 	to_remove = true;
 	return true;
 }
@@ -856,4 +855,17 @@ inline void Obj_Enemy::ReduceLife(Collider * collider)
 	{
 		app->audio->PlayFx(sfx_hit);
 	}
+}
+
+void Obj_Enemy::ResetAllAnimations()
+{
+	idle.Reset();
+	walk.Reset();
+	attack.Reset();
+	death.Reset();
+	burn.Reset();
+	dying_burn.Reset();
+	electro_dead.Reset();
+	portal_animation.Reset();
+	portal_close_anim.Reset();
 }

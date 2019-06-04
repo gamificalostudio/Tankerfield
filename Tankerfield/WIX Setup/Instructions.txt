@@ -1,0 +1,1 @@
+Just build the solution in Release. Then you will find the .msi setup inside the new created folder bin/.
