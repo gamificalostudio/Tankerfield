@@ -32,8 +32,10 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	title = app->ui->CreateLabel(fPoint(relative_pos.x + 295, relative_pos.y + 76), UI_LabelDef("Controller Settings", app->font->label_font_24), this);
 	title->SetParent(panel);
 	UI_TableDef table_def(3,2,5);
-
-	table = app->ui->CreateTable(fPoint(182,138), table_def,)
+	int width = 270, height = 75;
+	int widths[2] = { width,width};
+	int heights[3] = { height ,height ,height };
+	table = app->ui->CreateTable(fPoint(182, 138), table_def, widths, heights);
 }
 
 Controllers_Settings::~Controllers_Settings()
