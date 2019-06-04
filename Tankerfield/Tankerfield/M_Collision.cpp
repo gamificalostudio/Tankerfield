@@ -106,8 +106,6 @@ M_Collision::M_Collision()
 	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::ENEMY] = false;
 	trigger_matrix[(int)TAG::BULLET_ENEMY][(int)TAG::REWARD_BOX] = false;
 
-	trigger_matrix[(int)TAG::WATER][(int)TAG::PLAYER] = true;
-
 	// Set rigid body physics compatinility =============================================
 
 	physics_matrix[(int)TAG::PLAYER][(int)TAG::PLAYER]      = true;

@@ -38,6 +38,7 @@
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
 #include "M_PickManager.h"
+#include "Obj_Enemy.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -189,10 +190,13 @@ bool Obj_Tank::Start()
 	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
 	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
 
-	speed_colliding_with_building = 3.25f;
+	speed_colliding_with_building = 2.5f;
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
+
+	run_over_damage_multiplier = 31.f;
+	run_over_speed_reduction = 3.5f;
 
 	camera_player = app->render->CreateCamera(this);
 	app->ui->AddPlayerGUI(this);
@@ -715,6 +719,11 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
+float Obj_Tank::GetCurrSpeed()
+{
+	return velocity_map.ModuleF();
+}
+
 void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
 	switch (c1->GetTag())
@@ -766,11 +775,15 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		ReduceLife(c1->damage);
 	}break;
 
+	case TAG::ENEMY: {
+		//If you collide against an enemy, you run over it, dealing damage and slowing you
+		Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
+		enemy->ReduceLife(GetCurrSpeed() * run_over_damage_multiplier);
+		ReduceSpeed(run_over_speed_reduction);
+	}break;
+
 	//This two cases without a break are intentional. DO NOT CHANGE THIS.
 	case TAG::WATER: //Fallthrough
-		SetSpeed(0.f);
-		break;
-
 	case TAG::WALL:
 		SetSpeed(0.f);
 		break;
@@ -806,9 +819,6 @@ void Obj_Tank::OnTrigger(Collider * c1)
 	//This two cases without a break are intentional. DO NOT CHANGE THIS.
 	case TAG::WATER: //Fallthrough
 		SetSpeed(speed_colliding_with_building);
-		break;
-
-	case TAG::WALL:
 		SetSpeed(speed_colliding_with_building);
 		break;
 

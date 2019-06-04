@@ -53,6 +53,7 @@ public:
 
 	bool CleanUp() override;
 
+
 	void OnTrigger(Collider* c1);
 	void OnTriggerEnter(Collider* c1);
 	void OnTriggerExit(Collider* c1);
@@ -100,6 +101,7 @@ private:
 	float GetMaxSpeed();//Returns the maximum speed of the tank, tanking into account the bonuses it has
 	void ReduceSpeed(float reduction);
 	void SetSpeed(float speed);
+	float GetCurrSpeed();
 
 	//- Camera
 	void CameraMovement(float dt);
@@ -176,6 +178,10 @@ private:
 	UI_IG_Helper * tutorial_move			= nullptr;
 	int tutorial_move_time					= 0;//The time the tutorial move image will appear on screen (ms)
 	bool tutorial_move_pressed				= false;
+
+	//- Run over
+	float run_over_damage_multiplier		= 0.f;//The damage it does when it hits an enemy (it is multiplied by the current speed)
+	float run_over_speed_reduction			= 0.f;//The speed it loses every time it hits an enemy
 
 
 	//- Shooting
