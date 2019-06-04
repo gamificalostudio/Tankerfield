@@ -545,6 +545,13 @@ float Obj_Tank::GetMaxSpeed()
 	return base_max_speed + total_bonus;
 }
 
+void Obj_Tank::ReduceSpeed(float reduction)
+{
+	float curr_speed = velocity_map.ModuleF();
+	velocity_map.Normalize();
+	velocity_map *= MAX(0.f, curr_speed - reduction);
+}
+
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
 	if (!damaged)
@@ -710,8 +717,9 @@ bool Obj_Tank::CleanUp()
 
 void Obj_Tank::OnTriggerEnter(Collider * c1)
 {
-	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
+	switch (c1->GetTag())
 	{
+	case TAG::FRIENDLY_BULLET: {
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
 		if (bullet->player && Alive()) // he does not heal himself
 		{
@@ -727,8 +735,9 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		{
 			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
-	}
-	else if (c1->GetTag() == TAG::PORTAL)
+	} break;
+
+	case TAG::PORTAL:
 	{
 		if (this->time_between_portal_tp.ReadMs() >= 1000)
 		{
@@ -737,9 +746,9 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			instant_help->Teleport(this, portal);
 			this->time_between_portal_tp.Start();
 		}
-	}
-	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
-	{
+	}break;
+
+	case TAG::HEALING_AREA_SHOT: {
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
 		if (this->GetLife() < GetMaxLife())
 		{
@@ -747,14 +756,16 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			new_particle->tank = this;
 			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
-	}
-	else if (c1->GetTag() == TAG::ROAD)
-	{
+	}break;
+
+	case TAG::ROAD: {
 		AddMaxSpeedBuff(road_buff);
-	}
-	else if (c1->GetTag() == TAG::BULLET_ENEMY)
-	{
-		this->SetLife(GetLife() - c1->damage);
+	}break;
+
+	case TAG::BULLET_ENEMY: {
+		ReduceLife(c1->damage);
+	}break;
+
 	}
 }
 
