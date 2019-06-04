@@ -50,7 +50,7 @@ private:
 	UI_InteractiveGroup * global_navigation_panel = nullptr;
 	UI_InteractiveGroup * labels_panel = nullptr;
 
-	UI_Image* panel_background = nullptr;
+	UI_Image* panel_options = nullptr;
 
 	UI_Label* options_title = nullptr;
 

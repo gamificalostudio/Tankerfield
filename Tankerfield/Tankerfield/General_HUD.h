@@ -30,19 +30,10 @@ public:
 
 	void RoundFX();
 
-	void SetInputTextToNameLabel();
-
 	void FadeGameOverScreen(bool fade_on, int round = -1);
 
 	void FadeWinScreen(bool fade_on);
 
-	void FadeLeaderBoardScreen(bool fade_on);
-
-	bool UpdateLeaderBoard( std::string path, int round);
-
-	void FillLeaderBoardTable();
-
-	void UpdateLeaderBoardSquadName();
 
 	void MakeChildOfRoundElement(UI_Element* elem);//To be painted over the rhombus on the center, it needs to be a child of round element
 
@@ -79,24 +70,6 @@ private:
 	UI_Label* you_survived = nullptr;
 
 	UI_Quad*  background = nullptr;
-
-	// LeaderBoard Screen ----------------------------------
-
-	int current_rank = 0;
-
-	UI_Table* leader_board_table = nullptr;
-
-	UI_Label* current_name = nullptr;
-
-	UI_InputText* input_text = nullptr;
-
-	std::list<UI_Element*>leader_board_elements;
-
-	std::string doc_path;
-
-	pugi::xml_document leader_board_doc;
-
-	pugi::xml_node new_score_node;
 
 	// Split Screen ----------------------------------------
 

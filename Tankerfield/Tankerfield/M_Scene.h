@@ -17,7 +17,7 @@ class Object;
 class Player_GUI;
 class General_GUI;
 class UI_Label;
-
+class LeaderBoard;
 
 enum class GAME_STATE
 {
@@ -43,6 +43,8 @@ public:
 	int current_level				= 0;
 
 	General_GUI * general_gui		= nullptr;
+
+	LeaderBoard * leaderboard		= nullptr;
 
 	uint round		= 0u;
 
@@ -102,6 +104,7 @@ private:
 
 	iPoint path_tex_offset = { -30, 0 };
 	uint initial_num_enemies = 0u;
+
 private:
 
 	/* Game variables*/
