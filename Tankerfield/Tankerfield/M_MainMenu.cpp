@@ -75,10 +75,11 @@ bool M_MainMenu::Start()
 
 	menu_panel = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
 	menu_panel->SetElement(play_button, iPoint(0,0));
-	menu_panel->SetElement(options_menu_button, iPoint(0, 1));
-	menu_panel->SetElement(credits_menu_button, iPoint(0, 2));
-	menu_panel->SetElement(exit_button, iPoint(0, 3));
-	menu_panel->SetElement(leaderboard_button, iPoint(0, 4));
+	menu_panel->SetElement(leaderboard_button, iPoint(0, 1));
+	menu_panel->SetElement(options_menu_button, iPoint(0, 2));
+	menu_panel->SetElement(credits_menu_button, iPoint(0, 3));
+	menu_panel->SetElement(exit_button, iPoint(0, 4));
+
 
 	// Selection screen ------------------------
 	player_labels_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
@@ -290,14 +291,32 @@ bool M_MainMenu::Start()
 	credits_navigation->SetElement(aitor_github, iPoint(2, 4));
 	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 4));
 
-	// Leaderboard =========================================
+	
+	// Options =============================================
 
 	options = new Options_Menu();
+	
+	// Leaderboard =========================================
+
 	panel_leaderboard = app->ui->CreateImage(screen_center, UI_ImageDef({ 1075,395,606,771 }), this);
 	panel_leaderboard->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	leaderboard = new LeaderBoard( screen_center + fPoint( 0, 60),"data/leader_board.xml", true);
 	leaderboard->FillLeaderBoardTable();
+
+	return_from_leaderboard= app->ui->CreateButton({ screen.w*0.5f-230,225 }, UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
+	return_from_leaderboard->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+	leaderboard_label= app->ui->CreateLabel({ screen.w*0.5f, 290 }, UI_LabelDef("LeaderBoard", app->font->label_font_38, { 255,255,255,180 }));
+	leaderboard_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	leaderboard_label->SetParent(panel_leaderboard);
+
+	UI_InteractiveGroupDef leaderboard_def;
+	leaderboard_def.columns = 1;
+	leaderboard_def.rows = 1;
+
+	leaderboard_navigation = app->ui->CreateIntearctiveGroup(screen_center, leaderboard_def, this);
+	leaderboard_navigation->SetElement(return_from_leaderboard, iPoint(0, 0));
 
 	// Set values ==========================================
 
@@ -470,7 +489,7 @@ void M_MainMenu::InputSelect()
 			}
 		}
 	}
-	else if (menu_state == MENU_STATE::SELECTION || menu_state == MENU_STATE::OPTIONS||menu_state==MENU_STATE::CREDITS)
+	else if (menu_state == MENU_STATE::SELECTION || menu_state == MENU_STATE::OPTIONS||menu_state==MENU_STATE::CREDITS||menu_state==MENU_STATE::LEADERBOARD)
 	{
 		if (players[current_player].controller != -1 &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
@@ -530,12 +549,23 @@ void M_MainMenu::InputSelect()
 			}
 			else if (menu_element == leaderboard_button)
 			{
+				app->audio->PlayFx(button_select_sfx);
 				SetState(MENU_STATE::LEADERBOARD);
 			}
 		}
 		else if (menu_state == MENU_STATE::OPTIONS && app->ui->GetFocusedElement() != nullptr)
 		{
 			options->InputSelect();
+		}
+		else if (menu_state == MENU_STATE::LEADERBOARD && app->ui->GetFocusedElement() != nullptr)
+		{
+			UI_Element*  menu_element = leaderboard_navigation->GetFocusedElement();
+
+			if (menu_element == return_from_leaderboard)
+			{
+				app->audio->PlayFx(button_select_sfx);
+				SetState(MENU_STATE::INIT_MENU);
+			}
 		}
 		else if (menu_state == MENU_STATE::CREDITS && app->ui->GetFocusedElement() != nullptr)
 		{
@@ -751,8 +781,9 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		options->HideOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
-		panel_leaderboard->SetState(ELEMENT_STATE::HIDDEN);
+		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		leaderboard->HideLeaderBoard();
+		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		break;
 	}
 
@@ -794,8 +825,9 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		options->ShowOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
-		panel_leaderboard->SetState(ELEMENT_STATE::VISIBLE);
+		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		leaderboard->ShowLeaderBoard();
+		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		break;
 	}
 

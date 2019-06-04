@@ -179,6 +179,9 @@ private:
 
 	UI_Button* return_credits = nullptr;
 
+	UI_Button* return_from_leaderboard = nullptr;
+	UI_Label* leaderboard_label = nullptr;
+	UI_InteractiveGroup* leaderboard_navigation = nullptr;
 	// Sfx --------------------------------------------
 
 	uint button_enter_sfx = 0u;
