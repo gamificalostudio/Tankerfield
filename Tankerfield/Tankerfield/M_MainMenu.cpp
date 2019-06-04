@@ -9,6 +9,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "Options_Menu.h"
+#include "Controllers_Settings.h"
 
 #include "UI_Image.h"
 #include "UI_Button.h"
@@ -23,6 +24,7 @@ bool M_MainMenu::Start()
 	// Menus
 
 	options = new Options_Menu();
+	controllers_setting = new Controllers_Settings();
 
 	// Load assets ===========================================
 
@@ -292,7 +294,7 @@ bool M_MainMenu::Start()
 	// Set values ==========================================
 	app->ui->HideAllUI();
 	SetPlayerObjectsState(false);
-	SetState(MENU_STATE::INIT_MENU);
+	SetState(MENU_STATE::CONTROLLERS_SETTINGS);
 	SDL_ShowCursor(SDL_ENABLE);
 	
 	return true;
@@ -309,6 +311,16 @@ bool M_MainMenu::CleanUp()
 		players[i].tank = nullptr;
 	}
 
+	if (options)
+	{
+		delete options;
+		options = nullptr;
+	}
+	if (controllers_setting)
+	{
+		delete controllers_setting;
+		controllers_setting = nullptr;
+	}
 	return true;
 }
 
@@ -618,6 +630,11 @@ void M_MainMenu::InputSelect()
 				app->audio->PlayFx(button_select_sfx);
 			}
 		}
+
+		else if (menu_state == MENU_STATE::CONTROLLERS_SETTINGS && app->ui->GetFocusedElement() != nullptr)
+		{
+		controllers_setting->InputSelect();
+		}
 	}
 
 }
@@ -771,6 +788,11 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	case MENU_STATE::OPTIONS:
 
 		options->ShowOptionsMenu();
+		break;
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		{
+			controllers_setting->ShowControllerSettings();
+		}
 		break;
 	}
 

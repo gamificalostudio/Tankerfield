@@ -277,6 +277,7 @@ void Options_Menu::InputSelect()
 		}
 		else if (menu_element == individual_settings)
 		{
+			app->main_menu->SetState(MENU_STATE::CONTROLLERS_SETTINGS);
 			HideOptionsMenu();
 		}
 		else if (menu_element == return_button)

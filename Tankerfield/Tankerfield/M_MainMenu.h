@@ -18,6 +18,7 @@ class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
 class Options_Menu;
+class Controllers_Settings;
 
 class Obj_Tank_MainMenu;
 
@@ -28,6 +29,7 @@ enum class MENU_STATE
 	CREDITS,
 	SELECTION,
 	CHANGE_SCENE,
+	CONTROLLERS_SETTINGS,
 	NO_TYPE
 };
 
@@ -186,6 +188,8 @@ private:
 	// Menus ------------------------------------------
 
 	Options_Menu* options = nullptr;
+	Controllers_Settings* controllers_setting = nullptr;
+	
 };
 
 #endif // __j1SCENE_H__
