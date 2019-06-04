@@ -210,6 +210,8 @@ private:
 	uint shot_sound = 0u;
 	uint heal_sound = 0u;
 	uint laser_sound = 0u;
+	uint pick_item_sound = 0u;
+	uint pick_weapon_sound = 0u;
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot

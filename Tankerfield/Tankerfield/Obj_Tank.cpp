@@ -113,6 +113,8 @@ bool Obj_Tank::Start()
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string(), 100);
 	heal_sound = app->audio->LoadFx(tank_node.child("sounds").child("heal_shot").attribute("sound").as_string(), 100);
 	laser_sound = app->audio->LoadFx(tank_node.child("sounds").child("laser_shot").attribute("sound").as_string(), 100);
+	pick_item_sound = app->audio->LoadFx(tank_node.child("sounds").child("item_pick_up").attribute("sound").as_string(), 100);
+	pick_weapon_sound = app->audio->LoadFx(tank_node.child("sounds").child("weapon_pick_up").attribute("sound").as_string(), 100);
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -276,7 +278,7 @@ bool Obj_Tank::Start()
 	text_finished_charged = app->tex->Load("textures/Objects/tank/texture_charging_finished.png");
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
-	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+	charging_ready = app->audio->LoadFx("audio/Fx/tank/max_charged.wav");
 
 	this->time_between_portal_tp.Start();
 
@@ -1290,6 +1292,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
 		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		app->audio->PlayFx(pick_item_sound);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
 		
@@ -1300,6 +1303,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 		{
 			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
 		}
+		app->audio->PlayFx(pick_weapon_sound);
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 		gui->CreateParticleToWeaponFrame();
 	}
