@@ -5,7 +5,7 @@
 class Controllers_Settings :public UI_Listener
 {
 public:
-	Controllers_Settings();
+	Controllers_Settings(fPoint relative_pos);
 	~Controllers_Settings();
 
 	void ShowControllerSettings();
@@ -15,10 +15,13 @@ public:
 	void InputSelect();
 
 private:
+	UI_InteractiveGroup* InteractiveGroup = nullptr;
+
 	UI_Element* Canvas = nullptr;
+	
 	UI_Image* panel = nullptr;
 	UI_Button* return_button = nullptr;
-	UI_InteractiveGroup* InteractiveGroup = nullptr;
+	UI_Label* title = nullptr;
 
 
 };

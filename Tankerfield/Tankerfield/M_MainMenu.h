@@ -188,7 +188,7 @@ private:
 	// Menus ------------------------------------------
 
 	Options_Menu* options = nullptr;
-	Controllers_Settings* controllers_setting = nullptr;
+	Controllers_Settings* controllers_setting[4] = {nullptr, nullptr, nullptr, nullptr};
 	
 };
 

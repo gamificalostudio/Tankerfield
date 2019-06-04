@@ -21,10 +21,19 @@
 
 bool M_MainMenu::Start()
 {
+	//Create camera
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
+	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
+
+
 	// Menus
 
 	options = new Options_Menu();
-	controllers_setting = new Controllers_Settings();
+	controllers_setting[0] = new Controllers_Settings(fPoint(0,0));
+	controllers_setting[1] = new Controllers_Settings(fPoint(screen.w*0.5f, 0));
+	controllers_setting[2] = new Controllers_Settings(fPoint(0, screen.h*0.5f));
+	controllers_setting[3] = new Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f));
 
 	// Load assets ===========================================
 
@@ -39,9 +48,7 @@ bool M_MainMenu::Start()
 	
 	// Create UI Elements ====================================
 
-	fRect screen = app->win->GetWindowRect();
-	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-	camera = app->render->CreateCamera( iPoint(0,0), (SDL_Rect)screen);
+
 
 	// Controll helper ------------------------
 
@@ -316,11 +323,15 @@ bool M_MainMenu::CleanUp()
 		delete options;
 		options = nullptr;
 	}
-	if (controllers_setting)
+	for (uint i = 0; i < 0; ++i)
 	{
-		delete controllers_setting;
-		controllers_setting = nullptr;
+		if (controllers_setting[i])
+		{
+			delete controllers_setting[i];
+			controllers_setting[i] = nullptr;
+		}
 	}
+
 	return true;
 }
 
@@ -633,7 +644,11 @@ void M_MainMenu::InputSelect()
 
 		else if (menu_state == MENU_STATE::CONTROLLERS_SETTINGS && app->ui->GetFocusedElement() != nullptr)
 		{
-		controllers_setting->InputSelect();
+		for (uint i = 0; i < 4; ++i)
+		{
+			controllers_setting[i]->InputSelect();
+		}
+		
 		}
 	}
 
@@ -791,7 +806,10 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 	case MENU_STATE::CONTROLLERS_SETTINGS:
 		{
-			controllers_setting->ShowControllerSettings();
+			for (uint i = 0; i < 4; ++i)
+			{
+				controllers_setting[i]->ShowControllerSettings();
+			}
 		}
 		break;
 	}
