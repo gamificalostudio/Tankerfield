@@ -15,7 +15,10 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 
 	panel = app->ui->CreateImage(fPoint(relative_pos.x + 20, relative_pos.y + 20), UI_ImageDef({ 10,1324,1651,881 }));
 	panel->SetParent(Canvas);
-
+	SDL_Rect draw_rect = { (int)(relative_pos.x) + 20, (int)(relative_pos.y + 20), 920, 499 };
+	panel->SetDrawRect(draw_rect);
+	//panel->section_height = 10;
+	//panel->section_width = 10;
 	return_button = app->ui->CreateButton(fPoint(relative_pos.x + 59, relative_pos.y + 426), UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 	return_button->SetParent(panel);
 
@@ -28,6 +31,7 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	title = app->ui->CreateLabel(fPoint(relative_pos.x + 295, relative_pos.y + 76), UI_LabelDef("Controller Settings", app->font->label_font_24), this);
 	title->SetParent(panel);
 
+	//table = app->ui->CreateTable()
 }
 
 Controllers_Settings::~Controllers_Settings()

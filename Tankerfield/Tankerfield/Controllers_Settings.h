@@ -22,6 +22,7 @@ private:
 	UI_Image* panel = nullptr;
 	UI_Button* return_button = nullptr;
 	UI_Label* title = nullptr;
+	UI_Table* table = nullptr;
 
 
 };
