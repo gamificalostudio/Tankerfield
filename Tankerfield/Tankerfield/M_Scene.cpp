@@ -24,6 +24,7 @@
 #include "M_MainMenu.h"
 #include "M_PickManager.h"
 #include "M_RewardZoneManager.h"
+#include "LeaderBoard.h"
 
 #include "UI_Label.h"
 
@@ -126,8 +127,6 @@ bool M_Scene::Start()
 		Obj_RewardBox* box = app->pick_manager->CreateRewardBox(app->objectmanager->obj_tanks[i]->pos_map + fPoint{ 2.f, -2.f });
 		box->SetTypeBox(PICKUP_TYPE::WEAPON);
 	}
-	
-	general_gui = DBG_NEW General_GUI();
 
 	round = 0u;
 	game_state = GAME_STATE::ENTER_IN_WAVE;
@@ -138,11 +137,11 @@ bool M_Scene::Start()
 	Suicidal_units = 0u;
 	RocketLauncher_units = 0u;
 
-	//app->objectmanager->CreateObject(ObjectType::SUICIDAL, app->objectmanager->obj_tanks[0]->pos_map + fPoint(4.0f, 4.0f));
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
-	//UI_LabelDef info_label("number of enemies: 0", app->font->default_font, {255,0,0,255});
-	//label_number_of_enemies = app->ui->CreateLabel({ 10,10 }, info_label, nullptr);
-	//label_number_of_enemies->SetState(ELEMENT_STATE::HIDDEN);
+	general_gui = DBG_NEW General_GUI();
+	leaderboard = DBG_NEW LeaderBoard(screen_center,"data/leader_board.xml",false);
 
 	return true;
 }
@@ -174,9 +173,9 @@ bool M_Scene::Update(float dt)
 
 	for (int i = 0; i < MAX_PLAYERS && input_accept == false; ++i) {
 
-		Controller** controller = app->objectmanager->obj_tanks[i]->GetController();
+		int controller = app->objectmanager->obj_tanks[i]->GetController();
 
-		if (controller != nullptr && app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (controller != -1 && app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			input_accept = true;
 		}
@@ -196,7 +195,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::IN_WAVE:
 	{
-		if (number_of_enemies<=5)//Hardcode to go to next round when there are less enemies
+		if (app->objectmanager->GetNumberOfEnemies()<=5)//Hardcode to go to next round when there are less enemies
 		{
 			game_state = GAME_STATE::EXIT_OF_WAVE;
 		}
@@ -245,24 +244,24 @@ bool M_Scene::Update(float dt)
 
 	case GAME_STATE::LEADER_BOARD:
 
-		if (general_gui->UpdateLeaderBoard("data/leader_board.xml", round) == true)
+		if (leaderboard->UpdateLeaderBoard(round) == true)
 		{
-			general_gui->FillLeaderBoardTable();
+			leaderboard->FillLeaderBoardTable();
 		}
 		
 		general_gui->FadeGameOverScreen(false);
-		general_gui->FadeLeaderBoardScreen(true);
+		leaderboard->FadeLeaderBoardScreen(true);
 		game_state = GAME_STATE::WAITING_LEADERBOARD;
 
 		break;
 
 	case GAME_STATE::WAITING_LEADERBOARD:
 
-		general_gui->SetInputTextToNameLabel();
+		leaderboard->SetInputTextToNameLabel();
 
 		if (input_accept == true)
 		{
-			general_gui->UpdateLeaderBoardSquadName();
+			leaderboard->UpdateLeaderBoardSquadName();
 			app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f);
 		}
 	}
@@ -315,6 +314,9 @@ bool M_Scene::CleanUp()
 	{
 		(*i)->gui = nullptr;
 	}
+
+	delete(leaderboard);
+	leaderboard = nullptr;
 
 	return true;
 }
@@ -395,35 +397,15 @@ void M_Scene::DebugPathfinding()
 	}
 }
 
-void M_Scene::ReduceNumEnemies()
-{
-	number_of_enemies -= 1;
-	if (number_of_enemies < 0)
-	{
-		number_of_enemies = 0;
-	}
-	//if (label_number_of_enemies != nullptr)
-	//	label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));
-
-}
-
 void M_Scene::CreateEnemyWave()
 {
-	number_of_enemies = 0;
-	number_of_enemies += Tesla_trooper_units;
-	number_of_enemies += Brute_units;
-
-	//number_of_enemies += Suicidal_units;
-
-	/*label_number_of_enemies->SetText("number of enemies:" + std::to_string(number_of_enemies));*/
-
 	for (int i = 0; i < Tesla_trooper_units; i++)
 	{
 		if (app->map->data.spawners_position_enemy.size() != 0)
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_TeslaTrooper * enemy = (Obj_TeslaTrooper*)app->objectmanager->CreateObject(ObjectType::TESLA_TROOPER, pos);
+			Obj_TeslaTrooper * enemy = (Obj_TeslaTrooper*)app->objectmanager->GetObjectFromPool(ObjectType::TESLA_TROOPER, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	
@@ -435,7 +417,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_Brute * enemy = (Obj_Brute*)app->objectmanager->CreateObject(ObjectType::BRUTE, pos);
+			Obj_Brute * enemy = (Obj_Brute*)app->objectmanager->GetObjectFromPool(ObjectType::BRUTE, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	}
@@ -446,7 +428,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_RocketLauncher * enemy = (Obj_RocketLauncher*) app->objectmanager->CreateObject(ObjectType::ROCKETLAUNCHER, pos);
+			Obj_RocketLauncher * enemy = (Obj_RocketLauncher*) app->objectmanager->GetObjectFromPool(ObjectType::ROCKETLAUNCHER, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	}
@@ -457,7 +439,7 @@ void M_Scene::CreateEnemyWave()
 		{
 			uint spawner_random = rand() % app->map->data.spawners_position_enemy.size();
 			fPoint pos = app->map->data.spawners_position_enemy.at(spawner_random)->pos;
-			Obj_Suicidal * enemy = (Obj_Suicidal*)app->objectmanager->CreateObject(ObjectType::SUICIDAL, pos);
+			Obj_Suicidal * enemy = (Obj_Suicidal*)app->objectmanager->GetObjectFromPool(ObjectType::SUICIDAL, pos);
 			enemy->SetStats(app->scene->round);
 		}
 	}
@@ -473,7 +455,7 @@ void M_Scene::NewWave()
 	{
 		Brute_units += round - 1;
 		RocketLauncher_units += round - 1;
-		//Suicidal_units += round - 1;
+		Suicidal_units += round - 1;
 	}
 
 	CreateEnemyWave();

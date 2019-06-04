@@ -18,14 +18,19 @@
 
 #include "UI_Image.h"
 #include "UI_InGameElement.h"
+#include "M_Map.h"
 #include "UI_Label.h"
 #include "UI_Bar.h"
 #include "Camera.h"
 
 Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 {
-	int tank_num = player->GetTankNum();
+	// Assets ===============================================================
 
+	flash_texture = app->tex->Load("textures/ui/flash.png");
+
+	int tank_num = player->GetTankNum();
+	 
 	viewport.create(
 		player_object->camera_player->screen_section.x,
 		player_object->camera_player->screen_section.y,
@@ -49,6 +54,12 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	// HUD  Elements ========================================================
 
 	UI_ImageDef image_def;
+	image_def.sprite_section = { 0, 0, 1280, 720 };
+
+	flash = app->ui->CreateImage( fPoint( viewport.GetLeft() ,viewport.GetTop()), image_def);
+	flash->SetTexture(flash_texture);
+	flash->SetDrawRect((SDL_Rect)viewport);
+	flash->alpha = 0.f;
 
 	image_def.sprite_section = { 80, 10, 65, 65 };        
 
@@ -171,7 +182,6 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		weapon_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 
-
 	Fade_GUI(true);
 }
 
@@ -196,14 +206,63 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	item_icon			->SetFX(type, 3.f);
 	charged_shot_bar	->SetFX(type, 3.f);
 	life_bar			->SetFX(type, 3.f);
-	
+}
+
+void Player_GUI::DamageFlash()
+{
+	flash->color_mod = { 255, 0 , 0 ,255 };
+	flash->SetFX( UI_Fade_FX::FX_TYPE::INTERMITTENT,0.5F, 1);
+}
+
+void Player_GUI::HealingFlash()
+{
+	flash->color_mod = { 0, 255 , 0 ,255 };
+	flash->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.8F, 1);
 }
 
 
 void Player_GUI::Update(float dt)
 {
-	// Update charged shot value ========================================
+	// Update charged shot value ======================================== ???
+	// Check if picked weapon and update the GUI if true
+	
+	for (std::list<UI_Image*>::const_iterator item = this->particles_weapon_frame_list.begin(); item != this->particles_weapon_frame_list.end();)
+	{
+		fPoint w_offset = { 0, 0 };
+		if(this->player->GetTankNum() == 0 || this->player->GetTankNum() == 1)
+			w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
+		else if(this->player->GetTankNum() == 2 || this->player->GetTankNum() == 3)
+			w_offset = { 22.0f, 20.0f };
 
+		fPoint w_pos = GetWeaponFramePos();
+		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 3.25f * dt));
+		if ((iPoint)(*item)->position == (iPoint)w_pos - (iPoint)w_offset)
+		{
+			(*item)->Destroy();
+			item = particles_weapon_frame_list.erase(item);
+		}
+		else
+		{
+			++item;
+		}
+	}
+
+	for (std::list<UI_Image*>::const_iterator item = this->particles_item_frame_list.begin(); item != this->particles_item_frame_list.end();)
+	{
+		fPoint i_offset = { 0.0f, 0.0f }; // TODO: Get Item rect to avoid these magic numbers
+
+		fPoint i_pos = GetItemFramePos();
+		(*item)->SetPos(lerp((*item)->position, i_pos - i_offset, 3.25f * dt));
+		if ((iPoint)(*item)->position == (iPoint)i_pos - (iPoint)i_offset)
+		{
+			(*item)->Destroy();
+			item = particles_item_frame_list.erase(item);
+		}
+		else
+		{
+			++item;
+		}
+	}
 }
 
 void Player_GUI::SetLifeBar(float life)
@@ -297,6 +356,7 @@ void Player_GUI::SetHelper()
 
 }
 
+
 void Player_GUI::AddButtonHelper( const CONTROLLER_BUTTON button_type)
 {
 	app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)button_type]));
@@ -308,21 +368,40 @@ void Player_GUI::AddTextHelper(const std::string text)
 	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->font->font_open_sants_bold_12));
 }
 
+void Player_GUI::CreateParticleToWeaponFrame()
+{
+	UI_ImageDef anim_image_def;
+	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
+	
+	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
+	particle_image->SetState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	particle_image->alpha = 175.0f;
+	this->particles_weapon_frame_list.push_back(particle_image);
+}
+
+void Player_GUI::CreateParticleToItemFrame()
+{
+	UI_ImageDef anim_image_def;
+	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
+
+	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
+	particle_image->SetState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	particle_image->alpha = 175.0f;
+	this->particles_item_frame_list.push_back(particle_image);
+}
+
+fPoint Player_GUI::GetWeaponFramePos() const
+{
+	return this->weapon_icon->position;
+}
+
+fPoint Player_GUI::GetItemFramePos() const
+{
+	return this->item_icon->position;
+}
+
 Player_GUI::~Player_GUI()
 {
 }
-
-
-//
-//if (type == TYPE::PLAYER_1 || type == TYPE::PLAYER_2)
-//{
-//	image_def.sprite_section = { 10, 70, 50, 20 };
-//	ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetTop() + 50.f + margin.y }, image_def);
-//	ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::TOP);
-//}
-//else if (type == TYPE::PLAYER_3 || type == TYPE::PLAYER_4)
-//{
-//	image_def.sprite_section = { 10, 100, 50, 20 };
-//	ammo_image = app->ui->CreateImage({ viewport.GetRight() - 24.f - margin.x , viewport.GetBottom() - 50.f - margin.y }, image_def);
-//	ammo_image->SetPivot(Pivot::POS_X::RIGHT, Pivot::POS_Y::BOTTOM);
-//}

@@ -817,7 +817,7 @@ iPoint M_Map::ScreenToMapI(int x, int y) const
 	}
 	else
 	{
-		LOG("Unknown map type");
+		//LOG("Unknown map type");
 		ret.x = x; ret.y = y;
 	}
 	return ret;

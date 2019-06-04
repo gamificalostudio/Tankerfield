@@ -22,8 +22,17 @@ bool Bullet_Basic::Start()
 
 	shot_sound = app->audio->LoadFx("audio/Fx/tank/weapons/basic_shot/machine_gun.wav",10);
 	app->audio->PlayFx(shot_sound);
-	coll = app->collision->AddCollider(pos_map, .25f, .25f, TAG::BULLET, BODY_TYPE::DYNAMIC, 0.f, this);
-	coll->SetObjOffset({ -0.25f*0.5f, -0.25f*0.5f });
+	if (coll)
+	{
+		coll->SetIsTrigger(true);
+	}
+	else
+	{
+		coll = app->collision->AddCollider(pos_map, .25f, .25f, TAG::BULLET, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->SetObjOffset({ -0.25f*0.5f, -0.25f*0.5f });
+	}
+
+	bullet_life_ms_timer.Start();
 
 	return true;
 }

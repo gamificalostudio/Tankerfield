@@ -50,7 +50,7 @@ private:
 	UI_InteractiveGroup * global_navigation_panel = nullptr;
 	UI_InteractiveGroup * labels_panel = nullptr;
 
-	UI_Image* panel_background = nullptr;
+	UI_Image* panel_options = nullptr;
 
 	UI_Label* options_title = nullptr;
 
@@ -77,6 +77,8 @@ private:
 	UI_Label* sfx_volume_value = nullptr;
 
 	UI_Button* individual_settings = nullptr;
+
+	UI_Button* return_button = nullptr;
 
 	// Sfx --------------------------------------------
 

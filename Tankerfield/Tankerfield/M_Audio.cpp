@@ -55,7 +55,7 @@ bool M_Audio::Start()
 	}
 	else
 	{
-		sfx_volume = 60;
+		sfx_volume = 25;
 		music_volume = 75;
 
 		Mix_VolumeMusic(music_volume);
@@ -106,7 +106,7 @@ bool M_Audio::PlayMusic(const char* path, float fade_time)
 	{
 		if (fade_time > 0.0f)
 		{
-			Mix_FadeOutMusic(int(fade_time * 1000.0f));
+			Mix_FadeOutMusic(0);
 		}
 		else
 		{

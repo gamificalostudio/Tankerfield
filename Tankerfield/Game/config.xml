@@ -19,6 +19,7 @@
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
+    <icon path="textures/ui/icon.png"/>
   </window>
 
   <animations_bank>animations.xml</animations_bank>
@@ -79,7 +80,7 @@
 
   
   <pick_manager>
-    <percentage_spawn_item_from_enemy value="5"/>
+    <percentage_spawn_item_from_enemy value="3"/>
     <percentage_spawn_reward_box value="80"/>
   </pick_manager>
 
@@ -120,13 +121,6 @@
     </oil>
     
     <tank>
-      <speed value ="1"/>
-      <recoil>
-        <velocity_recoil_decay value="900"/>
-        <velocity_recoil_speed_max value="25"/>
-        <velocity_recoil_speed_max_charged value="50"/>
-      </recoil>
-
       <electro_shot>
         <collider_size value="1"/> <!--Width and height in tiles-->
         <electro_shot_sound>audio/Fx/tank/weapons/electric_shot/no_enemies_attack.wav</electro_shot_sound>
@@ -212,6 +206,8 @@
         <basic_shot sound ="audio/Fx/tank/weapons/tank_basic_shot.wav"/>
         <laser_shot sound ="audio/Fx/tank/weapons/tank_laser_shot.wav"/>
         <heal_shot sound ="audio/Fx/tank/weapons/tank_heal_shot.wav"/>
+        <item_pick_up sound ="audio/Fx/objects/pick_up_item.wav"/>
+        <weapon_pick_up sound ="audio/Fx/objects/pick_up_weapon.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">

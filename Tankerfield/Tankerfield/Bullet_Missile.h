@@ -19,6 +19,7 @@ public:
 
 public:
 	int explosion_damage = 0;
+	uint shot_sound = 0u;
 };
 
 #endif

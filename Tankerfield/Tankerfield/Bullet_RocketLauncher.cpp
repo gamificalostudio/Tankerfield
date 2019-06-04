@@ -17,7 +17,6 @@ Bullet_RocketLauncher::~Bullet_RocketLauncher()
 }
 
 
-
 bool Bullet_RocketLauncher::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet_rocketlauncher");
@@ -29,13 +28,18 @@ bool Bullet_RocketLauncher::Start()
 	curr_tex = tex;
 
 	draw_offset = { 35, 14 };
-
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
-	coll->is_sensor = true;
-
-	coll->SetObjOffset({ -0.25f, -0.25f });
+	if (coll)
+	{
+		coll->SetIsTrigger(true);
+	}
+	else
+	{
+		coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->is_sensor = true;
+		coll->SetObjOffset({ -0.25f, -0.25f });
+	}
 
 	attack_damage = app->objectmanager->rocket_launcher_info.attack_damage;
-
+	bullet_life_ms_timer.Start();
 	return true;
 }
