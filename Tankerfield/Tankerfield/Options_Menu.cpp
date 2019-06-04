@@ -38,18 +38,18 @@ Options_Menu::Options_Menu()
 
 	// Global Options Menu
 
-	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
-	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	panel_options = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
+	panel_options->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	options_title = app->ui->CreateLabel({ screen.w *0.5f, 250 }, UI_LabelDef("Options", app->font->label_font_38, { 255,255,255,180 }));
 	options_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	options_title->SetParent(panel_background);
+	options_title->SetParent(panel_options);
 
 		// Fullscreen Options
 
 	fullscreen_label = app->ui->CreateLabel({ screen.w*0.5f-100,325 }, UI_LabelDef("Fullscreen", app->font->label_font_38, { 255,255,255,180 }));
 	fullscreen_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	fullscreen_label->SetParent(panel_background);
+	fullscreen_label->SetParent(panel_options);
 
 	if (app->win->fullscreen == true) 
 	{
@@ -62,7 +62,7 @@ Options_Menu::Options_Menu()
 		fullscreen_value_info = false;
 	}
 	fullscreen_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	fullscreen_value->SetParent(panel_background);
+	fullscreen_value->SetParent(panel_options);
 
 	fullscreen_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 325 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	fullscreen_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -74,7 +74,7 @@ Options_Menu::Options_Menu()
 
 	master_volume_label=app->ui->CreateLabel({ screen.w * 0.5f -100, 425 }, UI_LabelDef("Master Volume", app->font->label_font_38, { 255,255,255,180 }));
 	master_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	master_volume_label->SetParent(panel_background);
+	master_volume_label->SetParent(panel_options);
 
 	master_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 425 },UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	master_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -86,13 +86,13 @@ Options_Menu::Options_Menu()
 
 	master_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 425 }, UI_LabelDef(master_multiplier_string,app->font->label_font_38), this);
 	master_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	master_volume_value->SetParent(panel_background);
+	master_volume_value->SetParent(panel_options);
 
 		//Music Volume
 
 	music_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 525 }, UI_LabelDef("Music Volume", app->font->label_font_38, { 255,255,255,180 }));
 	music_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	music_volume_label->SetParent(panel_background);
+	music_volume_label->SetParent(panel_options);
 
 	music_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 525 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	music_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -104,13 +104,13 @@ Options_Menu::Options_Menu()
 
 	music_volume_value = app->ui->CreateLabel({ screen.w* 0.5f + 110, 525 }, UI_LabelDef(music_volume_string, app->font->label_font_38), this);
 	music_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	music_volume_value->SetParent(panel_background);
+	music_volume_value->SetParent(panel_options);
 
 		// Sfx Volume
 
 	sfx_volume_label = app->ui->CreateLabel({ screen.w * 0.5f - 100, 625 }, UI_LabelDef("SFX Volume", app->font->label_font_38, { 255,255,255,180 }));
 	sfx_volume_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	sfx_volume_label->SetParent(panel_background);
+	sfx_volume_label->SetParent(panel_options);
 
 	sfx_volume_L = app->ui->CreateButton({ screen.w * 0.5f + 50, 625 }, UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
 	sfx_volume_L->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -122,7 +122,7 @@ Options_Menu::Options_Menu()
 
 	sfx_volume_value = app->ui->CreateLabel({ screen.w * 0.5f + 110, 625 }, UI_LabelDef(sfx_volume_string, app->font->label_font_38), this);
 	sfx_volume_value->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	sfx_volume_value->SetParent(panel_background);
+	sfx_volume_value->SetParent(panel_options);
 
 		// Else
 
@@ -171,13 +171,13 @@ void Options_Menu::ShowOptionsMenu()
 	control_helper_label->SetText("Accept");
 	control_helper_image->SetPos(screen_center + fPoint(-30, 450));
 
-	panel_background->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+	panel_options->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
 
 void Options_Menu::HideOptionsMenu()
 {
-	panel_background->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+	panel_options->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 

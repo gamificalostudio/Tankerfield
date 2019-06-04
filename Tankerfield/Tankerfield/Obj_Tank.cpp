@@ -113,6 +113,8 @@ bool Obj_Tank::Start()
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string(), 100);
 	heal_sound = app->audio->LoadFx(tank_node.child("sounds").child("heal_shot").attribute("sound").as_string(), 100);
 	laser_sound = app->audio->LoadFx(tank_node.child("sounds").child("laser_shot").attribute("sound").as_string(), 100);
+	pick_item_sound = app->audio->LoadFx(tank_node.child("sounds").child("item_pick_up").attribute("sound").as_string(), 100);
+	pick_weapon_sound = app->audio->LoadFx(tank_node.child("sounds").child("weapon_pick_up").attribute("sound").as_string(), 100);
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -220,8 +222,7 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	max_life = 100;
-	SetLife(100);
+	max_life = life = 100;
 
 	turr_scale = 1.2f;
 
@@ -249,7 +250,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HAPPY_HOUR_ITEM);
+	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
 	//Flamethrower
@@ -276,7 +277,7 @@ bool Obj_Tank::Start()
 	text_finished_charged = app->tex->Load("textures/Objects/tank/texture_charging_finished.png");
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
-	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+	charging_ready = app->audio->LoadFx("audio/Fx/tank/max_charged.wav");
 
 	this->time_between_portal_tp.Start();
 
@@ -543,6 +544,13 @@ float Obj_Tank::GetMaxSpeed()
 	return base_max_speed + total_bonus;
 }
 
+void Obj_Tank::ReduceSpeed(float reduction)
+{
+	float curr_speed = velocity_map.ModuleF();
+	velocity_map.Normalize();
+	velocity_map *= MAX(0.f, curr_speed - reduction);
+}
+
 bool Obj_Tank::Draw(float dt, Camera * camera)
 {
 	if (!damaged)
@@ -706,10 +714,11 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-void Obj_Tank::OnTriggerEnter(Collider * c1)
+void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 {
-	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
+	switch (c1->GetTag())
 	{
+	case TAG::FRIENDLY_BULLET: {
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
 		if (bullet->player && Alive()) // he does not heal himself
 		{
@@ -717,7 +726,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
+				IncreaseLife(bullet->player->weapon_info.shot1.bullet_healing);
 				app->audio->PlayFx(heal_sound);
 			}
 		}
@@ -725,8 +734,9 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		{
 			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
-	}
-	else if (c1->GetTag() == TAG::PORTAL)
+	} break;
+
+	case TAG::PORTAL:
 	{
 		if (this->time_between_portal_tp.ReadMs() >= 1000)
 		{
@@ -735,28 +745,30 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			instant_help->Teleport(this, portal);
 			this->time_between_portal_tp.Start();
 		}
-	}
-	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
-	{
+	}break;
+
+	case TAG::HEALING_AREA_SHOT: {
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
 		if (this->GetLife() < GetMaxLife())
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
-			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
+			IncreaseLife(area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
-	}
-	else if (c1->GetTag() == TAG::ROAD)
-	{
+	}break;
+
+	case TAG::ROAD: {
 		AddMaxSpeedBuff(road_buff);
-	}
-	else if (c1->GetTag() == TAG::BULLET_ENEMY)
-	{
-		this->SetLife(GetLife() - c1->damage);
+	}break;
+
+	case TAG::BULLET_ENEMY: {
+		ReduceLife(c1->damage);
+	}break;
+
 	}
 }
 
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTrigger(Collider * c1, float dt)
 {
 	if (c1->GetTag() == TAG::PICK_UP)
 	{
@@ -794,42 +806,30 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	}
 }
 
-void Obj_Tank::SetLife(int life)
-{
-	this->life = life;
-	gui->SetLifeBar(this->life);
-}
-
 void Obj_Tank::IncreaseLife(int heal)
 {
-	int new_life = life + heal;
-	if (new_life > GetMaxLife())
-	{
-		new_life = GetMaxLife();
-	}
-	SetLife(new_life);
-
+	life = MIN(max_life, life + heal);
+	gui->SetLifeBar(this->life);
 	gui->HealingFlash();
 }
 
 void Obj_Tank::ReduceLife(int damage)
 {
-	//Don't reduce life if we're in god mode
-	if (!app->debug->god_mode)
+	//Don't reduce life if we're in god mode or we're already dead
+	if (!app->debug->god_mode
+		&& life > 0)
 	{
-		int new_life = life - damage;
+		life -= damage;
 		//Tank death
-		if (new_life <= 0)
+		if (life <= 0)
 		{
-			new_life = 0;
+			life = 0;
 			Die();
 		}
-		SetLife(new_life);
+		gui->SetLifeBar(this->life);
 		damaged_timer.Start();
 		damaged = true;
-
 		gui->DamageFlash();
-
 	}
 }
 
@@ -1181,45 +1181,52 @@ void Obj_Tank::ReviveTank(float dt)
 		iter != app->objectmanager->obj_tanks.end();
 		++iter)
 	{
-		if (this != (*iter)
-			&& pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
-			&& !(*iter)->Alive()
-			&& Alive())
+		if (this != (*iter))
 		{
-			if (!can_revive)
+			if (pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
+				&& !(*iter)->Alive()
+				&& Alive())
 			{
-				can_revive = true;
-			}
+				if (!can_revive)
+				{
+					can_revive = true;
+				}
 
-			//Presses the button
-			if (!reviving_tank[(*iter)->tank_num] && PressInteract())
-			{
-				reviving_tank[(*iter)->tank_num] = true;
-				revive_timer[(*iter)->tank_num].Start();
-				(*iter)->cycle_bar_anim.Reset();
-				(*iter)->draw_revive_cycle_bar = true;
-			}
-			//Releases the button
-			else if (ReleaseInteract())
-			{
-				reviving_tank[(*iter)->tank_num] = false;
-				(*iter)->draw_revive_cycle_bar = false;
-				(*iter)->cycle_bar_anim.Reset();
-			}
+				//Presses the button
+				if (!reviving_tank[(*iter)->tank_num] && PressInteract())
+				{
 
-			//Finishes reviving the tank
-			if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
-			{
-				(*iter)->SetLife(revive_life);
-				reviving_tank[(*iter)->tank_num] = false;
-				app->audio->PlayFx(revive_sfx);
-				(*iter)->draw_revive_cycle_bar = false;
-				(*iter)->cycle_bar_anim.Reset();
+					reviving_tank[(*iter)->tank_num] = true;
+					revive_timer[(*iter)->tank_num].Start();
+					(*iter)->cycle_bar_anim.Reset();
+					(*iter)->draw_revive_cycle_bar = true;
+				}
+				//Releases the button
+				else if (ReleaseInteract())
+				{
+					reviving_tank[(*iter)->tank_num] = false;
+					(*iter)->draw_revive_cycle_bar = false;
+					(*iter)->cycle_bar_anim.Reset();
+				}
+
+				//Finishes reviving the tank
+				if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
+				{
+					(*iter)->IncreaseLife(revive_life);
+					reviving_tank[(*iter)->tank_num] = false;
+					app->audio->PlayFx(revive_sfx);
+					(*iter)->draw_revive_cycle_bar = false;
+					(*iter)->cycle_bar_anim.Reset();
+				}
 			}
-		}
-		else
-		{
-			reviving_tank[(*iter)->tank_num] = false;
+			else
+			{
+				if (reviving_tank[(*iter)->tank_num])
+				{
+					reviving_tank[(*iter)->tank_num] = false;
+					(*iter)->draw_revive_cycle_bar = false;
+				}
+			}
 		}
 	}
 
@@ -1282,7 +1289,11 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
-		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		if (item != ItemType::NO_TYPE)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		}
+		app->audio->PlayFx(pick_item_sound);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
 		
@@ -1293,6 +1304,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 		{
 			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
 		}
+		app->audio->PlayFx(pick_weapon_sound);
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 		gui->CreateParticleToWeaponFrame();
 	}

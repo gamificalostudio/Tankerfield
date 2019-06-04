@@ -46,9 +46,9 @@ public:
 
 	bool Update(float dt) override;
 
-	void OnTriggerEnter(Collider * collider);
+	void OnTriggerEnter(Collider * collider, float dt);
 
-	void OnTrigger(Collider * collider);
+	void OnTrigger(Collider * collider, float dt);
 
 	bool DrawShadow(Camera* camera, float dt) override;
 
