@@ -17,6 +17,7 @@ UI_Image::~UI_Image()
 bool UI_Image::Draw()
 {
 	SDL_Rect draw_rect;
+	SDL_Texture *tex = GetTexture();
 
 	if (SDL_RectEmpty(&custom_draw_rect))
 	{
@@ -27,9 +28,9 @@ bool UI_Image::Draw()
 		draw_rect = custom_draw_rect;
 	}
 
-	SDL_SetTextureColorMod(GetTexture(), color_mod.r, color_mod.g, color_mod.b);
-	app->render->BlitCustomUI(GetTexture(), &sprite_rect, &draw_rect, app->ui->current_camera, (int)alpha);
-	SDL_SetTextureColorMod(GetTexture(), 255, 255, 255);
+	SDL_SetTextureColorMod(tex, color_mod.r, color_mod.g, color_mod.b);
+	app->render->BlitCustomUI(tex, &sprite_rect, &draw_rect, app->ui->current_camera, (int)alpha);
+	SDL_SetTextureColorMod(tex, 255, 255, 255);
 
 	return true;
 }
