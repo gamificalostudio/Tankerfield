@@ -7,6 +7,7 @@
 #include "UI_Image.h"
 #include "UI_Button.h"
 #include "UI_Label.h"
+#include "UI_Table.h"
 #include "UI_InteractiveGroup.h"
 
 Controllers_Settings::Controllers_Settings(fPoint relative_pos)
@@ -30,8 +31,9 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	
 	title = app->ui->CreateLabel(fPoint(relative_pos.x + 295, relative_pos.y + 76), UI_LabelDef("Controller Settings", app->font->label_font_24), this);
 	title->SetParent(panel);
+	UI_TableDef table_def(3,2,5);
 
-	//table = app->ui->CreateTable()
+	table = app->ui->CreateTable(fPoint(182,138), table_def,)
 }
 
 Controllers_Settings::~Controllers_Settings()
