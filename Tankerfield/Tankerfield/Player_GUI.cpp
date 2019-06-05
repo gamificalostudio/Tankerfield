@@ -237,7 +237,7 @@ void Player_GUI::Update(float dt)
 
 		fPoint w_pos = GetWeaponFramePos();
 		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 3.25f * dt));
-		if ((iPoint)(*item)->position == (iPoint)w_pos - (iPoint)w_offset)
+		if ((*item)->timer.ReadSec() > 2.0f)
 		{
 			(*item)->Destroy();
 			item = particles_weapon_frame_list.erase(item);
@@ -254,7 +254,7 @@ void Player_GUI::Update(float dt)
 
 		fPoint i_pos = GetItemFramePos();
 		(*item)->SetPos(lerp((*item)->position, i_pos - i_offset, 3.25f * dt));
-		if ((iPoint)(*item)->position == (iPoint)i_pos - (iPoint)i_offset)
+		if ((*item)->timer.ReadSec() > 2.0f)
 		{
 			(*item)->Destroy();
 			item = particles_item_frame_list.erase(item);
@@ -378,6 +378,7 @@ void Player_GUI::CreateParticleToWeaponFrame()
 	particle_image->SetState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	particle_image->alpha = 175.0f;
+	particle_image->timer.Start();
 	this->particles_weapon_frame_list.push_back(particle_image);
 }
 

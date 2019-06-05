@@ -112,8 +112,6 @@ private:
 
 	UI_InGameElement* player_arrow = nullptr;
 
-	bool particle_created = false;
-
 	friend M_UI;
 };
 
