@@ -82,24 +82,6 @@ bool UI_InGameElement::Draw()
 	SDL_RenderCopyEx(app->render->renderer, app->ui->GetAtlas(), &src, &dst, angle, &rect_point, SDL_FLIP_NONE);
 	SDL_SetTextureColorMod(app->ui->GetAtlas(), 0, 0, 0);
 
-		//if (app->ui->current_gui->player->GetTankNum() == 0)
-		//{
-		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 255, 0, 0 ,255 });
-		//}
-		//
-		//if (app->ui->current_gui->player->GetTankNum() == 1)
-		//{
-		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 0, 255, 0 ,255 });
-		//}
-		//if (app->ui->current_gui->player->GetTankNum() == 2)
-		//{
-		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 0, 0, 255 ,255 });
-		//}
-		//if (app->ui->current_gui->player->GetTankNum() == 3)
-		//{
-		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 255, 0, 255 ,255 });
-		//}
-
 }
 
 UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef definition) : UI_InGameElement(position, definition)
