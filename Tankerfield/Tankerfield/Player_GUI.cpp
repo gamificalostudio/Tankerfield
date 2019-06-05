@@ -234,10 +234,19 @@ void Player_GUI::Update(float dt)
 			w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
 		else if(this->player->GetTankNum() == 2 || this->player->GetTankNum() == 3)
 			w_offset = { 22.0f, 20.0f };
-
+		
 		fPoint w_pos = GetWeaponFramePos();
 		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 3.25f * dt));
+		
 		if ((*item)->timer.ReadSec() > 2.0f)
+		{
+			if ((*item)->alpha > 0.0f)
+				(*item)->alpha -= 75.0f * dt;
+			else if ((*item)->alpha < 0.0f)
+				(*item)->alpha = 0.0f;
+		}
+
+		if ((*item)->timer.ReadSec() > 5.0f)
 		{
 			(*item)->Destroy();
 			item = particles_weapon_frame_list.erase(item);
