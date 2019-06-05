@@ -424,6 +424,7 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
+
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)

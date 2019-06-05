@@ -28,6 +28,7 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	// Assets ===============================================================
 
 	flash_texture = app->tex->Load("textures/ui/flash.png");
+	margin = { 30.f, 30.f };
 
 	int tank_num = player->GetTankNum();
 	 
@@ -36,12 +37,12 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		player_object->camera_player->screen_section.y,
 		player_object->camera_player->screen_section.w,
 		player_object->camera_player->screen_section.h);
+
 	viewport_with_margin = {
-		(int)(viewport.GetLeft() + margin.x * 0.5f),
-		(int)(viewport.GetTop()  + margin.y * 0.5f),
-		(int)(viewport.w - margin.x),
-		(int)(viewport.h - margin.y)};
-	margin = { 30.f, 30.f };
+		viewport.GetLeft() + margin.x * 0.5f,
+		viewport.GetTop()  + margin.y * 0.5f,
+		viewport.w - margin.x,
+		viewport.h - margin.y};
 
 	// In Game Elements =====================================================
 
@@ -121,22 +122,22 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	{
 	case 0:
 		life_bar_def.direction = UI_Bar::DIR::UP;
-		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 50.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::LEFT, Pivot::Y::BOTTOM);
 		break;
 	case 1:
 		life_bar_def.direction = UI_Bar::DIR::UP;
-		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetRight() - 50.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 		break;
 	case 2:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
-		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetTop() + 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 50.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
 		break;
 	case 3:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
-		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetTop() + 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetRight() - 50.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::TOP);
 		break;
 	default:
