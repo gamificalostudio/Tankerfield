@@ -70,9 +70,9 @@ public:
 
 	fRect viewport;
 
-	SDL_Rect viewport_with_margin = { 0,0,0,0 };
+	fRect viewport_with_margin;
 
-	fPoint margin = { 80.f, 80.f };
+	fPoint margin;
 
 private:
 

@@ -90,11 +90,11 @@ General_GUI::General_GUI()
 	round_fx->alpha = 0.f;
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
-	left_tank_life = app->ui->CreateImage({ 0.f ,  screen.h * .5f }, image_def);
+	left_tank_life = app->ui->CreateImage({ 40.f ,  screen.h * .5f }, image_def);
 	left_tank_life->SetPivot(Pivot::X::LEFT, Pivot::Y::CENTER);
 
 	image_def.sprite_section = { 60, 160, 50, 530 };
-	right_tank_life = app->ui->CreateImage({ screen.w ,  screen.h * .5f }, image_def);
+	right_tank_life = app->ui->CreateImage({ screen.w - 40.f ,  screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::X::RIGHT, Pivot::Y::CENTER);
 
 	FadeGeneralHUD(true);

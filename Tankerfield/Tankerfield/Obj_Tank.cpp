@@ -422,7 +422,7 @@ void Obj_Tank::Movement(float dt)
 
 	if (tank_num == 0)
 	{
-		LOG("Current speed: %f", velocity_map.ModuleF());
+		//LOG("Current speed: %f", velocity_map.ModuleF());
 	}
 }
 

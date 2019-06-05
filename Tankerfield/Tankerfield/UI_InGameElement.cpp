@@ -42,23 +42,64 @@ bool UI_InGameElement::Draw()
 		return true;
 	}
 
-	fPoint screen_pos = app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_camera);
-	SDL_Point screen_point;
+	fPoint obj_pos = app->map->MapToCamera(pointed_obj->pos_map, app->ui->current_camera);
+	fPoint player_pos = app->map->MapToCamera(app->ui->current_gui->player->pos_map, app->ui->current_camera);
 
-	screen_point.x = (int)screen_pos.x;
-	screen_point.y = (int)screen_pos.y;
+	SDL_Point sdl_point = { (int)obj_pos.x,  (int)obj_pos.y };
 
-	if (SDL_PointInRect( &screen_point, &app->ui->current_gui->viewport_with_margin) == false)
+	if (SDL_PointInRect( &sdl_point, &(SDL_Rect)app->ui->current_gui->viewport_with_margin))
 	{
-		fPoint vector = app->ui->current_gui->player->pos_map - pointed_obj->pos_map;
-		sprite_rect = arrow_animation->GetFrame(atan2(vector.y, vector.x) * RADTODEG);
-		vector.Normalize();
-		screen_pos = app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 2.f, app->ui->current_camera);
-
-		SDL_SetTextureColorMod(app->ui->GetAtlas(), color_mod.r, color_mod.g, color_mod.b);
-		app->render->BlitUI( app->ui->GetAtlas(), screen_pos.x - (float)sprite_rect.w * 0.5f, screen_pos.y - (float)sprite_rect.h * 0.5f, &sprite_rect ,app->ui->current_camera);
-		SDL_SetTextureColorMod(app->ui->GetAtlas(), 255, 255, 255);
+		return true;
 	}
+
+	fPoint vector(obj_pos - player_pos);
+	float angle = atan2(vector.y, vector.x) * RADTODEG; 
+	fRect viewport = app->ui->current_gui->viewport_with_margin;
+	fPoint points[4] = { fPoint(viewport.GetLeft() , viewport.GetTop()) , fPoint(viewport.GetRight() , viewport.GetTop()), fPoint(viewport.GetRight() , viewport.GetBottom()), fPoint(viewport.GetLeft() , viewport.GetBottom()) };
+
+	fPoint final_point = { 0.f,0.f };
+
+	for (int i = 0; i < 4 ; ++i)
+	{
+		int j = 0;  
+
+		if (i == 3)
+			j = 0;
+		else
+			j = i + 1;
+
+		if (get_line_intersection(obj_pos , player_pos , points[i] , points[j], &final_point) == true)
+		{
+			break;
+		}
+	}
+
+	SDL_Rect src = { 120, 160, 45, 45 };
+	SDL_Rect dst = { (int)final_point.x - 45, (int)final_point.y - 45 * 0.5f, 45, 45 };
+	SDL_Point rect_point = { 45, 45 / 2 };
+
+	SDL_SetTextureColorMod(app->ui->GetAtlas(), color_mod.r, color_mod.g, color_mod.b);
+	SDL_RenderCopyEx(app->render->renderer, app->ui->GetAtlas(), &src, &dst, angle, &rect_point, SDL_FLIP_NONE);
+	SDL_SetTextureColorMod(app->ui->GetAtlas(), 0, 0, 0);
+
+		//if (app->ui->current_gui->player->GetTankNum() == 0)
+		//{
+		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 255, 0, 0 ,255 });
+		//}
+		//
+		//if (app->ui->current_gui->player->GetTankNum() == 1)
+		//{
+		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 0, 255, 0 ,255 });
+		//}
+		//if (app->ui->current_gui->player->GetTankNum() == 2)
+		//{
+		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 0, 0, 255 ,255 });
+		//}
+		//if (app->ui->current_gui->player->GetTankNum() == 3)
+		//{
+		//	app->render->DrawQuadUI({ (int)final_point.x - 8,(int)final_point.y - 8, 16, 16 }, app->ui->current_camera, { 255, 0, 255 ,255 });
+		//}
+
 }
 
 UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef definition) : UI_InGameElement(position, definition)
@@ -279,3 +320,34 @@ void UI_IG_Helper::Destroy()
 		(*iter)->Destroy();
 	}
 }
+
+//fPoint final_arrow_point;
+//fRect viewport = app->ui->current_gui->viewport;
+//fPoint vector = pointed_obj_pos - player_pos;
+//float angle = atan2(vector.y, vector.x) * RADTODEG;
+//
+//float distance_to_border_y = 0.f;
+
+//if (pointed_obj_pos.y > viewport.GetBottom())
+//{
+//	distance_to_border_y = viewport.GetBottom() - player_pos.y;
+//	final_arrow_point.x = player_pos.x + (distance_to_border_y *  vector.x) / vector.y;
+//	final_arrow_point.y = viewport.GetBottom();
+//}
+//else if (pointed_obj_pos.y < viewport.GetTop())
+//{
+//	distance_to_border_y = viewport.GetTop() - player_pos.y;
+//	final_arrow_point.x = player_pos.x + (distance_to_border_y *  vector.x) / vector.y;
+//	final_arrow_point.y = viewport.GetTop();
+//}
+//else if 
+//{
+//	final_arrow_point = 
+//}
+
+
+//pointed_obj_pos = app->map->MapToCamera(app->ui->current_gui->player->pos_map - vector * 2.f, app->ui->current_camera);
+
+//SDL_SetTextureColorMod(app->ui->GetAtlas(), color_mod.r, color_mod.g, color_mod.b);
+//app->render->BlitUI( app->ui->GetAtlas(), pointed_obj_pos.x - (float)sprite_rect.w * 0.5f, pointed_obj_pos.y - (float)sprite_rect.h * 0.5f, &sprite_rect ,app->ui->current_camera);
+//SDL_SetTextureColorMod(app->ui->GetAtlas(), 255, 255, 255);
