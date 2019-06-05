@@ -16,6 +16,7 @@ Bullet_RocketLauncher::~Bullet_RocketLauncher()
 {
 }
 
+
 bool Bullet_RocketLauncher::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("basic_bullet_rocketlauncher");

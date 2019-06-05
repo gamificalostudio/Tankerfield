@@ -53,8 +53,8 @@ public:
 
 	bool CleanUp() override;
 
-	void OnTrigger(Collider* c1);
-	void OnTriggerEnter(Collider* c1);
+	void OnTrigger(Collider* c1, float dt);
+	void OnTriggerEnter(Collider* c1, float dt);
 	void OnTriggerExit(Collider* c1);
 
 public:
@@ -90,9 +90,6 @@ public:
 	fPoint GetTurrPos() const;
 
 private:
-	//- Logic
-	void SetLife(int life);//Don't use SetLife directly from other classes, use ReduceLife() or IncreaseLife()
-
 	//- Movement
 	void Movement(float dt);
 	void InputMovementKeyboard(fPoint & input);
@@ -101,6 +98,9 @@ private:
 	bool AddMaxSpeedBuff(MovementBuff buff);
 	bool RemoveMaxSpeedBuff(std::string source);
 	float GetMaxSpeed();//Returns the maximum speed of the tank, tanking into account the bonuses it has
+	void ReduceSpeed(float reduction);
+	void SetSpeed(float speed);
+	float GetCurrSpeed();
 
 	//- Camera
 	void CameraMovement(float dt);
@@ -159,6 +159,7 @@ private:
 
 	//- Movement
 	float base_max_speed							= 0.f;
+	float speed_colliding_with_building				= 0.f;
 	MovementBuff road_buff;
 	MovementBuff charged_shot_buff;
 	MovementBuff recoil_buff;
@@ -176,6 +177,10 @@ private:
 	UI_IG_Helper * tutorial_move			= nullptr;
 	int tutorial_move_time					= 0;//The time the tutorial move image will appear on screen (ms)
 	bool tutorial_move_pressed				= false;
+
+	//- Run over
+	float run_over_damage_multiplier		= 0.f;//The damage it does when it hits an enemy (it is multiplied by the current speed)
+	float run_over_speed_reduction			= 0.f;//The speed it loses every time it hits an enemy
 
 
 	//- Shooting
@@ -210,6 +215,8 @@ private:
 	uint shot_sound = 0u;
 	uint heal_sound = 0u;
 	uint laser_sound = 0u;
+	uint pick_item_sound = 0u;
+	uint pick_weapon_sound = 0u;
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot

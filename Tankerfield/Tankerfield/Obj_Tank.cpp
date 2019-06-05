@@ -38,6 +38,7 @@
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
 #include "M_PickManager.h"
+#include "Obj_Enemy.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -113,6 +114,8 @@ bool Obj_Tank::Start()
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string(), 100);
 	heal_sound = app->audio->LoadFx(tank_node.child("sounds").child("heal_shot").attribute("sound").as_string(), 100);
 	laser_sound = app->audio->LoadFx(tank_node.child("sounds").child("laser_shot").attribute("sound").as_string(), 100);
+	pick_item_sound = app->audio->LoadFx(tank_node.child("sounds").child("item_pick_up").attribute("sound").as_string(), 100);
+	pick_weapon_sound = app->audio->LoadFx(tank_node.child("sounds").child("weapon_pick_up").attribute("sound").as_string(), 100);
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -187,10 +190,13 @@ bool Obj_Tank::Start()
 	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
 	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
 
-
+	speed_colliding_with_building = 2.5f;
 
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
+
+	run_over_damage_multiplier = 31.f;
+	run_over_speed_reduction = 3.5f;
 
 	camera_player = app->render->CreateCamera(this);
 	app->ui->AddPlayerGUI(this);
@@ -220,8 +226,7 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	max_life = 100;
-	SetLife(100);
+	max_life = life = 100;
 
 	turr_scale = 1.2f;
 
@@ -249,7 +254,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HAPPY_HOUR_ITEM);
+	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
 	//Flamethrower
@@ -276,7 +281,7 @@ bool Obj_Tank::Start()
 	text_finished_charged = app->tex->Load("textures/Objects/tank/texture_charging_finished.png");
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
-	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+	charging_ready = app->audio->LoadFx("audio/Fx/tank/max_charged.wav");
 
 	this->time_between_portal_tp.Start();
 
@@ -402,12 +407,12 @@ void Obj_Tank::Movement(float dt)
 	if (!no_input)
 	{
 		//CALCULATE ANGLE
-		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG;
+		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG - ISO_COMPENSATION;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
-		target_angle += 360.f * turns - ISO_COMPENSATION;
+		target_angle += 360.f * turns;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f)) < abs(target_angle - angle))
+		if (abs(target_angle + 360.f - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
@@ -420,10 +425,6 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move = nullptr;
 	}
 
-	if (tank_num == 0)
-	{
-		//LOG("Current speed: %f", velocity_map.ModuleF());
-	}
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -541,6 +542,19 @@ float Obj_Tank::GetMaxSpeed()
 		total_bonus += (*iter).bonus_speed;
 	}
 	return base_max_speed + total_bonus;
+}
+
+void Obj_Tank::ReduceSpeed(float reduction)
+{
+	float curr_speed = velocity_map.ModuleF();
+	velocity_map.Normalize();
+	velocity_map *= MAX(0.f, curr_speed - reduction);
+}
+
+void Obj_Tank::SetSpeed(float speed)
+{
+	velocity_map.Normalize();
+	velocity_map *= speed;
 }
 
 bool Obj_Tank::Draw(float dt, Camera * camera)
@@ -706,10 +720,16 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-void Obj_Tank::OnTriggerEnter(Collider * c1)
+float Obj_Tank::GetCurrSpeed()
 {
-	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
+	return velocity_map.ModuleF();
+}
+
+void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
+{
+	switch (c1->GetTag())
 	{
+	case TAG::FRIENDLY_BULLET: {
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
 		if (bullet->player && Alive()) // he does not heal himself
 		{
@@ -717,7 +737,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
+				IncreaseLife(bullet->player->weapon_info.shot1.bullet_healing);
 				app->audio->PlayFx(heal_sound);
 			}
 		}
@@ -725,8 +745,9 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		{
 			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
-	}
-	else if (c1->GetTag() == TAG::PORTAL)
+	} break;
+
+	case TAG::PORTAL:
 	{
 		if (this->time_between_portal_tp.ReadMs() >= 1000)
 		{
@@ -735,31 +756,50 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			instant_help->Teleport(this, portal);
 			this->time_between_portal_tp.Start();
 		}
-	}
-	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
-	{
+	}break;
+
+	case TAG::HEALING_AREA_SHOT: {
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
 		if (this->GetLife() < GetMaxLife())
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
-			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
+			IncreaseLife(area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
-	}
-	else if (c1->GetTag() == TAG::ROAD)
-	{
+	}break;
+
+	case TAG::ROAD: {
 		AddMaxSpeedBuff(road_buff);
-	}
-	else if (c1->GetTag() == TAG::BULLET_ENEMY)
-	{
-		this->SetLife(GetLife() - c1->damage);
+	}break;
+
+	case TAG::BULLET_ENEMY: {
+		ReduceLife(c1->damage);
+	}break;
+
+	case TAG::ENEMY: {
+		//If you collide against an enemy, you run over it, dealing damage and slowing you
+		float curr_speed = GetCurrSpeed();
+		if (curr_speed > 0.f)
+		{
+			Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
+			enemy->ReduceLife(curr_speed * run_over_damage_multiplier, dt);
+			ReduceSpeed(run_over_speed_reduction);
+		}
+	}break;
+
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+	case TAG::WALL:
+		SetSpeed(0.f);
+		break;
+
 	}
 }
 
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTrigger(Collider * c1, float dt)
 {
-	if (c1->GetTag() == TAG::PICK_UP)
-	{
+	switch (c1->GetTag()) {
+	case TAG::PICK_UP: {
 		if (this->Alive())
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
@@ -767,7 +807,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-				
+
 				SetPickUp(pick_up);
 			}
 		}
@@ -775,11 +815,20 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
-	}
-	else if (c1->GetTag() == TAG::ROAD)
-	{
+	}break;
+
+	case TAG::ROAD: {
 		AddMaxSpeedBuff(road_buff);
+	}break;
+
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+		SetSpeed(speed_colliding_with_building);
+		SetSpeed(speed_colliding_with_building);
+		break;
+
 	}
+
 }
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
@@ -794,42 +843,30 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	}
 }
 
-void Obj_Tank::SetLife(int life)
-{
-	this->life = life;
-	gui->SetLifeBar(this->life);
-}
-
 void Obj_Tank::IncreaseLife(int heal)
 {
-	int new_life = life + heal;
-	if (new_life > GetMaxLife())
-	{
-		new_life = GetMaxLife();
-	}
-	SetLife(new_life);
-
+	life = MIN(max_life, life + heal);
+	gui->SetLifeBar(this->life);
 	gui->HealingFlash();
 }
 
 void Obj_Tank::ReduceLife(int damage)
 {
-	//Don't reduce life if we're in god mode
-	if (!app->debug->god_mode)
+	//Don't reduce life if we're in god mode or we're already dead
+	if (!app->debug->god_mode
+		&& life > 0)
 	{
-		int new_life = life - damage;
+		life -= damage;
 		//Tank death
-		if (new_life <= 0)
+		if (life <= 0)
 		{
-			new_life = 0;
+			life = 0;
 			Die();
 		}
-		SetLife(new_life);
+		gui->SetLifeBar(this->life);
 		damaged_timer.Start();
 		damaged = true;
-
 		gui->DamageFlash();
-
 	}
 }
 
@@ -1065,7 +1102,7 @@ void Obj_Tank::Aim(float dt)
 		float turns = floor(turr_angle / 360.f);
 		turr_target_angle += 360.f * turns;
 		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
+		if (abs(turr_target_angle + 360.f - turr_angle) < abs(turr_target_angle - turr_angle))
 		{
 			turr_target_angle += 360.f;
 		}
@@ -1212,7 +1249,7 @@ void Obj_Tank::ReviveTank(float dt)
 					//Finishes reviving the tank
 					if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
 					{
-						(*iter)->SetLife(revive_life);
+						(*iter)->IncreaseLife(revive_life);
 						reviving_tank[(*iter)->tank_num] = false;
 						app->audio->PlayFx(revive_sfx);
 						(*iter)->draw_revive_cycle_bar = false;
@@ -1289,7 +1326,11 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
-		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		if (item != ItemType::NO_TYPE)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		}
+		app->audio->PlayFx(pick_item_sound);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
 		
@@ -1300,6 +1341,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 		{
 			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
 		}
+		app->audio->PlayFx(pick_weapon_sound);
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 		gui->CreateParticleToWeaponFrame();
 	}

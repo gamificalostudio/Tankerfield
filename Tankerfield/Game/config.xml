@@ -206,6 +206,8 @@
         <basic_shot sound ="audio/Fx/tank/weapons/tank_basic_shot.wav"/>
         <laser_shot sound ="audio/Fx/tank/weapons/tank_laser_shot.wav"/>
         <heal_shot sound ="audio/Fx/tank/weapons/tank_heal_shot.wav"/>
+        <item_pick_up sound ="audio/Fx/objects/pick_up_item.wav"/>
+        <weapon_pick_up sound ="audio/Fx/objects/pick_up_weapon.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">

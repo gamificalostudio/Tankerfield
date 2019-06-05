@@ -74,11 +74,11 @@ public:
 		return true;
 	}
 
-	void OnTriggerEnter(Collider* c1)
+	void OnTriggerEnter(Collider* c1, float dt)
 	{
 
 	}
-	void OnTrigger(Collider* c1)
+	void OnTrigger(Collider* c1, float dt)
 	{
 		if (c1->GetTag() == TAG::PLAYER)
 		{
