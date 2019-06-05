@@ -28,10 +28,10 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	InteractiveGroup->SetElement(return_button, iPoint(0, 0));
 	
 	
-	title = app->ui->CreateLabel(fPoint(relative_pos.x + 305, relative_pos.y + 76), UI_LabelDef("Controller Settings", app->font->label_font_38), this);
+	title = app->ui->CreateLabel(fPoint(relative_pos.x + 305, relative_pos.y + 70), UI_LabelDef("Controller Settings", app->font->label_font_38), this);
 	title->SetParent(panel);
 	UI_TableDef table_def(3,2,2);
-	int width = 270, height = 75;
+	int width = 270, height = 70;
 	int widths[2] = { width,width};
 	int heights[3] = { height ,height ,height };
 	table = app->ui->CreateTable(fPoint(relative_pos.x + 453, relative_pos.y + 255), table_def, widths, heights);
@@ -48,6 +48,14 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	UI_Label* Use_item_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Use item", app->font->label_font_24), nullptr);
 	table->AssortElementToTable(Use_item_label, iPoint(0, 2));
 	Use_item_label->SetParent(table);
+
+	UI_Label* Vibration_label = app->ui->CreateLabel(fPoint(relative_pos.x + 275, relative_pos.y + 390), UI_LabelDef("Vibration", app->font->label_font_24), nullptr);
+	Vibration_label->SetParent(panel);
+
+	UI_Label* Sensitivity_label = app->ui->CreateLabel(fPoint(relative_pos.x + 270, relative_pos.y + 430), UI_LabelDef("Sensitivity", app->font->label_font_24), nullptr);
+	Sensitivity_label->SetParent(panel);
+
+
 
 }
 
