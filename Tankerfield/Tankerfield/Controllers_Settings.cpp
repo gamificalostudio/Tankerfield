@@ -22,7 +22,7 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	return_button = app->ui->CreateButton(fPoint(relative_pos.x + 89, relative_pos.y + 456), UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 	return_button->SetParent(panel);
 
-	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(1, 1, nullptr), this);
+	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(2, 2, nullptr), this);
 	InteractiveGroup->SetParent(panel);
 
 	InteractiveGroup->SetElement(return_button, iPoint(0, 0));
@@ -55,8 +55,10 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	UI_Label* Sensitivity_label = app->ui->CreateLabel(fPoint(relative_pos.x + 270, relative_pos.y + 430), UI_LabelDef("Sensitivity", app->font->label_font_24), nullptr);
 	Sensitivity_label->SetParent(panel);
 
-
-
+	Sensitivity_button_left = app->ui->CreateButton(fPoint(relative_pos.x + 535, relative_pos.y + 430), UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
+	Sensitivity_button_left->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	Sensitivity_button_left->SetParent(panel);
+	InteractiveGroup->SetElement(Sensitivity_button_left, iPoint(0,1));
 }
 
 Controllers_Settings::~Controllers_Settings()
@@ -80,7 +82,10 @@ void Controllers_Settings::InputSelect()
 		HideControllersSettings();
 		app->main_menu->SetState(MENU_STATE::OPTIONS);
 	}
+	if (focused == Sensitivity_button_left)
+	{
 
+	}
 
 
 

@@ -23,6 +23,9 @@ private:
 	UI_Button* return_button = nullptr;
 	UI_Label* title = nullptr;
 	UI_Table* table = nullptr;
+	UI_Button* Sensitivity_button_left = nullptr;
+	UI_Button* Sensitivity_button_rigth = nullptr;
+
 
 
 };
