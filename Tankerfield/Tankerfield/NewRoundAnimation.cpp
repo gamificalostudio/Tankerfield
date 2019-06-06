@@ -112,6 +112,8 @@ bool NewRoundAnimation::Update(float dt)
 		if (particles_reached_trg == NEW_ROUND_PARTICLE_NUM)
 		{
 			PrepareColorTransition();
+			++app->scene->round;
+			app->scene->general_gui->SetRoundNumber(app->scene->round);
 			phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
 		}
 		//If for any reasons all particles don't reach the center
@@ -123,6 +125,8 @@ bool NewRoundAnimation::Update(float dt)
 				particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
 			}
 			PrepareColorTransition();
+			++app->scene->round;
+			app->scene->general_gui->SetRoundNumber(app->scene->round);
 			phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
 		}
 	}break;
@@ -141,7 +145,6 @@ bool NewRoundAnimation::Update(float dt)
 
 		if (color_transition_timer.ReadSec() > color_transition_time)
 		{
-			//TODO: Change the number
 			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
 			{
 				heal_particle[i]->SetState(ELEMENT_STATE::VISIBLE);

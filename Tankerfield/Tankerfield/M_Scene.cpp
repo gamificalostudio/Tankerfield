@@ -130,7 +130,7 @@ bool M_Scene::Start()
 		box->SetTypeBox(PICKUP_TYPE::WEAPON);
 	}
 
-	round = 0u;
+	round = 1u;
 	game_state = GAME_STATE::ENTER_IN_WAVE;
 	game_over = false;
 
@@ -187,7 +187,6 @@ bool M_Scene::Update(float dt)
 	{
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
-		++round;
 		NewWave();
 		game_state = GAME_STATE::IN_WAVE;
 		app->audio->PlayMusic(main_music, 2.0f);
@@ -217,7 +216,7 @@ bool M_Scene::Update(float dt)
 	}
 	case GAME_STATE::OUT_WAVE:
 		new_round_animation.Update(dt);
-		//New round animation changes the state to ENTER_IN_WAVE when it has finished
+		//INFO: New round animation changes the game_state to ENTER_IN_WAVE when it has finished
 		//In this way, it doens't need to be checking every frame if the animation has finished
 		break;
 
@@ -453,5 +452,4 @@ void M_Scene::NewWave()
 
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
-	general_gui->SetRoundNumber(round);
 }
