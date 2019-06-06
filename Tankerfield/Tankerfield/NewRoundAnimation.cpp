@@ -165,16 +165,23 @@ bool NewRoundAnimation::Update(float dt)
 		heal_particle[(int)HEAL_PARTICLE::LEFT]->SetPos(heal_particle[(int)HEAL_PARTICLE::LEFT]->position - fPoint(heal_particle_speed, 0.f));
 		heal_particle[(int)HEAL_PARTICLE::RIGHT]->SetPos(heal_particle[(int)HEAL_PARTICLE::RIGHT]->position + fPoint(heal_particle_speed, 0.f));
 		if (heal_particle[(int)HEAL_PARTICLE::LEFT]->position.x < 0.f
-			|| heal_particle [(int)HEAL_PARTICLE::RIGHT]->position.x > screen.w)
+			&& heal_particle [(int)HEAL_PARTICLE::RIGHT]->position.x > screen.w)
 		{
+			center_energy->SetState(ELEMENT_STATE::HIDDEN);
 			//TODO: Heal players
 			//TODO: Start next round
 			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
 			{
 				heal_particle[i]->SetState(ELEMENT_STATE::HIDDEN);
 			}
-			phase = NEW_ROUND_ANIMATION_PHASE::IN_ROUND;
+			app->scene->game_state = GAME_STATE::ENTER_IN_WAVE;
+			phase = NEW_ROUND_ANIMATION_PHASE::WAITING;
 		}
+	}break;
+
+	case NEW_ROUND_ANIMATION_PHASE::WAITING:
+	{
+		//Doesn nothing (shouldn't call the Update either so there is no problem)
 	}break;
 
 	//case NEW_ROUND_ANIMATION_PHASE::IN_ROUND: Doesn't do anything, simply returns true

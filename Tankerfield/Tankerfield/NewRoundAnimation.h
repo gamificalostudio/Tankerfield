@@ -26,13 +26,12 @@ public:
 	void Start();
 	bool Update(float dt);
 
-	void PrepareColorTransition();
-
 private:
 	void CreateNewRoundParticles();
 	void PrepareNewRoundUIParticles();
 	void UpdateNewRoundUIParticles(float dt);
 	void ReduceCenterEnergyAlpha(float dt);
+	void PrepareColorTransition();
 
 private:
 	//New round animation
@@ -94,7 +93,7 @@ private:
 		COLOR_TRANSITION,
 		REDUCE_ALPHA,
 		HEAL,
-		IN_ROUND,
+		WAITING,
 	};
 
 	NEW_ROUND_ANIMATION_PHASE phase = NEW_ROUND_ANIMATION_PHASE::PARTICLES;

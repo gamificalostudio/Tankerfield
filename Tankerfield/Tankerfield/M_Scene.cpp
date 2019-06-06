@@ -145,8 +145,6 @@ bool M_Scene::Start()
 	general_gui = DBG_NEW General_GUI();
 	leaderboard = DBG_NEW LeaderBoard(screen_center,"data/leader_board.xml",false);
 
-	new_round_animation.Start();
-
 	return true;
 }
 
@@ -213,21 +211,17 @@ bool M_Scene::Update(float dt)
 		finish_wave_sound_channel = app->audio->PlayFx(finish_wave_sound_uint);
 		wind_sound_channel = app->audio->PlayFx(wind_sound_uint);
 		
+		new_round_animation.Start();
 		game_state = GAME_STATE::OUT_WAVE;
-		general_gui->RoundFX();
 		break;
 	}
 	case GAME_STATE::OUT_WAVE:
-
-		if (timer_between_waves.ReadSec() >= 3 || AllPlayersReady())
-		{
-			game_state = GAME_STATE::ENTER_IN_WAVE;
-		}
-
+		new_round_animation.Update(dt);
+		//New round animation changes the state to ENTER_IN_WAVE when it has finished
+		//In this way, it doens't need to be checking every frame if the animation has finished
 		break;
 
 	case GAME_STATE::GAME_OVER:
-
 		for (int i = 0; i < MAX_PLAYERS; ++i) {
 			app->objectmanager->obj_tanks[i]->gui->Fade_GUI(false);
 		}
@@ -238,16 +232,13 @@ bool M_Scene::Update(float dt)
 		break;
 
 	case GAME_STATE::WAITING_GAMEOVER:
-
-		if (input_accept == true)
+		if (input_accept)
 		{
 			game_state = GAME_STATE::LEADER_BOARD;
 		}
-
 		break;
 
 	case GAME_STATE::LEADER_BOARD:
-
 		if (leaderboard->UpdateLeaderBoard(round) == true)
 		{
 			leaderboard->FillLeaderBoardTable();
@@ -256,18 +247,16 @@ bool M_Scene::Update(float dt)
 		general_gui->FadeGameOverScreen(false);
 		leaderboard->FadeLeaderBoardScreen(true);
 		game_state = GAME_STATE::WAITING_LEADERBOARD;
-
 		break;
 
 	case GAME_STATE::WAITING_LEADERBOARD:
-
 		leaderboard->SetInputTextToNameLabel();
-
 		if (input_accept == true)
 		{
 			leaderboard->UpdateLeaderBoardSquadName();
 			app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f);
 		}
+		break;
 	}
 
 	if (!game_over
@@ -279,8 +268,6 @@ bool M_Scene::Update(float dt)
 		game_state = GAME_STATE::GAME_OVER;
 		game_over = true;
 	}
-
-	new_round_animation.Update(dt);
 
 	return true;
 }
@@ -467,12 +454,4 @@ void M_Scene::NewWave()
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
 	general_gui->SetRoundNumber(round);
-}
-
-bool M_Scene::AllPlayersReady() const
-{
-	return (app->objectmanager->obj_tanks[0]->IsReady()
-		&&  app->objectmanager->obj_tanks[1]->IsReady()
-		&&  app->objectmanager->obj_tanks[2]->IsReady()
-		&&  app->objectmanager->obj_tanks[3]->IsReady());
 }

@@ -91,8 +91,6 @@ private:
 
 	void NewWave();
 
-	bool AllPlayersReady() const;
-
 
 public:
 	SDL_Texture* path_tex = nullptr;
@@ -128,6 +126,8 @@ private:
 	int wind_sound_channel = -1;
 
 	const char* main_music;
+
+	float time_between_waves = 0.f;//In seconds
 
 private:
 	/* Reward Zones */
