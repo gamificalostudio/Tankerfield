@@ -8,9 +8,10 @@
 #include "UI_Button.h"
 #include "UI_Label.h"
 #include "UI_Table.h"
+#include "UI_Image.h"
 #include "UI_InteractiveGroup.h"
 
-Controllers_Settings::Controllers_Settings(fPoint relative_pos)
+Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
 {
 	Canvas = app->ui->CreateElement(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_ElementDef(), this);;
 
@@ -39,6 +40,18 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	UI_Label* attack_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Attack", app->font->label_font_24), nullptr);
 	table->AssortElementToTable(attack_label, iPoint(0, 0));
 	attack_label->SetParent(table);
+
+	attack_image = app->ui->CreateImage(fPoint(0, 0), UI_ImageDef(app->input->buttons_image[(int)app->input->controllerInfo[player].attack_button]), this);
+	attack_image->SetParent(table);
+	table->AssortElementToTable(attack_image, iPoint(1, 0));
+	
+	interaction_image = app->ui->CreateImage(fPoint(0, 0), UI_ImageDef(app->input->buttons_image[(int)app->input->controllerInfo[player].interacton_button]), this);
+	interaction_image->SetParent(table);
+	table->AssortElementToTable(interaction_image, iPoint(1, 1));
+
+	item_image = app->ui->CreateImage(fPoint(0, 0), UI_ImageDef(app->input->buttons_image[(int)app->input->controllerInfo[player].use_item_button]), this);
+	item_image->SetParent(table);
+	table->AssortElementToTable(item_image, iPoint(1, 2));
 
 	UI_Label* interaction_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Interaction", app->font->label_font_24), nullptr);
 	table->AssortElementToTable(interaction_label, iPoint(0, 1));

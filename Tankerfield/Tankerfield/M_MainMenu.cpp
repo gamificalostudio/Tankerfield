@@ -31,10 +31,10 @@ bool M_MainMenu::Start()
 	// Menus
 
 	options = new Options_Menu();
-	controllers_setting[0] = new Controllers_Settings(fPoint(0,0));
-	controllers_setting[1] = new Controllers_Settings(fPoint(screen.w*0.5f, 0));
-	controllers_setting[2] = new Controllers_Settings(fPoint(0, screen.h*0.5f));
-	controllers_setting[3] = new Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f));
+	controllers_setting[0] = new Controllers_Settings(fPoint(0, 0), 0);
+	controllers_setting[1] = new Controllers_Settings(fPoint(screen.w*0.5f, 0), 1);
+	controllers_setting[2] = new Controllers_Settings(fPoint(0, screen.h*0.5f), 2);
+	controllers_setting[3] = new Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f), 3);
 
 	// Load assets ===========================================
 

@@ -5,7 +5,7 @@
 class Controllers_Settings :public UI_Listener
 {
 public:
-	Controllers_Settings(fPoint relative_pos);
+	Controllers_Settings(fPoint relative_pos, uint player);
 	~Controllers_Settings();
 
 	void ShowControllerSettings();
@@ -18,6 +18,9 @@ public:
 	UI_InteractiveGroup* InteractiveGroup = nullptr;
 private:
 	
+	UI_Image* attack_image = nullptr;
+	UI_Image* interaction_image = nullptr;
+	UI_Image* item_image = nullptr;
 
 	UI_Element* Canvas = nullptr;
 	
@@ -30,6 +33,8 @@ private:
 	
 	UI_Button* Sensitivity_button_L = nullptr;
 	UI_Button* Sensitivity_button_R = nullptr;
+
+	uint Player = 5;
 
 
 
