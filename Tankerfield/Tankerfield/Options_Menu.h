@@ -76,7 +76,7 @@ private:
 	UI_Button* sfx_volume_R = nullptr;
 	UI_Label* sfx_volume_value = nullptr;
 
-	UI_Button* individual_settings = nullptr;
+	UI_Button* controller_settings = nullptr;
 
 	UI_Button* return_button = nullptr;
 
