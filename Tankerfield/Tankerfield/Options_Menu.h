@@ -24,7 +24,7 @@ public:
 
 	Options_Menu();
 
-	bool OnHoverEnter(UI_Element * element);
+	bool UI_OnHoverEnter(UI_Element * element);
 
 	void ShowOptionsMenu();
 

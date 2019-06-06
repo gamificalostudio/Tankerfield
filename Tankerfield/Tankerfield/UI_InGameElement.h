@@ -44,8 +44,6 @@ public:
 protected:
 
 	bool           is_arrow_actived = false;
-	Animation*     arrow_animation = nullptr;
-
 };
 
 

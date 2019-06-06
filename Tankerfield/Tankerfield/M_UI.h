@@ -64,17 +64,10 @@ enum class FocusState
 	NONE
 };
 
-enum class FOCUS_AXIS
-{
-	X,
-	Y,
-	BOTH
-};
-
 enum class UI_INPUT_TYPE
 {
 	NO_TYPE,
-	CONTROLLER,
+	CONTROLLERS,
 	MOUSE,
 	KEYBOARD
 };
@@ -125,17 +118,13 @@ public:
 	UI_Listener()
 	{}
 
-	virtual bool OnHoverEnter(UI_Element* object) { return true; }
+	virtual bool UI_OnHoverEnter(UI_Element* element) { return true; }
 
-	virtual bool OnHoverRepeat(UI_Element* object) { return true; }
+	virtual bool UI_OnHoverRepeat(UI_Element* element) { return true; }
 
-	virtual bool OnHoverExit(UI_Element* object) { return true; }
+	virtual bool UI_OnHoverExit(UI_Element* element) { return true; }
 
-	virtual bool ClickDown(UI_Element* object) { return true; }
-
-	virtual bool ClickRepeat(UI_Element* object) { return true; }
-
-	virtual bool ClickUp(UI_Element* object) { return true; }
+	virtual bool UI_Selected(UI_Element* element) { return true; }
 };
 
 class UI_Fade_FX
@@ -192,11 +181,23 @@ public:
 
 	Player_GUI* AddPlayerGUI(Obj_Tank* player);
 
-	void AddInteractiveElement(UI_Element * element);
-
 	SDL_Texture* GetAtlas() const;
 
 	FocusState GetClickState() const;
+
+	// Object functions ----------------------------------------------------------
+
+	void SetFocusedElement(UI_Element* element);
+
+	UI_Element* GetFocusedElement();
+
+	UI_INPUT_TYPE GetInputType();
+
+	bool MouseIsFocusing();
+
+	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
+
+	void HideAllUI();
 
 	// Creation functions ---------------------------------------------------------
 
@@ -218,7 +219,7 @@ public:
 
 	UI_Bar       * CreateBar(const fPoint position, const UI_BarDef definition, UI_Listener* listener = nullptr);
 
-	UI_Table * CreateTable (const fPoint position, const UI_TableDef definition, int * widths, int * heights, UI_Listener * listener = nullptr);
+	UI_Table * CreateTable(const fPoint position, const UI_TableDef definition, int * widths, int * heights, UI_Listener * listener = nullptr);
 
 	UI_InteractiveGroup * CreateIntearctiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener* listener = nullptr);
 
@@ -232,31 +233,23 @@ public:
 
 	UI_IG_Helper*  CreateInGameHelper(const fPoint position, const UI_InGameElementDef definition);
 
-	// Object functions ----------------------------------------------------------
-
-	void SetFocusedElement(UI_Element* element);
-
-	UI_Element*  GetFocusedElement();
-
-	UI_INPUT_TYPE GetInputType();
-
-	bool MouseIsFocusing();
-
-	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
-
-	void HideAllUI();
-
 private:
 
 	void AddFX(UI_Fade_FX::FX_TYPE type, const float seconds, UI_Element * element, const float loops, const float init_value, const float target_value);
-
-	bool SelectClickedObject();
 
 	void UpdateElements(float dt);
 
 	void UpdateHerarchyPositions(UI_Element* object, fPoint cumulated_position);
 
-	void FocusMouse();
+	void SelectInputType();
+
+	void MouseNavigation();
+
+	void MouseSelection();
+
+	void ControllersNavigation();
+
+	void ControllerSelection();
 
 	void DrawUI(UI_Element* object);
 
@@ -276,8 +269,6 @@ private:
 
 	list<UI_Element*> ig_elements_list;
 
-	list<UI_Element*> interactive_elements;
-
 	list<Player_GUI*> players_guis;
 
 	list<UI_Fade_FX*> active_fxs;
@@ -286,13 +277,15 @@ private:
 
 	UI_Element* main_in_game_element = nullptr;
 
-	UI_Element* focused_element = nullptr;
-
-	FocusState focus_state = FocusState::NONE;
+	// Focus info -----------------------------------------
 
 	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
 
-	bool mouse_is_focusing = false;
+	UI_Element* focused_element = nullptr;
+
+	UI_InteractiveGroup * current_interactive_group = nullptr;
+
+	FocusState focus_state = FocusState::NONE;
 
 public:
 
@@ -302,15 +295,11 @@ public:
 
 	fPoint		mouse_position;
 
-	fPoint		mouse_offset;
-
 	// Assets --------------------------------------------
 
 	SDL_Rect button_sprites[(int)CONTROLLER_BUTTON::MAX];
 
 	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
-
-	Animation	arrow_anim;
 
 	friend UI_Element;
 };

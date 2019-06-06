@@ -72,16 +72,6 @@ bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 	return true;
 }
 
-bool UI_Button::PreUpdate()
-{
-	if (hover_state == HoverState::ENTER && app->ui->GetFocusedElement() != this)
-	{
-		// TODO 1: Add SFX  
-	}
-	
-	return true;
-}
-
 void UI_Button::SetDefinition(const UI_ButtonDef def)
 {
 	this->definition = def;

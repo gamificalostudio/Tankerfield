@@ -40,14 +40,6 @@ public:
 
 };
 
-enum class HoverState
-{
-	ENTER,
-	EXIT,
-	REPEAT,
-	NONE
-};
-
 enum class ELEMENT_STATE
 {
 	VISIBLE,
@@ -122,17 +114,25 @@ public:
 
 public:
 
+	// Transform ==========================================
 	fPoint                position = { 0.f, 0.f };
+	float				  scale_w = 1.f;
+	float				  scale_h = 1.f;
+
+
 	SDL_Rect              sprite_rect = { 0, 0, 0, 0};
 	float                 section_width = 0.f;
 	float                 section_height = 0.f;
-	fPoint                screen_offset = { 0.f, 0.f };
-	bool			      is_draggable = false;
+
 	bool                  is_in_game = false;
-	Camera*               single_camera = nullptr;
-	Camera*               not_in_camera = nullptr;
+
 	float                 alpha = 255.f;
 	SDL_Color             color_mod = { 255, 255, 255, 255 };
+
+	// Cameras options ==================================
+
+	Camera*               single_camera = nullptr;
+	Camera*               not_in_camera = nullptr;
 
 protected:
 
@@ -143,21 +143,16 @@ protected:
 	Pivot                 pivot;
 	bool                  to_destroy = false;
 	UI_Listener         * listener = nullptr;
-	bool				  is_interactive = false;
 
 	// Properties ========================================
 
 	ELEMENT_STATE		  state = ELEMENT_STATE::VISIBLE;
-	HoverState			  hover_state = HoverState::NONE;
 	UI_Fade_FX*           element_fx = nullptr;
 
 	// Hierarchy =========================================
 
 	UI_Element           * element_parent = nullptr;
 	list<UI_Element*>      element_sons;
-
-	float				scale_w = 1.f;
-	float				scale_h = 1.f;
 
 	friend class M_UI;
 };

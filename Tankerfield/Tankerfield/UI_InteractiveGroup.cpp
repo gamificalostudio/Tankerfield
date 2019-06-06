@@ -10,32 +10,22 @@
 UI_InteractiveGroup::UI_InteractiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener * listener) : UI_Element( position, definition, listener) , 
 columns(definition.columns), rows(definition.rows) ,focus_indicator(definition.focus_indicator)
 {
-	group_elements = new UI_Element*[rows * columns];
-
-	for ( int i = 0 ; i < rows * columns ; ++i)
-	{
-		group_elements[i] = nullptr;
-	}
-
-	if (focus_indicator != nullptr)
-	{
-		focus_indicator->SetParent(this);
-	}
 	
+}
+
+bool UI_InteractiveGroup::Update(float dt)
+{
+
+
+
+	return true;
 }
 
 bool UI_InteractiveGroup::HandleControllerINavigation(int controller )
 {
 	bool ret = false;
 
-	for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
-	{
-		if (app->input->GetControllerJoystickState(controller,Joystick::LEFT, (INPUT_DIR)input_dir) == KEY_DOWN)
-		{
-			SetNearestElement((INPUT_DIR)input_dir);
-			ret = true;
-		}
-	}
+
 
 	return ret;
 }
@@ -68,7 +58,7 @@ bool UI_InteractiveGroup::HandleKeyboardNavigation()
 	return ret;
 }
 
-bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
+bool UI_InteractiveGroup::UI_OnHoverEnter(UI_Element * element)
 {
 	current_focus_pos = GetPos(element);
 	SetFocusImage(current_focus_pos);
@@ -76,7 +66,7 @@ bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
 
 	if (listener != nullptr)
 	{
-		listener->OnHoverEnter(element);
+		listener->UI_OnHoverEnter(element);
 	}
 
 
@@ -84,21 +74,21 @@ bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
 }
 
 
-bool UI_InteractiveGroup::OnHoverRepeat(UI_Element * element)
+bool UI_InteractiveGroup::UI_OnHoverRepeat(UI_Element * element)
 {
 	if (listener != nullptr)
 	{
-		listener->OnHoverRepeat(element);
+		listener->UI_OnHoverRepeat(element);
 	}
 
 	return true;
 }
 
-bool UI_InteractiveGroup::OnHoverExit(UI_Element * element)
+bool UI_InteractiveGroup::UI_OnHoverExit(UI_Element * element)
 {
 	if (listener != nullptr)
 	{
-		listener->OnHoverExit(element);
+		listener->UI_OnHoverExit(element);
 	}
 
 	app->ui->SetFocusedElement(nullptr);
@@ -121,22 +111,12 @@ void UI_InteractiveGroup::SetFocusImage(iPoint point)
 	focus_indicator->SetParent(element);
 }
 
-void UI_InteractiveGroup::SetElement(UI_Element* element, const iPoint position)
+void UI_InteractiveGroup::SetElement(UI_Element* element)
 {
-
-	if (element == nullptr || position.x >= columns || position.y >= rows)
+	if (element != nullptr)
 	{
-		LOG("Imposible Set Element");
-		return;
+		group_elements_list.push_back(element);
 	}
-
-	group_elements[ (position.y * columns ) + position.x] = element;
-	element->SetParent(this);
-	element->SetListener(this);
-	element->section_width = element->sprite_rect.w;
-	element->section_height= element->sprite_rect.h;
-
-	app->ui->AddInteractiveElement(element);
 }
 
 void UI_InteractiveGroup::SetNearestElement( const INPUT_DIR dir)
@@ -227,10 +207,4 @@ iPoint UI_InteractiveGroup::GetPos(UI_Element * element)
 void  UI_InteractiveGroup::Destroy()
 {
 	to_destroy = true;
-
-	if (focus_indicator != nullptr)
-	{
-		focus_indicator->Destroy();
-	}
-
 }

@@ -157,7 +157,7 @@ Options_Menu::Options_Menu()
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
-bool Options_Menu::OnHoverEnter(UI_Element * element)
+bool Options_Menu::UI_OnHoverEnter(UI_Element * element)
 {
 	app->audio->PlayFx(button_enter_sfx);
 	return true;

@@ -60,7 +60,7 @@ public:
 
 	bool Reset();
 
-	bool OnHoverEnter(UI_Element * element);
+	bool UI_OnHoverEnter(UI_Element * element);
 
 	void SetState(MENU_STATE new_state);
 

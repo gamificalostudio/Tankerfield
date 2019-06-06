@@ -20,17 +20,19 @@ public:
 
 	UI_InteractiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener *listener);
 
+	bool Update(float dt);
+
 	void Destroy();
 
-	bool OnHoverEnter(UI_Element* object);
+	bool UI_OnHoverEnter(UI_Element* object);
 
 	bool HandleControllerINavigation(int controller);
 
 	bool HandleKeyboardNavigation();
 
-	bool OnHoverRepeat(UI_Element* object);
+	bool UI_OnHoverRepeat(UI_Element* object);
 
-	bool OnHoverExit(UI_Element * object);
+	bool UI_OnHoverExit(UI_Element * object);
 
 public:
 
@@ -56,8 +58,13 @@ private:
 	uint rows = 0u;
 
 	iPoint current_focus_pos = { 0,0 };
+
 	UI_Image*  focus_indicator = nullptr;
+
 	UI_Element** group_elements = nullptr;
+	list<UI_Element*> group_elements_list;
+
+	friend M_UI;
 };
 
 

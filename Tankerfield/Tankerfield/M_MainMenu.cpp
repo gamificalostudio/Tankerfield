@@ -416,7 +416,7 @@ bool M_MainMenu::Reset()
 	return true;
 }
 
-bool M_MainMenu::OnHoverEnter(UI_Element * element)
+bool M_MainMenu::UI_OnHoverEnter(UI_Element * element)
 {
 	app->audio->PlayFx(button_enter_sfx);
 	return true;
