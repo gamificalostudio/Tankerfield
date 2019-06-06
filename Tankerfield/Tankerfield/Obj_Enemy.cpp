@@ -678,8 +678,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 		}
 		else if (collider->GetTag() == TAG::BULLET_OIL)
 		{
-
-			life -= collider->damage;
+			ReduceLife(life -= collider->damage, dt);
 			oiled = true;
 			oiled_timer.Start();
 			damaged_sprite_timer.Start();
@@ -687,7 +686,6 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 			if (life <= 0)
 			{
-				app->pick_manager->PickUpFromEnemy(pos_map);
 				state = ENEMY_STATE::DEAD;
 			}
 			else
