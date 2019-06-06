@@ -622,6 +622,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	tesla_trooper_info.attack_range				= tesla_trooper_node.child("attack_range").attribute("num").as_float();
 	tesla_trooper_info.attack_frequency			= tesla_trooper_node.child("attack_frequency").attribute("num").as_uint();
 	tesla_trooper_info.teleport_max_enemies		= tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_int();
+	tesla_trooper_info.detection_range			= tesla_trooper_node.child("detection_range").attribute("num").as_float();
 
 	//BRUTE
 	pugi::xml_node brute_node = balance_node.child("enemies").child("brute");
@@ -641,6 +642,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	rocket_launcher_info.speed					= rocket_launcher_node.child("speed").attribute("num").as_float();
 	rocket_launcher_info.life_multiplier		= rocket_launcher_node.child("life_multiplier").attribute("num").as_float();
 	rocket_launcher_info.life_exponential_base	= rocket_launcher_node.child("life_exponential_base").attribute("num").as_float();
+	rocket_launcher_info.detection_range		= rocket_launcher_node.child("detection_range").attribute("num").as_float();
 
 	//SUICIDAL
 	pugi::xml_node suicidal_node = balance_node.child("enemies").child("suicidal");
@@ -650,6 +652,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	suicidal_info.speed							= suicidal_node.child("speed").attribute("num").as_float();
 	suicidal_info.life_multiplier				= suicidal_node.child("life_multiplier").attribute("num").as_float();
 	suicidal_info.life_exponential_base			= suicidal_node.child("life_exponential_base").attribute("num").as_float();
+	suicidal_info.detection_range				= suicidal_node.child("detection_range").attribute("num").as_float();
 
 	//WEAPONS
 

@@ -65,7 +65,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 //Called after creating the enemy
 void Obj_Suicidal::SetStats(int level)
 {
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width) * 1.33f;
+	detection_range = app->objectmanager->suicidal_info.detection_range;
 	original_speed = speed = app->objectmanager->suicidal_info.speed;
 	attack_damage = app->objectmanager->suicidal_info.attack_damage;
 	attack_range = app->objectmanager->suicidal_info.attack_range;
