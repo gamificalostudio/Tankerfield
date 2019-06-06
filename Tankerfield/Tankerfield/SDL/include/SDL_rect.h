@@ -65,6 +65,11 @@ typedef struct SDL_Rect
 {
     int x, y;
     int w, h;
+	SDL_Rect(int x, int y, int w, int h) :x(x), y(y), w(w), h(h)
+	{};
+
+	SDL_Rect()
+	{};
 } SDL_Rect;
 
 /**

@@ -57,6 +57,8 @@ enum class INPUT_DIR
 	MAX
 };
 
+//DON'T CHANGE THE ORDER OF THIS BUTTONS PLEASE!!!
+//DONT' ADD MORE BUTTONS IF SO SAY IT TO YESSICA CAUSE CONTROLLERS SETTINGS STAFF
 enum class CONTROLLER_BUTTON : int
 {
 	NONE = -1,
@@ -227,6 +229,31 @@ public:
 	std::string input_text;
 	int GetAbleController();
 	ControllersPlayerInfo controllerInfo[4];
+
+														
+	SDL_Rect buttons_image[(int)CONTROLLER_BUTTON::MAX] = 
+	//A
+	{{449,19,32,32},
+	//B
+	{399,69,32,32}, 
+	//Y
+	{449,69,32,32}, 
+	//X
+	{399,19,32,32},
+	//L
+	{500,15,42,42},
+	//LT
+	{287,15,36,39},
+	//LB
+	{284,73,41,23},
+	//R
+	{500,70,42,42},
+	//RT
+	{338,15,36,39},
+	//RB
+	{334,73,42,23},
+	};
+
 
 };
 

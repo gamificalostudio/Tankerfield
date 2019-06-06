@@ -555,5 +555,10 @@ KeyState M_Input::GetControllerButtonOrTriggerState(int controller, CONTROLLER_B
 		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT);
 	case CONTROLLER_BUTTON::RT:
 		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	case CONTROLLER_BUTTON::LB:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER);	
+	case CONTROLLER_BUTTON::RB:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+
 	}
 }
