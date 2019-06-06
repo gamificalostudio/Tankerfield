@@ -164,6 +164,7 @@ bool Obj_Tank::Start()
 		break;
 	}
 	dead_zone =	MAX_DEAD_ZONE*app->input->controllerInfo[tank_num].death_zone_porcenatage;//TODO: Get from options menu
+	vibration_percentage = app->input->controllerInfo[tank_num].vibration_percentage;
 
 	kb_shoot = SDL_BUTTON_LEFT;
 
@@ -212,9 +213,9 @@ bool Obj_Tank::Start()
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
-	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
-	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	gamepad_interact	= SDL_CONTROLLER_BUTTON_X;
+	gamepad_shoot		= app->input->controllerInfo[number_of_tanks].attack_button;
+	gamepad_item		= app->input->controllerInfo[number_of_tanks].use_item_button;
+	gamepad_interact	= app->input->controllerInfo[number_of_tanks].interacton_button;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -983,7 +984,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			}
 			if (app->input->IsConnectedControllet(controller))
 			{ 
-				app->input->ControllerPlayRumble(controller, 0.1f, 100);
+				app->input->ControllerPlayRumble(controller, 0.1f*vibration_percentage, 100);
 			}
 
 			if (charging)
@@ -1022,7 +1023,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			camera_player->AddTrauma(weapon_info.shot1.trauma);
 
 			if (app->input->IsConnectedControllet(controller))
-				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration);
+				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 			velocity_map -= shot_dir * recoil_speed;
@@ -1034,7 +1035,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			if (app->input->IsConnectedControllet(controller))
-				app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration);
+				app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot2.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
@@ -1058,7 +1059,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		(this->*shot2_function[(uint)weapon_info.weapon])();
 		camera_player->AddTrauma(weapon_info.shot1.trauma);
 		//TODO: Play wepon sfx
-		if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
+		if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration); }
 	}
 
 	//- Quick shot
@@ -1070,7 +1071,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		{
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			(this->*shot1_function[(uint)weapon_info.weapon])();
-			if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 			shot_timer.Start();
 		}
@@ -1122,7 +1123,7 @@ bool Obj_Tank::PressShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_DOWN;
+		return app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) == KEY_DOWN;
 	}
 }
 
@@ -1134,7 +1135,7 @@ bool Obj_Tank::HoldShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_REPEAT;
+		return app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) == KEY_REPEAT;
 	}
 }
 
@@ -1146,7 +1147,7 @@ bool Obj_Tank::ReleaseShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_UP;
+		return app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) == KEY_UP;
 	}
 }
 
@@ -1195,7 +1196,7 @@ void Obj_Tank::SelectInputMethod()
 	if (shot_input != INPUT_METHOD::CONTROLLER
 		&& (app->input->IsConnectedControllet(controller)
 			&& (!app->input->GetControllerJoystick(controller, gamepad_aim, dead_zone).IsZero()
-				|| app->input->GetControllerAxis(controller, gamepad_shoot) > 0)))
+				|| app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
@@ -1279,12 +1280,12 @@ void Obj_Tank::ReviveTank(float dt)
 
 bool Obj_Tank::PressInteract()
 {
-	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
+	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
 }
 
 bool Obj_Tank::ReleaseInteract()
 {
-	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
+	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
 void Obj_Tank::Die()
@@ -1310,7 +1311,7 @@ void Obj_Tank::Item()
 	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
 			|| (app->input->IsConnectedControllet(controller)
-				&& app->input->GetControllerButtonState(controller, gamepad_item) == KEY_DOWN)))
+				&& app->input->GetControllerButtonOrTriggerState(controller, gamepad_item) == KEY_DOWN)))
 	{
 		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);
 		new_item->caster = this;

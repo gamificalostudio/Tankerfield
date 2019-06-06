@@ -21,14 +21,7 @@
 struct SDL_Rect;
 class Camera;
 
-struct ControllersPlayerInfo
-{
-	float death_zone_porcenatage = 0.20f;
-	int vibration_percentage = 1.00f;
-	//SDL_GameControllerButton attack_button;
-	//SDL_GameControllerButton interacton_button = SDL_CONTROLLER_BUTTON_X;
-	//SDL_GameControllerButton use_item_button = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-};
+
 
 enum EventWindow
 {
@@ -80,6 +73,15 @@ enum class CONTROLLER_BUTTON : int
 	MAX
 };
 
+struct ControllersPlayerInfo
+{
+	float death_zone_porcenatage = 0.20f;
+	int vibration_percentage = 1.00f;
+	CONTROLLER_BUTTON attack_button = CONTROLLER_BUTTON::RT;
+	CONTROLLER_BUTTON interacton_button = CONTROLLER_BUTTON::X;
+	CONTROLLER_BUTTON use_item_button = CONTROLLER_BUTTON::LB;
+
+};
 
 class M_Input;
 
