@@ -79,6 +79,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,6 +108,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,6 +132,7 @@
     <ClCompile Include="Bullet_Oil.cpp" />
     <ClCompile Include="Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="LeaderBoard.cpp" />
     <ClCompile Include="M_Debug.cpp" />
     <ClCompile Include="NewRoundAnimation.cpp" />
     <ClCompile Include="Options_Menu.cpp" />
@@ -204,6 +207,7 @@
     <ClCompile Include="UI_Slider.cpp" />
     <ClCompile Include="UI_TextPanel.cpp" />
     <ClCompile Include="UI_Element.cpp" />
+    <ClCompile Include="M_VideoPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -212,6 +216,7 @@
     <ClInclude Include="Bullet_Oil.h" />
     <ClInclude Include="Bullet_RocketLauncher.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="LeaderBoard.h" />
     <ClInclude Include="M_Debug.h" />
     <ClInclude Include="NewRoundAnimation.h" />
     <ClInclude Include="Options_Menu.h" />
@@ -222,6 +227,7 @@
     <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="Obj_FlamethrowerFlame.h" />
     <ClInclude Include="Quadtree_Collision.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="UI_InputText.h" />
     <ClInclude Include="UI_Table.h" />
     <ClInclude Include="M_AnimationBank.h" />
@@ -291,6 +297,7 @@
     <ClInclude Include="UI_Slider.h" />
     <ClInclude Include="UI_TextPanel.h" />
     <ClInclude Include="UI_Element.h" />
+    <ClInclude Include="M_VideoPlayer.h" />
     <ClInclude Include="WeaponInfo.h" />
   </ItemGroup>
   <ItemGroup>
@@ -306,6 +313,12 @@
     <Xml Include="..\Game\data\leader_board.xml">
       <SubType>Designer</SubType>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tankerfield.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Game\textures\ui\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,9 @@
 #ifndef __OBJ_TANK_H__
 #define __OBJ_TANK_H__
 
+#include <string>
+#include <list>
+
 #include "Object.h"
 #include "WeaponInfo.h"
 #include "M_Input.h"
@@ -19,6 +22,16 @@ class Obj_FlamethrowerFlame;
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
 	CONTROLLER
+};
+
+struct MovementBuff
+{
+	std::string source = "";
+	float bonus_speed = 0.f;
+	bool has_decay = false;
+	bool decaying = false;//If the buff is being reduced by the decay rate. For example this is set to true when the tank exits a road
+	//The decay that the bonus will have each second
+	float decay_rate = 0.f;
 };
 
 
@@ -40,8 +53,8 @@ public:
 
 	bool CleanUp() override;
 
-	void OnTrigger(Collider* c1);
-	void OnTriggerEnter(Collider* c1);
+	void OnTrigger(Collider* c1, float dt);
+	void OnTriggerEnter(Collider* c1, float dt);
 	void OnTriggerExit(Collider* c1);
 
 public:
@@ -57,7 +70,7 @@ public:
 	int GetMaxLife() const;
 	int GetTimeBetweenBullets() const;
 	int GetTankNum() const;
-	Controller ** GetController();
+	int GetController();
 	bool GetShotAutomatically() const;
 	bool GetIsElectroShotCharged() const;
 	fPoint GetShotDir() const;
@@ -68,11 +81,8 @@ public:
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	std::vector<Object*>* GetEnemiesHitted();
-
 	void CreatePortals();
-
-public:
-
+	
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);
 	void SetGui(Player_GUI* gui);
@@ -80,14 +90,17 @@ public:
 	fPoint GetTurrPos() const;
 
 private:
-	//- Logic
-	void SetLife(int life);//Don't use SetLife directly from other classes, use ReduceLife() or IncreaseLife()
-
 	//- Movement
 	void Movement(float dt);
-	void ShotRecoilMovement(float &dt);
 	void InputMovementKeyboard(fPoint & input);
 	void InputMovementController(fPoint & input);
+	bool UpdateMaxSpeedBuffs(float dt);
+	bool AddMaxSpeedBuff(MovementBuff buff);
+	bool RemoveMaxSpeedBuff(std::string source);
+	float GetMaxSpeed();//Returns the maximum speed of the tank, tanking into account the bonuses it has
+	void ReduceSpeed(float reduction);
+	void SetSpeed(float speed);
+	float GetCurrSpeed();
 
 	//- Camera
 	void CameraMovement(float dt);
@@ -145,31 +158,30 @@ private:
 	bool ready								= false;
 
 	//- Movement
-	float curr_speed						= 0.f;
-	float speed								= 0.f;
-	float road_buff							= 0.f;
-	fPoint velocity							= { 0.f, 0.f };
-	fPoint max_velocity						= { 0.f, 0.f };
-	fPoint velocity_recoil_lerp				= { 0.f, 0.f };
-	fPoint velocity_recoil_final_lerp		= { 0.f, 0.f };
-	fPoint recoil_dir						= { 0.f, 0.f };
-	float velocity_recoil_curr_speed		= 0.f;
-	float velocity_recoil_decay				= 0.f;
-	float velocity_recoil_speed_max			= 0.f;
-	float velocity_recoil_speed_max_charged = 0.f;
-	float charged_shot_speed				= 0.0f;
-	float lerp_factor_recoil				= 0.f;
-	Timer movement_timer;
-	PerfTimer time_between_portal_tp;
+	float base_max_speed							= 0.f;
+	float speed_colliding_with_building				= 0.f;
+	MovementBuff road_buff;
+	MovementBuff charged_shot_buff;
+	MovementBuff recoil_buff;
 
+	float acceleration_power				= 0.f;
+	fPoint velocity_map						= { 0.f, 0.f };
+	fPoint acceleration_map					= { 0.f, 0.f};
 	float cos_45							= 0.f;//TODO: Create a macro with its value directly
 	float sin_45							= 0.f;
 	float base_angle_lerp_factor			= 0.f;
+	std::list<MovementBuff> movement_buffs;
+
 	//-- Move tutorial
 	Timer tutorial_move_timer;
 	UI_IG_Helper * tutorial_move			= nullptr;
 	int tutorial_move_time					= 0;//The time the tutorial move image will appear on screen (ms)
 	bool tutorial_move_pressed				= false;
+
+	//- Run over
+	float run_over_damage_multiplier		= 0.f;//The damage it does when it hits an enemy (it is multiplied by the current speed)
+	float run_over_speed_reduction			= 0.f;//The speed it loses every time it hits an enemy
+
 
 	//- Shooting
 	fPoint turr_pos							= { 0.f, 0.f };//The position of the turret in the map
@@ -203,11 +215,18 @@ private:
 	uint shot_sound = 0u;
 	uint heal_sound = 0u;
 	uint laser_sound = 0u;
+	uint pick_item_sound = 0u;
+	uint pick_weapon_sound = 0u;
 	void(Obj_Tank::*shot1_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 1 function. The basic shot for charged weapons. The quick shot for sustained weapons.
 	void(Obj_Tank::*shot2_function[(uint)WEAPON::MAX_WEAPONS])();//Shot 2 function. The charged shot for charged wepoans. The sustained shot for sustained weapons.
 	void(Obj_Tank::*release_shot[(uint)WEAPON::MAX_WEAPONS])();//Used on sustained weapons when you release a shot
 	bool show_crosshairs					= false;
 	bool shot_automatically					= false;
+	float recoil_speed						= 0.f;
+	float brake_power						= 0.f;
+
+	//Teleport
+	PerfTimer time_between_portal_tp;
 
 	//Electro shot
 	PerfTimer electro_shot_timer;
@@ -240,7 +259,7 @@ private:
 	//- Input
 	INPUT_METHOD move_input					= INPUT_METHOD::KEYBOARD_MOUSE;//Starts as keyboard and switch to last pressed input
 	INPUT_METHOD shot_input					= INPUT_METHOD::KEYBOARD_MOUSE;
-	Controller ** controller = nullptr;
+	int controller = -1;
 
 	//-- Keyboard inputs
 	SDL_Scancode kb_item					= SDL_SCANCODE_UNKNOWN;
@@ -312,8 +331,6 @@ public:
 	Player_GUI*  gui = nullptr;
 
 public:
-	Obj_Portal * portal1;
-	Obj_Portal * portal2;
 	bool hit_no_enemie = false;
 };
 

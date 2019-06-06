@@ -30,7 +30,7 @@ Obj_Tank_MainMenu::Obj_Tank_MainMenu(fPoint pos) : Object(pos)
 
 Obj_Tank_MainMenu::~Obj_Tank_MainMenu()
 {
-	if (controller != nullptr)
+	if (controller != -1)
 	{
 		app->input->DetachController(controller);
 	}
@@ -88,7 +88,7 @@ bool Obj_Tank_MainMenu::Update(float dt)
 
 void Obj_Tank_MainMenu::InputController(fPoint & input)
 {
-	if (controller != nullptr)
+	if (controller != -1)
 	{
 		input = (fPoint)app->input->GetControllerJoystick(controller, gamepad_rotate, dead_zone);
 	}
@@ -230,7 +230,7 @@ void Obj_Tank_MainMenu::SetColor(const SDL_Color new_color)
 	tank_color = new_color;
 }
 
-void Obj_Tank_MainMenu::SetController(Controller** controller)
+void Obj_Tank_MainMenu::SetController(int controller)
 {
 	this->controller = controller;
 }

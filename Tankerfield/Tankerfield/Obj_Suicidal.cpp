@@ -55,7 +55,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
 
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
-	coll->SetObjOffset({ -coll_w * 2.25f, -coll_h * 1.75f });
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	check_path_time = 2.0f;
 

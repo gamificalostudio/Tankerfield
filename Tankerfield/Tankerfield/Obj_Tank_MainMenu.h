@@ -29,7 +29,7 @@ public:
 
 public:
 	void SetColor( const SDL_Color color_mod);
-	void SetController(Controller ** controller);
+	void SetController(int controller);
 
 private:
 	//- Movement
@@ -51,7 +51,7 @@ private:
 	float turr_target_angle = 0.f;
 
 	//- Input
-	Controller ** controller = nullptr;
+	int controller = -1;
 
 	//-- Controller inputs
 	int dead_zone = 0;

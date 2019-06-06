@@ -11,6 +11,7 @@
 #include "M_Map.h"
 #include "M_Audio.h"
 #include "Obj_ElectroShotAnimation.h"
+#include "M_Scene.h"
 
 
 
@@ -56,12 +57,12 @@ bool Obj_RewardBox::Update(float dt)
 	return true;
 }
 
-void Obj_RewardBox::OnTriggerEnter(Collider * collider)
+void Obj_RewardBox::OnTriggerEnter(Collider * collider, float dt)
 {
 	TakeDamage(collider);
 }
 
-void Obj_RewardBox::OnTrigger(Collider * collider)
+void Obj_RewardBox::OnTrigger(Collider * collider, float dt)
 {
 	TakeDamage(collider);
 }
@@ -100,7 +101,7 @@ void Obj_RewardBox::Dead()
 		}
 		else if (probability < 100)
 		{
-			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, WEAPON::MAX_WEAPONS, 1u);
+			app->pick_manager->CreatePickUp(pos_map, PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, WEAPON::MAX_WEAPONS, app->scene->round + 1u);
 		}
 		if (my_spawn_point != nullptr)
 		{

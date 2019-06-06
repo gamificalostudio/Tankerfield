@@ -19,6 +19,7 @@ class Player_GUI;
 class General_GUI;
 class UI_Label;
 class UI_Image;
+class LeaderBoard;
 
 enum class GAME_STATE
 {
@@ -35,10 +36,6 @@ enum class GAME_STATE
 
 class M_Scene : public Module
 {
-private:
-
-	int number_of_enemies = 0;
-
 public:
 
 	SDL_Color tank_colors[4];
@@ -46,6 +43,8 @@ public:
 	int current_level				= 0;
 
 	General_GUI * general_gui		= nullptr;
+
+	LeaderBoard * leaderboard		= nullptr;
 
 	uint round		= 0u;
 
@@ -86,7 +85,6 @@ public:
 
 	void DebugPathfinding();
 
-	void ReduceNumEnemies();
 
 private:
 	void CreateEnemyWave();
@@ -106,6 +104,7 @@ private:
 
 	iPoint path_tex_offset = { -30, 0 };
 	uint initial_num_enemies = 0u;
+
 private:
 
 	/* Game variables*/

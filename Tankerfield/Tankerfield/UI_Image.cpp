@@ -14,3 +14,46 @@ UI_Image::~UI_Image()
 
 }
 
+bool UI_Image::Draw()
+{
+	SDL_Rect draw_rect;
+	SDL_Texture *tex = GetTexture();
+
+	if (SDL_RectEmpty(&custom_draw_rect))
+	{
+		draw_rect = GetDrawRect();
+	}
+	else
+	{
+		draw_rect = custom_draw_rect;
+	}
+
+	SDL_SetTextureColorMod(tex, color_mod.r, color_mod.g, color_mod.b);
+	app->render->BlitCustomUI(tex, &sprite_rect, &draw_rect, app->ui->current_camera, (int)alpha);
+	SDL_SetTextureColorMod(tex, 255, 255, 255);
+
+	return true;
+}
+
+void UI_Image::SetTexture(SDL_Texture * texture)
+{
+	this->texture = texture;
+}
+
+void UI_Image::SetDrawRect(SDL_Rect draw_rect)
+{
+	custom_draw_rect = draw_rect;
+}
+
+SDL_Texture * UI_Image::GetTexture()
+{
+	if (texture != nullptr)
+	{
+		return texture;
+	}
+	else
+	{
+		return app->ui->GetAtlas();
+	}
+}
+

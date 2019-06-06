@@ -395,6 +395,37 @@ void M_Render::BlitUI(SDL_Texture* texture, int screen_x, int screen_y, const SD
 
 }
 
+void M_Render::BlitCustomUI(SDL_Texture* texture,  const SDL_Rect* sprite_section, const SDL_Rect* draw_section, Camera* camera, const int alpha ) const
+{
+	if (alpha == 0.f)
+	{
+		return;
+	}
+
+	if (camera != nullptr)
+	{
+		SDL_RenderSetClipRect(renderer, &camera->screen_section);
+	}
+
+	if (alpha != 255)
+	{
+		SDL_SetTextureAlphaMod(texture, alpha);
+	}
+
+	if (SDL_RenderCopy(renderer, texture, sprite_section, draw_section) != 0)
+	{
+		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+	}
+
+	SDL_RenderSetClipRect(renderer, nullptr);
+
+	if (alpha != 255)
+	{
+		SDL_SetTextureAlphaMod(texture, 255);
+	}
+
+}
+
 
 bool M_Render::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {

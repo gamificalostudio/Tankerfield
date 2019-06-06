@@ -23,9 +23,16 @@ bool Bullet_Oil::Start()
 	curr_tex = tex;
 
 	draw_offset = { 35, 14 };
-
-	coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_OIL, BODY_TYPE::DYNAMIC, 0.f, this);
-	coll->SetObjOffset({ -0.25f, -0.25f });
-	coll->is_sensor = true;
+	if (coll)
+	{
+		coll->SetIsTrigger(true);
+	}
+	else
+	{
+		coll = app->collision->AddCollider(pos_map, .5f, .5f, TAG::BULLET_OIL, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->SetObjOffset({ -0.25f, -0.25f });
+		coll->is_sensor = true;
+	}
+	bullet_life_ms_timer.Start();
 	return true;
 }

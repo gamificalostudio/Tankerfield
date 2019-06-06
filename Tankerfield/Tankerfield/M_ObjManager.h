@@ -2,6 +2,7 @@
 #define __M_OBJMANAGER_H__
 
 #include <list>
+#include <map>
 
 #include "PugiXml/src/pugiconfig.hpp"
 #include "PugiXml/src/pugixml.hpp"
@@ -96,6 +97,10 @@ public:
 
 	Obj_Item* CreateItem(ItemType type, fPoint map_pos);
 
+	Object* GetObjectFromPool(ObjectType type, fPoint map_pos);
+
+	void ReturnToPool(Object* object);
+
 	static bool SortByYPos(Object * obj1, Object * obj2);
 
 	void DeleteObjects();
@@ -110,6 +115,13 @@ public:
 	}
 
 	bool IsEnemy(ObjectType type);
+
+private:
+	inline void RemoveObject(std::list<Object*>::iterator& iterator);
+
+	inline void DesactivateObject(std::list<Object*>::iterator& iterator);
+
+	inline void UpdateObject(std::list<Object*>::iterator& iterator, const float& dt);
 
 public:
 	bool delete_all_enemies = false;
@@ -137,6 +149,7 @@ private:
 	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
+	std::map<ObjectType, std::list<Object*>> pool_of_objects;
 };
 
 #endif

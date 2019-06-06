@@ -59,7 +59,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	coll_w = 0.5f;
 	coll_h = 0.5f;
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
-	coll->SetObjOffset({ -coll_w * 2.0f, -coll_h * 1.0f });
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 	can_attack = false;
 	distance_to_player = 5; //this is in tiles
 	deltatime_to_check_distance = 1;

@@ -500,6 +500,7 @@ bool Obj_Enemy::Start()
 
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
+	ResetAllAnimations();
 	return true;
 }
 
@@ -518,8 +519,6 @@ void Obj_Enemy::DrawAttackRange(Camera * camera)
 
 bool Obj_Enemy::CleanUp()
 {
-	app->scene->ReduceNumEnemies();
-
 	to_remove = true;
 	return true;
 }
@@ -633,7 +632,7 @@ inline void Obj_Enemy::Stunned()
 }
 
 
-void Obj_Enemy::OnTriggerEnter(Collider * collider)
+void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 {
 	if (state != ENEMY_STATE::BURN)
 	{
@@ -675,7 +674,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 
 		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 		{
-			ReduceLife(collider);
+			ReduceLife(collider->damage, dt);
 		}
 		else if (collider->GetTag() == TAG::BULLET_OIL)
 		{
@@ -710,14 +709,14 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider)
 			}
 			else
 			{
-				ReduceLife(collider);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
 	
 }
 
-void Obj_Enemy::OnTrigger(Collider * collider)
+void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 {
 	if (state != ENEMY_STATE::BURN)
 	{
@@ -754,7 +753,10 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 				{
 					app->audio->PlayFx(sfx_hit);
 					channel_electrocuted = app->audio->PlayFx(electocuted);
-					state_saved = state;
+					if (state != ENEMY_STATE::STUNNED)
+					{
+						state_saved = state;
+					}
 
 					anim_saved = curr_anim;
 
@@ -789,7 +791,7 @@ void Obj_Enemy::OnTrigger(Collider * collider)
 			}
 			else
 			{
-				ReduceLife(collider);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
@@ -835,9 +837,9 @@ void Obj_Enemy::Oiled()
 		}
 }
 
-inline void Obj_Enemy::ReduceLife(Collider * collider)
+inline void Obj_Enemy::ReduceLife(int damage, float dt)
 {
-	life -= collider->damage;
+	life -= damage;
 
 	damaged_sprite_timer.Start();
 	last_texture = curr_tex;
@@ -853,4 +855,17 @@ inline void Obj_Enemy::ReduceLife(Collider * collider)
 	{
 		app->audio->PlayFx(sfx_hit);
 	}
+}
+
+void Obj_Enemy::ResetAllAnimations()
+{
+	idle.Reset();
+	walk.Reset();
+	attack.Reset();
+	death.Reset();
+	burn.Reset();
+	dying_burn.Reset();
+	electro_dead.Reset();
+	portal_animation.Reset();
+	portal_close_anim.Reset();
 }

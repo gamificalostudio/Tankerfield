@@ -63,6 +63,8 @@ M_Collision::M_Collision()
 	trigger_matrix[(int)TAG::PLAYER][(int)TAG::ROAD] = true;
 	trigger_matrix[(int)TAG::PLAYER][(int)TAG::PORTAL] = true;
 	trigger_matrix[(int)TAG::PLAYER][(int)TAG::HEALING_AREA_SHOT] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::WALL] = true;
+	trigger_matrix[(int)TAG::PLAYER][(int)TAG::WATER] = true;
 
 	trigger_matrix[(int)TAG::ENEMY][(int)TAG::BULLET] = true;
 	trigger_matrix[(int)TAG::ENEMY][(int)TAG::FRIENDLY_BULLET] = true;
@@ -217,7 +219,7 @@ bool M_Collision::Update(float dt)
 			{
 				if ((*iter)->object != nullptr && trigger_matrix[(int)(*iter)->tag][(int)(*collider)->tag] && (*iter)->to_destroy == false && (*collider)->to_destroy == false)
 				{
-					(*iter)->object->OnTriggerEnter((*collider));
+					(*iter)->object->OnTriggerEnter((*collider), dt);
 				}
 
 				(*collider)->triggers_list.push_back(*iter);
@@ -226,7 +228,7 @@ bool M_Collision::Update(float dt)
 			{
 				if ((*iter)->object != nullptr && trigger_matrix[(int)(*iter)->tag][(int)(*collider)->tag] && (*iter)->to_destroy == false && (*collider)->to_destroy == false)
 				{
-					(*iter)->object->OnTrigger((*collider));
+					(*iter)->object->OnTrigger((*collider), dt);
 				}
 			}
 		}
