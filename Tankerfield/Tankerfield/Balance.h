@@ -20,6 +20,7 @@ struct TeslaTrooperInfo
 	float attack_range				= 0.f;
 	uint attack_frequency			= 0;
 	int teleport_max_enemies		= 0;
+	float detection_range = 0.f;
 };
 
 struct BruteInfo
@@ -41,6 +42,7 @@ struct RocketLauncherInfo
 	uint attack_frequency			= 0;
 	float life_multiplier			= 0.f;
 	float life_exponential_base		= 0.f;
+	float detection_range			= 0.f;
 };
 
 struct SuicidalInfo
@@ -51,6 +53,7 @@ struct SuicidalInfo
 	uint attack_frequency			= 0;
 	float life_multiplier			= 0.f;
 	float life_exponential_base		= 0.f;
+	float detection_range			= 0.f;
 };
 
 class WeaponXMLInfo
