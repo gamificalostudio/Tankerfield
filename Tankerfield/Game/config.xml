@@ -5,7 +5,7 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="0" />
+    <mode value ="1" />
 
   </app>
 
@@ -119,6 +119,29 @@
         </rotate>
       </animations>
     </oil>
+    
+    <oil_splash>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/particles/oil_splash.png"/>
+      <animations>
+        <oil_splash speed="40" loop ="false">
+          <dir>
+            <frame x="0" y="0" w="90" h="97"/>
+            <frame x="90" y="0" w="90" h="97"/>
+            <frame x="180" y="0" w="90" h="97"/>
+            <frame x="270" y="0" w="90" h="97"/>
+            <frame x="360" y="0" w="90" h="97"/>
+            <frame x="450" y="0" w="90" h="97"/>
+            <frame x="0" y="97" w="90" h="97"/>
+            <frame x="90" y="97" w="90" h="97"/>
+            <frame x="180" y="97" w="90" h="97"/>
+            <frame x="270" y="97" w="90" h="97"/>
+            <frame x="360" y="97" w="90" h="97"/>
+          </dir>
+        </oil_splash>
+      </animations>
+    </oil_splash>
     
     <tank>
       <electro_shot>

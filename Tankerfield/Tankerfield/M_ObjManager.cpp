@@ -47,6 +47,7 @@
 #include "Obj_Tank_MainMenu.h"
 #include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
+#include "Oil_Splash.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -444,6 +445,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::HEALING_AREA_SHOT:
 		ret = DBG_NEW HealingShot_Area(pos);
 		ret->type = ObjectType::HEALING_AREA_SHOT;
+		break;
+	case ObjectType::OIL_SPLASH:
+		ret = DBG_NEW Oil_Splash(pos);
+		ret->type = ObjectType::OIL_SPLASH;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");

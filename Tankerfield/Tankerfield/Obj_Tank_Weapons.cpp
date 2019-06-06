@@ -474,6 +474,8 @@ void Obj_Tank::ShootOil()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
+	bullet->splash_damage = weapon_info.shot1.bullet_damage;
+
 	bullet->SetPlayer(this);
 
 }
