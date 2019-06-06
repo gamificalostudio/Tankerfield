@@ -9,6 +9,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "M_UI.h"
 
 
 
@@ -532,4 +533,27 @@ int Controller::PlayRumble(float strengh, Uint32 length)
 int Controller::StopRumble()
 {
 	return SDL_HapticRumbleStop(haptic);
+}
+
+KeyState M_Input::GetControllerButtonOrTriggerState(int controller, CONTROLLER_BUTTON controller_button)
+{
+	switch (controller_button)
+	{
+	case CONTROLLER_BUTTON::A:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A);
+	case CONTROLLER_BUTTON::B:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B);
+	case CONTROLLER_BUTTON::Y:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_Y);
+	case CONTROLLER_BUTTON::X:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X);
+	case CONTROLLER_BUTTON::L:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+	case CONTROLLER_BUTTON::R:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+	case CONTROLLER_BUTTON::LT:
+		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+	case CONTROLLER_BUTTON::RT:
+		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	}
 }
