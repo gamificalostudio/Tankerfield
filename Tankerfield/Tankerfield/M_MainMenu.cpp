@@ -73,12 +73,12 @@ bool M_MainMenu::Start()
 	menu_panel_def.columns = 1;
 	menu_panel_def.rows = 5;
 
-	menu_panel = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
-	menu_panel->SetElement(play_button, iPoint(0,0));
-	menu_panel->SetElement(leaderboard_button, iPoint(0, 1));
-	menu_panel->SetElement(options_menu_button, iPoint(0, 2));
-	menu_panel->SetElement(credits_menu_button, iPoint(0, 3));
-	menu_panel->SetElement(exit_button, iPoint(0, 4));
+	menu_navigation = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
+	menu_navigation->SetElement(play_button, iPoint(0,0));
+	menu_navigation->SetElement(leaderboard_button, iPoint(0, 1));
+	menu_navigation->SetElement(options_menu_button, iPoint(0, 2));
+	menu_navigation->SetElement(credits_menu_button, iPoint(0, 3));
+	menu_navigation->SetElement(exit_button, iPoint(0, 4));
 
 
 	// Selection screen ------------------------
@@ -270,22 +270,27 @@ bool M_MainMenu::Start()
 	credits_navigation_def.rows = 5;
 
 	credits_navigation = app->ui->CreateIntearctiveGroup(screen_center,credits_navigation_def,this);
+
 	credits_navigation->SetElement(return_credits, iPoint(0, 0));
 	credits_navigation->SetElement(website, iPoint(1, 0));
 	credits_navigation->SetElement(github, iPoint(2, 0));
 	credits_navigation->SetElement(return_credits, iPoint(3, 0));
+
 	credits_navigation->SetElement(jaume_github, iPoint(0, 1));
 	credits_navigation->SetElement(jaume_linkedin, iPoint(1, 1));
 	credits_navigation->SetElement(aurelio_github, iPoint(2, 1));
 	credits_navigation->SetElement(aurelio_linkedin, iPoint(3, 1));
+
 	credits_navigation->SetElement(víctor_github, iPoint(0, 2));
 	credits_navigation->SetElement(víctor_linkedin, iPoint(1, 2));
 	credits_navigation->SetElement(jorge_github, iPoint(2, 2));
 	credits_navigation->SetElement(jorge_linkedin, iPoint(3, 2));
+
 	credits_navigation->SetElement(yessica_github, iPoint(0, 3));
 	credits_navigation->SetElement(yessica_linkedin, iPoint(1, 3));
 	credits_navigation->SetElement(gerard_github, iPoint(2, 3));
 	credits_navigation->SetElement(gerard_linkedin, iPoint(3, 3));
+
 	credits_navigation->SetElement(sergio_github, iPoint(0, 4));
 	credits_navigation->SetElement(sergio_linkedin, iPoint(1, 4));
 	credits_navigation->SetElement(aitor_github, iPoint(2, 4));
@@ -335,6 +340,7 @@ bool M_MainMenu::CleanUp()
 	app->tex->UnLoad(background_texture);
 	app->audio->PauseMusic(2);
 	app->render->DestroyCamera(camera);
+
 	delete(options);
 	options = nullptr;
 	delete(leaderboard);
@@ -384,7 +390,6 @@ bool M_MainMenu::Update(float dt)
 
 bool M_MainMenu::PostUpdate(float dt)
 {
-	//LOG("Current  player : %i",current_player );
 	// Blit background ===================================
 
 	SDL_RenderCopy(app->render->renderer, background_texture, NULL, &(SDL_Rect)app->win->GetWindowRect());
@@ -413,7 +418,6 @@ bool M_MainMenu::Reset()
 
 bool M_MainMenu::OnHoverEnter(UI_Element * element)
 {
-
 	app->audio->PlayFx(button_enter_sfx);
 	return true;
 }
@@ -426,14 +430,14 @@ void M_MainMenu::InputNavigate()
 		{
 			if (players[i].controller != -1)
 			{
-				if (menu_panel->HandleControllerINavigation(players[i].controller))
+				if (menu_navigation->HandleControllerINavigation(players[i].controller))
 				{
 					app->audio->PlayFx(button_enter_sfx);
 				}
 			}
 		}
 
-		if (menu_panel->HandleKeyboardNavigation())
+		if (menu_navigation->HandleKeyboardNavigation())
 		{
 			app->audio->PlayFx(button_enter_sfx);
 		}
@@ -441,11 +445,14 @@ void M_MainMenu::InputNavigate()
 	}
 	else if (menu_state == MENU_STATE::SELECTION)
 	{
-		if (players[current_player].controller != -1)
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (selection_panel->HandleControllerINavigation(players[current_player].controller))
+			if (players[current_player].controller != -1)
 			{
-				app->audio->PlayFx(button_enter_sfx);
+				if (selection_panel->HandleControllerINavigation(players[current_player].controller))
+				{
+					app->audio->PlayFx(button_enter_sfx);
+				}
 			}
 		}
 
@@ -456,11 +463,14 @@ void M_MainMenu::InputNavigate()
 	}
 	else if (menu_state == MENU_STATE::CREDITS)
 	{
-		if (players[current_player].controller != -1)
+		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (credits_navigation->HandleControllerINavigation(players[current_player].controller))
+			if (players[current_player].controller != -1)
 			{
-				app->audio->PlayFx(button_enter_sfx);
+				if (credits_navigation->HandleControllerINavigation(players[current_player].controller))
+				{
+					app->audio->PlayFx(button_enter_sfx);
+				}
 			}
 		}
 
@@ -479,7 +489,9 @@ void M_MainMenu::InputSelect()
 {
 	bool input_select_controller = false;
 
-	if (menu_state == MENU_STATE::INIT_MENU)
+	// Detect input select controller ------------------------------------- 
+
+	if (menu_state != MENU_STATE::SELECTION && menu_state != MENU_STATE::CHANGE_SCENE)
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
@@ -489,7 +501,8 @@ void M_MainMenu::InputSelect()
 			}
 		}
 	}
-	else if (menu_state == MENU_STATE::SELECTION || menu_state == MENU_STATE::OPTIONS||menu_state==MENU_STATE::CREDITS||menu_state==MENU_STATE::LEADERBOARD)
+
+	else if (menu_state == MENU_STATE::SELECTION)
 	{
 		if (players[current_player].controller != -1 &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
@@ -497,178 +510,186 @@ void M_MainMenu::InputSelect()
 		}
 	}
 
-	if (app->input->GetMouseButton(1) == KEY_UP)
+	// Detect input select mouse -----------------------------------------
+
+	if (app->input->GetMouseButton(1) == KEY_UP && app->ui->MouseIsFocusing())
 	{
 		input_select_controller = true;
 	}
 
-	if (input_select_controller == true)
+	if (input_select_controller == false)
 	{
-		if (menu_state == MENU_STATE::SELECTION && selection_panel->GetFocusedElement() != nullptr )
+		return;
+	}
+
+	// Manage selection input select mouse -------------------------------
+	
+	if (menu_state == MENU_STATE::SELECTION && selection_panel->GetFocusedElement() != nullptr)
+	{
+		if (SetPlayerProperties() == true)
 		{
-			if (SetPlayerProperties() == true)
+			if (current_player < MAX_PLAYERS)
 			{
-				if (current_player < MAX_PLAYERS)
-				{
-					app->audio->PlayFx(button_select_sfx);
-				}
-				else
-				{
-					app->audio->PlayFx(selection_finished_sfx);
-				}
+				app->audio->PlayFx(button_select_sfx);
 			}
 			else
 			{
-				app->audio->PlayFx(button_error_sfx);
+				app->audio->PlayFx(selection_finished_sfx);
 			}
 		}
-
-		else if ( menu_state == MENU_STATE::INIT_MENU && app->ui->GetFocusedElement() != nullptr)
+		else
 		{
-			UI_Element*  menu_element = menu_panel->GetFocusedElement();
-
-			if (menu_element == play_button)
-			{
-				SetState(MENU_STATE::SELECTION);
-				app->audio->PlayFx(button_select_sfx);
-			}
-			else if (menu_element == credits_menu_button)
-			{
-				SetState(MENU_STATE::CREDITS);
-				app->audio->PlayFx(button_select_sfx);
-			}
-			else if (menu_element == options_menu_button)
-			{
-				app->audio->PlayFx(button_select_sfx);
-				SetState(MENU_STATE::OPTIONS);
-			}
-			else if (menu_element == exit_button)
-			{
-				exit_game = true;
-				app->audio->PlayFx(button_select_sfx);
-			}
-			else if (menu_element == leaderboard_button)
-			{
-				app->audio->PlayFx(button_select_sfx);
-				SetState(MENU_STATE::LEADERBOARD);
-			}
-		}
-		else if (menu_state == MENU_STATE::OPTIONS && app->ui->GetFocusedElement() != nullptr)
-		{
-			options->InputSelect();
-		}
-		else if (menu_state == MENU_STATE::LEADERBOARD && app->ui->GetFocusedElement() != nullptr)
-		{
-			UI_Element*  menu_element = leaderboard_navigation->GetFocusedElement();
-
-			if (menu_element == return_from_leaderboard)
-			{
-				app->audio->PlayFx(button_select_sfx);
-				SetState(MENU_STATE::INIT_MENU);
-			}
-		}
-		else if (menu_state == MENU_STATE::CREDITS && app->ui->GetFocusedElement() != nullptr)
-		{
-			UI_Element*  menu_element = credits_navigation->GetFocusedElement();
-
-			if (menu_element == github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/gamificalostudio/Tankerfield", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == website)
-			{
-				ShellExecute(NULL, "open", "https://google.es", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == jaume_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/jaume-montagut-guix-7389a4166/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == jaume_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/JaumeMontagut", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == aurelio_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/alejandro61299", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == aurelio_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/alejandro-a-gamarra-ni%C3%B1o-568b6b171/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == víctor_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/VictorSegura99", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == víctor_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/v%C3%ADctor-segura-blanco-297458185/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == jorge_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/jorgegh2", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == jorge_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/jorge-gemas-herencia-28140b188/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if(menu_element == yessica_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/YessicaSD", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == yessica_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/yessica-servin-dominguez-663175165/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == gerard_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/vsRushy", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == gerard_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/gerard-marcos-freixas-0a9284158/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == sergio_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/Sersius", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == sergio_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/sergio-g%C3%B3mez-b81b69184/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == aitor_github)
-			{
-				ShellExecute(NULL, "open", "https://github.com/AitorVelez", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == aitor_linkedin)
-			{
-				ShellExecute(NULL, "open", "https://www.linkedin.com/in/aitor-v%C3%A9lez-tolosa-48186a129/", NULL, NULL, SW_SHOWNORMAL);
-			}
-
-			else if (menu_element == return_credits)
-			{
-				SetState(MENU_STATE::INIT_MENU);
-				app->audio->PlayFx(button_select_sfx);
-			}
+			app->audio->PlayFx(button_error_sfx);
 		}
 	}
 
+	else if (menu_state == MENU_STATE::INIT_MENU && menu_navigation->GetFocusedElement() != nullptr)
+	{
+		UI_Element*  menu_element = menu_navigation->GetFocusedElement();
+
+		if (menu_element == play_button)
+		{
+			SetState(MENU_STATE::SELECTION);
+			app->audio->PlayFx(button_select_sfx);
+		}
+		else if (menu_element == credits_menu_button)
+		{
+			SetState(MENU_STATE::CREDITS);
+			app->audio->PlayFx(button_select_sfx);
+		}
+		else if (menu_element == options_menu_button)
+		{
+			app->audio->PlayFx(button_select_sfx);
+			SetState(MENU_STATE::OPTIONS);
+		}
+		else if (menu_element == exit_button)
+		{
+			exit_game = true;
+			app->audio->PlayFx(button_select_sfx);
+		}
+		else if (menu_element == leaderboard_button)
+		{
+			app->audio->PlayFx(button_select_sfx);
+			SetState(MENU_STATE::LEADERBOARD);
+		}
+	}
+
+	else if (menu_state == MENU_STATE::OPTIONS)
+	{
+		options->InputSelect();
+	}
+
+	else if (menu_state == MENU_STATE::LEADERBOARD && leaderboard_navigation->GetFocusedElement() != nullptr)
+	{
+		UI_Element*  menu_element = leaderboard_navigation->GetFocusedElement();
+
+		if (menu_element == return_from_leaderboard)
+		{
+			app->audio->PlayFx(button_select_sfx);
+			SetState(MENU_STATE::INIT_MENU);
+		}
+	}
+
+	else if (menu_state == MENU_STATE::CREDITS && credits_navigation->GetFocusedElement() != nullptr)
+	{
+		UI_Element*  menu_element = credits_navigation->GetFocusedElement();
+
+		if (menu_element == github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/gamificalostudio/Tankerfield", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == website)
+		{
+			ShellExecute(NULL, "open", "https://google.es", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == jaume_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/jaume-montagut-guix-7389a4166/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == jaume_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/JaumeMontagut", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == aurelio_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/alejandro61299", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == aurelio_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/alejandro-a-gamarra-ni%C3%B1o-568b6b171/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == víctor_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/VictorSegura99", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == víctor_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/v%C3%ADctor-segura-blanco-297458185/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == jorge_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/jorgegh2", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == jorge_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/jorge-gemas-herencia-28140b188/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == yessica_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/YessicaSD", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == yessica_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/yessica-servin-dominguez-663175165/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == gerard_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/vsRushy", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == gerard_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/gerard-marcos-freixas-0a9284158/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == sergio_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/Sersius", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == sergio_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/sergio-g%C3%B3mez-b81b69184/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == aitor_github)
+		{
+			ShellExecute(NULL, "open", "https://github.com/AitorVelez", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == aitor_linkedin)
+		{
+			ShellExecute(NULL, "open", "https://www.linkedin.com/in/aitor-v%C3%A9lez-tolosa-48186a129/", NULL, NULL, SW_SHOWNORMAL);
+		}
+
+		else if (menu_element == return_credits)
+		{
+			SetState(MENU_STATE::INIT_MENU);
+			app->audio->PlayFx(button_select_sfx);
+		}
+	}
 }
 
 
@@ -751,7 +772,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	{
 	case MENU_STATE::INIT_MENU:
 		current_player = 0;
-		menu_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		menu_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		logo_image->SetState(ELEMENT_STATE::HIDDEN);
 		version_label->SetState(ELEMENT_STATE::HIDDEN);
 
@@ -793,7 +814,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	{
 	case MENU_STATE::INIT_MENU:
 
-		menu_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		menu_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		logo_image->SetState(ELEMENT_STATE::VISIBLE);
 		version_label->SetState(ELEMENT_STATE::VISIBLE);
 
