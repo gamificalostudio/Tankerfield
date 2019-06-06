@@ -153,6 +153,7 @@ bool M_MainMenu::Start()
 		player_labels[i] = app->ui->CreateLabel(players[i].tank_pos + fPoint(0, 150), UI_LabelDef(player_string, app->font->button_font_40, { 220, 220,220,255 }));
 		player_labels[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 		player_labels[i]->SetParent(player_labels_peg);
+		players[i].controller = i;
 	}
 
 	// Credits Menu
@@ -379,15 +380,6 @@ bool M_MainMenu::PreUpdate()
 		return false;
 	}
 
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (players[i].controller == -1)
-		{
-			players[i].controller = app->input->GetAbleController();
-			players[i].tank->SetController(players[i].controller);
-		}
-	}
-
 	if (menu_state != MENU_STATE::CHANGE_SCENE)
 	{
 		InputNavigate();
@@ -449,7 +441,7 @@ void M_MainMenu::InputNavigate()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != -1)
+			if (app->input->IsConnectedControllet(players[i].controller))
 			{
 				if (menu_panel->HandleControllerINavigation(players[i].controller))
 				{
@@ -466,7 +458,7 @@ void M_MainMenu::InputNavigate()
 	}
 	else if (menu_state == MENU_STATE::SELECTION)
 	{
-		if (players[current_player].controller != -1)
+		if (app->input->IsConnectedControllet(players[current_player].controller))
 		{
 			if (selection_panel->HandleControllerINavigation(players[current_player].controller))
 			{
@@ -481,7 +473,7 @@ void M_MainMenu::InputNavigate()
 	}
 	else if (menu_state == MENU_STATE::CREDITS)
 	{
-		if (players[current_player].controller != -1)
+		if (app->input->IsConnectedControllet(players[current_player].controller))
 		{
 			if (credits_navigation->HandleControllerINavigation(players[current_player].controller))
 			{
@@ -498,6 +490,16 @@ void M_MainMenu::InputNavigate()
 	{
 		options->InputNavigate();
 	}
+	else if (menu_state == MENU_STATE::CONTROLLERS_SETTINGS)
+	{
+		for (uint i = 0; i < MAX_PLAYERS; ++i)
+		{
+			if (app->input->IsConnectedControllet(players[i].controller))
+			{
+				controllers_setting[i]->InteractiveGroup->HandleControllerINavigation(players[i].controller);
+			}
+		}
+	}
 }
 
 void M_MainMenu::InputSelect()
@@ -508,13 +510,13 @@ void M_MainMenu::InputSelect()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != -1 && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if (app->input->IsConnectedControllet(players[i].controller) && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 			{
 				input_select_controller = true;
 			}
 		}
 	}
-	else if (menu_state == MENU_STATE::SELECTION || menu_state == MENU_STATE::OPTIONS||menu_state==MENU_STATE::CREDITS||menu_state==MENU_STATE::LEADERBOARD)
+	else if (menu_state != MENU_STATE::INIT_MENU && menu_state != MENU_STATE::CHANGE_SCENE && menu_state != MENU_STATE::NO_TYPE)
 	{
 		if (players[current_player].controller != -1 &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
@@ -695,11 +697,13 @@ void M_MainMenu::InputSelect()
 
 		else if (menu_state == MENU_STATE::CONTROLLERS_SETTINGS && app->ui->GetFocusedElement() != nullptr)
 		{
-		for (uint i = 0; i < 4; ++i)
-		{
-			controllers_setting[i]->InputSelect();
-		}
-		
+			for (uint player = 0; player < MAX_PLAYERS; ++player)
+			{
+				if (app->input->IsConnectedControllet(players[player].controller) && app->input->GetControllerButtonState(players[player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+				{
+					controllers_setting[player]->InputSelect();
+				}
+			}
 		}
 	}
 
@@ -818,6 +822,13 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		leaderboard->HideLeaderBoard();
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		break;
+
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		for (uint i = 0; i < 4; ++i)
+		{
+			controllers_setting[i]->HideControllersSettings();
+		}
 		break;
 	}
 

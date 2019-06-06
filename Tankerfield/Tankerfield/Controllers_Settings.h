@@ -14,8 +14,10 @@ public:
 
 	void InputSelect();
 
-private:
+
 	UI_InteractiveGroup* InteractiveGroup = nullptr;
+private:
+	
 
 	UI_Element* Canvas = nullptr;
 	
@@ -23,8 +25,11 @@ private:
 	UI_Button* return_button = nullptr;
 	UI_Label* title = nullptr;
 	UI_Table* table = nullptr;
-	UI_Button* Sensitivity_button_left = nullptr;
-	UI_Button* Sensitivity_button_rigth = nullptr;
+	UI_Button* vibration_button_L = nullptr;
+	UI_Button* vibration_button_R = nullptr;
+	
+	UI_Button* Sensitivity_button_L = nullptr;
+	UI_Button* Sensitivity_button_R = nullptr;
 
 
 

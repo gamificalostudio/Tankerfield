@@ -25,7 +25,6 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(2, 2, nullptr), this);
 	InteractiveGroup->SetParent(panel);
 
-	InteractiveGroup->SetElement(return_button, iPoint(0, 0));
 	
 	
 	title = app->ui->CreateLabel(fPoint(relative_pos.x + 305, relative_pos.y + 70), UI_LabelDef("Controller Settings", app->font->label_font_38), this);
@@ -34,7 +33,7 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	int width = 270, height = 70;
 	int widths[2] = { width,width};
 	int heights[3] = { height ,height ,height };
-	table = app->ui->CreateTable(fPoint(relative_pos.x + 453, relative_pos.y + 255), table_def, widths, heights);
+	table = app->ui->CreateTable(fPoint(relative_pos.x + 453, relative_pos.y + 240), table_def, widths, heights);
 	table->SetParent(panel);
 	
 	UI_Label* attack_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Attack", app->font->label_font_24), nullptr);
@@ -49,16 +48,29 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos)
 	table->AssortElementToTable(Use_item_label, iPoint(0, 2));
 	Use_item_label->SetParent(table);
 
-	UI_Label* Vibration_label = app->ui->CreateLabel(fPoint(relative_pos.x + 275, relative_pos.y + 390), UI_LabelDef("Vibration", app->font->label_font_24), nullptr);
+	UI_Label* Vibration_label = app->ui->CreateLabel(fPoint(relative_pos.x + 275, relative_pos.y + 375), UI_LabelDef("Vibration", app->font->label_font_24), nullptr);
 	Vibration_label->SetParent(panel);
 
-	UI_Label* Sensitivity_label = app->ui->CreateLabel(fPoint(relative_pos.x + 270, relative_pos.y + 430), UI_LabelDef("Sensitivity", app->font->label_font_24), nullptr);
+	vibration_button_L = app->ui->CreateButton(fPoint(relative_pos.x + 535, relative_pos.y + 390), UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), nullptr);
+	vibration_button_L->SetParent(panel);
+
+	vibration_button_R = app->ui->CreateButton(fPoint(relative_pos.x + 625, relative_pos.y + 390), UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), nullptr);
+	vibration_button_R->SetParent(panel);
+
+	UI_Label* Sensitivity_label = app->ui->CreateLabel(fPoint(relative_pos.x + 270, relative_pos.y + 435), UI_LabelDef("Sensitivity", app->font->label_font_24), nullptr);
 	Sensitivity_label->SetParent(panel);
 
-	Sensitivity_button_left = app->ui->CreateButton(fPoint(relative_pos.x + 535, relative_pos.y + 430), UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), this);
-	Sensitivity_button_left->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	Sensitivity_button_left->SetParent(panel);
-	InteractiveGroup->SetElement(Sensitivity_button_left, iPoint(0,1));
+	Sensitivity_button_L = app->ui->CreateButton(fPoint(relative_pos.x + 535, relative_pos.y + 450), UI_ButtonDef({ 310,510,33,35 }, { 310, 550,33,35 }, { 310 ,645,46,44 }, { 302 ,592,55,50 }), nullptr);
+	Sensitivity_button_L->SetParent(panel);
+
+	Sensitivity_button_R = app->ui->CreateButton(fPoint(relative_pos.x + 625, relative_pos.y + 450), UI_ButtonDef({ 350,510,33,35 }, { 350, 550	,33,35 }, { 365 ,645,53,50 }, { 365 ,590,53,50 }), nullptr);
+	Sensitivity_button_R->SetParent(panel);
+
+
+	InteractiveGroup->SetElement(return_button, iPoint(0, 1));
+	InteractiveGroup->SetElement(vibration_button_L, iPoint(0, 0));
+	InteractiveGroup->SetElement(vibration_button_R, iPoint(1, 0));
+
 }
 
 Controllers_Settings::~Controllers_Settings()
@@ -79,10 +91,9 @@ void Controllers_Settings::InputSelect()
 	UI_Element* focused = InteractiveGroup->GetFocusedElement();
 	if (focused == return_button)
 	{
-		HideControllersSettings();
 		app->main_menu->SetState(MENU_STATE::OPTIONS);
 	}
-	if (focused == Sensitivity_button_left)
+	if (focused == vibration_button_L)
 	{
 
 	}
