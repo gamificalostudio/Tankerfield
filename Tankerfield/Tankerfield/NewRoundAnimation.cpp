@@ -30,15 +30,15 @@ void NewRoundAnimation::Start()
 	center_energy->alpha = 0.f;
 	center_energy_alpha_fill_amount = 255.f / NEW_ROUND_PARTICLE_NUM;
 	max_particle_time = 10000u;//10 seconds max time to transition for all the particles
-	color_transition_time = 1.f;
+	color_transition_time = 2.5f;
+
+	source_color = { 255, 255, 255, 255 };//White
+	target_color = { 75, 180,   0, 255 };//Same green as the health bars in full life
 
 	color_r = source_color.r;
 	color_g = source_color.g;
 	color_b = source_color.b;
 	color_a = source_color.a;
-
-	source_color = { 255, 255, 255, 255 };//White
-	target_color = { 75, 180,   0, 255 };//Same green as the health bars in full life
 
 	image_def.sprite_section = { 1725, 1514, 55, 55 };
 	for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
@@ -49,7 +49,7 @@ void NewRoundAnimation::Start()
 		heal_particle[i]->color_mod = target_color;
 	}
 
-	heal_particle_speed = 20.f;
+	heal_particle_speed = 3.5f;
 
 	center_energy->SetParent(app->scene->general_gui->round_element);
 	app->scene->general_gui->round_number_label->SetParent(center_energy);
@@ -148,6 +148,7 @@ bool NewRoundAnimation::Update(float dt)
 
 	case NEW_ROUND_ANIMATION_PHASE::HEAL:
 	{
+		//TODO: Transition center energy alpha
 		fRect screen = app->win->GetWindowRect();
 		heal_particle[(int)HEAL_PARTICLE::LEFT]->SetPos(heal_particle[(int)HEAL_PARTICLE::LEFT]->position - fPoint(heal_particle_speed, 0.f));
 		heal_particle[(int)HEAL_PARTICLE::RIGHT]->SetPos(heal_particle[(int)HEAL_PARTICLE::RIGHT]->position + fPoint(heal_particle_speed, 0.f));
