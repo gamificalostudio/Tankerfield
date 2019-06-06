@@ -529,7 +529,13 @@ void M_MainMenu::InputSelect()
 			}
 		}
 	}
-
+	if (menu_state == MENU_STATE::SELECTION)
+	{
+		if (app->input->IsConnectedControllet(players[current_player].controller) && app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		{
+			input_select_controller = true;
+		}
+	}
 	// Detect input select mouse -----------------------------------------
 
 	if (app->input->GetMouseButton(1) == KEY_UP && app->ui->MouseIsFocusing())
