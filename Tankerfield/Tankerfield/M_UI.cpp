@@ -288,6 +288,8 @@ void M_UI::FocusMouse()
 
 	fRect section;
 
+	mouse_is_focusing = false;
+
 	for (list<UI_Element*>::iterator item = interactive_elements.begin(); item != interactive_elements.end(); ++item)
 	{
 		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f)
@@ -307,6 +309,8 @@ void M_UI::FocusMouse()
 			{
 				(*item)->hover_state = HoverState::REPEAT;
 			}
+
+			mouse_is_focusing = true;
 		}
 		else
 		{
@@ -534,6 +538,11 @@ Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
 UI_INPUT_TYPE M_UI::GetInputType()
 {
 	return input_type;
+}
+
+bool M_UI::MouseIsFocusing()
+{
+	return mouse_is_focusing;
 }
 
 void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
