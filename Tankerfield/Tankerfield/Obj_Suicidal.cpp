@@ -55,7 +55,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	coll_h = 0.5f;
 
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
-	coll->SetObjOffset({ -coll_w * 2.25f, -coll_h * 1.75f });
+	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 
 	check_path_time = 2.0f;
 
@@ -65,7 +65,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 //Called after creating the enemy
 void Obj_Suicidal::SetStats(int level)
 {
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width) * 1.33f;
+	detection_range = app->objectmanager->suicidal_info.detection_range;
 	original_speed = speed = app->objectmanager->suicidal_info.speed;
 	attack_damage = app->objectmanager->suicidal_info.attack_damage;
 	attack_range = app->objectmanager->suicidal_info.attack_range;

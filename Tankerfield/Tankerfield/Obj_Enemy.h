@@ -52,6 +52,8 @@ public:
 
 	void DrawAttackRange(Camera * camera);
 
+	inline void ReduceLife(int damage, float dt);
+
 protected:
 	inline void UpdateMoveVec();
 
@@ -86,8 +88,6 @@ protected:
 	bool CleanUp() override;
 
 	void Oiled();
-
-	inline void ReduceLife(Collider* collider, float dt);
 
 	void ResetAllAnimations();
 

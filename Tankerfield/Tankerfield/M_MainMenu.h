@@ -106,7 +106,7 @@ private:
 
 	// Main screen --------------------------------
 
-	UI_InteractiveGroup * menu_panel = nullptr;
+	UI_InteractiveGroup * menu_navigation = nullptr;
 
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;

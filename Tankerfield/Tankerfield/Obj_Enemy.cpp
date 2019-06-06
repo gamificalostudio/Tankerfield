@@ -674,7 +674,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 		{
-			ReduceLife(collider, dt);
+			ReduceLife(collider->damage, dt);
 		}
 		else if (collider->GetTag() == TAG::BULLET_OIL)
 		{
@@ -709,7 +709,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 			}
 			else
 			{
-				ReduceLife(collider, dt);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
@@ -791,7 +791,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 			}
 			else
 			{
-				ReduceLife(collider, dt);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
@@ -837,16 +837,9 @@ void Obj_Enemy::Oiled()
 		}
 }
 
-inline void Obj_Enemy::ReduceLife(Collider * collider, float dt)
+inline void Obj_Enemy::ReduceLife(int damage, float dt)
 {
-	if (collider->GetTag() != TAG::FLAMETHROWER)
-	{
-		life -= collider->damage;
-	}
-	else
-	{
-		life -= collider->damage * dt;
-	}
+	life -= damage;
 
 	damaged_sprite_timer.Start();
 	last_texture = curr_tex;

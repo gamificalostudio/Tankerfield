@@ -97,7 +97,4 @@ void Controllers_Settings::InputSelect()
 	{
 
 	}
-
-
-
 }

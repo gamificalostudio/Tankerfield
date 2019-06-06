@@ -25,6 +25,7 @@ Options_Menu::Options_Menu()
 	selection_finished_sfx = app->audio->LoadFx("audio/Fx/main_menu/selection_finished.wav", 40);
 
 	// Create UI Elements ====================================
+
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
@@ -126,8 +127,8 @@ Options_Menu::Options_Menu()
 
 		// Else
 
-	individual_settings = app->ui->CreateButton({ screen.w * 0.5f,735 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
-	individual_settings->SetLabel({ 0.f,2.f }, UI_LabelDef("Settings", app->font->button_font_22, { 50, 50, 50, 255 }));
+	controller_settings = app->ui->CreateButton({ screen.w * 0.5f,735 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
+	controller_settings->SetLabel({ 0.f,2.f }, UI_LabelDef("Controllers", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 	return_button = app->ui->CreateButton({ screen.w * 0.38f,850 }, UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 
@@ -147,8 +148,8 @@ Options_Menu::Options_Menu()
 	global_navigation_panel->SetElement(music_volume_R, iPoint(1, 2));
 	global_navigation_panel->SetElement(sfx_volume_L, iPoint(0, 3));
 	global_navigation_panel->SetElement(sfx_volume_R, iPoint(1, 3));
-	global_navigation_panel->SetElement(individual_settings, iPoint(0, 4));
-	global_navigation_panel->SetElement(individual_settings, iPoint(1, 4));
+	global_navigation_panel->SetElement(controller_settings, iPoint(0, 4));
+	global_navigation_panel->SetElement(controller_settings, iPoint(1, 4));
 	global_navigation_panel->SetElement(return_button, iPoint(0, 5));
 	global_navigation_panel->SetElement(return_button, iPoint(1, 5));
 
@@ -205,7 +206,12 @@ void Options_Menu::InputSelect()
 {
 		UI_Element*  menu_element = global_navigation_panel->GetFocusedElement();
 
-		if (menu_element == fullscreen_L||menu_element==fullscreen_R)
+		if (global_navigation_panel == nullptr)
+		{
+			return;
+		}
+ 
+		if (menu_element == fullscreen_L || menu_element == fullscreen_R)
 		{
 			app->win->SetFullscreen();
 			fullscreen_value_info = !fullscreen_value_info;
@@ -275,7 +281,7 @@ void Options_Menu::InputSelect()
 				app->audio->SetSfxVolume(5);
 			}
 		}
-		else if (menu_element == individual_settings)
+		else if (menu_element == controller_settings)
 		{
 			app->main_menu->SetState(MENU_STATE::CONTROLLERS_SETTINGS);
 			HideOptionsMenu();

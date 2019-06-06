@@ -15,10 +15,20 @@
 #define NUM_MOUSE_BUTTONS 5
 #define MAX_CONTROLLERS 4
 #define DEFAULT_DEAD_ZONE 7500
+#define MAX_DEAD_ZONE 32767
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
 class Camera;
+
+struct ControllersPlayerInfo
+{
+	float death_zone_porcenatage = 0.20f;
+	int vibration_percentage = 1.00f;
+	//SDL_GameControllerButton attack_button;
+	//SDL_GameControllerButton interacton_button = SDL_CONTROLLER_BUTTON_X;
+	//SDL_GameControllerButton use_item_button = SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
+};
 
 enum EventWindow
 {
@@ -191,11 +201,13 @@ private:
 	int			mouse_x = NULL;
 	int			mouse_y = NULL;
 	uint		num_controller_connected = 0;
+	Controller controllers[MAX_CONTROLLERS];
 
 public:
 	std::string input_text;
-	Controller controllers[MAX_CONTROLLERS];
 	int GetAbleController();
+	ControllersPlayerInfo controllerInfo[4];
+
 };
 
 #endif // __j1INPUT_H__

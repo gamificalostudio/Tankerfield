@@ -70,9 +70,9 @@ public:
 
 	fRect viewport;
 
-	SDL_Rect viewport_with_margin = { 0,0,0,0 };
+	fRect viewport_with_margin;
 
-	fPoint margin = { 80.f, 80.f };
+	fPoint margin;
 
 private:
 
@@ -111,8 +111,6 @@ private:
 	// In Game Elements ======================
 
 	UI_InGameElement* player_arrow = nullptr;
-
-	bool particle_created = false;
 
 	friend M_UI;
 };

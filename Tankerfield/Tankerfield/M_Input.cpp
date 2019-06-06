@@ -53,7 +53,7 @@ bool M_Input::Awake(pugi::xml_node& config)
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-
+	
 	return ret;
 }
 
@@ -246,6 +246,7 @@ KeyState M_Input::GetControllerButtonState(int i, SDL_GameControllerButton butto
 	}
 	return KeyState::KEY_IDLE;
 }
+
 
 iPoint M_Input::GetControllerJoystick(int i, Joystick joystick, int dead_zone)
 {

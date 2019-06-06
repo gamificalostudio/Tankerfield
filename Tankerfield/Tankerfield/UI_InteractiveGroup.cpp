@@ -23,20 +23,6 @@ columns(definition.columns), rows(definition.rows) ,focus_indicator(definition.f
 	}
 	
 }
-bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
-{
-	current_focus_pos = GetPos(element);
-	SetFocusImage(current_focus_pos);
-	app->ui->SetFocusedElement(GetElement(current_focus_pos));
-
-	if (listener != nullptr)
-	{
-		listener->OnHoverEnter(this);
-	}
-	
-
-	return true;
-}
 
 bool UI_InteractiveGroup::HandleControllerINavigation(int controller )
 {
@@ -82,22 +68,37 @@ bool UI_InteractiveGroup::HandleKeyboardNavigation()
 	return ret;
 }
 
+bool UI_InteractiveGroup::OnHoverEnter(UI_Element * element)
+{
+	current_focus_pos = GetPos(element);
+	SetFocusImage(current_focus_pos);
+	app->ui->SetFocusedElement(GetElement(current_focus_pos));
 
-bool UI_InteractiveGroup::OnHoverRepeat(UI_Element * object)
+	if (listener != nullptr)
+	{
+		listener->OnHoverEnter(element);
+	}
+
+
+	return true;
+}
+
+
+bool UI_InteractiveGroup::OnHoverRepeat(UI_Element * element)
 {
 	if (listener != nullptr)
 	{
-		listener->OnHoverRepeat(this);
+		listener->OnHoverRepeat(element);
 	}
 
 	return true;
 }
 
-bool UI_InteractiveGroup::OnHoverExit(UI_Element * object)
+bool UI_InteractiveGroup::OnHoverExit(UI_Element * element)
 {
 	if (listener != nullptr)
 	{
-		listener->OnHoverExit(this);
+		listener->OnHoverExit(element);
 	}
 
 	app->ui->SetFocusedElement(nullptr);
