@@ -52,7 +52,13 @@ void NewRoundAnimation::Start()
 	heal_particle_speed = 3.5f;
 
 	center_energy->SetParent(app->scene->general_gui->round_element);
+	heal_particle[0]->SetParent(center_energy);
+	heal_particle[1]->SetParent(center_energy);
 	app->scene->general_gui->round_number_label->SetParent(center_energy);
+
+	center_energy_reduce_alpha_speed = 500.f;
+
+	center_energy_alpha_start_heal = 75;
 }
 
 void NewRoundAnimation::CreateNewRoundParticles()
@@ -136,19 +142,25 @@ bool NewRoundAnimation::Update(float dt)
 		if (color_transition_timer.ReadSec() > color_transition_time)
 		{
 			//TODO: Change the number
-			center_energy->SetState(ELEMENT_STATE::HIDDEN);
-			//center_energy->color_mod = source_color;
 			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
 			{
 				heal_particle[i]->SetState(ELEMENT_STATE::VISIBLE);
 			}
+			phase = NEW_ROUND_ANIMATION_PHASE::REDUCE_ALPHA;
+		}
+	}break;
+
+	case NEW_ROUND_ANIMATION_PHASE::REDUCE_ALPHA: {
+		ReduceCenterEnergyAlpha(dt);
+		if (center_energy->alpha < center_energy_alpha_start_heal)
+		{
 			phase = NEW_ROUND_ANIMATION_PHASE::HEAL;
 		}
 	}break;
 
 	case NEW_ROUND_ANIMATION_PHASE::HEAL:
 	{
-		//TODO: Transition center energy alpha
+		ReduceCenterEnergyAlpha(dt);
 		fRect screen = app->win->GetWindowRect();
 		heal_particle[(int)HEAL_PARTICLE::LEFT]->SetPos(heal_particle[(int)HEAL_PARTICLE::LEFT]->position - fPoint(heal_particle_speed, 0.f));
 		heal_particle[(int)HEAL_PARTICLE::RIGHT]->SetPos(heal_particle[(int)HEAL_PARTICLE::RIGHT]->position + fPoint(heal_particle_speed, 0.f));
@@ -175,6 +187,19 @@ bool NewRoundAnimation::Update(float dt)
 	}
 
 	return true;
+}
+
+void NewRoundAnimation::ReduceCenterEnergyAlpha(float dt)
+{
+	float final_alpha = center_energy->alpha - center_energy_reduce_alpha_speed * dt;
+	if (final_alpha < 0.f)
+	{
+		center_energy->alpha = 0.f;
+	}
+	else
+	{
+		center_energy->alpha = final_alpha;
+	}
 }
 
 void NewRoundAnimation::PrepareColorTransition()

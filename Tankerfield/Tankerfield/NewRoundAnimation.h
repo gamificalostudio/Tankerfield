@@ -32,6 +32,7 @@ private:
 	void CreateNewRoundParticles();
 	void PrepareNewRoundUIParticles();
 	void UpdateNewRoundUIParticles(float dt);
+	void ReduceCenterEnergyAlpha(float dt);
 
 private:
 	//New round animation
@@ -50,7 +51,7 @@ private:
 
 	int particles_reached_trg = 0;
 
-	UI_Image * center_energy = nullptr;
+	UI_Image * center_energy = nullptr;//The white image over the rhombus on the center of the screen
 	float center_energy_alpha_fill_amount = 0.f;
 
 	//variables used to not lose decimals while transitioning color
@@ -73,6 +74,9 @@ private:
 	UI_Image * heal_particle[2] = { nullptr };
 	float heal_particle_speed = 0.f;
 
+	float center_energy_reduce_alpha_speed = 0.f;
+	uint center_energy_alpha_start_heal = 0u;
+
 	//TODO: Create Start method (fill variables)
 	//TODO: Create void Reset method
 	//TODO: Put methods in here
@@ -88,6 +92,7 @@ private:
 	{
 		PARTICLES,
 		COLOR_TRANSITION,
+		REDUCE_ALPHA,
 		HEAL,
 		IN_ROUND,
 	};
