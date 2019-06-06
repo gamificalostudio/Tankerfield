@@ -72,22 +72,6 @@ enum class UI_INPUT_TYPE
 	KEYBOARD
 };
 
-enum class CONTROLLER_BUTTON : int
-{
-	NONE = -1,
-	A,
-	B,
-	Y,
-	X,
-	L,
-	LT,
-	LB,
-	R,
-	RT,
-	RB,
-	MAX
-};
-
 enum class ICON_SIZE : int
 {
 	NONE = -1,
