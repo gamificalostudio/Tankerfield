@@ -21,16 +21,16 @@
 
 Oil_Splash::Oil_Splash(fPoint pos) :Object(pos)
 {
-	pugi::xml_node splash_node = app->config.child("object").child("oil_splash");
+	pugi::xml_node explosion_node = app->config.child("object").child("oil_splash");
 
-	anim.frames = app->anim_bank->LoadFrames(splash_node.child("animations").child("oil_splash"));
+	anim.frames = app->anim_bank->LoadFrames(explosion_node.child("animations").child("oil_splash"));
 	curr_anim = &anim;
 
-	tex = app->tex->Load(splash_node.child("tex").attribute("path").as_string());
+	tex = app->tex->Load(explosion_node.child("tex").attribute("path").as_string());
 	curr_tex = tex;
 
-	draw_offset.x = 99;
-	draw_offset.y = 75;
+	draw_offset.x = 45;
+	draw_offset.y = 48;
 
 	frame_damage = 0;
 }
@@ -40,8 +40,8 @@ bool Oil_Splash::Update(float dt)
 	//Create a collider during one frame which deals damage equivalent to int explosion_damage
 	if (frame_num == frame_damage)
 	{
-		float coll_w = 2.f;
-		float coll_h = 2.f;
+		float coll_w = 1.5f;
+		float coll_h = 1.5f;
 
 		coll = app->collision->AddCollider(
 			pos_map - fPoint(coll_w * 0.5f, coll_h * 0.5f),
