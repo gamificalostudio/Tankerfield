@@ -58,6 +58,8 @@ void NewRoundAnimation::Start()
 
 	center_energy_reduce_alpha_speed = 500.f;
 
+	life_increase = 10;
+
 	center_energy_alpha_start_heal = 75;
 }
 
@@ -171,12 +173,11 @@ bool NewRoundAnimation::Update(float dt)
 			&& heal_particle [(int)HEAL_PARTICLE::RIGHT]->position.x > screen.w)
 		{
 			center_energy->SetState(ELEMENT_STATE::HIDDEN);
-			//TODO: Heal players
-			//TODO: Start next round
 			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
 			{
 				heal_particle[i]->SetState(ELEMENT_STATE::HIDDEN);
 			}
+			HealPlayers();
 			app->scene->game_state = GAME_STATE::ENTER_IN_WAVE;
 			phase = NEW_ROUND_ANIMATION_PHASE::WAITING;
 		}
@@ -197,6 +198,14 @@ bool NewRoundAnimation::Update(float dt)
 	}
 
 	return true;
+}
+
+void NewRoundAnimation::HealPlayers()
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		app->objectmanager->obj_tanks[i]->IncreaseLife(life_increase);
+	}
 }
 
 void NewRoundAnimation::ReduceCenterEnergyAlpha(float dt)

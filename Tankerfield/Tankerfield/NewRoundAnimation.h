@@ -26,6 +26,8 @@ public:
 	void Start();
 	bool Update(float dt);
 
+	void HealPlayers();
+
 private:
 	void CreateNewRoundParticles();
 	void PrepareNewRoundUIParticles();
@@ -75,6 +77,8 @@ private:
 
 	float center_energy_reduce_alpha_speed = 0.f;
 	uint center_energy_alpha_start_heal = 0u;
+
+	int life_increase = 0;
 
 	//TODO: Create Start method (fill variables)
 	//TODO: Create void Reset method
