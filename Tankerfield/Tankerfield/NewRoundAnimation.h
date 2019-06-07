@@ -86,6 +86,10 @@ private:
 	//TODO: Create void Reset method
 	//TODO: Put methods in here
 
+	uint particle_reach_sfx = 0u;
+	uint change_color_sfx = 0u;
+	uint throw_healing_balls_sfx = 0u;
+
 	enum class HEAL_PARTICLE
 	{
 		LEFT,

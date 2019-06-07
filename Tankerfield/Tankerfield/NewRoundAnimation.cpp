@@ -9,6 +9,7 @@
 #include "M_Scene.h"
 #include "General_HUD.h"
 #include "UI_Label.h"
+#include "M_Audio.h"
 
 void NewRoundAnimation::Start()
 {
@@ -65,6 +66,10 @@ void NewRoundAnimation::Start()
 	life_increase = 10;
 
 	center_energy_alpha_start_heal = 75;
+
+	particle_reach_sfx = app->audio->LoadFx("audio/Fx/new_wave/sd_0.wav");
+	change_color_sfx = app->audio->LoadFx("audio/Fx/new_wave/336741__steshystesh__spaceship-whoosh-2.wav");
+	throw_healing_balls_sfx = app->audio->LoadFx("audio/Fx/new_wave/87043__runnerpack__weapappear.wav");
 }
 
 void NewRoundAnimation::CreateNewRoundParticles()
