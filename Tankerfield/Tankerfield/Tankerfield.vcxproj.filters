@@ -241,6 +241,7 @@
     <ClCompile Include="Oil_Splash.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="NewRoundAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -510,6 +511,7 @@
     <ClInclude Include="Oil_Splash.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
+    <ClInclude Include="NewRoundAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">

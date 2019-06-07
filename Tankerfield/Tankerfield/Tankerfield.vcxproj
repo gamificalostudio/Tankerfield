@@ -134,6 +134,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="LeaderBoard.cpp" />
     <ClCompile Include="M_Debug.cpp" />
+    <ClCompile Include="NewRoundAnimation.cpp" />
     <ClCompile Include="Oil_Splash.cpp" />
     <ClCompile Include="Options_Menu.cpp" />
     <ClCompile Include="Obj_ElectroShotAnimation.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="LeaderBoard.h" />
     <ClInclude Include="M_Debug.h" />
+    <ClInclude Include="NewRoundAnimation.h" />
     <ClInclude Include="Oil_Splash.h" />
     <ClInclude Include="Options_Menu.h" />
     <ClInclude Include="Obj_ElectroShotAnimation.h" />
