@@ -5,27 +5,25 @@ Each one of you will control a tank and defend against enldess rounds of invader
 You can play with your friends downloading the latest release [here]().
 
 ## Index
-* [About our game]()
-* [Controls]()
-* [Members]()
-  * [Jaume Montagut Guix]()
-  * [Jorge Gemas Herencia]()
-  * [Aurelio Gamarra Niño]()
-  * [Victor Segura Blanco]()
-  * [Gerard Marcos Freixas]()
-  * [Yessica Servin Dominguez]()
-  * [Sergio Gómez Roldán]()
-  * [Aitor Vélez Tolosa]()
-* [Trailer of the game]()
-* [Gameplay]()
-* [Our social media]()
-* [Tools used]()
-* [Credits]()
+* [About our game](https://gamificalostudio.github.io/Tankerfield/#about-our-game)
+* [Controls](https://gamificalostudio.github.io/Tankerfield/#controls)
+* [Members](https://gamificalostudio.github.io/Tankerfield/#members)
+  * [Jaume Montagut Guix](https://gamificalostudio.github.io/Tankerfield/#jaume-montagur-guix)
+  * [Jorge Gemas Herencia](https://gamificalostudio.github.io/Tankerfield/#jorge-gemas-herencia)
+  * [Aurelio Gamarra Niño](https://gamificalostudio.github.io/Tankerfield/#aurelio-gamarra-niño)
+  * [Victor Segura Blanco](https://gamificalostudio.github.io/Tankerfield/#victor-segura-blanco)
+  * [Gerard Marcos Freixas](https://gamificalostudio.github.io/Tankerfield/#gerard-marcos-freixas)
+  * [Yessica Servin Dominguez](https://gamificalostudio.github.io/Tankerfield/#yesssica-servin-dominguez)
+  * [Sergio Gómez Roldán](https://gamificalostudio.github.io/Tankerfield/#sergio-gómez-roldán)
+  * [Aitor Vélez Tolosa](https://gamificalostudio.github.io/Tankerfield/#aitor-vélez-tolosa)
+* [Trailer of the game](https://gamificalostudio.github.io/Tankerfield/#trailer-of-the-game)
+* [Gameplay](https://gamificalostudio.github.io/Tankerfield/#gameplay)
+* [Our social media](https://gamificalostudio.github.io/Tankerfield/#our-social-media)
+* [Tools used](https://gamificalostudio.github.io/Tankerfield/#tools-used)
 
 ## About our game
 Tankerfield is a party game for you and 3 more friends. In this game you will have to survive rounds with your tank, while picking up items and other awesome weapons. The main objective is to survive the max rounds possible killing all the enemies that are about to take over the world. You and your friend will have to explore the map to improve your weapons and not get killed.
-For more information about the decisions we have taken, you can check our game desing document [here]().
-
+For more information about the decisions we have taken, you can check our game desing document [here](https://github.com/gamificalostudio/Tankerfield/wiki/Game-Design-Document).
 
 ## Controls
 - Left joystick : Move
@@ -91,7 +89,16 @@ For more information about the decisions we have taken, you can check our game d
 ## Gameplay
 
 ## Our social media
+* [Github](https://github.com/gamificalostudio/Tankerfield)
+* [Twitter](https://twitter.com/gamificalo)
+* [Instagram](https://www.instagram.com/gamificalo)
 
 ## Tools used
-
-## Credits
+* IDE: Microsoft Visual Studio 2017
+* Language: C++
+* Containers: STL
+* Graphics and audio: SDL 2.0
+* Data: pugixml 1.8
+* Level editor: Tiled 0.17
+* Code repository: GitHub
+* Art and audio: Adobe Photoshop CS6 / Paint / Aseprite / Audacity / Texture packer / XCC mixer / Leshy SpriteSheet
