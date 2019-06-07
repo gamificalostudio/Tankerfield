@@ -9,6 +9,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "Options_Menu.h"
+#include "Controllers_Settings.h"
 #include "LeaderBoard.h"
 
 #include "UI_Image.h"
@@ -21,6 +22,20 @@
 
 bool M_MainMenu::Start()
 {
+	//Create camera
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
+	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
+
+
+	// Menus
+
+	options = new Options_Menu();
+	controllers_setting[0] = new Controllers_Settings(fPoint(0, 0), 0);
+	controllers_setting[1] = new Controllers_Settings(fPoint(screen.w*0.5f, 0), 1);
+	controllers_setting[2] = new Controllers_Settings(fPoint(0, screen.h*0.5f), 2);
+	controllers_setting[3] = new Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f), 3);
+
 	// Load assets ===========================================
 
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
@@ -33,11 +48,6 @@ bool M_MainMenu::Start()
 
 	
 	// Create UI Elements ====================================
-
-	fRect screen = app->win->GetWindowRect();
-	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-	camera = app->render->CreateCamera( iPoint(0,0), (SDL_Rect)screen);
-
 	// Controll helper ------------------------
 
 	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
@@ -143,6 +153,7 @@ bool M_MainMenu::Start()
 		player_labels[i] = app->ui->CreateLabel(players[i].tank_pos + fPoint(0, 150), UI_LabelDef(player_string, app->font->button_font_40, { 220, 220,220,255 }));
 		player_labels[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 		player_labels[i]->SetParent(player_labels_peg);
+		players[i].controller = i;
 	}
 
 	// Credits Menu
@@ -326,9 +337,10 @@ bool M_MainMenu::Start()
 	// Set values ==========================================
 
 	SetPlayerObjectsState(false);
-	app->ui->HideAllUI();
 
+	app->ui->HideAllUI();
 	SetState(MENU_STATE::INIT_MENU);
+
 	SDL_ShowCursor(SDL_ENABLE);
 
 
@@ -350,6 +362,20 @@ bool M_MainMenu::CleanUp()
 		players[i].tank = nullptr;
 	}
 
+	if (options)
+	{
+		delete options;
+		options = nullptr;
+	}
+	for (uint i = 0; i < 0; ++i)
+	{
+		if (controllers_setting[i])
+		{
+			delete controllers_setting[i];
+			controllers_setting[i] = nullptr;
+		}
+	}
+
 	return true;
 }
 
@@ -358,15 +384,6 @@ bool M_MainMenu::PreUpdate()
 	if ( app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || exit_game == true)
 	{
 		return false;
-	}
-
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (players[i].controller == -1)
-		{
-			players[i].controller = app->input->GetAbleController();
-			players[i].tank->SetController(players[i].controller);
-		}
 	}
 
 	if (menu_state != MENU_STATE::CHANGE_SCENE)
@@ -428,7 +445,7 @@ void M_MainMenu::InputNavigate()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != -1)
+			if (app->input->IsConnectedControllet(players[i].controller))
 			{
 				if (menu_navigation->HandleControllerINavigation(players[i].controller))
 				{
@@ -445,9 +462,10 @@ void M_MainMenu::InputNavigate()
 	}
 	else if (menu_state == MENU_STATE::SELECTION)
 	{
+
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[current_player].controller != -1)
+			if (app->input->IsConnectedControllet(players[current_player].controller))
 			{
 				if (selection_panel->HandleControllerINavigation(players[current_player].controller))
 				{
@@ -465,7 +483,7 @@ void M_MainMenu::InputNavigate()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[current_player].controller != -1)
+			if (app->input->IsConnectedControllet(players[current_player].controller))
 			{
 				if (credits_navigation->HandleControllerINavigation(players[current_player].controller))
 				{
@@ -483,6 +501,16 @@ void M_MainMenu::InputNavigate()
 	{
 		options->InputNavigate();
 	}
+	else if (menu_state == MENU_STATE::CONTROLLERS_SETTINGS)
+	{
+		for (uint i = 0; i < MAX_PLAYERS; ++i)
+		{
+			if (app->input->IsConnectedControllet(players[i].controller))
+			{
+				controllers_setting[i]->InteractiveGroup->HandleControllerINavigation(players[i].controller);
+			}
+		}
+	}
 }
 
 void M_MainMenu::InputSelect()
@@ -495,21 +523,19 @@ void M_MainMenu::InputSelect()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if (players[i].controller != -1 && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+			if (app->input->IsConnectedControllet(players[i].controller) && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 			{
 				input_select_controller = true;
 			}
 		}
 	}
-
-	else if (menu_state == MENU_STATE::SELECTION)
+	if (menu_state == MENU_STATE::SELECTION)
 	{
-		if (players[current_player].controller != -1 &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+		if (app->input->IsConnectedControllet(players[current_player].controller) && app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 		{
 			input_select_controller = true;
 		}
 	}
-
 	// Detect input select mouse -----------------------------------------
 
 	if (app->input->GetMouseButton(1) == KEY_UP && app->ui->MouseIsFocusing())
@@ -690,6 +716,19 @@ void M_MainMenu::InputSelect()
 			app->audio->PlayFx(button_select_sfx);
 		}
 	}
+
+	else if (menu_state == MENU_STATE::CONTROLLERS_SETTINGS && app->ui->GetFocusedElement() != nullptr)
+		{
+			for (uint player = 0; player < MAX_PLAYERS; ++player)
+			{
+				if (app->input->IsConnectedControllet(players[player].controller) && app->input->GetControllerButtonState(players[player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+				{
+					controllers_setting[player]->InputSelect();
+				}
+			}
+		}
+
+	
 }
 
 
@@ -806,6 +845,13 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		leaderboard->HideLeaderBoard();
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		break;
+
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		for (uint i = 0; i < 4; ++i)
+		{
+			controllers_setting[i]->HideControllersSettings();
+		}
+		break;
 	}
 
 	// Active new state ======================================
@@ -845,10 +891,20 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	case MENU_STATE::OPTIONS:
 		options->ShowOptionsMenu();
 		break;
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		{
+			for (uint i = 0; i < 4; ++i)
+			{
+				controllers_setting[i]->ShowControllerSettings();
+			}
+		}
+		break;
+
 	case MENU_STATE::LEADERBOARD:
 		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		leaderboard->ShowLeaderBoard();
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
 		break;
 	}
 
