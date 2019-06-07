@@ -34,8 +34,18 @@ Obj_Portal::~Obj_Portal()
 
 bool Obj_Portal::Update(float dt)
 {
+	if (time.ReadMs() >= 7000 && coll != nullptr && time.ReadMs() < 10000)
+	{
+		if((int)time.ReadMs() % 200 <= 100)
+			this->curr_tex = nullptr;
+		else this->curr_tex = tex;
+	}
+
 	if (time.ReadMs() >= 10000 && coll != nullptr)
 	{
+		if(curr_tex == nullptr)
+			this->curr_tex = tex;
+		
 		to_remove = true;
 		coll->Destroy();
 		coll = nullptr;

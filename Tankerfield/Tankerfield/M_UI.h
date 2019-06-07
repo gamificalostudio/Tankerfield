@@ -79,22 +79,6 @@ enum class UI_INPUT_TYPE
 	KEYBOARD
 };
 
-enum class CONTROLLER_BUTTON : int
-{
-	NONE = -1,
-	A,
-	B,
-	Y,
-	X,
-	L,
-	LT,
-	LB,
-	R,
-	RT,
-	RB,
-	MAX
-};
-
 enum class ICON_SIZE : int
 {
 	NONE = -1,
@@ -240,6 +224,8 @@ public:
 
 	UI_INPUT_TYPE GetInputType();
 
+	bool MouseIsFocusing();
+
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
 	void HideAllUI();
@@ -289,6 +275,8 @@ private:
 	FocusState focus_state = FocusState::NONE;
 
 	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
+
+	bool mouse_is_focusing = false;
 
 public:
 

@@ -19,6 +19,11 @@ public:
 	//Add functions that are overriden
 	bool Start();
 
+	void OnTriggerEnter(Collider * collider_1, float dt) override;
+
+public:
+
+	float splash_damage = 0.f;
 };
 
 #endif

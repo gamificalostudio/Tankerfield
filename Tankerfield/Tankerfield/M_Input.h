@@ -54,6 +54,22 @@ enum class INPUT_DIR
 	MAX
 };
 
+enum class CONTROLLER_BUTTON : int
+{
+	NONE = -1,
+	A,
+	B,
+	Y,
+	X,
+	L,
+	LT,
+	LB,
+	R,
+	RT,
+	RB,
+	MAX
+};
+
 
 class M_Input;
 
@@ -154,6 +170,8 @@ public:
 
 
 	//Controller funtions===================================================================================================
+	KeyState GetControllerButtonOrTriggerState(int controller, CONTROLLER_BUTTON controller_button);
+	
 	KeyState GetControllerButtonState(int controller, SDL_GameControllerButton button);
 
 	iPoint GetControllerJoystick(int controller, Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
