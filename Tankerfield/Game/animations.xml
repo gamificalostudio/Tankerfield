@@ -1240,7 +1240,7 @@
   </suicidal>
   <inkdrop>
     <animation>
-      <anim speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+      <anim speed="9" rotation="counter-clockwise" first_dir_angle ="-90">
         <dir>
           <frame name="sprite41" x="0" y="1064" w="320" h="133"></frame>
           <frame name="sprite40" x="1280" y="931" w="320" h="133"></frame>
