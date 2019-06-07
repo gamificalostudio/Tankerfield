@@ -24,9 +24,10 @@ struct NewRoundAnimation
 {
 public:
 	void Start();
+	
 	bool Update(float dt);
 
-	void HealPlayers();
+	void PrepareAnimation();
 
 private:
 	void CreateNewRoundParticles();
@@ -34,6 +35,7 @@ private:
 	void UpdateNewRoundUIParticles(float dt);
 	void ReduceCenterEnergyAlpha(float dt);
 	void PrepareColorTransition();
+	void HealPlayers();
 
 private:
 	//New round animation

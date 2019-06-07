@@ -20,7 +20,6 @@ void NewRoundAnimation::Start()
 	max_particle_alpha_speed = 120.f;
 
 	CreateNewRoundParticles();
-	PrepareNewRoundUIParticles();
 
 	fRect screen = app->win->GetWindowRect();
 
@@ -39,6 +38,11 @@ void NewRoundAnimation::Start()
 	color_g = source_color.g;
 	color_b = source_color.b;
 	color_a = source_color.a;
+
+	r_increment = (target_color.r - source_color.r) / color_transition_time;
+	g_increment = (target_color.g - source_color.g) / color_transition_time;
+	b_increment = (target_color.b - source_color.b) / color_transition_time;
+	a_increment = (target_color.a - source_color.a) / color_transition_time;
 
 	image_def.sprite_section = { 1725, 1514, 55, 55 };
 	for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
@@ -74,6 +78,13 @@ void NewRoundAnimation::CreateNewRoundParticles()
 	}
 }
 
+void NewRoundAnimation::PrepareAnimation()
+{
+	PrepareNewRoundUIParticles();
+
+	phase = NEW_ROUND_ANIMATION_PHASE::PARTICLES;
+}
+
 void NewRoundAnimation::PrepareNewRoundUIParticles()
 {
 	fRect screen = app->win->GetWindowRect();
@@ -100,6 +111,8 @@ void NewRoundAnimation::PrepareNewRoundUIParticles()
 		particles[i].speed_squared = particles[i].speed * particles[i].speed;
 	}
 	particles_reached_trg = 0;
+	particles_timer.Start();
+	center_energy->SetState(ELEMENT_STATE::VISIBLE);
 }
 
 bool NewRoundAnimation::Update(float dt)
@@ -172,11 +185,15 @@ bool NewRoundAnimation::Update(float dt)
 		if (heal_particle[(int)HEAL_PARTICLE::LEFT]->position.x < 0.f
 			&& heal_particle [(int)HEAL_PARTICLE::RIGHT]->position.x > screen.w)
 		{
-			center_energy->SetState(ELEMENT_STATE::HIDDEN);
+			fRect screen = app->win->GetWindowRect();
 			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
 			{
 				heal_particle[i]->SetState(ELEMENT_STATE::HIDDEN);
+				heal_particle[i]->SetPos({ screen.w * 0.5f, screen.h * 0.5f });
 			}
+			center_energy->color_mod = source_color;
+			center_energy->alpha = 0.f;
+			center_energy->SetState(ELEMENT_STATE::HIDDEN);
 			HealPlayers();
 			app->scene->game_state = GAME_STATE::ENTER_IN_WAVE;
 			phase = NEW_ROUND_ANIMATION_PHASE::WAITING;
@@ -223,10 +240,10 @@ void NewRoundAnimation::ReduceCenterEnergyAlpha(float dt)
 
 void NewRoundAnimation::PrepareColorTransition()
 {
-	r_increment = (target_color.r - source_color.r) / color_transition_time;
-	g_increment = (target_color.g - source_color.g) / color_transition_time;
-	b_increment = (target_color.b - source_color.b) / color_transition_time;
-	a_increment = (target_color.a - source_color.a) / color_transition_time;
+	color_r = source_color.r;
+	color_g = source_color.g;
+	color_b = source_color.b;
+	color_a = source_color.a;
 	color_transition_timer.Start();
 }
 

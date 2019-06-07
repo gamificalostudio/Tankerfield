@@ -145,6 +145,8 @@ bool M_Scene::Start()
 	general_gui = DBG_NEW General_GUI();
 	leaderboard = DBG_NEW LeaderBoard(screen_center,"data/leader_board.xml",false);
 
+	new_round_animation.Start();
+
 	return true;
 }
 
@@ -209,8 +211,7 @@ bool M_Scene::Update(float dt)
 		app->audio->PauseMusic(3000);
 		finish_wave_sound_channel = app->audio->PlayFx(finish_wave_sound_uint);
 		wind_sound_channel = app->audio->PlayFx(wind_sound_uint);
-		
-		new_round_animation.Start();
+		new_round_animation.PrepareAnimation();
 		game_state = GAME_STATE::OUT_WAVE;
 		break;
 	}
