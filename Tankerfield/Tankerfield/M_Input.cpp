@@ -54,7 +54,7 @@ bool M_Input::Awake(pugi::xml_node& config)
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-
+	
 	return ret;
 }
 
@@ -247,6 +247,7 @@ KeyState M_Input::GetControllerButtonState(int i, SDL_GameControllerButton butto
 	}
 	return KeyState::KEY_IDLE;
 }
+
 
 iPoint M_Input::GetControllerJoystick(int i, Joystick joystick, int dead_zone)
 {
@@ -554,5 +555,10 @@ KeyState M_Input::GetControllerButtonOrTriggerState(int controller, CONTROLLER_B
 		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT);
 	case CONTROLLER_BUTTON::RT:
 		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	case CONTROLLER_BUTTON::LB:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER);	
+	case CONTROLLER_BUTTON::RB:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+
 	}
 }

@@ -132,6 +132,7 @@
     <ClCompile Include="Bullet_Oil.cpp" />
     <ClCompile Include="Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Controllers_Settings.cpp" />
     <ClCompile Include="LeaderBoard.cpp" />
     <ClCompile Include="M_Debug.cpp" />
     <ClCompile Include="NewRoundAnimation.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Bullet_Oil.h" />
     <ClInclude Include="Bullet_RocketLauncher.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Controllers_Settings.h" />
     <ClInclude Include="LeaderBoard.h" />
     <ClInclude Include="M_Debug.h" />
     <ClInclude Include="NewRoundAnimation.h" />
@@ -229,7 +231,6 @@
     <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="Obj_FlamethrowerFlame.h" />
     <ClInclude Include="Quadtree_Collision.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="UI_InputText.h" />
     <ClInclude Include="UI_Table.h" />
     <ClInclude Include="M_AnimationBank.h" />
@@ -315,12 +316,6 @@
     <Xml Include="..\Game\data\leader_board.xml">
       <SubType>Designer</SubType>
     </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Tankerfield.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Game\textures\ui\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

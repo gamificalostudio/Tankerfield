@@ -6,11 +6,6 @@
 //Structs created so that we don't have to go through all the nodes in balance.xml
 //every time we need to get a value (for example, when we create a new enemy).
 
-struct TankInfo
-{
-
-};
-
 struct TeslaTrooperInfo
 {
 	float life_multiplier			= 0.f;
@@ -55,6 +50,8 @@ struct SuicidalInfo
 	float life_exponential_base		= 0.f;
 	float detection_range			= 0.f;
 };
+
+
 
 class WeaponXMLInfo
 {

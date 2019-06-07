@@ -18,6 +18,7 @@ class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
 class Options_Menu;
+class Controllers_Settings;
 class LeaderBoard;
 
 class Obj_Tank_MainMenu;
@@ -30,6 +31,7 @@ enum class MENU_STATE
 	SELECTION,
 	LEADERBOARD,
 	CHANGE_SCENE,
+	CONTROLLERS_SETTINGS,
 	NO_TYPE
 };
 
@@ -192,7 +194,9 @@ private:
 	// Menus ------------------------------------------
 
 	Options_Menu* options = nullptr;
+	Controllers_Settings* controllers_setting[4] = {nullptr, nullptr, nullptr, nullptr};
 	LeaderBoard* leaderboard = nullptr;
+
 };
 
 #endif // __j1SCENE_H__

@@ -232,6 +232,9 @@
     <ClCompile Include="M_VideoPlayer.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Controllers_Settings.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="LeaderBoard.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -499,11 +502,11 @@
     <ClInclude Include="M_VideoPlayer.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="LeaderBoard.h">
+    <ClInclude Include="Controllers_Settings.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Data\Icon</Filter>
+    <ClInclude Include="LeaderBoard.h">
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="HealingShot_Area.h">
       <Filter>Objects\Particles</Filter>
@@ -576,18 +579,5 @@
     <Filter Include="Objects\Particles">
       <UniqueIdentifier>{9ebcce9b-e2e9-4b17-9e32-108b6bba6746}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data\Icon">
-      <UniqueIdentifier>{20620a25-8168-48ca-bbd0-e47a05d77861}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Game\textures\ui\icon.ico">
-      <Filter>Data\Icon</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Tankerfield.rc">
-      <Filter>Data\Icon</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>
