@@ -99,6 +99,7 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - margin.x ,viewport.GetBottom() - margin.y }, image_def);
 		weapon_frame->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
+
 	image_def.sprite_section = { 0, 0, 0, 0 };
 
 	if (tank_num == 0 || tank_num == 1)
@@ -112,6 +113,19 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		weapon_icon->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
 
+	UI_LabelDef label_def("lvl. 0", app->font->button_font_22, { 255, 255, 255, 255 });
+
+	if (tank_num == 0 || tank_num == 1)
+	{
+		label_weapon_lvl = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 8.f,viewport.GetTop() + margin.y + 8.f }, label_def);
+		label_weapon_lvl->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+	else if (tank_num == 2 || tank_num == 3)
+	{
+		label_weapon_lvl = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 8.f ,viewport.GetBottom() - margin.y - 8.f }, label_def);
+		label_weapon_lvl->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+	
 	SetWeaponIcon(WEAPON::BASIC);
 
 	UI_BarDef life_bar_def(UI_Bar::DIR::UP, 1.f, { 0, 160, 0, 255 }, { 80, 80, 80, 255 });
@@ -207,6 +221,7 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	item_icon			->SetFX(type, 3.f);
 	charged_shot_bar	->SetFX(type, 3.f);
 	life_bar			->SetFX(type, 3.f);
+	label_weapon_lvl	->SetFX(type, 3.f);
 }
 
 void Player_GUI::DamageFlash()
@@ -220,7 +235,6 @@ void Player_GUI::HealingFlash()
 	flash->color_mod = { 0, 255 , 0 ,255 };
 	flash->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.8F, 1);
 }
-
 
 void Player_GUI::Update(float dt)
 {
@@ -343,7 +357,6 @@ void Player_GUI::SetItemIcon(ItemType type)
 	}
 
 	item_icon->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1, 3.5F);
-
 }
 
 void Player_GUI::SetArrowColor(const SDL_Color color )
@@ -364,18 +377,6 @@ void Player_GUI::ClearHelpers()
 void Player_GUI::SetHelper()
 {
 
-}
-
-
-void Player_GUI::AddButtonHelper( const CONTROLLER_BUTTON button_type)
-{
-	app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)button_type]));
-
-}
-
-void Player_GUI::AddTextHelper(const std::string text)
-{
-	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->font->font_open_sants_bold_12));
 }
 
 void Player_GUI::CreateParticleToWeaponFrame()

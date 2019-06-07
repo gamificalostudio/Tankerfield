@@ -734,8 +734,10 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		leaderboard->ShowLeaderBoard();
 		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-	
-		
+		break;
+
+	case MENU_STATE::CHANGE_SCENE:
+		app->ui->SetInteractiveGroup(nullptr);
 		break;
 	}
 

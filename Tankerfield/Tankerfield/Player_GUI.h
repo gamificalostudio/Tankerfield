@@ -88,6 +88,8 @@ private:
 
 	UI_Image* weapon_icon = nullptr;
 
+	UI_Label* label_weapon_lvl = nullptr;
+
 	UI_Image* item_frame = nullptr;
 
 	UI_Image* item_icon = nullptr;
