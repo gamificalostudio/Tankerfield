@@ -30,7 +30,7 @@ void NewRoundAnimation::Start()
 	center_energy->alpha = 0.f;
 	center_energy_alpha_fill_amount = 255.f / NEW_ROUND_PARTICLE_NUM;
 	max_particle_time = 10000u;//10 seconds max time to transition for all the particles
-	color_transition_time = 2.5f;
+	color_transition_time = 5.75f;
 
 	source_color = { 255, 255, 255, 255 };//White
 	target_color = { 75, 180,   0, 255 };//Same green as the health bars in full life
@@ -131,6 +131,7 @@ bool NewRoundAnimation::Update(float dt)
 
 		if (particles_reached_trg == NEW_ROUND_PARTICLE_NUM)
 		{
+			app->audio->PlayFx(change_color_sfx);
 			PrepareColorTransition();
 			++app->scene->round;
 			app->scene->general_gui->SetRoundNumber(app->scene->round);
@@ -139,6 +140,7 @@ bool NewRoundAnimation::Update(float dt)
 		//If for any reasons all particles don't reach the center
 		else if (particles_timer.Read() > max_particle_time)
 		{
+			app->audio->PlayFx(change_color_sfx);
 			center_energy->alpha = 255.f;
 			for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
 			{
@@ -177,6 +179,7 @@ bool NewRoundAnimation::Update(float dt)
 		ReduceCenterEnergyAlpha(dt);
 		if (center_energy->alpha < center_energy_alpha_start_heal)
 		{
+			app->audio->PlayFx(throw_healing_balls_sfx);
 			phase = NEW_ROUND_ANIMATION_PHASE::HEAL;
 		}
 	}break;
@@ -264,6 +267,7 @@ void NewRoundAnimation::UpdateNewRoundUIParticles(float dt)
 				/*new_round_ui_particles[i].ui_image->position.DistanceTo(target_pos) <= abs(new_round_ui_particles[i].speed * dt)*/)//It's the same but the above one is more optimized because it doens't calculate a square root
 			{
 				//INFO: Reach the target
+				app->audio->PlayFx(particle_reach_sfx);
 				particles[i].ui_image->SetPos(target_pos);
 				particles[i].reached_target = true;
 				particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
