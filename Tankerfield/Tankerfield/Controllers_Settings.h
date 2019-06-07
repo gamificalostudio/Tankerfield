@@ -14,10 +14,14 @@ public:
 
 	void InputSelect();
 
+	bool OnHoverEnter(UI_Element * object);
+
 
 	UI_InteractiveGroup* InteractiveGroup = nullptr;
 private:
 	
+	UI_Label* attack_label = nullptr;
+
 	UI_Image* attack_image = nullptr;
 	UI_Image* interaction_image = nullptr;
 	UI_Image* item_image = nullptr;
@@ -30,11 +34,13 @@ private:
 	UI_Table* table = nullptr;
 	UI_Button* vibration_button_L = nullptr;
 	UI_Button* vibration_button_R = nullptr;
+	UI_Label* vibration_value_label = nullptr;
 	
 	UI_Button* Sensitivity_button_L = nullptr;
 	UI_Button* Sensitivity_button_R = nullptr;
+	UI_Label* sensitivity_value_label = nullptr;
 
-	uint Player = 5;
+	uint player = 5;
 
 
 
