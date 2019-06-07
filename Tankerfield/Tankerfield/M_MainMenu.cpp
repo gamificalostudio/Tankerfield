@@ -627,7 +627,7 @@ void M_MainMenu::InputSelect()
 
 		else if (menu_element == website)
 		{
-			ShellExecute(NULL, "open", "https://google.es", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecute(NULL, "open", "https://gamificalostudio.github.io/Tankerfield/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
 		else if (menu_element == jaume_linkedin)
