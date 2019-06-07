@@ -32,18 +32,26 @@ public:
 
 	void FadeGameOverScreen(bool fade_on, int round = -1);
 
+	void FadeLeaderBoardScreen(bool fade_on);
+
+	bool UpdateLeaderBoard( std::string path, int round);
+
+	void FillLeaderBoardTable();
+
+	void UpdateLeaderBoardSquadName();
 	void FadeWinScreen(bool fade_on);
 
 
 	void MakeChildOfRoundElement(UI_Element* elem);//To be painted over the rhombus on the center, it needs to be a child of round element
 
-private:
-
-	// General HUD -------------------------------------------
-
+public:
 	UI_Label* round_number_label = nullptr;
 
-	UI_Image* round_element = nullptr;
+	UI_Image* round_element = nullptr; // Rhombus on the center of the screen
+
+
+private:
+	// General HUD -------------------------------------------
 
 	UI_Image* round_fx = nullptr;
 
