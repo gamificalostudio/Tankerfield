@@ -111,14 +111,7 @@
     <oil>
       <speed value ="0"/>
       <life value ="1000"/>
-      <tex path="textures/objects/bullets/oil_pool.png"/>
-      <animations>
-        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="0">
-          <dir>
-            <frame x="0"   y="0"   w="300" h="151"/>
-          </dir>
-        </rotate>
-      </animations>
+      <tex path="textures/objects/bullets/inkdrop02sprite.png"/>
     </oil>
     
     <oil_splash>

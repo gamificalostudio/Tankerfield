@@ -216,6 +216,11 @@ inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & itera
 
 inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, const float & dt)
 {
+	if ((*iterator)->curr_anim != nullptr)
+	{
+		(*iterator)->curr_anim->NextFrame(dt);
+	}
+
 	(*iterator)->Update(dt);
 
 	// Update Components ======================================
@@ -224,10 +229,7 @@ inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, 
 		(*iterator)->coll->SetPosToObj();
 	}
 
-	if ((*iterator)->curr_anim != nullptr)
-	{
-		(*iterator)->curr_anim->NextFrame(dt);
-	}
+
 }
 
 bool M_ObjManager::PostUpdate(float dt)
@@ -272,7 +274,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		{
 			if ((*item) != nullptr)
 			{
-				(*item)->Draw(dt, (*item_cam));
+				(*item)->Draw((*item_cam));
 			}
 		}
 

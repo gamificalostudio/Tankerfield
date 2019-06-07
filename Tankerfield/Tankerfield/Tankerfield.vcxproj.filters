@@ -248,6 +248,9 @@
     <ClCompile Include="Obj_Smoke.cpp">
       <Filter>Objects\Particles</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Emmiter.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -520,6 +523,9 @@
     </ClInclude>
     <ClInclude Include="Obj_Smoke.h">
       <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Emmiter.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

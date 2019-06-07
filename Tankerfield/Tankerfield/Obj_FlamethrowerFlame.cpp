@@ -95,7 +95,7 @@ bool Obj_FlamethrowerFlame::Update(float dt)
 	return true;
 }
 
-bool Obj_FlamethrowerFlame::Draw(float dt, Camera* camera)
+bool Obj_FlamethrowerFlame::Draw(Camera* camera)
 {
 	if (curr_anim != nullptr) {
 		app->render->BlitScaledAndRotated(

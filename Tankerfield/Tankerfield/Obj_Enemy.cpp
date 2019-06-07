@@ -465,7 +465,7 @@ inline void Obj_Enemy::TeleportOut(float & dt)
 	}
 }
 
-bool Obj_Enemy::Draw(float dt, Camera * camera)
+bool Obj_Enemy::Draw(Camera * camera)
 {
 
 	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)

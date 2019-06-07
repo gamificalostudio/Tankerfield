@@ -48,7 +48,7 @@ public:
 
 	void UpdateWeaponsWithoutBullets(float dt);
 
-	bool Draw(float dt, Camera * camera) override;
+	bool Draw(Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
 
 	bool CleanUp() override;

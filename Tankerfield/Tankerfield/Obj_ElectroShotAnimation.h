@@ -15,7 +15,7 @@ public:
 
 	bool Update(float dt);
 
-	bool Draw(float dt, Camera* camera) override;
+	bool Draw(Camera* camera) override;
 
 public:
 	Obj_Tank * tank = nullptr;

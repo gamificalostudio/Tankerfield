@@ -51,7 +51,7 @@ bool Eletro_Shot_Animation::Update(float dt)
 	return true;
 }
 
-bool Eletro_Shot_Animation::Draw(float dt, Camera* camera)
+bool Eletro_Shot_Animation::Draw(Camera* camera)
 {
 	app->render->BlitScaledAndRotated(
 		tex,
