@@ -39,6 +39,7 @@
 #include "Item_InstantHelp.h"
 #include "M_PickManager.h"
 #include "Obj_Enemy.h"
+#include "Obj_Smoke.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -857,6 +858,11 @@ void Obj_Tank::ReduceLife(int damage)
 			life = 0;
 			Die();
 		}
+		else if (life <= 33 && life > 0)
+		{
+			Obj_Smoke* damaged_smoke = (Obj_Smoke*)app->objectmanager->CreateObject(ObjectType::DAMAGED_SMOKE, pos_map);
+			damaged_smoke->tank = this;
+		}
 		gui->SetLifeBar(this->life);
 		damaged_timer.Start();
 		damaged = true;
@@ -1283,14 +1289,11 @@ bool Obj_Tank::ReleaseInteract()
 void Obj_Tank::Die()
 {
 	//If life was over 0 die (otherwise no need to die again)
-	if (life > 0)
-	{
 		app->audio->PlayFx(die_sfx);
 		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 		dead_fire->tank = this;
 		SetWeapon(WEAPON::BASIC, 1);
 		SetItem(ItemType::NO_TYPE);
-	}
 }
 
 bool Obj_Tank::Alive() const
