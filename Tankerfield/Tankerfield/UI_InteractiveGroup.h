@@ -9,8 +9,6 @@ class UI_Quad;
 
 struct UI_InteractiveGroupDef : public UI_ElementDef
 {
-	uint columns = 0u;
-	uint rows = 0u;
 	UI_Image*  focus_indicator = nullptr;
 };
 
@@ -26,42 +24,23 @@ public:
 
 	bool UI_OnHoverEnter(UI_Element* object);
 
-	bool HandleControllerINavigation(int controller);
-
-	bool HandleKeyboardNavigation();
-
 	bool UI_OnHoverRepeat(UI_Element* object);
 
 	bool UI_OnHoverExit(UI_Element * object);
 
+	bool UI_Selected(UI_Element * object);
+
 public:
 
-	void SetFocusImage(iPoint point);
+	void SetFocusImage(UI_Element * element);
 
-	void SetElement( UI_Element* element, const iPoint position);
+	void SetElement( UI_Element* element);
 
-	UI_Element * GetElement(iPoint position);
-
-	UI_Element * GetFocusedElement();
-
-	iPoint GetPos(UI_Element* element);
-
-	void SetNearestElement(const INPUT_DIR dir);
+	std::list<UI_Element*>* GetElementsList();
 
 private:
-
-	iPoint GetFirstAvailableElement();
-
-private:
-
-	uint columns = 0u;
-	uint rows = 0u;
-
-	iPoint current_focus_pos = { 0,0 };
 
 	UI_Image*  focus_indicator = nullptr;
-
-	UI_Element** group_elements = nullptr;
 	list<UI_Element*> group_elements_list;
 
 	friend M_UI;

@@ -8,7 +8,7 @@
 UI_Element::UI_Element(const fPoint position, const UI_ElementDef definition, UI_Listener *listener) 
 	: position(position), listener(listener), section_width(definition.section_width), section_height(definition.section_height),
 	pivot(definition.pivot), section_offset(definition.section_offset), sprite_rect(definition.sprite_section), is_in_game(definition.is_in_game),
-	screen_offset(definition.screen_offset), single_camera(definition.single_camera), not_in_camera(definition.not_in_camera){}
+	single_camera(definition.single_camera), not_in_camera(definition.not_in_camera){}
 	
 UI_Element::~UI_Element()
 {

@@ -38,14 +38,6 @@ bool M_MainMenu::Start()
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 	camera = app->render->CreateCamera( iPoint(0,0), (SDL_Rect)screen);
 
-	// Controll helper ------------------------
-
-	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
-	control_helper_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
-	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
-	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
 	// Main menu ------------------------------
 
 	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, - 320.f), UI_ImageDef({10, 710, 915, 260}));
@@ -70,15 +62,13 @@ bool M_MainMenu::Start()
 	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 
 	UI_InteractiveGroupDef menu_panel_def;
-	menu_panel_def.columns = 1;
-	menu_panel_def.rows = 5;
 
 	menu_navigation = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
-	menu_navigation->SetElement(play_button, iPoint(0,0));
-	menu_navigation->SetElement(leaderboard_button, iPoint(0, 1));
-	menu_navigation->SetElement(options_menu_button, iPoint(0, 2));
-	menu_navigation->SetElement(credits_menu_button, iPoint(0, 3));
-	menu_navigation->SetElement(exit_button, iPoint(0, 4));
+	menu_navigation->SetElement(play_button);
+	menu_navigation->SetElement(leaderboard_button);
+	menu_navigation->SetElement(options_menu_button);
+	menu_navigation->SetElement(credits_menu_button);
+	menu_navigation->SetElement(exit_button);
 
 
 	// Selection screen ------------------------
@@ -86,13 +76,12 @@ bool M_MainMenu::Start()
 
 	float element_side = 126;
 	UI_InteractiveGroupDef selection_panel_def;
-	selection_panel_def.columns = DEFAULT_PANEL_COLUMNS;
-	selection_panel_def.rows = DEFAULT_PANEL_ROWS;
+
 	selection_panel_def.focus_indicator = app->ui->CreateImage({ 0.F,0.F }, UI_ImageDef({ 255, 265, 126,126 }));;
 
 	fPoint  offset (DEFAULT_PANEL_COLUMNS * element_side * 0.5f , DEFAULT_PANEL_ROWS  * element_side * 0.5f);
 
-	selection_panel = app->ui->CreateIntearctiveGroup(screen_center, selection_panel_def, this);
+	selection_navigation = app->ui->CreateIntearctiveGroup(screen_center, selection_panel_def, this);
 
 	float color_value = 0.f;
 	float color_sum = 1.f / (DEFAULT_PANEL_COLUMNS * DEFAULT_PANEL_ROWS + 1);
@@ -101,15 +90,12 @@ bool M_MainMenu::Start()
 	{
 		for (int x = 0; x < DEFAULT_PANEL_COLUMNS; ++x)
 		{
-			UI_Element* element = app->ui->CreateImage(fPoint(screen_center.x - offset.x + x * element_side, screen_center.y - offset.y + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 }));
-			colors[x][y] = GetColor(color_value);
-			element->color_mod = colors[x][y];
+			UI_Element* element = app->ui->CreateImage(fPoint(screen_center.x - offset.x + x * element_side, screen_center.y - offset.y + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 }), this);
+			element->color_mod  =  colors[x + y* DEFAULT_PANEL_COLUMNS] = GetColor(color_value);
 			color_value += color_sum;
-			selection_panel->SetElement(element, iPoint(x, y));
+			selection_navigation->SetElement(element);
 		}
 	}
-
-	selection_panel->SetFocusImage( iPoint(0, 0) );
 
 	fPoint tank_offset = { 280.f, 280.f };
 
@@ -266,35 +252,33 @@ bool M_MainMenu::Start()
 	return_credits->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	UI_InteractiveGroupDef credits_navigation_def;
-	credits_navigation_def.columns = 4;
-	credits_navigation_def.rows = 5;
 
 	credits_navigation = app->ui->CreateIntearctiveGroup(screen_center,credits_navigation_def,this);
 
-	credits_navigation->SetElement(return_credits, iPoint(0, 0));
-	credits_navigation->SetElement(website, iPoint(1, 0));
-	credits_navigation->SetElement(github, iPoint(2, 0));
-	credits_navigation->SetElement(return_credits, iPoint(3, 0));
+	credits_navigation->SetElement(return_credits);
+	credits_navigation->SetElement(website);
+	credits_navigation->SetElement(github);
+	credits_navigation->SetElement(return_credits);
 
-	credits_navigation->SetElement(jaume_github, iPoint(0, 1));
-	credits_navigation->SetElement(jaume_linkedin, iPoint(1, 1));
-	credits_navigation->SetElement(aurelio_github, iPoint(2, 1));
-	credits_navigation->SetElement(aurelio_linkedin, iPoint(3, 1));
+	credits_navigation->SetElement(jaume_github);
+	credits_navigation->SetElement(jaume_linkedin);
+	credits_navigation->SetElement(aurelio_github);
+	credits_navigation->SetElement(aurelio_linkedin);
 
-	credits_navigation->SetElement(víctor_github, iPoint(0, 2));
-	credits_navigation->SetElement(víctor_linkedin, iPoint(1, 2));
-	credits_navigation->SetElement(jorge_github, iPoint(2, 2));
-	credits_navigation->SetElement(jorge_linkedin, iPoint(3, 2));
+	credits_navigation->SetElement(víctor_github);
+	credits_navigation->SetElement(víctor_linkedin);
+	credits_navigation->SetElement(jorge_github);
+	credits_navigation->SetElement(jorge_linkedin);
 
-	credits_navigation->SetElement(yessica_github, iPoint(0, 3));
-	credits_navigation->SetElement(yessica_linkedin, iPoint(1, 3));
-	credits_navigation->SetElement(gerard_github, iPoint(2, 3));
-	credits_navigation->SetElement(gerard_linkedin, iPoint(3, 3));
+	credits_navigation->SetElement(yessica_github);
+	credits_navigation->SetElement(yessica_linkedin);
+	credits_navigation->SetElement(gerard_github);
+	credits_navigation->SetElement(gerard_linkedin);
 
-	credits_navigation->SetElement(sergio_github, iPoint(0, 4));
-	credits_navigation->SetElement(sergio_linkedin, iPoint(1, 4));
-	credits_navigation->SetElement(aitor_github, iPoint(2, 4));
-	credits_navigation->SetElement(aitor_linkedin, iPoint(3, 4));
+	credits_navigation->SetElement(sergio_github);
+	credits_navigation->SetElement(sergio_linkedin);
+	credits_navigation->SetElement(aitor_github);
+	credits_navigation->SetElement(aitor_linkedin);
 
 	
 	// Options =============================================
@@ -317,16 +301,22 @@ bool M_MainMenu::Start()
 	leaderboard_label->SetParent(panel_leaderboard);
 
 	UI_InteractiveGroupDef leaderboard_def;
-	leaderboard_def.columns = 1;
-	leaderboard_def.rows = 1;
 
 	leaderboard_navigation = app->ui->CreateIntearctiveGroup(screen_center, leaderboard_def, this);
-	leaderboard_navigation->SetElement(return_from_leaderboard, iPoint(0, 0));
+	leaderboard_navigation->SetElement(return_from_leaderboard);
 
 	// Set values ==========================================
 
 	SetPlayerObjectsState(false);
 	app->ui->HideAllUI();
+
+	// Controll helper ------------------------
+
+	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
+	control_helper_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+
+	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
+	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	SetState(MENU_STATE::INIT_MENU);
 	SDL_ShowCursor(SDL_ENABLE);
@@ -369,12 +359,6 @@ bool M_MainMenu::PreUpdate()
 		}
 	}
 
-	if (menu_state != MENU_STATE::CHANGE_SCENE)
-	{
-		InputNavigate();
-		InputSelect();
-	}
-
 	return true;
 }
 
@@ -382,7 +366,10 @@ bool M_MainMenu::Update(float dt)
 {
 	if (menu_state == MENU_STATE::SELECTION)
 	{
-		players[current_player].tank->SetColor(selection_panel->GetFocusedElement()->color_mod);
+		if (app->ui->GetFocusedElement() != nullptr)
+		{
+			players[current_player].tank->SetColor(app->ui->GetFocusedElement()->color_mod);
+		}
 	}
 
 	return true;
@@ -422,109 +409,10 @@ bool M_MainMenu::UI_OnHoverEnter(UI_Element * element)
 	return true;
 }
 
-void M_MainMenu::InputNavigate()
+bool M_MainMenu::UI_Selected(UI_Element * element)
 {
-	if (menu_state == MENU_STATE::INIT_MENU)
-	{
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if (players[i].controller != -1)
-			{
-				if (menu_navigation->HandleControllerINavigation(players[i].controller))
-				{
-					app->audio->PlayFx(button_enter_sfx);
-				}
-			}
-		}
 
-		if (menu_navigation->HandleKeyboardNavigation())
-		{
-			app->audio->PlayFx(button_enter_sfx);
-		}
-
-	}
-	else if (menu_state == MENU_STATE::SELECTION)
-	{
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if (players[current_player].controller != -1)
-			{
-				if (selection_panel->HandleControllerINavigation(players[current_player].controller))
-				{
-					app->audio->PlayFx(button_enter_sfx);
-				}
-			}
-		}
-
-		if (selection_panel->HandleKeyboardNavigation())
-		{
-			app->audio->PlayFx(button_enter_sfx);
-		}
-	}
-	else if (menu_state == MENU_STATE::CREDITS)
-	{
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if (players[current_player].controller != -1)
-			{
-				if (credits_navigation->HandleControllerINavigation(players[current_player].controller))
-				{
-					app->audio->PlayFx(button_enter_sfx);
-				}
-			}
-		}
-
-		if (credits_navigation->HandleKeyboardNavigation())
-		{
-			app->audio->PlayFx(button_enter_sfx);
-		}
-	}
-	else if (menu_state == MENU_STATE::OPTIONS)
-	{
-		options->InputNavigate();
-	}
-}
-
-void M_MainMenu::InputSelect()
-{
-	bool input_select_controller = false;
-
-	// Detect input select controller ------------------------------------- 
-
-	if (menu_state != MENU_STATE::SELECTION && menu_state != MENU_STATE::CHANGE_SCENE)
-	{
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if (players[i].controller != -1 && app->input->GetControllerButtonState(players[i].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-			{
-				input_select_controller = true;
-			}
-		}
-	}
-
-	else if (menu_state == MENU_STATE::SELECTION)
-	{
-		if (players[current_player].controller != -1 &&  app->input->GetControllerButtonState(players[current_player].controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-		{
-			input_select_controller = true;
-		}
-	}
-
-	// Detect input select mouse -----------------------------------------
-
-	if (app->input->GetMouseButton(1) == KEY_UP && app->ui->MouseIsFocusing())
-	{
-		input_select_controller = true;
-	}
-
-	if (input_select_controller == false)
-	{
-		return;
-	}
-
-	// Manage selection input select mouse -------------------------------
-	
-	if (menu_state == MENU_STATE::SELECTION && selection_panel->GetFocusedElement() != nullptr)
+	if (menu_state == MENU_STATE::SELECTION)
 	{
 		if (SetPlayerProperties() == true)
 		{
@@ -543,159 +431,154 @@ void M_MainMenu::InputSelect()
 		}
 	}
 
-	else if (menu_state == MENU_STATE::INIT_MENU && menu_navigation->GetFocusedElement() != nullptr)
+	else if (menu_state == MENU_STATE::INIT_MENU)
 	{
-		UI_Element*  menu_element = menu_navigation->GetFocusedElement();
 
-		if (menu_element == play_button)
+		if (element == play_button)
 		{
 			SetState(MENU_STATE::SELECTION);
 			app->audio->PlayFx(button_select_sfx);
 		}
-		else if (menu_element == credits_menu_button)
+		else if (element == credits_menu_button)
 		{
 			SetState(MENU_STATE::CREDITS);
 			app->audio->PlayFx(button_select_sfx);
 		}
-		else if (menu_element == options_menu_button)
+		else if (element == options_menu_button)
 		{
 			app->audio->PlayFx(button_select_sfx);
 			SetState(MENU_STATE::OPTIONS);
 		}
-		else if (menu_element == exit_button)
+		else if (element == exit_button)
 		{
 			exit_game = true;
 			app->audio->PlayFx(button_select_sfx);
 		}
-		else if (menu_element == leaderboard_button)
+		else if (element == leaderboard_button)
 		{
 			app->audio->PlayFx(button_select_sfx);
 			SetState(MENU_STATE::LEADERBOARD);
 		}
+
+		app->audio->PlayFx(button_select_sfx);
 	}
 
-	else if (menu_state == MENU_STATE::OPTIONS)
+	else if (menu_state == MENU_STATE::LEADERBOARD)
 	{
-		options->InputSelect();
-	}
-
-	else if (menu_state == MENU_STATE::LEADERBOARD && leaderboard_navigation->GetFocusedElement() != nullptr)
-	{
-		UI_Element*  menu_element = leaderboard_navigation->GetFocusedElement();
-
-		if (menu_element == return_from_leaderboard)
+		if (element == return_from_leaderboard)
 		{
-			app->audio->PlayFx(button_select_sfx);
 			SetState(MENU_STATE::INIT_MENU);
 		}
+
+		app->audio->PlayFx(button_select_sfx);
 	}
 
-	else if (menu_state == MENU_STATE::CREDITS && credits_navigation->GetFocusedElement() != nullptr)
+	else if (menu_state == MENU_STATE::CREDITS)
 	{
-		UI_Element*  menu_element = credits_navigation->GetFocusedElement();
-
-		if (menu_element == github)
+		if (element == github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/gamificalostudio/Tankerfield", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == website)
+		else if (element == website)
 		{
 			ShellExecute(NULL, "open", "https://google.es", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == jaume_linkedin)
+		else if (element == jaume_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/jaume-montagut-guix-7389a4166/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == jaume_github)
+		else if (element == jaume_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/JaumeMontagut", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == aurelio_github)
+		else if (element == aurelio_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/alejandro61299", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == aurelio_linkedin)
+		else if (element == aurelio_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/alejandro-a-gamarra-ni%C3%B1o-568b6b171/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == víctor_github)
+		else if (element == víctor_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/VictorSegura99", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == víctor_linkedin)
+		else if (element == víctor_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/v%C3%ADctor-segura-blanco-297458185/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == jorge_github)
+		else if (element == jorge_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/jorgegh2", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == jorge_linkedin)
+		else if (element == jorge_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/jorge-gemas-herencia-28140b188/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == yessica_github)
+		else if (element == yessica_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/YessicaSD", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == yessica_linkedin)
+		else if (element == yessica_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/yessica-servin-dominguez-663175165/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == gerard_github)
+		else if (element == gerard_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/vsRushy", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == gerard_linkedin)
+		else if (element == gerard_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/gerard-marcos-freixas-0a9284158/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == sergio_github)
+		else if (element == sergio_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/Sersius", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == sergio_linkedin)
+		else if (element == sergio_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/sergio-g%C3%B3mez-b81b69184/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == aitor_github)
+		else if (element == aitor_github)
 		{
 			ShellExecute(NULL, "open", "https://github.com/AitorVelez", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == aitor_linkedin)
+		else if (element == aitor_linkedin)
 		{
 			ShellExecute(NULL, "open", "https://www.linkedin.com/in/aitor-v%C3%A9lez-tolosa-48186a129/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
-		else if (menu_element == return_credits)
+		else if (element == return_credits)
 		{
 			SetState(MENU_STATE::INIT_MENU);
-			app->audio->PlayFx(button_select_sfx);
 		}
+
+		app->audio->PlayFx(button_select_sfx);
 	}
+	return true;
 }
 
 
 bool M_MainMenu::SetPlayerProperties()
 {
-	UI_Element* element_focused = selection_panel->GetFocusedElement();
+	UI_Element* element_focused = app->ui->GetFocusedElement();
 
 	if (element_focused == nullptr)
 	{
@@ -735,23 +618,18 @@ bool M_MainMenu::SetPlayerProperties()
 
 void M_MainMenu::ResetPanelColors()
 {
-	if (selection_panel == nullptr)
+	if (selection_navigation == nullptr)
 	{
 		return;
 	}
 
-	UI_Element* aux = nullptr;
+	int i = 0;
 
-	for (int y = 0; y < DEFAULT_PANEL_ROWS; ++y)
+	for ( std::list<UI_Element*>::iterator iter = selection_navigation->GetElementsList()->begin(); iter != selection_navigation->GetElementsList()->end() ; ++iter)
 	{
-		for (int x = 0; x < DEFAULT_PANEL_COLUMNS; ++x)
-		{
-			aux = selection_panel->GetElement(iPoint(x, y));
-			aux->color_mod = colors[x][y];
-		}
+		(*iter)->color_mod = colors[i];
+		++i;
 	}
-
-	selection_panel->SetFocusImage(iPoint(0, 0));
 }
 
 void M_MainMenu::SetState(MENU_STATE new_state)
@@ -775,7 +653,6 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		logo_image->SetState(ELEMENT_STATE::HIDDEN);
 		version_label->SetState(ELEMENT_STATE::HIDDEN);
-
 		break;
 
 	case MENU_STATE::SELECTION:
@@ -785,7 +662,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		SetPlayerObjectsState(false);
 
 		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		selection_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+		selection_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 		player_labels[0]->color_mod = { 250, 20, 20, 255 };
 		player_labels[1]->color_mod = { 220, 220, 220, 255 };
@@ -808,11 +685,15 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 	}
 
+	app->ui->SetInteractiveGroup(nullptr);
+
 	// Active new state ======================================
 
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
+
+		app->ui->SetInteractiveGroup(menu_navigation);
 
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		logo_image->SetState(ELEMENT_STATE::VISIBLE);
@@ -831,14 +712,16 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 		// Set elements state --------------------------------
 
+		app->ui->SetInteractiveGroup(selection_navigation);
+		selection_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		selection_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		control_helper_label->SetPos(screen_center + fPoint(40, 350));
 		control_helper_label->SetText("Select Color");
 		control_helper_image->SetPos(screen_center + fPoint(-50, 350));
 
 		break;
 	case MENU_STATE::CREDITS:
+		app->ui->SetInteractiveGroup(credits_navigation);
 		panel_credits->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		break;
@@ -846,9 +729,13 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		options->ShowOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
-		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+		app->ui->SetInteractiveGroup(leaderboard_navigation);
+
 		leaderboard->ShowLeaderBoard();
+		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+	
+		
 		break;
 	}
 

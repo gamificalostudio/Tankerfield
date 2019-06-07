@@ -217,16 +217,16 @@ bool M_UI::Update(float dt)
 
 	if (current_interactive_group != nullptr)
 	{
-		if (input_type == UI_INPUT_TYPE::MOUSE)
-		{
-			MouseSelection();
-			MouseNavigation();
-		}
-		else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
-		{
+		//if (input_type == UI_INPUT_TYPE::MOUSE)
+		//{
+		//	MouseSelection();
+		//	MouseNavigation();
+		//}
+		//else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
+		//{
 			ControllerSelection();
 			ControllersNavigation();
-		}
+		//}
 	}
 
 	// Update elements and in game elements =================================
@@ -278,6 +278,11 @@ bool M_UI::PostUpdate(float dt)
 		}
 	}
 	return true;
+}
+
+void M_UI::SetInteractiveGroup(UI_InteractiveGroup* group)
+{
+	current_interactive_group = group;
 }
 
 void M_UI::MouseNavigation()
@@ -333,6 +338,32 @@ void M_UI::MouseNavigation()
 
 void M_UI::ControllerSelection()
 {
+	bool ret = false;
+
+	if (focused_element != nullptr)
+	{
+
+		for (int i = 0; i < MAX_PLAYERS; ++i)
+		{
+			if (focus_controller_id != -1 && focus_controller_id != i && app->input->IsConnectedControllet(i))
+			{
+				continue;
+			}
+
+			for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
+			{
+				if (app->input->GetControllerButtonState(i, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
+				{
+					focused_element->listener->UI_Selected(focused_element);
+					break;
+				}
+			}
+		}
+	}
+}
+
+void M_UI::MouseSelection()
+{
 	if (focused_element != nullptr)
 	{
 		if (app->input->GetMouseButton(1) == KEY_UP)
@@ -342,14 +373,140 @@ void M_UI::ControllerSelection()
 	}
 }
 
-void M_UI::MouseSelection()
+void M_UI::ControllersNavigation()
 {
+	UI_Element* nearest_element = nullptr;
+	UI_Element* last_focused_element = focused_element;
+
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (focus_controller_id != -1 && focus_controller_id != i && app->input->IsConnectedControllet(i))
+		{
+			continue;
+		}
+
+		for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
+		{
+			if (app->input->GetControllerJoystickState(i, Joystick::LEFT, (INPUT_DIR)input_dir) == KEY_DOWN)
+			{
+				if (focused_element != nullptr)
+				{
+					nearest_element = GetNearestElement((INPUT_DIR)input_dir);
+					break;
+				}
+				else 
+				{
+					nearest_element = GetFistAvaliableElement();
+					break;
+				}
+			}
+		}
+	}
+
+	if (nearest_element != nullptr)
+	{
+		focused_element = nearest_element;
+	}
+
+
+	if (focused_element != last_focused_element)
+	{
+		if (last_focused_element != nullptr)
+		{
+			last_focused_element->listener->UI_OnHoverExit(last_focused_element);
+		}
+
+		if (focused_element != nullptr)
+		{
+			focused_element->listener->UI_OnHoverEnter(focused_element);
+		}
+	}
+	else
+	{
+		if (focused_element != nullptr)
+		{
+			focused_element->listener->UI_OnHoverRepeat(focused_element);
+		}
+	}
 
 }
 
-void M_UI::ControllersNavigation()
+UI_Element*  M_UI::GetNearestElement(INPUT_DIR input_dir)
 {
+	int distance_preference = 0;
+	int current_distance = 0;
+	UI_Element* nearest_element = nullptr;
 
+	for (list<UI_Element*>::iterator iter = current_interactive_group->group_elements_list.begin(); iter != current_interactive_group->group_elements_list.end(); ++iter)
+	{
+		if ((*iter)->state != ELEMENT_STATE::VISIBLE || (*iter) == focused_element)
+		{
+			continue;
+		}
+
+		current_distance = 0;
+
+		switch (input_dir)
+		{
+		case INPUT_DIR::RIGHT:
+			if ( focused_element->position.x >= (*iter)->position.x)
+			{
+				continue;
+			}
+
+			current_distance = abs(focused_element->position.x - (*iter)->position.x);
+			break;
+		case INPUT_DIR::LEFT:
+			if (focused_element->position.x <= (*iter)->position.x)
+			{
+				continue;
+			}
+
+			current_distance = abs(focused_element->position.x - (*iter)->position.x);
+			break;
+		case INPUT_DIR::DOWN:
+			if (focused_element->position.y >= (*iter)->position.y)
+			{
+				continue;
+			}
+
+			current_distance = abs(focused_element->position.y - (*iter)->position.y);
+			break;
+		case INPUT_DIR::UP:
+			if (focused_element->position.y <= (*iter)->position.y)
+			{
+				continue;
+			}
+
+			current_distance = abs(focused_element->position.y - (*iter)->position.y);
+			break;
+		}
+
+		current_distance += focused_element->position.DistanceTo((*iter)->position);
+
+		if (distance_preference == 0 || current_distance < distance_preference)
+		{
+			distance_preference = current_distance;
+			nearest_element = (*iter);
+		}
+	}
+
+	return nearest_element;
+}
+
+UI_Element*  M_UI::GetFistAvaliableElement()
+{
+	for (list<UI_Element*>::iterator iter = current_interactive_group->group_elements_list.begin(); iter != current_interactive_group->group_elements_list.end(); ++iter)
+	{
+		if ((*iter)->state != ELEMENT_STATE::VISIBLE)
+		{
+			continue;
+		}
+
+		return (*iter);
+	}
+
+	return nullptr;
 }
 
 void M_UI::SelectInputType()
@@ -475,11 +632,6 @@ Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
  FocusState M_UI::GetClickState() const
  {
 	 return focus_state;
- }
-
- void M_UI::SetFocusedElement(UI_Element * element)
- {
-	 focused_element = element;
  }
 
  UI_Element * M_UI::GetFocusedElement()

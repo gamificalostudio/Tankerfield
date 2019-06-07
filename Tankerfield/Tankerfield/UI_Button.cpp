@@ -11,7 +11,7 @@
 UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener) : UI_Element(position, definition, listener)
 {
 	this->definition = definition;
-	this->is_interactive = true;
+	//this->is_interactive = true;
 	SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	section_width = definition.idle_rect.w;
 	section_height = definition.idle_rect.h;

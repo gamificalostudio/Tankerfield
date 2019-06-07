@@ -11,8 +11,7 @@
 #include "Animation.h"
 #include "Point.h"
 
-#define CURSOR_WIDTH 2
-#define BTW_FOCUS_TIME 150
+#define MAX_PLAYERS 4
 #define UI_DEAD_ZONE 5000
 
 using namespace std;
@@ -171,13 +170,11 @@ public:
 
 	// Object functions ----------------------------------------------------------
 
-	void SetFocusedElement(UI_Element* element);
+	void SetInteractiveGroup(UI_InteractiveGroup * group);
 
 	UI_Element* GetFocusedElement();
 
 	UI_INPUT_TYPE GetInputType();
-
-	bool MouseIsFocusing();
 
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
@@ -233,6 +230,10 @@ private:
 
 	void ControllersNavigation();
 
+	UI_Element * GetNearestElement(INPUT_DIR input_dir);
+
+	UI_Element * GetFistAvaliableElement();
+
 	void ControllerSelection();
 
 	void DrawUI(UI_Element* object);
@@ -270,6 +271,8 @@ private:
 	UI_InteractiveGroup * current_interactive_group = nullptr;
 
 	FocusState focus_state = FocusState::NONE;
+
+	int focus_controller_id = -1;
 
 public:
 
