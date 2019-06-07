@@ -19,7 +19,7 @@ public:
 	~Obj_FlamethrowerFlame();
 
 	bool Update(float dt) override;
-	bool Draw(float dt, Camera* camera) override;
+	bool Draw(Camera* camera) override;
 
 public:
 	Obj_Tank * tank		= nullptr;

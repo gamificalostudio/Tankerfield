@@ -1238,5 +1238,54 @@
     </animation>
   
   </suicidal>
-
+  <inkdrop>
+    <animation>
+      <anim speed="10" rotation="counter-clockwise" first_dir_angle ="-90">
+        <dir>
+          <frame name="sprite41" x="0" y="1064" w="320" h="133"></frame>
+          <frame name="sprite40" x="1280" y="931" w="320" h="133"></frame>
+          <frame name="sprite39" x="960" y="931" w="320" h="133"></frame>
+          <frame name="sprite38" x="640" y="931" w="320" h="133"></frame>
+          <frame name="sprite37" x="320" y="931" w="320" h="133"></frame>
+          <frame name="sprite36" x="0" y="931" w="320" h="133"></frame>
+          <frame name="sprite35" x="1280" y="798" w="320" h="133"></frame>
+          <frame name="sprite34" x="960" y="798" w="320" h="133"></frame>
+          <frame name="sprite33" x="640" y="798" w="320" h="133"></frame>
+          <frame name="sprite32" x="320" y="798" w="320" h="133"></frame>
+          <frame name="sprite31" x="0" y="798" w="320" h="133"></frame>
+          <frame name="sprite30" x="1280" y="665" w="320" h="133"></frame>
+          <frame name="sprite29" x="960" y="665" w="320" h="133"></frame>
+          <frame name="sprite28" x="640" y="665" w="320" h="133"></frame>
+          <frame name="sprite27" x="320" y="665" w="320" h="133"></frame>
+          <frame name="sprite26" x="0" y="665" w="320" h="133"></frame>
+          <frame name="sprite25" x="1280" y="532" w="320" h="133"></frame>
+          <frame name="sprite24" x="960" y="532" w="320" h="133"></frame>
+          <frame name="sprite23" x="640" y="532" w="320" h="133"></frame>
+          <frame name="sprite22" x="320" y="532" w="320" h="133"></frame>
+          <frame name="sprite21" x="0" y="532" w="320" h="133"></frame>
+          <frame name="sprite20" x="1280" y="399" w="320" h="133"></frame>
+          <frame name="sprite19" x="960" y="399" w="320" h="133"></frame>
+          <frame name="sprite18" x="640" y="399" w="320" h="133"></frame>
+          <frame name="sprite17" x="320" y="399" w="320" h="133"></frame>
+          <frame name="sprite16" x="0" y="399" w="320" h="133"></frame>
+          <frame name="sprite15" x="1280" y="266" w="320" h="133"></frame>
+          <frame name="sprite14" x="960" y="266" w="320" h="133"></frame>
+          <frame name="sprite13" x="640" y="266" w="320" h="133"></frame>
+          <frame name="sprite12" x="320" y="266" w="320" h="133"></frame>
+          <frame name="sprite11" x="0" y="266" w="320" h="133"></frame>
+          <frame name="sprite10" x="1280" y="133" w="320" h="133"></frame>
+          <frame name="sprite9" x="960" y="133" w="320" h="133"></frame>
+          <frame name="sprite8" x="640" y="133" w="320" h="133"></frame>
+          <frame name="sprite7" x="320" y="133" w="320" h="133"></frame>
+          <frame name="sprite6" x="0" y="133" w="320" h="133"></frame>
+          <frame name="sprite5" x="1280" y="0" w="320" h="133"></frame>
+          <frame name="sprite4" x="960" y="0" w="320" h="133"></frame>
+          <frame name="sprite3" x="640" y="0" w="320" h="133"></frame>
+          <frame name="sprite2" x="320" y="0" w="320" h="133"></frame>
+          <frame name="sprite1" x="0" y="0" w="320" h="133"></frame>
+          
+        </dir>
+      </anim>
+    </animation>
+  </inkdrop>
 </animations>

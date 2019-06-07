@@ -551,7 +551,7 @@ void Obj_Tank::SetSpeed(float speed)
 	velocity_map *= speed;
 }
 
-bool Obj_Tank::Draw(float dt, Camera * camera)
+bool Obj_Tank::Draw(Camera * camera)
 {
 	if (!damaged)
 	{

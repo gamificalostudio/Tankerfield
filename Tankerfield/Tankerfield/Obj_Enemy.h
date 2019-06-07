@@ -44,7 +44,7 @@ public:
 
 	void DebugPathfinding (Camera* camera)override;
 
-	virtual bool Draw(float dt, Camera* camera)override;
+	virtual bool Draw(Camera* camera)override;
 
 	virtual bool Start() override;
 

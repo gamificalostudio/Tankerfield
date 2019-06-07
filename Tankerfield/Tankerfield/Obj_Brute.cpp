@@ -168,7 +168,7 @@ void Obj_Brute::Burn(const float& dt)
 	fire3.NextFrame(dt);
 }
 
-bool Obj_Brute::Draw(float dt, Camera * camera)
+bool Obj_Brute::Draw(Camera * camera)
 {
 	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)
 	{
