@@ -4,7 +4,7 @@ Each one of you will control a tank and defend against enldess rounds of invader
 
 You can play with your friends downloading the latest release [here]().
 
-## Index
+### Index
 * [About our game](https://gamificalostudio.github.io/Tankerfield/#about-our-game)
 * [Controls](https://gamificalostudio.github.io/Tankerfield/#controls)
 * [Members](https://gamificalostudio.github.io/Tankerfield/#members)
@@ -23,6 +23,7 @@ You can play with your friends downloading the latest release [here]().
 
 ## About our game
 Tankerfield is a party game for you and 3 more friends. In this game you will have to survive rounds with your tank, while picking up items and other awesome weapons. The main objective is to survive the max rounds possible killing all the enemies that are about to take over the world. You and your friend will have to explore the map to improve your weapons and not get killed.
+
 For more information about the decisions we have taken, you can check our game desing document [here](https://github.com/gamificalostudio/Tankerfield/wiki/Game-Design-Document).
 
 ## Controls
@@ -42,45 +43,42 @@ For more information about the decisions we have taken, you can check our game d
 - F1: show map grid
 - F5: Reset level
 
-# Members:
+## Members:
 
-### Jaume Montagut Guix
-* **Leader:** 
+<p align="center">
+  <img width="600" height="600" src="https://github.com/gamificalostudio/Tankerfield/blob/master/docs/team_images/GroupPhoto.png">
+</p>
+
+**Leader**: Jaume Montagut Guix 
 * [Github account](https://github.com/JaumeMontagut)
 * [Contribution in the game]()
 
-### Jorge Gemas Herencia
-* **Management:** 
+**Management**:  Jorge Gemas Herencia
 * [Github account](https://github.com/jorgegh2)
 * [Contribution in the game]()
 
-### Aurelio Gamarra Niño
-* **UI:** 
+**UI**: Aurelio Gamarra Niño
 * [Github account](https://github.com/alejandro61299)
 * [Contribution in the game]()
 
-### Victor Segura Blanco
-* **Design:** 
+**Design**: Victor Segura Blanco
 * [Github account](https://github.com/VictorSegura99)
 * [Contribution in the game]()
 
-### Gerard Marcos Freixas
-* **Code:** 
+**Code**: Gerard Marcos Freixas
+
 * [Github account](https://github.com/vsRushy)
 * [Contribution in the game]()
 
-### Yessica Servin Dominguez
-* **Code:** 
+**Code**: Yessica Servin Dominguez
 * [Github account](https://github.com/YessicaSD)
 * [Contribution in the game]()
 
-### Sergio Gómez Roldán
-* **Art & Audio:** 
+**Art & Audio**: Sergio Gómez Roldán 
 * [Github account](https://github.com/Sersius)
 * [Contribution in the game]()
 
-### Aitor Vélez Tolosa
-* **QA:** 
+**QA**: Aitor Vélez Tolosa 
 * [Github account](https://github.com/AitorVelez)
 * [Contribution in the game]()
 
@@ -89,9 +87,9 @@ For more information about the decisions we have taken, you can check our game d
 ## Gameplay
 
 ## Our social media
-* [Github](https://github.com/gamificalostudio/Tankerfield)
-* [Twitter](https://twitter.com/gamificalo)
-* [Instagram](https://www.instagram.com/gamificalo)
+* <img width="32" height="32" src="https://cdn.iconscout.com/icon/free/png-256/github-84-436555.png">[Github](https://github.com/gamificalostudio/Tankerfield)
+* <img width="32" height="32" src="https://cdn.icon-icons.com/icons2/122/PNG/128/twitter_socialnetwork_20007.png">[Twitter](https://twitter.com/gamificalo)
+* <img width="32" height="32" src="https://cdn.iconscout.com/icon/free/png-256/instagram-188-498425.png">[Instagram](https://www.instagram.com/gamificalo)
 
 ## Tools used
 * IDE: Microsoft Visual Studio 2017
