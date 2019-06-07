@@ -77,7 +77,6 @@ public:
 	float GetTurrAngle() const;
 	WeaponInfo GetWeaponInfo() const;
 
-	bool IsReady() const;
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	std::vector<Object*>* GetEnemiesHitted();
@@ -118,7 +117,6 @@ private:
 
 	//- Input
 	void SelectInputMethod();
-	void InputReadyKeyboard();
 	bool PressInteract();
 	bool ReleaseInteract();
 

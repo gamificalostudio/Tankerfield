@@ -127,8 +127,6 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_D;
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
-		kb_ready	= SDL_SCANCODE_Z;
-		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -137,8 +135,6 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_H;
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
-		kb_ready	= SDL_SCANCODE_V;
-		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -147,8 +143,6 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_L;
 		kb_item		= SDL_SCANCODE_U;
 		kb_interact = SDL_SCANCODE_O;
-		kb_ready	= SDL_SCANCODE_M;
-		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 3:
 		kb_up		= SDL_SCANCODE_KP_8;
@@ -315,8 +309,6 @@ bool Obj_Tank::Update(float dt)
 	Item();
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
-	InputReadyKeyboard();
-
 	UpdateWeaponsWithoutBullets(dt);
 
 	return true;
@@ -1357,11 +1349,6 @@ void Obj_Tank::SetGui(Player_GUI * gui)
 	this->gui = gui;
 }
 
-bool Obj_Tank::IsReady() const
-{
-	return ready;
-}
-
 int Obj_Tank::GetTankNum() const
 {
 	return tank_num;
@@ -1370,18 +1357,6 @@ int Obj_Tank::GetTankNum() const
 int Obj_Tank::GetController()
 {
 	return controller;
-}
-
-void Obj_Tank::InputReadyKeyboard()
-{
-	if (app->scene->game_state == GAME_STATE::OUT_WAVE && app->input->GetKey(kb_ready) == KEY_DOWN)
-	{
-		ready = !ready;
-	}
-	else if (app->scene->game_state != GAME_STATE::OUT_WAVE)
-	{
-		ready = false;
-	}
 }
 
 fPoint Obj_Tank::GetShotDir() const

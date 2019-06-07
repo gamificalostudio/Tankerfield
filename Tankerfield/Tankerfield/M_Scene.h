@@ -5,8 +5,9 @@
 
 #include "SDL/include/SDL_rect.h"
 
-
 #include "Module.h"
+
+#include "NewRoundAnimation.h"
 
 struct SDL_Texture;
 struct Controller;
@@ -17,6 +18,7 @@ class Object;
 class Player_GUI;
 class General_GUI;
 class UI_Label;
+class UI_Image;
 class LeaderBoard;
 
 enum class GAME_STATE
@@ -31,8 +33,6 @@ enum class GAME_STATE
 	LEADER_BOARD,
 	WAITING_LEADERBOARD//Waiting for player input
 };
-
-class PerfTimer;
 
 class M_Scene : public Module
 {
@@ -91,8 +91,6 @@ private:
 
 	void NewWave();
 
-	bool AllPlayersReady() const;
-
 
 public:
 	SDL_Texture* path_tex = nullptr;
@@ -128,12 +126,15 @@ private:
 	int wind_sound_channel = -1;
 
 	const char* main_music;
-	
+
+	float time_between_waves = 0.f;//In seconds
 
 private:
 	/* Reward Zones */
 	RewardZone* reward_zone_01 = nullptr;
 	RewardZone* reward_zone_02 = nullptr;
+
+	NewRoundAnimation new_round_animation;
 };
 
 #endif // __j1SCENE_H__

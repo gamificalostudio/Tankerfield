@@ -339,7 +339,7 @@ bool M_MainMenu::Start()
 	SetPlayerObjectsState(false);
 
 	app->ui->HideAllUI();
-	SetState(MENU_STATE::CONTROLLERS_SETTINGS);
+	SetState(MENU_STATE::INIT_MENU);
 
 	SDL_ShowCursor(SDL_ENABLE);
 
