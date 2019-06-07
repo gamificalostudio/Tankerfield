@@ -245,6 +245,9 @@
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="NewRoundAnimation.cpp" />
+    <ClCompile Include="Obj_Emmiter.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -515,6 +518,9 @@
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="NewRoundAnimation.h" />
+    <ClInclude Include="Obj_Emmiter.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">
