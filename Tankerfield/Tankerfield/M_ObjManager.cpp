@@ -95,6 +95,10 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
+	FillPool(ObjectType::TESLA_TROOPER, 100);
+	FillPool(ObjectType::BRUTE, 2);
+	FillPool(ObjectType::SUICIDAL, 2);
+	FillPool(ObjectType::ROCKETLAUNCHER, 2);
 	return ret;
 }
 
@@ -214,6 +218,23 @@ inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & itera
 	++iterator;
 }
 
+void M_ObjManager::DesactivateObject(Object * iterator)
+{
+	iterator->Desactivate();
+	iterator->return_to_pool = false;
+	iterator->active = false;
+
+	if (IsEnemy(iterator->type))
+	{
+		enemies.remove(iterator);
+	}
+	if (iterator->coll != nullptr)
+	{
+		iterator->coll->SetIsTrigger(false);
+	}
+	ReturnToPool(iterator);
+}
+
 inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, const float & dt)
 {
 	if ((*iterator)->curr_anim != nullptr)
@@ -230,6 +251,15 @@ inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, 
 	}
 
 
+}
+
+void M_ObjManager::FillPool(ObjectType type, uint number)
+{
+	for (uint i = 0; i < number; ++i)
+	{
+		Object* obj = CreateObject(type, fPoint(-100, -100));
+		DesactivateObject(obj);
+	}
 }
 
 bool M_ObjManager::PostUpdate(float dt)
@@ -319,23 +349,7 @@ bool M_ObjManager::CleanUp()
 
 bool M_ObjManager::Reset()
 {
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
-	{
-		(*iterator)->CleanUp();
-		if ((*iterator)->coll != nullptr)
-		{
-			(*iterator)->coll->Destroy();
-			(*iterator)->coll = nullptr;
-		}
-
-		delete((*iterator));
-		(*iterator) = nullptr;
-		iterator = objects.erase(iterator);
-	}
-
-	obj_tanks.clear();
-	objects.clear();
-
+	DeleteObjects();
 	return true;
 }
 
@@ -556,6 +570,11 @@ void M_ObjManager::DeleteObjects()
 		if ((*iterator) != nullptr)
 		{
 			(*iterator)->CleanUp();
+			if ((*iterator)->coll != nullptr)
+			{
+				(*iterator)->coll->Destroy();
+				(*iterator)->coll = nullptr;
+			}
 			delete (*iterator);
 			(*iterator) = nullptr;
 		}
@@ -564,6 +583,7 @@ void M_ObjManager::DeleteObjects()
 	objects.clear();
 	obj_tanks.clear();
 	enemies.clear();
+	pool_of_objects.clear();
 }
 
 
