@@ -51,36 +51,35 @@ For more information about the decisions we have taken, you can check our game d
 
 **Leader**: Jaume Montagut Guix 
 * [Github account](https://github.com/JaumeMontagut)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Jaume_contribution)
 
 **Management**:  Jorge Gemas Herencia
 * [Github account](https://github.com/jorgegh2)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Jorge_contribution)
 
 **UI**: Aurelio Gamarra Niño
 * [Github account](https://github.com/alejandro61299)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Aurelio_contribution)
 
 **Design**: Victor Segura Blanco
 * [Github account](https://github.com/VictorSegura99)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Victor_contribution)
 
 **Code**: Gerard Marcos Freixas
-
 * [Github account](https://github.com/vsRushy)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Gerard_contribution)
 
 **Code**: Yessica Servin Dominguez
 * [Github account](https://github.com/YessicaSD)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Yessica_contribution)
 
 **Art & Audio**: Sergio Gómez Roldán 
 * [Github account](https://github.com/Sersius)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Sergio_contribution)
 
 **QA**: Aitor Vélez Tolosa 
 * [Github account](https://github.com/AitorVelez)
-* [Contribution in the game]()
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Aitor_contribution)
 
 ## Trailer of the game
 
