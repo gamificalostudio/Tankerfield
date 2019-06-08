@@ -44,6 +44,11 @@ public:
 	bool Draw(float dt, Camera* camera);
 
 	void DeletePickUp();
+
+private:
+
+	Collider* coll_corrector = nullptr;
+
 };
 
 #endif // !__PICKUP_H__
