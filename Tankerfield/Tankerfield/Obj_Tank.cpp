@@ -72,7 +72,7 @@ Obj_Tank::~Obj_Tank()
 		app->render->DestroyCamera(camera_player);
 	}
 
-	if (app->input->IsConnectedControllet(controller))
+	if (app->input->IsConnectedController(controller))
 	{
 		app->input->DetachController(controller);
 	}
@@ -287,7 +287,7 @@ bool Obj_Tank::Start()
 
 bool Obj_Tank::PreUpdate()
 {
-	if (!app->input->IsConnectedControllet(controller))
+	if (!app->input->IsConnectedController(controller))
 	{
 		controller = app->input->GetAbleController();
 	}
@@ -633,14 +633,25 @@ bool Obj_Tank::Draw(Camera * camera)
 	// Debug line
 	if (show_crosshairs && camera == camera_player)
 	{
+		//float line_length = 5.f;
+		////1-- Set a position in the isometric space
+		//fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
+		////2-- Transform that point to screen coordinates
+		//iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+		//app->render->DrawLineSplitScreen(
+		//	pos_screen.x, pos_screen.y - cannon_height,
+		//	input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
+
 		float line_length = 5.f;
-		//1-- Set a position in the isometric space
-		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
-		//2-- Transform that poin to screen coordinates
-		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+		//TurrPos in screen space
+		iPoint point1 (pos_screen.x, pos_screen.y - cannon_height);
+		//Input pos in screen space
+		iPoint point2 = point1 + app->input->GetControllerJoystick(controller, gamepad_aim);
+		//2-- Transform that point to screen coordinates
 		app->render->DrawLineSplitScreen(
-			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
+			point1.x, point1.y,
+			point2.x, point2.y
+			, 255, 0, 255, 255, camera);
 	}
 	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
@@ -932,7 +943,7 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, f
 
 void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir)
 {
-	if (app->input->IsConnectedControllet(controller))
+	if (app->input->IsConnectedController(controller))
 	{
 		input_dir = (fPoint)app->input->GetControllerJoystick(controller, gamepad_aim, dead_zone);
 		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
@@ -980,7 +991,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			{
 				camera_player->AddTrauma(0.02f);
 			}
-			if (app->input->IsConnectedControllet(controller))
+			if (app->input->IsConnectedController(controller))
 			{ 
 				app->input->ControllerPlayRumble(controller, 0.1f*vibration_percentage, 100);
 			}
@@ -1020,7 +1031,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot1.trauma);
 
-			if (app->input->IsConnectedControllet(controller))
+			if (app->input->IsConnectedController(controller))
 				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
@@ -1032,7 +1043,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			(this->*shot2_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
-			if (app->input->IsConnectedControllet(controller))
+			if (app->input->IsConnectedController(controller))
 				app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot2.smoke_particle, turr_pos + shot_dir * 1.2f);
@@ -1057,7 +1068,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		(this->*shot2_function[(uint)weapon_info.weapon])();
 		camera_player->AddTrauma(weapon_info.shot1.trauma);
 		//TODO: Play wepon sfx
-		if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration); }
+		if (app->input->IsConnectedController(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration); }
 	}
 
 	//- Quick shot
@@ -1069,7 +1080,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		{
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			(this->*shot1_function[(uint)weapon_info.weapon])();
-			if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration); }
+			if (app->input->IsConnectedController(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 			shot_timer.Start();
 		}
@@ -1178,7 +1189,7 @@ void Obj_Tank::SelectInputMethod()
 		move_input = INPUT_METHOD::KEYBOARD_MOUSE;
 	}
 	if (move_input != INPUT_METHOD::CONTROLLER
-		&& (app->input->IsConnectedControllet(controller)
+		&& (app->input->IsConnectedController(controller)
 		&& !app->input->GetControllerJoystick(controller, gamepad_move, dead_zone).IsZero()))
 	{
 		move_input = INPUT_METHOD::CONTROLLER;
@@ -1192,7 +1203,7 @@ void Obj_Tank::SelectInputMethod()
 		SDL_ShowCursor(SDL_ENABLE);
 	}
 	if (shot_input != INPUT_METHOD::CONTROLLER
-		&& (app->input->IsConnectedControllet(controller)
+		&& (app->input->IsConnectedController(controller)
 			&& (!app->input->GetControllerJoystick(controller, gamepad_aim, dead_zone).IsZero()
 				|| app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) > 0)))
 	{
@@ -1278,12 +1289,12 @@ void Obj_Tank::ReviveTank(float dt)
 
 bool Obj_Tank::PressInteract()
 {
-	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
+	return (app->input->IsConnectedController(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
 }
 
 bool Obj_Tank::ReleaseInteract()
 {
-	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
+	return (app->input->IsConnectedController(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
 void Obj_Tank::Die()
@@ -1305,7 +1316,7 @@ void Obj_Tank::Item()
 {
 	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
-			|| (app->input->IsConnectedControllet(controller)
+			|| (app->input->IsConnectedController(controller)
 				&& app->input->GetControllerButtonOrTriggerState(controller, gamepad_item) == KEY_DOWN)))
 	{
 		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);

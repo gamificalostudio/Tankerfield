@@ -173,7 +173,7 @@ void UI_InteractiveGroup::ControllerSelection()
 	{
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
-			if ((focused_controller != -1 && focused_controller != i) || app->input->IsConnectedControllet(i) == false)
+			if ((focused_controller != -1 && focused_controller != i) || app->input->IsConnectedController(i) == false)
 			{
 				continue;
 			}
@@ -194,7 +194,7 @@ void UI_InteractiveGroup::ControllersNavigation()
 
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if ((focused_controller != -1 && focused_controller != i) || app->input->IsConnectedControllet(i) == false)
+		if ((focused_controller != -1 && focused_controller != i) || app->input->IsConnectedController(i) == false)
 		{
 			continue;
 		}
