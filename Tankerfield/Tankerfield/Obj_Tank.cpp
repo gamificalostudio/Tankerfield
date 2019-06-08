@@ -662,33 +662,30 @@ bool Obj_Tank::Draw(Camera * camera)
 
 void Obj_Tank::DrawCrosshair(Camera * camera)
 {
-	float tex_width = 4;
+	//Pivot from which the croshair is going to be rotated
+	SDL_Point crosshair_tex_pivot;
+	crosshair_tex_pivot.x = 0;
+	crosshair_tex_pivot.y = 2;
 
 	//Pos1 = position of the turret in screen space
-	fPoint turr_pos_screen(pos_screen.x, pos_screen.y - cannon_height);
-
-	//Pos2 = position where the player is aiming at screen spaces
-	// 1. Set a position in the isometric space
-	fPoint input_iso_pos(turr_pos.x + shot_dir.x, turr_pos.y + shot_dir.y);
-	// 2. Transform that point to screen coordinates
-	iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+	fPoint turr_pos_screen(
+		pos_screen.x,
+		pos_screen.y - cannon_height);
 
 	//Angle between the two positions
 	float crosshair_angle = atan2(
-		input_screen_pos.y - turr_pos_screen.y,
-		input_screen_pos.x - turr_pos_screen.x)  * RADTODEG;
+		shot_dir.y,
+		shot_dir.x)  * RADTODEG + ISO_COMPENSATION;
 
 	app->render->BlitScaledAndRotated(
 		crosshair_tex,
-		turr_pos_screen.x,
-		turr_pos_screen.y - tex_width * 0.5f,
+		turr_pos_screen.x - crosshair_tex_pivot.x,
+		turr_pos_screen.y - crosshair_tex_pivot.y,
 		camera,
 		NULL,
 		1.f, 1.f,
-		{ 0, (int)(tex_width * 0.5f) },
+		crosshair_tex_pivot,
 		crosshair_angle);
-
-	//atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45)
 
 	//app->render->DrawLineSplitScreen(
 	//	pos_screen.x, pos_screen.y - cannon_height,

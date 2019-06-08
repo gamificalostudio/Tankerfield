@@ -217,6 +217,11 @@ public:
 		return Point<float>((float)x, (float)y);
 	}
 
+	//explicit operator SDL_Point () const
+	//{
+	//	return SDL_Point(x, y);
+	//}
+
 	// Distances ---------------------------------------------
 	TYPE1 DistanceTo(const Point& v) const
 	{
