@@ -17,8 +17,13 @@
 
 Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 {
-	coll = app->collision->AddCollider(pos, 1, 1, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll = app->collision->AddCollider(pos, 1.6F, 1.6F, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->is_sensor = true;
+	coll->SetObjOffset(fPoint( -0.8F, -0.8F));
+
+	coll_corrector = app->collision->AddCollider(pos, 2.6F, 2.6F, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll_corrector->SetIsTrigger(false);
+	coll_corrector->SetObjOffset(fPoint(-1.3F, -1.3F));
 
 	frame.w = 1;
 	frame.h = 1;
@@ -58,6 +63,12 @@ bool Obj_PickUp::Update(float dt)
 		}
 		DeletePickUp();
 	}
+	
+	if (coll_corrector != nullptr)
+	{
+		coll_corrector->SetPosToObj();
+	}
+
 	return true;
 }
 
@@ -80,6 +91,12 @@ void Obj_PickUp::DeletePickUp()
 	{
 		coll->Destroy();
 		coll = nullptr;
+	}
+
+	if (coll_corrector != nullptr)
+	{
+		coll_corrector->Destroy();
+		coll_corrector = nullptr;
 	}
 
 }
