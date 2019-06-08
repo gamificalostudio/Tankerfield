@@ -72,23 +72,21 @@ bool M_MainMenu::Start()
 	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v 1.0.0", app->font->label_font_38, {255,255,255,180}));
 	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 
-	UI_InteractiveGroupDef menu_panel_def;
+	UI_InteractiveGroupDef menu_panel_def( -1, nullptr);
 
 	menu_navigation = app->ui->CreateIntearctiveGroup(screen_center, menu_panel_def, this);
-	menu_navigation->SetElement(play_button);
-	menu_navigation->SetElement(leaderboard_button);
-	menu_navigation->SetElement(options_menu_button);
-	menu_navigation->SetElement(credits_menu_button);
-	menu_navigation->SetElement(exit_button);
+	menu_navigation->AddElement(play_button);
+	menu_navigation->AddElement(leaderboard_button);
+	menu_navigation->AddElement(options_menu_button);
+	menu_navigation->AddElement(credits_menu_button);
+	menu_navigation->AddElement(exit_button);
 
 
 	// Selection screen ------------------------
 	player_labels_peg = app->ui->CreateElement(fPoint(), UI_ElementDef());
 
 	float element_side = 126;
-	UI_InteractiveGroupDef selection_panel_def;
-
-	selection_panel_def.focus_indicator = app->ui->CreateImage({ 0.F,0.F }, UI_ImageDef({ 255, 265, 126,126 }));;
+	UI_InteractiveGroupDef selection_panel_def( -1, app->ui->CreateImage({ 0.F,0.F }, UI_ImageDef({ 255, 265, 126,126 })));
 
 	fPoint  offset (DEFAULT_PANEL_COLUMNS * element_side * 0.5f , DEFAULT_PANEL_ROWS  * element_side * 0.5f);
 
@@ -104,7 +102,7 @@ bool M_MainMenu::Start()
 			UI_Element* element = app->ui->CreateImage(fPoint(screen_center.x - offset.x + x * element_side, screen_center.y - offset.y + y * element_side), UI_ImageDef({ 120 ,265 ,126 ,126 }), this);
 			element->color_mod  =  colors[x + y* DEFAULT_PANEL_COLUMNS] = GetColor(color_value);
 			color_value += color_sum;
-			selection_navigation->SetElement(element);
+			selection_navigation->AddElement(element);
 		}
 	}
 
@@ -140,7 +138,8 @@ bool M_MainMenu::Start()
 		player_labels[i] = app->ui->CreateLabel(players[i].tank_pos + fPoint(0, 150), UI_LabelDef(player_string, app->font->button_font_40, { 220, 220,220,255 }));
 		player_labels[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 		player_labels[i]->SetParent(player_labels_peg);
-		players[i].controller = i;
+		players[i].controller = app->input->GetAbleController();
+		players[i].tank->SetController(players[i].controller);
 	}
 
 	// Credits Menu
@@ -263,34 +262,34 @@ bool M_MainMenu::Start()
 	return_credits = app->ui->CreateButton({220,175},UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
 	return_credits->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	UI_InteractiveGroupDef credits_navigation_def;
+	UI_InteractiveGroupDef credits_navigation_def(-1, nullptr);
 
 	credits_navigation = app->ui->CreateIntearctiveGroup(screen_center,credits_navigation_def,this);
 
-	credits_navigation->SetElement(return_credits);
-	credits_navigation->SetElement(website);
-	credits_navigation->SetElement(github);
-	credits_navigation->SetElement(return_credits);
+	credits_navigation->AddElement(return_credits);
+	credits_navigation->AddElement(website);
+	credits_navigation->AddElement(github);
+	credits_navigation->AddElement(return_credits);
 
-	credits_navigation->SetElement(jaume_github);
-	credits_navigation->SetElement(jaume_linkedin);
-	credits_navigation->SetElement(aurelio_github);
-	credits_navigation->SetElement(aurelio_linkedin);
+	credits_navigation->AddElement(jaume_github);
+	credits_navigation->AddElement(jaume_linkedin);
+	credits_navigation->AddElement(aurelio_github);
+	credits_navigation->AddElement(aurelio_linkedin);
 
-	credits_navigation->SetElement(víctor_github);
-	credits_navigation->SetElement(víctor_linkedin);
-	credits_navigation->SetElement(jorge_github);
-	credits_navigation->SetElement(jorge_linkedin);
+	credits_navigation->AddElement(víctor_github);
+	credits_navigation->AddElement(víctor_linkedin);
+	credits_navigation->AddElement(jorge_github);
+	credits_navigation->AddElement(jorge_linkedin);
 
-	credits_navigation->SetElement(yessica_github);
-	credits_navigation->SetElement(yessica_linkedin);
-	credits_navigation->SetElement(gerard_github);
-	credits_navigation->SetElement(gerard_linkedin);
+	credits_navigation->AddElement(yessica_github);
+	credits_navigation->AddElement(yessica_linkedin);
+	credits_navigation->AddElement(gerard_github);
+	credits_navigation->AddElement(gerard_linkedin);
 
-	credits_navigation->SetElement(sergio_github);
-	credits_navigation->SetElement(sergio_linkedin);
-	credits_navigation->SetElement(aitor_github);
-	credits_navigation->SetElement(aitor_linkedin);
+	credits_navigation->AddElement(sergio_github);
+	credits_navigation->AddElement(sergio_linkedin);
+	credits_navigation->AddElement(aitor_github);
+	credits_navigation->AddElement(aitor_linkedin);
 
 	
 	// Options =============================================
@@ -312,10 +311,10 @@ bool M_MainMenu::Start()
 	leaderboard_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	leaderboard_label->SetParent(panel_leaderboard);
 
-	UI_InteractiveGroupDef leaderboard_def;
+	UI_InteractiveGroupDef leaderboard_def(-1, nullptr);
 
 	leaderboard_navigation = app->ui->CreateIntearctiveGroup(screen_center, leaderboard_def, this);
-	leaderboard_navigation->SetElement(return_from_leaderboard);
+	leaderboard_navigation->AddElement(return_from_leaderboard);
 
 	// Set values ==========================================
 
@@ -383,13 +382,7 @@ bool M_MainMenu::PreUpdate()
 
 bool M_MainMenu::Update(float dt)
 {
-	if (menu_state == MENU_STATE::SELECTION)
-	{
-		if (app->ui->GetFocusedElement() != nullptr)
-		{
-			players[current_player].tank->SetColor(app->ui->GetFocusedElement()->color_mod);
-		}
-	}
+
 
 	return true;
 }
@@ -424,6 +417,11 @@ bool M_MainMenu::Reset()
 
 bool M_MainMenu::UI_OnHoverEnter(UI_Element * element)
 {
+	if (menu_state == MENU_STATE::SELECTION)
+	{
+		players[current_player].tank->SetColor(element->color_mod);
+	}
+
 	app->audio->PlayFx(button_enter_sfx);
 	return true;
 }
@@ -597,7 +595,7 @@ bool M_MainMenu::UI_Selected(UI_Element * element)
 
 bool M_MainMenu::SetPlayerProperties()
 {
-	UI_Element* element_focused = app->ui->GetFocusedElement();
+	UI_Element* element_focused = selection_navigation->GetFocusedElement();
 
 	if (element_focused == nullptr)
 	{
@@ -644,7 +642,7 @@ void M_MainMenu::ResetPanelColors()
 
 	int i = 0;
 
-	for ( std::list<UI_Element*>::iterator iter = selection_navigation->GetElementsList()->begin(); iter != selection_navigation->GetElementsList()->end() ; ++iter)
+	for ( std::list<UI_Element*>::iterator iter = selection_navigation->GetGroupList()->begin(); iter != selection_navigation->GetGroupList()->end() ; ++iter)
 	{
 		(*iter)->color_mod = colors[i];
 		++i;
@@ -699,15 +697,13 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 	}
 
-	app->ui->SetInteractiveGroup(nullptr);
-
 	// Active new state ======================================
 
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
 		SetPlayerObjectsState(false);
-		app->ui->SetInteractiveGroup(menu_navigation);
+		menu_navigation->Active();
 
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		logo_image->SetState(ELEMENT_STATE::VISIBLE);
@@ -730,7 +726,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 		// Set elements state -----------------------------------
 
-		app->ui->SetInteractiveGroup(selection_navigation);
+		selection_navigation->Active();
 		selection_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		control_helper_label->SetPos(screen_center + fPoint(40, 350));
@@ -739,7 +735,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 		break;
 	case MENU_STATE::CREDITS:
-		app->ui->SetInteractiveGroup(credits_navigation);
+		credits_navigation->Active();
 		panel_credits->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		break;
@@ -756,8 +752,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 
 	case MENU_STATE::LEADERBOARD:
-		app->ui->SetInteractiveGroup(leaderboard_navigation);
-
+		leaderboard_navigation->Active();
 		leaderboard->ShowLeaderBoard();
 		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
@@ -765,7 +760,8 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 
 	case MENU_STATE::CHANGE_SCENE:
-		app->ui->SetInteractiveGroup(nullptr);
+	
+		app->ui->DesactiveAllInteractiveGroups();
 		break;
 	}
 

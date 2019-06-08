@@ -162,19 +162,13 @@ public:
 
 	bool Reset();
 
+	void DesactiveAllInteractiveGroups();
+
 	Player_GUI* AddPlayerGUI(Obj_Tank* player);
 
 	SDL_Texture* GetAtlas() const;
 
-	FocusState GetClickState() const;
-
 	// Object functions ----------------------------------------------------------
-
-	void SetInteractiveGroup(UI_InteractiveGroup * group);
-
-	UI_Element* GetFocusedElement();
-
-	UI_INPUT_TYPE GetInputType();
 
 	void SetStateToBranch(const ELEMENT_STATE state, UI_Element* branch_root);
 
@@ -226,21 +220,7 @@ private:
 
 	bool ControllersHaveActivity();
 
-	void MouseNavigation();
-
-	void MouseSelection();
-
-	void ControllersNavigation();
-
-	UI_Element * GetNearestElement(INPUT_DIR input_dir);
-
-	UI_Element * GetFistAvaliableElement();
-
-	void ControllerSelection();
-
 	void DrawUI(UI_Element* object);
-
-
 
 private:
 
@@ -266,15 +246,10 @@ private:
 
 	// Focus info -----------------------------------------
 
-	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::MOUSE;
+	UI_INPUT_TYPE input_type = UI_INPUT_TYPE::CONTROLLERS;
 
-	UI_Element* focused_element = nullptr;
+	list<UI_InteractiveGroup*> interactive_groups;
 
-	UI_InteractiveGroup * current_interactive_group = nullptr;
-
-	FocusState focus_state = FocusState::NONE;
-
-	int focus_controller_id = -1;
 
 public:
 
@@ -291,6 +266,7 @@ public:
 	SDL_Rect icon_sprites[(int)ICON_SIZE::MAX][(int)ICON_TYPE::MAX];
 
 	friend UI_Element;
+	friend UI_InteractiveGroup;
 };
 
 

@@ -134,19 +134,19 @@ Options_Menu::Options_Menu()
 
 		// Navigation Matrix
 
-	UI_InteractiveGroupDef options_panel_def;
+	UI_InteractiveGroupDef options_panel_def( -1, nullptr);
 
 	options_navigation = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
-	options_navigation->SetElement(fullscreen_L);
-	options_navigation->SetElement(fullscreen_R);
-	options_navigation->SetElement(master_volume_L);
-	options_navigation->SetElement(master_volume_R);
-	options_navigation->SetElement(music_volume_L);
-	options_navigation->SetElement(music_volume_R);
-	options_navigation->SetElement(sfx_volume_L);
-	options_navigation->SetElement(sfx_volume_R);
-	options_navigation->SetElement(controller_settings);
-	options_navigation->SetElement(return_button);
+	options_navigation->AddElement(fullscreen_L);
+	options_navigation->AddElement(fullscreen_R);
+	options_navigation->AddElement(master_volume_L);
+	options_navigation->AddElement(master_volume_R);
+	options_navigation->AddElement(music_volume_L);
+	options_navigation->AddElement(music_volume_R);
+	options_navigation->AddElement(sfx_volume_L);
+	options_navigation->AddElement(sfx_volume_R);
+	options_navigation->AddElement(controller_settings);
+	options_navigation->AddElement(return_button);
 
 	// Set values ==========================================
 	SDL_ShowCursor(SDL_ENABLE);
@@ -248,7 +248,7 @@ bool Options_Menu::UI_Selected(UI_Element * element)
 
 void Options_Menu::ShowOptionsMenu()
 {
-	app->ui->SetInteractiveGroup(options_navigation);
+	options_navigation->Active();
 
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
@@ -263,6 +263,8 @@ void Options_Menu::ShowOptionsMenu()
 
 void Options_Menu::HideOptionsMenu()
 {
+	options_navigation->Desactive();
+
 	panel_options->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	options_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }

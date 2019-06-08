@@ -126,7 +126,7 @@ bool M_UI::CleanUp()
 
 	app->tex->UnLoad(atlas);
 	atlas = nullptr;
-	focused_element = nullptr;
+	interactive_groups.clear();
 
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
 	{
@@ -158,8 +158,8 @@ bool M_UI::CleanUp()
 
 bool M_UI::Reset()
 {
-	focused_element = nullptr;
 	reset = true;
+	interactive_groups.clear();
 
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
 	{
@@ -205,6 +205,14 @@ bool M_UI::PreUpdate()
 	return true;
 }
 
+void M_UI::DesactiveAllInteractiveGroups()
+{
+	for (std::list<UI_InteractiveGroup*>::iterator itr = interactive_groups.begin(); itr != interactive_groups.end(); ++itr)
+	{
+		(*itr)->Desactive();
+	}
+}
+
 bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
@@ -215,18 +223,22 @@ bool M_UI::Update(float dt)
 
 	// Update navigation and selection ======================================
 
-	if (current_interactive_group != nullptr)
+	for (std::list<UI_InteractiveGroup*>::iterator itr = interactive_groups.begin(); itr != interactive_groups.end(); ++itr)
 	{
+		if ((*itr)->is_active == false)
+		{
+			continue;
+		}
+
 		if (input_type == UI_INPUT_TYPE::MOUSE)
 		{
-			MouseNavigation();
-			MouseSelection();
+			(*itr)->MouseNavigation();
+			(*itr)->MouseSelection();
 		}
 		else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
 		{
-			ControllersNavigation();
-			ControllerSelection();
-
+			(*itr)->ControllersNavigation();
+			(*itr)->ControllerSelection();
 		}
 	}
 
@@ -263,7 +275,7 @@ bool M_UI::ControllersHaveActivity()
 {
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (focus_controller_id != -1 && focus_controller_id != i && app->input->IsConnectedControllet(i))
+		if (app->input->IsConnectedControllet(i) == false)
 		{
 			continue;
 		}
@@ -314,233 +326,6 @@ bool M_UI::PostUpdate(float dt)
 	return true;
 }
 
-void M_UI::SetInteractiveGroup(UI_InteractiveGroup* group)
-{
-	current_interactive_group = group;
-}
-
-void M_UI::MouseNavigation()
-{
-	fRect section;
-
-	bool mouse_is_focusing = false;
-
-	for (list<UI_Element*>::iterator iter = current_interactive_group->group_elements_list.begin(); iter != current_interactive_group->group_elements_list.end(); ++iter)
-	{
-		if ((*iter)->state != ELEMENT_STATE::VISIBLE)
-		{
-			continue;
-		}
-
-		section = (*iter)->GetSection();
-
-		if (mouse_position.x >= section.GetLeft() && mouse_position.x <= section.GetRight() && mouse_position.y >= section.GetTop() && mouse_position.y <= section.GetBottom() && (*iter)->listener != nullptr)
-		{
-			mouse_is_focusing = true;
-
-			if (focused_element != (*iter))
-			{
-				if (focused_element != nullptr )
-				{
-					focused_element->listener->UI_OnHoverExit((*iter));
-				}
-
-				focused_element = (*iter);
-
-				if (focused_element != nullptr )
-				{
-					focused_element->listener->UI_OnHoverEnter((*iter));
-				}
-			}
-			else
-			{
-				if (focused_element != nullptr )
-				{
-					focused_element->listener->UI_OnHoverRepeat((*iter));
-				}
-			}
-			break;
-		}
-	}
-
-	if (mouse_is_focusing == false && focused_element != nullptr)
-	{
-		focused_element->listener->UI_OnHoverExit(focused_element);
-		focused_element = nullptr;
-	}
-}
-
-void M_UI::ControllerSelection()
-{
-	bool ret = false;
-
-	if (focused_element != nullptr)
-	{
-		for (int i = 0; i < MAX_PLAYERS; ++i)
-		{
-			if (focus_controller_id != -1 && focus_controller_id != i && app->input->IsConnectedControllet(i))
-			{
-				continue;
-			}
-
-			for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
-			{
-				if (app->input->GetControllerButtonState(i, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				{
-					focused_element->listener->UI_Selected(focused_element);
-					break;
-				}
-			}
-		}
-	}
-}
-
-void M_UI::MouseSelection()
-{
-	if (focused_element != nullptr)
-	{
-		if (app->input->GetMouseButton(1) == KEY_UP)
-		{
-			focused_element->listener->UI_Selected(focused_element);
-		}
-	}
-}
-
-void M_UI::ControllersNavigation()
-{
-	UI_Element* nearest_element = nullptr;
-	UI_Element* last_focused_element = focused_element;
-
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (focus_controller_id != -1 && focus_controller_id != i && app->input->IsConnectedControllet(i))
-		{
-			continue;
-		}
-
-		for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
-		{
-			if (app->input->GetControllerJoystickState(i, Joystick::LEFT, (INPUT_DIR)input_dir) == KEY_DOWN)
-			{
-				if (focused_element != nullptr)
-				{
-					nearest_element = GetNearestElement((INPUT_DIR)input_dir);
-					break;
-				}
-				else 
-				{
-					nearest_element = GetFistAvaliableElement();
-					break;
-				}
-			}
-		}
-	}
-
-	if (nearest_element != nullptr)
-	{
-		focused_element = nearest_element;
-	}
-
-
-	if (focused_element != last_focused_element)
-	{
-		if (last_focused_element != nullptr)
-		{
-			last_focused_element->listener->UI_OnHoverExit(last_focused_element);
-		}
-
-		if (focused_element != nullptr)
-		{
-			focused_element->listener->UI_OnHoverEnter(focused_element);
-		}
-	}
-	else
-	{
-		if (focused_element != nullptr)
-		{
-			focused_element->listener->UI_OnHoverRepeat(focused_element);
-		}
-	}
-
-}
-
-UI_Element*  M_UI::GetNearestElement(INPUT_DIR input_dir)
-{
-	int distance_preference = 0;
-	int current_distance = 0;
-	UI_Element* nearest_element = nullptr;
-
-	for (list<UI_Element*>::iterator iter = current_interactive_group->group_elements_list.begin(); iter != current_interactive_group->group_elements_list.end(); ++iter)
-	{
-		if ((*iter)->state != ELEMENT_STATE::VISIBLE || (*iter) == focused_element)
-		{
-			continue;
-		}
-
-		current_distance = 0;
-
-		switch (input_dir)
-		{
-		case INPUT_DIR::RIGHT:
-			if ( focused_element->position.x >= (*iter)->position.x)
-			{
-				continue;
-			}
-
-			current_distance = abs(focused_element->position.x - (*iter)->position.x);
-			break;
-		case INPUT_DIR::LEFT:
-			if (focused_element->position.x <= (*iter)->position.x)
-			{
-				continue;
-			}
-
-			current_distance = abs(focused_element->position.x - (*iter)->position.x);
-			break;
-		case INPUT_DIR::DOWN:
-			if (focused_element->position.y >= (*iter)->position.y)
-			{
-				continue;
-			}
-
-			current_distance = abs(focused_element->position.y - (*iter)->position.y);
-			break;
-		case INPUT_DIR::UP:
-			if (focused_element->position.y <= (*iter)->position.y)
-			{
-				continue;
-			}
-
-			current_distance = abs(focused_element->position.y - (*iter)->position.y);
-			break;
-		}
-
-		current_distance += focused_element->position.DistanceTo((*iter)->position);
-
-		if (distance_preference == 0 || current_distance < distance_preference)
-		{
-			distance_preference = current_distance;
-			nearest_element = (*iter);
-		}
-	}
-
-	return nearest_element;
-}
-
-UI_Element*  M_UI::GetFistAvaliableElement()
-{
-	for (list<UI_Element*>::iterator iter = current_interactive_group->group_elements_list.begin(); iter != current_interactive_group->group_elements_list.end(); ++iter)
-	{
-		if ((*iter)->state != ELEMENT_STATE::VISIBLE)
-		{
-			continue;
-		}
-
-		return (*iter);
-	}
-
-	return nullptr;
-}
 
 void M_UI::UpdateElements(float dt)
 {
@@ -622,13 +407,6 @@ void M_UI::UpdateElements(float dt)
 
 			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
 
-			// Check if it is teh current selected element
-
-			if (focused_element == (*element))
-			{
-				focused_element = nullptr;
-			}
-
 			RELEASE((*element));
 			element = elements_list.erase(element);
 		}
@@ -651,25 +429,9 @@ Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
 	return player_gui;
 }
 
-
  SDL_Texture* M_UI::GetAtlas() const 
 {
 	return atlas;
-}
-
- FocusState M_UI::GetClickState() const
- {
-	 return focus_state;
- }
-
- UI_Element * M_UI::GetFocusedElement()
-{
-	return focused_element;
-}
-
-UI_INPUT_TYPE M_UI::GetInputType()
-{
-	return input_type;
 }
 
 void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
@@ -719,7 +481,7 @@ void M_UI::DrawUI(UI_Element * object)
 	{
 		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
-		if (focused_element == object)
+		if (object->is_focused == true)
 		{
 			app->render->DrawQuad(rect, 255, 233, 15, 100, true, false);
 		}

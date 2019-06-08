@@ -137,7 +137,7 @@ public:
 protected:
 
 	// Vars =============================================
-
+	bool                  is_focused = false;
 	fPoint                section_offset = { 0.f, 0.f };
 	fPoint                relative_position = { 0.f, 0.f };
 	Pivot                 pivot;
@@ -155,6 +155,7 @@ protected:
 	list<UI_Element*>      element_sons;
 
 	friend class M_UI;
+	friend class UI_InteractiveGroup;
 };
 
 #endif // __Object_H__

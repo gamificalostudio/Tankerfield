@@ -31,11 +31,10 @@ void UI_Button::Destroy()
 
 bool UI_Button::Draw()
 {
-	FocusState state = app->ui->GetClickState();
 
 	sprite_rect = definition.idle_rect;
 
-	if (app->ui->GetFocusedElement() == this)
+	if (is_focused == true)
 	{
 		if (app->input->GetMouseButton(1) == KEY_REPEAT)
 		{
