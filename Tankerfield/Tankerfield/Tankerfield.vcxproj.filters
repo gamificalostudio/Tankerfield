@@ -248,9 +248,6 @@
     <ClCompile Include="Obj_Smoke.cpp">
       <Filter>Objects\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Emmiter.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="ParticlePool.cpp" />
     <ClCompile Include="Particle.cpp" />
@@ -527,9 +524,6 @@
     </ClInclude>
     <ClInclude Include="Obj_Smoke.h">
       <Filter>Objects\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Emmiter.h">
-      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Emitter.h" />
     <ClInclude Include="ParticlePool.h" />
