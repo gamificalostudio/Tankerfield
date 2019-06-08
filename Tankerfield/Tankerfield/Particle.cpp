@@ -87,7 +87,7 @@ void Particle::Draw()
 
 	// Blitting particle on screen
 	app->render->BlitParticle(
-		app->psystem->GetParticleAtlas(),
+		app->objectmanager->particle_system.GetParticleAtlas(),
 		(int)center_x,
 		(int)center_y,
 		&particle_state.particle_live.pRect,

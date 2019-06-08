@@ -87,7 +87,9 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 	//Fill balance structs
 	LoadBalanceVariables(balance_xml_node);
 
-	//Close document
+	//TODO: Close document
+
+	particle_system.Awake();
 
 	return ret;
 }
@@ -99,6 +101,9 @@ bool M_ObjManager::Start()
 	FillPool(ObjectType::BRUTE, 2);
 	FillPool(ObjectType::SUICIDAL, 2);
 	FillPool(ObjectType::ROCKETLAUNCHER, 2);
+
+	particle_system.Start();
+
 	return ret;
 }
 
@@ -142,6 +147,8 @@ bool M_ObjManager::PreUpdate()
 
 	}
 
+	particle_system.PreUpdate();
+
 	return true;
 }
 
@@ -165,6 +172,8 @@ bool M_ObjManager::Update(float dt)
 			++iterator;
 		}
 	}
+
+	particle_system.Update(dt);
 	
 	return true;
 }
@@ -336,6 +345,8 @@ bool M_ObjManager::PostUpdate(float dt)
     }
 	SDL_RenderSetClipRect(app->render->renderer, nullptr);
    
+	particle_system.PostUpdate();
+
 	return true;
 }
 
@@ -343,6 +354,8 @@ bool M_ObjManager::PostUpdate(float dt)
 bool M_ObjManager::CleanUp()
 {
 	DeleteObjects();
+
+	particle_system.CleanUp();
 
 	return true;
 }

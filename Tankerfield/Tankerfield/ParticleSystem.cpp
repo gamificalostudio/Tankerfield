@@ -1,4 +1,3 @@
-
 #include "Log.h"
 #include "ParticleSystem.h"
 #include "App.h"
@@ -6,11 +5,8 @@
 
 
 
-ParticleSystem::ParticleSystem() : Module()
+ParticleSystem::ParticleSystem()
 {
-	name = "psystem";
-
-	LOG("Loading Languages");
 	
 }
 
@@ -19,7 +15,7 @@ ParticleSystem::~ParticleSystem()
 	
 }
 
-bool ParticleSystem::Awake(pugi::xml_node& config)
+bool ParticleSystem::Awake()
 {
 	bool ret = true;
 

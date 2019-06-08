@@ -46,7 +46,7 @@ struct EmitterData
 	fPoint endSizeRand = { 0.0f, 0.0f };
 };
 
-class ParticleSystem : public Module
+class ParticleSystem
 {
 
 private:
@@ -62,25 +62,12 @@ public:
 
 	ParticleSystem();
 
-	// Destructor
 	virtual ~ParticleSystem();
-
-	// Called when before render is available
-	bool Awake(pugi::xml_node& config);
-
-	// Call before first frame
+	bool Awake();
 	bool Start();
-
-	// Called before all Updates
 	bool PreUpdate();
-
-	// Called each loop iteration
 	bool Update(float dt);
-
-	// Called after all Updates
 	bool PostUpdate();
-
-	// Called before quitting
 	bool CleanUp();
 
 	// Emitter methods

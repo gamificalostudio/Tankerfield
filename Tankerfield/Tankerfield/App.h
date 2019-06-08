@@ -30,7 +30,6 @@ class M_MainMenu;
 class M_Debug;
 class M_Options_Menu;
 class Video;
-class ParticleSystem;
 
 enum class APP_MODE
 {
@@ -124,7 +123,6 @@ public:
 	M_Debug*				debug = nullptr;
 	M_Options_Menu*			options_menu = nullptr;
 	Video*					video = nullptr;
-	ParticleSystem*		psystem = nullptr;
 
 	//XML document
 	pugi::xml_node		   config;

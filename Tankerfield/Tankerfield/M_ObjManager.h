@@ -12,6 +12,7 @@
 #include "Module.h"
 #include "Point.h"
 #include "Balance.h"
+#include "ParticleSystem.h"
 
 enum class ObjectType
 {
@@ -151,12 +152,13 @@ public:
 	FlameThrowerInfo flamethrower_info;
 	OilWeaponInfo oil_weapon_info;
 
+	ParticleSystem particle_system;
+
 private:
 	pugi::xml_document balance_xml_doc;
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
 	std::map<ObjectType, std::list<Object*>> pool_of_objects;
-
 };
 
 #endif

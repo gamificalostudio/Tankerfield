@@ -56,7 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	main_menu = DBG_NEW M_MainMenu();
 	debug = DBG_NEW M_Debug();
 	video = DBG_NEW Video();
-	psystem = DBG_NEW ParticleSystem();
+
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
@@ -70,7 +70,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(scene);
 	AddModule(main_menu);
 	AddModule(objectmanager);
-	AddModule(psystem);
 	AddModule(pick_manager);
 	AddModule(reward_zone_manager);
 	AddModule(collision);

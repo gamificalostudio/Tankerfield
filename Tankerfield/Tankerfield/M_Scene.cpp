@@ -279,7 +279,7 @@ bool M_Scene::Update(float dt)
 		app->input->GetMousePosition(mx, my);
 		fPoint pos((float)mx, (float)my);
 		pos.y -= 230.0f;
-		eFire = app->psystem->AddEmiter(pos, EmitterType::EMITTER_TYPE_FIRE);
+		eFire = app->objectmanager->particle_system.AddEmiter(pos, EmitterType::EMITTER_TYPE_FIRE);
 	}
 
 	int mx, my;
