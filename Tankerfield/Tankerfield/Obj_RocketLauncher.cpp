@@ -68,6 +68,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 void Obj_RocketLauncher::SetStats(int level)
 {
 	detection_range = app->objectmanager->rocket_launcher_info.detection_range;
+	squared_detection_range = detection_range * detection_range;
 	original_speed = speed = app->objectmanager->rocket_launcher_info.speed;
 	attack_damage = app->objectmanager->rocket_launcher_info.attack_damage;
 	attack_range = app->objectmanager->rocket_launcher_info.attack_range;

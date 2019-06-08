@@ -34,9 +34,6 @@
     <ClCompile Include="M_Render.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="M_RewardZoneManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="M_Scene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -286,9 +283,6 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Render.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_RewardZoneManager.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Scene.h">

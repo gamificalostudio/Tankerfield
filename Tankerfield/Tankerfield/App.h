@@ -80,7 +80,6 @@ public:
 
 	void ResumeGame();
 
-
 private:
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;

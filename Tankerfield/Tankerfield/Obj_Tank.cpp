@@ -582,7 +582,9 @@ bool Obj_Tank::Draw(Camera * camera)
 		SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
 
 
-		if (show_crosshairs && camera == camera_player)
+		if (show_crosshairs
+			&& camera == camera_player
+			&& app->IsPaused())
 		{
 			DrawCrosshair(camera);
 		}
@@ -624,7 +626,9 @@ bool Obj_Tank::Draw(Camera * camera)
 			camera,
 			&curr_anim->GetFrame(angle));
 
-		if (show_crosshairs && camera == camera_player)
+		if (show_crosshairs
+			&& camera == camera_player
+			&& app->IsPaused())
 		{
 			DrawCrosshair(camera);
 		}

@@ -23,7 +23,6 @@
 #include "M_Collision.h"
 #include "M_MainMenu.h"
 #include "M_PickManager.h"
-#include "M_RewardZoneManager.h"
 #include "LeaderBoard.h"
 
 #include "UI_Label.h"

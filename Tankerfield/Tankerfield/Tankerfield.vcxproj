@@ -154,7 +154,6 @@
     <ClCompile Include="Bullet_Missile.cpp" />
     <ClCompile Include="Healing_Bullet.cpp" />
     <ClCompile Include="M_MainMenu.cpp" />
-    <ClCompile Include="M_RewardZoneManager.cpp" />
     <ClCompile Include="Obj_Brute.cpp" />
     <ClCompile Include="Obj_CannonFire.cpp" />
     <ClCompile Include="Obj_Enemy.cpp" />
@@ -243,7 +242,6 @@
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Healing_Bullet.h" />
     <ClInclude Include="M_MainMenu.h" />
-    <ClInclude Include="M_RewardZoneManager.h" />
     <ClInclude Include="Obj_Brute.h" />
     <ClInclude Include="Obj_CannonFire.h" />
     <ClInclude Include="Obj_Enemy.h" />
