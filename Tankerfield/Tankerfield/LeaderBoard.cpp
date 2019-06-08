@@ -35,26 +35,26 @@ LeaderBoard::LeaderBoard(fPoint position, std::string doc_path, bool only_read) 
 	}
 
 	leader_board_table = app->ui->CreateTable(position, table_def, widths, heights);
-	leader_board_table->SetState(ELEMENT_STATE::HIDDEN);
+	leader_board_table->SetMenuState(ELEMENT_STATE::HIDDEN);
 }
 
 void LeaderBoard::ShowLeaderBoard()
 {
-	leader_board_table->SetState(ELEMENT_STATE::VISIBLE);
+	leader_board_table->SetMenuState(ELEMENT_STATE::VISIBLE);
 
 	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
 	{
-		(*iter)->SetState(ELEMENT_STATE::VISIBLE);
+		(*iter)->SetMenuState(ELEMENT_STATE::VISIBLE);
 	}
 }
 
 void LeaderBoard::HideLeaderBoard()
 {
-	leader_board_table->SetState(ELEMENT_STATE::HIDDEN);
+	leader_board_table->SetMenuState(ELEMENT_STATE::HIDDEN);
 
 	for (std::list<UI_Element*>::iterator iter = leader_board_elements.begin(); iter != leader_board_elements.end(); ++iter)
 	{
-		(*iter)->SetState(ELEMENT_STATE::HIDDEN);
+		(*iter)->SetMenuState(ELEMENT_STATE::HIDDEN);
 	}
 }
 
@@ -66,7 +66,7 @@ void LeaderBoard::FadeLeaderBoardScreen(bool fade_on)
 	{
 		type = UI_Fade_FX::FX_TYPE::FADE_ON;
 		input_text->ActiveInputText();
-		leader_board_table->SetState(ELEMENT_STATE::VISIBLE);
+		leader_board_table->SetMenuState(ELEMENT_STATE::VISIBLE);
 	}
 	else
 	{

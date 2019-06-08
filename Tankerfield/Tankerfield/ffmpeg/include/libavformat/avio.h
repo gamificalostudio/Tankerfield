@@ -403,7 +403,7 @@ int avpriv_io_delete(const char *url);
  *                containing options that were not found. May be NULL.
  * @return >=0 on success or negative on error.
  */
-int avio_open_dir(AVIODirContext **s, const char *url, AVDictionary **options);
+int avio_open_dir(AVIODirContext **s, const char *url, AVDictionary **options_menu);
 
 /**
  * Get next directory entry.
@@ -715,7 +715,7 @@ int avio_open(AVIOContext **s, const char *url, int flags);
  * AVERROR code in case of failure
  */
 int avio_open2(AVIOContext **s, const char *url, int flags,
-               const AVIOInterruptCB *int_cb, AVDictionary **options);
+               const AVIOInterruptCB *int_cb, AVDictionary **options_menu);
 
 /**
  * Close the resource accessed by the AVIOContext s and free it.

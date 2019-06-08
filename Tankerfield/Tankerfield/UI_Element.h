@@ -88,7 +88,7 @@ public:
 
 	void SetParent(UI_Element* parent);
 
-	void SetState(ELEMENT_STATE new_state);
+	void SetMenuState(ELEMENT_STATE new_state);
 
 	ELEMENT_STATE GetState();
 

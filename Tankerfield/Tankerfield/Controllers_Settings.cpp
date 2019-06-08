@@ -2,6 +2,7 @@
 #include "App.h"
 #include "M_MainMenu.h"
 #include "M_Fonts.h"
+#include "M_Scene.h"
 
 #include "UI_Element.h"
 #include "UI_Image.h"
@@ -11,7 +12,7 @@
 #include "UI_Image.h"
 #include "UI_InteractiveGroup.h"
 
-Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
+Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player, MENU_TYPE menu_type) : menu_type(menu_type)
 {
 	Canvas = app->ui->CreateElement(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_ElementDef(), this);;
 
@@ -106,7 +107,15 @@ bool Controllers_Settings::UI_Selected( UI_Element* element)
 
 	if (element == return_button)
 	{
-		app->main_menu->SetState(MENU_STATE::OPTIONS);
+		if (menu_type == MENU_TYPE::MAIN_MENU)
+		{
+			app->main_menu->SetMenuState(MENU_STATE::OPTIONS);
+		}
+		else if (menu_type == MENU_TYPE::PAUSE_MENU)
+		{
+			app->scene->SetMenuState(MENU_STATE::OPTIONS);
+		}
+		
 	}
 	if (element == vibration_button_L)
 	{
