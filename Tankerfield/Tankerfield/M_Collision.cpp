@@ -120,6 +120,8 @@ M_Collision::M_Collision()
 	physics_matrix[(int)TAG::ENEMY][(int)TAG::WATER] = true;
 	physics_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
 
+	physics_matrix[(int)TAG::PICK_UP][(int)TAG::PICK_UP] = true;
+
 }
 
 bool M_Collision::CleanUp()
