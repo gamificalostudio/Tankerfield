@@ -39,6 +39,10 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
 	table->AssortElementToTable(attack_label, iPoint(0, 0));
 	attack_label->SetParent(table);
 
+	interaction_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Interaction", app->font->label_font_24), this);
+	table->AssortElementToTable(interaction_label, iPoint(0, 1));
+	interaction_label->SetParent(table);
+
 	attack_image = app->ui->CreateImage(fPoint(0, 0), UI_ImageDef(app->input->buttons_image[(int)app->input->controllerInfo[player].attack_button]), nullptr);
 	attack_image->SetParent(table);
 	table->AssortElementToTable(attack_image, iPoint(1, 0));
@@ -51,11 +55,7 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
 	item_image->SetParent(table);
 	table->AssortElementToTable(item_image, iPoint(1, 2));
 
-	UI_Label* interaction_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Interaction", app->font->label_font_24), nullptr);
-	table->AssortElementToTable(interaction_label, iPoint(0, 1));
-	interaction_label->SetParent(table);
-
-	UI_Label* Use_item_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Use item", app->font->label_font_24), nullptr);
+	Use_item_label = app->ui->CreateLabel(fPoint(0, 0), UI_LabelDef("Use item", app->font->label_font_24), this);
 	table->AssortElementToTable(Use_item_label, iPoint(0, 2));
 	Use_item_label->SetParent(table);
 
@@ -165,13 +165,36 @@ bool Controllers_Settings::UI_Selected( UI_Element* element)
 	return true;
 }
 
-bool Controllers_Settings::OnHoverEnter(UI_Element* object)
+bool Controllers_Settings::UI_OnHoverEnter(UI_Element* element)
 {
-	if (object == (UI_Element*)attack_label)
+	if (element == (UI_Element*)attack_label)
 	{
-		attack_label->color_mod = { 255,0,0,255 };
-
-		
+		attack_label->color_mod = { 200,0,0,255 };
+	}
+	if (element == (UI_Element*)interaction_label)
+	{
+		interaction_label->color_mod = { 200,0,0,255 };
+	}
+	if (element == (UI_Element*)Use_item_label)
+	{
+		Use_item_label->color_mod = { 200,0,0,255 };
 	}
 	return true;
 };
+
+bool Controllers_Settings::UI_OnHoverExit(UI_Element* element)
+{
+	if (element == (UI_Element*)attack_label)
+	{
+		attack_label->color_mod = { 255,255,255,255 };
+	}
+	if (element == (UI_Element*)interaction_label)
+	{
+		interaction_label->color_mod = { 255,255,255,255 };
+	}
+	if (element == (UI_Element*)Use_item_label)
+	{
+		Use_item_label->color_mod = { 255,255,255,255 };
+	}
+	return true;
+}

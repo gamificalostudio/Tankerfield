@@ -15,13 +15,17 @@ public:
 	bool UI_Selected(UI_Element * element);
 
 
-	bool OnHoverEnter(UI_Element * object);
+	bool UI_OnHoverEnter(UI_Element * object) override;
+
+	bool UI_OnHoverExit(UI_Element* element) override;
 
 
 	UI_InteractiveGroup* InteractiveGroup = nullptr;
 private:
 	
 	UI_Label* attack_label = nullptr;
+	UI_Label* interaction_label = nullptr;
+	UI_Label* Use_item_label = nullptr;
 
 	UI_Image* attack_image = nullptr;
 	UI_Image* interaction_image = nullptr;
