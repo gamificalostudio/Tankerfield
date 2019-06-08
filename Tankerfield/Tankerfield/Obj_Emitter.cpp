@@ -2,7 +2,7 @@
 #include <time.h>
 
 
-Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data)
+Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data) : Object(pos)
 { 
 	srand(time(NULL));
 	
@@ -12,7 +12,6 @@ Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data)
 	this->endSpeed = data.endSpeed;
 	this->startSize = data.startSize;
 	this->endSize = data.endSize;
-	this->pos = pos;
 	this->rotSpeed = data.rotSpeed;
 
 	// Particle emission calculations
@@ -55,7 +54,7 @@ Obj_Emitter::~Obj_Emitter()
 	emitterPool = nullptr;
 }
 
-void Obj_Emitter::Update(float dt)
+bool Obj_Emitter::Update(float dt)
 {
 	if (active)
 	{
@@ -73,7 +72,7 @@ void Obj_Emitter::Update(float dt)
 			float randRadius = RangeRandomNum(randStart, randEnd);
 			double randRotSpeed = rotSpeed * RangeRandomNum(rotSpeedRand.x, rotSpeedRand.y);
 
-			emitterPool->Generate(pos, tmpStartSpeed, tmpEndSpeed, randAngle, randRotSpeed, randRadius, endSize, maxParticleLife, textureRect, startColor, endColor, blendMode);
+			emitterPool->Generate(pos_map, tmpStartSpeed, tmpEndSpeed, randAngle, randRotSpeed, randRadius, endSize, maxParticleLife, textureRect, startColor, endColor, blendMode);
 			timeStep += timeStep;
 		}
 	}
@@ -113,7 +112,11 @@ void Obj_Emitter::Update(float dt)
 	/* NOTE: if lifetime is 0 and last particles have been updated
 	then the emitter is automatically destroyed */
 	if (!emitterPool->Update(dt) && lifetime == 0.0f)
+	{
 		to_destroy = true;
+	}
+
+	return true;
 }
 
 float Obj_Emitter::RangeRandomNum(float min, float max)
@@ -152,10 +155,10 @@ void Obj_Emitter::StopEmission(double timer)
 
 void Obj_Emitter::MoveEmitter(fPoint newPos)
 {
-	pos = newPos;
+	pos_map = newPos;
 }
 
 fPoint Obj_Emitter::GetEmitterPos() const
 {
-	return pos;
+	return pos_map;
 }

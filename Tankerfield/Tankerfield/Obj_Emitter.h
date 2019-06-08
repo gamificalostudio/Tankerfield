@@ -1,6 +1,7 @@
 #ifndef __EMITTER_H__
 #define __EMITTER_H__
 
+#include "Object.h"
 #include "Point.h"
 #include "ParticleSystem.h"
 #include "ParticlePool.h"
@@ -11,12 +12,9 @@ struct SDL_Texture;
 class ParticlePool;
 struct EmitterData;
 
-class Obj_Emitter
+class Obj_Emitter : public Object
 {
 private:
-
-	// Particles size and movement
-	fPoint pos = { 0.0f, 0.0f };
 	fPoint angleRange = { 0.0f, 360.0f };
 	float startSpeed = 0.0f;
 	float endSpeed = 0.0f;
@@ -68,7 +66,7 @@ public:
 	// fPoint pos, uint emitNumber, uint emitVariance, uint maxParticleLife, fPoint angleRange, double rotSpeed, float maxSpeed, float startSize, float endSize, SDL_Rect textureRect, SDL_Color startColor = { 0, 0, 0, 0 }, SDL_Color endColor = { 0, 0, 0, 0 }, SDL_BlendMode blendMode = SDL_BlendMode::SDL_BLENDMODE_NONE, double lifetime = -1.0f
 	virtual ~Obj_Emitter();
 	
-	void Update(float dt);
+	bool Update(float dt) override;
 
 	// Generates random number between given range
 	float RangeRandomNum(float min = -1.0f, float max = 1.0f);
