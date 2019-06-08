@@ -699,7 +699,9 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 	// Active new state ======================================
 
-	switch (new_state)
+	menu_state = new_state;
+
+	switch (menu_state)
 	{
 	case MENU_STATE::INIT_MENU:
 		SetPlayerObjectsState(false);
@@ -764,8 +766,6 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		app->ui->DesactiveAllInteractiveGroups();
 		break;
 	}
-
-	menu_state = new_state;
 
 }
 

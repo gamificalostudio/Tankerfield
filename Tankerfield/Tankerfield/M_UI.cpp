@@ -225,7 +225,7 @@ bool M_UI::Update(float dt)
 
 	// Select input type ====================================================
 
-	SelectInputType();
+
 
 	// Update navigation and selection ======================================
 
@@ -233,6 +233,8 @@ bool M_UI::Update(float dt)
 
 	for (std::list<UI_InteractiveGroup*>::iterator itr = interactive_groups.begin(); itr != interactive_groups.end() && prevent_double_select == false; ++itr)
 	{
+		SelectInputType();
+
 		if ((*itr)->is_active == false)
 		{
 			continue;
