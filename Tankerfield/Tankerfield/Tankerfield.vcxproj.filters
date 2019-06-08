@@ -248,10 +248,10 @@
     <ClCompile Include="Obj_Smoke.cpp">
       <Filter>Objects\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="ParticlePool.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="Obj_Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -525,10 +525,10 @@
     <ClInclude Include="Obj_Smoke.h">
       <Filter>Objects\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="Emitter.h" />
     <ClInclude Include="ParticlePool.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="Obj_Emitter.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">

@@ -3,7 +3,7 @@
 
 #include "Point.h"
 #include "Module.h"
-#include "Emitter.h"
+#include "Obj_Emitter.h"
 #include <list>
 #include <string>
 #include "SDL/include/SDL.h"

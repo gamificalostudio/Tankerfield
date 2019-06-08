@@ -2,7 +2,7 @@
 #define __PARTICLE_POOL_H__
 
 #include "Particle.h"
-#include "Emitter.h"
+#include "Obj_Emitter.h"
 #include "Point.h"
 #include <vector>
 
