@@ -15,10 +15,13 @@
 #define NUM_MOUSE_BUTTONS 5
 #define MAX_CONTROLLERS 4
 #define DEFAULT_DEAD_ZONE 7500
+#define MAX_DEAD_ZONE 32767
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
 struct SDL_Rect;
 class Camera;
+
+
 
 enum EventWindow
 {
@@ -54,6 +57,33 @@ enum class INPUT_DIR
 	MAX
 };
 
+//DON'T CHANGE THE ORDER OF THIS BUTTONS PLEASE!!!
+//DONT' ADD MORE BUTTONS IF SO SAY IT TO YESSICA CAUSE CONTROLLERS SETTINGS STAFF
+enum class CONTROLLER_BUTTON : int
+{
+	NONE = -1,
+	A,
+	B,
+	Y,
+	X,
+	L,
+	LT,
+	LB,
+	R,
+	RT,
+	RB,
+	MAX
+};
+
+struct ControllersPlayerInfo
+{
+	float death_zone_porcenatage = 0.20f;
+	int vibration_percentage = 1.00f;
+	CONTROLLER_BUTTON attack_button = CONTROLLER_BUTTON::RT;
+	CONTROLLER_BUTTON interacton_button = CONTROLLER_BUTTON::X;
+	CONTROLLER_BUTTON use_item_button = CONTROLLER_BUTTON::LB;
+
+};
 
 class M_Input;
 
@@ -154,6 +184,8 @@ public:
 
 
 	//Controller funtions===================================================================================================
+	KeyState GetControllerButtonOrTriggerState(int controller, CONTROLLER_BUTTON controller_button);
+	
 	KeyState GetControllerButtonState(int controller, SDL_GameControllerButton button);
 
 	iPoint GetControllerJoystick(int controller, Joystick joystick, int dead_zone = DEFAULT_DEAD_ZONE);
@@ -174,7 +206,7 @@ public:
 
 	void DetachController(int controller);
 
-	bool IsConnectedControllet(int i);
+	bool IsConnectedController(int i);
 
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
@@ -191,11 +223,38 @@ private:
 	int			mouse_x = NULL;
 	int			mouse_y = NULL;
 	uint		num_controller_connected = 0;
+	Controller controllers[MAX_CONTROLLERS];
 
 public:
 	std::string input_text;
-	Controller controllers[MAX_CONTROLLERS];
 	int GetAbleController();
+	ControllersPlayerInfo controllerInfo[4];
+
+														
+	SDL_Rect buttons_image[(int)CONTROLLER_BUTTON::MAX] = 
+	//A
+	{{449,19,32,32},
+	//B
+	{399,69,32,32}, 
+	//Y
+	{449,69,32,32}, 
+	//X
+	{399,19,32,32},
+	//L
+	{500,15,42,42},
+	//LT
+	{287,15,36,39},
+	//LB
+	{284,73,41,23},
+	//R
+	{500,70,42,42},
+	//RT
+	{338,15,36,39},
+	//RB
+	{334,73,42,23},
+	};
+
+
 };
 
 #endif // __j1INPUT_H__

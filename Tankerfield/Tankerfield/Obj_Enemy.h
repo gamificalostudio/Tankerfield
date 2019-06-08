@@ -36,21 +36,23 @@ public:
 
 	virtual void Attack();
 
-	void OnTriggerEnter(Collider * collider);
+	void OnTriggerEnter(Collider * collider, float dt);
 
-	void OnTrigger(Collider * collider);
+	void OnTrigger(Collider * collider, float dt);
 
 	inline bool IsOnGoal(fPoint goal); //const?
 
 	void DebugPathfinding (Camera* camera)override;
 
-	virtual bool Draw(float dt, Camera* camera)override;
+	virtual bool Draw(Camera* camera)override;
 
 	virtual bool Start() override;
 
 	virtual void SetStats(int level);
 
 	void DrawAttackRange(Camera * camera);
+
+	inline void ReduceLife(int damage, float dt);
 
 protected:
 	inline void UpdateMoveVec();
@@ -87,7 +89,7 @@ protected:
 
 	void Oiled();
 
-	inline void ReduceLife(Collider* collider);
+	void ResetAllAnimations();
 
 protected:
 

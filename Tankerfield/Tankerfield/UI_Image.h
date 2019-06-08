@@ -4,6 +4,7 @@
 #include "Point.h"
 #include "Animation.h"
 #include "UI_Element.h"
+#include "Timer.h"
 
 struct UI_ImageDef : public UI_ElementDef
 {
@@ -29,6 +30,8 @@ public:
 	void SetDrawRect(SDL_Rect draw_rect);
 
 	SDL_Texture* GetTexture();
+
+	Timer timer;
 
 private:
 

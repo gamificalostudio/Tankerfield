@@ -520,7 +520,7 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 			else if (type == "WATER")
 			{
 				coll =app->collision->AddCollider(object_group->objects[i].pos, object_group->objects[i].w, object_group->objects[i].h, TAG::WATER, BODY_TYPE::STATIC);
-				coll->SetIsTrigger(false);
+				//coll->SetIsTrigger(false);
 			}
 			else if (type == "ROAD")
 			{
@@ -817,7 +817,7 @@ iPoint M_Map::ScreenToMapI(int x, int y) const
 	}
 	else
 	{
-		LOG("Unknown map type");
+		//LOG("Unknown map type");
 		ret.x = x; ret.y = y;
 	}
 	return ret;

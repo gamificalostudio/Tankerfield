@@ -22,7 +22,7 @@ public:
 	bool Start() override;
 	bool Update(float dt) override;
 
-	bool Draw(float dt, Camera * camera) override;
+	bool Draw(Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
 
 	bool CleanUp() override;

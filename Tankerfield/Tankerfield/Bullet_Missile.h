@@ -13,12 +13,13 @@ public:
 
 	Bullet_Missile(fPoint pos);
 
-	void OnTriggerEnter(Collider* collider_1);
+	void OnTriggerEnter(Collider* collider_1, float dt);
 
 	bool Update(float dt);
 
 public:
 	int explosion_damage = 0;
+	uint shot_sound = 0u;
 };
 
 #endif

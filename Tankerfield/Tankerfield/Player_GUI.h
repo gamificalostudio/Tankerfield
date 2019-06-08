@@ -38,16 +38,13 @@ public:
 
 	void SetChargedShotBar(float percent);
 
-	void SetWeaponIcon(WEAPON weapon_type);
+	void SetWeapon(WEAPON weapon_type, int level);
 
-	void SetItemIcon(ItemType type);
+	void SetItem(ItemType type);
 
 	void SetArrowColor(const SDL_Color color);
 
 	void Fade_GUI(bool fade_on);
-
-	void AddTextHelper(const std::string text);
-	void AddButtonHelper(const CONTROLLER_BUTTON button_type);
 
 	/* UI Elements getters */
 
@@ -70,9 +67,9 @@ public:
 
 	fRect viewport;
 
-	SDL_Rect viewport_with_margin = { 0,0,0,0 };
+	fRect viewport_with_margin;
 
-	fPoint margin = { 80.f, 80.f };
+	fPoint margin;
 
 private:
 
@@ -87,6 +84,10 @@ private:
 	UI_Image* weapon_frame = nullptr;
 
 	UI_Image* weapon_icon = nullptr;
+
+	UI_Image* weapon_lvl_image = nullptr;
+
+	UI_Label* weapon_lvl_label = nullptr;
 
 	UI_Image* item_frame = nullptr;
 
@@ -111,8 +112,6 @@ private:
 	// In Game Elements ======================
 
 	UI_InGameElement* player_arrow = nullptr;
-
-	bool particle_created = false;
 
 	friend M_UI;
 };

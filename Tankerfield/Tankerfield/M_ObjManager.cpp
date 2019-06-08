@@ -47,6 +47,8 @@
 #include "Obj_Tank_MainMenu.h"
 #include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
+#include "Oil_Splash.h"
+#include "Obj_Smoke.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -93,33 +95,51 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
+	FillPool(ObjectType::TESLA_TROOPER, 100);
+	FillPool(ObjectType::BRUTE, 2);
+	FillPool(ObjectType::SUICIDAL, 2);
+	FillPool(ObjectType::ROCKETLAUNCHER, 2);
 	return ret;
 }
 
 bool M_ObjManager::PreUpdate()
 {
 	BROFILER_CATEGORY("Object Manager: PreUpdate", Profiler::Color::Lavender);
-	std::list<Object*>::iterator iterator;
-
-	for (iterator = objects.begin(); iterator != objects.end(); iterator++)
-	{
-		if ((*iterator) != nullptr && (*iterator)->active == true)
-		{
-			(*iterator)->PreUpdate();
-		}
-	}
 
 	if (delete_all_enemies == true)
 	{
-		for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+		for (std::list<Object*>::iterator iterator = enemies.begin(); iterator != enemies.end(); ++iterator)
 		{
-			if (IsEnemy((*iterator)->type))
-			{
-				(*iterator)->to_remove = true;
-			}
+			(*iterator)->return_to_pool = true;
 		}
-
 		delete_all_enemies = false;
+		enemies.clear();
+	}
+
+	std::list<Object*>::iterator iterator;
+	for (iterator = objects.begin(); iterator != objects.end();)
+	{
+		if ((*iterator) != nullptr)
+		{
+			if ((*iterator)->return_to_pool)
+			{
+				DesactivateObject(iterator);
+			}
+			else if ((*iterator)->to_remove)
+			{
+				RemoveObject(iterator);
+			}
+			else if ((*iterator)->active == true)
+			{
+				(*iterator)->PreUpdate();
+				++iterator;
+			}
+			else
+				++iterator;
+		}
+		else
+			++iterator;
+
 	}
 
 	return true;
@@ -131,49 +151,14 @@ bool M_ObjManager::Update(float dt)
 
 	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
 	{
-		if ((*iterator) != nullptr )
+		if ((*iterator) != nullptr)
 		{
+
 			if ((*iterator)->active == true)
 			{
-				(*iterator)->Update(dt);
+				UpdateObject(iterator, dt);
 			}
-
-			if ((*iterator)->to_remove)
-			{
-			
-				(*iterator)->CleanUp();
-
-				if (IsEnemy((*iterator)->type))
-				{
-					enemies.remove((*iterator));
-				}
-
-				if ((*iterator)->coll != nullptr)
-				{
-					(*iterator)->coll->object = nullptr;
-					(*iterator)->coll->Destroy();
-					(*iterator)->coll = nullptr;
-				}
-
-				delete((*iterator));
-				(*iterator) = nullptr;
-				iterator = objects.erase(iterator);
-			}
-			else
-			{
-				// Update Components ======================================
-				if ((*iterator)->coll != nullptr)
-				{
-					(*iterator)->coll->SetPosToObj();
-				}
-
-				if ((*iterator)->curr_anim != nullptr)
-				{
-					(*iterator)->curr_anim->NextFrame(dt);
-				}
-
-				++iterator;
-			}
+			++iterator;
 		}
 		else
 		{
@@ -187,6 +172,94 @@ bool M_ObjManager::Update(float dt)
 bool M_ObjManager::IsEnemy(ObjectType type)
 {
 	return (type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER);//Change this enemy for the last enemy on the ObjectType enum
+}
+
+inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator & iterator)
+{
+	(*iterator)->CleanUp();
+
+	if ((*iterator)->type >= ObjectType::TESLA_TROOPER
+		&& (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.remove((*iterator));
+	}
+
+	if ((*iterator)->active == false)
+	{
+
+	}
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->object = nullptr;
+		(*iterator)->coll->Destroy();
+		(*iterator)->coll = nullptr;
+	}
+
+	delete((*iterator));
+	(*iterator) = nullptr;
+	iterator = objects.erase(iterator);
+}
+
+inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & iterator)
+{
+	(*iterator)->Desactivate();
+	(*iterator)->return_to_pool = false;
+	(*iterator)->active = false;
+
+	if ((*iterator)->type >= ObjectType::TESLA_TROOPER && (*iterator)->type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.remove((*iterator));
+	}
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->SetIsTrigger(false);
+	}
+	ReturnToPool((*iterator));
+	++iterator;
+}
+
+void M_ObjManager::DesactivateObject(Object * iterator)
+{
+	iterator->Desactivate();
+	iterator->return_to_pool = false;
+	iterator->active = false;
+
+	if (IsEnemy(iterator->type))
+	{
+		enemies.remove(iterator);
+	}
+	if (iterator->coll != nullptr)
+	{
+		iterator->coll->SetIsTrigger(false);
+	}
+	ReturnToPool(iterator);
+}
+
+inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, const float & dt)
+{
+	if ((*iterator)->curr_anim != nullptr)
+	{
+		(*iterator)->curr_anim->NextFrame(dt);
+	}
+
+	(*iterator)->Update(dt);
+
+	// Update Components ======================================
+	if ((*iterator)->coll != nullptr)
+	{
+		(*iterator)->coll->SetPosToObj();
+	}
+
+
+}
+
+void M_ObjManager::FillPool(ObjectType type, uint number)
+{
+	for (uint i = 0; i < number; ++i)
+	{
+		Object* obj = CreateObject(type, fPoint(-100, -100));
+		DesactivateObject(obj);
+	}
 }
 
 bool M_ObjManager::PostUpdate(float dt)
@@ -231,7 +304,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		{
 			if ((*item) != nullptr)
 			{
-				(*item)->Draw(dt, (*item_cam));
+				(*item)->Draw((*item_cam));
 			}
 		}
 
@@ -276,23 +349,7 @@ bool M_ObjManager::CleanUp()
 
 bool M_ObjManager::Reset()
 {
-	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end();)
-	{
-		(*iterator)->CleanUp();
-		if ((*iterator)->coll != nullptr)
-		{
-			(*iterator)->coll->Destroy();
-			(*iterator)->coll = nullptr;
-		}
-
-		delete((*iterator));
-		(*iterator) = nullptr;
-		iterator = objects.erase(iterator);
-	}
-
-	obj_tanks.clear();
-	objects.clear();
-
+	DeleteObjects();
 	return true;
 }
 
@@ -406,6 +463,14 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW HealingShot_Area(pos);
 		ret->type = ObjectType::HEALING_AREA_SHOT;
 		break;
+	case ObjectType::OIL_SPLASH:
+		ret = DBG_NEW Oil_Splash(pos);
+		ret->type = ObjectType::OIL_SPLASH;
+		break;
+	case ObjectType::DAMAGED_SMOKE:
+		ret = DBG_NEW Obj_Smoke(pos);
+		ret->type = ObjectType::DAMAGED_SMOKE;
+		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");
 
@@ -449,6 +514,54 @@ Obj_Item * M_ObjManager::CreateItem(ItemType type, fPoint pos)
 	return ret;
 }
 
+Object * M_ObjManager::GetObjectFromPool(ObjectType type, fPoint map_pos)
+{
+	Object* ret = nullptr;
+
+	std::map<ObjectType, std::list<Object*>>::iterator iterator = pool_of_objects.find(type);
+	if (iterator != pool_of_objects.end())
+	{
+		std::list<Object*>* list = &(*iterator).second;
+		if (list->size() > 0)
+		{
+			ret = (*list->begin());
+			list->pop_front();
+		}
+	}
+	if (ret != nullptr && type >= ObjectType::TESLA_TROOPER && type <= ObjectType::ROCKETLAUNCHER)
+	{
+		enemies.push_back(ret);
+	}
+	if (ret == nullptr)
+	{
+		ret = CreateObject(type, map_pos);
+	}
+
+	if (ret != nullptr)
+	{
+		ret->active = true;
+		ret->SetMapPos(map_pos);
+		ret->Start();
+		return ret;
+	}
+	return nullptr;
+}
+
+void M_ObjManager::ReturnToPool(Object * object)
+{
+	std::map<ObjectType, std::list<Object*>>::iterator iter = pool_of_objects.find(object->type);
+	if (iter != pool_of_objects.end())
+	{
+		(*iter).second.push_back(object);
+	}
+	else
+	{
+		std::list<Object*> list_obj;
+		list_obj.push_back(object);
+		pool_of_objects[object->type] = list_obj;
+	}
+}
+
 
 void M_ObjManager::DeleteObjects()
 {
@@ -457,6 +570,11 @@ void M_ObjManager::DeleteObjects()
 		if ((*iterator) != nullptr)
 		{
 			(*iterator)->CleanUp();
+			if ((*iterator)->coll != nullptr)
+			{
+				(*iterator)->coll->Destroy();
+				(*iterator)->coll = nullptr;
+			}
 			delete (*iterator);
 			(*iterator) = nullptr;
 		}
@@ -465,6 +583,7 @@ void M_ObjManager::DeleteObjects()
 	objects.clear();
 	obj_tanks.clear();
 	enemies.clear();
+	pool_of_objects.clear();
 }
 
 
@@ -535,6 +654,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	tesla_trooper_info.attack_range				= tesla_trooper_node.child("attack_range").attribute("num").as_float();
 	tesla_trooper_info.attack_frequency			= tesla_trooper_node.child("attack_frequency").attribute("num").as_uint();
 	tesla_trooper_info.teleport_max_enemies		= tesla_trooper_node.child("teleport_max_enemies").attribute("num").as_int();
+	tesla_trooper_info.detection_range			= tesla_trooper_node.child("detection_range").attribute("num").as_float();
 
 	//BRUTE
 	pugi::xml_node brute_node = balance_node.child("enemies").child("brute");
@@ -554,6 +674,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	rocket_launcher_info.speed					= rocket_launcher_node.child("speed").attribute("num").as_float();
 	rocket_launcher_info.life_multiplier		= rocket_launcher_node.child("life_multiplier").attribute("num").as_float();
 	rocket_launcher_info.life_exponential_base	= rocket_launcher_node.child("life_exponential_base").attribute("num").as_float();
+	rocket_launcher_info.detection_range		= rocket_launcher_node.child("detection_range").attribute("num").as_float();
 
 	//SUICIDAL
 	pugi::xml_node suicidal_node = balance_node.child("enemies").child("suicidal");
@@ -563,6 +684,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	suicidal_info.speed							= suicidal_node.child("speed").attribute("num").as_float();
 	suicidal_info.life_multiplier				= suicidal_node.child("life_multiplier").attribute("num").as_float();
 	suicidal_info.life_exponential_base			= suicidal_node.child("life_exponential_base").attribute("num").as_float();
+	suicidal_info.detection_range				= suicidal_node.child("detection_range").attribute("num").as_float();
 
 	//WEAPONS
 

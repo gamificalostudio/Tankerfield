@@ -88,7 +88,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 void Obj_TeslaTrooper::SetStats(int level)
 {
 	original_speed = speed = app->objectmanager->tesla_trooper_info.speed;
-	detection_range = ((*app->render->cameras.begin())->screen_section.w / app->map->data.tile_width)* 1.33f; // 1.33 are 4/3
+	detection_range = app->objectmanager->tesla_trooper_info.detection_range;
 	squared_detection_range = detection_range * detection_range;
 	attack_damage = app->objectmanager->tesla_trooper_info.attack_damage;
 	attack_range = app->objectmanager->tesla_trooper_info.attack_range;
@@ -242,7 +242,7 @@ void Obj_TeslaTrooper::GetPath()
 }
 
 
-bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
+bool Obj_TeslaTrooper::Draw(Camera * camera)
 {
 
 	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)

@@ -10,6 +10,13 @@ struct UI_TableDef: public UI_ElementDef
 	int rows = 0;
 	int columns = 0;
 	int line_width = 0;
+
+public:
+	UI_TableDef()
+	{};
+
+	UI_TableDef(int rows, int columns, int line_width) : rows(rows), columns(columns), line_width(line_width)
+	{};
 };
 
 class UI_Table: public UI_Element

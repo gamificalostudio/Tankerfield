@@ -5,8 +5,9 @@
 
 #include "SDL/include/SDL_rect.h"
 
-
 #include "Module.h"
+
+#include "NewRoundAnimation.h"
 
 struct SDL_Texture;
 struct Controller;
@@ -14,11 +15,14 @@ struct Controller;
 class Obj_Tank;
 class RewardZone;
 class Object;
+
+class UI_Label;
+class UI_Image;
+
 class Player_GUI;
 class General_GUI;
-class UI_Label;
 class Pause_Menu;
-
+class LeaderBoard;
 
 enum class GAME_STATE
 {
@@ -33,14 +37,8 @@ enum class GAME_STATE
 	WAITING_LEADERBOARD//Waiting for player input
 };
 
-class PerfTimer;
-
 class M_Scene : public Module
 {
-private:
-
-	int number_of_enemies = 0;
-
 public:
 
 	SDL_Color tank_colors[4];
@@ -48,6 +46,8 @@ public:
 	int current_level				= 0;
 
 	General_GUI * general_gui		= nullptr;
+
+	LeaderBoard * leaderboard		= nullptr;
 
 	uint round		= 0u;
 
@@ -88,14 +88,11 @@ public:
 
 	void DebugPathfinding();
 
-	void ReduceNumEnemies();
 
 private:
 	void CreateEnemyWave();
 
 	void NewWave();
-
-	bool AllPlayersReady() const;
 
 
 public:
@@ -109,6 +106,7 @@ private:
 
 	iPoint path_tex_offset = { -30, 0 };
 	uint initial_num_enemies = 0u;
+
 private:
 
 	/* Game variables*/
@@ -132,12 +130,15 @@ private:
 	int wind_sound_channel = -1;
 
 	const char* main_music;
-	
+
+	float time_between_waves = 0.f;//In seconds
 
 private:
 	/* Reward Zones */
 	RewardZone* reward_zone_01 = nullptr;
 	RewardZone* reward_zone_02 = nullptr;
+
+	NewRoundAnimation new_round_animation;
 };
 
 #endif // __j1SCENE_H__

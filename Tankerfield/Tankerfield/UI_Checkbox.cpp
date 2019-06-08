@@ -71,10 +71,10 @@ bool UI_Checkbox::OutClick(UI_Element * object)
 			button->SetDefinition(definition.check_off_button);
 		}
 
-		if (listener != nullptr)
-		{
-			listener->ClickUp(this);
-		}
+		//if (listener != nullptr)
+		//{
+		//	listener->ClickUp(this);
+		//}
 	}
 	return true;
 }

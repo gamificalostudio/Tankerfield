@@ -35,7 +35,7 @@ Obj_FlamethrowerFlame::Obj_FlamethrowerFlame(fPoint pos) : Object(pos)
 
 	
 	draw_offset = { 77, 0 };
-	
+	draw_offset_original = draw_offset;
 	pivot.x = draw_offset.x;
 	pivot.y = draw_offset.y;
 
@@ -48,7 +48,7 @@ Obj_FlamethrowerFlame::~Obj_FlamethrowerFlame()
 
 bool Obj_FlamethrowerFlame::Update(float dt)
 {
-	if (is_holding == true && curr_anim == nullptr)
+	if (is_holding == true && curr_anim == nullptr && tank->Alive())
 	{
 		curr_anim = &fire_start;
 	}
@@ -63,7 +63,7 @@ bool Obj_FlamethrowerFlame::Update(float dt)
 
 	if (fire.Finished())
 	{
-		if (is_holding)
+		if (is_holding && tank->Alive())
 		{
 			fire.Reset();
 			curr_anim = &fire_reverse;
@@ -89,10 +89,13 @@ bool Obj_FlamethrowerFlame::Update(float dt)
 
 	pos_map = tank->GetTurrPos();
 
+	draw_offset = draw_offset_original;
+	draw_offset -= (iPoint)(app->map->MapToScreenF(tank->GetShotDir()*0.5f)) ;
+
 	return true;
 }
 
-bool Obj_FlamethrowerFlame::Draw(float dt, Camera* camera)
+bool Obj_FlamethrowerFlame::Draw(Camera* camera)
 {
 	if (curr_anim != nullptr) {
 		app->render->BlitScaledAndRotated(

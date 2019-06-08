@@ -28,6 +28,7 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	// Assets ===============================================================
 
 	flash_texture = app->tex->Load("textures/ui/flash.png");
+	margin = { 30.f, 30.f };
 
 	int tank_num = player->GetTankNum();
 	 
@@ -36,12 +37,12 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		player_object->camera_player->screen_section.y,
 		player_object->camera_player->screen_section.w,
 		player_object->camera_player->screen_section.h);
+
 	viewport_with_margin = {
-		(int)(viewport.GetLeft() + margin.x * 0.5f),
-		(int)(viewport.GetTop()  + margin.y * 0.5f),
-		(int)(viewport.w - margin.x),
-		(int)(viewport.h - margin.y)};
-	margin = { 30.f, 30.f };
+		viewport.GetLeft() + margin.x * 0.5f,
+		viewport.GetTop()  + margin.y * 0.5f,
+		viewport.w - margin.x,
+		viewport.h - margin.y};
 
 	// In Game Elements =====================================================
 
@@ -98,6 +99,7 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		weapon_frame = app->ui->CreateImage({ viewport.GetRight() - margin.x ,viewport.GetBottom() - margin.y }, image_def);
 		weapon_frame->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
+
 	image_def.sprite_section = { 0, 0, 0, 0 };
 
 	if (tank_num == 0 || tank_num == 1)
@@ -111,7 +113,34 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		weapon_icon->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
 
-	SetWeaponIcon(WEAPON::BASIC);
+	image_def.sprite_section = { 10, 80, 27, 27 };
+
+	if (tank_num == 0 || tank_num == 1)
+	{
+		weapon_lvl_image = app->ui->CreateImage({ viewport.GetRight() - margin.x - 30.f,viewport.GetTop() + margin.y + 60.f }, image_def);
+		weapon_lvl_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+	else if (tank_num == 2 || tank_num == 3)
+	{
+		weapon_lvl_image = app->ui->CreateImage({ viewport.GetRight() - margin.x - 30.f ,viewport.GetBottom() - margin.y - 60.f }, image_def);
+		weapon_lvl_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+
+
+	UI_LabelDef label_def("1", app->font->label_font_24, { 255, 255, 255, 255 });
+
+	if (tank_num == 0 || tank_num == 1)
+	{
+		weapon_lvl_label = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 30.f,viewport.GetTop() + margin.y + 60.f }, label_def);
+		weapon_lvl_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+	else if (tank_num == 2 || tank_num == 3)
+	{
+		weapon_lvl_label = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 30.f ,viewport.GetBottom() - margin.y - 60.f }, label_def);
+		weapon_lvl_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+
+	SetWeapon(WEAPON::BASIC, 1 );
 
 	UI_BarDef life_bar_def(UI_Bar::DIR::UP, 1.f, { 0, 160, 0, 255 }, { 80, 80, 80, 255 });
 	life_bar_def.section_width = 20.f;
@@ -206,6 +235,9 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	item_icon			->SetFX(type, 3.f);
 	charged_shot_bar	->SetFX(type, 3.f);
 	life_bar			->SetFX(type, 3.f);
+	weapon_lvl_label	->SetFX(type, 3.f);
+	weapon_lvl_image	->SetFX(type, 3.f);
+
 }
 
 void Player_GUI::DamageFlash()
@@ -220,7 +252,6 @@ void Player_GUI::HealingFlash()
 	flash->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.8F, 1);
 }
 
-
 void Player_GUI::Update(float dt)
 {
 	// Update charged shot value ======================================== ???
@@ -233,10 +264,19 @@ void Player_GUI::Update(float dt)
 			w_offset = { 22.0f, -20.0f }; // TODO: Get Weapon rect to avoid these magic numbers
 		else if(this->player->GetTankNum() == 2 || this->player->GetTankNum() == 3)
 			w_offset = { 22.0f, 20.0f };
-
+		
 		fPoint w_pos = GetWeaponFramePos();
 		(*item)->SetPos(lerp((*item)->position, w_pos - w_offset, 3.25f * dt));
-		if ((iPoint)(*item)->position == (iPoint)w_pos - (iPoint)w_offset)
+		
+		if ((*item)->timer.ReadSec() > 2.0f)
+		{
+			if ((*item)->alpha > 0.0f)
+				(*item)->alpha -= 75.0f * dt;
+			else if ((*item)->alpha < 0.0f)
+				(*item)->alpha = 0.0f;
+		}
+
+		if ((*item)->timer.ReadSec() > 5.0f)
 		{
 			(*item)->Destroy();
 			item = particles_weapon_frame_list.erase(item);
@@ -253,7 +293,7 @@ void Player_GUI::Update(float dt)
 
 		fPoint i_pos = GetItemFramePos();
 		(*item)->SetPos(lerp((*item)->position, i_pos - i_offset, 3.25f * dt));
-		if ((iPoint)(*item)->position == (iPoint)i_pos - (iPoint)i_offset)
+		if ((*item)->timer.ReadSec() > 2.0f)
 		{
 			(*item)->Destroy();
 			item = particles_item_frame_list.erase(item);
@@ -281,8 +321,9 @@ void Player_GUI::SetChargedShotBar(float percent)
 	charged_shot_bar->value = percent;
 }
 
-void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
+void Player_GUI::SetWeapon(WEAPON weapon_type, int level)
 {
+	weapon_lvl_label->SetText(std::to_string(level));
 
 	switch (weapon_type)
 	{
@@ -312,7 +353,7 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 
 }
 
-void Player_GUI::SetItemIcon(ItemType type)
+void Player_GUI::SetItem(ItemType type)
 {
 	item_icon->SetState(ELEMENT_STATE::VISIBLE);
 
@@ -333,7 +374,6 @@ void Player_GUI::SetItemIcon(ItemType type)
 	}
 
 	item_icon->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1, 3.5F);
-
 }
 
 void Player_GUI::SetArrowColor(const SDL_Color color )
@@ -356,18 +396,6 @@ void Player_GUI::SetHelper()
 
 }
 
-
-void Player_GUI::AddButtonHelper( const CONTROLLER_BUTTON button_type)
-{
-	app->ui->CreateImage({ 0.f, 0.f }, UI_ImageDef(app->ui->button_sprites[(int)button_type]));
-
-}
-
-void Player_GUI::AddTextHelper(const std::string text)
-{
-	app->ui->CreateLabel({ 0.f, 0.f }, UI_LabelDef(text, app->font->font_open_sants_bold_12));
-}
-
 void Player_GUI::CreateParticleToWeaponFrame()
 {
 	UI_ImageDef anim_image_def;
@@ -377,6 +405,7 @@ void Player_GUI::CreateParticleToWeaponFrame()
 	particle_image->SetState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	particle_image->alpha = 175.0f;
+	particle_image->timer.Start();
 	this->particles_weapon_frame_list.push_back(particle_image);
 }
 

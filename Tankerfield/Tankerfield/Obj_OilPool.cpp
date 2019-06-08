@@ -15,9 +15,10 @@ Obj_OilPool::~Obj_OilPool()
 
 bool Obj_OilPool::Update(float dt)
 {
-	if (time.ReadMs() >= 5000)
+	if (anim.Finished())
 	{
 		to_remove = true;
+		active = false;
 	}
 
 	return true;
@@ -27,7 +28,7 @@ bool Obj_OilPool::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("oil");
 
-	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
+	anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("inkdrop").child("animation").child("anim"));
 	curr_anim = &anim;
 
 	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
@@ -36,9 +37,15 @@ bool Obj_OilPool::Start()
 	draw_offset = { 150,0 };
 
 	time.Start();
-
-	coll = app->collision->AddCollider(pos_map, 5, 5, TAG::OIL_POOL, BODY_TYPE::DYNAMIC);
-	coll->is_sensor = true;
-
+	if (coll)
+	{
+		coll->SetIsTrigger(true);
+	}
+	else
+	{
+		coll = app->collision->AddCollider(pos_map, 5, 5, TAG::OIL_POOL, BODY_TYPE::DYNAMIC);
+		coll->is_sensor = true;
+	}
+	bullet_life_ms_timer.Start();
 	return true;
 }

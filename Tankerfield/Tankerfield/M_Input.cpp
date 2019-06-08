@@ -9,6 +9,7 @@
 #include "M_Window.h"
 #include "M_Render.h"
 #include "M_Map.h"
+#include "M_UI.h"
 
 
 
@@ -53,7 +54,7 @@ bool M_Input::Awake(pugi::xml_node& config)
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-
+	
 	return ret;
 }
 
@@ -247,6 +248,7 @@ KeyState M_Input::GetControllerButtonState(int i, SDL_GameControllerButton butto
 	return KeyState::KEY_IDLE;
 }
 
+
 iPoint M_Input::GetControllerJoystick(int i, Joystick joystick, int dead_zone)
 {
 	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
@@ -311,7 +313,7 @@ void M_Input::DetachController(int i)
 	}
 }
 
-bool M_Input::IsConnectedControllet(int i)
+bool M_Input::IsConnectedController(int i)
 {
 	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
@@ -493,29 +495,62 @@ KeyState Controller::GetTriggerState(SDL_GameControllerAxis axis)
 
 iPoint Controller::GetJoystick(Joystick joystick, int dead_zone)
 {
-	switch (joystick)
+	iPoint ret (0, 0);
+
+	if (ctr_pointer != nullptr)
 	{
-	case Joystick::LEFT:
-		return iPoint(GetAxis(SDL_CONTROLLER_AXIS_LEFTX), GetAxis(SDL_CONTROLLER_AXIS_LEFTY));
-	case Joystick::RIGHT:
-		return iPoint(GetAxis(SDL_CONTROLLER_AXIS_RIGHTX), GetAxis(SDL_CONTROLLER_AXIS_RIGHTY));
+		switch (joystick)
+		{
+
+		case Joystick::LEFT: {
+			iPoint input(
+				SDL_GameControllerGetAxis(ctr_pointer, SDL_CONTROLLER_AXIS_LEFTX),
+				SDL_GameControllerGetAxis(ctr_pointer, SDL_CONTROLLER_AXIS_LEFTY));
+			if (input.ModuleNoSqrtF() > dead_zone * dead_zone)
+			{
+				ret = input;
+			}
+		} break;
+
+		case Joystick::RIGHT: {
+			iPoint input(
+				SDL_GameControllerGetAxis(ctr_pointer, SDL_CONTROLLER_AXIS_RIGHTX),
+				SDL_GameControllerGetAxis(ctr_pointer, SDL_CONTROLLER_AXIS_RIGHTY));
+			if (input.ModuleNoSqrtF() > dead_zone * dead_zone)
+			{
+				ret = input;
+			}
+		} break;
+
+		}
 	}
+	else
+	{
+		LOG("Controller not detected properly");
+	}
+
+
+	return ret;
 }
 
 Sint16 Controller::GetAxis(SDL_GameControllerAxis axis, int dead_zone)
 {
-	if (ctr_pointer == nullptr)
-		return 0;
+	Sint16 ret = 0;
 
-	Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
-	if (abs(value) > dead_zone)
+	if (ctr_pointer != nullptr)
 	{
-		return value;
+		Sint16 value = SDL_GameControllerGetAxis(ctr_pointer, axis);
+		if (abs(value) > dead_zone)
+		{
+			ret = value;
+		}
 	}
 	else
 	{
-		return 0;
+		LOG("Controller not detected properly");
 	}
+
+	return ret;
 }
 
 //This funtion returns axis and triggers state value
@@ -531,4 +566,32 @@ int Controller::PlayRumble(float strengh, Uint32 length)
 int Controller::StopRumble()
 {
 	return SDL_HapticRumbleStop(haptic);
+}
+
+KeyState M_Input::GetControllerButtonOrTriggerState(int controller, CONTROLLER_BUTTON controller_button)
+{
+	switch (controller_button)
+	{
+	case CONTROLLER_BUTTON::A:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A);
+	case CONTROLLER_BUTTON::B:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_B);
+	case CONTROLLER_BUTTON::Y:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_Y);
+	case CONTROLLER_BUTTON::X:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X);
+	case CONTROLLER_BUTTON::L:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+	case CONTROLLER_BUTTON::R:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+	case CONTROLLER_BUTTON::LT:
+		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+	case CONTROLLER_BUTTON::RT:
+		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+	case CONTROLLER_BUTTON::LB:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER);	
+	case CONTROLLER_BUTTON::RB:
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+
+	}
 }

@@ -6,7 +6,6 @@
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
     <mode value ="1" />
-
   </app>
 
   <renderer>
@@ -14,11 +13,12 @@
   </renderer>
 
   <window>
-    <resolution width="1280" height="720" scale="1"/>
+    <resolution width="1920" height="1080" scale="1"/>
     <fullscreen value="false"/>
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
+    <icon path="textures/ui/icon.png"/>
   </window>
 
   <animations_bank>animations.xml</animations_bank>
@@ -41,6 +41,7 @@
     <levels>
       <level name="Map2.tmx"/>
       <level name="test.tmx"/>
+
     </levels>
   </map>
   
@@ -109,24 +110,33 @@
     <oil>
       <speed value ="0"/>
       <life value ="1000"/>
-      <tex path="textures/objects/bullets/oil_pool.png"/>
-      <animations>
-        <rotate speed="0" rotation="counter-clockwise" first_dir_angle ="0">
-          <dir>
-            <frame x="0"   y="0"   w="300" h="151"/>
-          </dir>
-        </rotate>
-      </animations>
+      <tex path="textures/objects/bullets/inkdrop02sprite.png"/>
     </oil>
     
+    <oil_splash>
+      <speed value="0"/>
+      <life value="1000"/>
+      <tex path="textures/objects/particles/oil_splash.png"/>
+      <animations>
+        <oil_splash speed="40" loop ="false">
+          <dir>
+            <frame x="0" y="0" w="90" h="97"/>
+            <frame x="90" y="0" w="90" h="97"/>
+            <frame x="180" y="0" w="90" h="97"/>
+            <frame x="270" y="0" w="90" h="97"/>
+            <frame x="360" y="0" w="90" h="97"/>
+            <frame x="450" y="0" w="90" h="97"/>
+            <frame x="0" y="97" w="90" h="97"/>
+            <frame x="90" y="97" w="90" h="97"/>
+            <frame x="180" y="97" w="90" h="97"/>
+            <frame x="270" y="97" w="90" h="97"/>
+            <frame x="360" y="97" w="90" h="97"/>
+          </dir>
+        </oil_splash>
+      </animations>
+    </oil_splash>
+    
     <tank>
-      <speed value ="1"/>
-      <recoil>
-        <velocity_recoil_decay value="900"/>
-        <velocity_recoil_speed_max value="25"/>
-        <velocity_recoil_speed_max_charged value="50"/>
-      </recoil>
-
       <electro_shot>
         <collider_size value="1"/> <!--Width and height in tiles-->
         <electro_shot_sound>audio/Fx/tank/weapons/electric_shot/no_enemies_attack.wav</electro_shot_sound>
@@ -212,6 +222,8 @@
         <basic_shot sound ="audio/Fx/tank/weapons/tank_basic_shot.wav"/>
         <laser_shot sound ="audio/Fx/tank/weapons/tank_laser_shot.wav"/>
         <heal_shot sound ="audio/Fx/tank/weapons/tank_heal_shot.wav"/>
+        <item_pick_up sound ="audio/Fx/objects/pick_up_item.wav"/>
+        <weapon_pick_up sound ="audio/Fx/objects/pick_up_weapon.wav"/>
       </sounds>
       <animations>
         <rotate_base speed="0" rotation="counter-clockwise" first_dir_angle ="315">
@@ -596,6 +608,30 @@
         </fire>
       </animations>
     </fire_dead_tank>
+    <fire_damaged_tank>
+      <tex path="textures/objects/particles/fire_damaged_tank.png"/>
+      <animations>
+        <smoke speed="10" rotation="counter-clockwise" first_dir_angle ="0">
+          <dir>
+            <frame x="0" y="0" w="74" h="112"/>
+            <frame x="74" y="0" w="74" h="112"/>
+            <frame x="148" y="0" w="74" h="112"/>
+            <frame x="222" y="0" w="74" h="112"/>
+            <frame x="296" y="0" w="74" h="112"/>
+            <frame x="370" y="0" w="74" h="112"/>
+            <frame x="444" y="0" w="74" h="112"/>
+            <frame x="518" y="0" w="74" h="112"/>
+            <frame x="592" y="0" w="74" h="112"/>
+            <frame x="666" y="0" w="74" h="112"/>
+            <frame x="740" y="0" w="74" h="112"/>
+            <frame x="814" y="0" w="74" h="112"/>
+            <frame x="888" y="0" w="74" h="112"/>
+            <frame x="0" y="112" w="74" h="112"/>
+            <frame x="74" y="112" w="74" h="112"/>
+          </dir>
+        </smoke>
+      </animations>
+    </fire_damaged_tank>
     <bullet>
       <speed value ="0.5"/>
       <life value ="1000"/>

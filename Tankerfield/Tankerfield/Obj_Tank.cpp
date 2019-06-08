@@ -38,6 +38,8 @@
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
 #include "M_PickManager.h"
+#include "Obj_Enemy.h"
+#include "Obj_Smoke.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -70,7 +72,7 @@ Obj_Tank::~Obj_Tank()
 		app->render->DestroyCamera(camera_player);
 	}
 
-	if (app->input->IsConnectedControllet(controller))
+	if (app->input->IsConnectedController(controller))
 	{
 		app->input->DetachController(controller);
 	}
@@ -80,12 +82,7 @@ bool Obj_Tank::Start()
 {
 	pugi::xml_node tank_node = app->config.child("object").child("tank");
 
-	pugi::xml_node tank_node_recoil = app->config.child("object").child("tank").child("recoil");
-
-	velocity_recoil_decay = tank_node_recoil.child("velocity_recoil_decay").attribute("value").as_float();
-	velocity_recoil_speed_max = tank_node_recoil.child("velocity_recoil_speed_max").attribute("value").as_float();
-	velocity_recoil_speed_max_charged = tank_node_recoil.child("velocity_recoil_speed_max_charged").attribute("value").as_float();
-	lerp_factor_recoil = tank_node_recoil.child("lerp_factor_recoil").attribute("value").as_float();
+	pugi::xml_node tank_stats_node = app->objectmanager->balance_xml_node.child("tank");
 
 	// Textures ================================================
 
@@ -118,6 +115,8 @@ bool Obj_Tank::Start()
 	shot_sound = app->audio->LoadFx(tank_node.child("sounds").child("basic_shot").attribute("sound").as_string(), 100);
 	heal_sound = app->audio->LoadFx(tank_node.child("sounds").child("heal_shot").attribute("sound").as_string(), 100);
 	laser_sound = app->audio->LoadFx(tank_node.child("sounds").child("laser_shot").attribute("sound").as_string(), 100);
+	pick_item_sound = app->audio->LoadFx(tank_node.child("sounds").child("item_pick_up").attribute("sound").as_string(), 100);
+	pick_weapon_sound = app->audio->LoadFx(tank_node.child("sounds").child("weapon_pick_up").attribute("sound").as_string(), 100);
 	revive_sfx = app->audio->LoadFx("audio/Fx/tank/revivir.wav");
 	die_sfx = app->audio->LoadFx("audio/Fx/tank/death-sfx.wav");
 
@@ -129,8 +128,6 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_D;
 		kb_item		= SDL_SCANCODE_Q;
 		kb_interact	= SDL_SCANCODE_E;
-		kb_ready	= SDL_SCANCODE_Z;
-		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 1:
 		kb_up		= SDL_SCANCODE_T;
@@ -139,8 +136,6 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_H;
 		kb_item		= SDL_SCANCODE_R;
 		kb_interact = SDL_SCANCODE_Y;
-		kb_ready	= SDL_SCANCODE_V;
-		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 2:
 		kb_up		= SDL_SCANCODE_I;
@@ -149,8 +144,6 @@ bool Obj_Tank::Start()
 		kb_right	= SDL_SCANCODE_L;
 		kb_item		= SDL_SCANCODE_U;
 		kb_interact = SDL_SCANCODE_O;
-		kb_ready	= SDL_SCANCODE_M;
-		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	case 3:
 		kb_up		= SDL_SCANCODE_KP_8;
@@ -160,12 +153,14 @@ bool Obj_Tank::Start()
 		kb_item		= SDL_SCANCODE_KP_7;
 		kb_interact	= SDL_SCANCODE_KP_9;
 		kb_ready	= SDL_SCANCODE_KP_2;
-		dead_zone = DEFAULT_DEAD_ZONE;//TODO: Get from options menu
 		break;
 	default:
 		LOG("Number of tanks is greater than 3. You probably restarted the game and need to set the variable to 0 again.");
 		break;
 	}
+	dead_zone =	MAX_DEAD_ZONE*app->input->controllerInfo[tank_num].death_zone_porcenatage;//TODO: Get from options menu
+	vibration_percentage = app->input->controllerInfo[tank_num].vibration_percentage;
+
 	kb_shoot = SDL_BUTTON_LEFT;
 
 	rotate_base.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_base"));
@@ -173,10 +168,32 @@ bool Obj_Tank::Start()
 
 	rotate_turr.frames = app->anim_bank->LoadFrames(tank_node.child("animations").child("rotate_turr"));
 
-	curr_speed = speed = 5.f;//TODO: Load from xml
-	road_buff = 3.f;
+	base_max_speed = tank_stats_node.child("max_speed").attribute("value").as_float();
+
+	charged_shot_buff.source = "charged_shot";
+	charged_shot_buff.bonus_speed = tank_stats_node.child("charged_shot_buff").attribute("value").as_float();
+	charged_shot_buff.has_decay = false;
+
+	road_buff.source = "road";
+	road_buff.bonus_speed = tank_stats_node.child("road_buff").attribute("value").as_float();
+	road_buff.has_decay = true;
+	road_buff.decay_rate = tank_stats_node.child("road_buff_decay_rate").attribute("value").as_float();
+
+	recoil_buff.source = "recoil";
+	recoil_buff.bonus_speed = tank_stats_node.child("recoil_buff").attribute("value").as_float();
+	recoil_buff.has_decay = false;
+
+	acceleration_power = tank_stats_node.child("acceleration_power").attribute("value").as_float();
+	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
+	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
+
+	speed_colliding_with_building = 2.5f;
+
 	cos_45 = cosf(-45 * DEGTORAD);
 	sin_45 = sinf(-45 * DEGTORAD);
+
+	run_over_damage_multiplier = 31.f;
+	run_over_speed_reduction = 3.5f;
 
 	camera_player = app->render->CreateCamera(this);
 	app->ui->AddPlayerGUI(this);
@@ -191,9 +208,9 @@ bool Obj_Tank::Start()
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
-	gamepad_shoot		= SDL_CONTROLLER_AXIS_TRIGGERRIGHT;
-	gamepad_item		= SDL_CONTROLLER_BUTTON_LEFTSHOULDER;
-	gamepad_interact	= SDL_CONTROLLER_BUTTON_X;
+	gamepad_shoot		= app->input->controllerInfo[number_of_tanks].attack_button;
+	gamepad_item		= app->input->controllerInfo[number_of_tanks].use_item_button;
+	gamepad_interact	= app->input->controllerInfo[number_of_tanks].interacton_button;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -206,10 +223,7 @@ bool Obj_Tank::Start()
 
 	shot_timer.Start();
 
-	max_life = 100;
-	SetLife(100);
-
-	charged_shot_speed = 1.0f;
+	max_life = life = 100;
 
 	turr_scale = 1.2f;
 
@@ -223,7 +237,6 @@ bool Obj_Tank::Start()
 	tutorial_move->AddButtonHelper(CONTROLLER_BUTTON::L, {0.f, 100.f});
 	tutorial_move->AddTextHelper("MOVE", {0.f, 70.f});
 	tutorial_move_time = 4500;
-	movement_timer.Start();
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
@@ -238,7 +251,7 @@ bool Obj_Tank::Start()
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
-	SetItem(ItemType::HAPPY_HOUR_ITEM);
+	SetItem(ItemType::HEALTH_BAG);
 	time_between_portal_tp.Start();
 
 	//Flamethrower
@@ -265,7 +278,9 @@ bool Obj_Tank::Start()
 	text_finished_charged = app->tex->Load("textures/Objects/tank/texture_charging_finished.png");
 	anim_finished_charged.frames = app->anim_bank->LoadFrames(anim_node.child("finish_charged"));
 
-	charging_ready = app->audio->LoadFx("audio/Fx/ready.wav");
+	charging_ready = app->audio->LoadFx("audio/Fx/tank/max_charged.wav");
+
+	crosshair_tex = app->tex->Load("textures/Objects/tank/crosshair.png");
 
 	this->time_between_portal_tp.Start();
 
@@ -274,7 +289,7 @@ bool Obj_Tank::Start()
 
 bool Obj_Tank::PreUpdate()
 {
-	if (!app->input->IsConnectedControllet(controller))
+	if (!app->input->IsConnectedController(controller))
 	{
 		controller = app->input->GetAbleController();
 	}
@@ -290,15 +305,13 @@ bool Obj_Tank::PreUpdate()
 
 bool Obj_Tank::Update(float dt)
 {
+	UpdateMaxSpeedBuffs(dt);
 	Movement(dt);
 	Aim(dt);//INFO: Aim always has to go before void Shoot()
 	Shoot(dt);
 	Item();
 	ReviveTank(dt);
 	CameraMovement(dt);//Camera moves after the player and after aiming
-	InputReadyKeyboard();
-	
-
 	UpdateWeaponsWithoutBullets(dt);
 
 	return true;
@@ -324,12 +337,14 @@ fPoint Obj_Tank::GetTurrPos() const
 void Obj_Tank::Movement(float dt)
 {
 	if (!tutorial_move_pressed)
+	{
 		tutorial_move_timer.Start();
-	
+	}
 	tutorial_move_pressed = true;
 
 	//Don't move if tank is dead
-	if (life <= 0) {
+	if (life <= 0)
+	{
 		return;
 	}
 
@@ -350,93 +365,64 @@ void Obj_Tank::Movement(float dt)
 	iso_dir.y = input_dir.x * sin_45 + input_dir.y * cos_45;
 	iso_dir.Normalize();
 
-	if (!iso_dir.IsZero())
+	//TODO: Instead of setting it to zero, add very high friction which makes it stop quickly
+	bool no_input = false;
+	if (input_dir.IsZero())
 	{
-		if (movement_timer.ReadSec() >= 0.7f)
-		{
-			movement_timer.Start();
-		}
+		no_input = true;
+	}
 
-		float target_angle = atan2(input_dir.y, -input_dir.x) * RADTODEG;
+	fPoint brake_vector = -velocity_map;
+	brake_vector.Normalize();
+	brake_vector *= brake_power;
+
+	if (no_input)
+	{
+		if (velocity_map.ModuleF() <= brake_power * dt)//If the velocity is less than the velocity we're going to substract, directly set it to zero
+		{
+			acceleration_map.SetToZero();
+			velocity_map.SetToZero();
+		}
+		else
+		{
+			acceleration_map = brake_vector;
+		}
+	}
+	else
+	{
+		acceleration_map = iso_dir * acceleration_power;
+	}
+	velocity_map += acceleration_map * dt;
+	float max_speed = GetMaxSpeed();
+	if (velocity_map.ModuleF() > max_speed)//If the module of the velocity is bigger than the speed
+	{
+		velocity_map.Normalize();
+		velocity_map *= max_speed;
+	}
+	pos_map += velocity_map * dt;
+
+	if (!no_input)
+	{
+		//CALCULATE ANGLE
+		float target_angle = atan2(velocity_map.y, -velocity_map.x) * RADTODEG - ISO_COMPENSATION;
 		//Calculate how many turns has the base angle and apply them to the target angle
 		float turns = floor(angle / 360.f);
 		target_angle += 360.f * turns;
 		//Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((target_angle + 360.f) - angle) < abs(target_angle - angle))
+		if (abs(target_angle + 360.f - angle) < abs(target_angle - angle))
 		{
 			target_angle += 360.f;
 		}
 		angle = lerp(angle, target_angle, base_angle_lerp_factor * dt);
-
 	}
-
-	velocity = iso_dir * curr_speed * dt;  
-
-	ShotRecoilMovement(dt);
-
-	pos_map += velocity;
 
 	if (tutorial_move != nullptr && tutorial_move_pressed && tutorial_move_timer.Read() > tutorial_move_time)
 	{
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
+
 }
-
-void Obj_Tank::ShotRecoilMovement(float &dt)
-{
-	if (life == 0) {
-		return;
-	}
-
-	//if the player shot
-	if ((ReleaseShot()
-		|| GetShotAutomatically())
-		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets
-		&& weapon_info.type == WEAPON_TYPE::CHARGED)
-	{
-		//- Basic shot
-		if (charged_shot_timer.ReadMs() < charge_time)
-		{
-			//set the max velocity in a basic shot
-			velocity_recoil_curr_speed = weapon_info.shot1.recoil;
-		}
-
-		//Item Happy hour activated
-		else if (GetShotAutomatically())
-		{
-			velocity_recoil_curr_speed = weapon_info.shot1.recoil * 0.75f;
-		}
-
-		//- Charged shot
-		else
-		{
-			//set the max velocity in a charged shot
-			velocity_recoil_curr_speed = weapon_info.shot2.recoil;
-		}
-		// set the direction when shot
-		recoil_dir = -GetShotDir();
-	}
-	else
-	{
-		//reduce the velocity to 0 with decay
-		if (velocity_recoil_curr_speed > 0)
-		{
-			velocity_recoil_curr_speed -= velocity_recoil_decay * dt;
-			if (velocity_recoil_curr_speed < 0)
-			{
-				velocity_recoil_curr_speed = 0;
-			}
-		}
-	}
-	//calculate the max position of the lerp
-	velocity_recoil_final_lerp = recoil_dir * velocity_recoil_curr_speed * dt;
-
-	//calculate the velocity in lerp
-	//velocity_recoil_lerp = lerp({ 0,0 }, velocity_recoil_final_lerp, 0.5f*dt);
-	velocity += velocity_recoil_final_lerp;
-}
-
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
 {
@@ -465,10 +451,111 @@ void Obj_Tank::InputMovementController(fPoint & input)
 	input = (fPoint)app->input->GetControllerJoystick(controller, gamepad_move, dead_zone);;
 }
 
-bool Obj_Tank::Draw(float dt, Camera * camera)
+bool Obj_Tank::UpdateMaxSpeedBuffs(float dt)
 {
+	bool ret = true;
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end();)
+	{
+		if ((*iter).decaying)
+		{
+			(*iter).bonus_speed -= (*iter).decay_rate * dt;
+			if ((*iter).bonus_speed <= 0.f)
+			{
+				iter = movement_buffs.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
+		else
+		{
+			++iter;
+		}
+	}
+	return ret;
+}
 
+//Returns true if the buff has been added, returns false if there was already a buff of the same type and the new buff didn't have any effect
+//Assumes that buffs from the same source will always have the same bonus
+//We pass movement buff as a copy so we don't override the movement buff on Obj_Tank
+bool Obj_Tank::AddMaxSpeedBuff(MovementBuff buff)
+{
+	bool ret = false;
+	const char * source_char_ptr = buff.source.c_str();
 
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
+	{
+		if (strcmp(source_char_ptr,(*iter).source.c_str()) == 0)
+		{
+			if ((*iter).decaying)
+			{
+				(*iter).decaying = false;
+				(*iter).bonus_speed = buff.bonus_speed;
+			}
+			ret = true;
+			break;
+		}
+	}
+	if (ret != true)
+	{
+		movement_buffs.push_back(buff);
+		ret = true;
+	}
+	return ret;
+}
+
+//Assumes all buffs have the same has_decay property
+bool Obj_Tank::RemoveMaxSpeedBuff(std::string source)
+{
+	bool ret = false;
+	const char * source_char_ptr = source.c_str();
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end();)
+	{
+		if (strcmp((*iter).source.c_str(), source_char_ptr) == 0)
+		{
+			if ((*iter).has_decay)
+			{
+				(*iter).decaying = true;
+				++iter;
+			}
+			else
+			{
+				iter = movement_buffs.erase(iter);
+			}
+			ret = true;
+		}
+		else
+			++iter;
+	}
+	return ret;
+}
+
+float Obj_Tank::GetMaxSpeed()
+{
+	float total_bonus = 0.f;
+	for (std::list<MovementBuff>::iterator iter = movement_buffs.begin(); iter != movement_buffs.end(); ++iter)
+	{
+		total_bonus += (*iter).bonus_speed;
+	}
+	return base_max_speed + total_bonus;
+}
+
+void Obj_Tank::ReduceSpeed(float reduction)
+{
+	float curr_speed = velocity_map.ModuleF();
+	velocity_map.Normalize();
+	velocity_map *= MAX(0.f, curr_speed - reduction);
+}
+
+void Obj_Tank::SetSpeed(float speed)
+{
+	velocity_map.Normalize();
+	velocity_map *= speed;
+}
+
+bool Obj_Tank::Draw(Camera * camera)
+{
 	if (!damaged)
 	{
 		// Base common ========================================
@@ -548,14 +635,46 @@ bool Obj_Tank::Draw(float dt, Camera * camera)
 	// Debug line
 	if (show_crosshairs && camera == camera_player)
 	{
+		//Current aiming line
 		float line_length = 5.f;
 		//1-- Set a position in the isometric space
 		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
-		//2-- Transform that poin to screen coordinates
+		//2-- Transform that point to screen coordinates
 		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+
+		float tex_width = 5;
+
+		fPoint turr_pos_screen (pos_screen.x, pos_screen.y - cannon_height);
+
+		float crosshair_angle = atan2(
+			input_screen_pos.x - turr_pos_screen.x,
+			-(input_screen_pos.y - turr_pos_screen.y))  * RADTODEG - 90;
+
+		app->render->BlitScaledAndRotated(
+			crosshair_tex,
+			turr_pos_screen.x, turr_pos_screen.y,
+			camera,
+			NULL,
+			1.f, 1.f,
+			{ 0, (int)(tex_width * 0.5f) },
+			crosshair_angle);
+
 		app->render->DrawLineSplitScreen(
 			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
+			input_screen_pos.x, input_screen_pos.y, 0, 0, 255, 255, camera);
+
+
+		//Natural aiming line
+		//float line_length = 5.f;
+		//TurrPos in screen space
+		//iPoint point1 (pos_screen.x, pos_screen.y - cannon_height);
+		//Input pos in screen space
+		//iPoint point2 = point1 + app->input->GetControllerJoystick(controller, gamepad_aim);
+		//2-- Transform that point to screen coordinates
+		//app->render->DrawLineSplitScreen(
+		//	point1.x, point1.y,
+		//	point2.x, point2.y
+		//	, 255, 255, 0, 255, camera);
 	}
 	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
@@ -630,10 +749,16 @@ bool Obj_Tank::CleanUp()
 	return true;
 }
 
-void Obj_Tank::OnTriggerEnter(Collider * c1)
+float Obj_Tank::GetCurrSpeed()
 {
-	if (c1->GetTag() == TAG::FRIENDLY_BULLET)
+	return velocity_map.ModuleF();
+}
+
+void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
+{
+	switch (c1->GetTag())
 	{
+	case TAG::FRIENDLY_BULLET: {
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
 		if (bullet->player && Alive()) // he does not heal himself
 		{
@@ -641,7 +766,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			new_particle->tank = this;
 			if (GetLife() < GetMaxLife())
 			{
-				SetLife(GetLife() + bullet->player->weapon_info.shot1.bullet_healing);
+				IncreaseLife(bullet->player->weapon_info.shot1.bullet_healing);
 				app->audio->PlayFx(heal_sound);
 			}
 		}
@@ -649,9 +774,9 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 		{
 			bullet->to_remove = false; //if is himself, don't delete the bullet
 		}
-	}
+	} break;
 
-	else if (c1->GetTag() == TAG::PORTAL)
+	case TAG::PORTAL:
 	{
 		if (this->time_between_portal_tp.ReadMs() >= 1000)
 		{
@@ -660,29 +785,50 @@ void Obj_Tank::OnTriggerEnter(Collider * c1)
 			instant_help->Teleport(this, portal);
 			this->time_between_portal_tp.Start();
 		}
-	}
+	}break;
 
-	else if (c1->GetTag() == TAG::HEALING_AREA_SHOT)
-	{
+	case TAG::HEALING_AREA_SHOT: {
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
 		if (this->GetLife() < GetMaxLife())
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
-			this->SetLife(GetLife() + area->tank_parent->weapon_info.shot2.bullet_healing);
+			IncreaseLife(area->tank_parent->weapon_info.shot2.bullet_healing);
 		}
-	}
+	}break;
 
-	else if (c1->GetTag() == TAG::BULLET_ENEMY)
-	{
-		this->SetLife(GetLife() - c1->damage);
+	case TAG::ROAD: {
+		AddMaxSpeedBuff(road_buff);
+	}break;
+
+	case TAG::BULLET_ENEMY: {
+		ReduceLife(c1->damage);
+	}break;
+
+	case TAG::ENEMY: {
+		//If you collide against an enemy, you run over it, dealing damage and slowing you
+		float curr_speed = GetCurrSpeed();
+		if (curr_speed > 0.f)
+		{
+			Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
+			enemy->ReduceLife(curr_speed * run_over_damage_multiplier, dt);
+			ReduceSpeed(run_over_speed_reduction);
+		}
+	}break;
+
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+	case TAG::WALL:
+		SetSpeed(0.f);
+		break;
+
 	}
 }
 
-void Obj_Tank::OnTrigger(Collider * c1)
+void Obj_Tank::OnTrigger(Collider * c1, float dt)
 {
-	if (c1->GetTag() == TAG::PICK_UP)
-	{
+	switch (c1->GetTag()) {
+	case TAG::PICK_UP: {
 		if (this->Alive())
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::VISIBLE);
@@ -690,7 +836,7 @@ void Obj_Tank::OnTrigger(Collider * c1)
 			if ((app->input->GetKey(kb_interact) == KEY_DOWN || PressInteract()) && !picking)
 			{
 				Obj_PickUp* pick_up = (Obj_PickUp*)c1->GetObj();
-				
+
 				SetPickUp(pick_up);
 			}
 		}
@@ -698,12 +844,20 @@ void Obj_Tank::OnTrigger(Collider * c1)
 		{
 			tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		}
+	}break;
+
+	case TAG::ROAD: {
+		AddMaxSpeedBuff(road_buff);
+	}break;
+
+	//This two cases without a break are intentional. DO NOT CHANGE THIS.
+	case TAG::WATER: //Fallthrough
+		SetSpeed(speed_colliding_with_building);
+		SetSpeed(speed_colliding_with_building);
+		break;
+
 	}
 
-	if (c1->GetTag() == TAG::ROAD && curr_speed < speed + road_buff)
-	{
-			curr_speed += road_buff;
-	}
 }
 
 void Obj_Tank::OnTriggerExit(Collider * c1)
@@ -712,55 +866,48 @@ void Obj_Tank::OnTriggerExit(Collider * c1)
 	{
 		tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
-	if (c1->GetTag() == TAG::ROAD && curr_speed >= speed + road_buff)
-		{
-			curr_speed = (curr_speed - road_buff) < speed ? speed : curr_speed - road_buff;
-		}
-}
-
-void Obj_Tank::SetLife(int life)
-{
-	this->life = life;
-	gui->SetLifeBar(this->life);
+	if (c1->GetTag() == TAG::ROAD)
+	{
+		RemoveMaxSpeedBuff(road_buff.source);
+	}
 }
 
 void Obj_Tank::IncreaseLife(int heal)
 {
-	int new_life = life + heal;
-	if (new_life > GetMaxLife())
-	{
-		new_life = GetMaxLife();
-	}
-	SetLife(new_life);
-
+	life = MIN(max_life, life + heal);
+	gui->SetLifeBar(this->life);
 	gui->HealingFlash();
 }
 
 void Obj_Tank::ReduceLife(int damage)
 {
-	//Don't reduce life if we're in god mode
-	if (!app->debug->god_mode)
+	//Don't reduce life if we're in god mode or we're already dead
+	if (!app->debug->god_mode
+		&& life > 0)
 	{
-		int new_life = life - damage;
+		life -= damage;
 		//Tank death
-		if (new_life <= 0)
+		if (life <= 0)
 		{
-			new_life = 0;
+			life = 0;
 			Die();
 		}
-		SetLife(new_life);
+		else if (life <= 33 && life > 0)
+		{
+			Obj_Smoke* damaged_smoke = (Obj_Smoke*)app->objectmanager->CreateObject(ObjectType::DAMAGED_SMOKE, pos_map);
+			damaged_smoke->tank = this;
+		}
+		gui->SetLifeBar(this->life);
 		damaged_timer.Start();
 		damaged = true;
-
 		gui->DamageFlash();
-
 	}
 }
 
 void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
-	gui->SetItemIcon(type);
+	gui->SetItem(type);
 }
 
 void Obj_Tank::SetColor(const SDL_Color new_color)
@@ -819,7 +966,7 @@ void Obj_Tank::InputShotMouse(const fPoint & turr_map_pos, fPoint & input_dir, f
 
 void Obj_Tank::InputShotController(const fPoint & shot_pos, fPoint & input_dir, fPoint & iso_dir)
 {
-	if (app->input->IsConnectedControllet(controller))
+	if (app->input->IsConnectedController(controller))
 	{
 		input_dir = (fPoint)app->input->GetControllerJoystick(controller, gamepad_aim, dead_zone);
 		iso_dir.x = input_dir.x * cos_45 - input_dir.y * sin_45;
@@ -861,15 +1008,15 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 	{
 		if (charged_shot_timer.ReadMs() / charge_time > 0.1f)
 		{
-			this->curr_speed = charged_shot_speed;
+			AddMaxSpeedBuff(charged_shot_buff);
 			gui->SetChargedShotBar(charged_shot_timer.ReadMs() / charge_time);
 			if (camera_player->GetShakeAmount() <= 0.05f)
 			{
 				camera_player->AddTrauma(0.02f);
 			}
-			if (app->input->IsConnectedControllet(controller))
+			if (app->input->IsConnectedController(controller))
 			{ 
-				app->input->ControllerPlayRumble(controller, 0.1f, 100);
+				app->input->ControllerPlayRumble(controller, 0.1f*vibration_percentage, 100);
 			}
 
 			if (charging)
@@ -898,8 +1045,8 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 		|| GetShotAutomatically())
 		&& shot_timer.ReadMs() >= weapon_info.shot1.time_between_bullets)
 	{
+		RemoveMaxSpeedBuff(charged_shot_buff.source);
 		anim_charging.Reset();
-		this->curr_speed = speed;
 		//- Basic shot
 		if (charged_shot_timer.ReadMs() < charge_time || GetShotAutomatically())
 		{
@@ -907,10 +1054,11 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot1.trauma);
 
-			if (app->input->IsConnectedControllet(controller))
-				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration);
+			if (app->input->IsConnectedController(controller))
+				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
+			velocity_map -= shot_dir * recoil_speed;
 		}
 		//- Charged shot
 		else
@@ -918,8 +1066,8 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			(this->*shot2_function[(uint)weapon_info.weapon])();
 			app->audio->PlayFx(shot_sound);
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
-			if (app->input->IsConnectedControllet(controller))
-				app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration);
+			if (app->input->IsConnectedController(controller))
+				app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot2.smoke_particle, turr_pos + shot_dir * 1.2f);
 		}
@@ -943,7 +1091,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		(this->*shot2_function[(uint)weapon_info.weapon])();
 		camera_player->AddTrauma(weapon_info.shot1.trauma);
 		//TODO: Play wepon sfx
-		if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength, weapon_info.shot2.rumble_duration); }
+		if (app->input->IsConnectedController(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration); }
 	}
 
 	//- Quick shot
@@ -955,7 +1103,7 @@ void Obj_Tank::ShootSustainedWeapon()
 		{
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			(this->*shot1_function[(uint)weapon_info.weapon])();
-			if (app->input->IsConnectedControllet(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot1.rumble_strength, weapon_info.shot1.rumble_duration); }
+			if (app->input->IsConnectedController(controller)) { app->input->ControllerPlayRumble(controller, weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration); }
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
 			shot_timer.Start();
 		}
@@ -988,7 +1136,7 @@ void Obj_Tank::Aim(float dt)
 		float turns = floor(turr_angle / 360.f);
 		turr_target_angle += 360.f * turns;
 		//- Check which distance is shorter. Rotating clockwise or counter-clockwise
-		if (abs((turr_target_angle + 360.f) - turr_angle) < abs(turr_target_angle - turr_angle))
+		if (abs(turr_target_angle + 360.f - turr_angle) < abs(turr_target_angle - turr_angle))
 		{
 			turr_target_angle += 360.f;
 		}
@@ -1007,7 +1155,7 @@ bool Obj_Tank::PressShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_DOWN;
+		return app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) == KEY_DOWN;
 	}
 }
 
@@ -1019,7 +1167,7 @@ bool Obj_Tank::HoldShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_REPEAT;
+		return app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) == KEY_REPEAT;
 	}
 }
 
@@ -1031,7 +1179,7 @@ bool Obj_Tank::ReleaseShot()
 	}
 	else if (shot_input == INPUT_METHOD::CONTROLLER)
 	{
-		return app->input->GetControllerTriggerState(controller, gamepad_shoot) == KEY_UP;
+		return app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) == KEY_UP;
 	}
 }
 
@@ -1064,7 +1212,7 @@ void Obj_Tank::SelectInputMethod()
 		move_input = INPUT_METHOD::KEYBOARD_MOUSE;
 	}
 	if (move_input != INPUT_METHOD::CONTROLLER
-		&& (app->input->IsConnectedControllet(controller)
+		&& (app->input->IsConnectedController(controller)
 		&& !app->input->GetControllerJoystick(controller, gamepad_move, dead_zone).IsZero()))
 	{
 		move_input = INPUT_METHOD::CONTROLLER;
@@ -1078,9 +1226,9 @@ void Obj_Tank::SelectInputMethod()
 		SDL_ShowCursor(SDL_ENABLE);
 	}
 	if (shot_input != INPUT_METHOD::CONTROLLER
-		&& (app->input->IsConnectedControllet(controller)
+		&& (app->input->IsConnectedController(controller)
 			&& (!app->input->GetControllerJoystick(controller, gamepad_aim, dead_zone).IsZero()
-				|| app->input->GetControllerAxis(controller, gamepad_shoot) > 0)))
+				|| app->input->GetControllerButtonOrTriggerState(controller, gamepad_shoot) > 0)))
 	{
 		shot_input = INPUT_METHOD::CONTROLLER;
 		SDL_ShowCursor(SDL_DISABLE);
@@ -1104,45 +1252,52 @@ void Obj_Tank::ReviveTank(float dt)
 		iter != app->objectmanager->obj_tanks.end();
 		++iter)
 	{
-		if (this != (*iter)
-			&& pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
-			&& !(*iter)->Alive()
-			&& Alive())
+		if (this != (*iter))
 		{
-			if (!can_revive)
+			if (pos_map.DistanceNoSqrt((*iter)->pos_map) <= revive_range_squared
+				&& !(*iter)->Alive()
+				&& Alive())
 			{
-				can_revive = true;
-			}
+				if (!can_revive)
+				{
+					can_revive = true;
+				}
 
-			//Presses the button
-			if (!reviving_tank[(*iter)->tank_num] && PressInteract())
-			{
-				reviving_tank[(*iter)->tank_num] = true;
-				revive_timer[(*iter)->tank_num].Start();
-				(*iter)->cycle_bar_anim.Reset();
-				(*iter)->draw_revive_cycle_bar = true;
-			}
-			//Releases the button
-			else if (ReleaseInteract())
-			{
-				reviving_tank[(*iter)->tank_num] = false;
-				(*iter)->draw_revive_cycle_bar = false;
-				(*iter)->cycle_bar_anim.Reset();
-			}
+				//Presses the button
+				if (!reviving_tank[(*iter)->tank_num] && PressInteract())
+				{
 
-			//Finishes reviving the tank
-			if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
-			{
-				(*iter)->SetLife(revive_life);
-				reviving_tank[(*iter)->tank_num] = false;
-				app->audio->PlayFx(revive_sfx);
-				(*iter)->draw_revive_cycle_bar = false;
-				(*iter)->cycle_bar_anim.Reset();
+					reviving_tank[(*iter)->tank_num] = true;
+					revive_timer[(*iter)->tank_num].Start();
+					(*iter)->cycle_bar_anim.Reset();
+					(*iter)->draw_revive_cycle_bar = true;
+				}
+				//Releases the button
+				else if (ReleaseInteract())
+				{
+					reviving_tank[(*iter)->tank_num] = false;
+					(*iter)->draw_revive_cycle_bar = false;
+					(*iter)->cycle_bar_anim.Reset();
+				}
+
+				//Finishes reviving the tank
+				if (reviving_tank[(*iter)->tank_num] && (*iter)->cycle_bar_anim.Finished())
+				{
+					(*iter)->IncreaseLife(revive_life);
+					reviving_tank[(*iter)->tank_num] = false;
+					app->audio->PlayFx(revive_sfx);
+					(*iter)->draw_revive_cycle_bar = false;
+					(*iter)->cycle_bar_anim.Reset();
+				}
 			}
-		}
-		else
-		{
-			reviving_tank[(*iter)->tank_num] = false;
+			else
+			{
+				if (reviving_tank[(*iter)->tank_num])
+				{
+					reviving_tank[(*iter)->tank_num] = false;
+					(*iter)->draw_revive_cycle_bar = false;
+				}
+			}
 		}
 	}
 
@@ -1157,25 +1312,22 @@ void Obj_Tank::ReviveTank(float dt)
 
 bool Obj_Tank::PressInteract()
 {
-	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
+	return (app->input->IsConnectedController(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_DOWN) || app->input->GetKey(kb_interact) == KeyState::KEY_DOWN);
 }
 
 bool Obj_Tank::ReleaseInteract()
 {
-	return (app->input->IsConnectedControllet(controller) && (app->input->GetControllerButtonState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
+	return (app->input->IsConnectedController(controller) && (app->input->GetControllerButtonOrTriggerState(controller, gamepad_interact) == KEY_UP) || (app->input->GetKey(kb_interact) == KeyState::KEY_UP));
 }
 
 void Obj_Tank::Die()
 {
 	//If life was over 0 die (otherwise no need to die again)
-	if (life > 0)
-	{
 		app->audio->PlayFx(die_sfx);
 		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 		dead_fire->tank = this;
 		SetWeapon(WEAPON::BASIC, 1);
 		SetItem(ItemType::NO_TYPE);
-	}
 }
 
 bool Obj_Tank::Alive() const
@@ -1187,14 +1339,14 @@ void Obj_Tank::Item()
 {
 	if(item != ItemType::NO_TYPE
 		&& (app->input->GetKey(kb_item) == KEY_DOWN
-			|| (app->input->IsConnectedControllet(controller)
-				&& app->input->GetControllerButtonState(controller, gamepad_item) == KEY_DOWN)))
+			|| (app->input->IsConnectedController(controller)
+				&& app->input->GetControllerButtonOrTriggerState(controller, gamepad_item) == KEY_DOWN)))
 	{
 		Obj_Item * new_item = (Obj_Item*)app->objectmanager->CreateItem(item, pos_map);
 		new_item->caster = this;
 		new_item->Use();
 		item = ItemType::NO_TYPE;
-		gui->SetItemIcon(item);
+		gui->SetItem(item);
 	}
 
 	picking = false;
@@ -1205,7 +1357,11 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 {
 	if (pick_up->type_of_pick_up == PICKUP_TYPE::ITEM)
 	{
-		app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		if (item != ItemType::NO_TYPE)
+		{
+			app->pick_manager->CreatePickUp(pick_up->pos_map, PICKUP_TYPE::ITEM, item);
+		}
+		app->audio->PlayFx(pick_item_sound);
 		SetItem(pick_up->type_of_item);
 		gui->CreateParticleToItemFrame();
 		
@@ -1216,6 +1372,7 @@ void Obj_Tank::SetPickUp(Obj_PickUp* pick_up)
 		{
 			app->pick_manager->CreatePickUp(pick_up->pos_map,PICKUP_TYPE::WEAPON, ItemType::MAX_ITEMS, weapon_info.weapon, weapon_info.level_weapon);
 		}
+		app->audio->PlayFx(pick_weapon_sound);
 		SetWeapon(pick_up->type_of_weapon, pick_up->level_of_weapon);
 		gui->CreateParticleToWeaponFrame();
 	}
@@ -1229,11 +1386,6 @@ void Obj_Tank::SetGui(Player_GUI * gui)
 	this->gui = gui;
 }
 
-bool Obj_Tank::IsReady() const
-{
-	return ready;
-}
-
 int Obj_Tank::GetTankNum() const
 {
 	return tank_num;
@@ -1242,18 +1394,6 @@ int Obj_Tank::GetTankNum() const
 int Obj_Tank::GetController()
 {
 	return controller;
-}
-
-void Obj_Tank::InputReadyKeyboard()
-{
-	if (app->scene->game_state == GAME_STATE::OUT_WAVE && app->input->GetKey(kb_ready) == KEY_DOWN)
-	{
-		ready = !ready;
-	}
-	else if (app->scene->game_state != GAME_STATE::OUT_WAVE)
-	{
-		ready = false;
-	}
 }
 
 fPoint Obj_Tank::GetShotDir() const

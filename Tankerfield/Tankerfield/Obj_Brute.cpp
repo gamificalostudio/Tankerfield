@@ -168,7 +168,7 @@ void Obj_Brute::Burn(const float& dt)
 	fire3.NextFrame(dt);
 }
 
-bool Obj_Brute::Draw(float dt, Camera * camera)
+bool Obj_Brute::Draw(Camera * camera)
 {
 	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)
 	{
@@ -232,20 +232,18 @@ void Obj_Brute::Dead()
 		app->audio->PlayFx(sfx_death);
 		if (coll != nullptr)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			coll->SetIsTrigger(false);
 		}
 		if (life_collider != nullptr)
 		{
-			life_collider->Destroy();
-			life_collider = nullptr;
+			life_collider->SetIsTrigger(false);
 		}
 	}
 	else
 	{
 		if (death.Finished())
 		{
-			to_remove = true;
+			return_to_pool = true;
 
 		}
 	}
@@ -264,15 +262,14 @@ void Obj_Brute::ElectroDead()
 		draw_offset = electrocuted_draw_offset;
 		if (coll != nullptr)
 		{
-			coll->Destroy();
-			coll = nullptr;
+			coll->SetIsTrigger(false);
 		}
 	}
 	else
 	{
 		if (electro_dead.Finished())
 		{
-			to_remove = true;
+			return_to_pool = true;
 			app->audio->PauseFx(channel_electrocuted);
 
 		}

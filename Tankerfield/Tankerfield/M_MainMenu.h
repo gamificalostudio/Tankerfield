@@ -5,7 +5,7 @@
 #include "Module.h"
 #include "M_UI.h"
 
-#define MAX_PLAYERS 4
+
 #define DEFAULT_PANEL_COLUMNS 5
 #define DEFAULT_PANEL_ROWS 5
 
@@ -18,6 +18,8 @@ class UI_Button;
 class UI_Label;
 class UI_InteractiveGroup;
 class Options_Menu;
+class Controllers_Settings;
+class LeaderBoard;
 
 class Obj_Tank_MainMenu;
 
@@ -27,7 +29,9 @@ enum class MENU_STATE
 	OPTIONS,
 	CREDITS,
 	SELECTION,
+	LEADERBOARD,
 	CHANGE_SCENE,
+	CONTROLLERS_SETTINGS,
 	NO_TYPE
 };
 
@@ -58,7 +62,9 @@ public:
 
 	bool Reset();
 
-	bool OnHoverEnter(UI_Element * element);
+	bool UI_OnHoverEnter(UI_Element * element);
+
+	bool UI_Selected(UI_Element * object);
 
 	void SetState(MENU_STATE new_state);
 
@@ -67,12 +73,6 @@ private:
 	bool SetPlayerProperties();
 
 	void SetPlayerObjectsState(bool new_value);
-
-	void InputNavigate();
-
-	void InputSelect();
-
-	
 
 	void ResetPanelColors();
 
@@ -102,13 +102,13 @@ private:
 
 	// Main screen --------------------------------
 
-	UI_InteractiveGroup * menu_panel = nullptr;
+	UI_InteractiveGroup * menu_navigation = nullptr;
 
 	UI_Image		* logo_image = nullptr;
 	UI_Button		* single_player_button = nullptr;
-	UI_Button		* multi_player_button = nullptr;
+	UI_Button		* play_button = nullptr;
 	UI_Button		* credits_menu_button = nullptr;
-	UI_Button		* leaderboard_menu_button = nullptr;
+	UI_Button		* leaderboard_button = nullptr;
 	UI_Button		* options_menu_button = nullptr;
 	UI_Button		* exit_button = nullptr;
 	UI_Label        * version_label = nullptr;
@@ -125,13 +125,14 @@ private:
 	float B_Color[6] = { 0     , 0    , 0    , 255.F, 255.F, 255.F };
 
 	float color_percent = 0.f;
-	SDL_Color colors[DEFAULT_PANEL_COLUMNS][DEFAULT_PANEL_ROWS];
-	UI_InteractiveGroup * selection_panel = nullptr;
+	SDL_Color colors[DEFAULT_PANEL_COLUMNS * DEFAULT_PANEL_ROWS];
+	UI_InteractiveGroup * selection_navigation = nullptr;
 
 	// Credits Menu
 
 	UI_InteractiveGroup * credits_navigation = nullptr;
-	UI_Image * panel_background = nullptr;
+	UI_Image * panel_credits = nullptr;
+	UI_Image * panel_leaderboard = nullptr;
 	UI_Label * credits_title = nullptr;
 	UI_Image* credits_logo = nullptr;
 
@@ -176,6 +177,9 @@ private:
 
 	UI_Button* return_credits = nullptr;
 
+	UI_Button* return_from_leaderboard = nullptr;
+	UI_Label* leaderboard_label = nullptr;
+	UI_InteractiveGroup* leaderboard_navigation = nullptr;
 	// Sfx --------------------------------------------
 
 	uint button_enter_sfx = 0u;
@@ -186,6 +190,9 @@ private:
 	// Menus ------------------------------------------
 
 	Options_Menu* options = nullptr;
+	Controllers_Settings* controllers_setting[4] = {nullptr, nullptr, nullptr, nullptr};
+	LeaderBoard* leaderboard = nullptr;
+
 };
 
 #endif // __j1SCENE_H__

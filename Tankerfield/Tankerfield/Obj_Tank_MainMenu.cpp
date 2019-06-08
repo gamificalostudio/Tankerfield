@@ -99,7 +99,7 @@ void Obj_Tank_MainMenu::InputController(fPoint & input)
 }
 
 
-bool Obj_Tank_MainMenu::Draw(float dt, Camera * camera)
+bool Obj_Tank_MainMenu::Draw(Camera * camera)
 {
 
 	// Base common =========================================
