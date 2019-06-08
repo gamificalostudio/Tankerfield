@@ -280,6 +280,8 @@ bool Obj_Tank::Start()
 
 	charging_ready = app->audio->LoadFx("audio/Fx/tank/max_charged.wav");
 
+	crosshair_tex = app->tex->Load("textures/Objects/tank/crosshair.png");
+
 	this->time_between_portal_tp.Start();
 
 	return true;
@@ -639,9 +641,28 @@ bool Obj_Tank::Draw(Camera * camera)
 		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
 		//2-- Transform that point to screen coordinates
 		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+
+		float tex_width = 5;
+
+		fPoint turr_pos_screen (pos_screen.x, pos_screen.y - cannon_height);
+
+		float crosshair_angle = atan2(
+			input_screen_pos.x - turr_pos_screen.x,
+			-(input_screen_pos.y - turr_pos_screen.y))  * RADTODEG - 90;
+
+		app->render->BlitScaledAndRotated(
+			crosshair_tex,
+			turr_pos_screen.x, turr_pos_screen.y,
+			camera,
+			NULL,
+			1.f, 1.f,
+			{ 0, (int)(tex_width * 0.5f) },
+			crosshair_angle);
+
 		app->render->DrawLineSplitScreen(
 			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
+			input_screen_pos.x, input_screen_pos.y, 0, 0, 255, 255, camera);
+
 
 		//Natural aiming line
 		//float line_length = 5.f;
