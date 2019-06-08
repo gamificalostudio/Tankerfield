@@ -9,6 +9,8 @@
 
 #include "NewRoundAnimation.h"
 
+#include "M_UI.h"
+
 struct SDL_Texture;
 struct Controller;
 
@@ -23,6 +25,7 @@ class Player_GUI;
 class General_GUI;
 class Pause_Menu;
 class LeaderBoard;
+class Options_Menu;
 
 enum class GAME_STATE
 {
@@ -85,6 +88,8 @@ public:
 	bool CleanUp() override;
 
 	// ---------
+	
+	void SetMenuState(MENU_STATE new_state);
 
 	void DebugPathfinding();
 
@@ -96,9 +101,9 @@ private:
 
 
 public:
+
 	SDL_Texture* path_tex = nullptr;
 
-	Pause_Menu*			   pause_menu = nullptr;
 private:
 	/* Debug pathfinding */
 	std::vector<iPoint> debug_path;
@@ -108,6 +113,11 @@ private:
 	uint initial_num_enemies = 0u;
 
 private:
+	//	Menus ---------------------------------
+
+	MENU_STATE		menu_state = MENU_STATE::NO_TYPE;
+	Pause_Menu*		pause_menu = nullptr;
+	Options_Menu*	options_menu = nullptr;
 
 	/* Game variables*/
 	bool game_over = false;

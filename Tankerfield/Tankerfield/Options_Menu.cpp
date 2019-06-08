@@ -17,7 +17,7 @@
 #include "UI_Label.h"
 #include "UI_InteractiveGroup.h"
 
-Options_Menu::Options_Menu()
+Options_Menu::Options_Menu(MENU_TYPE menu_type): menu_type(menu_type)
 {
 	button_enter_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_enter.wav", 20);
 	button_select_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_select.wav", 35);
@@ -29,14 +29,6 @@ Options_Menu::Options_Menu()
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
-	// Controll helper ------------------------
-
-	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
-	control_helper_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
-	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
-	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
 	// Global Options Menu
 
 	panel_options = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
@@ -46,7 +38,7 @@ Options_Menu::Options_Menu()
 	options_title->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	options_title->SetParent(panel_options);
 
-		// Fullscreen Options
+	// Fullscreen Options
 
 	fullscreen_label = app->ui->CreateLabel({ screen.w*0.5f-100,325 }, UI_LabelDef("Fullscreen", app->font->label_font_38, { 255,255,255,180 }));
 	fullscreen_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
@@ -148,8 +140,7 @@ Options_Menu::Options_Menu()
 	options_navigation->AddElement(controller_settings);
 	options_navigation->AddElement(return_button);
 
-	// Set values ==========================================
-	SDL_ShowCursor(SDL_ENABLE);
+	HideOptionsMenu();
 }
 
 bool Options_Menu::UI_OnHoverEnter(UI_Element * element)
@@ -234,13 +225,25 @@ bool Options_Menu::UI_Selected(UI_Element * element)
 	}
 	else if (element == controller_settings)
 	{
-		app->main_menu->SetState(MENU_STATE::CONTROLLERS_SETTINGS);
-		HideOptionsMenu();
+		if (menu_type == MENU_TYPE::MAIN_MENU)
+		{
+			app->main_menu->SetMenuState(MENU_STATE::CONTROLLERS_SETTINGS);
+		}
+		else if (menu_type == MENU_TYPE::PAUSE_MENU)
+		{
+			app->scene->SetMenuState(MENU_STATE::CONTROLLERS_SETTINGS);
+		}
 	}
 	else if (element == return_button)
 	{
-		app->main_menu->SetState(MENU_STATE::INIT_MENU);
-		HideOptionsMenu();
+		if (menu_type == MENU_TYPE::MAIN_MENU)
+		{
+			app->main_menu->SetMenuState(MENU_STATE::INIT_MENU);
+		}
+		else if (menu_type == MENU_TYPE::PAUSE_MENU)
+		{
+			app->scene->SetMenuState(MENU_STATE::INIT_MENU);
+		}
 	}
 
 	return true;
@@ -252,10 +255,6 @@ void Options_Menu::ShowOptionsMenu()
 
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-
-	control_helper_label->SetPos(screen_center + fPoint(30, 450));
-	control_helper_label->SetText("Accept");
-	control_helper_image->SetPos(screen_center + fPoint(-30, 450));
 
 	panel_options->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 	options_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);

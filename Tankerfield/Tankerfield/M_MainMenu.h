@@ -23,18 +23,6 @@ class LeaderBoard;
 
 class Obj_Tank_MainMenu;
 
-enum class MENU_STATE
-{
-	INIT_MENU,
-	OPTIONS,
-	CREDITS,
-	SELECTION,
-	LEADERBOARD,
-	CHANGE_SCENE,
-	CONTROLLERS_SETTINGS,
-	NO_TYPE
-};
-
 struct Player_Selection
 {
 	int id = 0;
@@ -66,7 +54,7 @@ public:
 
 	bool UI_Selected(UI_Element * object);
 
-	void SetState(MENU_STATE new_state);
+	void SetMenuState(MENU_STATE new_state);
 
 private:
 
@@ -189,7 +177,7 @@ private:
 
 	// Menus ------------------------------------------
 
-	Options_Menu* options = nullptr;
+	Options_Menu* options_menu = nullptr;
 	Controllers_Settings* controllers_setting[4] = {nullptr, nullptr, nullptr, nullptr};
 	LeaderBoard* leaderboard = nullptr;
 

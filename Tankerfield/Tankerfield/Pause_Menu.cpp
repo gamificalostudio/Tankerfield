@@ -25,9 +25,6 @@ Pause_Menu::Pause_Menu()
 	button_error_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_error.wav", 35);
 	selection_finished_sfx = app->audio->LoadFx("audio/Fx/main_menu/selection_finished.wav", 40);
 
-	options = new Options_Menu();
-	options->HideOptionsMenu();
-
 	// Create UI Elements ====================================
 
 	fRect screen = app->win->GetWindowRect();
@@ -69,8 +66,8 @@ Pause_Menu::Pause_Menu()
 	pause_navigation->AddElement(options_menu);
 	pause_navigation->AddElement(main_menu);
 
-	// Set values ==========================================
-	SDL_ShowCursor(SDL_ENABLE);
+	HidePauseMenu();
+
 }
 
 bool Pause_Menu::UI_OnHoverEnter(UI_Element * element)
@@ -107,17 +104,15 @@ bool Pause_Menu::UI_Selected(UI_Element * element)
 {
 	if (element == options_menu)
 	{
-		HidePauseMenu();
-		options->ShowOptionsMenu();
+		app->scene->SetMenuState(MENU_STATE::OPTIONS);
 	}
 	else if (element == main_menu)
 	{
-		HidePauseMenu();
 		app->scmanager->FadeToBlack(app->scene, app->main_menu, 2.f, 2.f);
 	}
 	else if (element == continue_button)
 	{
-		HidePauseMenu();
+		app->scene->SetMenuState(MENU_STATE::NO_TYPE);
 	}
 
 	app->audio->PlayFx(button_select_sfx);

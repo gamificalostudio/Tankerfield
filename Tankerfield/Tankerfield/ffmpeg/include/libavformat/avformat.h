@@ -1306,7 +1306,7 @@ typedef int (*av_format_control_message)(struct AVFormatContext *s, int type,
                                          void *data, size_t data_size);
 
 typedef int (*AVOpenCallback)(struct AVFormatContext *s, AVIOContext **pb, const char *url, int flags,
-                              const AVIOInterruptCB *int_cb, AVDictionary **options);
+                              const AVIOInterruptCB *int_cb, AVDictionary **options_menu);
 
 /**
  * The duration of a video can be estimated through various ways, and this enum can be used
@@ -1886,7 +1886,7 @@ typedef struct AVFormatContext {
      * @deprecated Use io_open and io_close.
      */
     attribute_deprecated
-    int (*open_cb)(struct AVFormatContext *s, AVIOContext **p, const char *url, int flags, const AVIOInterruptCB *int_cb, AVDictionary **options);
+    int (*open_cb)(struct AVFormatContext *s, AVIOContext **p, const char *url, int flags, const AVIOInterruptCB *int_cb, AVDictionary **options_menu);
 #endif
 
     /**
@@ -1917,7 +1917,7 @@ typedef struct AVFormatContext {
      * It will, however, have the same 'opaque' field.
      */
     int (*io_open)(struct AVFormatContext *s, AVIOContext **pb, const char *url,
-                   int flags, AVDictionary **options);
+                   int flags, AVDictionary **options_menu);
 
     /**
      * A callback for closing the streams opened with AVFormatContext.io_open().
@@ -2302,7 +2302,7 @@ int av_probe_input_buffer(AVIOContext *pb, AVInputFormat **fmt,
  *
  * @note If you want to use custom IO, preallocate the format context and set its pb field.
  */
-int avformat_open_input(AVFormatContext **ps, const char *url, AVInputFormat *fmt, AVDictionary **options);
+int avformat_open_input(AVFormatContext **ps, const char *url, AVInputFormat *fmt, AVDictionary **options_menu);
 
 attribute_deprecated
 int av_demuxer_open(AVFormatContext *ic);
@@ -2328,7 +2328,7 @@ int av_demuxer_open(AVFormatContext *ic);
  * @todo Let the user decide somehow what information is needed so that
  *       we do not waste time getting stuff the user does not need.
  */
-int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options);
+int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options_menu);
 
 /**
  * Find the programs which belong to a given stream.
@@ -2518,7 +2518,7 @@ void avformat_close_input(AVFormatContext **s);
  * @see av_opt_find, av_dict_set, avio_open, av_oformat_next, avformat_init_output.
  */
 av_warn_unused_result
-int avformat_write_header(AVFormatContext *s, AVDictionary **options);
+int avformat_write_header(AVFormatContext *s, AVDictionary **options_menu);
 
 /**
  * Allocate the stream private data and initialize the codec, but do not write the header.
@@ -2540,7 +2540,7 @@ int avformat_write_header(AVFormatContext *s, AVDictionary **options);
  * @see av_opt_find, av_dict_set, avio_open, av_oformat_next, avformat_write_header.
  */
 av_warn_unused_result
-int avformat_init_output(AVFormatContext *s, AVDictionary **options);
+int avformat_init_output(AVFormatContext *s, AVDictionary **options_menu);
 
 /**
  * Write a packet to an output media file.

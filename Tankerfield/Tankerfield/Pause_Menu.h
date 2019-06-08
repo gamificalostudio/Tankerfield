@@ -59,8 +59,6 @@ private:
 	uint button_select_sfx = 0u;
 	uint button_error_sfx = 0u;
 	uint selection_finished_sfx = 0u;
-
-	Options_Menu* options = nullptr;
 };
 
 #endif 

@@ -47,7 +47,7 @@ void  UI_InteractiveGroup::Active()
 
 	if (focus_indicator != nullptr && focused_element != nullptr)
 	{
-		focus_indicator->SetState(ELEMENT_STATE::VISIBLE);
+		focus_indicator->SetMenuState(ELEMENT_STATE::VISIBLE);
 		SetFocusImage(focused_element);
 	}
 
@@ -60,7 +60,7 @@ void  UI_InteractiveGroup::Desactive()
 {
 	if (focus_indicator != nullptr)
 	{
-		focus_indicator->SetState(ELEMENT_STATE::HIDDEN);
+		focus_indicator->SetMenuState(ELEMENT_STATE::HIDDEN);
 	}
 
 	is_active = false;
@@ -136,7 +136,7 @@ void UI_InteractiveGroup::MouseNavigation()
 
 					if (focus_indicator != nullptr)
 					{
-						focus_indicator->SetState(ELEMENT_STATE::VISIBLE);
+						focus_indicator->SetMenuState(ELEMENT_STATE::VISIBLE);
 						SetFocusImage(focused_element);
 					}
 				}
@@ -160,7 +160,7 @@ void UI_InteractiveGroup::MouseNavigation()
 
 		if (focus_indicator != nullptr)
 		{
-			focus_indicator->SetState(ELEMENT_STATE::HIDDEN);
+			focus_indicator->SetMenuState(ELEMENT_STATE::HIDDEN);
 		}
 	}
 }
@@ -237,7 +237,7 @@ void UI_InteractiveGroup::ControllersNavigation()
 
 			if (focus_indicator != nullptr)
 			{
-				focus_indicator->SetState(ELEMENT_STATE::VISIBLE);
+				focus_indicator->SetMenuState(ELEMENT_STATE::VISIBLE);
 				SetFocusImage(focused_element);
 			}
 		}
