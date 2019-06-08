@@ -148,6 +148,7 @@
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
     <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
+    <ClCompile Include="ParticlePool.cpp" />
     <ClCompile Include="Quadtree_Collision.cpp" />
     <ClCompile Include="UI_InputText.cpp" />
     <ClCompile Include="UI_Table.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="Obj_FlamethrowerFlame.h" />
+    <ClInclude Include="ParticlePool.h" />
     <ClInclude Include="Quadtree_Collision.h" />
     <ClInclude Include="UI_InputText.h" />
     <ClInclude Include="UI_Table.h" />

@@ -253,6 +253,7 @@
     </ClCompile>
     <ClCompile Include="j1ParticleSystem.cpp" />
     <ClCompile Include="Emitter.cpp" />
+    <ClCompile Include="ParticlePool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -531,6 +532,7 @@
     </ClInclude>
     <ClInclude Include="j1ParticleSystem.h" />
     <ClInclude Include="Emitter.h" />
+    <ClInclude Include="ParticlePool.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">
