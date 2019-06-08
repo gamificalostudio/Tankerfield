@@ -250,6 +250,7 @@ private:
 
 	list<UI_InteractiveGroup*> interactive_groups;
 
+	bool prevent_double_select = false; //HARD CODE TODO
 
 public:
 

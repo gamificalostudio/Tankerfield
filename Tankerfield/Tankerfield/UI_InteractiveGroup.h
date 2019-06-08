@@ -58,7 +58,7 @@ private:
 
 	UI_Element * GetNearestElement(INPUT_DIR input_dir);
 
-	UI_Element * GetFistAvaliableElement();
+	UI_Element * GetFirstAbleElement();
 
 	void MouseNavigation();
 
@@ -70,11 +70,9 @@ private:
 
 private:
 
+	bool first_focus = true;
+
 	bool is_active = false;
-
-	bool to_active = false;
-
-	bool to_desactive = false;
 
 	// Focus info =================================
 

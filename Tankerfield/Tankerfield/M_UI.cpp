@@ -202,6 +202,12 @@ bool M_UI::PreUpdate()
 	app->input->GetMousePosition(x,y);
 	mouse_position = fPoint( x,y );
 
+	for (list<UI_Element*>::iterator element = elements_list.begin(); element != elements_list.end(); ++element)
+	{
+		(*element)->PreUpdate();
+	}
+
+
 	return true;
 }
 
@@ -223,7 +229,9 @@ bool M_UI::Update(float dt)
 
 	// Update navigation and selection ======================================
 
-	for (std::list<UI_InteractiveGroup*>::iterator itr = interactive_groups.begin(); itr != interactive_groups.end(); ++itr)
+	prevent_double_select = false;
+
+	for (std::list<UI_InteractiveGroup*>::iterator itr = interactive_groups.begin(); itr != interactive_groups.end() && prevent_double_select == false; ++itr)
 	{
 		if ((*itr)->is_active == false)
 		{
@@ -232,13 +240,25 @@ bool M_UI::Update(float dt)
 
 		if (input_type == UI_INPUT_TYPE::MOUSE)
 		{
-			(*itr)->MouseNavigation();
-			(*itr)->MouseSelection();
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->MouseSelection();
+			}
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->MouseNavigation();
+			}
 		}
 		else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
 		{
-			(*itr)->ControllersNavigation();
-			(*itr)->ControllerSelection();
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->ControllerSelection();
+			}
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->ControllersNavigation();
+			}
 		}
 	}
 

@@ -91,11 +91,13 @@ Controllers_Settings::~Controllers_Settings()
 
 void Controllers_Settings::ShowControllerSettings()
 {
+	InteractiveGroup->Active();
 	Canvas->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
 
 void Controllers_Settings::HideControllersSettings()
 {
+	InteractiveGroup->Desactive();
 	Canvas->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 

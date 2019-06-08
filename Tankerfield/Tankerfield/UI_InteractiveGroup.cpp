@@ -19,30 +19,6 @@ UI_InteractiveGroup::~UI_InteractiveGroup()
 
 bool UI_InteractiveGroup::Update(float dt)
 {
-	if (to_active == true)
-	{
-		focused_element = GetFistAvaliableElement();
-		listener->UI_OnHoverEnter(focused_element);
-		focused_element->is_focused = true;
-
-		if (focus_indicator != nullptr)
-		{
-			focus_indicator->SetState(ELEMENT_STATE::VISIBLE);
-			SetFocusImage(focused_element);
-		}
-
-		is_active = true;
-
-		to_active = false;
-	}
-
-	if (to_desactive == true)
-	{
-		focused_element = nullptr;
-		is_active = false;
-
-		to_desactive = false;
-	}
 	
 	return true;
 }
@@ -61,12 +37,34 @@ void UI_InteractiveGroup::AddElement(UI_Element* element)
 
 void  UI_InteractiveGroup::Active()
 {
-	to_active = true;
+	if (first_focus == true)
+	{
+		focused_element = GetFirstAbleElement();
+		focused_element->is_focused = true;
+		first_focus = false;
+	}
+
+	if (focus_indicator != nullptr && focused_element != nullptr)
+	{
+		focus_indicator->SetState(ELEMENT_STATE::VISIBLE);
+		SetFocusImage(focused_element);
+	}
+
+	is_active = true;
+
+	app->ui->prevent_double_select = true;
 }
 
 void  UI_InteractiveGroup::Desactive()
 {
-	to_desactive = true;
+	if (focus_indicator != nullptr)
+	{
+		focus_indicator->SetState(ELEMENT_STATE::HIDDEN);
+	}
+
+	is_active = false;
+
+	app->ui->prevent_double_select = true;
 }
 
 void UI_InteractiveGroup::SetControllers(int controller_id)
@@ -179,13 +177,10 @@ void UI_InteractiveGroup::ControllerSelection()
 				continue;
 			}
 
-			for (uint input_dir = (uint)INPUT_DIR::RIGHT; input_dir < (uint)INPUT_DIR::MAX; ++input_dir)
+			if (app->input->GetControllerButtonState(i, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
 			{
-				if (app->input->GetControllerButtonState(i, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_A) == KEY_DOWN)
-				{
-					listener->UI_Selected(focused_element);
-					break;
-				}
+				listener->UI_Selected(focused_element);
+				break;
 			}
 		}
 	}
@@ -214,7 +209,7 @@ void UI_InteractiveGroup::ControllersNavigation()
 				}
 				else
 				{
-					nearest_element = GetFistAvaliableElement();
+					nearest_element = GetFirstAbleElement();
 					break;
 				}
 			}
@@ -319,15 +314,10 @@ UI_Element*  UI_InteractiveGroup::GetNearestElement(INPUT_DIR input_dir)
 	return nearest_element;
 }
 
-UI_Element*  UI_InteractiveGroup::GetFistAvaliableElement()
+UI_Element*  UI_InteractiveGroup::GetFirstAbleElement()
 {
 	for (list<UI_Element*>::iterator iter = group_elements_list.begin(); iter != group_elements_list.end(); ++iter)
 	{
-		if ((*iter)->state != ELEMENT_STATE::VISIBLE)
-		{
-			continue;
-		}
-
 		return (*iter);
 	}
 
