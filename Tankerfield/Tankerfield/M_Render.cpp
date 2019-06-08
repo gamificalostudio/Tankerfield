@@ -663,7 +663,6 @@ bool M_Render::DrawIsoCircle(int x, int y, int radius, Camera* camera, Uint8 r, 
 
 }
 
-
 bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int & h, Camera* camera) const
 {
 	int scale = app->win->GetScale();
@@ -671,4 +670,62 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
 
 	return SDL_HasIntersection(&r, &camera->rect);
+}
+
+// Blit particle to screen
+bool M_Render::BlitParticle(SDL_Texture* texture, int x, int y, const SDL_Rect* section, const SDL_Rect* rectSize, const SDL_Color & color, const SDL_BlendMode & blend_mode, float speed, double angle) const
+{
+	if (SDL_SetTextureColorMod(texture, color.r, color.g, color.b) != 0)
+	{
+		LOG("Cannot set texture color mode. SDL_SetTextureColorMod error: %s", SDL_GetError());
+	}
+	if (SDL_SetTextureAlphaMod(texture, color.a) != 0)
+	{
+		LOG("Cannot set texture alpha mode. SDL_SetTextureAlphaMod error: %s", SDL_GetError());
+	}
+	if (SDL_SetTextureBlendMode(texture, blend_mode) != 0)
+	{
+		LOG("Cannot set texture blend mode. SDL_SetTextureBlendMode error: %s", SDL_GetError());
+	}
+
+	bool ret = true;
+	uint scale = app->win->GetScale();
+
+	SDL_Rect rect;
+	rect.x = (int)(/*camera.x * */speed)+x * scale;
+	rect.y = (int)(/*camera.y * */speed)+y * scale;
+
+	if (rectSize != NULL)
+	{
+		rect.w = rectSize->w;
+		rect.h = rectSize->h;
+	}
+	else if (section != NULL)
+	{
+		rect.w = section->w;
+		rect.h = section->h;
+	}
+	else
+		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
+
+	int px = rect.w * 0.5f;
+	int py = rect.h * 0.5f;
+
+	rect.w *= scale;
+	rect.h *= scale;
+
+	SDL_Point* p = NULL;
+	SDL_Point pivot;
+	pivot.x = px;
+	pivot.y = py;
+	p = &pivot;
+
+
+	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, NULL, SDL_FLIP_NONE) != 0)
+	{
+		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
 }

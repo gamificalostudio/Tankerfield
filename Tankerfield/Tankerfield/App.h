@@ -30,6 +30,7 @@ class M_MainMenu;
 class M_Debug;
 class M_Options_Menu;
 class Video;
+class j1ParticleSystem;
 
 enum class APP_MODE
 {
@@ -71,6 +72,8 @@ public:
 
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
+
+	pugi::xml_node LoadEmitters(pugi::xml_document& psystem_file) const;
 
 private:
 	// Load config file
@@ -121,6 +124,7 @@ public:
 	M_Debug*				debug = nullptr;
 	M_Options_Menu*			options_menu = nullptr;
 	Video*					video = nullptr;
+	j1ParticleSystem*		psystem = nullptr;
 
 	//XML document
 	pugi::xml_node		   config;

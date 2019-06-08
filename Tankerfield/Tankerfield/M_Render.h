@@ -48,6 +48,8 @@ public:
 	void BlitScaledAndRotated(SDL_Texture* texture, const int screen_x, const int screen_y, Camera* current_camera, const SDL_Rect* section, float scale_w = 1.f, float scale_h = 1.f, SDL_Point pivot= {0,0}, float angle = 0.f) const;
 	void BlitAlphaAndScale(SDL_Texture * texture, int screen_x, int screen_y, const SDL_Rect * section = nullptr, Camera* current_camera = nullptr, const int alpha = 255, float scale_w = 1, float scale_h = 1) const;
 
+	bool BlitParticle(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, const SDL_Rect* rectSize = NULL, const SDL_Color & color = { 0u, 0u, 0u, 0u }, const SDL_BlendMode & blend_mode = SDL_BLENDMODE_NONE, float speed = 1.0f, double angle = 0) const;
+
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool filled = true, bool use_camera = true) const;
 
 	bool DrawQuadUI(const SDL_Rect section, Camera * camera, const SDL_Color color);
