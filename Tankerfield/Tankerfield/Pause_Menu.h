@@ -25,21 +25,19 @@ public:
 
 	Pause_Menu();
 
-	bool OnHoverEnter(UI_Element * element);
+	bool UI_OnHoverEnter(UI_Element * element);
+
+	bool UI_Selected(UI_Element * element);
 
 	void ShowPauseMenu();
 
 	void HidePauseMenu();
 
-	void InputNavigate();
-
-	void InputSelect();
-
 private:
 
-	UI_InteractiveGroup * global_navigation_panel = nullptr;
+	UI_InteractiveGroup * pause_navigation = nullptr;
 
-	UI_Image* panel_background = nullptr;
+	UI_Image* panel_panel = nullptr;
 
 	// Elements ================================================
 

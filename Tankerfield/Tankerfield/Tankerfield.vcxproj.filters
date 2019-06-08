@@ -234,11 +234,24 @@
     </ClCompile>
     <ClCompile Include="Options_Menu.cpp">
       <Filter>UI</Filter>
-
     </ClCompile>
     <ClCompile Include="M_VideoPlayer.cpp">
       <Filter>Modules</Filter>
-
+    </ClCompile>
+    <ClCompile Include="LeaderBoard.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="NewRoundAnimation.cpp">
+      <Filter>Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Controllers_Settings.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Oil_Splash.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Smoke.cpp">
+      <Filter>Objects\Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -503,6 +516,21 @@
     <ClInclude Include="M_VideoPlayer.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="LeaderBoard.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="NewRoundAnimation.h">
+      <Filter>Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Controllers_Settings.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Oil_Splash.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Smoke.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">
@@ -566,6 +594,9 @@
     </Filter>
     <Filter Include="Objects\Particles">
       <UniqueIdentifier>{9ebcce9b-e2e9-4b17-9e32-108b6bba6746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animations">
+      <UniqueIdentifier>{cd840f94-b3be-4bbf-a5a4-ac362db5c3df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -44,13 +44,13 @@ Pause_Menu::Pause_Menu()
 
 	// Global Pause Menu
 
-	panel_background = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
-	panel_background->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	panel_panel = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
+	panel_panel->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	/* Labels */
 	pause_menu = app->ui->CreateLabel({ screen.w*0.5f, 250 }, UI_LabelDef("Pause", app->font->label_font_38));
 	pause_menu->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	pause_menu->SetParent(panel_background);
+	pause_menu->SetParent(panel_panel);
 
 	/* Buttons */
 	continue_button = app->ui->CreateButton({ screen.w*0.5f,350 }, UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
@@ -63,21 +63,18 @@ Pause_Menu::Pause_Menu()
 	main_menu->SetLabel({ 0.f,2.f }, UI_LabelDef("Main Menu", app->font->button_font_22, { 50, 50, 50, 255 }));
 
 
-	UI_InteractiveGroupDef pause_panel_def;
-	pause_panel_def.columns = 1;
-	pause_panel_def.rows = 4;
+	UI_InteractiveGroupDef pause_panel_def(-1, nullptr);
 
-
-	global_navigation_panel = app->ui->CreateIntearctiveGroup(screen_center, pause_panel_def, this);
-	global_navigation_panel->SetElement(continue_button, iPoint(0, 1));
-	global_navigation_panel->SetElement(options_menu, iPoint(0, 2));
-	global_navigation_panel->SetElement(main_menu, iPoint(0, 3));
+	pause_navigation = app->ui->CreateIntearctiveGroup(screen_center, pause_panel_def, this);
+	pause_navigation->AddElement(continue_button);
+	pause_navigation->AddElement(options_menu);
+	pause_navigation->AddElement(main_menu);
 
 	// Set values ==========================================
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
-bool Pause_Menu::OnHoverEnter(UI_Element * element)
+bool Pause_Menu::UI_OnHoverEnter(UI_Element * element)
 {
 	app->audio->PlayFx(button_enter_sfx);
 	return true;
@@ -92,51 +89,39 @@ void Pause_Menu::ShowPauseMenu()
 	control_helper_label->SetText("Accept");
 	control_helper_image->SetPos(screen_center + fPoint(-30, 450));
 
-	panel_background->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+	pause_navigation->Active();
+
+	panel_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+	pause_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
 
 void Pause_Menu::HidePauseMenu()
 {
-	panel_background->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+	pause_navigation->Desactive();
+
+	panel_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+	pause_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 
 
-void Pause_Menu::InputNavigate()
+bool Pause_Menu::UI_Selected(UI_Element * element)
 {
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
-		{
-			app->audio->PlayFx(button_enter_sfx);
-		}
-	}
-
-	if (global_navigation_panel->HandleKeyboardNavigation())
-	{
-		app->audio->PlayFx(button_enter_sfx);
-	}
-}
-
-void Pause_Menu::InputSelect()
-{
-	UI_Element*  menu_element = global_navigation_panel->GetFocusedElement();
-
-	if (menu_element == options_menu)
+	if (element == options_menu)
 	{
 		HidePauseMenu();
 		options->ShowOptionsMenu();
 	}
-	else if (menu_element == main_menu)
+	else if (element == main_menu)
 	{
 		HidePauseMenu();
 		app->scmanager->FadeToBlack(app->scene, app->main_menu, 2.f, 2.f);
 	}
-	else if (menu_element == continue_button)
+	else if (element == continue_button)
 	{
 		HidePauseMenu();
 	}
 
 	app->audio->PlayFx(button_select_sfx);
+
+	return true;
 }
