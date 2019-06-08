@@ -297,7 +297,7 @@ bool M_UI::ControllersHaveActivity()
 {
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
-		if (app->input->IsConnectedControllet(i) == false)
+		if (app->input->IsConnectedController(i) == false)
 		{
 			continue;
 		}
