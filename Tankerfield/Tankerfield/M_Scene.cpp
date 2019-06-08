@@ -47,6 +47,8 @@
 
 #include "UI_Image.h"
 
+#include "j1ParticleSystem.h"
+
 
 M_Scene::M_Scene() : Module()
 {
@@ -268,6 +270,33 @@ bool M_Scene::Update(float dt)
 		game_state = GAME_STATE::GAME_OVER;
 		game_over = true;
 	}
+
+
+	//copied from particle system
+	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		int mx, my;
+		app->input->GetMousePosition(mx, my);
+		fPoint pos((float)mx, (float)my);
+		pos.y -= 230.0f;
+		eFire = app->psystem->AddEmiter(pos, EmitterType::EMITTER_TYPE_FIRE);
+	}
+
+	int mx, my;
+	app->input->GetMousePosition(mx, my);
+	fPoint pos((float)mx, (float)my);
+
+	//app->render->Blit(torchTex, pos.x - 43, pos.y - 270, &rect);
+
+	if (eFire != nullptr)
+	{
+		int mx, my;
+		app->input->GetMousePosition(mx, my);
+		fPoint pos((float)mx, (float)my);
+		pos.y -= 230.0f;
+		eFire->MoveEmitter(pos);
+	}
+
 
 	return true;
 }
