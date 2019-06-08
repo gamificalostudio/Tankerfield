@@ -109,7 +109,7 @@ bool Obj_Emitter::Update(float dt)
 	then the emitter is automatically destroyed */
 	if (!emitterPool->Update(dt) && lifetime == 0.0f)
 	{
-		to_destroy = true;
+		to_remove = true;
 	}
 
 	return true;
