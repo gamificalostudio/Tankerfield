@@ -123,7 +123,11 @@ private:
 
 	inline void DesactivateObject(std::list<Object*>::iterator& iterator);
 
+	void DesactivateObject(Object* iterator);
+
 	inline void UpdateObject(std::list<Object*>::iterator& iterator, const float& dt);
+
+	void FillPool(ObjectType type, uint number);
 
 public:
 	bool delete_all_enemies = false;
@@ -152,6 +156,7 @@ private:
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
 	std::map<ObjectType, std::list<Object*>> pool_of_objects;
+
 };
 
 #endif
