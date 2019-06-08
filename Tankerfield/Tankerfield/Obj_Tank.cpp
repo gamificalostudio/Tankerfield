@@ -677,8 +677,8 @@ void Obj_Tank::DrawCrosshair(Camera * camera)
 	iPoint shot_dir_screen = app->map->MapToScreenI(shot_dir_max.y, shot_dir_max.x);
 
 	float crosshair_angle = atan2(
-		-shot_dir_screen.y,
-		shot_dir_screen.x)  * RADTODEG + 180;
+		shot_dir_screen.y,
+		-shot_dir_screen.x)  * RADTODEG;
 
 	app->render->BlitScaledAndRotated(
 		crosshair_tex,
