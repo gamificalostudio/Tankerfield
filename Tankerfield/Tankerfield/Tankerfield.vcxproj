@@ -133,6 +133,7 @@
     <ClCompile Include="Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Controllers_Settings.cpp" />
+    <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="j1ParticleSystem.cpp" />
     <ClCompile Include="LeaderBoard.cpp" />
     <ClCompile Include="M_Debug.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Bullet_RocketLauncher.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controllers_Settings.h" />
+    <ClInclude Include="Emitter.h" />
     <ClInclude Include="j1ParticleSystem.h" />
     <ClInclude Include="LeaderBoard.h" />
     <ClInclude Include="M_Debug.h" />

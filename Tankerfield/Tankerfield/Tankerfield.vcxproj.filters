@@ -252,6 +252,7 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="j1ParticleSystem.cpp" />
+    <ClCompile Include="Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -529,6 +530,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="j1ParticleSystem.h" />
+    <ClInclude Include="Emitter.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">
