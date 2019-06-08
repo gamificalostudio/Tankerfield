@@ -3,7 +3,7 @@
 
 
 // This pool constructor sets our particles to available
-ParticlePool::ParticlePool(Emitter* emitter)
+ParticlePool::ParticlePool(Obj_Emitter* emitter)
 {
 	pool_size = emitter->GetPoolSize();
 	particle_array = new Particle[pool_size];

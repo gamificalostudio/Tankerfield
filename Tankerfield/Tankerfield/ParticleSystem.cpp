@@ -48,7 +48,7 @@ bool ParticleSystem::PreUpdate()
 
 bool ParticleSystem::Update(float dt)
 {
-	for (std::list<Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
+	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
 	{
 		if ((*it) != nullptr)
 		{
@@ -61,7 +61,7 @@ bool ParticleSystem::Update(float dt)
 
 bool ParticleSystem::PostUpdate()
 {
-	for (std::list<Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end();)
+	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end();)
 	{
 		if ((*it)->to_destroy)
 		{
@@ -81,7 +81,7 @@ bool ParticleSystem::CleanUp()
 {
 	LOG("Freeing emitters from the system.");
 
-	for (std::list<Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
+	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
 	{
 		if ((*it) != nullptr)
 		{
@@ -95,18 +95,18 @@ bool ParticleSystem::CleanUp()
 	return true;
 }
 
-Emitter* ParticleSystem::AddEmiter(fPoint pos, EmitterType type)
+Obj_Emitter* ParticleSystem::AddEmiter(fPoint pos, EmitterType type)
 {
-	Emitter* tmp_emitter = new Emitter(pos, vecEmitterData[type]);
+	Obj_Emitter* tmp_emitter = new Obj_Emitter(pos, vecEmitterData[type]);
 
 	emitters_list.push_back(tmp_emitter);
 	
 	return tmp_emitter;
 }
 
-bool ParticleSystem::RemoveEmitter(Emitter & emitter)
+bool ParticleSystem::RemoveEmitter(Obj_Emitter & emitter)
 {
-	for (std::list<Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
+	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
 	{
 		if ((*it) == &emitter)
 		{
@@ -122,7 +122,7 @@ bool ParticleSystem::RemoveAllEmitters()
 {
 	bool ret = false;
 
-	std::list<Emitter*>::const_iterator it;
+	std::list<Obj_Emitter*>::const_iterator it;
 
 	for (it = emitters_list.begin(); it != emitters_list.end(); ++it)
 	{

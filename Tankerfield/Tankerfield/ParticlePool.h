@@ -6,7 +6,7 @@
 #include "Point.h"
 #include <vector>
 
-class Emitter;
+class Obj_Emitter;
 
 class ParticlePool
 {
@@ -19,7 +19,7 @@ private:
 
 public:
 
-	ParticlePool(Emitter* emitter);
+	ParticlePool(Obj_Emitter* emitter);
 	virtual ~ParticlePool();
 
 	//Generates a new particle each time it's called

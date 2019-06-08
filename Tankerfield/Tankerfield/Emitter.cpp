@@ -2,7 +2,7 @@
 #include <time.h>
 
 
-Emitter::Emitter(fPoint pos, EmitterData data)
+Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data)
 { 
 	srand(time(NULL));
 	
@@ -49,13 +49,13 @@ Emitter::Emitter(fPoint pos, EmitterData data)
 		lifeTimer.Start();
 }
 
-Emitter::~Emitter()
+Obj_Emitter::~Obj_Emitter()
 {
 	delete emitterPool;
 	emitterPool = nullptr;
 }
 
-void Emitter::Update(float dt)
+void Obj_Emitter::Update(float dt)
 {
 	if (active)
 	{
@@ -116,7 +116,7 @@ void Emitter::Update(float dt)
 		to_destroy = true;
 }
 
-float Emitter::RangeRandomNum(float min, float max)
+float Obj_Emitter::RangeRandomNum(float min, float max)
 {
 	float random = ((float)rand()) / (float)RAND_MAX;
 	float diff = max - min;
@@ -125,12 +125,12 @@ float Emitter::RangeRandomNum(float min, float max)
 	return min + r;
 }
 
-int Emitter::GetPoolSize() const
+int Obj_Emitter::GetPoolSize() const
 {
 	return poolSize;
 }
 
-void Emitter::StartEmission(double timer)
+void Obj_Emitter::StartEmission(double timer)
 {
 	if (!active)
 	{
@@ -140,7 +140,7 @@ void Emitter::StartEmission(double timer)
 	}
 }
 
-void Emitter::StopEmission(double timer)
+void Obj_Emitter::StopEmission(double timer)
 {
 	if (active)
 	{
@@ -150,12 +150,12 @@ void Emitter::StopEmission(double timer)
 	}
 }
 
-void Emitter::MoveEmitter(fPoint newPos)
+void Obj_Emitter::MoveEmitter(fPoint newPos)
 {
 	pos = newPos;
 }
 
-fPoint Emitter::GetEmitterPos() const
+fPoint Obj_Emitter::GetEmitterPos() const
 {
 	return pos;
 }

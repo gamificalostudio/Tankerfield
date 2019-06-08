@@ -20,7 +20,7 @@ class General_GUI;
 class UI_Label;
 class UI_Image;
 class LeaderBoard;
-class Emitter;
+class Obj_Emitter;
 
 enum class GAME_STATE
 {
@@ -136,7 +136,7 @@ private:
 	RewardZone* reward_zone_02 = nullptr;
 
 	NewRoundAnimation new_round_animation;
-	Emitter* eFire = nullptr;
+	Obj_Emitter* eFire = nullptr;
 };
 
 #endif // __j1SCENE_H__

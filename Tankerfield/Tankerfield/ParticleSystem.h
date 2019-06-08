@@ -10,7 +10,7 @@
 
 #define MAX_NUM_EMITTERS_TYPE 1
 
-class Emitter;
+class Obj_Emitter;
 struct SDL_Texture;
 struct SDL_Rect;
 struct SDL_Color;
@@ -51,7 +51,7 @@ class ParticleSystem
 
 private:
 
-	std::list<Emitter*> emitters_list;
+	std::list<Obj_Emitter*> emitters_list;
 	SDL_Texture* particleAtlas = nullptr;
 	std::string nameParticleAtlas;
 
@@ -71,8 +71,8 @@ public:
 	bool CleanUp();
 
 	// Emitter methods
-	Emitter* AddEmiter(fPoint pos, EmitterType type);
-	bool RemoveEmitter(Emitter& emitter);
+	Obj_Emitter* AddEmiter(fPoint pos, EmitterType type);
+	bool RemoveEmitter(Obj_Emitter& emitter);
 	bool RemoveAllEmitters();
 
 	SDL_Texture* GetParticleAtlas() const;
