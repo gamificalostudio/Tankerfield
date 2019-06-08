@@ -517,8 +517,3 @@ bool App::SavegameNow() const
 	want_to_save = false;
 	return ret;
 }
-
-bool App::IsPaused()
-{
-	return pause;
-}

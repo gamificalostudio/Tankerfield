@@ -541,9 +541,6 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Modules">
-      <UniqueIdentifier>{81942fd6-8c45-4a5a-9630-e39191594881}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{0351f03c-1ee1-4d2d-95f2-d874bd5b3109}</UniqueIdentifier>
     </Filter>
@@ -591,6 +588,9 @@
     </Filter>
     <Filter Include="Animations">
       <UniqueIdentifier>{cd840f94-b3be-4bbf-a5a4-ac362db5c3df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{81942fd6-8c45-4a5a-9630-e39191594881}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
