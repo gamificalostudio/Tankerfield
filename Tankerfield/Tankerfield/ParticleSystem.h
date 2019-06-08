@@ -7,8 +7,6 @@
 #include "SDL/include/SDL.h"
 #include <map>
 
-#define MAX_NUM_EMITTERS_TYPE 1
-
 class Obj_Emitter;
 struct SDL_Texture;
 struct SDL_Rect;

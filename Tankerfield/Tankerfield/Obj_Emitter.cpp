@@ -2,50 +2,46 @@
 #include <time.h>
 
 
-Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data) : Object(pos)
-{ 
-	srand(time(NULL));
-	
+Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data) :
+	Object(pos),
 	// Particles size and movement
-	this->angleRange = data.angleRange;
-	this->startSpeed = data.startSpeed;
-	this->endSpeed = data.endSpeed;
-	this->startSize = data.startSize;
-	this->endSize = data.endSize;
-	this->rotSpeed = data.rotSpeed;
-
+	angleRange(data.angleRange),
+	startSpeed(data.startSpeed),
+	endSpeed(data.endSpeed),
+	startSize(data.startSize),
+	endSize(data.endSize),
+	rotSpeed(data.rotSpeed),
 	// Particle emission calculations
-	this->emitNumber = data.emitNumber;
-	this->emitVariance = data.emitVariance;
-	this->maxParticleLife = data.maxParticleLife;
-	maxParticlesPerFrame = data.emitNumber + data.emitVariance;
-
-	poolSize = maxParticlesPerFrame * (maxParticleLife + 1u);
-
+	emitNumber(data.emitNumber),
+	emitVariance(data.emitVariance),
+	maxParticleLife(data.maxParticleLife),
+	maxParticlesPerFrame(data.emitNumber + data.emitVariance),
+	poolSize(maxParticlesPerFrame * (maxParticleLife + 1u)),
+	// Color and render properties
+	textureRect(data.textureRect),
+	startColor(data.startColor),
+	endColor(data.endColor),
+	blendMode(data.blendMode),
+	timeStep(1.0f / (float)maxParticleLife),
+	// Emission properties
+	active(true),
+	lifetime(data.lifetime),
+	// Random control parameters
+	rotSpeedRand(data.rotSpeedRand),
+	startSpeedRand(data.startSpeedRand),
+	endSpeedRand(data.endSpeedRand),
+	emitVarianceRand(data.emitVarianceRand),
+	lifeRand(data.lifeRand),
+	startSizeRand(data.startSizeRand),
+	endSizeRand(data.endSizeRand)
+{ 
+	//srand(time(NULL));
 	emitterPool = new ParticlePool(this);
 
-	// Color and render properties
-	this->textureRect = data.textureRect;
-	this->startColor = data.startColor;
-	this->endColor = data.endColor;
-	this->blendMode = data.blendMode;
-	timeStep = 1.0f / (float)maxParticleLife;
-
-	// Emission properties
-	active = true;
-	lifetime = data.lifetime;
-
-	// Random control parameters
-	rotSpeedRand = data.rotSpeedRand;
-	startSpeedRand = data.startSpeedRand;
-	endSpeedRand = data.endSpeedRand;
-	emitVarianceRand = data.emitVarianceRand;
-	lifeRand = data.lifeRand;
-	startSizeRand = data.startSizeRand;
-	endSizeRand = data.endSizeRand;
-
 	if (this->lifetime != -1.0f && this->lifetime > 0.0f)
+	{
 		lifeTimer.Start();
+	}
 }
 
 Obj_Emitter::~Obj_Emitter()
