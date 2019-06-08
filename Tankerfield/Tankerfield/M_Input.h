@@ -208,6 +208,8 @@ public:
 
 	bool IsConnectedController(int i);
 
+	bool GetControllerButtonDown(int controller, CONTROLLER_BUTTON& button);
+
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
 	void UpdateKeyboardState();

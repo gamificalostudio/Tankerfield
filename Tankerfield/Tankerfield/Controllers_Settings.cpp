@@ -86,8 +86,9 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
 	sensitivity_value_label->SetParent(panel);
 	sensitivity_value_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(0, nullptr), this); //  TODO Set Controller of player 
+	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(player, nullptr), this); //  TODO Set Controller of player 
 	InteractiveGroup->SetParent(panel);
+	InteractiveGroup->SetControllers(player);
 
 	InteractiveGroup->AddElement(attack_label);
 	InteractiveGroup->AddElement(interaction_label);
@@ -160,7 +161,18 @@ bool Controllers_Settings::UI_Selected( UI_Element* element)
 	}
 	else if (element == attack_label)
 	{
-		LOG("");
+		attack_image->SetState(ELEMENT_STATE::HIDDEN);
+		change_attack_button = KEY_DOWN;
+	}
+	else if (element == interaction_label)
+	{
+		interaction_image->SetState(ELEMENT_STATE::HIDDEN);
+		change_interaction_button = KEY_DOWN;
+	}
+	else if (element == Use_item_label)
+	{
+		item_image->SetState(ELEMENT_STATE::HIDDEN);
+		change_use_item_button = KEY_DOWN;
 	}
 	return true;
 }
@@ -187,14 +199,79 @@ bool Controllers_Settings::UI_OnHoverExit(UI_Element* element)
 	if (element == (UI_Element*)attack_label)
 	{
 		attack_label->color_mod = { 255,255,255,255 };
+		attack_image->SetState(ELEMENT_STATE::VISIBLE);
+		change_attack_button = KEY_IDLE;
 	}
 	if (element == (UI_Element*)interaction_label)
 	{
 		interaction_label->color_mod = { 255,255,255,255 };
+		interaction_image->SetState(ELEMENT_STATE::VISIBLE);
+		change_interaction_button = KEY_IDLE;
 	}
 	if (element == (UI_Element*)Use_item_label)
 	{
 		Use_item_label->color_mod = { 255,255,255,255 };
+		item_image->SetState(ELEMENT_STATE::VISIBLE);
+		change_use_item_button = KEY_IDLE;
+	}
+	return true;
+}
+
+bool Controllers_Settings::UI_OnHoverRepeat(UI_Element * element)
+{
+	if (element == (UI_Element*)attack_label)
+	{
+		if (change_attack_button == KEY_DOWN)
+		{
+			change_attack_button = KEY_REPEAT;
+		}
+		else if (change_attack_button == KEY_REPEAT)
+		{
+			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].attack_button))
+			{
+				attack_image->sprite_rect = (app->input->buttons_image[(int)app->input->controllerInfo[player].attack_button]);
+				attack_image->SetState(ELEMENT_STATE::VISIBLE);
+				change_attack_button = KEY_IDLE;
+			}
+		
+		}
+		
+	}
+	if (element == (UI_Element*)interaction_label)
+	{
+		if (change_interaction_button == KEY_DOWN)
+		{
+			change_interaction_button = KEY_REPEAT;
+		}
+		else if (change_interaction_button == KEY_REPEAT)
+		{
+			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].interacton_button))
+			{
+				interaction_image->sprite_rect = app->input->buttons_image[(int)app->input->controllerInfo[player].interacton_button];
+				interaction_image->SetState(ELEMENT_STATE::VISIBLE);
+				change_interaction_button = KEY_IDLE;
+			}
+			
+		}
+	
+	}
+	if (element == (UI_Element*)Use_item_label)
+	{
+		if (change_use_item_button == KEY_DOWN)
+		{
+			change_use_item_button = KEY_REPEAT;
+		}
+		else if (change_use_item_button == KEY_REPEAT)
+		{
+			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].interacton_button))
+			{
+				item_image->sprite_rect = (app->input->buttons_image[(int)app->input->controllerInfo[player].interacton_button]);
+				item_image->SetState(ELEMENT_STATE::VISIBLE);
+				change_use_item_button = KEY_IDLE;
+			}
+			
+		}
+		
 	}
 	return true;
 }

@@ -12,13 +12,13 @@ public:
 
 	void HideControllersSettings();
 
-	bool UI_Selected(UI_Element * element);
-
+	bool UI_Selected(UI_Element * element) override;
 
 	bool UI_OnHoverEnter(UI_Element * object) override;
 
 	bool UI_OnHoverExit(UI_Element* element) override;
 
+	bool UI_OnHoverRepeat(UI_Element* element) override;
 
 	UI_InteractiveGroup* InteractiveGroup = nullptr;
 private:
@@ -47,6 +47,10 @@ private:
 
 	uint player = 5;
 
+	KeyState change_attack_button = KEY_IDLE;
+	KeyState change_interaction_button = KEY_IDLE;
+	KeyState change_use_item_button = KEY_IDLE;
+	
 
 
 };
