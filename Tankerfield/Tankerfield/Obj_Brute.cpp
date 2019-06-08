@@ -77,8 +77,9 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
 void Obj_Brute::SetStats(int level)
 {
 	detection_range = app->objectmanager->brute_info.detection_range;
+	squared_detection_range = detection_range * detection_range;
 	original_speed = speed = app->objectmanager->brute_info.speed;
-	range_pos.radius = 1.f;
+	range_pos.radius = 0.5f;
 	attack_damage = app->objectmanager->brute_info.attack_damage;
 	attack_range = app->objectmanager->brute_info.attack_range;
 	attack_range_squared = attack_range * attack_range;

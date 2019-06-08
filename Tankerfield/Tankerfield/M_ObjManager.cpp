@@ -14,6 +14,7 @@
 #include "M_Window.h"
 #include "M_Scene.h"
 #include "M_Map.h"
+#include "M_Collision.h"
 
 #include "Camera.h"
 
@@ -190,6 +191,7 @@ inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator & iterator)
 	}
 	if ((*iterator)->coll != nullptr)
 	{
+	
 		(*iterator)->coll->object = nullptr;
 		(*iterator)->coll->Destroy();
 		(*iterator)->coll = nullptr;
@@ -405,10 +407,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::STATIC:
 		ret = DBG_NEW Obj_Building(pos);
 		ret->type = ObjectType::STATIC;
-		break;
-	case ObjectType::REWARD_ZONE:
-		ret = DBG_NEW Reward_Zone(pos);
-		ret->type = ObjectType::REWARD_ZONE;
 		break;
 	case ObjectType::OIL_POOL:
 		ret = DBG_NEW Obj_OilPool(pos);

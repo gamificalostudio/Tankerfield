@@ -315,21 +315,25 @@ void Obj_Enemy::Move(const float & dt)
 
 void Obj_Enemy::GetPath()
 {
-	path.clear();
+	curr_anim = &idle;
 	move_vect.SetToZero();
-	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+	target = app->objectmanager->GetNearestTank(pos_map);
+
 	if (target != nullptr)
 	{
-		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+		if (pos_map.DistanceNoSqrt(target->pos_map) <= squared_detection_range
+			&& app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 		{
 			path.clear();
 			path = *app->pathfinding->GetLastPath();
 			if (path.size() > 0)
 				path.erase(path.begin());
+
 			next_pos = (fPoint)(*path.begin());
-			UpdateMoveVec();
+			UpdateVelocity();
 
 			state = ENEMY_STATE::MOVE;
+			curr_anim = &walk;
 		}
 		else
 		{
@@ -345,15 +349,19 @@ void Obj_Enemy::GetPath()
 			}
 			else
 			{
-				state = ENEMY_STATE::IDLE;
-				curr_anim = &idle;
+				if (!app->pathfinding->IsWalkable(iPoint(pos_map.x, pos_map.y)) && GetOutOfUnwalkableTile())
+				{
+					state = ENEMY_STATE::MOVE;
+				}
+				else
+				{
+					state = ENEMY_STATE::IDLE;
+					curr_anim = &idle;
+				}
+
 				path_timer.Start();
 			}
 		}
-	}
-	else
-	{
-		state = ENEMY_STATE::IDLE;
 	}
 }
 
@@ -550,14 +558,6 @@ inline void Obj_Enemy::Burn(const float & dt)
 			curr_tex = burn_texture;
 		oiled = false;
 		speed = original_speed;
-	/*	if (coll != nullptr)
-		{
-			coll->to_destroy = true;
-		}
-		if (life_collider != nullptr)
-		{
-			life_collider->to_destroy = true;
-		}*/
 	
 	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
@@ -631,6 +631,19 @@ inline void Obj_Enemy::Stunned()
 	}
 }
 
+bool Obj_Enemy::GetOutOfUnwalkableTile()
+{
+	PathNode node;
+	node.pos = iPoint(pos_map.x,pos_map.y);
+	PathNode neighbour = node.FindWalkableAdjacent();
+	if (neighbour.pos != iPoint(-1, -1))
+	{
+		next_pos = fPoint(neighbour.pos.x + 0.5f, neighbour.pos.y + 0.5f);
+		return true;
+	};
+	return false;
+};
+
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 {
@@ -650,8 +663,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 				if (life <= 0)
 				{
-
-					state = ENEMY_STATE::DEAD;
+					SetState(ENEMY_STATE::DEAD);
 				}
 				else
 				{
@@ -847,12 +859,50 @@ inline void Obj_Enemy::ReduceLife(int damage, float dt)
 	if (life <= 0)
 	{
 		app->pick_manager->PickUpFromEnemy(pos_map);
-		state = ENEMY_STATE::DEAD;
+		SetState(ENEMY_STATE::DEAD);
 	}
 	else
 	{
 		app->audio->PlayFx(sfx_hit);
 	}
+}
+
+void Obj_Enemy::SetState(ENEMY_STATE new_state)
+{
+	switch (new_state)
+	{
+	case ENEMY_STATE::SPAWN:
+		break;
+	case ENEMY_STATE::IDLE:
+		curr_anim = &idle;
+		break;
+	case ENEMY_STATE::GET_PATH:
+		break;
+	case ENEMY_STATE::MOVE:
+		curr_anim = &walk;
+		break;
+	case ENEMY_STATE::RECHEAD_POINT:
+		break;
+	case ENEMY_STATE::GET_TELEPORT_POINT:
+		break;
+	case ENEMY_STATE::TELEPORT_IN:
+		break;
+	case ENEMY_STATE::TELEPORT_OUT:
+		break;
+	case ENEMY_STATE::BURN:
+		curr_anim = &burn;
+		break;
+	case ENEMY_STATE::DEAD:
+		curr_anim = &death;
+		break;
+	case ENEMY_STATE::STUNNED:
+		break;
+	case ENEMY_STATE::STUNNED_CHARGED:
+		break;
+	default:
+		break;
+	}
+	state = new_state;
 }
 
 void Obj_Enemy::ResetAllAnimations()
@@ -866,4 +916,14 @@ void Obj_Enemy::ResetAllAnimations()
 	electro_dead.Reset();
 	portal_animation.Reset();
 	portal_close_anim.Reset();
+}
+
+inline void Obj_Enemy::UpdateVelocity()
+{
+	fPoint new_move_vec = fPoint(next_pos-pos_map).Normalize();
+	if (new_move_vec != move_vect)
+	{
+		move_vect = new_move_vec;
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+	}
 }
