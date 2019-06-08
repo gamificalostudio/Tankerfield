@@ -159,15 +159,16 @@ void Obj_RocketLauncher::Move(const float & dt)
 
 void Obj_RocketLauncher::ShootMissile()
 {
+	fPoint offset_rocket{ 1.f,1.f };
 	fPoint p_dir(0.0f, 0.0f);
 	if (target != nullptr
 		&& target->coll->GetTag() == TAG::PLAYER
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared)
 	{
-		p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map;
+		p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map + offset_rocket;
 		p_dir.Normalize();
 
-		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map + p_dir);
+		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map - offset_rocket /*+ p_dir*/);
 		bullet->SetBulletProperties(
 			9.0f,
 			2000.0f,
