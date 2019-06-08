@@ -873,7 +873,7 @@ void Obj_Tank::ReduceLife(int damage)
 void Obj_Tank::SetItem(ItemType type)
 {
 	item = type;
-	gui->SetItemIcon(type);
+	gui->SetItem(type);
 }
 
 void Obj_Tank::SetColor(const SDL_Color new_color)
@@ -1312,7 +1312,7 @@ void Obj_Tank::Item()
 		new_item->caster = this;
 		new_item->Use();
 		item = ItemType::NO_TYPE;
-		gui->SetItemIcon(item);
+		gui->SetItem(item);
 	}
 
 	picking = false;

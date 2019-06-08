@@ -40,6 +40,7 @@ void  UI_InteractiveGroup::Active()
 	if (first_focus == true)
 	{
 		focused_element = GetFirstAbleElement();
+		listener->UI_OnHoverEnter(focused_element);
 		focused_element->is_focused = true;
 		first_focus = false;
 	}

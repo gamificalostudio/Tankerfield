@@ -121,7 +121,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	weapon_info.level_weapon = level;
 	weapon_info.weapon = type;
 
-	gui->SetWeaponIcon(type);
+	gui->SetWeapon(type, level);
 
 	switch (type)
 	{

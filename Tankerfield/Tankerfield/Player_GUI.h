@@ -38,16 +38,13 @@ public:
 
 	void SetChargedShotBar(float percent);
 
-	void SetWeaponIcon(WEAPON weapon_type);
+	void SetWeapon(WEAPON weapon_type, int level);
 
-	void SetItemIcon(ItemType type);
+	void SetItem(ItemType type);
 
 	void SetArrowColor(const SDL_Color color);
 
 	void Fade_GUI(bool fade_on);
-
-	void AddTextHelper(const std::string text);
-	void AddButtonHelper(const CONTROLLER_BUTTON button_type);
 
 	/* UI Elements getters */
 
@@ -88,7 +85,9 @@ private:
 
 	UI_Image* weapon_icon = nullptr;
 
-	UI_Label* label_weapon_lvl = nullptr;
+	UI_Image* weapon_lvl_image = nullptr;
+
+	UI_Label* weapon_lvl_label = nullptr;
 
 	UI_Image* item_frame = nullptr;
 

@@ -66,7 +66,10 @@ public:
 
 	UI_Image*             weapon_icon = nullptr;
 	UI_Image*             weapon_frame = nullptr;
-	UI_Image*             level_indicator = nullptr;
+	UI_Image*             level_difference = nullptr;
+
+	UI_Image*             weapon_lvl_image = nullptr;
+	UI_Label*             weapon_lvl_label = nullptr;
 };
 
 class UI_IG_Item : public UI_InGameElement

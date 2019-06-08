@@ -113,20 +113,34 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 		weapon_icon->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 	}
 
-	UI_LabelDef label_def("lvl. 0", app->font->button_font_22, { 255, 255, 255, 255 });
+	image_def.sprite_section = { 10, 80, 27, 27 };
 
 	if (tank_num == 0 || tank_num == 1)
 	{
-		label_weapon_lvl = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 8.f,viewport.GetTop() + margin.y + 8.f }, label_def);
-		label_weapon_lvl->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+		weapon_lvl_image = app->ui->CreateImage({ viewport.GetRight() - margin.x - 30.f,viewport.GetTop() + margin.y + 60.f }, image_def);
+		weapon_lvl_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
-		label_weapon_lvl = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 8.f ,viewport.GetBottom() - margin.y - 8.f }, label_def);
-		label_weapon_lvl->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+		weapon_lvl_image = app->ui->CreateImage({ viewport.GetRight() - margin.x - 30.f ,viewport.GetBottom() - margin.y - 60.f }, image_def);
+		weapon_lvl_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
-	
-	SetWeaponIcon(WEAPON::BASIC);
+
+
+	UI_LabelDef label_def("1", app->font->label_font_24, { 255, 255, 255, 255 });
+
+	if (tank_num == 0 || tank_num == 1)
+	{
+		weapon_lvl_label = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 30.f,viewport.GetTop() + margin.y + 60.f }, label_def);
+		weapon_lvl_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+	else if (tank_num == 2 || tank_num == 3)
+	{
+		weapon_lvl_label = app->ui->CreateLabel({ viewport.GetRight() - margin.x - 30.f ,viewport.GetBottom() - margin.y - 60.f }, label_def);
+		weapon_lvl_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	}
+
+	SetWeapon(WEAPON::BASIC, 1 );
 
 	UI_BarDef life_bar_def(UI_Bar::DIR::UP, 1.f, { 0, 160, 0, 255 }, { 80, 80, 80, 255 });
 	life_bar_def.section_width = 20.f;
@@ -136,22 +150,22 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 	{
 	case 0:
 		life_bar_def.direction = UI_Bar::DIR::UP;
-		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 50.f, viewport.GetBottom() - 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::LEFT, Pivot::Y::BOTTOM);
 		break;
 	case 1:
 		life_bar_def.direction = UI_Bar::DIR::UP;
-		life_bar = app->ui->CreateBar({ viewport.GetRight() - 50.f, viewport.GetBottom() - 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetBottom() - 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 		break;
 	case 2:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
-		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 50.f, viewport.GetTop() + 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetLeft() + 10.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::LEFT, Pivot::Y::TOP);
 		break;
 	case 3:
 		life_bar_def.direction = UI_Bar::DIR::DOWN;
-		life_bar = app->ui->CreateBar({ viewport.GetRight() - 50.f, viewport.GetTop() + 21.f }, life_bar_def);
+		life_bar = app->ui->CreateBar({ viewport.GetRight() - 10.f, viewport.GetTop() + 21.f }, life_bar_def);
 		life_bar->SetPivot(Pivot::X::RIGHT, Pivot::Y::TOP);
 		break;
 	default:
@@ -221,7 +235,9 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	item_icon			->SetFX(type, 3.f);
 	charged_shot_bar	->SetFX(type, 3.f);
 	life_bar			->SetFX(type, 3.f);
-	label_weapon_lvl	->SetFX(type, 3.f);
+	weapon_lvl_label	->SetFX(type, 3.f);
+	weapon_lvl_image	->SetFX(type, 3.f);
+
 }
 
 void Player_GUI::DamageFlash()
@@ -305,8 +321,9 @@ void Player_GUI::SetChargedShotBar(float percent)
 	charged_shot_bar->value = percent;
 }
 
-void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
+void Player_GUI::SetWeapon(WEAPON weapon_type, int level)
 {
+	weapon_lvl_label->SetText(std::to_string(level));
 
 	switch (weapon_type)
 	{
@@ -336,7 +353,7 @@ void Player_GUI::SetWeaponIcon(WEAPON weapon_type)
 
 }
 
-void Player_GUI::SetItemIcon(ItemType type)
+void Player_GUI::SetItem(ItemType type)
 {
 	item_icon->SetState(ELEMENT_STATE::VISIBLE);
 
