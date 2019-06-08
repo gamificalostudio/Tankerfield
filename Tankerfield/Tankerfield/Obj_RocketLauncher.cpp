@@ -61,7 +61,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 	can_attack = false;
-	distance_to_player = 5; //this is in tiles
+	distance_to_player = 10; //this is in tiles
 	deltatime_to_check_distance = 1;
 }
 
@@ -115,7 +115,7 @@ void Obj_RocketLauncher::Move(const float & dt)
 {
 	if (timer_check_distance.ReadSec() >= deltatime_to_check_distance || fist_enter_to_move)
 	{
-		if (target->pos_map.DistanceNoSqrt(pos_map) <= 5 * 5)
+		if (target->pos_map.DistanceNoSqrt(pos_map) <= 10 * 10)
 		{
 			can_attack = true;
 			curr_anim = &idle;
