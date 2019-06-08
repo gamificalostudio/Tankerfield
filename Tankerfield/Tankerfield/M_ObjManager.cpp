@@ -48,6 +48,7 @@
 #include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
 #include "Oil_Splash.h"
+#include "Obj_Smoke.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -215,6 +216,11 @@ inline void M_ObjManager::DesactivateObject(std::list<Object*>::iterator & itera
 
 inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, const float & dt)
 {
+	if ((*iterator)->curr_anim != nullptr)
+	{
+		(*iterator)->curr_anim->NextFrame(dt);
+	}
+
 	(*iterator)->Update(dt);
 
 	// Update Components ======================================
@@ -223,10 +229,7 @@ inline void M_ObjManager::UpdateObject(std::list<Object*>::iterator & iterator, 
 		(*iterator)->coll->SetPosToObj();
 	}
 
-	if ((*iterator)->curr_anim != nullptr)
-	{
-		(*iterator)->curr_anim->NextFrame(dt);
-	}
+
 }
 
 bool M_ObjManager::PostUpdate(float dt)
@@ -271,7 +274,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		{
 			if ((*item) != nullptr)
 			{
-				(*item)->Draw(dt, (*item_cam));
+				(*item)->Draw((*item_cam));
 			}
 		}
 
@@ -449,6 +452,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::OIL_SPLASH:
 		ret = DBG_NEW Oil_Splash(pos);
 		ret->type = ObjectType::OIL_SPLASH;
+		break;
+	case ObjectType::DAMAGED_SMOKE:
+		ret = DBG_NEW Obj_Smoke(pos);
+		ret->type = ObjectType::DAMAGED_SMOKE;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");

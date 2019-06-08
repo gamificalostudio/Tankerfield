@@ -15,9 +15,10 @@ Obj_OilPool::~Obj_OilPool()
 
 bool Obj_OilPool::Update(float dt)
 {
-	if (time.ReadMs() >= 5000)
+	if (anim.Finished())
 	{
 		to_remove = true;
+		active = false;
 	}
 
 	return true;
@@ -27,7 +28,7 @@ bool Obj_OilPool::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("oil");
 
-	anim.frames = app->anim_bank->LoadFrames(bullet_node.child("animations").child("rotate"));
+	anim.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("inkdrop").child("animation").child("anim"));
 	curr_anim = &anim;
 
 	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());

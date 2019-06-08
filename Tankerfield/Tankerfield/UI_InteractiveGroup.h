@@ -10,6 +10,11 @@ class UI_Quad;
 struct UI_InteractiveGroupDef : public UI_ElementDef
 {
 	UI_Image*  focus_indicator = nullptr;
+public:
+	UI_InteractiveGroupDef(uint columns, uint rows, UI_Image* focus_indicator = nullptr) :columns(columns), rows(rows), focus_indicator(focus_indicator)
+	{};
+	UI_InteractiveGroupDef()
+	{};
 };
 
 class UI_InteractiveGroup : public UI_Element , public UI_Listener

@@ -242,7 +242,7 @@ void Obj_TeslaTrooper::GetPath()
 }
 
 
-bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
+bool Obj_TeslaTrooper::Draw(Camera * camera)
 {
 
 	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)

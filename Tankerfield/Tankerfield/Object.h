@@ -55,7 +55,7 @@ public:
 
 	virtual bool Update(float dt);
 
-	virtual bool Draw(float dt, Camera * camera);
+	virtual bool Draw(Camera * camera);
 
 	virtual void DebugSpriteSorting(Camera* camera);
 

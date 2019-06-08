@@ -48,7 +48,7 @@ public:
 
 	void UpdateWeaponsWithoutBullets(float dt);
 
-	bool Draw(float dt, Camera * camera) override;
+	bool Draw(Camera * camera) override;
 	bool DrawShadow(Camera * camera, float dt) override;
 
 	bool CleanUp() override;
@@ -77,7 +77,6 @@ public:
 	float GetTurrAngle() const;
 	WeaponInfo GetWeaponInfo() const;
 
-	bool IsReady() const;
 	void ShotAutormaticallyActivate();
 	void ShotAutormaticallyDisactivate();
 	std::vector<Object*>* GetEnemiesHitted();
@@ -118,7 +117,6 @@ private:
 
 	//- Input
 	void SelectInputMethod();
-	void InputReadyKeyboard();
 	bool PressInteract();
 	bool ReleaseInteract();
 
@@ -275,10 +273,11 @@ private:
 	Joystick gamepad_move							= Joystick::MAX;
 	Joystick gamepad_aim							= Joystick::MAX;
 	int dead_zone									= 0;
-	SDL_GameControllerButton gamepad_interact		= SDL_CONTROLLER_BUTTON_INVALID;
-	SDL_GameControllerButton gamepad_item			= SDL_CONTROLLER_BUTTON_INVALID;
-	SDL_GameControllerAxis gamepad_shoot			= SDL_CONTROLLER_AXIS_INVALID;
+	CONTROLLER_BUTTON gamepad_interact		= CONTROLLER_BUTTON::NONE;
+	CONTROLLER_BUTTON gamepad_item			= CONTROLLER_BUTTON::NONE;
+	CONTROLLER_BUTTON gamepad_shoot			= CONTROLLER_BUTTON::NONE;
 	short int gamepad_shoot_last_frame				= 0;
+	float vibration_percentage = 1.0f;
 
 	// Drawing =============================================
 	SDL_Color tank_color = { 255, 255, 255, 255 };

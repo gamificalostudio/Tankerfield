@@ -234,6 +234,7 @@ bool Options_Menu::UI_Selected(UI_Element * element)
 	}
 	else if (element == controller_settings)
 	{
+		app->main_menu->SetState(MENU_STATE::CONTROLLERS_SETTINGS);
 		HideOptionsMenu();
 	}
 	else if (element == return_button)

@@ -33,7 +33,7 @@ public:
 
 	inline virtual void GetPath() override;
 
-	bool Draw(float dt, Camera * camera) override;
+	bool Draw(Camera * camera) override;
 
 	void SetStats(int level) override;
 

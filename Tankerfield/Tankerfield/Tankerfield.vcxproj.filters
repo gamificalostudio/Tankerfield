@@ -193,9 +193,6 @@
     <ClCompile Include="Obj_Explosion.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Fire.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_OilPool.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -232,6 +229,9 @@
     <ClCompile Include="M_VideoPlayer.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Controllers_Settings.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="LeaderBoard.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -240,6 +240,16 @@
     </ClCompile>
     <ClCompile Include="Oil_Splash.cpp">
       <Filter>Objects\Bullets</Filter>
+    </ClCompile>
+    <ClCompile Include="NewRoundAnimation.cpp" />
+    <ClCompile Include="Obj_Fire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Smoke.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Emmiter.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -462,9 +472,6 @@
     <ClInclude Include="Obj_Explosion.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Fire.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_OilPool.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -498,17 +505,27 @@
     <ClInclude Include="M_VideoPlayer.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="LeaderBoard.h">
+    <ClInclude Include="Controllers_Settings.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Data\Icon</Filter>
+    <ClInclude Include="LeaderBoard.h">
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="HealingShot_Area.h">
       <Filter>Objects\Particles</Filter>
     </ClInclude>
     <ClInclude Include="Oil_Splash.h">
       <Filter>Objects\Bullets</Filter>
+    </ClInclude>
+    <ClInclude Include="NewRoundAnimation.h" />
+    <ClInclude Include="Obj_Fire.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Smoke.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Emmiter.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -574,18 +591,5 @@
     <Filter Include="Objects\Particles">
       <UniqueIdentifier>{9ebcce9b-e2e9-4b17-9e32-108b6bba6746}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data\Icon">
-      <UniqueIdentifier>{20620a25-8168-48ca-bbd0-e47a05d77861}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Game\textures\ui\icon.ico">
-      <Filter>Data\Icon</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Tankerfield.rc">
-      <Filter>Data\Icon</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

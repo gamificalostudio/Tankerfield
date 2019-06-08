@@ -9,6 +9,7 @@
 #include "M_Audio.h"
 #include "M_Scene.h"
 #include "Options_Menu.h"
+#include "Controllers_Settings.h"
 #include "LeaderBoard.h"
 
 #include "UI_Image.h"
@@ -21,6 +22,20 @@
 
 bool M_MainMenu::Start()
 {
+	//Create camera
+	fRect screen = app->win->GetWindowRect();
+	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
+	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
+
+
+	// Menus
+
+	options = new Options_Menu();
+	controllers_setting[0] = new Controllers_Settings(fPoint(0, 0), 0);
+	controllers_setting[1] = new Controllers_Settings(fPoint(screen.w*0.5f, 0), 1);
+	controllers_setting[2] = new Controllers_Settings(fPoint(0, screen.h*0.5f), 2);
+	controllers_setting[3] = new Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f), 3);
+
 	// Load assets ===========================================
 
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
@@ -33,10 +48,6 @@ bool M_MainMenu::Start()
 
 	
 	// Create UI Elements ====================================
-
-	fRect screen = app->win->GetWindowRect();
-	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-	camera = app->render->CreateCamera( iPoint(0,0), (SDL_Rect)screen);
 
 	// Main menu ------------------------------
 
@@ -129,6 +140,7 @@ bool M_MainMenu::Start()
 		player_labels[i] = app->ui->CreateLabel(players[i].tank_pos + fPoint(0, 150), UI_LabelDef(player_string, app->font->button_font_40, { 220, 220,220,255 }));
 		player_labels[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 		player_labels[i]->SetParent(player_labels_peg);
+		players[i].controller = i;
 	}
 
 	// Credits Menu
@@ -308,7 +320,6 @@ bool M_MainMenu::Start()
 	// Set values ==========================================
 
 	SetPlayerObjectsState(false);
-	app->ui->HideAllUI();
 
 	// Controll helper ------------------------
 
@@ -318,7 +329,10 @@ bool M_MainMenu::Start()
 	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
 	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
+	app->ui->HideAllUI();
+
 	SetState(MENU_STATE::INIT_MENU);
+
 	SDL_ShowCursor(SDL_ENABLE);
 
 
@@ -340,6 +354,20 @@ bool M_MainMenu::CleanUp()
 		players[i].tank = nullptr;
 	}
 
+	if (options)
+	{
+		delete options;
+		options = nullptr;
+	}
+	for (uint i = 0; i < 0; ++i)
+	{
+		if (controllers_setting[i])
+		{
+			delete controllers_setting[i];
+			controllers_setting[i] = nullptr;
+		}
+	}
+
 	return true;
 }
 
@@ -348,15 +376,6 @@ bool M_MainMenu::PreUpdate()
 	if ( app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || exit_game == true)
 	{
 		return false;
-	}
-
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (players[i].controller == -1)
-		{
-			players[i].controller = app->input->GetAbleController();
-			players[i].tank->SetController(players[i].controller);
-		}
 	}
 
 	return true;
@@ -411,7 +430,6 @@ bool M_MainMenu::UI_OnHoverEnter(UI_Element * element)
 
 bool M_MainMenu::UI_Selected(UI_Element * element)
 {
-
 	if (menu_state == MENU_STATE::SELECTION)
 	{
 		if (SetPlayerProperties() == true)
@@ -482,7 +500,7 @@ bool M_MainMenu::UI_Selected(UI_Element * element)
 
 		else if (element == website)
 		{
-			ShellExecute(NULL, "open", "https://google.es", NULL, NULL, SW_SHOWNORMAL);
+			ShellExecute(NULL, "open", "https://gamificalostudio.github.io/Tankerfield/", NULL, NULL, SW_SHOWNORMAL);
 		}
 
 		else if (element == jaume_linkedin)
@@ -572,6 +590,7 @@ bool M_MainMenu::UI_Selected(UI_Element * element)
 
 		app->audio->PlayFx(button_select_sfx);
 	}
+
 	return true;
 }
 
@@ -671,6 +690,13 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		leaderboard->HideLeaderBoard();
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		break;
+
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		for (uint i = 0; i < 4; ++i)
+		{
+			controllers_setting[i]->HideControllersSettings();
+		}
+		break;
 	}
 
 	app->ui->SetInteractiveGroup(nullptr);
@@ -720,12 +746,22 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	case MENU_STATE::OPTIONS:
 		options->ShowOptionsMenu();
 		break;
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		{
+			for (uint i = 0; i < 4; ++i)
+			{
+				controllers_setting[i]->ShowControllerSettings();
+			}
+		}
+		break;
+
 	case MENU_STATE::LEADERBOARD:
 		app->ui->SetInteractiveGroup(leaderboard_navigation);
 
 		leaderboard->ShowLeaderBoard();
 		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		leaderboard_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+
 		break;
 
 	case MENU_STATE::CHANGE_SCENE:
