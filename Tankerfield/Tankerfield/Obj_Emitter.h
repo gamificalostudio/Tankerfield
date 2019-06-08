@@ -65,6 +65,8 @@ public:
 	
 	bool Update(float dt) override;
 
+	bool Draw(Camera * camera) override;
+
 	// Generates random number between given range
 	float RangeRandomNum(float min = -1.0f, float max = 1.0f);
 

@@ -52,13 +52,28 @@ bool ParticlePool::Update(float dt)
 		if (particle_array[i].IsAlive())
 		{
 			particle_array[i].Update(dt);
-			particle_array[i].Draw();
 			ret = true;
 		}
 		else
 		{
 			particle_array[i].SetNext(first_available);
 			first_available = &particle_array[i];
+		}
+	}
+
+	return true;
+}
+
+bool ParticlePool::Draw(Camera * camera)
+{
+	bool ret = false;
+
+	for (int i = 0; i < pool_size; ++i)
+	{
+		if (particle_array[i].IsAlive())
+		{
+			particle_array[i].Draw(camera);
+			ret = true;
 		}
 	}
 

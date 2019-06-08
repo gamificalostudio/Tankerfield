@@ -68,7 +68,7 @@ SDL_Color Particle::LerpColor(SDL_Color src_color, SDL_Color trg_color, float ti
 			 (Uint8)(src_color.a + (trg_color.a - src_color.a) * time_step) };
 }
 
-void Particle::Draw()
+void Particle::Draw(Camera * camera)
 {
 	// Calculations to determine the current center of particle texture
 	SDL_Rect tmp_rect = { (int)particle_state.particle_live.startSize, (int)particle_state.particle_live.startSize };

@@ -38,7 +38,7 @@ Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data) :
 	//srand(time(NULL));
 	emitterPool = new ParticlePool(this);
 
-	if (this->lifetime != -1.0f && this->lifetime > 0.0f)
+	if (lifetime != -1.0f && lifetime > 0.0f)
 	{
 		lifeTimer.Start();
 	}
@@ -113,6 +113,15 @@ bool Obj_Emitter::Update(float dt)
 	}
 
 	return true;
+}
+
+bool Obj_Emitter::Draw(Camera * camera)
+{
+	bool ret = false;
+
+	ret = emitterPool->Draw(camera);
+
+	return ret;
 }
 
 float Obj_Emitter::RangeRandomNum(float min, float max)

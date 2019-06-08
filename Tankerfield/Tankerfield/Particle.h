@@ -7,6 +7,7 @@
 #define MIN_LIFE_TO_INTERPOLATE 15
 
 struct SDL_Texture;
+class Camera;
 
 class Particle
 {
@@ -68,7 +69,7 @@ class Particle
 
 	// Generic methods
 	void Update(float dt);
-	void Draw();
+	void Draw(Camera * camera);
 	bool IsAlive();
 
 	// Particle pointer methods
