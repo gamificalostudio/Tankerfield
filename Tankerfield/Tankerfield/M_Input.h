@@ -206,7 +206,7 @@ public:
 
 	void DetachController(int controller);
 
-	bool IsConnectedControllet(int i);
+	bool IsConnectedController(int i);
 
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);

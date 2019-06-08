@@ -86,21 +86,17 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
 	sensitivity_value_label->SetParent(panel);
 	sensitivity_value_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(2, 6, nullptr), this);
+	InteractiveGroup = app->ui->CreateIntearctiveGroup(fPoint(relative_pos.x + 0, relative_pos.y + 0), UI_InteractiveGroupDef(0, nullptr), this); //  TODO Set Controller of player 
 	InteractiveGroup->SetParent(panel);
 
-	InteractiveGroup->SetElement(attack_label, iPoint(0, 0));
-	InteractiveGroup->SetElement(interaction_label, iPoint(0, 1));
-	InteractiveGroup->SetElement(Use_item_label, iPoint(0, 2));
-	InteractiveGroup->SetElement(vibration_button_L, iPoint(0, 3));
-	InteractiveGroup->SetElement(vibration_button_R, iPoint(1, 3));
-	InteractiveGroup->SetElement(Sensitivity_button_L, iPoint(0,4));
-	InteractiveGroup->SetElement(Sensitivity_button_R, iPoint(1,4));
-	InteractiveGroup->SetElement(return_button, iPoint(0, 5));
-
-
-
-
+	InteractiveGroup->AddElement(attack_label);
+	InteractiveGroup->AddElement(interaction_label);
+	InteractiveGroup->AddElement(Use_item_label);
+	InteractiveGroup->AddElement(vibration_button_L);
+	InteractiveGroup->AddElement(vibration_button_R);
+	InteractiveGroup->AddElement(Sensitivity_button_L);
+	InteractiveGroup->AddElement(Sensitivity_button_R);
+	InteractiveGroup->AddElement(return_button);
 }
 
 Controllers_Settings::~Controllers_Settings()
@@ -108,22 +104,25 @@ Controllers_Settings::~Controllers_Settings()
 
 void Controllers_Settings::ShowControllerSettings()
 {
+	InteractiveGroup->Active();
 	Canvas->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
 
 void Controllers_Settings::HideControllersSettings()
 {
+	InteractiveGroup->Desactive();
 	Canvas->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 
-void Controllers_Settings::InputSelect()
+bool Controllers_Settings::UI_Selected( UI_Element* element)
 {
-	UI_Element* focused = InteractiveGroup->GetFocusedElement();
-	if (focused == return_button)
+
+	if (element == return_button)
 	{
 		app->main_menu->SetState(MENU_STATE::OPTIONS);
 	}
-	else if (focused == vibration_button_L)
+	else if (element == vibration_button_L)
+
 	{
 		app->input->controllerInfo[player].vibration_percentage -= 0.100000000f;
 		if (app->input->controllerInfo[player].vibration_percentage < 0.f)
@@ -132,7 +131,7 @@ void Controllers_Settings::InputSelect()
 		}
 		vibration_value_label->SetText(std::to_string((int)(app->input->controllerInfo[player].vibration_percentage*100)));
 	}
-	else if (focused == vibration_button_R)
+	else if (element == vibration_button_R)
 	{
 		app->input->controllerInfo[player].vibration_percentage += 0.10f;
 		if (app->input->controllerInfo[player].vibration_percentage > 1.f)
@@ -141,7 +140,7 @@ void Controllers_Settings::InputSelect()
 		}
 		vibration_value_label->SetText(std::to_string((int)(app->input->controllerInfo[player].vibration_percentage * 100)));
 	}
-	else if (focused== Sensitivity_button_L)
+	else if (element == Sensitivity_button_L)
 	{
 		app->input->controllerInfo[player].death_zone_porcenatage -= 0.100000000f;
 		if (app->input->controllerInfo[player].death_zone_porcenatage < 0.f)
@@ -150,7 +149,7 @@ void Controllers_Settings::InputSelect()
 		}
 		sensitivity_value_label->SetText(std::to_string((int)(app->input->controllerInfo[player].death_zone_porcenatage * 100)));
 	}
-	else if (focused == Sensitivity_button_R)
+	else if (element == Sensitivity_button_R)
 	{
 		app->input->controllerInfo[player].death_zone_porcenatage += 0.100000000f;
 		if (app->input->controllerInfo[player].death_zone_porcenatage > 1.f)
@@ -159,16 +158,20 @@ void Controllers_Settings::InputSelect()
 		}
 		sensitivity_value_label->SetText(std::to_string((int)(app->input->controllerInfo[player].death_zone_porcenatage * 100)));
 	}
-	else if (focused == attack_label)
+	else if (element == attack_label)
 	{
 		LOG("");
 	}
+	return true;
 }
 
-bool Controllers_Settings::OnHoverEnter(UI_Element* object) 
+bool Controllers_Settings::OnHoverEnter(UI_Element* object)
 {
 	if (object == (UI_Element*)attack_label)
 	{
 		attack_label->color_mod = { 255,0,0,255 };
-}
-	return true; }
+
+		
+	}
+	return true;
+};

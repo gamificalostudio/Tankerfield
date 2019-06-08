@@ -34,9 +34,6 @@
     <ClCompile Include="M_Render.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="M_RewardZoneManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="M_Scene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -193,9 +190,6 @@
     <ClCompile Include="Obj_Explosion.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_Fire.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_OilPool.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -245,6 +239,15 @@
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
     <ClCompile Include="NewRoundAnimation.cpp" />
+    <ClCompile Include="Obj_Fire.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Smoke.cpp">
+      <Filter>Objects\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Obj_Emmiter.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -278,9 +281,6 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Render.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_RewardZoneManager.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Scene.h">
@@ -466,9 +466,6 @@
     <ClInclude Include="Obj_Explosion.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_Fire.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_OilPool.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -515,6 +512,15 @@
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="NewRoundAnimation.h" />
+    <ClInclude Include="Obj_Fire.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Smoke.h">
+      <Filter>Objects\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_Emmiter.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">

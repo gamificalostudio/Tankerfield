@@ -21,7 +21,6 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 
 	if (definition.is_arrow_actived == true)
 	{
-		arrow_animation = &app->ui->arrow_anim;
 		color_mod = definition.arrow_color;
 	}
 }
@@ -87,7 +86,7 @@ bool UI_InGameElement::Draw()
 UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef definition) : UI_InGameElement(position, definition)
 {
 	UI_ImageDef img_def;
-
+	
 	// Add frame ====================================================
 
 	img_def.sprite_section = { 330, 160, 50, 70 };
@@ -129,15 +128,33 @@ UI_IG_Weapon::UI_IG_Weapon(const fPoint position, const UI_InGameElementDef defi
 		weapon_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::SMALL][(int)ICON_TYPE::WEAPON_BASIC];
 		break;
 	}
+	;
 
-	level_indicator = app->ui->CreateImage(position + app->map->ScreenToMapF(-32.f,- 64.f), img_def);
-	level_indicator->SetParent(weapon_frame);
+	level_difference = app->ui->CreateImage(position + app->map->ScreenToMapF(-32.f,- 64.f), img_def);
+	level_difference->SetParent(weapon_frame);
 	UpdateLevel();
 
+	// Add level =====================================================
 
-	weapon_frame	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
-	weapon_icon		->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
-	level_indicator	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	img_def.sprite_section = { 10, 80, 27, 27 };
+
+	weapon_lvl_image = app->ui->CreateImage(position + app->map->ScreenToMapF(25.f, -45.f), img_def);
+	weapon_lvl_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	weapon_lvl_image->SetParent(weapon_frame);
+
+	UI_LabelDef label_def(std::to_string(pick_up_obj->level_of_weapon), app->font->label_font_24);
+	label_def.is_in_game = true;
+
+	weapon_lvl_label = app->ui->CreateLabel(position + app->map->ScreenToMapF(25.f, -45.f), label_def);
+	weapon_lvl_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
+	weapon_lvl_label->SetParent(weapon_frame);
+
+
+	weapon_frame		->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	weapon_icon			->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	level_difference	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	weapon_lvl_image	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
+	weapon_lvl_label	->SetFX(UI_Fade_FX::FX_TYPE::FADE_ON, 2.F);
 }
 
 bool UI_IG_Weapon::Draw()
@@ -151,7 +168,7 @@ void UI_IG_Weapon::UpdateLevel()
 	Obj_PickUp* pick_up = (Obj_PickUp*) pointed_obj;
 	int diference = pick_up->level_of_weapon - app->ui->current_gui->player->GetWeaponInfo().level_weapon;
 
-	level_indicator->SetState(ELEMENT_STATE::VISIBLE);
+	level_difference->SetState(ELEMENT_STATE::VISIBLE);
 
 	if (diference > 4)
 	{
@@ -163,16 +180,16 @@ void UI_IG_Weapon::UpdateLevel()
 	}
 	else if (diference == 0)
 	{
-		level_indicator->SetState(ELEMENT_STATE::HIDDEN);
+		level_difference->SetState(ELEMENT_STATE::HIDDEN);
 	}
 
 	if (diference > 0)
 	{
-		level_indicator->sprite_rect = { 460, 160, 15, 10 * abs(diference)};
+		level_difference->sprite_rect = { 460, 160, 15, 10 * abs(diference)};
 	}
 	else
 	{
-		level_indicator->sprite_rect = { 460, 205, 15, 10 * abs(diference) };
+		level_difference->sprite_rect = { 460, 205, 15, 10 * abs(diference) };
 	}
 
 
@@ -193,10 +210,20 @@ void UI_IG_Weapon::Destroy()
 		weapon_icon->Destroy();
 		weapon_icon = nullptr;
 	}
-	if (level_indicator != nullptr)
+	if (level_difference != nullptr)
 	{
-		level_indicator->Destroy();
-		level_indicator = nullptr;
+		level_difference->Destroy();
+		level_difference = nullptr;
+	}
+	if (weapon_lvl_image != nullptr)
+	{
+		weapon_lvl_image->Destroy();
+		weapon_lvl_image = nullptr;
+	}
+	if (weapon_lvl_label != nullptr)
+	{
+		weapon_lvl_label->Destroy();
+		weapon_lvl_label = nullptr;
 	}
 
 }

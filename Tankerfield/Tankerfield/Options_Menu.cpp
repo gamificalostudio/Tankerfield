@@ -134,37 +134,122 @@ Options_Menu::Options_Menu()
 
 		// Navigation Matrix
 
-	UI_InteractiveGroupDef options_panel_def;
-	options_panel_def.columns = 2;
-	options_panel_def.rows = 6;
+	UI_InteractiveGroupDef options_panel_def( -1, nullptr);
 
-
-	global_navigation_panel = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
-	global_navigation_panel->SetElement(fullscreen_L, iPoint(0, 0));
-	global_navigation_panel->SetElement(fullscreen_R, iPoint(1, 0));
-	global_navigation_panel->SetElement(master_volume_L, iPoint(0, 1));
-	global_navigation_panel->SetElement(master_volume_R, iPoint(1, 1));
-	global_navigation_panel->SetElement(music_volume_L, iPoint(0, 2));
-	global_navigation_panel->SetElement(music_volume_R, iPoint(1, 2));
-	global_navigation_panel->SetElement(sfx_volume_L, iPoint(0, 3));
-	global_navigation_panel->SetElement(sfx_volume_R, iPoint(1, 3));
-	global_navigation_panel->SetElement(controller_settings, iPoint(0, 4));
-	global_navigation_panel->SetElement(controller_settings, iPoint(1, 4));
-	global_navigation_panel->SetElement(return_button, iPoint(0, 5));
-	global_navigation_panel->SetElement(return_button, iPoint(1, 5));
+	options_navigation = app->ui->CreateIntearctiveGroup(screen_center, options_panel_def, this);
+	options_navigation->AddElement(fullscreen_L);
+	options_navigation->AddElement(fullscreen_R);
+	options_navigation->AddElement(master_volume_L);
+	options_navigation->AddElement(master_volume_R);
+	options_navigation->AddElement(music_volume_L);
+	options_navigation->AddElement(music_volume_R);
+	options_navigation->AddElement(sfx_volume_L);
+	options_navigation->AddElement(sfx_volume_R);
+	options_navigation->AddElement(controller_settings);
+	options_navigation->AddElement(return_button);
 
 	// Set values ==========================================
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
-bool Options_Menu::OnHoverEnter(UI_Element * element)
+bool Options_Menu::UI_OnHoverEnter(UI_Element * element)
 {
 	app->audio->PlayFx(button_enter_sfx);
 	return true;
 }
 
+bool Options_Menu::UI_Selected(UI_Element * element)
+{
+	app->audio->PlayFx(button_select_sfx);
+
+	if (element == fullscreen_L || element == fullscreen_R)
+	{
+		app->win->SetFullscreen();
+		fullscreen_value_info = !fullscreen_value_info;
+
+		if (fullscreen_value_info)
+		{
+			fullscreen_value->SetText("Yes");
+		}
+		else
+		{
+			fullscreen_value->SetText("No");
+		}
+	}
+	else if (element == master_volume_L)
+	{
+		if (app->audio->master_volume >= 0.04)
+		{
+			master_multiplier_string = std::to_string(int(round((app->audio->master_volume -= 0.05) * 100)));
+			master_volume_value->SetText(master_multiplier_string);
+			app->audio->SetMasterVolume(app->audio->master_volume);
+			LOG("%f", app->audio->master_volume);
+		}
+	}
+	else if (element == master_volume_R)
+	{
+		if (app->audio->master_volume <= 0.95)
+		{
+			master_multiplier_string = std::to_string(int(round((app->audio->master_volume += 0.05) * 100)));
+			master_volume_value->SetText(master_multiplier_string);
+			app->audio->SetMasterVolume(app->audio->master_volume);
+			LOG("%f", app->audio->master_volume);
+		}
+	}
+	else if (element == music_volume_L)
+	{
+		if (app->audio->music_volume >= 5)
+		{
+			music_volume_string = std::to_string(app->audio->music_volume -= 5);
+			music_volume_value->SetText(music_volume_string);
+			app->audio->SetMusicVolume(app->audio->music_volume);
+		}
+	}
+	else if (element == music_volume_R)
+	{
+		if (app->audio->music_volume <= 95)
+		{
+			music_volume_string = std::to_string(app->audio->music_volume += 5);
+			music_volume_value->SetText(music_volume_string);
+			app->audio->SetMusicVolume(app->audio->music_volume);
+		}
+	}
+	else if (element == sfx_volume_L)
+	{
+		if (app->audio->sfx_volume >= 5)
+		{
+			sfx_volume_string = std::to_string(app->audio->sfx_volume -= 5);
+			sfx_volume_value->SetText(sfx_volume_string);
+			app->audio->SetSfxVolume(-5);
+		}
+	}
+	else if (element == sfx_volume_R)
+	{
+		if (app->audio->sfx_volume <= 95)
+		{
+			sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
+			sfx_volume_value->SetText(sfx_volume_string);
+			app->audio->SetSfxVolume(5);
+		}
+	}
+	else if (element == controller_settings)
+	{
+		app->main_menu->SetState(MENU_STATE::CONTROLLERS_SETTINGS);
+		HideOptionsMenu();
+	}
+	else if (element == return_button)
+	{
+		app->main_menu->SetState(MENU_STATE::INIT_MENU);
+		HideOptionsMenu();
+	}
+
+	return true;
+}
+
 void Options_Menu::ShowOptionsMenu()
 {
+	options_navigation->Active();
+
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
@@ -173,123 +258,14 @@ void Options_Menu::ShowOptionsMenu()
 	control_helper_image->SetPos(screen_center + fPoint(-30, 450));
 
 	panel_options->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+	options_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
 
 void Options_Menu::HideOptionsMenu()
 {
+	options_navigation->Desactive();
+
 	panel_options->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-	global_navigation_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+	options_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 
-
-void Options_Menu::InputNavigate()
-{
-	for (int i = 0; i < MAX_PLAYERS; ++i)
-	{
-		if (app->main_menu->players[i].controller != -1)
-		{
-			if (global_navigation_panel->HandleControllerINavigation(app->main_menu->players[i].controller))
-			{
-				app->audio->PlayFx(button_enter_sfx);
-			}
-		}
-	}
-
-	if (global_navigation_panel->HandleKeyboardNavigation())
-	{
-		app->audio->PlayFx(button_enter_sfx);
-	}
-}
-
-void Options_Menu::InputSelect()
-{
-		UI_Element*  menu_element = global_navigation_panel->GetFocusedElement();
-
-		if (global_navigation_panel == nullptr)
-		{
-			return;
-		}
- 
-		if (menu_element == fullscreen_L || menu_element == fullscreen_R)
-		{
-			app->win->SetFullscreen();
-			fullscreen_value_info = !fullscreen_value_info;
-
-			if (fullscreen_value_info)
-			{
-				fullscreen_value->SetText("Yes");
-			}
-			else
-			{
-				fullscreen_value->SetText("No");
-			}
-		}
-		else if (menu_element == master_volume_L)
-		{
-			if (app->audio->master_volume >= 0.04)
-			{
-				master_multiplier_string = std::to_string(int(round((app->audio->master_volume -= 0.05) * 100)));
-				master_volume_value->SetText(master_multiplier_string);
-				app->audio->SetMasterVolume(app->audio->master_volume);
-				LOG("%f", app->audio->master_volume);
-			}
-		}
-		else if (menu_element == master_volume_R)
-		{
-			if (app->audio->master_volume <= 0.95)
-			{
-				master_multiplier_string = std::to_string(int(round((app->audio->master_volume += 0.05) * 100)));
-				master_volume_value->SetText(master_multiplier_string);
-				app->audio->SetMasterVolume(app->audio->master_volume);
-				LOG("%f", app->audio->master_volume);
-			}
-		}
-		else if (menu_element == music_volume_L)
-		{
-			if (app->audio->music_volume >= 5)
-			{
-				music_volume_string = std::to_string(app->audio->music_volume -= 5);
-				music_volume_value->SetText(music_volume_string);
-				app->audio->SetMusicVolume(app->audio->music_volume);
-			}
-		}
-		else if (menu_element == music_volume_R)
-		{
-			if (app->audio->music_volume <= 95)
-			{
-				music_volume_string = std::to_string(app->audio->music_volume += 5);
-				music_volume_value->SetText(music_volume_string);
-				app->audio->SetMusicVolume(app->audio->music_volume);
-			}
-		}
-		else if (menu_element == sfx_volume_L)
-		{
-			if (app->audio->sfx_volume >= 5)
-			{
-				sfx_volume_string = std::to_string(app->audio->sfx_volume -= 5);
-				sfx_volume_value->SetText(sfx_volume_string);
-				app->audio->SetSfxVolume(-5);
-			}
-		}
-		else if (menu_element == sfx_volume_R)
-		{
-			if (app->audio->sfx_volume <= 95)
-			{
-				sfx_volume_string = std::to_string(app->audio->sfx_volume += 5);
-				sfx_volume_value->SetText(sfx_volume_string);
-				app->audio->SetSfxVolume(5);
-			}
-		}
-		else if (menu_element == controller_settings)
-		{
-			app->main_menu->SetState(MENU_STATE::CONTROLLERS_SETTINGS);
-			HideOptionsMenu();
-		}
-		else if (menu_element == return_button)
-		{
-			app->main_menu->SetState(MENU_STATE::INIT_MENU);
-			HideOptionsMenu();
-		}
-		app->audio->PlayFx(button_select_sfx);
-}

@@ -12,7 +12,7 @@ UI_Slider::UI_Slider(const fPoint position, const UI_SliderDef definition, UI_Li
 
 	thumb = app->ui->CreateButton(position, definition.thumb_definition, this);
 	thumb->SetParent(this);
-	thumb->is_draggable = true;
+	//thumb->is_draggable = true;
 
 	point_A = position.x - definition.distance * 0.5f;
 	point_B = position.x + definition.distance * 0.5f;
@@ -87,10 +87,10 @@ bool UI_Slider::RepeatClick(UI_Element * object)
 {
 	if (object == thumb)
 	{
-		if (listener != nullptr)
-		{
-			listener->ClickRepeat(this);
-		}
+		//if (listener != nullptr)
+		//{
+		//	listener->ClickRepeat(this);
+		//}
 	}
 
 	return true;

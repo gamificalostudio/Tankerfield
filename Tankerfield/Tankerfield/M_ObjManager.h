@@ -18,7 +18,6 @@ enum class ObjectType
 	//OTHER
 	TANK,
 	STATIC,
-	REWARD_ZONE,
 	REWARD_BOX,
 	PICK_UP,
 	OIL_POOL,
@@ -49,6 +48,7 @@ enum class ObjectType
 	FIRE_DEAD,
 	ELECTRO_SHOT_ANIMATION,
 	FLAMETHROWER_FLAME,
+	DAMAGED_SMOKE,
 
 	MAX
 };
@@ -122,7 +122,11 @@ private:
 
 	inline void DesactivateObject(std::list<Object*>::iterator& iterator);
 
+	void DesactivateObject(Object* iterator);
+
 	inline void UpdateObject(std::list<Object*>::iterator& iterator, const float& dt);
+
+	void FillPool(ObjectType type, uint number);
 
 public:
 	bool delete_all_enemies = false;
@@ -151,6 +155,7 @@ private:
 	std::list<Object*> objects;
 	std::list<Object*> enemies;
 	std::map<ObjectType, std::list<Object*>> pool_of_objects;
+
 };
 
 #endif

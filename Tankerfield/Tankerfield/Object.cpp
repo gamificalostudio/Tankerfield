@@ -57,7 +57,7 @@ bool Object::Desactivate()
 	return true;
 }
 
-bool Object::Draw(float dt, Camera * camera)
+bool Object::Draw(Camera * camera)
 {
 	app->render->Blit(
 		curr_tex,

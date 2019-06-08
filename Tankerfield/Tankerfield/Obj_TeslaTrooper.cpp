@@ -197,52 +197,7 @@ void Obj_TeslaTrooper::Move(const float & dt)
 
 }
 
-void Obj_TeslaTrooper::GetPath()
-{
-	curr_anim = &idle;
-	move_vect.SetToZero();
-	target = app->objectmanager->GetNearestTank(pos_map);
-
-	if (target != nullptr)
-	{
-		if (pos_map.DistanceNoSqrt(target->pos_map) <= squared_detection_range
-			&& app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
-		{
-			path.clear();
-			path = *app->pathfinding->GetLastPath();
-			if (path.size() > 0)
-				path.erase(path.begin());
-
-			next_pos = (fPoint)(*path.begin());
-			UpdateVelocity();
-
-			state = ENEMY_STATE::MOVE;
-			curr_anim = &walk;
-		}
-		else
-		{
-			if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
-			{
-				state = ENEMY_STATE::GET_TELEPORT_POINT;
-				curr_anim = &idle;
-			}
-			else if (path.size() > 0)
-			{
-				state = ENEMY_STATE::MOVE;
-				curr_anim = &walk;
-			}
-			else
-			{
-				state = ENEMY_STATE::IDLE;
-				curr_anim = &idle;
-				path_timer.Start();
-			}
-		}
-	}
-}
-
-
-bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
+bool Obj_TeslaTrooper::Draw(Camera * camera)
 {
 
 	if ((state == ENEMY_STATE::TELEPORT_IN || state == ENEMY_STATE::TELEPORT_OUT) && in_portal != nullptr)
@@ -284,14 +239,5 @@ bool Obj_TeslaTrooper::Draw(float dt, Camera * camera)
 	return true;
 }
 
-inline void Obj_TeslaTrooper::UpdateVelocity()
-{
-	fPoint new_move_vec = (fPoint)(next_pos)-pos_map;
-	new_move_vec.Normalize();
-	if (new_move_vec != move_vect)
-	{
-		move_vect = new_move_vec;
-		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
-	}
-}
+
 

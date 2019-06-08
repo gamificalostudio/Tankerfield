@@ -72,6 +72,8 @@ public:
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
 
+	bool IsPaused();
+
 private:
 	// Load config file
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;

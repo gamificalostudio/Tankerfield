@@ -66,6 +66,7 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 void Obj_Suicidal::SetStats(int level)
 {
 	detection_range = app->objectmanager->suicidal_info.detection_range;
+	squared_detection_range = detection_range * detection_range;
 	original_speed = speed = app->objectmanager->suicidal_info.speed;
 	attack_damage = app->objectmanager->suicidal_info.attack_damage;
 	attack_range = app->objectmanager->suicidal_info.attack_range;

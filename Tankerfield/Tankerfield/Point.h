@@ -156,7 +156,7 @@ public:
 		return(*this);
 	}
 
-	void Normalize() {
+	Point Normalize() {
 
 		double module = sqrt(x * x + y * y);
 		if (module != 0.)
@@ -164,6 +164,7 @@ public:
 			x /= module;
 			y /= module;
 		}
+		return Point(x, y);
 	}
 
 	double Module()
@@ -174,6 +175,16 @@ public:
 	float ModuleF()
 	{
 		return sqrtf(x * x + y * y);
+	}
+
+	double ModuleNoSqrt()
+	{
+		return x * x + y * y;
+	}
+
+	float ModuleNoSqrtF()
+	{
+		return x * x + y * y;
 	}
 
 	//Rotate a vector in radians
@@ -206,6 +217,11 @@ public:
 	{
 		return Point<float>((float)x, (float)y);
 	}
+
+	//explicit operator SDL_Point () const
+	//{
+	//	return SDL_Point(x, y);
+	//}
 
 	// Distances ---------------------------------------------
 	TYPE1 DistanceTo(const Point& v) const

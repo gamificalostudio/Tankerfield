@@ -69,7 +69,7 @@ void Obj_Tank::InitWeapons()
 		electric_shot_colliders_charged_vector.push_back(electro_shot_collider_charged);
 	}
   
-	charge_time = 2500.f; // Same for all bullets (player gets used to it)
+	charge_time = 1500.f; // Same for all bullets (player gets used to it)
 	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
 	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
@@ -121,7 +121,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 	weapon_info.level_weapon = level;
 	weapon_info.weapon = type;
 
-	gui->SetWeaponIcon(type);
+	gui->SetWeapon(type, level);
 
 	switch (type)
 	{

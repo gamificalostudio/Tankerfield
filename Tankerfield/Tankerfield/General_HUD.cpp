@@ -24,10 +24,10 @@ General_GUI::General_GUI()
 
 	// Split screen quads ========================================
 
-	vertical_split_rect = app->ui->CreateQuad(screen_center, UI_QuadDef({ 0 ,0, 6 , (int)screen.h }, { 150, 150, 150, 255 }));
+	vertical_split_rect = app->ui->CreateQuad(screen_center, UI_QuadDef({ 0 ,0, 6 , (int)screen.h }, { 100, 100, 100, 255 }));
 	vertical_split_rect->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	horizontal_split_rect = app->ui->CreateQuad({ screen.w * 0.5f, screen.h * 0.5f }, UI_QuadDef({ 0,0, (int)screen.w , 6 }, { 150, 150, 150, 255 }));
+	horizontal_split_rect = app->ui->CreateQuad({ screen.w * 0.5f, screen.h * 0.5f }, UI_QuadDef({ 0,0, (int)screen.w , 6 }, { 100, 100, 100, 255 }));
 	horizontal_split_rect->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	background = app->ui->CreateQuad({ 0.f, 0.f }, UI_QuadDef({ 0,0, (int)screen.w , (int)screen.h }, { 0, 0, 0 , 200 }));
@@ -90,11 +90,11 @@ General_GUI::General_GUI()
 	round_fx->alpha = 0.f;
 
 	image_def.sprite_section = { 10, 160, 50, 530 };
-	left_tank_life = app->ui->CreateImage({ 40.f ,  screen.h * .5f }, image_def);
+	left_tank_life = app->ui->CreateImage({ 0.f ,  screen.h * .5f }, image_def);
 	left_tank_life->SetPivot(Pivot::X::LEFT, Pivot::Y::CENTER);
 
 	image_def.sprite_section = { 60, 160, 50, 530 };
-	right_tank_life = app->ui->CreateImage({ screen.w - 40.f ,  screen.h * .5f }, image_def);
+	right_tank_life = app->ui->CreateImage({ screen.w  ,  screen.h * .5f }, image_def);
 	right_tank_life->SetPivot(Pivot::X::RIGHT, Pivot::Y::CENTER);
 
 	FadeGeneralHUD(true);
