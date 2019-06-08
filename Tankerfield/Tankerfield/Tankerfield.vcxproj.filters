@@ -251,10 +251,10 @@
     <ClCompile Include="Obj_Emmiter.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="j1ParticleSystem.cpp" />
     <ClCompile Include="Emitter.cpp" />
     <ClCompile Include="ParticlePool.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -531,10 +531,10 @@
     <ClInclude Include="Obj_Emmiter.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="j1ParticleSystem.h" />
     <ClInclude Include="Emitter.h" />
     <ClInclude Include="ParticlePool.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\Game\animations.xml">

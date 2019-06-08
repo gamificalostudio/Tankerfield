@@ -1,7 +1,7 @@
 #include "Particle.h"
 #include "App.h"
 #include "M_Render.h"
-#include "j1ParticleSystem.h"
+#include "ParticleSystem.h"
 #include "Defs.h"
 
 

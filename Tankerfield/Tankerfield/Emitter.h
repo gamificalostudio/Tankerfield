@@ -2,7 +2,7 @@
 #define __EMITTER_H__
 
 #include "Point.h"
-#include "j1ParticleSystem.h"
+#include "ParticleSystem.h"
 #include "ParticlePool.h"
 #include "PerfTimer.h"
 #include "SDL/include/SDL.h"

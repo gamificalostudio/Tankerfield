@@ -46,7 +46,7 @@ struct EmitterData
 	fPoint endSizeRand = { 0.0f, 0.0f };
 };
 
-class j1ParticleSystem : public Module
+class ParticleSystem : public Module
 {
 
 private:
@@ -60,10 +60,10 @@ private:
 	
 public:
 
-	j1ParticleSystem();
+	ParticleSystem();
 
 	// Destructor
-	virtual ~j1ParticleSystem();
+	virtual ~ParticleSystem();
 
 	// Called when before render is available
 	bool Awake(pugi::xml_node& config);

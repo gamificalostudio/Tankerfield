@@ -1,12 +1,12 @@
 
 #include "Log.h"
-#include "j1ParticleSystem.h"
+#include "ParticleSystem.h"
 #include "App.h"
 #include "M_Textures.h"
 
 
 
-j1ParticleSystem::j1ParticleSystem() : Module()
+ParticleSystem::ParticleSystem() : Module()
 {
 	name = "psystem";
 
@@ -14,12 +14,12 @@ j1ParticleSystem::j1ParticleSystem() : Module()
 	
 }
 
-j1ParticleSystem::~j1ParticleSystem()
+ParticleSystem::~ParticleSystem()
 {
 	
 }
 
-bool j1ParticleSystem::Awake(pugi::xml_node& config)
+bool ParticleSystem::Awake(pugi::xml_node& config)
 {
 	bool ret = true;
 
@@ -38,19 +38,19 @@ bool j1ParticleSystem::Awake(pugi::xml_node& config)
 	return ret;
 }
 
-bool j1ParticleSystem::Start()
+bool ParticleSystem::Start()
 {
 	particleAtlas = app->tex->Load(nameParticleAtlas.c_str());
 
 	return true;
 }
 
-bool j1ParticleSystem::PreUpdate()
+bool ParticleSystem::PreUpdate()
 {
 	return true;
 }
 
-bool j1ParticleSystem::Update(float dt)
+bool ParticleSystem::Update(float dt)
 {
 	for (std::list<Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
 	{
@@ -63,7 +63,7 @@ bool j1ParticleSystem::Update(float dt)
 	return true;
 }
 
-bool j1ParticleSystem::PostUpdate()
+bool ParticleSystem::PostUpdate()
 {
 	for (std::list<Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end();)
 	{
@@ -81,7 +81,7 @@ bool j1ParticleSystem::PostUpdate()
 	return true;
 }
 
-bool j1ParticleSystem::CleanUp()
+bool ParticleSystem::CleanUp()
 {
 	LOG("Freeing emitters from the system.");
 
@@ -99,7 +99,7 @@ bool j1ParticleSystem::CleanUp()
 	return true;
 }
 
-Emitter* j1ParticleSystem::AddEmiter(fPoint pos, EmitterType type)
+Emitter* ParticleSystem::AddEmiter(fPoint pos, EmitterType type)
 {
 	Emitter* tmp_emitter = new Emitter(pos, vecEmitterData[type]);
 
@@ -108,7 +108,7 @@ Emitter* j1ParticleSystem::AddEmiter(fPoint pos, EmitterType type)
 	return tmp_emitter;
 }
 
-bool j1ParticleSystem::RemoveEmitter(Emitter & emitter)
+bool ParticleSystem::RemoveEmitter(Emitter & emitter)
 {
 	for (std::list<Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
 	{
@@ -122,7 +122,7 @@ bool j1ParticleSystem::RemoveEmitter(Emitter & emitter)
 	return false;
 }
 
-bool j1ParticleSystem::RemoveAllEmitters()
+bool ParticleSystem::RemoveAllEmitters()
 {
 	bool ret = false;
 
@@ -137,12 +137,12 @@ bool j1ParticleSystem::RemoveAllEmitters()
 	return ret;
 }
  
-SDL_Texture* j1ParticleSystem::GetParticleAtlas() const
+SDL_Texture* ParticleSystem::GetParticleAtlas() const
 {
 	return particleAtlas;
 }
 
-void j1ParticleSystem::LoadEmitterData(pugi::xml_node & emitter, EmitterType type)
+void ParticleSystem::LoadEmitterData(pugi::xml_node & emitter, EmitterType type)
 {
 	EmitterData tmp;
 

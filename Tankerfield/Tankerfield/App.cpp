@@ -29,7 +29,7 @@
 #include "M_Debug.h"
 #include "Options_Menu.h"
 #include "M_VideoPlayer.h"
-#include "j1ParticleSystem.h"
+#include "ParticleSystem.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -56,7 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	main_menu = DBG_NEW M_MainMenu();
 	debug = DBG_NEW M_Debug();
 	video = DBG_NEW Video();
-	psystem = DBG_NEW j1ParticleSystem();
+	psystem = DBG_NEW ParticleSystem();
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 

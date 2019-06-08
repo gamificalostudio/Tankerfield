@@ -47,7 +47,7 @@
 
 #include "UI_Image.h"
 
-#include "j1ParticleSystem.h"
+#include "ParticleSystem.h"
 
 
 M_Scene::M_Scene() : Module()
