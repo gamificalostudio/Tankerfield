@@ -36,9 +36,9 @@ private:
 	int poolSize = 0;
 
 	// Emission time
-	j1PerfTimer stopTimer;
-	j1PerfTimer emissionTimer;
-	j1PerfTimer lifeTimer;
+	PerfTimer stopTimer;
+	PerfTimer emissionTimer;
+	PerfTimer lifeTimer;
 	double stopTime = 0.0f;
 	double emissionTime = 0.0f;
 	double lifetime = -1.0f;

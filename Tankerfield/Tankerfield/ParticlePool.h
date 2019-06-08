@@ -3,7 +3,7 @@
 
 #include "Particle.h"
 #include "Emitter.h"
-#include "p2Point.h"
+#include "Point.h"
 #include <vector>
 
 class Emitter;
