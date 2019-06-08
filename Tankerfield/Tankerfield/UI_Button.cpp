@@ -11,7 +11,7 @@
 UI_Button::UI_Button(const fPoint position, const UI_ButtonDef definition, UI_Listener* listener) : UI_Element(position, definition, listener)
 {
 	this->definition = definition;
-	this->is_interactive = true;
+	//this->is_interactive = true;
 	SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	section_width = definition.idle_rect.w;
 	section_height = definition.idle_rect.h;
@@ -31,11 +31,10 @@ void UI_Button::Destroy()
 
 bool UI_Button::Draw()
 {
-	FocusState state = app->ui->GetClickState();
 
 	sprite_rect = definition.idle_rect;
 
-	if (app->ui->GetFocusedElement() == this)
+	if (is_focused == true)
 	{
 		if (app->input->GetMouseButton(1) == KEY_REPEAT)
 		{
@@ -69,16 +68,6 @@ bool UI_Button::SetLabel(const fPoint position , const UI_LabelDef definition)
 	label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	label->SetParent(this);
 
-	return true;
-}
-
-bool UI_Button::PreUpdate()
-{
-	if (hover_state == HoverState::ENTER && app->ui->GetFocusedElement() != this)
-	{
-		// TODO 1: Add SFX  
-	}
-	
 	return true;
 }
 

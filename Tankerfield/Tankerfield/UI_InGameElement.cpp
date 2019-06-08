@@ -21,7 +21,6 @@ UI_InGameElement::UI_InGameElement(const fPoint position, const UI_InGameElement
 
 	if (definition.is_arrow_actived == true)
 	{
-		arrow_animation = &app->ui->arrow_anim;
 		color_mod = definition.arrow_color;
 	}
 }

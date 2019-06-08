@@ -33,8 +33,6 @@ public:
 
 	void Destroy();
 
-	bool PreUpdate();
-
 	bool Draw();
 
 	bool SetLabel(const fPoint position, const UI_LabelDef definition);

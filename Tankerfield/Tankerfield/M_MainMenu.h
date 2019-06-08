@@ -5,7 +5,7 @@
 #include "Module.h"
 #include "M_UI.h"
 
-#define MAX_PLAYERS 4
+
 #define DEFAULT_PANEL_COLUMNS 5
 #define DEFAULT_PANEL_ROWS 5
 
@@ -62,7 +62,9 @@ public:
 
 	bool Reset();
 
-	bool OnHoverEnter(UI_Element * element);
+	bool UI_OnHoverEnter(UI_Element * element);
+
+	bool UI_Selected(UI_Element * object);
 
 	void SetState(MENU_STATE new_state);
 
@@ -71,12 +73,6 @@ private:
 	bool SetPlayerProperties();
 
 	void SetPlayerObjectsState(bool new_value);
-
-	void InputNavigate();
-
-	void InputSelect();
-
-	
 
 	void ResetPanelColors();
 
@@ -129,8 +125,8 @@ private:
 	float B_Color[6] = { 0     , 0    , 0    , 255.F, 255.F, 255.F };
 
 	float color_percent = 0.f;
-	SDL_Color colors[DEFAULT_PANEL_COLUMNS][DEFAULT_PANEL_ROWS];
-	UI_InteractiveGroup * selection_panel = nullptr;
+	SDL_Color colors[DEFAULT_PANEL_COLUMNS * DEFAULT_PANEL_ROWS];
+	UI_InteractiveGroup * selection_navigation = nullptr;
 
 	// Credits Menu
 

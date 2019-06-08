@@ -9,14 +9,20 @@ class UI_Quad;
 
 struct UI_InteractiveGroupDef : public UI_ElementDef
 {
-	uint columns = 0u;
-	uint rows = 0u;
-	UI_Image*  focus_indicator = nullptr;
+	// -1 : All conected controllers can navigate   
+    // 0 to 3 : Only one controller can navigate 
+	int  focused_controller = -1;     
+
+	// Image that can indicate the focused element. It is optional 
+	UI_Image* focus_indicator = nullptr;
+	
+
 public:
-	UI_InteractiveGroupDef(uint columns, uint rows, UI_Image* focus_indicator = nullptr) :columns(columns), rows(rows), focus_indicator(focus_indicator)
+	// -1 : All conected controllers can navigate   
+    // 0 to 3 : Only one controller can navigate 
+	UI_InteractiveGroupDef(int focused_controller, UI_Image* focus_indicator = nullptr): focus_indicator(focus_indicator)
 	{};
-	UI_InteractiveGroupDef()
-	{};
+
 };
 
 class UI_InteractiveGroup : public UI_Element , public UI_Listener
@@ -25,44 +31,69 @@ public:
 
 	UI_InteractiveGroup(const fPoint position, const UI_InteractiveGroupDef definition, UI_Listener *listener);
 
+	~UI_InteractiveGroup();
+
+	bool Update(float dt);
+
 	void Destroy();
 
-	bool OnHoverEnter(UI_Element* object);
-
-	bool HandleControllerINavigation(int controller);
-
-	bool HandleKeyboardNavigation();
-
-	bool OnHoverRepeat(UI_Element* object);
-
-	bool OnHoverExit(UI_Element * object);
-
 public:
+	// -1 : All conected controllers can navigate  
+	// 0 to 3 : Only one controller can navigate 
+	void SetControllers(int controller_id);
 
-	void SetFocusImage(iPoint point);
-
-	void SetElement( UI_Element* element, const iPoint position);
-
-	UI_Element * GetElement(iPoint position);
+	void SetFocusImage(UI_Element * element);
 
 	UI_Element * GetFocusedElement();
 
-	iPoint GetPos(UI_Element* element);
+	std::list<UI_Element*> * GetGroupList();
 
-	void SetNearestElement(const INPUT_DIR dir);
+	void AddElement( UI_Element* element);
+
+	void Active();
+
+	void Desactive();
 
 private:
 
-	iPoint GetFirstAvailableElement();
+	UI_Element * GetNearestElement(INPUT_DIR input_dir);
+
+	UI_Element * GetFirstAbleElement();
+
+	void MouseNavigation();
+
+	void MouseSelection();
+
+	void ControllersNavigation();
+
+	void ControllerSelection();
 
 private:
 
-	uint columns = 0u;
-	uint rows = 0u;
+	bool first_focus = true;
 
-	iPoint current_focus_pos = { 0,0 };
+	bool is_active = false;
+
+	// Focus info =================================
+
+	// Current focused element in interactive group
+	UI_Element* focused_element = nullptr;
+
+	// Image that can indicate the focused element. It is optional 
 	UI_Image*  focus_indicator = nullptr;
-	UI_Element** group_elements = nullptr;
+
+	// -1 : All conected controllers can navigate  
+	// 0 to 3 : Only one controller can navigate 
+	int focused_controller = -1;
+
+	// Current state of focus. Used in UI Listeners methods 
+	FocusState focus_state = FocusState::NONE;
+
+	// Elements ====================================
+
+	list<UI_Element*> group_elements_list;
+
+	friend M_UI;
 };
 
 

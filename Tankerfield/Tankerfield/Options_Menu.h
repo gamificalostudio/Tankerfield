@@ -24,15 +24,14 @@ public:
 
 	Options_Menu();
 
-	bool OnHoverEnter(UI_Element * element);
+	bool UI_OnHoverEnter(UI_Element * element);
+
+	bool UI_Selected(UI_Element * element);
 
 	void ShowOptionsMenu();
 
 	void HideOptionsMenu();
 
-	void InputNavigate();
-
-	void InputSelect();
 
 private:
 
@@ -47,7 +46,7 @@ private:
 
 	// Main screen --------------------------------
 
-	UI_InteractiveGroup * global_navigation_panel = nullptr;
+	UI_InteractiveGroup * options_navigation = nullptr;
 	UI_InteractiveGroup * labels_panel = nullptr;
 
 	UI_Image* panel_options = nullptr;

@@ -63,9 +63,6 @@ bool M_UI::Awake(pugi::xml_node& config)
 	LOG("Loading Module UI");
 	bool ret = true;
 
-	arrow_anim.frames = app->anim_bank->LoadFrames(config.child("animations").child("arrow"));
-
-
 	button_sprites[(int)CONTROLLER_BUTTON::A] =  { 440,10 ,50 ,50 };
 	button_sprites[(int)CONTROLLER_BUTTON::B] =  { 390,60 ,50 ,50 };
 	button_sprites[(int)CONTROLLER_BUTTON::Y] =  { 440,60 ,50 ,50 };
@@ -129,8 +126,7 @@ bool M_UI::CleanUp()
 
 	app->tex->UnLoad(atlas);
 	atlas = nullptr;
-	focused_element = nullptr;
-	interactive_elements.clear();
+	interactive_groups.clear();
 
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
 	{
@@ -162,10 +158,8 @@ bool M_UI::CleanUp()
 
 bool M_UI::Reset()
 {
-	focused_element = nullptr;
 	reset = true;
-
-	interactive_elements.clear();
+	interactive_groups.clear();
 
 	for (list < Player_GUI*> ::iterator gui = players_guis.begin(); gui != players_guis.end(); ++gui)
 	{
@@ -208,22 +202,111 @@ bool M_UI::PreUpdate()
 	app->input->GetMousePosition(x,y);
 	mouse_position = fPoint( x,y );
 
+	for (list<UI_Element*>::iterator element = elements_list.begin(); element != elements_list.end(); ++element)
+	{
+		(*element)->PreUpdate();
+	}
+
+
 	return true;
+}
+
+void M_UI::DesactiveAllInteractiveGroups()
+{
+	for (std::list<UI_InteractiveGroup*>::iterator itr = interactive_groups.begin(); itr != interactive_groups.end(); ++itr)
+	{
+		(*itr)->Desactive();
+	}
 }
 
 bool M_UI::Update(float dt)
 {
 	BROFILER_CATEGORY("M_UI_Update", Profiler::Color::Brown);
 
+	// Select input type ====================================================
+
+	SelectInputType();
+
+	// Update navigation and selection ======================================
+
+	prevent_double_select = false;
+
+	for (std::list<UI_InteractiveGroup*>::iterator itr = interactive_groups.begin(); itr != interactive_groups.end() && prevent_double_select == false; ++itr)
+	{
+		if ((*itr)->is_active == false)
+		{
+			continue;
+		}
+
+		if (input_type == UI_INPUT_TYPE::MOUSE)
+		{
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->MouseSelection();
+			}
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->MouseNavigation();
+			}
+		}
+		else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
+		{
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->ControllerSelection();
+			}
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->ControllersNavigation();
+			}
+		}
+	}
+
+	// Update elements and in game elements =================================
+
+	UpdateElements(dt);
+
+	// Update player guis ====================================================
+
 	for (std::list<Player_GUI*>::iterator iter = players_guis.begin(); iter != players_guis.end(); ++iter)
 	{
 		(*iter)->Update(dt);
 	}
 
-	UpdateElements(dt);
-	FocusMouse();
-
 	return true;
+}
+
+void M_UI::SelectInputType()
+{
+	int x = 0, y = 0;
+	app->input->GetMouseMotion(x, y);
+
+	if (x != 0 && y != 0 && input_type == UI_INPUT_TYPE::CONTROLLERS)
+	{
+		input_type = UI_INPUT_TYPE::MOUSE;
+	}
+	else if (ControllersHaveActivity() == true && input_type == UI_INPUT_TYPE::MOUSE)
+	{
+		input_type = UI_INPUT_TYPE::CONTROLLERS;
+	}
+}
+
+bool M_UI::ControllersHaveActivity()
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (app->input->IsConnectedControllet(i) == false)
+		{
+			continue;
+		}
+
+		if (app->input->GetControllerJoystick(i, Joystick::LEFT) != iPoint(0,0) )
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 // Called after all Updates
@@ -256,143 +339,13 @@ bool M_UI::PostUpdate(float dt)
 		{
 			if ((*item) != main_ui_element)
 			{
-				app->render->DrawQuad({ (int)(*item)->position.x - 3 , (int)(*item)->position.y - 3,  6, 6 }, 255, 0, 0, 255, true, false);
+				app->render->DrawQuad((*item)->GetDrawRect(), 255, 0, 0, 255, true, false);
 			}
 		}
 	}
 	return true;
 }
 
-void M_UI::FocusMouse()
-{
-
-	// Draggable ================================================
-	if (focused_element && focused_element->is_draggable)
-	{
-		switch (focus_state)
-		{
-		case FocusState::ENTER:
-			mouse_offset = mouse_position - focused_element->position;
-			break;
-		case FocusState::REPEAT:
-			focused_element->position = mouse_position - mouse_offset;
-			focused_element->UpdateRelativePosition();
-			break;
-		case FocusState::EXIT:
-			mouse_offset = { 0,0 };
-			break;
-		}
-	}
-
-	// Hover States ============================================
-
-	fRect section;
-
-	mouse_is_focusing = false;
-
-	for (list<UI_Element*>::iterator item = interactive_elements.begin(); item != interactive_elements.end(); ++item)
-	{
-		if ((*item)->state != ELEMENT_STATE::VISIBLE || (*item)->section_width == 0.f || (*item)->section_height == 0.f)
-		{
-			continue;
-		}
-
-		section = (*item)->GetSection();
-
-		if (mouse_position.x >= section.GetLeft() && mouse_position.x <= section.GetRight() && mouse_position.y >= section.GetTop() && mouse_position.y <= section.GetBottom())
-		{
-			if ((*item)->hover_state == HoverState::NONE)
-			{
-				(*item)->hover_state = HoverState::ENTER;
-			}
-			else
-			{
-				(*item)->hover_state = HoverState::REPEAT;
-			}
-
-			mouse_is_focusing = true;
-		}
-		else
-		{
-			if ((*item)->hover_state == HoverState::ENTER || (*item)->hover_state == HoverState::REPEAT)
-			{
-				(*item)->hover_state = HoverState::EXIT;
-			}
-			else
-			{
-				(*item)->hover_state = HoverState::NONE;
-			}
-		}
-
-		(*item)->PreUpdate();
-	}
-
-	// Hover Callbacks =============================================
-
-	for (list<UI_Element*>::iterator item = interactive_elements.begin(); item != interactive_elements.end(); ++item)
-	{
-		if ((*item)->listener == nullptr)
-		{
-			continue;
-		}
-
-		switch ((*item)->hover_state)
-		{
-		case HoverState::ENTER:
-			(*item)->listener->OnHoverEnter((*item));
-			break;
-		case HoverState::REPEAT:
-			(*item)->listener->OnHoverRepeat((*item));
-			break;
-		case HoverState::EXIT:
-			(*item)->listener->OnHoverExit((*item));
-			break;
-		}
-	}
-
-
-	// Click States ============================================
-
-	//if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-	//{
-	//	SelectClickedObject();
-	//}
-	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && focused_element)
-	//{
-	//	focus_state = FocusState::REPEAT;
-	//}
-	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && focused_element)
-	//{
-	//	focus_state = FocusState::EXIT;
-	//}
-	//else if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_IDLE && focused_element)
-
-	//{
-	//	focus_state = FocusState::NONE;
-	//	focused_element = nullptr;
-	//}
-
-	//// Click Callbacks =============================================
-
-	//if (focused_element != nullptr && focused_element->listener != nullptr)
-	//{
-	//	switch (focus_state)
-	//	{
-	//	case FocusState::ENTER:
-	//		focused_element->listener->ClickDown(focused_element);
-	//		break;
-	//	case FocusState::REPEAT:
-	//		focused_element->listener->ClickRepeat(focused_element);
-	//		break;
-	//	case FocusState::EXIT:
-	//		if (focused_element->hover_state != HoverState::NONE)
-	//		{
-	//			focused_element->listener->ClickUp(focused_element);
-	//		}
-	//		break;
-	//	}
-	//}
-}
 
 void M_UI::UpdateElements(float dt)
 {
@@ -474,24 +427,6 @@ void M_UI::UpdateElements(float dt)
 
 			parent->GetSons()->erase(std::find(parent->GetSons()->begin(), parent->GetSons()->end(), (*element)));
 
-			// Check if it is teh current selected element
-
-			if (focused_element == (*element))
-			{
-				focused_element = nullptr;
-			}
-
-			// Delete from UI list
-			if ((*element)->is_interactive == true)
-			{
-				std::list<UI_Element*>::iterator found_element = std::find(interactive_elements.begin(), interactive_elements.end(), (*element));
-
-				if (found_element != interactive_elements.end())
-				{
-					interactive_elements.erase(found_element);
-				}
-			}
-
 			RELEASE((*element));
 			element = elements_list.erase(element);
 		}
@@ -514,35 +449,9 @@ Player_GUI * M_UI::AddPlayerGUI(Obj_Tank * player)
 	return player_gui;
 }
 
-
  SDL_Texture* M_UI::GetAtlas() const 
 {
 	return atlas;
-}
-
- FocusState M_UI::GetClickState() const
- {
-	 return focus_state;
- }
-
- void M_UI::SetFocusedElement(UI_Element * element)
- {
-	 focused_element = element;
- }
-
- UI_Element * M_UI::GetFocusedElement()
-{
-	return focused_element;
-}
-
-UI_INPUT_TYPE M_UI::GetInputType()
-{
-	return input_type;
-}
-
-bool M_UI::MouseIsFocusing()
-{
-	return mouse_is_focusing;
 }
 
 void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
@@ -559,45 +468,6 @@ void M_UI::SetStateToBranch(const ELEMENT_STATE state, UI_Element * branch_root)
 		SetStateToBranch(state, (*item));
 	}
 
-}
-
-bool M_UI::SelectClickedObject()
-{
-	list<UI_Element*> clicked_objects;
-
-	for (list<UI_Element*>::iterator item = interactive_elements.begin(); item != interactive_elements.end(); ++item)
-	{
-		if ((*item)->hover_state != HoverState::NONE  && (*item)->state == ELEMENT_STATE::VISIBLE)
-		{
-			clicked_objects.push_back((*item));
-		}
-	}
-
-	// Select nearest object -------------------------------
-	if ( ! clicked_objects.empty())
-	{
-		UI_Element* nearest_object = nullptr;
-		int nearest_object_position = -1;
-
-		for ( list<UI_Element*>::iterator item = clicked_objects.begin(); item != clicked_objects.end() ; ++item)
-		{
-			int count = 0;
-			for (UI_Element* iterator = (*item); iterator != nullptr ; iterator = iterator->element_parent)
-			{
-				++count;
-			}
-
-			if (count > nearest_object_position)
-			{
-				nearest_object_position = count;
-				nearest_object = (*item);
-			}
-		}
-
-		focused_element = nearest_object;
-	}
-
-	return true;
 }
 
 void M_UI::DrawUI(UI_Element * object)
@@ -627,17 +497,13 @@ void M_UI::DrawUI(UI_Element * object)
 		}
 	}
 	
-	if (app->debug->debug_ui && object->state != ELEMENT_STATE::HIDDEN && object->is_interactive == true)
+	if (app->debug->debug_ui && object->state != ELEMENT_STATE::HIDDEN)
 	{
 		SDL_Rect rect = (SDL_Rect)object->GetSection();
 
-		if (focused_element == object)
+		if (object->is_focused == true)
 		{
 			app->render->DrawQuad(rect, 255, 233, 15, 100, true, false);
-		}
-		else if (object->hover_state != HoverState::NONE )
-		{
-			app->render->DrawQuad(rect, 255, 0, 0, 100, true, false);
 		}
 		else
 		{
@@ -664,15 +530,6 @@ void M_UI::UpdateHerarchyPositions(UI_Element * object, fPoint cumulated_positio
 	for (list<UI_Element*>::iterator item = object->element_sons.begin() ; item != object->element_sons.end(); ++item)
 	{
 		UpdateHerarchyPositions((*item), cumulated_position);
-	}
-}
-
-void M_UI::AddInteractiveElement(UI_Element* element)
-{
-	if (element != nullptr && element->is_in_game == false)
-	{
-		element->is_interactive = true;
-		interactive_elements.push_back(element);
 	}
 }
 

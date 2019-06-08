@@ -12,7 +12,8 @@ public:
 
 	void HideControllersSettings();
 
-	void InputSelect();
+	bool UI_Selected(UI_Element * element);
+
 
 
 	UI_InteractiveGroup* InteractiveGroup = nullptr;
