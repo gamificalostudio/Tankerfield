@@ -157,13 +157,3 @@ void Obj_Emitter::StopEmission(double timer)
 		stopTimer.Start();
 	}
 }
-
-void Obj_Emitter::MoveEmitter(fPoint newPos)
-{
-	pos_map = newPos;
-}
-
-fPoint Obj_Emitter::GetEmitterPos() const
-{
-	return pos_map;
-}

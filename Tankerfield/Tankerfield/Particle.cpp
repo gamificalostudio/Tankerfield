@@ -90,6 +90,7 @@ void Particle::Draw(Camera * camera)
 		app->objectmanager->particle_system.GetParticleAtlas(),
 		(int)center_x,
 		(int)center_y,
+		camera,
 		&particle_state.particle_live.pRect,
 		&particle_state.particle_live.rectSize,
 		curr_color,

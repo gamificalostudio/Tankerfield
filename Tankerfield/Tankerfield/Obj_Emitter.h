@@ -78,10 +78,6 @@ public:
 
 	// Stops emission specified by timer, if not emission stop time is infinite
 	void StopEmission(double timer = 0.0f);
-
-	// Emitter move methods
-	void MoveEmitter(fPoint newPos);
-	fPoint GetEmitterPos() const;
 };
 
 #endif

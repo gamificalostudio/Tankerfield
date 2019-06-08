@@ -673,7 +673,7 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 }
 
 // Blit particle to screen
-bool M_Render::BlitParticle(SDL_Texture* texture, int x, int y, const SDL_Rect* section, const SDL_Rect* rectSize, const SDL_Color & color, const SDL_BlendMode & blend_mode, float speed, double angle) const
+bool M_Render::BlitParticle(SDL_Texture* texture, int x, int y, Camera * current_camera, const SDL_Rect* section, const SDL_Rect* rectSize, const SDL_Color & color, const SDL_BlendMode & blend_mode, float speed, double angle) const
 {
 	if (SDL_SetTextureColorMod(texture, color.r, color.g, color.b) != 0)
 	{
@@ -691,39 +691,33 @@ bool M_Render::BlitParticle(SDL_Texture* texture, int x, int y, const SDL_Rect* 
 	bool ret = true;
 	uint scale = app->win->GetScale();
 
-	SDL_Rect rect;
-	rect.x = (int)(/*camera.x * */speed)+x * scale;
-	rect.y = (int)(/*camera.y * */speed)+y * scale;
+	SDL_Rect rect_in_screen;
+	SDL_Rect spritesheet_rect{ 0,0,0,0 };
 
-	if (rectSize != NULL)
+	//Transform the rect in the word to the rect in screen =======================
+	rect_in_screen.x = -current_camera->rect.x + x * scale;
+	rect_in_screen.y = -current_camera->rect.y + y * scale;
+
+	if (section != NULL)
 	{
-		rect.w = rectSize->w;
-		rect.h = rectSize->h;
-	}
-	else if (section != NULL)
-	{
-		rect.w = section->w;
-		rect.h = section->h;
+		spritesheet_rect = *section;
+		rect_in_screen.w = section->w * scale;
+		rect_in_screen.h = section->h * scale;
 	}
 	else
-		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
-
-	int px = rect.w * 0.5f;
-	int py = rect.h * 0.5f;
-
-	rect.w *= scale;
-	rect.h *= scale;
-
-	SDL_Point* p = NULL;
-	SDL_Point pivot;
-	pivot.x = px;
-	pivot.y = py;
-	p = &pivot;
-
-
-	if (SDL_RenderCopyEx(renderer, texture, section, &rect, angle, NULL, SDL_FLIP_NONE) != 0)
 	{
-		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
+		spritesheet_rect.w = rect_in_screen.w;
+		spritesheet_rect.h = rect_in_screen.h;
+	}
+	//Move the rect_in_screen to their correct screen =========================== 	
+	rect_in_screen.x += current_camera->screen_section.x;
+	rect_in_screen.y += current_camera->screen_section.y;
+
+	//Print the rect_in_screen ============================================
+	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, NULL, SDL_FLIP_NONE) != 0)
+	{
+		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
 
