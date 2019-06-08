@@ -32,7 +32,6 @@ Pause_Menu::Pause_Menu()
 
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
 
 	// Controll helper ------------------------
 

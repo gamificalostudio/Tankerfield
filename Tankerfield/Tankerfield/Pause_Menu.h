@@ -41,8 +41,6 @@ private:
 
 	// Elements ================================================
 
-	Camera*			       camera = nullptr;
-
 	// Control helpers --------------------------------------
 
 	UI_Image* control_helper_image = nullptr;
