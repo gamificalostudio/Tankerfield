@@ -633,25 +633,27 @@ bool Obj_Tank::Draw(Camera * camera)
 	// Debug line
 	if (show_crosshairs && camera == camera_player)
 	{
-		//float line_length = 5.f;
-		////1-- Set a position in the isometric space
-		//fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
-		////2-- Transform that point to screen coordinates
-		//iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
-		//app->render->DrawLineSplitScreen(
-		//	pos_screen.x, pos_screen.y - cannon_height,
-		//	input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
-
+		//Current aiming line
 		float line_length = 5.f;
-		//TurrPos in screen space
-		iPoint point1 (pos_screen.x, pos_screen.y - cannon_height);
-		//Input pos in screen space
-		iPoint point2 = point1 + app->input->GetControllerJoystick(controller, gamepad_aim);
+		//1-- Set a position in the isometric space
+		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
 		//2-- Transform that point to screen coordinates
+		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
 		app->render->DrawLineSplitScreen(
-			point1.x, point1.y,
-			point2.x, point2.y
-			, 255, 0, 255, 255, camera);
+			pos_screen.x, pos_screen.y - cannon_height,
+			input_screen_pos.x, input_screen_pos.y, 255, 0, 255, 255, camera);
+
+		//Natural aiming line
+		//float line_length = 5.f;
+		//TurrPos in screen space
+		//iPoint point1 (pos_screen.x, pos_screen.y - cannon_height);
+		//Input pos in screen space
+		//iPoint point2 = point1 + app->input->GetControllerJoystick(controller, gamepad_aim);
+		//2-- Transform that point to screen coordinates
+		//app->render->DrawLineSplitScreen(
+		//	point1.x, point1.y,
+		//	point2.x, point2.y
+		//	, 255, 255, 0, 255, camera);
 	}
 	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
