@@ -40,55 +40,8 @@ bool ParticleSystem::Start()
 	return true;
 }
 
-bool ParticleSystem::PreUpdate()
-{
-	return true;
-}
-
-bool ParticleSystem::Update(float dt)
-{
-	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
-	{
-		if ((*it) != nullptr)
-		{
-			(*it)->Update(dt);
-		}
-	}
-
-	return true;
-}
-
-bool ParticleSystem::PostUpdate()
-{
-	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end();)
-	{
-		if ((*it)->to_destroy)
-		{
-			delete (*it);
-			it = emitters_list.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
-
-	return true;
-}
-
 bool ParticleSystem::CleanUp()
 {
-	LOG("Freeing emitters from the system.");
-
-	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
-	{
-		if ((*it) != nullptr)
-		{
-			delete (*it);
-		}
-	}
-
-	emitters_list.clear();
 	app->tex->UnLoad(particleAtlas);
 
 	return true;

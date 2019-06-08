@@ -147,8 +147,6 @@ bool M_ObjManager::PreUpdate()
 
 	}
 
-	particle_system.PreUpdate();
-
 	return true;
 }
 
@@ -172,8 +170,6 @@ bool M_ObjManager::Update(float dt)
 			++iterator;
 		}
 	}
-
-	particle_system.Update(dt);
 	
 	return true;
 }
@@ -193,10 +189,6 @@ inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator & iterator)
 		enemies.remove((*iterator));
 	}
 
-	if ((*iterator)->active == false)
-	{
-
-	}
 	if ((*iterator)->coll != nullptr)
 	{
 		(*iterator)->coll->object = nullptr;
@@ -344,8 +336,6 @@ bool M_ObjManager::PostUpdate(float dt)
 		draw_objects.clear();
     }
 	SDL_RenderSetClipRect(app->render->renderer, nullptr);
-   
-	particle_system.PostUpdate();
 
 	return true;
 }

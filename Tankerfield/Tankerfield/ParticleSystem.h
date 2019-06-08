@@ -64,9 +64,6 @@ public:
 	virtual ~ParticleSystem();
 	bool Awake();
 	bool Start();
-	bool PreUpdate();
-	bool Update(float dt);
-	bool PostUpdate();
 	bool CleanUp();
 
 	// Emitter methods
