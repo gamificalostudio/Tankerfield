@@ -673,9 +673,12 @@ void Obj_Tank::DrawCrosshair(Camera * camera)
 		pos_screen.y - cannon_height);
 
 	//Angle between the two positions
+	fPoint shot_dir_max = shot_dir * 10000000;//Arbitrary number to reduce the decimals on the floating point
+	iPoint shot_dir_screen = app->map->MapToScreenI(shot_dir_max.y, shot_dir_max.x);
+
 	float crosshair_angle = atan2(
-		shot_dir.y,
-		shot_dir.x)  * RADTODEG + ISO_COMPENSATION;
+		-shot_dir_screen.y,
+		shot_dir_screen.x)  * RADTODEG + 180;
 
 	app->render->BlitScaledAndRotated(
 		crosshair_tex,
