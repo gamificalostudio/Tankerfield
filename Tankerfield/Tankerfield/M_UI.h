@@ -224,6 +224,8 @@ private:
 
 	void SelectInputType();
 
+	bool ControllersHaveActivity();
+
 	void MouseNavigation();
 
 	void MouseSelection();

@@ -605,7 +605,7 @@ bool M_MainMenu::SetPlayerProperties()
 		modules_to_reset.push_back((Module*)app->ui);
 		modules_to_reset.push_back((Module*)app->debug);
 		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f, modules_to_reset);
-		menu_state = MENU_STATE::CHANGE_SCENE;
+		SetState(MENU_STATE::CHANGE_SCENE);
 	}
 	else
 	{
@@ -656,18 +656,6 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		break;
 
 	case MENU_STATE::SELECTION:
-		
-		current_player = 0;
-		ResetPanelColors();
-		SetPlayerObjectsState(false);
-
-		player_labels_peg->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		selection_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-
-		player_labels[0]->color_mod = { 250, 20, 20, 255 };
-		player_labels[1]->color_mod = { 220, 220, 220, 255 };
-		player_labels[2]->color_mod = { 220, 220, 220, 255 };
-		player_labels[3]->color_mod = { 220, 220, 220, 255 };
 
 		break;
 	case MENU_STATE::CREDITS:
@@ -692,7 +680,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	switch (new_state)
 	{
 	case MENU_STATE::INIT_MENU:
-
+		SetPlayerObjectsState(false);
 		app->ui->SetInteractiveGroup(menu_navigation);
 
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
@@ -706,11 +694,15 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 
 	case MENU_STATE::SELECTION:
 
-		//Set Values -------------------------------------------
-
+		// Set Values -------------------------------------------
+		current_player = 0;
+		player_labels[0]->color_mod = { 250, 20, 20, 255 };
+		player_labels[1]->color_mod = { 220, 220, 220, 255 };
+		player_labels[2]->color_mod = { 220, 220, 220, 255 };
+		player_labels[3]->color_mod = { 220, 220, 220, 255 };
 		SetPlayerObjectsState(true);
 
-		// Set elements state --------------------------------
+		// Set elements state -----------------------------------
 
 		app->ui->SetInteractiveGroup(selection_navigation);
 		selection_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);

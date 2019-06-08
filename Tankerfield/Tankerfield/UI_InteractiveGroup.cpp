@@ -22,7 +22,12 @@ bool UI_InteractiveGroup::Update(float dt)
 
 bool UI_InteractiveGroup::UI_OnHoverEnter(UI_Element * element)
 {
-	SetFocusImage(element);
+	if (focus_indicator != nullptr)
+	{
+		focus_indicator->SetState(ELEMENT_STATE::VISIBLE);
+		SetFocusImage(element);
+	}
+	
 
 	if (listener != nullptr)
 	{
@@ -46,6 +51,11 @@ bool UI_InteractiveGroup::UI_OnHoverRepeat(UI_Element * element)
 
 bool UI_InteractiveGroup::UI_OnHoverExit(UI_Element * element)
 {
+	if (focus_indicator != nullptr)
+	{
+		focus_indicator->SetState(ELEMENT_STATE::HIDDEN);
+	}
+
 	if (listener != nullptr)
 	{
 		listener->UI_OnHoverExit(element);
@@ -75,6 +85,9 @@ void UI_InteractiveGroup::SetElement(UI_Element* element)
 	if (element != nullptr)
 	{
 		element->SetParent(this);
+		element->SetListener (this);
+		element->section_height = element->sprite_rect.h;
+		element->section_width = element->sprite_rect.w;
 		group_elements_list.push_back(element);
 	}
 }

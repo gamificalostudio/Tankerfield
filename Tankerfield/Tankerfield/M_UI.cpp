@@ -217,16 +217,17 @@ bool M_UI::Update(float dt)
 
 	if (current_interactive_group != nullptr)
 	{
-		//if (input_type == UI_INPUT_TYPE::MOUSE)
-		//{
-		//	MouseSelection();
-		//	MouseNavigation();
-		//}
-		//else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
-		//{
-			ControllerSelection();
+		if (input_type == UI_INPUT_TYPE::MOUSE)
+		{
+			MouseNavigation();
+			MouseSelection();
+		}
+		else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
+		{
 			ControllersNavigation();
-		//}
+			ControllerSelection();
+
+		}
 	}
 
 	// Update elements and in game elements =================================
@@ -241,6 +242,39 @@ bool M_UI::Update(float dt)
 	}
 
 	return true;
+}
+
+void M_UI::SelectInputType()
+{
+	int x = 0, y = 0;
+	app->input->GetMouseMotion(x, y);
+
+	if (x != 0 && y != 0 && input_type == UI_INPUT_TYPE::CONTROLLERS)
+	{
+		input_type = UI_INPUT_TYPE::MOUSE;
+	}
+	else if (ControllersHaveActivity() == true && input_type == UI_INPUT_TYPE::MOUSE)
+	{
+		input_type = UI_INPUT_TYPE::CONTROLLERS;
+	}
+}
+
+bool M_UI::ControllersHaveActivity()
+{
+	for (int i = 0; i < MAX_PLAYERS; ++i)
+	{
+		if (focus_controller_id != -1 && focus_controller_id != i && app->input->IsConnectedControllet(i))
+		{
+			continue;
+		}
+
+		if (app->input->GetControllerJoystick(i, Joystick::LEFT) != iPoint(0,0) )
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 // Called after all Updates
@@ -329,7 +363,7 @@ void M_UI::MouseNavigation()
 		}
 	}
 
-	if (mouse_is_focusing = false && focused_element != nullptr)
+	if (mouse_is_focusing == false && focused_element != nullptr)
 	{
 		focused_element->listener->UI_OnHoverExit(focused_element);
 		focused_element = nullptr;
@@ -342,7 +376,6 @@ void M_UI::ControllerSelection()
 
 	if (focused_element != nullptr)
 	{
-
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			if (focus_controller_id != -1 && focus_controller_id != i && app->input->IsConnectedControllet(i))
@@ -507,11 +540,6 @@ UI_Element*  M_UI::GetFistAvaliableElement()
 	}
 
 	return nullptr;
-}
-
-void M_UI::SelectInputType()
-{
-
 }
 
 void M_UI::UpdateElements(float dt)
