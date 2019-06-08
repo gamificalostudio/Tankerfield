@@ -27,7 +27,7 @@ bool ParticleSystem::Awake()
 		std::string emitterType = emitters.attribute("type").as_string();
 
 		if (emitterType == "fire") {
-			LoadEmitterData(emitters, EmitterType::EMITTER_TYPE_FIRE);
+			LoadEmitterData(emitters, ObjectType::EMITTER_FIRE);
 		}
 	}
 	return ret;
@@ -46,51 +46,13 @@ bool ParticleSystem::CleanUp()
 
 	return true;
 }
-
-Obj_Emitter* ParticleSystem::AddEmiter(fPoint pos, EmitterType type)
-{
-	Obj_Emitter* tmp_emitter = new Obj_Emitter(pos, vecEmitterData[type]);
-
-	emitters_list.push_back(tmp_emitter);
-	
-	return tmp_emitter;
-}
-
-bool ParticleSystem::RemoveEmitter(Obj_Emitter & emitter)
-{
-	for (std::list<Obj_Emitter*>::const_iterator it = emitters_list.begin(); it != emitters_list.end(); ++it)
-	{
-		if ((*it) == &emitter)
-		{
-			(*it)->to_destroy = true;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-bool ParticleSystem::RemoveAllEmitters()
-{
-	bool ret = false;
-
-	std::list<Obj_Emitter*>::const_iterator it;
-
-	for (it = emitters_list.begin(); it != emitters_list.end(); ++it)
-	{
-		if ((*it) != nullptr) (*it)->to_destroy = true;
-		ret = true;
-	}
-
-	return ret;
-}
  
 SDL_Texture* ParticleSystem::GetParticleAtlas() const
 {
 	return particleAtlas;
 }
 
-void ParticleSystem::LoadEmitterData(pugi::xml_node & emitter, EmitterType type)
+void ParticleSystem::LoadEmitterData(pugi::xml_node & emitter, ObjectType type)
 {
 	EmitterData tmp;
 

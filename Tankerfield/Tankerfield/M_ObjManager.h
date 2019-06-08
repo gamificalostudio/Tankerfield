@@ -52,6 +52,9 @@ enum class ObjectType
 	FLAMETHROWER_FLAME,
 	DAMAGED_SMOKE,
 
+	//EMITTERS
+	EMITTER_FIRE,
+
 	MAX
 };
 

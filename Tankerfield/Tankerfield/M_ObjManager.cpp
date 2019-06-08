@@ -49,6 +49,7 @@
 #include "HealingShot_Area.h"
 #include "Oil_Splash.h"
 #include "Obj_Smoke.h"
+#include "Obj_Emitter.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -473,6 +474,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::DAMAGED_SMOKE:
 		ret = DBG_NEW Obj_Smoke(pos);
 		ret->type = ObjectType::DAMAGED_SMOKE;
+		break;
+	case ObjectType::EMITTER_FIRE:
+		ret = DBG_NEW Obj_Emitter(pos, particle_system.vecEmitterData[type]);
+		ret->type = ObjectType::EMITTER_FIRE;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");

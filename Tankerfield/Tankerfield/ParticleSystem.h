@@ -3,9 +3,9 @@
 
 #include "Point.h"
 #include "Module.h"
-#include <list>
 #include <string>
 #include "SDL/include/SDL.h"
+#include <map>
 
 #define MAX_NUM_EMITTERS_TYPE 1
 
@@ -14,11 +14,7 @@ struct SDL_Texture;
 struct SDL_Rect;
 struct SDL_Color;
 
-enum EmitterType
-{
-	EMITTER_TYPE_NONE = -1,
-	EMITTER_TYPE_FIRE
-};
+enum class ObjectType;
 
 struct EmitterData
 {
@@ -49,13 +45,10 @@ class ParticleSystem
 {
 
 private:
-
-	std::list<Obj_Emitter*> emitters_list;
 	SDL_Texture* particleAtlas = nullptr;
 	std::string nameParticleAtlas;
 
-	// Static array that stores all the data of emitters
-	EmitterData vecEmitterData[MAX_NUM_EMITTERS_TYPE];
+	std::map<ObjectType, EmitterData> vecEmitterData;
 	
 public:
 
@@ -66,13 +59,10 @@ public:
 	bool Start();
 	bool CleanUp();
 
-	// Emitter methods
-	Obj_Emitter* AddEmiter(fPoint pos, EmitterType type);
-	bool RemoveEmitter(Obj_Emitter& emitter);
-	bool RemoveAllEmitters();
-
 	SDL_Texture* GetParticleAtlas() const;
-	void LoadEmitterData(pugi::xml_node& config, EmitterType type);
+	void LoadEmitterData(pugi::xml_node& config, ObjectType type);
+
+	friend class M_ObjManager;
 };
 
 #endif
