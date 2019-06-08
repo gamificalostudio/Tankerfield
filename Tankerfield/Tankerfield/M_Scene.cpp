@@ -48,6 +48,7 @@
 #include "UI_Image.h"
 
 #include "ParticleSystem.h"
+#include "Obj_Emitter.h"
 
 
 M_Scene::M_Scene() : Module()

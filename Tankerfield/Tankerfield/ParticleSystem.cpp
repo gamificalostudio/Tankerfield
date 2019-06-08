@@ -2,8 +2,7 @@
 #include "ParticleSystem.h"
 #include "App.h"
 #include "M_Textures.h"
-
-
+#include "Obj_Emitter.h"
 
 ParticleSystem::ParticleSystem()
 {
