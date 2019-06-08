@@ -598,6 +598,7 @@ bool Obj_Tank::Draw(Camera * camera)
 			turr_scale,
 			turr_scale);
 
+
 		// Turret color =======================================
 
 		SDL_SetTextureColorMod(turret_color_tex, tank_color.r, tank_color.g, tank_color.b);
@@ -674,8 +675,8 @@ void Obj_Tank::DrawCrosshair(Camera * camera)
 
 	//Angle between the two positions
 	float crosshair_angle = atan2(
-		input_screen_pos.x - turr_pos_screen.x,
-		-(input_screen_pos.y - turr_pos_screen.y))  * RADTODEG - 90;
+		input_screen_pos.y - turr_pos_screen.y,
+		input_screen_pos.x - turr_pos_screen.x)  * RADTODEG;
 
 	app->render->BlitScaledAndRotated(
 		crosshair_tex,
@@ -686,6 +687,8 @@ void Obj_Tank::DrawCrosshair(Camera * camera)
 		1.f, 1.f,
 		{ 0, (int)(tex_width * 0.5f) },
 		crosshair_angle);
+
+	//atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45)
 
 	//app->render->DrawLineSplitScreen(
 	//	pos_screen.x, pos_screen.y - cannon_height,
