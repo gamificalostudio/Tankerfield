@@ -598,6 +598,7 @@ bool Obj_Tank::Draw(Camera * camera)
 			turr_scale,
 			turr_scale);
 
+
 		// Turret color =======================================
 
 		SDL_SetTextureColorMod(turret_color_tex, tank_color.r, tank_color.g, tank_color.b);
@@ -661,30 +662,32 @@ bool Obj_Tank::Draw(Camera * camera)
 
 void Obj_Tank::DrawCrosshair(Camera * camera)
 {
-	float tex_width = 4;
+	//Pivot from which the croshair is going to be rotated
+	SDL_Point crosshair_tex_pivot;
+	crosshair_tex_pivot.x = 0;
+	crosshair_tex_pivot.y = 2;
 
 	//Pos1 = position of the turret in screen space
-	fPoint turr_pos_screen(pos_screen.x, pos_screen.y - cannon_height);
-
-	//Pos2 = position where the player is aiming at screen spaces
-	// 1. Set a position in the isometric space
-	fPoint input_iso_pos(turr_pos.x + shot_dir.x, turr_pos.y + shot_dir.y);
-	// 2. Transform that point to screen coordinates
-	iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
+	fPoint turr_pos_screen(
+		pos_screen.x,
+		pos_screen.y - cannon_height);
 
 	//Angle between the two positions
+	fPoint shot_dir_max = shot_dir * 10000000;//Arbitrary number to reduce the decimals on the floating point
+	iPoint shot_dir_screen = app->map->MapToScreenI(shot_dir_max.y, shot_dir_max.x);
+
 	float crosshair_angle = atan2(
-		input_screen_pos.x - turr_pos_screen.x,
-		-(input_screen_pos.y - turr_pos_screen.y))  * RADTODEG - 90;
+		shot_dir_screen.y,
+		-shot_dir_screen.x)  * RADTODEG;
 
 	app->render->BlitScaledAndRotated(
 		crosshair_tex,
-		turr_pos_screen.x,
-		turr_pos_screen.y - tex_width * 0.5f,
+		turr_pos_screen.x - crosshair_tex_pivot.x,
+		turr_pos_screen.y - crosshair_tex_pivot.y,
 		camera,
 		NULL,
 		1.f, 1.f,
-		{ 0, (int)(tex_width * 0.5f) },
+		crosshair_tex_pivot,
 		crosshair_angle);
 
 	//app->render->DrawLineSplitScreen(
