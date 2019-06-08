@@ -284,6 +284,8 @@ bool Obj_Tank::Start()
 
 	this->time_between_portal_tp.Start();
 
+	show_crosshairs = true;
+
 	return true;
 }
 
@@ -580,6 +582,11 @@ bool Obj_Tank::Draw(Camera * camera)
 		SDL_SetTextureColorMod(base_color_tex, 255, 255, 255);
 
 
+		if (show_crosshairs && camera == camera_player)
+		{
+			DrawCrosshair(camera);
+		}
+
 		// Turret common ======================================
 
 		app->render->BlitScaled(
@@ -590,6 +597,7 @@ bool Obj_Tank::Draw(Camera * camera)
 			&rotate_turr.GetFrame(turr_angle),
 			turr_scale,
 			turr_scale);
+
 
 		// Turret color =======================================
 
@@ -616,6 +624,11 @@ bool Obj_Tank::Draw(Camera * camera)
 			camera,
 			&curr_anim->GetFrame(angle));
 
+		if (show_crosshairs && camera == camera_player)
+		{
+			DrawCrosshair(camera);
+		}
+
 		// Turret common ======================================
 		app->render->BlitScaled(
 			tur_damaged_tex,
@@ -632,50 +645,6 @@ bool Obj_Tank::Draw(Camera * camera)
 
 	}
 
-	// Debug line
-	if (show_crosshairs && camera == camera_player)
-	{
-		//Current aiming line
-		float line_length = 5.f;
-		//1-- Set a position in the isometric space
-		fPoint input_iso_pos(turr_pos.x + shot_dir.x * line_length, turr_pos.y + shot_dir.y * line_length);
-		//2-- Transform that point to screen coordinates
-		iPoint input_screen_pos = (iPoint)app->map->MapToScreenF(input_iso_pos);
-
-		float tex_width = 5;
-
-		fPoint turr_pos_screen (pos_screen.x, pos_screen.y - cannon_height);
-
-		float crosshair_angle = atan2(
-			input_screen_pos.x - turr_pos_screen.x,
-			-(input_screen_pos.y - turr_pos_screen.y))  * RADTODEG - 90;
-
-		app->render->BlitScaledAndRotated(
-			crosshair_tex,
-			turr_pos_screen.x, turr_pos_screen.y,
-			camera,
-			NULL,
-			1.f, 1.f,
-			{ 0, (int)(tex_width * 0.5f) },
-			crosshair_angle);
-
-		app->render->DrawLineSplitScreen(
-			pos_screen.x, pos_screen.y - cannon_height,
-			input_screen_pos.x, input_screen_pos.y, 0, 0, 255, 255, camera);
-
-
-		//Natural aiming line
-		//float line_length = 5.f;
-		//TurrPos in screen space
-		//iPoint point1 (pos_screen.x, pos_screen.y - cannon_height);
-		//Input pos in screen space
-		//iPoint point2 = point1 + app->input->GetControllerJoystick(controller, gamepad_aim);
-		//2-- Transform that point to screen coordinates
-		//app->render->DrawLineSplitScreen(
-		//	point1.x, point1.y,
-		//	point2.x, point2.y
-		//	, 255, 255, 0, 255, camera);
-	}
 	if (HoldShot() && weapon_info.type == WEAPON_TYPE::CHARGED)
 	{
 		app->render->BlitAlphaAndScale(
@@ -689,6 +658,53 @@ bool Obj_Tank::Draw(Camera * camera)
 			charging_scale);
 	}
 	return true;
+}
+
+void Obj_Tank::DrawCrosshair(Camera * camera)
+{
+	//Pivot from which the croshair is going to be rotated
+	SDL_Point crosshair_tex_pivot;
+	crosshair_tex_pivot.x = 0;
+	crosshair_tex_pivot.y = 2;
+
+	//Pos1 = position of the turret in screen space
+	fPoint turr_pos_screen(
+		pos_screen.x,
+		pos_screen.y - cannon_height);
+
+	//Angle between the two positions
+	fPoint shot_dir_max = shot_dir * 10000000;//Arbitrary number to reduce the decimals on the floating point
+	iPoint shot_dir_screen = app->map->MapToScreenI(shot_dir_max.y, shot_dir_max.x);
+
+	float crosshair_angle = atan2(
+		shot_dir_screen.y,
+		-shot_dir_screen.x)  * RADTODEG;
+
+	app->render->BlitScaledAndRotated(
+		crosshair_tex,
+		turr_pos_screen.x - crosshair_tex_pivot.x,
+		turr_pos_screen.y - crosshair_tex_pivot.y,
+		camera,
+		NULL,
+		1.f, 1.f,
+		crosshair_tex_pivot,
+		crosshair_angle);
+
+	//app->render->DrawLineSplitScreen(
+	//	pos_screen.x, pos_screen.y - cannon_height,
+	//	input_screen_pos.x, input_screen_pos.y, 0, 0, 255, 255, camera);
+
+	//Natural aiming line
+	//float line_length = 5.f;
+	//TurrPos in screen space
+	//iPoint point1 (pos_screen.x, pos_screen.y - cannon_height);
+	//Input pos in screen space
+	//iPoint point2 = point1 + app->input->GetControllerJoystick(controller, gamepad_aim);
+	//2-- Transform that point to screen coordinates
+	//app->render->DrawLineSplitScreen(
+	//	point1.x, point1.y,
+	//	point2.x, point2.y
+	//	, 255, 255, 0, 255, camera);
 }
 
 bool Obj_Tank::DrawShadow(Camera * camera, float dt)
