@@ -18,7 +18,6 @@ enum class ObjectType
 	//OTHER
 	TANK,
 	STATIC,
-	REWARD_ZONE,
 	REWARD_BOX,
 	PICK_UP,
 	OIL_POOL,
