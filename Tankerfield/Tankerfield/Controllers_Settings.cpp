@@ -80,9 +80,9 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
 	Sensitivity_button_R->SetParent(panel);
 
 
-	InteractiveGroup->SetElement(return_button, iPoint(0, 1));
-	InteractiveGroup->SetElement(vibration_button_L, iPoint(0, 0));
-	InteractiveGroup->SetElement(vibration_button_R, iPoint(1, 0));
+	InteractiveGroup->SetElement(return_button);
+	InteractiveGroup->SetElement(vibration_button_L);
+	InteractiveGroup->SetElement(vibration_button_R);
 
 }
 
@@ -99,15 +99,18 @@ void Controllers_Settings::HideControllersSettings()
 	Canvas->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 
-void Controllers_Settings::InputSelect()
+bool Controllers_Settings::UI_Selected( UI_Element* element)
 {
-	UI_Element* focused = InteractiveGroup->GetFocusedElement();
-	if (focused == return_button)
+
+	if (element == return_button)
 	{
 		app->main_menu->SetState(MENU_STATE::OPTIONS);
 	}
-	if (focused == vibration_button_L)
+	if (element == vibration_button_L)
 	{
 
 	}
+
+	return true;
+
 }
