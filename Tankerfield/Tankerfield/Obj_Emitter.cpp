@@ -128,11 +128,7 @@ bool Obj_Emitter::Draw(Camera * camera)
 
 float Obj_Emitter::RangeRandomNum(float min, float max)
 {
-	float random = ((float)rand()) / (float)RAND_MAX;
-	float diff = max - min;
-	float r = random * diff;
-
-	return min + r;
+	return min + (((float)rand()) / (float)RAND_MAX) * (max - min);
 }
 
 int Obj_Emitter::GetPoolSize() const
