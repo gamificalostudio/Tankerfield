@@ -563,6 +563,14 @@ std::vector<Object*>* Obj_Tank::GetEnemiesHitted()
 	return &enemies_hitted;
 }
 
+void Obj_Tank::NewRound(int round)
+{
+	if (weapon_info.weapon == WEAPON::BASIC)
+	{
+		SetWeapon(WEAPON::BASIC, round);
+	}
+}
+
 void Obj_Tank::ReleaseFlameThrower()
 {
 	flame->is_holding = false;

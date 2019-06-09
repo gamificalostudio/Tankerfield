@@ -1342,12 +1342,11 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::Die()
 {
-	//If life was over 0 die (otherwise no need to die again)
-		app->audio->PlayFx(die_sfx);
-		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
-		dead_fire->tank = this;
-		SetWeapon(WEAPON::BASIC, 1);
-		SetItem(ItemType::NO_TYPE);
+	app->audio->PlayFx(die_sfx);
+	Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+	dead_fire->tank = this;
+	SetWeapon(WEAPON::BASIC, app->scene->round);
+	SetItem(ItemType::NO_TYPE);
 }
 
 bool Obj_Tank::Alive() const

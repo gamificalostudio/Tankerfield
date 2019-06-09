@@ -204,10 +204,14 @@ bool M_Scene::Update(float dt)
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
 		NewWave();
-		game_state = GAME_STATE::IN_WAVE;
+		for (int i = 0; i < 4; ++i)
+		{
+			app->objectmanager->obj_tanks[i]->NewRound(round);
+		}
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
+		game_state = GAME_STATE::IN_WAVE;
 		break;
 	}
 	case GAME_STATE::IN_WAVE:
