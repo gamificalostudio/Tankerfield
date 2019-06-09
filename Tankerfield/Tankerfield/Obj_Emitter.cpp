@@ -230,6 +230,10 @@ void Obj_Emitter::CalculateDrawVariables()
 		}
 	}
 	frame = { min_x, min_y, max_x - min_x , max_y - min_y };
-	//draw_offset = { emitterPool->particle_array[0].particle_state.particle_live.rectSize.w,
-	//emitterPool->particle_array[0].particle_state.particle_live.rectSize.h };
+	//Workaround to make min_x and min_y be the positions from which the rectangle (show with F3) is drawn
+	//We're substracting draw offset to pos_screen when we sort
+	//So we make pos_screen.x - pos_screen.x + min_x = min_x
+	//And that's how we make that the sorting rect has min_x and min_y as its position
+	draw_offset.create(pos_screen.x - min_x, pos_screen.y - min_y);
+
 }
