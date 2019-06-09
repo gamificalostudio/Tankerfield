@@ -708,6 +708,7 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	//Double missile
 	pugi::xml_node double_missile_node = balance_node.child("weapons").child("double_missile");
 	double_missile_info.damage_multiplier = double_missile_node.child("damage_multiplier").attribute("num").as_float();
+	double_missile_info.explosion_damage_multiplier = double_missile_node.child("explosion_multiplier").attribute("num").as_float();
 	double_missile_info.damage_exponential_base = double_missile_node.child("damage_exponential_base").attribute("num").as_float();
 	double_missile_info.speed = double_missile_node.child("speed").attribute("num").as_float();
 
