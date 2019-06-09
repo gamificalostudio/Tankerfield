@@ -162,9 +162,16 @@ void Obj_Emitter::StopEmission(double timer)
 
 void Obj_Emitter::CalculateDrawVariables()
 {
-	if (is_isometric == true)
+	//INFO: All particles are in map_pos, there is no need to check if they are in isometric as with Object::CalculateDrawVariables
+
+	pos_screen = app->map->MapToScreenF(pos_map);
+
+	for (int i = 0; i < emitterPool->pool_size; ++i)
 	{
-		pos_screen = app->map->MapToScreenF(pos_map);
+		if (emitterPool->particle_array[i].IsAlive())
+		{
+			emitterPool->particle_array[i].particle_state.particle_live.pos_screen = app->map->MapToScreenF(emitterPool->particle_array[i].particle_state.particle_live.pos_map);
+		}
 	}
 
 	int min_x = 0;
@@ -200,9 +207,9 @@ void Obj_Emitter::CalculateDrawVariables()
 				{
 					min_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
 				}
-				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x > max_y)
+				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y > max_y)
 				{
-					max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+					max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
 				}
 			}
 		}
