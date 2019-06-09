@@ -96,10 +96,10 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	FillPool(ObjectType::TESLA_TROOPER, 100);
-	FillPool(ObjectType::BRUTE, 2);
-	FillPool(ObjectType::SUICIDAL, 2);
-	FillPool(ObjectType::ROCKETLAUNCHER, 2);
+	//FillPool(ObjectType::TESLA_TROOPER, 100);
+	//FillPool(ObjectType::BRUTE, 2);
+	//FillPool(ObjectType::SUICIDAL, 2);
+	//FillPool(ObjectType::ROCKETLAUNCHER, 2);
 	return ret;
 }
 
