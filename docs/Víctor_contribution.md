@@ -47,6 +47,10 @@ This shot creates a bullet that if collides with an enemy, it deals the damage a
 
 ### Weapon Oil
 
+This weapon creates a bullet that when collide with an enemy, deals damage to it and the enemy takes the debuff Oiled. This debuff slows their speed by 4. The charged shot of this weapon creates a giant oil pool that puts all enemies in contact with it the Oiled Debuff. This debuff last for 5 seconds unless the enemy keeps getting the debuff, by being in contact with the oil pool or still being shot with this weapon.
+
+<iframe width="1024" height="576" src="https://www.youtube.com/embed/sdPF5dhDek4?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Items
 ### Happy Hour
 Happy Hour is an item that reduces the fire cadency of the player at a quarter of the original.
