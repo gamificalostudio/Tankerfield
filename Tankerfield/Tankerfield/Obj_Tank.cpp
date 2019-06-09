@@ -835,10 +835,10 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 	}break;
 
 	//This two cases without a break are intentional. DO NOT CHANGE THIS.
-	case TAG::WATER: //Fallthrough
-	case TAG::WALL:
-		SetSpeed(0.f);
-		break;
+	//case TAG::WATER: //Fallthrough
+	//case TAG::WALL:
+	//	SetSpeed(0.f);
+	//	break;
 
 	}
 }
@@ -869,10 +869,11 @@ void Obj_Tank::OnTrigger(Collider * c1, float dt)
 	}break;
 
 	//This two cases without a break are intentional. DO NOT CHANGE THIS.
-	case TAG::WATER: //Fallthrough
-		SetSpeed(speed_colliding_with_building);
-		SetSpeed(speed_colliding_with_building);
-		break;
+	//case TAG::WALL:
+	//case TAG::WATER: //Fallthrough
+	//	SetSpeed(speed_colliding_with_building);
+	//	SetSpeed(speed_colliding_with_building);
+	//	break;
 
 	}
 
