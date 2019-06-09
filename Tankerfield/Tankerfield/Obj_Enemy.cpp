@@ -215,8 +215,6 @@ void Obj_Enemy::Dead()
 {
 	if (curr_anim != &death)
 	{
-		// DROP A PICK UP ITEM 
-		app->pick_manager->PickUpFromEnemy(pos_map);
 		//curr_tex = tex;
 		curr_anim = &death;
 		app->audio->PlayFx(sfx_death);
