@@ -286,15 +286,13 @@ bool Obj_Tank::Start()
 
 	show_crosshairs = true;
 
+	controller = tank_num;
+
 	return true;
 }
 
 bool Obj_Tank::PreUpdate()
 {
-	if (!app->input->IsConnectedController(controller))
-	{
-		controller = app->input->GetAbleController();
-	}
 	SelectInputMethod();
 
 	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
