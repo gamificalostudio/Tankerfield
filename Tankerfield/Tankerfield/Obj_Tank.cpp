@@ -210,7 +210,7 @@ bool Obj_Tank::Start()
 	gamepad_aim			= Joystick::RIGHT;
 	gamepad_shoot		= app->input->controllerInfo[tank_num].attack_button;
 	gamepad_item		= app->input->controllerInfo[tank_num].use_item_button;
-	gamepad_interact	= app->input->controllerInfo[tank_num].interacton_button;
+	gamepad_interact	= app->input->controllerInfo[tank_num].interaction_button;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -240,14 +240,14 @@ bool Obj_Tank::Start()
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
-	tutorial_revive->AddButtonHelper(app->input->controllerInfo[tank_num].interacton_button, { 0.f, 100.f });
+	tutorial_revive->AddButtonHelper(app->input->controllerInfo[tank_num].interaction_button, { 0.f, 100.f });
 	tutorial_revive->AddTextHelper("REVIVE", { 0.f, 70.f });
 	tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 	////- PickUp
 	tutorial_pick_up = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_pick_up->single_camera = camera_player;
-	tutorial_pick_up->AddButtonHelper(app->input->controllerInfo[tank_num].interacton_button, { 0.f, 100.f });
+	tutorial_pick_up->AddButtonHelper(app->input->controllerInfo[tank_num].interaction_button, { 0.f, 100.f });
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
