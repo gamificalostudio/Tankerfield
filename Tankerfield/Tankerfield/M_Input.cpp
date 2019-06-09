@@ -54,7 +54,18 @@ bool M_Input::Awake(pugi::xml_node& config)
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	
+	input_node = config;
+	pugi::xml_node node_controllers_info = config.child("controller");
+	for (uint i = 0; i < MAX_PLAYERS; ++i)
+	{
+		controllerInfo[i].death_zone_porcenatage = node_controllers_info.child("death_zone_porcenatage").attribute("variable").as_float();
+		controllerInfo[i].vibration_percentage = node_controllers_info.child("vibration_percentage").attribute("variable").as_float();
+		controllerInfo[i].attack_button = (CONTROLLER_BUTTON)node_controllers_info.child("attack_button").attribute("variable").as_int();
+		controllerInfo[i].interaction_button = (CONTROLLER_BUTTON)node_controllers_info.child("interaction_button").attribute("variable").as_int();
+		controllerInfo[i].use_item_button = (CONTROLLER_BUTTON)node_controllers_info.child("use_item_button").attribute("variable").as_int();
+
+		node_controllers_info.next_sibling("controller");
+	}
 	return ret;
 }
 
@@ -221,7 +232,18 @@ bool M_Input::CleanUp()
 {
 	LOG("Quitting SDL event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
-	//RELEASE_ARRAY(keyboard);
+	pugi::xml_node node_controllers_info = input_node.child("controller");
+	for (uint i = 0; i < MAX_PLAYERS; ++i)
+	{
+		node_controllers_info.child("death_zone_porcenatage").attribute("variable") = controllerInfo[i].death_zone_porcenatage;
+		node_controllers_info.child("vibration_percentage").attribute("variable") = controllerInfo[i].vibration_percentage;
+		node_controllers_info.child("attack_button").attribute("variable") = (int)controllerInfo[i].attack_button;
+		node_controllers_info.child("interaction_button").attribute("variable") = (int)controllerInfo[i].interaction_button;
+		node_controllers_info.child("use_item_button").attribute("variable") = (int)controllerInfo[i].use_item_button;
+
+		node_controllers_info.next_sibling("controller");
+	}
+
 	return true;
 }
 

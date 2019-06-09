@@ -7,6 +7,9 @@
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL.h"
 
+#include "PugiXml/src/pugixml.hpp"
+#include "PugiXml/src/pugiconfig.hpp"
+
 #include "Module.h"
 #include "Point.h"
 
@@ -80,7 +83,7 @@ struct ControllersPlayerInfo
 	float death_zone_porcenatage = 0.20f;
 	float vibration_percentage = 1.00f;
 	CONTROLLER_BUTTON attack_button = CONTROLLER_BUTTON::RT;
-	CONTROLLER_BUTTON interacton_button = CONTROLLER_BUTTON::X;
+	CONTROLLER_BUTTON interaction_button = CONTROLLER_BUTTON::X;
 	CONTROLLER_BUTTON use_item_button = CONTROLLER_BUTTON::LB;
 
 };
@@ -100,8 +103,6 @@ private:
 
 public:
 	Controller();
-
-	
 
 private:
 	bool attached = false;
@@ -226,6 +227,7 @@ private:
 	int			mouse_y = NULL;
 	uint		num_controller_connected = 0;
 	Controller controllers[MAX_CONTROLLERS];
+	pugi::xml_node input_node;
 
 public:
 	std::string input_text;
