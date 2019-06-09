@@ -512,15 +512,15 @@ void M_Scene::CreateEnemyWave()
 
 void M_Scene::NewWave()
 {
-	Tesla_trooper_units = 30 + 40 * round;
+	//Tesla_trooper_units = 30 + 40 * round;
 
-	if (round >= 2)
-	{
-		Brute_units += round - 1;
-		RocketLauncher_units += round - 1;
-		Suicidal_units += round - 1;
-	}
+	//if (round >= 2)
+	//{
+	//	Brute_units += round - 1;
+	//	RocketLauncher_units += round - 1;
+	//	Suicidal_units += round - 1;
+	//}
 
-	CreateEnemyWave();
-	app->pick_manager->CreateRewardBoxWave();
+	//CreateEnemyWave();
+	//app->pick_manager->CreateRewardBoxWave();
 }
