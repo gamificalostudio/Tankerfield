@@ -572,7 +572,6 @@ void M_ObjManager::DeleteObjects()
 			if ((*iterator)->coll != nullptr)
 			{
 				(*iterator)->coll->Destroy();
-				(*iterator)->coll = nullptr;
 			}
 			delete (*iterator);
 			(*iterator) = nullptr;
