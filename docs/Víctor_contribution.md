@@ -40,6 +40,11 @@ The Normal Shot creates 2 bullets and the charged Shot creates 4.
 <iframe width="1024" height="576" src="https://www.youtube.com/embed/Axyet1AsBhY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Healing Shot
+
+This shot creates a bullet that if collides with an enemy, it deals the damage asigned to the enemy and delete itself. If it collides with a player, the bullets gets deleted and heals the colliding player the amount assigned. The charged shot creates a collider and all the players inside get healed the amount assigned.
+
+<iframe width="1024" height="576" src="https://www.youtube.com/embed/cnvghdEJnfM?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ### Weapon Oil
 
 ## Items
