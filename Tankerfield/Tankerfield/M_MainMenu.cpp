@@ -27,15 +27,6 @@ bool M_MainMenu::Start()
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 	camera = app->render->CreateCamera(iPoint(0, 0), (SDL_Rect)screen);
 
-
-	// Menus
-
-	options = new Options_Menu();
-	controllers_setting[0] = new Controllers_Settings(fPoint(0, 0), 0);
-	controllers_setting[1] = new Controllers_Settings(fPoint(screen.w*0.5f, 0), 1);
-	controllers_setting[2] = new Controllers_Settings(fPoint(0, screen.h*0.5f), 2);
-	controllers_setting[3] = new Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f), 3);
-
 	// Load assets ===========================================
 
 	background_texture = app->tex->Load("textures/ui/main_menu_background.png");
@@ -294,14 +285,18 @@ bool M_MainMenu::Start()
 	
 	// Options =============================================
 
-	options = new Options_Menu();
+	options_menu = DBG_NEW Options_Menu(MENU_TYPE::MAIN_MENU);
+	controllers_setting[0] = DBG_NEW Controllers_Settings(fPoint(0, 0), 0, MENU_TYPE::MAIN_MENU);
+	controllers_setting[1] = DBG_NEW Controllers_Settings(fPoint(screen.w*0.5f, 0), 1, MENU_TYPE::MAIN_MENU);
+	controllers_setting[2] = DBG_NEW Controllers_Settings(fPoint(0, screen.h*0.5f), 2, MENU_TYPE::MAIN_MENU);
+	controllers_setting[3] = DBG_NEW Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f), 3, MENU_TYPE::MAIN_MENU);
 	
 	// Leaderboard =========================================
 
 	panel_leaderboard = app->ui->CreateImage(screen_center, UI_ImageDef({ 1075,395,606,771 }), this);
 	panel_leaderboard->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	leaderboard = new LeaderBoard( screen_center + fPoint( 0, 60),"data/leader_board.xml", true);
+	leaderboard = DBG_NEW LeaderBoard( screen_center + fPoint( 0, 60),"data/leader_board.xml", true);
 	leaderboard->FillLeaderBoardTable();
 
 	return_from_leaderboard= app->ui->CreateButton({ screen.w*0.5f-230,225 }, UI_ButtonDef({ 10,1080,60,60 }, { 80,1080,60,60 }, { 150,1080,102 ,102 }, { 260 ,1080,102,102 }), this);
@@ -330,7 +325,9 @@ bool M_MainMenu::Start()
 
 	app->ui->HideAllUI();
 
-	SetState(MENU_STATE::CONTROLLERS_SETTINGS);
+
+	SetMenuState(MENU_STATE::CONTROLLERS_SETTINGS);
+
 
 
 	SDL_ShowCursor(SDL_ENABLE);
@@ -345,8 +342,8 @@ bool M_MainMenu::CleanUp()
 	app->audio->PauseMusic(2);
 	app->render->DestroyCamera(camera);
 
-	delete(options);
-	options = nullptr;
+	delete(options_menu);
+	options_menu = nullptr;
 	delete(leaderboard);
 	leaderboard = nullptr;
 	for (int i = 0; i < 4; ++i)
@@ -354,10 +351,10 @@ bool M_MainMenu::CleanUp()
 		players[i].tank = nullptr;
 	}
 
-	if (options)
+	if (options_menu)
 	{
-		delete options;
-		options = nullptr;
+		delete options_menu;
+		options_menu = nullptr;
 	}
 	for (uint i = 0; i < 0; ++i)
 	{
@@ -453,18 +450,18 @@ bool M_MainMenu::UI_Selected(UI_Element * element)
 
 		if (element == play_button)
 		{
-			SetState(MENU_STATE::SELECTION);
+			SetMenuState(MENU_STATE::SELECTION);
 			app->audio->PlayFx(button_select_sfx);
 		}
 		else if (element == credits_menu_button)
 		{
-			SetState(MENU_STATE::CREDITS);
+			SetMenuState(MENU_STATE::CREDITS);
 			app->audio->PlayFx(button_select_sfx);
 		}
 		else if (element == options_menu_button)
 		{
 			app->audio->PlayFx(button_select_sfx);
-			SetState(MENU_STATE::OPTIONS);
+			SetMenuState(MENU_STATE::OPTIONS);
 		}
 		else if (element == exit_button)
 		{
@@ -474,7 +471,7 @@ bool M_MainMenu::UI_Selected(UI_Element * element)
 		else if (element == leaderboard_button)
 		{
 			app->audio->PlayFx(button_select_sfx);
-			SetState(MENU_STATE::LEADERBOARD);
+			SetMenuState(MENU_STATE::LEADERBOARD);
 		}
 
 		app->audio->PlayFx(button_select_sfx);
@@ -484,7 +481,7 @@ bool M_MainMenu::UI_Selected(UI_Element * element)
 	{
 		if (element == return_from_leaderboard)
 		{
-			SetState(MENU_STATE::INIT_MENU);
+			SetMenuState(MENU_STATE::INIT_MENU);
 		}
 
 		app->audio->PlayFx(button_select_sfx);
@@ -584,7 +581,7 @@ bool M_MainMenu::UI_Selected(UI_Element * element)
 
 		else if (element == return_credits)
 		{
-			SetState(MENU_STATE::INIT_MENU);
+			SetMenuState(MENU_STATE::INIT_MENU);
 		}
 
 		app->audio->PlayFx(button_select_sfx);
@@ -623,7 +620,7 @@ bool M_MainMenu::SetPlayerProperties()
 		modules_to_reset.push_back((Module*)app->ui);
 		modules_to_reset.push_back((Module*)app->debug);
 		app->scmanager->FadeToBlack(this, app->scene, 2.f, 2.f, modules_to_reset);
-		SetState(MENU_STATE::CHANGE_SCENE);
+		SetMenuState(MENU_STATE::CHANGE_SCENE);
 	}
 	else
 	{
@@ -650,7 +647,7 @@ void M_MainMenu::ResetPanelColors()
 	}
 }
 
-void M_MainMenu::SetState(MENU_STATE new_state)
+void M_MainMenu::SetMenuState(MENU_STATE new_state)
 {
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
@@ -669,8 +666,8 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 	case MENU_STATE::INIT_MENU:
 		current_player = 0;
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		logo_image->SetState(ELEMENT_STATE::HIDDEN);
-		version_label->SetState(ELEMENT_STATE::HIDDEN);
+		logo_image->SetMenuState(ELEMENT_STATE::HIDDEN);
+		version_label->SetMenuState(ELEMENT_STATE::HIDDEN);
 		break;
 
 	case MENU_STATE::SELECTION:
@@ -682,7 +679,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 		break;
 	case MENU_STATE::OPTIONS:
-		options->HideOptionsMenu();
+		options_menu->HideOptionsMenu();
 		break;
 	case MENU_STATE::LEADERBOARD:
 		panel_leaderboard->SetStateToBranch(ELEMENT_STATE::HIDDEN);
@@ -709,8 +706,8 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		menu_navigation->Active();
 
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		logo_image->SetState(ELEMENT_STATE::VISIBLE);
-		version_label->SetState(ELEMENT_STATE::VISIBLE);
+		logo_image->SetMenuState(ELEMENT_STATE::VISIBLE);
+		version_label->SetMenuState(ELEMENT_STATE::VISIBLE);
 
 		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
 		control_helper_label->SetText("Accept");
@@ -743,7 +740,7 @@ void M_MainMenu::SetState(MENU_STATE new_state)
 		credits_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		break;
 	case MENU_STATE::OPTIONS:
-		options->ShowOptionsMenu();
+		options_menu->ShowOptionsMenu();
 		break;
 	case MENU_STATE::CONTROLLERS_SETTINGS:
 		{

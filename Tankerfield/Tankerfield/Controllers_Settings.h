@@ -5,7 +5,8 @@
 class Controllers_Settings :public UI_Listener
 {
 public:
-	Controllers_Settings(fPoint relative_pos, uint player);
+	Controllers_Settings(fPoint relative_pos, uint player, MENU_TYPE menu_type);
+
 	~Controllers_Settings();
 
 	void ShowControllerSettings();
@@ -26,6 +27,9 @@ private:
 	UI_Label* attack_label = nullptr;
 	UI_Label* interaction_label = nullptr;
 	UI_Label* Use_item_label = nullptr;
+
+	MENU_TYPE menu_type = MENU_TYPE::NO_TYPE;
+
 
 	UI_Image* attack_image = nullptr;
 	UI_Image* interaction_image = nullptr;

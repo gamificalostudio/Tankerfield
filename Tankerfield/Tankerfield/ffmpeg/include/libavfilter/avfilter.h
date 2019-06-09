@@ -243,7 +243,7 @@ typedef struct AVFilter {
      *
      * Otherwise the semantics is the same as for @ref AVFilter.init "init".
      */
-    int (*init_dict)(AVFilterContext *ctx, AVDictionary **options);
+    int (*init_dict)(AVFilterContext *ctx, AVDictionary **options_menu);
 
     /**
      * Filter uninitialization function.
@@ -777,7 +777,7 @@ int avfilter_init_str(AVFilterContext *ctx, const char *args);
  * this function will leave those extra options in the options AVDictionary and
  * continue as usual.
  */
-int avfilter_init_dict(AVFilterContext *ctx, AVDictionary **options);
+int avfilter_init_dict(AVFilterContext *ctx, AVDictionary **options_menu);
 
 /**
  * Free a filter context. This will also remove the filter from its
@@ -1139,7 +1139,7 @@ int avfilter_graph_queue_command(AVFilterGraph *graph, const char *target, const
  * @return  a string, or NULL in case of memory allocation failure;
  *          the string must be freed using av_free
  */
-char *avfilter_graph_dump(AVFilterGraph *graph, const char *options);
+char *avfilter_graph_dump(AVFilterGraph *graph, const char *options_menu);
 
 /**
  * Request a frame on the oldest sink link.

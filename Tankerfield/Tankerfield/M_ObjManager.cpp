@@ -96,10 +96,10 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	FillPool(ObjectType::TESLA_TROOPER, 100);
-	FillPool(ObjectType::BRUTE, 2);
-	FillPool(ObjectType::SUICIDAL, 2);
-	FillPool(ObjectType::ROCKETLAUNCHER, 2);
+	//FillPool(ObjectType::TESLA_TROOPER, 100);
+	//FillPool(ObjectType::BRUTE, 2);
+	//FillPool(ObjectType::SUICIDAL, 2);
+	//FillPool(ObjectType::ROCKETLAUNCHER, 2);
 	return ret;
 }
 
@@ -568,10 +568,10 @@ void M_ObjManager::DeleteObjects()
 		if ((*iterator) != nullptr)
 		{
 			(*iterator)->CleanUp();
+
 			if ((*iterator)->coll != nullptr)
 			{
 				(*iterator)->coll->Destroy();
-				(*iterator)->coll = nullptr;
 			}
 			delete (*iterator);
 			(*iterator) = nullptr;

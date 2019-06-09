@@ -3,6 +3,7 @@
 #include "App.h"
 #include "M_MainMenu.h"
 #include "M_Fonts.h"
+#include "M_Scene.h"
 
 #include "UI_Element.h"
 #include "UI_Image.h"
@@ -12,7 +13,7 @@
 #include "UI_Image.h"
 #include "UI_InteractiveGroup.h"
 
-Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player)
+Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player, MENU_TYPE menu_type) : menu_type(menu_type)
 {
 	this->player = player;
 
@@ -120,7 +121,15 @@ bool Controllers_Settings::UI_Selected( UI_Element* element)
 
 	if (element == return_button)
 	{
-		app->main_menu->SetState(MENU_STATE::OPTIONS);
+		if (menu_type == MENU_TYPE::MAIN_MENU)
+		{
+			app->main_menu->SetMenuState(MENU_STATE::OPTIONS);
+		}
+		else if (menu_type == MENU_TYPE::PAUSE_MENU)
+		{
+			app->scene->SetMenuState(MENU_STATE::OPTIONS);
+		}
+		
 	}
 	else if (element == vibration_button_L)
 
@@ -161,18 +170,30 @@ bool Controllers_Settings::UI_Selected( UI_Element* element)
 	}
 	else if (element == attack_label)
 	{
-		attack_image->SetState(ELEMENT_STATE::HIDDEN);
-		change_attack_button = KEY_DOWN;
+		if (change_attack_button == KEY_IDLE)
+		{
+			attack_image->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+			change_attack_button = KEY_DOWN;
+		}
+		
 	}
 	else if (element == interaction_label)
 	{
-		interaction_image->SetState(ELEMENT_STATE::HIDDEN);
-		change_interaction_button = KEY_DOWN;
+		if (change_interaction_button == KEY_IDLE)
+		{
+			interaction_image->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+			change_interaction_button = KEY_DOWN;
+		}
+		
 	}
 	else if (element == Use_item_label)
 	{
-		item_image->SetState(ELEMENT_STATE::HIDDEN);
-		change_use_item_button = KEY_DOWN;
+		if (change_use_item_button == KEY_IDLE)
+		{
+			item_image->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+			change_use_item_button = KEY_DOWN;
+		}
+		
 	}
 	return true;
 }
@@ -199,19 +220,19 @@ bool Controllers_Settings::UI_OnHoverExit(UI_Element* element)
 	if (element == (UI_Element*)attack_label)
 	{
 		attack_label->color_mod = { 255,255,255,255 };
-		attack_image->SetState(ELEMENT_STATE::VISIBLE);
+		attack_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		change_attack_button = KEY_IDLE;
 	}
 	if (element == (UI_Element*)interaction_label)
 	{
 		interaction_label->color_mod = { 255,255,255,255 };
-		interaction_image->SetState(ELEMENT_STATE::VISIBLE);
+		interaction_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		change_interaction_button = KEY_IDLE;
 	}
 	if (element == (UI_Element*)Use_item_label)
 	{
 		Use_item_label->color_mod = { 255,255,255,255 };
-		item_image->SetState(ELEMENT_STATE::VISIBLE);
+		item_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		change_use_item_button = KEY_IDLE;
 	}
 	return true;
@@ -230,10 +251,14 @@ bool Controllers_Settings::UI_OnHoverRepeat(UI_Element * element)
 			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].attack_button))
 			{
 				attack_image->sprite_rect = (app->input->buttons_image[(int)app->input->controllerInfo[player].attack_button]);
-				attack_image->SetState(ELEMENT_STATE::VISIBLE);
-				change_attack_button = KEY_IDLE;
+				attack_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+				change_attack_button = KEY_UP;
 			}
 		
+		}
+		else if (change_attack_button ==KEY_UP)
+		{
+			change_attack_button = KEY_IDLE;
 		}
 		
 	}
@@ -248,12 +273,15 @@ bool Controllers_Settings::UI_OnHoverRepeat(UI_Element * element)
 			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].interacton_button))
 			{
 				interaction_image->sprite_rect = app->input->buttons_image[(int)app->input->controllerInfo[player].interacton_button];
-				interaction_image->SetState(ELEMENT_STATE::VISIBLE);
-				change_interaction_button = KEY_IDLE;
+				interaction_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+				change_interaction_button = KEY_UP;
 			}
 			
 		}
-	
+		else if (change_interaction_button == KEY_UP)
+		{
+			change_interaction_button = KEY_IDLE;
+		}
 	}
 	if (element == (UI_Element*)Use_item_label)
 	{
@@ -266,12 +294,15 @@ bool Controllers_Settings::UI_OnHoverRepeat(UI_Element * element)
 			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].interacton_button))
 			{
 				item_image->sprite_rect = (app->input->buttons_image[(int)app->input->controllerInfo[player].interacton_button]);
-				item_image->SetState(ELEMENT_STATE::VISIBLE);
-				change_use_item_button = KEY_IDLE;
+				item_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
+				change_use_item_button = KEY_UP;
 			}
 			
 		}
-		
+		else if (change_use_item_button == KEY_UP)
+		{
+			change_use_item_button = KEY_IDLE;
+		}
 	}
 	return true;
 }

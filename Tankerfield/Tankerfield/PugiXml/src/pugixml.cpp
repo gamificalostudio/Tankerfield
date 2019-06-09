@@ -4083,7 +4083,7 @@ PUGI__NS_BEGIN
 		return size;
 	}
 
-	PUGI__FN xml_parse_result load_file_impl(xml_document& doc, FILE* file, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result load_file_impl(xml_document& doc, FILE* file, unsigned int options_menu, xml_encoding encoding)
 	{
 		if (!file) return make_parse_result(status_file_not_found);
 
@@ -4120,7 +4120,7 @@ PUGI__NS_BEGIN
 
 		xml_encoding real_encoding = get_buffer_encoding(encoding, contents, size);
 		
-		return doc.load_buffer_inplace_own(contents, zero_terminate_buffer(contents, size, real_encoding), options, real_encoding);
+		return doc.load_buffer_inplace_own(contents, zero_terminate_buffer(contents, size, real_encoding), options_menu, real_encoding);
 	}
 
 #ifndef PUGIXML_NO_STL
@@ -4248,7 +4248,7 @@ PUGI__NS_BEGIN
 		return status_ok;
 	}
 
-	template <typename T> PUGI__FN xml_parse_result load_stream_impl(xml_document& doc, std::basic_istream<T>& stream, unsigned int options, xml_encoding encoding)
+	template <typename T> PUGI__FN xml_parse_result load_stream_impl(xml_document& doc, std::basic_istream<T>& stream, unsigned int options_menu, xml_encoding encoding)
 	{
 		void* buffer = 0;
 		size_t size = 0;
@@ -4270,7 +4270,7 @@ PUGI__NS_BEGIN
 
 		xml_encoding real_encoding = get_buffer_encoding(encoding, buffer, size);
 		
-		return doc.load_buffer_inplace_own(buffer, zero_terminate_buffer(buffer, size, real_encoding), options, real_encoding);
+		return doc.load_buffer_inplace_own(buffer, zero_terminate_buffer(buffer, size, real_encoding), options_menu, real_encoding);
 	}
 #endif
 
@@ -4332,7 +4332,7 @@ PUGI__NS_BEGIN
 		return result == 0;
 	}
 
-	PUGI__FN xml_parse_result load_buffer_impl(xml_document_struct* doc, xml_node_struct* root, void* contents, size_t size, unsigned int options, xml_encoding encoding, bool is_mutable, bool own, char_t** out_buffer)
+	PUGI__FN xml_parse_result load_buffer_impl(xml_document_struct* doc, xml_node_struct* root, void* contents, size_t size, unsigned int options_menu, xml_encoding encoding, bool is_mutable, bool own, char_t** out_buffer)
 	{
 		// check input buffer
 		if (!contents && size) return make_parse_result(status_io_error);
@@ -4353,7 +4353,7 @@ PUGI__NS_BEGIN
 		doc->buffer = buffer;
 
 		// parse
-		xml_parse_result res = impl::xml_parser::parse(buffer, length, doc, root, options);
+		xml_parse_result res = impl::xml_parser::parse(buffer, length, doc, root, options_menu);
 
 		// remember encoding
 		res.encoding = buffer_encoding;
@@ -5261,7 +5261,7 @@ namespace pugi
 		return true;
 	}
 
-	PUGI__FN xml_parse_result xml_node::append_buffer(const void* contents, size_t size, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result xml_node::append_buffer(const void* contents, size_t size, unsigned int options_menu, xml_encoding encoding)
 	{
 		// append_buffer is only valid for elements/documents
 		if (!impl::allow_insert_child(type(), node_element)) return impl::make_parse_result(status_append_invalid_root);
@@ -5285,7 +5285,7 @@ namespace pugi
 
 		// parse
 		char_t* buffer = 0;
-		xml_parse_result res = impl::load_buffer_impl(doc, _root, const_cast<void*>(contents), size, options, encoding, false, false, &buffer);
+		xml_parse_result res = impl::load_buffer_impl(doc, _root, const_cast<void*>(contents), size, options_menu, encoding, false, false, &buffer);
 
 		// restore name
 		_root->name = rootname;
@@ -6072,22 +6072,22 @@ namespace pugi
 	}
 
 #ifndef PUGIXML_NO_STL
-	PUGI__FN xml_parse_result xml_document::load(std::basic_istream<char, std::char_traits<char> >& stream, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result xml_document::load(std::basic_istream<char, std::char_traits<char> >& stream, unsigned int options_menu, xml_encoding encoding)
 	{
 		reset();
 
-		return impl::load_stream_impl(*this, stream, options, encoding);
+		return impl::load_stream_impl(*this, stream, options_menu, encoding);
 	}
 
-	PUGI__FN xml_parse_result xml_document::load(std::basic_istream<wchar_t, std::char_traits<wchar_t> >& stream, unsigned int options)
+	PUGI__FN xml_parse_result xml_document::load(std::basic_istream<wchar_t, std::char_traits<wchar_t> >& stream, unsigned int options_menu)
 	{
 		reset();
 
-		return impl::load_stream_impl(*this, stream, options, encoding_wchar);
+		return impl::load_stream_impl(*this, stream, options_menu, encoding_wchar);
 	}
 #endif
 
-	PUGI__FN xml_parse_result xml_document::load_string(const char_t* contents, unsigned int options)
+	PUGI__FN xml_parse_result xml_document::load_string(const char_t* contents, unsigned int options_menu)
 	{
 		// Force native encoding (skip autodetection)
 	#ifdef PUGIXML_WCHAR_MODE
@@ -6096,51 +6096,51 @@ namespace pugi
 		xml_encoding encoding = encoding_utf8;
 	#endif
 
-		return load_buffer(contents, impl::strlength(contents) * sizeof(char_t), options, encoding);
+		return load_buffer(contents, impl::strlength(contents) * sizeof(char_t), options_menu, encoding);
 	}
 
-	PUGI__FN xml_parse_result xml_document::load(const char_t* contents, unsigned int options)
+	PUGI__FN xml_parse_result xml_document::load(const char_t* contents, unsigned int options_menu)
 	{
-		return load_string(contents, options);
+		return load_string(contents, options_menu);
 	}
 
-	PUGI__FN xml_parse_result xml_document::load_file(const char* path_, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result xml_document::load_file(const char* path_, unsigned int options_menu, xml_encoding encoding)
 	{
 		reset();
 
 		FILE* file = fopen(path_, "rb");
 
-		return impl::load_file_impl(*this, file, options, encoding);
+		return impl::load_file_impl(*this, file, options_menu, encoding);
 	}
 
-	PUGI__FN xml_parse_result xml_document::load_file(const wchar_t* path_, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result xml_document::load_file(const wchar_t* path_, unsigned int options_menu, xml_encoding encoding)
 	{
 		reset();
 
 		FILE* file = impl::open_file_wide(path_, L"rb");
 
-		return impl::load_file_impl(*this, file, options, encoding);
+		return impl::load_file_impl(*this, file, options_menu, encoding);
 	}
 
-	PUGI__FN xml_parse_result xml_document::load_buffer(const void* contents, size_t size, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result xml_document::load_buffer(const void* contents, size_t size, unsigned int options_menu, xml_encoding encoding)
 	{
 		reset();
 
-		return impl::load_buffer_impl(static_cast<impl::xml_document_struct*>(_root), _root, const_cast<void*>(contents), size, options, encoding, false, false, &_buffer);
+		return impl::load_buffer_impl(static_cast<impl::xml_document_struct*>(_root), _root, const_cast<void*>(contents), size, options_menu, encoding, false, false, &_buffer);
 	}
 
-	PUGI__FN xml_parse_result xml_document::load_buffer_inplace(void* contents, size_t size, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result xml_document::load_buffer_inplace(void* contents, size_t size, unsigned int options_menu, xml_encoding encoding)
 	{
 		reset();
 
-		return impl::load_buffer_impl(static_cast<impl::xml_document_struct*>(_root), _root, contents, size, options, encoding, true, false, &_buffer);
+		return impl::load_buffer_impl(static_cast<impl::xml_document_struct*>(_root), _root, contents, size, options_menu, encoding, true, false, &_buffer);
 	}
 
-	PUGI__FN xml_parse_result xml_document::load_buffer_inplace_own(void* contents, size_t size, unsigned int options, xml_encoding encoding)
+	PUGI__FN xml_parse_result xml_document::load_buffer_inplace_own(void* contents, size_t size, unsigned int options_menu, xml_encoding encoding)
 	{
 		reset();
 
-		return impl::load_buffer_impl(static_cast<impl::xml_document_struct*>(_root), _root, contents, size, options, encoding, true, true, &_buffer);
+		return impl::load_buffer_impl(static_cast<impl::xml_document_struct*>(_root), _root, contents, size, options_menu, encoding, true, true, &_buffer);
 	}
 
 	PUGI__FN void xml_document::save(xml_writer& writer, const char_t* indent, unsigned int flags, xml_encoding encoding) const

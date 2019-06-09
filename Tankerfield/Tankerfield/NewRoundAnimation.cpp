@@ -50,7 +50,7 @@ void NewRoundAnimation::Start()
 	{
 		heal_particle[i] = app->ui->CreateImage({ screen.w * 0.5f, screen.h * 0.5f }, image_def);
 		heal_particle[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-		heal_particle[i]->SetState(ELEMENT_STATE::HIDDEN);
+		heal_particle[i]->SetMenuState(ELEMENT_STATE::HIDDEN);
 		heal_particle[i]->color_mod = target_color;
 	}
 
@@ -79,7 +79,7 @@ void NewRoundAnimation::CreateNewRoundParticles()
 	for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
 	{
 		particles[i].ui_image = app->ui->CreateImage(default_pos, image_def);
-		particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+		particles[i].ui_image->SetMenuState(ELEMENT_STATE::HIDDEN);
 	}
 }
 
@@ -108,7 +108,7 @@ void NewRoundAnimation::PrepareNewRoundUIParticles()
 		particles[i].direction.Normalize();
 		particles[i].curr_scale = rand() % (int)max_particle_scale;
 		particles[i].reached_target = false;
-		particles[i].ui_image->SetState(ELEMENT_STATE::VISIBLE);
+		particles[i].ui_image->SetMenuState(ELEMENT_STATE::VISIBLE);
 		particles[i].ui_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 		particles[i].ui_image->alpha = 0.f;
 		particles[i].alpha_speed = min_particle_alpha_speed + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max_particle_alpha_speed - min_particle_alpha_speed)));
@@ -117,7 +117,7 @@ void NewRoundAnimation::PrepareNewRoundUIParticles()
 	}
 	particles_reached_trg = 0;
 	particles_timer.Start();
-	center_energy->SetState(ELEMENT_STATE::VISIBLE);
+	center_energy->SetMenuState(ELEMENT_STATE::VISIBLE);
 }
 
 bool NewRoundAnimation::Update(float dt)
@@ -144,7 +144,7 @@ bool NewRoundAnimation::Update(float dt)
 			center_energy->alpha = 255.f;
 			for (int i = 0; i < NEW_ROUND_PARTICLE_NUM; ++i)
 			{
-				particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+				particles[i].ui_image->SetMenuState(ELEMENT_STATE::HIDDEN);
 			}
 			PrepareColorTransition();
 			++app->scene->round;
@@ -169,7 +169,7 @@ bool NewRoundAnimation::Update(float dt)
 		{
 			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
 			{
-				heal_particle[i]->SetState(ELEMENT_STATE::VISIBLE);
+				heal_particle[i]->SetMenuState(ELEMENT_STATE::VISIBLE);
 			}
 			phase = NEW_ROUND_ANIMATION_PHASE::REDUCE_ALPHA;
 		}
@@ -196,12 +196,12 @@ bool NewRoundAnimation::Update(float dt)
 			fRect screen = app->win->GetWindowRect();
 			for (int i = 0; i < (int)HEAL_PARTICLE::MAX; ++i)
 			{
-				heal_particle[i]->SetState(ELEMENT_STATE::HIDDEN);
+				heal_particle[i]->SetMenuState(ELEMENT_STATE::HIDDEN);
 				heal_particle[i]->SetPos({ screen.w * 0.5f, screen.h * 0.5f });
 			}
 			center_energy->color_mod = source_color;
 			center_energy->alpha = 0.f;
-			center_energy->SetState(ELEMENT_STATE::HIDDEN);
+			center_energy->SetMenuState(ELEMENT_STATE::HIDDEN);
 			HealPlayers();
 			app->scene->game_state = GAME_STATE::ENTER_IN_WAVE;
 			phase = NEW_ROUND_ANIMATION_PHASE::WAITING;
@@ -270,7 +270,7 @@ void NewRoundAnimation::UpdateNewRoundUIParticles(float dt)
 				app->audio->PlayFx(particle_reach_sfx);
 				particles[i].ui_image->SetPos(target_pos);
 				particles[i].reached_target = true;
-				particles[i].ui_image->SetState(ELEMENT_STATE::HIDDEN);
+				particles[i].ui_image->SetMenuState(ELEMENT_STATE::HIDDEN);
 				center_energy->alpha += center_energy_alpha_fill_amount;
 				++particles_reached_trg;
 			}

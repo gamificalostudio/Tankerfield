@@ -355,7 +355,7 @@ void Player_GUI::SetWeapon(WEAPON weapon_type, int level)
 
 void Player_GUI::SetItem(ItemType type)
 {
-	item_icon->SetState(ELEMENT_STATE::VISIBLE);
+	item_icon->SetMenuState(ELEMENT_STATE::VISIBLE);
 
 	switch (type)
 	{
@@ -369,7 +369,7 @@ void Player_GUI::SetItem(ItemType type)
 		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP];
 		break;
 	case ItemType::NO_TYPE:
-		item_icon->SetState(ELEMENT_STATE::HIDDEN);
+		item_icon->SetMenuState(ELEMENT_STATE::HIDDEN);
 		break;
 	}
 
@@ -402,7 +402,7 @@ void Player_GUI::CreateParticleToWeaponFrame()
 	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
 	
 	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
-	particle_image->SetState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetMenuState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	particle_image->alpha = 175.0f;
 	particle_image->timer.Start();
@@ -415,7 +415,7 @@ void Player_GUI::CreateParticleToItemFrame()
 	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
 
 	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
-	particle_image->SetState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetMenuState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	particle_image->alpha = 175.0f;
 	this->particles_item_frame_list.push_back(particle_image);
