@@ -180,8 +180,6 @@ public:
 
 	bool Update(float dt) override;
 
-	bool UpdateForcedMethod(float dt);
-
 	bool PostUpdate(float dt) override;
 
 	bool CleanUp() override;
@@ -197,10 +195,6 @@ private:
 	void SolveOverlapDS(Collider * c1, Collider * c2); // Solve Static vs Dynamic Overlap
 
 	void SolveOverlapDD(Collider * c1, Collider * c2); // Solve Dynamic vs Dynamic Overlap
-
-	//inline void DoOnTrigger(Collider* c1, Collider *c2);
-
-	//inline void DoOnTriggerExit(Collider* c1, Collider *c2);
 
 	void DestroyColliders();
 
