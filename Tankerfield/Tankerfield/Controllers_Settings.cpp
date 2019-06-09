@@ -48,7 +48,7 @@ Controllers_Settings::Controllers_Settings(fPoint relative_pos, uint player, MEN
 	attack_image->SetParent(table);
 	table->AssortElementToTable(attack_image, iPoint(1, 0));
 	
-	interaction_image = app->ui->CreateImage(fPoint(0, 0), UI_ImageDef(app->ui->button_sprites[(int)app->input->controllerInfo[player].interacton_button]), nullptr);
+	interaction_image = app->ui->CreateImage(fPoint(0, 0), UI_ImageDef(app->ui->button_sprites[(int)app->input->controllerInfo[player].interaction_button]), nullptr);
 	interaction_image->SetParent(table);
 	table->AssortElementToTable(interaction_image, iPoint(1, 1));
 
@@ -270,9 +270,9 @@ bool Controllers_Settings::UI_OnHoverRepeat(UI_Element * element)
 		}
 		else if (change_interaction_button == KEY_REPEAT)
 		{
-			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].interacton_button))
+			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].interaction_button))
 			{
-				interaction_image->sprite_rect = app->ui->button_sprites[(int)app->input->controllerInfo[player].interacton_button];
+				interaction_image->sprite_rect = app->ui->button_sprites[(int)app->input->controllerInfo[player].interaction_button];
 				interaction_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 				change_interaction_button = KEY_UP;
 			}
