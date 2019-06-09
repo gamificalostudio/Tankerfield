@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <math.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -513,12 +514,31 @@ void M_Scene::CreateEnemyWave()
 void M_Scene::NewWave()
 {
 	Tesla_trooper_units = 30 + 40 * round;
+	Brute_units = 0u;
+	RocketLauncher_units = 0u;
+	Suicidal_units = 0u;
 
 	if (round >= 2)
 	{
-		Brute_units += round - 1;
-		RocketLauncher_units += round - 1;
-		Suicidal_units += round - 1;
+		uint number_of_special_enemies = 0.8f * round;
+		for (uint iter = 0; iter < number_of_special_enemies; ++iter)
+		{
+			uint r = rand() % 3 + 1;
+			if (r == 1)
+			{
+				Brute_units += 1;
+			}
+
+			else if (r == 2)
+			{
+				RocketLauncher_units += 1;
+			}
+
+			else
+			{
+				Suicidal_units += 1;
+			}
+		}
 	}
 
 	CreateEnemyWave();
