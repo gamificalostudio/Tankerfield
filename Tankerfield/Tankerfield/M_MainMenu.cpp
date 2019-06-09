@@ -325,7 +325,10 @@ bool M_MainMenu::Start()
 
 	app->ui->HideAllUI();
 
-	SetMenuState(MENU_STATE::INIT_MENU);
+
+	SetMenuState(MENU_STATE::CONTROLLERS_SETTINGS);
+
+
 
 	SDL_ShowCursor(SDL_ENABLE);
 

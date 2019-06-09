@@ -322,6 +322,20 @@ bool M_Input::IsConnectedController(int i)
 	return false;
 }
 
+bool M_Input::GetControllerButtonDown(int controller, CONTROLLER_BUTTON & button)
+{
+	for (uint i = 0; i < (uint)CONTROLLER_BUTTON::MAX; ++i)
+	{
+		CONTROLLER_BUTTON switch_controller = (CONTROLLER_BUTTON)i;
+		if (GetControllerButtonOrTriggerState(controller, switch_controller) == KEY_DOWN)
+		{
+			button = switch_controller;
+			return true;
+		}
+	}
+	return false;
+}
+
 iPoint M_Input::GetMousePos_Tiles(const Camera * camera)
 {
 	iPoint ret;

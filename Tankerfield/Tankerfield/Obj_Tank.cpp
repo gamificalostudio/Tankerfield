@@ -208,9 +208,9 @@ bool Obj_Tank::Start()
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
-	gamepad_shoot		= app->input->controllerInfo[number_of_tanks].attack_button;
-	gamepad_item		= app->input->controllerInfo[number_of_tanks].use_item_button;
-	gamepad_interact	= app->input->controllerInfo[number_of_tanks].interacton_button;
+	gamepad_shoot		= app->input->controllerInfo[tank_num].attack_button;
+	gamepad_item		= app->input->controllerInfo[tank_num].use_item_button;
+	gamepad_interact	= app->input->controllerInfo[tank_num].interacton_button;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
