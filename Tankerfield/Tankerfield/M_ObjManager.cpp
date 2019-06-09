@@ -96,7 +96,7 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
-	//FillPool(ObjectType::TESLA_TROOPER, 100);
+	FillPool(ObjectType::TESLA_TROOPER, 100);
 	//FillPool(ObjectType::BRUTE, 2);
 	//FillPool(ObjectType::SUICIDAL, 2);
 	//FillPool(ObjectType::ROCKETLAUNCHER, 2);
@@ -259,8 +259,122 @@ void M_ObjManager::FillPool(ObjectType type, uint number)
 {
 	for (uint i = 0; i < number; ++i)
 	{
-		Object* obj = CreateObject(type, fPoint(-100, -100));
-		DesactivateObject(obj);
+		Object* ret=nullptr;
+		fPoint pos(-100, -100);
+		switch (type)
+		{
+		case ObjectType::TESLA_TROOPER:
+			ret = DBG_NEW Obj_TeslaTrooper(pos);
+			ret->type = ObjectType::TESLA_TROOPER;
+			break;
+		case ObjectType::SUICIDAL:
+			ret = DBG_NEW Obj_Suicidal(pos);
+			ret->type = ObjectType::SUICIDAL;
+			break;
+		case ObjectType::ROCKETLAUNCHER:
+			ret = DBG_NEW Obj_RocketLauncher(pos);
+			ret->type = ObjectType::ROCKETLAUNCHER;
+			break;
+		case ObjectType::TANK:
+			ret = DBG_NEW Obj_Tank(pos);
+			ret->type = ObjectType::TANK;
+			break;
+		case ObjectType::BASIC_BULLET:
+			ret = DBG_NEW Bullet_Basic(pos);
+			ret->type = ObjectType::BASIC_BULLET;
+			break;
+		case ObjectType::BULLET_MISSILE:
+			ret = DBG_NEW Bullet_Missile(pos);
+			ret->type = ObjectType::BULLET_MISSILE;
+			break;
+		case ObjectType::BULLET_LASER:
+			ret = DBG_NEW Laser_Bullet(pos);
+			ret->type = ObjectType::BULLET_LASER;
+			break;
+		case ObjectType::HEALING_BULLET:
+			ret = DBG_NEW Healing_Bullet(pos);
+			ret->type = ObjectType::HEALING_BULLET;
+			break;
+		case ObjectType::BULLET_OIL:
+			ret = DBG_NEW Bullet_Oil(pos);
+			ret->type = ObjectType::BULLET_OIL;
+			break;
+		case ObjectType::BULLET_ROCKETLAUNCHER:
+			ret = DBG_NEW Bullet_RocketLauncher(pos);
+			ret->type = ObjectType::BULLET_ROCKETLAUNCHER;
+			break;
+		case ObjectType::STATIC:
+			ret = DBG_NEW Obj_Building(pos);
+			ret->type = ObjectType::STATIC;
+			break;
+		case ObjectType::OIL_POOL:
+			ret = DBG_NEW Obj_OilPool(pos);
+			ret->type = ObjectType::OIL_POOL;
+			break;
+		case ObjectType::BRUTE:
+			ret = DBG_NEW Obj_Brute(pos);
+			ret->type = ObjectType::BRUTE;
+			enemies.push_back(ret);
+			break;
+		case ObjectType::EXPLOSION:
+			ret = DBG_NEW Obj_Explosion(pos);
+			ret->type = ObjectType::EXPLOSION;
+			break;
+		case ObjectType::CANNON_FIRE:
+			ret = DBG_NEW Obj_CannonFire(pos);
+			ret->type = ObjectType::CANNON_FIRE;
+			break;
+		case ObjectType::HEALING_ANIMATION:
+			ret = DBG_NEW Obj_Healing_Animation(pos);
+			ret->type = ObjectType::HEALING_ANIMATION;
+			break;
+		case ObjectType::FIRE_DEAD:
+			ret = DBG_NEW Obj_Fire(pos);
+			ret->type = ObjectType::FIRE_DEAD;
+			break;
+		case ObjectType::PORTAL:
+			ret = DBG_NEW Obj_Portal(pos);
+			ret->type = ObjectType::PORTAL;
+			break;
+		case ObjectType::PICK_UP:
+			ret = DBG_NEW Obj_PickUp(pos);
+			ret->type = ObjectType::PICK_UP;
+			break;
+		case ObjectType::REWARD_BOX:
+			ret = DBG_NEW Obj_RewardBox(pos);
+			ret->type = ObjectType::REWARD_BOX;
+			break;
+		case ObjectType::TANK_MAIN_MENU:
+			ret = DBG_NEW Obj_Tank_MainMenu(pos);
+			ret->type = ObjectType::REWARD_BOX;
+			break;
+		case ObjectType::ELECTRO_SHOT_ANIMATION:
+			ret = DBG_NEW Eletro_Shot_Animation(pos);
+			ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
+			break;
+		case ObjectType::FLAMETHROWER_FLAME:
+			ret = DBG_NEW Obj_FlamethrowerFlame(pos);
+			ret->type = ObjectType::FLAMETHROWER_FLAME;
+			break;
+		case ObjectType::HEALING_AREA_SHOT:
+			ret = DBG_NEW HealingShot_Area(pos);
+			ret->type = ObjectType::HEALING_AREA_SHOT;
+			break;
+		case ObjectType::OIL_SPLASH:
+			ret = DBG_NEW Oil_Splash(pos);
+			ret->type = ObjectType::OIL_SPLASH;
+			break;
+		case ObjectType::DAMAGED_SMOKE:
+			ret = DBG_NEW Obj_Smoke(pos);
+			ret->type = ObjectType::DAMAGED_SMOKE;
+			break;
+		default:
+			LOG("Object could not be created. Type not detected correctly or hasn't a case.");
+
+		}
+		
+		if(ret!=nullptr)
+			DesactivateObject(ret);
 	}
 }
 

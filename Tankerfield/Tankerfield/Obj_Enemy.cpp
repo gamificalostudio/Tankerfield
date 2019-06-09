@@ -605,6 +605,7 @@ inline void Obj_Enemy::Burn(const float & dt)
 
 inline void Obj_Enemy::Stunned()
 {
+	app->audio->PlayFx(sfx_spawn);
 	curr_tex = tex_electro_dead;
 	curr_anim = &electro_dead;
 	draw_offset = electrocuted_draw_offset;

@@ -71,7 +71,7 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
   
 	damaged_sprite_time = 75;
 
-	app->audio->PlayFx(sfx_spawn);
+	
 }
 
 void Obj_Brute::SetStats(int level)
