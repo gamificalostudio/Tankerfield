@@ -43,7 +43,7 @@
     <levels>
       <level name="Map2.tmx"/>
       <level name="test.tmx"/>
-      </levels>
+    </levels>
   </map>
   
   <ui>
