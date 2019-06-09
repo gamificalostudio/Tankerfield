@@ -75,11 +75,6 @@ SDL_Color Particle::LerpColor(SDL_Color src_color, SDL_Color trg_color, float ti
 
 void Particle::Draw(Camera * camera)
 {
-	// Calculations to determine the current center of particle texture
-	SDL_Rect tmp_rect = { (int)particle_state.particle_live.startSize, (int)particle_state.particle_live.startSize };
-	float center_x = particle_state.particle_live.pos_screen.x + ((tmp_rect.w - particle_state.particle_live.rectSize.w) * 0.5f);
-	float center_y = particle_state.particle_live.pos_screen.y + ((tmp_rect.h - particle_state.particle_live.rectSize.h) * 0.5f);
-
 	// Color interpolation, only if the particle has enough life
 	SDL_Color curr_color;
 	if (particle_state.particle_live.start_life > MIN_LIFE_TO_INTERPOLATE)
@@ -93,8 +88,8 @@ void Particle::Draw(Camera * camera)
 	// Blitting particle on screen
 	app->render->BlitParticle(
 		app->objectmanager->particle_system.GetParticleAtlas(),
-		(int)center_x,
-		(int)center_y,
+		(int)(particle_state.particle_live.pos_screen.x - particle_state.particle_live.rectSize.w * 0.5f),
+		(int)(particle_state.particle_live.pos_screen.y - particle_state.particle_live.rectSize.h * 0.5f),
 		camera,
 		&particle_state.particle_live.pRect,
 		&particle_state.particle_live.rectSize,

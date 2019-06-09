@@ -179,37 +179,48 @@ void Obj_Emitter::CalculateDrawVariables()
 	int min_y = 0;
 	int max_y = 0;
 
+	int particle_min_x = 0;
+	int particle_max_x = 0;
+	int particle_min_y = 0;
+	int particle_max_y = 0;
+
 	bool init_frame_vars = false;
 	//Set the values of the first particle
 
 	for (int i = 0; i < emitterPool->pool_size; ++i)
 	{
+		particle_min_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+		particle_max_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x + emitterPool->particle_array[i].particle_state.particle_live.rectSize.w;
+		particle_min_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
+		particle_max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y + emitterPool->particle_array[i].particle_state.particle_live.rectSize.h;
+
 		if (emitterPool->particle_array[i].IsAlive())
 		{
 			if (!init_frame_vars)
 			{
-				min_x = max_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
-				min_y = max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
+				min_x = particle_min_x;
+				max_x = particle_max_x;
+				min_y = particle_min_y,
+				max_y = particle_max_y;
 				init_frame_vars = true;
 			}
 			else
 			{
-				//TODO: Use the scale too to calculate the frame
-				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x < min_x)
+				if (particle_min_x < min_x)
 				{
-					min_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+					min_x = particle_min_x;
 				}
-				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x > max_x)
+				if (particle_max_x > max_x)
 				{
-					max_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+					max_x = particle_max_x;
 				}
-				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y < min_y)
+				if (particle_min_y < min_y)
 				{
-					min_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
+					min_y = particle_min_y;
 				}
-				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y > max_y)
+				if (particle_max_y > max_y)
 				{
-					max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
+					max_y = particle_max_y;
 				}
 			}
 		}
