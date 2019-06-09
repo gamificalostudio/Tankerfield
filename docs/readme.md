@@ -63,7 +63,7 @@ For more information about the decisions we have taken, you can check our game d
 
 **Design**: Victor Segura Blanco
 * [Github account](https://github.com/VictorSegura99)
-* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Victor_contribution)
+* [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Víctor_contribution)
 
 **Code**: Gerard Marcos Freixas
 * [Github account](https://github.com/vsRushy)
