@@ -33,7 +33,11 @@ This shot creates a bullet that when it collides, it creates an Object Explosiod
 
 [![Double Missile](https://img.youtube.com/vi/W6fsnRjkULc/0.jpg)](https://www.youtube.com/watch?v=W6fsnRjkULc)
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/W6fsnRjkULc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 **Charged Shot:**
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Axyet1AsBhY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 [![Double Missile Charged](https://img.youtube.com/vi/Axyet1AsBhY/0.jpg)](https://www.youtube.com/watch?v=Axyet1AsBhY)
 
