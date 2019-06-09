@@ -26,6 +26,7 @@
 #include "LeaderBoard.h"
 
 #include "UI_Label.h"
+#include "UI_Image.h"
 
 #include "Point.h"
 #include "Rect.h"
@@ -33,6 +34,8 @@
 #include "PerfTimer.h"
 #include "Obj_Tank.h"
 
+#include "Options_Menu.h"
+#include "Pause_Menu.h"
 #include "General_HUD.h"
 #include "Player_GUI.h"
 
@@ -43,8 +46,6 @@
 
 #include "Object.h"
 #include "Obj_RewardBox.h"
-
-#include "UI_Image.h"
 
 
 M_Scene::M_Scene() : Module()
@@ -143,6 +144,10 @@ bool M_Scene::Start()
 
 	general_gui = DBG_NEW General_GUI();
 	leaderboard = DBG_NEW LeaderBoard(screen_center,"data/leader_board.xml",false);
+	pause_menu = DBG_NEW Pause_Menu();
+	options_menu = DBG_NEW Options_Menu(MENU_TYPE::PAUSE_MENU);
+
+	SetMenuState( MENU_STATE::NO_TYPE);
 
 	new_round_animation.Start();
 
@@ -152,11 +157,21 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
-	//LOG("Enemy number %i", number_of_enemies);
-
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)//TODO: Go to pause screen
 	{
 		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
+	{
+		if (app->IsPaused() == true)
+		{
+			SetMenuState(MENU_STATE::NO_TYPE);
+		}
+		else
+		{
+			SetMenuState(MENU_STATE::INIT_MENU);
+		}
 	}
 
 	return true;
@@ -311,6 +326,63 @@ bool M_Scene::CleanUp()
 	leaderboard = nullptr;
 
 	return true;
+}
+
+void M_Scene::SetMenuState(MENU_STATE new_state)
+{
+	// If state is equal to current state ========================
+
+	if (new_state == menu_state)
+	{
+		return;
+	}
+
+	// Desactive current state ==================================
+
+	switch (menu_state)
+	{
+	case MENU_STATE::NO_TYPE:
+		SDL_ShowCursor(SDL_ENABLE);
+		break;
+	case MENU_STATE::INIT_MENU:
+		pause_menu->HidePauseMenu();
+		break;
+	case MENU_STATE::OPTIONS:
+		options_menu->HideOptionsMenu();
+		break;
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		//for (uint i = 0; i < 4; ++i)
+		//{
+		//	controllers_setting[i]->HideControllersSettings();
+		//}
+		break;
+	}
+
+	// Active new state ======================================
+
+	menu_state = new_state;
+
+	switch (menu_state)
+	{
+	case MENU_STATE::NO_TYPE:
+		SDL_ShowCursor(SDL_DISABLE);
+		app->ResumeGame();
+		break;
+	case MENU_STATE::INIT_MENU:
+		app->PauseGame();
+		pause_menu->ShowPauseMenu();
+		break;
+	case MENU_STATE::OPTIONS:
+		options_menu->ShowOptionsMenu();
+		break;
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+
+		//for (uint i = 0; i < 4; ++i)
+		//{
+		//	controllers_setting[i]->ShowControllerSettings();
+		//}
+		break;
+	}
 }
 
 void M_Scene::DebugPathfinding()

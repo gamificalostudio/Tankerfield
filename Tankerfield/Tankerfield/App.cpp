@@ -27,6 +27,7 @@
 #include "M_MainMenu.h"
 #include "M_Debug.h"
 #include "Options_Menu.h"
+#include "Pause_Menu.h"
 #include "M_VideoPlayer.h"
 
 // Constructor
@@ -194,6 +195,7 @@ bool App::Start()
 	
 	startup_time.Start();
 
+	
 	PERF_PEEK(ptimer);
 
 	return ret;
@@ -204,11 +206,7 @@ bool App::Update()
 {
 	bool ret = true;
 	PrepareUpdate();
-	if (input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
-	{
-		pause = !pause;
-		frame_time.Start();
-	}
+
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
@@ -428,6 +426,22 @@ void App::SaveGame(const char* file) const
 	save_game.assign(file);
 }
 
+bool App::IsPaused()
+{
+	return pause;
+}
+
+void App::PauseGame()
+{
+	pause = true;
+}
+
+void App::ResumeGame()
+{
+	pause = false;
+	frame_time.Start();
+}
+
 // ---------------------------------------
 
 bool App::LoadGameNow()
@@ -502,9 +516,4 @@ bool App::SavegameNow() const
 	data.reset();
 	want_to_save = false;
 	return ret;
-}
-
-bool App::IsPaused()
-{
-	return pause;
 }

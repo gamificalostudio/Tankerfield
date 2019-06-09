@@ -164,20 +164,10 @@ bool M_Collision::Update(float dt)
 {
 	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange);
 
-	if (app->map->MapIsLoaded() == false)
-	{
-		return true;
-	}
-
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 	{
 		debug = !debug;
 	}
-
-	// Destroy Colliders =====================================================
-
-	DestroyColliders();
-
 	// Add colliders ========================================================
 
 	if (!colliders_to_add.empty())
@@ -189,6 +179,15 @@ bool M_Collision::Update(float dt)
 		}
 
 		colliders_to_add.clear();
+	}
+
+	// Destroy Colliders =====================================================
+
+	DestroyColliders();
+
+	if (app->map->MapIsLoaded() == false)
+	{
+		return true;
 	}
 
 	// Create Quadtree Collision =============================================

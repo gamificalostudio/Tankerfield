@@ -137,7 +137,6 @@
     <ClCompile Include="M_Debug.cpp" />
     <ClCompile Include="NewRoundAnimation.cpp" />
     <ClCompile Include="Obj_Smoke.cpp" />
-    <ClCompile Include="Obj_Emmiter.cpp" />
     <ClCompile Include="Oil_Splash.cpp" />
     <ClCompile Include="Options_Menu.cpp" />
     <ClCompile Include="Obj_ElectroShotAnimation.cpp" />
@@ -146,6 +145,7 @@
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
     <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
+    <ClCompile Include="Pause_Menu.cpp" />
     <ClCompile Include="Quadtree_Collision.cpp" />
     <ClCompile Include="UI_InputText.cpp" />
     <ClCompile Include="UI_Table.cpp" />
@@ -224,7 +224,6 @@
     <ClInclude Include="M_Debug.h" />
     <ClInclude Include="NewRoundAnimation.h" />
     <ClInclude Include="Obj_Smoke.h" />
-    <ClInclude Include="Obj_Emmiter.h" />
     <ClInclude Include="Oil_Splash.h" />
     <ClInclude Include="Options_Menu.h" />
     <ClInclude Include="Obj_ElectroShotAnimation.h" />
@@ -233,6 +232,7 @@
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
     <ClInclude Include="Obj_FlamethrowerFlame.h" />
+    <ClInclude Include="Pause_Menu.h" />
     <ClInclude Include="Quadtree_Collision.h" />
     <ClInclude Include="UI_InputText.h" />
     <ClInclude Include="UI_Table.h" />

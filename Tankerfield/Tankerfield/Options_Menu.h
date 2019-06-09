@@ -22,7 +22,7 @@ class Options_Menu :public UI_Listener
 {
 public:
 
-	Options_Menu();
+	Options_Menu(MENU_TYPE menu_type);
 
 	bool UI_OnHoverEnter(UI_Element * element);
 
@@ -35,14 +35,9 @@ public:
 
 private:
 
+	MENU_TYPE menu_type = MENU_TYPE::NO_TYPE;
+
 	// Elements ================================================
-
-	Camera*			       camera = nullptr;
-
-	// Control helpers --------------------------------------
-
-	UI_Image* control_helper_image = nullptr;
-	UI_Label* control_helper_label = nullptr;
 
 	// Main screen --------------------------------
 
