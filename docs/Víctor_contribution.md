@@ -1,7 +1,11 @@
-
 # Víctor Segura - Designer
  ## Role
- 
+ As a Designer, I collaborated with the Leader, [Jaume Montagut](https://github.com/JaumeMontagut), in order to design and decide all the aspects in the game. At the beginning, we decided with the group the main idea of the game and decided the Game Pillars we were going to use.
+
+We created, having in consideration the ideas of the members of the group, and designed how the weapons, enemies and items in the game would work.
+
+We had one or two point during the development where we had to redesign some important aspects of the game to make it more accessible, assure the game was going to work better or adapting it to the publisher expectations.
+
  ## Wiki contribution
 
 * [Game Design Document](https://github.com/gamificalostudio/Tankerfield/wiki/Game-Design-Document)
@@ -10,23 +14,35 @@
 # Game Implementations
 
 ## Object Manager
+The first task I had in the game code was adding the Object Manager. I took the Entity Manager of my previous project [Alien Earth](https://github.com/VictorSegura99/Alien_Earth) and adapted it to work with STL containers.
 
 ## Enemies
+
 ### First Tesla Trooper Version
 ### Brute
 
 ## Weapons
  
 ### Double Missile 
+
+
+<iframe width="854" height="480" src="[https://www.youtube.com/embed/W6fsnRjkULc](https://www.youtube.com/embed/y1xUT7QJ-mA)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+
+<iframe width="854" height="480" src="[https://www.youtube.com/embed/Axyet1AsBhY](https://www.youtube.com/embed/y1xUT7QJ-mA)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
 ### Healing Shot
 ### Weapon Oil
 
 ## Items
 ### Happy Hour
+Happy Hour is an item that reduces the fire cadency of the player at a quarter of the original.
+
 ### Instant Help
+Instant Help is an item that creates a portal in front of the player casting the item and another portal in a random place of the walkability map. The portals are managed and linked through the item. 
 
+When a player enters the portal, they get teleported to the other one.
 ## UI
-
 ### Credits Menu
 ![Credits Menu](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/V%C3%ADctor_Contributions_docs/Credits%20Menu.jpg?raw=true)
 The credits menu direct you directly to the Githubs and LinkedIns of all members, as well as the website of the game and the Github Repository.
@@ -43,5 +59,7 @@ The Music Volume and SFX volume are ints that modify the volume, after multiplyi
 
 ## Video Player
 
+I added a VideoPlayer to display the Logo Intro at the beginning of the game. I used the [Personal Research](https://github.com/AxelAlavedra/Video-Player-Research) of my classmate [Axel Alavedra](https://github.com/AxelAlavedra), which was a great help and worked great.
 
+I made a little modification because there was a bug that printed a frame green just before reproducing the video.
 ﻿
