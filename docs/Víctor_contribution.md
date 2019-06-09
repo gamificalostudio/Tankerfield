@@ -1,12 +1,14 @@
 # Víctor Segura - Designer
- ## Role
+
+## Role
+
  As a Designer, I collaborated with the Leader, [Jaume Montagut](https://github.com/JaumeMontagut), in order to design and decide all the aspects in the game. At the beginning, we decided with the group the main idea of the game and decided the Game Pillars we were going to use.
 
 We created, having in consideration the ideas of the members of the group, and designed how the weapons, enemies and items in the game would work.
 
 We had one or two point during the development where we had to redesign some important aspects of the game to make it more accessible, assure the game was going to work better or adapting it to the publisher expectations.
 
- ## Wiki contribution
+## Wiki contribution
 
 * [Game Design Document](https://github.com/gamificalostudio/Tankerfield/wiki/Game-Design-Document)
 	* I made the main part of the GDD, writing down the first ideas, mechanics, weapons and enemies that decided with the team.
@@ -25,11 +27,10 @@ The first task I had in the game code was adding the Object Manager. I took the 
  
 ### Double Missile 
 
+[![Double Missile](https://img.youtube.com/vi/W6fsnRjkULc/0.jpg)](https://www.youtube.com/watch?v=W6fsnRjkULc)
 
-<iframe width="854" height="480" src="[https://www.youtube.com/embed/W6fsnRjkULc](https://www.youtube.com/embed//W6fsnRjkULc)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+[![Double Missile Charged](https://img.youtube.com/vi/Axyet1AsBhY/0.jpg)](https://www.youtube.com/watch?v=Axyet1AsBhY)
 
-
-<iframe width="854" height="480" src="[https://www.youtube.com/embed/Axyet1AsBhY](https://www.youtube.com/embed/Axyet1AsBhY)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ### Healing Shot
 ### Weapon Oil
