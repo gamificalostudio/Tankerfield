@@ -273,7 +273,7 @@ void Obj_Enemy::Idle()
 	path.clear();
 	move_vect.SetToZero();
 	
-	if (change_to_teleport.ReadSec > 2)
+	if (change_to_teleport.ReadSec() > 2)
 	{
 		SetState(ENEMY_STATE::GET_PATH);
 		change_to_teleport.Start();
