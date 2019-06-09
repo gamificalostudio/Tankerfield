@@ -51,6 +51,8 @@ Instant Help is an item that creates a portal in front of the player casting the
 
 When a player enters the portal, they get teleported to the other one.
 
+<iframe width="1280" height="720" src="https://www.youtube.com/embed/2dE1WgqqKh4?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## UI
 ### Credits Menu
 ![Credits Menu](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/V%C3%ADctor_Contributions_docs/Credits%20Menu.jpg?raw=true)
