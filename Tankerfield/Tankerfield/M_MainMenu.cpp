@@ -99,7 +99,7 @@ bool M_MainMenu::Start()
 
 	fPoint tank_offset = { 280.f, 280.f };
 
-	for (int i = 0; i < 4; ++i)
+	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		std::string player_string;
 
@@ -129,7 +129,7 @@ bool M_MainMenu::Start()
 		player_labels[i] = app->ui->CreateLabel(players[i].tank_pos + fPoint(0, 150), UI_LabelDef(player_string, app->font->button_font_40, { 220, 220,220,255 }));
 		player_labels[i]->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 		player_labels[i]->SetParent(player_labels_peg);
-		players[i].controller = app->input->GetAbleController();
+		players[i].controller = i;
 		players[i].tank->SetController(players[i].controller);
 	}
 
@@ -317,21 +317,17 @@ bool M_MainMenu::Start()
 
 	// Controll helper ------------------------
 
+	app->ui->HideAllUI();
+
 	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
 	control_helper_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
 	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	app->ui->HideAllUI();
-
-
 	SetMenuState(MENU_STATE::INIT_MENU);
 
-
-
 	SDL_ShowCursor(SDL_ENABLE);
-
 
 	return true;
 }
@@ -625,6 +621,7 @@ bool M_MainMenu::SetPlayerProperties()
 	else
 	{
 		player_labels[current_player]->color_mod = { 255, 20, 20, 255 };
+		selection_navigation->SetControllers(current_player);
 	}
 
 	return true;
@@ -671,7 +668,6 @@ void M_MainMenu::SetMenuState(MENU_STATE new_state)
 		break;
 
 	case MENU_STATE::SELECTION:
-
 		break;
 	case MENU_STATE::CREDITS:
 		current_player = 0;
@@ -727,6 +723,8 @@ void M_MainMenu::SetMenuState(MENU_STATE new_state)
 		// Set elements state -----------------------------------
 
 		selection_navigation->Active();
+		selection_navigation->SetControllers(0);
+
 		selection_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		player_labels_peg->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 		control_helper_label->SetPos(screen_center + fPoint(40, 350));
