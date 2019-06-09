@@ -191,10 +191,10 @@ void Obj_Emitter::CalculateDrawVariables()
 
 	for (int i = 0; i < emitterPool->pool_size; ++i)
 	{
-		particle_min_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x - emitterPool->particle_array[i].particle_state.particle_live.rectSize.w * 0.5f;
-		particle_max_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x + emitterPool->particle_array[i].particle_state.particle_live.rectSize.w * 0.5f;
-		particle_min_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y - emitterPool->particle_array[i].particle_state.particle_live.rectSize.h * 0.5f;
-		particle_max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y + emitterPool->particle_array[i].particle_state.particle_live.rectSize.h * 0.5f;
+		particle_min_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x - emitterPool->particle_array[i].particle_state.particle_live.rect.w * 0.5f;
+		particle_max_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x + emitterPool->particle_array[i].particle_state.particle_live.rect.w * 0.5f;
+		particle_min_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y - emitterPool->particle_array[i].particle_state.particle_live.rect.h * 0.5f;
+		particle_max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y + emitterPool->particle_array[i].particle_state.particle_live.rect.h * 0.5f;
 
 		if (emitterPool->particle_array[i].IsAlive())
 		{

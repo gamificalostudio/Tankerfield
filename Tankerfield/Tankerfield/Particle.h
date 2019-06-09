@@ -36,7 +36,7 @@ class Particle
 			fPoint startVel;
 			fPoint endVel;
 			fPoint currentVel;
-			float currentSize, startSize, endSize;
+			float curr_size, start_size, end_size;
 			float ageRatio;
 			float angle;
 			double startRotSpeed;

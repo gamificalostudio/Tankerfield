@@ -20,8 +20,8 @@ void Particle::Init(fPoint pos, float startSpeed, float endSpeed, float angle, d
 
 	// Life properties
 	this->life = particle_state.particle_live.start_life = life;
-	particle_state.particle_live.currentSize = particle_state.particle_live.startSize = startSize;
-	particle_state.particle_live.endSize = endSize;
+	particle_state.particle_live.curr_size = particle_state.particle_live.start_size = startSize;
+	particle_state.particle_live.end_size = endSize;
 	particle_state.particle_live.t = 0.0f;
 
 	// Color properties
@@ -37,14 +37,14 @@ void Particle::Update(float dt)
 	particle_state.particle_live.ageRatio = (float)life / (float)particle_state.particle_live.start_life;
 
 	// Particle size interpolation
-	particle_state.particle_live.currentSize = InterpolateBetweenRange(particle_state.particle_live.startSize, particle_state.particle_live.t, particle_state.particle_live.endSize);
+	particle_state.particle_live.curr_size = InterpolateBetweenRange(particle_state.particle_live.start_size, particle_state.particle_live.t, particle_state.particle_live.end_size);
 
 	// Particle speed interpolation
 	particle_state.particle_live.currentVel.x = InterpolateBetweenRange(particle_state.particle_live.startVel.x, particle_state.particle_live.t, particle_state.particle_live.endVel.x);
 	particle_state.particle_live.currentVel.y = InterpolateBetweenRange(particle_state.particle_live.startVel.y, particle_state.particle_live.t, particle_state.particle_live.endVel.y);
 
 	// Assign new size to particle rect
-	particle_state.particle_live.rect.w = particle_state.particle_live.rect.h = particle_state.particle_live.currentSize;
+	particle_state.particle_live.rect.w = particle_state.particle_live.rect.h = particle_state.particle_live.curr_size;
 
 	// Calculating new particle position
 	particle_state.particle_live.pos_map.x += particle_state.particle_live.currentVel.x * dt;
