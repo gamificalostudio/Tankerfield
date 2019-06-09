@@ -109,6 +109,7 @@ bool Pause_Menu::UI_Selected(UI_Element * element)
 	else if (element == main_menu)
 	{
 		app->scmanager->FadeToBlack(app->scene, app->main_menu, 2.f, 2.f);
+		app->scene->SetMenuState(MENU_STATE::NO_TYPE);
 	}
 	else if (element == continue_button)
 	{

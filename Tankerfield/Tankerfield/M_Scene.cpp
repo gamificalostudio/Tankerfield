@@ -157,12 +157,7 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)//TODO: Go to pause screen
-	{
-		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KeyState::KEY_DOWN)
 	{
 		if (app->IsPaused() == true)
 		{
