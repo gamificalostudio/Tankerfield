@@ -50,6 +50,17 @@ void Particle::Update(float dt)
 	particle_state.particle_live.pos_map.x += particle_state.particle_live.currentVel.x * dt;
 	particle_state.particle_live.pos_map.y += particle_state.particle_live.currentVel.y * dt;
 
+	// Calculating new rotation according to rotation speed
+	particle_state.particle_live.curr_rot_speed += particle_state.particle_live.startRotSpeed;
+
+	// Time step increment to interpolate colors
+	particle_state.particle_live.t += (1.0f / (float)particle_state.particle_live.start_life);
+
+	if (particle_state.particle_live.t >= 1.0f)
+	{
+		particle_state.particle_live.t = 0.0f;
+	}
+
 	// Decrementing particle life
 	life--;
 }
@@ -66,8 +77,8 @@ void Particle::Draw(Camera * camera)
 {
 	// Calculations to determine the current center of particle texture
 	SDL_Rect tmp_rect = { (int)particle_state.particle_live.startSize, (int)particle_state.particle_live.startSize };
-	float center_x = particle_state.particle_live.pos_map.x + ((tmp_rect.w - particle_state.particle_live.rectSize.w) * 0.5f);
-	float center_y = particle_state.particle_live.pos_map.y + ((tmp_rect.h - particle_state.particle_live.rectSize.h) * 0.5f);
+	float center_x = particle_state.particle_live.pos_screen.x + ((tmp_rect.w - particle_state.particle_live.rectSize.w) * 0.5f);
+	float center_y = particle_state.particle_live.pos_screen.y + ((tmp_rect.h - particle_state.particle_live.rectSize.h) * 0.5f);
 
 	// Color interpolation, only if the particle has enough life
 	SDL_Color curr_color;
@@ -91,17 +102,6 @@ void Particle::Draw(Camera * camera)
 		particle_state.particle_live.blend_mode,
 		1.0f,
 		particle_state.particle_live.curr_rot_speed);
-
-	// Calculating new rotation according to rotation speed
-	particle_state.particle_live.curr_rot_speed += particle_state.particle_live.startRotSpeed;
-
-	// Time step increment to interpolate colors
-	particle_state.particle_live.t += (1.0f / (float)particle_state.particle_live.start_life);
-
-	if (particle_state.particle_live.t >= 1.0f)
-	{
-		particle_state.particle_live.t = 0.0f;
-	}
 }
 
 bool Particle::IsAlive()
