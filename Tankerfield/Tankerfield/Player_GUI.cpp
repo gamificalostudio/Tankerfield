@@ -191,7 +191,7 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 
 	if (tank_num == 0 || tank_num == 1)
 	{
-		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, 55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::RT] }));
+		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, 55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::A] }));
 		item_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
