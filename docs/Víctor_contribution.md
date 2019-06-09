@@ -33,11 +33,11 @@ The Normal Shot creates 2 bullets and the charged Shot creates 4.
 
 **Normal Shot:**
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/W6fsnRjkULc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="1024" height="576" src="https://www.youtube.com/embed/W6fsnRjkULc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 **Charged Shot:**
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Axyet1AsBhY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="1024" height="576" src="https://www.youtube.com/embed/Axyet1AsBhY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Healing Shot
 ### Weapon Oil
@@ -51,7 +51,7 @@ Instant Help is an item that creates a portal in front of the player casting the
 
 When a player enters the portal, they get teleported to the other one.
 
-<iframe width="1280" height="720" src="https://www.youtube.com/embed/2dE1WgqqKh4?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="1024" height="576" src="https://www.youtube.com/embed/2dE1WgqqKh4?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## UI
 ### Credits Menu
