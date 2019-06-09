@@ -28,6 +28,7 @@
 
     <double_missile>
       <damage_multiplier num="50"/>
+      <explosion_multiplier num="25"/>
       <damage_exponential_base num="1.25"/>
       <speed num="15"/>
     </double_missile>
