@@ -594,4 +594,9 @@
       <UniqueIdentifier>{9ebcce9b-e2e9-4b17-9e32-108b6bba6746}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Game\psystem_config">
+      <Filter>Data</Filter>
+    </None>
+  </ItemGroup>
 </Project>

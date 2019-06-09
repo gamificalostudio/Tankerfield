@@ -216,5 +216,5 @@ void Obj_Emitter::CalculateDrawVariables()
 	}
 
 	frame = { min_x, min_y, max_x - min_x , max_y - min_y };
-	draw_offset.create(min_x, min_y);//draw offset will efectively move the frame
+	//draw_offset.create(min_x, min_y);//draw offset will efectively move the frame
 }
