@@ -4258,7 +4258,7 @@ int avcodec_parameters_to_context(AVCodecContext *codec,
  * @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
  *      av_dict_set(), av_opt_find().
  */
-int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options);
+int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options_menu);
 
 /**
  * Close a given AVCodecContext and free all the data associated with it
@@ -5970,7 +5970,7 @@ int av_bsf_list_append(AVBSFList *lst, AVBSFContext *bsf);
  *
  * @return >=0 on success, negative AVERROR in case of failure
  */
-int av_bsf_list_append2(AVBSFList *lst, const char * bsf_name, AVDictionary **options);
+int av_bsf_list_append2(AVBSFList *lst, const char * bsf_name, AVDictionary **options_menu);
 /**
  * Finalize list of bitstream filters.
  *

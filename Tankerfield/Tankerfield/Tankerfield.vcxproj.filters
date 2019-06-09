@@ -34,9 +34,6 @@
     <ClCompile Include="M_Render.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="M_RewardZoneManager.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="M_Scene.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -193,6 +190,9 @@
     <ClCompile Include="Obj_Explosion.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
+    <ClCompile Include="Obj_Fire.cpp">
+      <Filter>Objects\Bullets</Filter>
+    </ClCompile>
     <ClCompile Include="Obj_OilPool.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -223,33 +223,32 @@
     <ClCompile Include="M_Debug.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="HealingShot_Area.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Pause_Menu.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
     <ClCompile Include="Options_Menu.cpp">
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="M_VideoPlayer.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Controllers_Settings.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="LeaderBoard.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="HealingShot_Area.cpp">
-      <Filter>Objects\Particles</Filter>
+    <ClCompile Include="NewRoundAnimation.cpp">
+      <Filter>Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Controllers_Settings.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Oil_Splash.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
-    <ClCompile Include="NewRoundAnimation.cpp" />
-    <ClCompile Include="Obj_Fire.cpp">
       <Filter>Objects\Particles</Filter>
     </ClCompile>
     <ClCompile Include="Obj_Smoke.cpp">
       <Filter>Objects\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Obj_Emmiter.cpp">
-      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,9 +283,6 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Render.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="M_RewardZoneManager.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="M_Scene.h">
@@ -472,6 +468,9 @@
     <ClInclude Include="Obj_Explosion.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
+    <ClInclude Include="Obj_Fire.h">
+      <Filter>Objects\Bullets</Filter>
+    </ClInclude>
     <ClInclude Include="Obj_OilPool.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -499,33 +498,32 @@
     <ClInclude Include="M_Debug.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="HealingShot_Area.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause_Menu.h">
+      <Filter>UI</Filter>
+    </ClInclude>
     <ClInclude Include="Options_Menu.h">
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="M_VideoPlayer.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Controllers_Settings.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="LeaderBoard.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="HealingShot_Area.h">
-      <Filter>Objects\Particles</Filter>
+    <ClInclude Include="NewRoundAnimation.h">
+      <Filter>Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Controllers_Settings.h">
+      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Oil_Splash.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
-    <ClInclude Include="NewRoundAnimation.h" />
-    <ClInclude Include="Obj_Fire.h">
       <Filter>Objects\Particles</Filter>
     </ClInclude>
     <ClInclude Include="Obj_Smoke.h">
       <Filter>Objects\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_Emmiter.h">
-      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -543,9 +541,6 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Modules">
-      <UniqueIdentifier>{81942fd6-8c45-4a5a-9630-e39191594881}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{0351f03c-1ee1-4d2d-95f2-d874bd5b3109}</UniqueIdentifier>
     </Filter>
@@ -590,6 +585,12 @@
     </Filter>
     <Filter Include="Objects\Particles">
       <UniqueIdentifier>{9ebcce9b-e2e9-4b17-9e32-108b6bba6746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animations">
+      <UniqueIdentifier>{cd840f94-b3be-4bbf-a5a4-ac362db5c3df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{81942fd6-8c45-4a5a-9630-e39191594881}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

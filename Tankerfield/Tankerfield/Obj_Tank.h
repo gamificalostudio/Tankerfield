@@ -49,6 +49,7 @@ public:
 	void UpdateWeaponsWithoutBullets(float dt);
 
 	bool Draw(Camera * camera) override;
+	void DrawCrosshair(Camera * camera);
 	bool DrawShadow(Camera * camera, float dt) override;
 
 	bool CleanUp() override;
@@ -307,6 +308,8 @@ private:
 	float charging_scale = 0.f;
 	uint charging_ready = 0u;
 	bool charging = false;
+
+	SDL_Texture * crosshair_tex				= nullptr;
 
 	iPoint turr_draw_offset						= { 0,0 };
 	float turr_scale							= 1.f;

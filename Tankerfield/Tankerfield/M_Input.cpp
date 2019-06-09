@@ -322,6 +322,20 @@ bool M_Input::IsConnectedController(int i)
 	return false;
 }
 
+bool M_Input::GetControllerButtonDown(int controller, CONTROLLER_BUTTON & button)
+{
+	for (uint i = 0; i < (uint)CONTROLLER_BUTTON::MAX; ++i)
+	{
+		CONTROLLER_BUTTON switch_controller = (CONTROLLER_BUTTON)i;
+		if (GetControllerButtonOrTriggerState(controller, switch_controller) == KEY_DOWN)
+		{
+			button = switch_controller;
+			return true;
+		}
+	}
+	return false;
+}
+
 iPoint M_Input::GetMousePos_Tiles(const Camera * camera)
 {
 	iPoint ret;
@@ -581,9 +595,9 @@ KeyState M_Input::GetControllerButtonOrTriggerState(int controller, CONTROLLER_B
 	case CONTROLLER_BUTTON::X:
 		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_X);
 	case CONTROLLER_BUTTON::L:
-		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSHOULDER);
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_LEFTSTICK);
 	case CONTROLLER_BUTTON::R:
-		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSHOULDER);
+		return app->input->GetControllerButtonState(controller, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_RIGHTSTICK);
 	case CONTROLLER_BUTTON::LT:
 		return app->input->GetControllerTriggerState(controller, SDL_GameControllerAxis::SDL_CONTROLLER_AXIS_TRIGGERLEFT);
 	case CONTROLLER_BUTTON::RT:

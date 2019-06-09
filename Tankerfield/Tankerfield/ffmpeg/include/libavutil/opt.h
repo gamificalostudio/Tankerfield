@@ -476,7 +476,7 @@ int av_opt_flag_is_set(void *obj, const char *field_name, const char *flag_name)
  *
  * @see av_dict_copy()
  */
-int av_opt_set_dict(void *obj, struct AVDictionary **options);
+int av_opt_set_dict(void *obj, struct AVDictionary **options_menu);
 
 
 /**
@@ -494,7 +494,7 @@ int av_opt_set_dict(void *obj, struct AVDictionary **options);
  *
  * @see av_dict_copy()
  */
-int av_opt_set_dict2(void *obj, struct AVDictionary **options, int search_flags);
+int av_opt_set_dict2(void *obj, struct AVDictionary **options_menu, int search_flags);
 
 /**
  * Extract a key-value pair from the beginning of a string.

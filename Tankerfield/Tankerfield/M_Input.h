@@ -78,7 +78,7 @@ enum class CONTROLLER_BUTTON : int
 struct ControllersPlayerInfo
 {
 	float death_zone_porcenatage = 0.20f;
-	int vibration_percentage = 1.00f;
+	float vibration_percentage = 1.00f;
 	CONTROLLER_BUTTON attack_button = CONTROLLER_BUTTON::RT;
 	CONTROLLER_BUTTON interacton_button = CONTROLLER_BUTTON::X;
 	CONTROLLER_BUTTON use_item_button = CONTROLLER_BUTTON::LB;
@@ -207,6 +207,8 @@ public:
 	void DetachController(int controller);
 
 	bool IsConnectedController(int i);
+
+	bool GetControllerButtonDown(int controller, CONTROLLER_BUTTON& button);
 
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
