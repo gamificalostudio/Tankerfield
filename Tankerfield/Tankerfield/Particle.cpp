@@ -10,7 +10,7 @@ Particle::Particle():life(0) { }
 void Particle::Init(fPoint pos, float startSpeed, float endSpeed, float angle, double rotSpeed, float startSize, float endSize, uint life, SDL_Rect textureRect, SDL_Color startColor, SDL_Color endColor, SDL_BlendMode blendMode)
 {
 	// Movement properties
-	particle_state.particle_live.pos = pos;
+	particle_state.particle_live.pos_map = pos;
 	particle_state.particle_live.startVel.x = startSpeed * cos(DEGTORAD * angle);
 	particle_state.particle_live.startVel.y = -startSpeed * sin(DEGTORAD * angle);
 	particle_state.particle_live.endVel.x = endSpeed * cos(DEGTORAD * angle);
@@ -29,9 +29,6 @@ void Particle::Init(fPoint pos, float startSpeed, float endSpeed, float angle, d
 	particle_state.particle_live.endColor = endColor;
 	particle_state.particle_live.blend_mode = blendMode;
 	particle_state.particle_live.pRect = particle_state.particle_live.rectSize = textureRect;
-
-	// Add vortex to the system (optional and only one is allowed)
-	 AddVortex({ 250.0f, 200.0f }, 10.0f, 30.0f);
 }
 
 void Particle::Update(float dt)
@@ -50,11 +47,8 @@ void Particle::Update(float dt)
 	particle_state.particle_live.rectSize.w = particle_state.particle_live.rectSize.h = particle_state.particle_live.currentSize;
 
 	// Calculating new particle position
-	particle_state.particle_live.pos.x += particle_state.particle_live.currentVel.x * dt;
-	particle_state.particle_live.pos.y += particle_state.particle_live.currentVel.y * dt;
-
-	// BONUS CODE. Uncomment to unchain vortices
-	//CalculateParticlePos(dt);
+	particle_state.particle_live.pos_map.x += particle_state.particle_live.currentVel.x * dt;
+	particle_state.particle_live.pos_map.y += particle_state.particle_live.currentVel.y * dt;
 
 	// Decrementing particle life
 	life--;
@@ -72,8 +66,8 @@ void Particle::Draw(Camera * camera)
 {
 	// Calculations to determine the current center of particle texture
 	SDL_Rect tmp_rect = { (int)particle_state.particle_live.startSize, (int)particle_state.particle_live.startSize };
-	float center_x = particle_state.particle_live.pos.x + ((tmp_rect.w - particle_state.particle_live.rectSize.w) * 0.5f);
-	float center_y = particle_state.particle_live.pos.y + ((tmp_rect.h - particle_state.particle_live.rectSize.h) * 0.5f);
+	float center_x = particle_state.particle_live.pos_map.x + ((tmp_rect.w - particle_state.particle_live.rectSize.w) * 0.5f);
+	float center_y = particle_state.particle_live.pos_map.y + ((tmp_rect.h - particle_state.particle_live.rectSize.h) * 0.5f);
 
 	// Color interpolation, only if the particle has enough life
 	SDL_Color curr_color;
@@ -128,23 +122,4 @@ void Particle::SetNext(Particle* next)
 float Particle::InterpolateBetweenRange(float min, float timeStep, float max)
 {
 	return min + (max - min) * timeStep;
-}
-
-void Particle::AddVortex(fPoint pos, float speed, float scale)
-{
-	vortex.pos = pos;
-	vortex.speed = speed;
-	vortex.scale = scale;
-}
-
-void Particle::CalculateParticlePos(float dt)
-{
-	float dx = particle_state.particle_live.pos.x - vortex.pos.x;
-	float dy = particle_state.particle_live.pos.y - vortex.pos.y;
-	float vx = -dy * vortex.speed;
-	float vy = dx * vortex.speed;
-	float factor = 1.0f / (1.0f + (dx * dx + dy * dy) / vortex.scale);
-
-	particle_state.particle_live.pos.x += (vx - particle_state.particle_live.currentVel.x) * factor + particle_state.particle_live.currentVel.x * dt;
-	particle_state.particle_live.pos.y += (vy - particle_state.particle_live.currentVel.y) * factor + particle_state.particle_live.currentVel.y * dt;
 }

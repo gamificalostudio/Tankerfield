@@ -78,6 +78,8 @@ public:
 
 	// Stops emission specified by timer, if not emission stop time is infinite
 	void StopEmission(double timer = 0.0f);
+
+	void CalculateDrawVariables() override;
 };
 
 #endif

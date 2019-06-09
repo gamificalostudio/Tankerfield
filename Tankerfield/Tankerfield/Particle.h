@@ -11,18 +11,18 @@ class Camera;
 
 class Particle
 {
-	private:
+	public:
 
 	/*  This is the only variable we care about no matter if
 	   the particle is alive or dead */
 	uint life = 0;
 
-	struct Vortex
-	{
-		fPoint pos = { 0.0f, 0.0f };
-		float speed = 0.0f;
-		float scale = 0.0f;
-	} vortex;
+	//struct Vortex
+	//{
+	//	fPoint pos = { 0.0f, 0.0f };
+	//	float speed = 0.0f;
+	//	float scale = 0.0f;
+	//} vortex;
 
 	union ParticleInfo
 	{
@@ -31,7 +31,8 @@ class Particle
 		struct ParticleState
 		{
 			uint start_life;
-			fPoint pos;
+			fPoint pos_map;
+			fPoint pos_screen;
 			fPoint startVel;
 			fPoint endVel;
 			fPoint currentVel;
@@ -77,13 +78,6 @@ class Particle
 	void SetNext(Particle* next);
 
 	float InterpolateBetweenRange(float min, float timeStep, float max);
-
-	// Adds a vortex to the system
-	void AddVortex(fPoint pos, float speed, float scale);
-
-	/* Calculates particle position considering its velocity
-	   and if there's a vortex in the system */
-	void CalculateParticlePos(float dt);
 
 	SDL_Color LerpColor(SDL_Color src_color, SDL_Color trg_color, float time_step);
 };

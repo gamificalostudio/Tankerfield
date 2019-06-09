@@ -1,5 +1,7 @@
 #include "Obj_Emitter.h"
 #include <time.h>
+#include "App.h"
+#include "M_Map.h"
 
 
 Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data) :
@@ -42,9 +44,6 @@ Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data) :
 	{
 		lifeTimer.Start();
 	}
-
-	//TODO: Calculate frame automcatically depending on the position of the particles inside the emitter
-	frame = { 0,0,1000,1000 };
 }
 
 Obj_Emitter::~Obj_Emitter()
@@ -159,4 +158,56 @@ void Obj_Emitter::StopEmission(double timer)
 		stopTime = timer;
 		stopTimer.Start();
 	}
+}
+
+void Obj_Emitter::CalculateDrawVariables()
+{
+	if (is_isometric == true)
+	{
+		pos_screen = app->map->MapToScreenF(pos_map);
+	}
+
+	int min_x = 0;
+	int max_x = 0;
+	int min_y = 0;
+	int max_y = 0;
+
+	bool init_frame_vars = false;
+	//Set the values of the first particle
+
+	for (int i = 0; i < emitterPool->pool_size; ++i)
+	{
+		if (emitterPool->particle_array[i].IsAlive())
+		{
+			if (!init_frame_vars)
+			{
+				min_x = max_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+				min_y = max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
+				init_frame_vars = true;
+			}
+			else
+			{
+				//TODO: Use the scale too to calculate the frame
+				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x < min_x)
+				{
+					min_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+				}
+				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x > max_x)
+				{
+					max_x = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+				}
+				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y < min_y)
+				{
+					min_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.y;
+				}
+				if (emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x > max_y)
+				{
+					max_y = emitterPool->particle_array[i].particle_state.particle_live.pos_screen.x;
+				}
+			}
+		}
+	}
+
+	frame = { min_x, min_y, max_x - min_x , max_y - min_y };
+	draw_offset.create(min_x, min_y);//draw offset will efectively move the frame
 }

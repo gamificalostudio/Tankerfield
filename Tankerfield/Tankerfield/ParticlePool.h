@@ -30,6 +30,8 @@ public:
 
 	// Draws particles in the pool
 	bool Draw(Camera * camera);
+
+	friend class Obj_Emitter;
 };
 
 #endif

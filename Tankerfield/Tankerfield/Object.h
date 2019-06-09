@@ -83,7 +83,7 @@ public:
 
 	void SetDamage(float damage);
 
-	void CalculateDrawVariables();//Avoids calculating variables multiple times during a single update. Only called on M_ObjManager::PostUpdate().
+	virtual void CalculateDrawVariables();//Avoids calculating variables multiple times during a single update. Only called on M_ObjManager::PostUpdate().
 	//Variables:
 	//- fPoint pos_screen
 	//- SDL_Rect frame
