@@ -344,7 +344,19 @@ bool M_ObjManager::PostUpdate(float dt)
 // Called before quitting
 bool M_ObjManager::CleanUp()
 {
-	DeleteObjects();
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+	{
+		if ((*iterator) != nullptr)
+		{
+			delete (*iterator);
+			(*iterator) = nullptr;
+		}
+	}
+
+	objects.clear();
+	obj_tanks.clear();
+	enemies.clear();
+	pool_of_objects.clear();
 
 	return true;
 }

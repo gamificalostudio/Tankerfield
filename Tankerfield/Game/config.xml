@@ -1721,4 +1721,9 @@
     </happy_hour>
   </items>
 
+  <input>
+    <controller>
+  
+    </controller>
+  </input>
 </config>
