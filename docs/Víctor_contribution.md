@@ -26,10 +26,10 @@ The first task I had in the game code was adding the Object Manager. I took the 
 ### Double Missile 
 
 
-<iframe width="854" height="480" src="[https://www.youtube.com/embed/W6fsnRjkULc](https://www.youtube.com/embed/y1xUT7QJ-mA)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="854" height="480" src="[https://www.youtube.com/embed/W6fsnRjkULc](https://www.youtube.com/embed//W6fsnRjkULc)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 
-<iframe width="854" height="480" src="[https://www.youtube.com/embed/Axyet1AsBhY](https://www.youtube.com/embed/y1xUT7QJ-mA)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe width="854" height="480" src="[https://www.youtube.com/embed/Axyet1AsBhY](https://www.youtube.com/embed/Axyet1AsBhY)" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 ### Healing Shot
 ### Weapon Oil
