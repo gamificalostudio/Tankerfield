@@ -43,6 +43,8 @@
     <levels>
       <level name="Map2.tmx"/>
       <level name="test.tmx"/>
+
+
     </levels>
   </map>
   
@@ -1723,7 +1725,7 @@
 
   <input>
     <controller>
-      <death_zone_porcenattage variable="0.20"/>
+      <death_zone_porcenatage variable="0.20"/>
       <vibration_percentage variable="1.0"/>
       <attack_button variable="8"/>
       <interaction_button variable="3"/>

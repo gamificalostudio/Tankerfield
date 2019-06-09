@@ -1422,3 +1422,11 @@ float Obj_Tank::GetTurrAngle() const
 {
 	return turr_angle;
 }
+
+void Obj_Tank::NewRound(int round)
+{
+	if (weapon_info.weapon == WEAPON::BASIC)
+	{
+		SetWeapon(WEAPON::BASIC, round);
+	}
+}
