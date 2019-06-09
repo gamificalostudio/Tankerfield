@@ -584,7 +584,7 @@ bool Obj_Tank::Draw(Camera * camera)
 
 		if (show_crosshairs
 			&& camera == camera_player
-			&& app->IsPaused())
+			&& !app->IsPaused())
 		{
 			DrawCrosshair(camera);
 		}
@@ -628,7 +628,7 @@ bool Obj_Tank::Draw(Camera * camera)
 
 		if (show_crosshairs
 			&& camera == camera_player
-			&& app->IsPaused())
+			&& !app->IsPaused())
 		{
 			DrawCrosshair(camera);
 		}
