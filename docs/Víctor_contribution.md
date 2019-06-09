@@ -27,7 +27,13 @@ The first task I had in the game code was adding the Object Manager. I took the 
  
 ### Double Missile 
 
+This shot creates a bullet that when it collides, it creates an Object Explosiod the bullet removes itself. This Object Explosion creates a collider during one frame and then deleted, and when the animation ends, the object removes itself.
+
+**Normal Shot:**
+
 [![Double Missile](https://img.youtube.com/vi/W6fsnRjkULc/0.jpg)](https://www.youtube.com/watch?v=W6fsnRjkULc)
+
+**Charged Shot:**
 
 [![Double Missile Charged](https://img.youtube.com/vi/Axyet1AsBhY/0.jpg)](https://www.youtube.com/watch?v=Axyet1AsBhY)
 
