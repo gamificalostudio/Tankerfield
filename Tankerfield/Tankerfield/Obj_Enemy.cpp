@@ -275,7 +275,7 @@ void Obj_Enemy::Idle()
 	path.clear();
 	move_vect.SetToZero();
 	
-	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+	target = app->objectmanager->GetNearestTank(pos_map);
 	if (target != nullptr)
 	{
 		state = ENEMY_STATE::GET_PATH;

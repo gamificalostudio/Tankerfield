@@ -540,7 +540,6 @@ void M_Scene::NewWave()
 			}
 		}
 	}
-
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
 }
