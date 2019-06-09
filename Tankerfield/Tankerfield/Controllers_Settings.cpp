@@ -291,9 +291,9 @@ bool Controllers_Settings::UI_OnHoverRepeat(UI_Element * element)
 		}
 		else if (change_use_item_button == KEY_REPEAT)
 		{
-			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].interacton_button))
+			if (app->input->GetControllerButtonDown(player, app->input->controllerInfo[player].use_item_button))
 			{
-				item_image->sprite_rect = (app->ui->button_sprites[(int)app->input->controllerInfo[player].interacton_button]);
+				item_image->sprite_rect = (app->ui->button_sprites[(int)app->input->controllerInfo[player].use_item_button]);
 				item_image->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 				change_use_item_button = KEY_UP;
 			}
