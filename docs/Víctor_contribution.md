@@ -46,6 +46,8 @@ The Normal Shot creates 2 bullets and the charged Shot creates 4.
 ### Happy Hour
 Happy Hour is an item that reduces the fire cadency of the player at a quarter of the original.
 
+<iframe width="1024" height="576" src="https://www.youtube.com/embed/hfcizQUya_4?rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ### Instant Help
 Instant Help is an item that creates a portal in front of the player casting the item and another portal in a random place of the walkability map. The portals are managed and linked through the item. 
 
