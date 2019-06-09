@@ -139,8 +139,6 @@ public:
 	RocketLauncherInfo rocket_launcher_info;
 	SuicidalInfo suicidal_info;
 
-	RocketLauncherWeaponInfo rocketlauncher_weapon_info;
-
 	//WeaponInfo
 	BasicWeaponInfo basic_weapon_info;
 	DoubleMissileInfo double_missile_info;

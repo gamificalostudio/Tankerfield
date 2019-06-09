@@ -30,14 +30,6 @@ Pause_Menu::Pause_Menu()
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
 
-	// Controll helper ------------------------
-
-	control_helper_image = app->ui->CreateImage(screen_center + fPoint(-40.f, 400.f), UI_ImageDef(app->ui->button_sprites[(int)CONTROLLER_BUTTON::A]));
-	control_helper_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
-	control_helper_label = app->ui->CreateLabel(screen_center + fPoint(10.f, 400.f), UI_LabelDef("Accept", app->font->label_font_24));
-	control_helper_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-
 	// Global Pause Menu
 
 	panel_panel = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 1075,395,606,771 }), this);
@@ -80,10 +72,6 @@ void Pause_Menu::ShowPauseMenu()
 {
 	fRect screen = app->win->GetWindowRect();
 	fPoint screen_center = { screen.w * 0.5f, screen.h * 0.5f };
-
-	control_helper_label->SetPos(screen_center + fPoint(30, 450));
-	control_helper_label->SetText("Accept");
-	control_helper_image->SetPos(screen_center + fPoint(-30, 450));
 
 	pause_navigation->Active();
 

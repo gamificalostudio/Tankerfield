@@ -344,7 +344,19 @@ bool M_ObjManager::PostUpdate(float dt)
 // Called before quitting
 bool M_ObjManager::CleanUp()
 {
-	DeleteObjects();
+	for (std::list<Object*>::iterator iterator = objects.begin(); iterator != objects.end(); ++iterator)
+	{
+		if ((*iterator) != nullptr)
+		{
+			delete (*iterator);
+			(*iterator) = nullptr;
+		}
+	}
+
+	objects.clear();
+	obj_tanks.clear();
+	enemies.clear();
+	pool_of_objects.clear();
 
 	return true;
 }
@@ -572,6 +584,7 @@ void M_ObjManager::DeleteObjects()
 			if ((*iterator)->coll != nullptr)
 			{
 				(*iterator)->coll->Destroy();
+				(*iterator)->coll = nullptr;
 			}
 			delete (*iterator);
 			(*iterator) = nullptr;
@@ -723,9 +736,4 @@ void M_ObjManager::LoadBalanceVariables(pugi::xml_node & balance_node)
 	oil_weapon_info.damage_multiplier = oil_weapon_node.child("damage_multiplier").attribute("num").as_float();
 	oil_weapon_info.damage_exponential_base = oil_weapon_node.child("damage_exponential_base").attribute("num").as_float();
 	oil_weapon_info.speed = oil_weapon_node.child("speed").attribute("num").as_float();
-
-	// (Enemy Rocket Launcher) weapon
-	pugi::xml_node rl_weapon_node = balance_node.child("weapons").child("rocket_launcher_weapon");
-	rocketlauncher_weapon_info.damage_multiplier = rl_weapon_node.child("damage_multiplier").attribute("num").as_float();
-	rocketlauncher_weapon_info.damage_exponential_base = rl_weapon_node.child("damage_exponential_base").attribute("num").as_float();
 }
