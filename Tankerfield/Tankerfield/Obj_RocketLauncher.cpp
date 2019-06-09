@@ -61,7 +61,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
 	can_attack = false;
-	distance_to_player = 5; //this is in tiles
+	distance_to_player = 10; //this is in tiles
 	deltatime_to_check_distance = 1;
 }
 
@@ -116,7 +116,7 @@ void Obj_RocketLauncher::Move(const float & dt)
 {
 	if (timer_check_distance.ReadSec() >= deltatime_to_check_distance || fist_enter_to_move)
 	{
-		if (target->pos_map.DistanceNoSqrt(pos_map) <= 5 * 5)
+		if (target->pos_map.DistanceNoSqrt(pos_map) <= 10 * 10)
 		{
 			can_attack = true;
 			curr_anim = &idle;
@@ -160,15 +160,16 @@ void Obj_RocketLauncher::Move(const float & dt)
 
 void Obj_RocketLauncher::ShootMissile()
 {
+	fPoint offset_rocket{ 1.f,1.f };
 	fPoint p_dir(0.0f, 0.0f);
 	if (target != nullptr
 		&& target->coll->GetTag() == TAG::PLAYER
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared)
 	{
-		p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map;
+		p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map + offset_rocket;
 		p_dir.Normalize();
 
-		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map + p_dir);
+		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map - offset_rocket /*+ p_dir*/);
 		bullet->SetBulletProperties(
 			9.0f,
 			2000.0f,
