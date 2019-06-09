@@ -41,8 +41,8 @@ class Particle
 			float angle;
 			double startRotSpeed;
 			double curr_rot_speed;
-			SDL_Rect pRect;
-			SDL_Rect rectSize;
+			SDL_Rect atlas_rect;//The src_rect on the SDL_RenderCpy function
+			SDL_Rect rect;//The dst_rect on the SDL_RenderCpy function
 			SDL_Color startColor;
 			SDL_Color endColor;
 			SDL_BlendMode blend_mode;

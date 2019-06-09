@@ -28,7 +28,7 @@ void Particle::Init(fPoint pos, float startSpeed, float endSpeed, float angle, d
 	particle_state.particle_live.startColor = startColor;
 	particle_state.particle_live.endColor = endColor;
 	particle_state.particle_live.blend_mode = blendMode;
-	particle_state.particle_live.pRect = particle_state.particle_live.rectSize = textureRect;
+	particle_state.particle_live.atlas_rect = particle_state.particle_live.rect = textureRect;
 }
 
 void Particle::Update(float dt)
@@ -44,7 +44,7 @@ void Particle::Update(float dt)
 	particle_state.particle_live.currentVel.y = InterpolateBetweenRange(particle_state.particle_live.startVel.y, particle_state.particle_live.t, particle_state.particle_live.endVel.y);
 
 	// Assign new size to particle rect
-	particle_state.particle_live.rectSize.w = particle_state.particle_live.rectSize.h = particle_state.particle_live.currentSize;
+	particle_state.particle_live.rect.w = particle_state.particle_live.rect.h = particle_state.particle_live.currentSize;
 
 	// Calculating new particle position
 	particle_state.particle_live.pos_map.x += particle_state.particle_live.currentVel.x * dt;
@@ -88,11 +88,11 @@ void Particle::Draw(Camera * camera)
 	// Blitting particle on screen
 	app->render->BlitParticle(
 		app->objectmanager->particle_system.GetParticleAtlas(),
-		(int)(particle_state.particle_live.pos_screen.x - particle_state.particle_live.rectSize.w * 0.5f),
-		(int)(particle_state.particle_live.pos_screen.y - particle_state.particle_live.rectSize.h * 0.5f),
+		(int)(particle_state.particle_live.pos_screen.x - particle_state.particle_live.rect.w * 0.5f),//Particle is painted from its center
+		(int)(particle_state.particle_live.pos_screen.y - particle_state.particle_live.rect.h * 0.5f),
 		camera,
-		&particle_state.particle_live.pRect,
-		&particle_state.particle_live.rectSize,
+		&particle_state.particle_live.atlas_rect,
+		&particle_state.particle_live.rect,
 		curr_color,
 		particle_state.particle_live.blend_mode,
 		1.0f,
