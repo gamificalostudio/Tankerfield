@@ -42,6 +42,9 @@ Obj_Emitter::Obj_Emitter(fPoint pos, EmitterData data) :
 	{
 		lifeTimer.Start();
 	}
+
+	//TODO: Calculate frame automcatically depending on the position of the particles inside the emitter
+	frame = { 0,0,1000,1000 };
 }
 
 Obj_Emitter::~Obj_Emitter()

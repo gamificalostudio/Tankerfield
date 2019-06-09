@@ -272,30 +272,21 @@ bool M_Scene::Update(float dt)
 		game_over = true;
 	}
 
+	iPoint mouse_pos;
+	app->input->GetMousePosition(mouse_pos.x, mouse_pos.y);
+	mouse_pos = app->render->ScreenToWorld(mouse_pos.x, mouse_pos.y, (*app->render->cameras.begin()));
+	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 
 	//copied from particle system
 	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
-		int mx, my;
-		app->input->GetMousePosition(mx, my);
-		fPoint pos((float)mx, (float)my);
-		pos.y -= 230.0f;
-		eFire = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, pos);
+		eFire = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, (fPoint)mouse_pos);
 	}
-
-	int mx, my;
-	app->input->GetMousePosition(mx, my);
-	fPoint pos((float)mx, (float)my);
-
 	//app->render->Blit(torchTex, pos.x - 43, pos.y - 270, &rect);
 
 	if (eFire != nullptr)
 	{
-		int mx, my;
-		app->input->GetMousePosition(mx, my);
-		fPoint pos((float)mx, (float)my);
-		pos.y -= 230.0f;
-		eFire->pos_map = pos;
+		eFire->pos_map = (fPoint)mouse_pos;
 	}
 
 
