@@ -29,18 +29,15 @@ The first task I had in the game code was adding the Object Manager. I took the 
 
 This shot creates a bullet that when it collides, it creates an Object Explosiod the bullet removes itself. This Object Explosion creates a collider during one frame and then deleted, and when the animation ends, the object removes itself.
 
-**Normal Shot:**
+The Normal Shot creates 2 bullets and the charged Shot creates 4.
 
-[![Double Missile](https://img.youtube.com/vi/W6fsnRjkULc/0.jpg)](https://www.youtube.com/watch?v=W6fsnRjkULc)
+**Normal Shot:**
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/W6fsnRjkULc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 **Charged Shot:**
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Axyet1AsBhY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-[![Double Missile Charged](https://img.youtube.com/vi/Axyet1AsBhY/0.jpg)](https://www.youtube.com/watch?v=Axyet1AsBhY)
-
 
 ### Healing Shot
 ### Weapon Oil
@@ -53,6 +50,7 @@ Happy Hour is an item that reduces the fire cadency of the player at a quarter o
 Instant Help is an item that creates a portal in front of the player casting the item and another portal in a random place of the walkability map. The portals are managed and linked through the item. 
 
 When a player enters the portal, they get teleported to the other one.
+
 ## UI
 ### Credits Menu
 ![Credits Menu](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/V%C3%ADctor_Contributions_docs/Credits%20Menu.jpg?raw=true)
