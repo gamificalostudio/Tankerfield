@@ -811,7 +811,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
-			IncreaseLife(area->tank_parent->weapon_info.shot2.bullet_healing);
+			IncreaseLife(area->player->weapon_info.shot2.bullet_healing);
 		}
 	}break;
 

@@ -154,11 +154,6 @@ bool M_Collision::CleanUp()
 	{
 		if (*item != nullptr)
 		{
-			if ((*item)->object != nullptr)
-			{
-				(*item)->object->coll = nullptr;
-			}
-
 			RELEASE(*item);
 		}
 	}
