@@ -6,7 +6,7 @@
 #include "Timer.h"
 #include "M_Debug.h"
 
-struct SpawnPoint;
+struct Obj_SpawnPoint;
 
 enum class ENEMY_STATE
 {
@@ -203,7 +203,7 @@ protected:
 	//TELEPORT VARIABLES ======================
 	float check_teleport_time = 0.f;
 	uint teleport_enemies_max = 0u;
-	SpawnPoint* teleport_spawnpoint = nullptr;
+	Obj_SpawnPoint* teleport_spawnpoint = nullptr;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
 	Timer	get_player;

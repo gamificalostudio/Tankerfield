@@ -49,6 +49,7 @@
 
 #include "Object.h"
 #include "Obj_RewardBox.h"
+#include "Obj_SpawnPoint.h"
 
 M_Scene::M_Scene() : Module()
 {

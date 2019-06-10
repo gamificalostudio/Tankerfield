@@ -12,6 +12,7 @@
 #include "M_Audio.h"
 #include "Obj_ElectroShotAnimation.h"
 #include "M_Scene.h"
+#include "Obj_SpawnPoint.h"
 
 
 

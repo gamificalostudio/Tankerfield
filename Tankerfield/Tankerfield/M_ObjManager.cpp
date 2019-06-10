@@ -50,6 +50,7 @@
 #include "Oil_Splash.h"
 #include "Obj_Smoke.h"
 #include "Obj_Emitter.h"
+#include "Obj_SpawnPoint.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -594,6 +595,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::EMITTER_FIRE:
 		ret = DBG_NEW Obj_Emitter(pos, particle_system.vecEmitterData[type]);
 		ret->type = ObjectType::EMITTER_FIRE;
+		break;
+	case ObjectType::SPAWNPOINT:
+		ret = DBG_NEW Obj_SpawnPoint(pos);
+		ret->type = ObjectType::SPAWNPOINT;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");

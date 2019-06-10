@@ -8,6 +8,7 @@
 #include "M_Scene.h"
 #include "Obj_Tank.h"
 #include "Obj_RewardBox.h"
+#include "Obj_SpawnPoint.h"
 
 M_PickManager::M_PickManager() : Module()
 {
@@ -119,7 +120,7 @@ Obj_RewardBox* M_PickManager::CreateRewardBox(fPoint pos_map)
 
 void M_PickManager::CreateRewardBoxWave()
 {
-	for (std::vector<SpawnPoint*>::iterator iterator = app->map->data.spawners_position_reward_box.begin(); iterator != app->map->data.spawners_position_reward_box.end(); ++iterator)
+	for (std::vector<Obj_SpawnPoint*>::iterator iterator = app->map->data.spawners_position_reward_box.begin(); iterator != app->map->data.spawners_position_reward_box.end(); ++iterator)
 	{
 		if (!(*iterator)->occupied)
 		{

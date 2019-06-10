@@ -13,6 +13,7 @@
 #include "M_Pathfinding.h"
 #include "M_Scene.h"
 #include "Obj_Building.h"
+#include "Obj_SpawnPoint.h"
 
 M_Map::M_Map()
 {
@@ -243,31 +244,7 @@ bool M_Map::Unload()
 	}
 	data.map_layers.clear();
 
-	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_box.begin(); iter != data.spawners_position_reward_box.end(); ++iter)
-	{
-		if (*iter != nullptr)
-		{
-			delete (*iter);
-		}
-	}
 	data.spawners_position_reward_box.clear();
-
-	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_reward_zone.begin(); iter != data.spawners_position_reward_zone.end(); ++iter)
-	{
-		if (*iter != nullptr)
-		{
-			delete (*iter);
-		}
-	}
-	data.spawners_position_reward_zone.clear();
-
-	for (std::vector<SpawnPoint*>::iterator iter = data.spawners_position_enemy.begin(); iter != data.spawners_position_enemy.end(); ++iter)
-	{
-		if (*iter != nullptr)
-		{
-			delete (*iter);
-		}
-	}
 	data.spawners_position_enemy.clear();
 
 
@@ -436,17 +413,12 @@ bool M_Map::LoadObjectGroup(const pugi::xml_node & object_group_node, ObjectGrou
 		//	SpawnPoints
 		if (object_group->name == "SpawnPoints")
 		{
-			SpawnPoint* ret = new SpawnPoint;
-			ret->pos = { (float)(object_group->objects[i].pos.x),  (float)(object_group->objects[i].pos.y) };
+			Obj_SpawnPoint* ret = (Obj_SpawnPoint*)app->objectmanager->CreateObject(ObjectType::SPAWNPOINT,fPoint((float)(object_group->objects[i].pos.x), (float)(object_group->objects[i].pos.y)));
 
 			std::string type = obj_node.attribute("type").as_string("");
 			if (type == "REWARD_BOX")
 			{
 				data.spawners_position_reward_box.push_back(ret);
-			}
-			else if (type == "REWARD_ZONE")
-			{
-				data.spawners_position_reward_zone.push_back(ret);
 			}
 			else if (type == "ENEMY")
 			{

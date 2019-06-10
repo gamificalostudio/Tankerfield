@@ -29,6 +29,7 @@
 #include "Obj_Tank.h"
 #include "Bullet_Laser.h"
 #include "Obj_Bullet.h"
+#include "Obj_SpawnPoint.h"
 
 
 Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
