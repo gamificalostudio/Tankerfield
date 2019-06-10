@@ -188,6 +188,10 @@ protected:
 	uint electocuted;
 	uint channel_electrocuted;
 
+	Timer timer_to_hit_sound;
+	uint time_to_hit_sound_sec = 0u;
+	bool hit_first_time = true;
+
 	// BURN VARIABLES =======================
 	bool burn_fist_enter = true;
 	float max_time_change_direction = 0.5f;

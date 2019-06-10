@@ -20,7 +20,7 @@ bool Bullet_Basic::Start()
 
 	draw_offset = { (int)(35*0.5f), 7 };
 
-	shot_sound = app->audio->LoadFx("audio/Fx/tank/weapons/basic_shot/machine_gun.wav",10);
+	shot_sound = app->audio->LoadFx("audio/Fx/tank/weapons/basic_shot/machine_gun.wav",5);
 	app->audio->PlayFx(shot_sound);
 	if (coll)
 	{

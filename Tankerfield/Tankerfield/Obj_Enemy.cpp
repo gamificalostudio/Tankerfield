@@ -37,7 +37,9 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.radius = 0.5f;
 
 	times_to_repeat_animation = 3u;
-	
+
+	time_to_hit_sound_sec = 1u;
+	timer_to_hit_sound.Start();
 
 	path_timer.Start();
 
@@ -819,7 +821,12 @@ inline void Obj_Enemy::ReduceLife(float damage)
 	}
 	else
 	{
-		app->audio->PlayFx(sfx_hit);
+		if (timer_to_hit_sound.ReadSec() >= time_to_hit_sound_sec || hit_first_time)
+		{
+			hit_first_time = false;
+			app->audio->PlayFx(sfx_hit);
+			timer_to_hit_sound.Start();
+		}
 	}
 }
 
