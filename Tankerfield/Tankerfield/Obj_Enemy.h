@@ -210,7 +210,7 @@ protected:
 	Timer	change_to_teleport;
 	bool can_attack = true;
 
-
+	bool spawn_first_enter = true;
 };
 
 #endif
