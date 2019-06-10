@@ -90,7 +90,6 @@ void Obj_Suicidal::Attack()
 	if (life > 0 && app->scene->game_state != GAME_STATE::NO_TYPE)
 	{
 		if (target != nullptr
-			&& target->coll->GetTag() == TAG::PLAYER
 			&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
@@ -98,7 +97,7 @@ void Obj_Suicidal::Attack()
 			target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
-			state = ENEMY_STATE::DEAD;
+			SetState(ENEMY_STATE::DEAD);
 		}
 
 		if (curr_anim == &attack
