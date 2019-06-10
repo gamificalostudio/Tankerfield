@@ -286,8 +286,6 @@ bool Obj_Tank::Start()
 	flame_emitter = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, pos_map);
 	flame_emitter->StopEmission();
 
-	SDL_ComposeCustomBlendMode();
-
 	return true;
 }
 
