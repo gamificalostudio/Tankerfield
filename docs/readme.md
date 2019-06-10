@@ -2,7 +2,13 @@
 Tankerfield is a cooperative survival tank game made by 8 students in CITM - UPC (Terrassa, Spain).
 Each one of you will control a tank and defend against enldess rounds of invaders to try to survive as much as you can.
 
-You can play with your friends downloading the latest release [here]().
+[Download the Game HERE!](https://github.com/gamificalostudio/Tankerfield/releases/download/1.3.2/Tankerfield.1.3.2.zip)
+
+Or you can check the releases [here](https://github.com/gamificalostudio/Tankerfield/releases).
+
+## Trailer
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/QC2n7g_kISs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Index
 * [About our game](https://gamificalostudio.github.io/Tankerfield/#about-our-game)

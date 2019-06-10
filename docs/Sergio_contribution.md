@@ -19,7 +19,7 @@ We had some inconvinients with the map sprites that cause us to make a map witho
 With all the problems we had with the tiles, we had use a several amount of tools to make the most simple way to paint a map with all the modifications we want.
  
 ## Choose all building
-To make a more realistic map, we use different types of 
+To make a more realistic map, we use different types of buildings adjusting at the type of zone are we in.
  
 ## Enemy shield
 This enemy is not in the game, but was a thing in the code, for a problem of time we had to remove it from the game.
@@ -28,4 +28,4 @@ This enemy is not in the game, but was a thing in the code, for a problem of tim
 After we design the final map there is work to put all the tiles and buildings that are needed.
  
 ## Balance
- 
+We had to balance many times the basic enemy tesla trooper, we didn't know how to make the enemy and cause that it's an enemy that can kill you but at the same time you have to have a sensation that you can destroy them, also balance the damage of the weapons too, adjusting the weapons for not to be some stronger than others.
