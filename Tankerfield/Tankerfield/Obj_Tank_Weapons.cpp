@@ -24,8 +24,9 @@
 void Obj_Tank::InitWeapons()
 {
 	//Basic weapon starting properties
-	SetWeapon(WEAPON::BASIC, 1u);
+	SetWeapon(WEAPON::LASER_SHOT, 1u);
 
+	//BASIC SHOOT
 	shot1_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
 	shot1_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissile;
 	shot1_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShot;
@@ -33,6 +34,19 @@ void Obj_Tank::InitWeapons()
 	shot1_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOil;
 	shot1_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShot;
 	shot1_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
+
+	//SUSTEINED SHOOT
+	
+	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
+	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
+	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
+	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShot;
+	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
+	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
+	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
+	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
+	release_shot[(uint)WEAPON::BASIC] = &Obj_Tank::ReleaseBasicShot;
+	release_shot[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ReleaseLaserShot;
 
 	//Electro_shot--
 	pugi::xml_node electro_shot_node = app->config.child("object").child("tank").child("electro_shot");
@@ -70,16 +84,7 @@ void Obj_Tank::InitWeapons()
 	}
   
 	charge_time = 1500.f; // Same for all bullets (player gets used to it)
-	shot2_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;
-	shot2_function[(uint)WEAPON::DOUBLE_MISSILE] = &Obj_Tank::ShootDoubleMissileCharged;
-	shot2_function[(uint)WEAPON::HEALING_SHOT] = &Obj_Tank::ShootHealingShotCharged;
-	shot2_function[(uint)WEAPON::LASER_SHOT] = &Obj_Tank::ShootLaserShotCharged;
-	shot2_function[(uint)WEAPON::OIL] = &Obj_Tank::ShootOilCharged;
-	shot2_function[(uint)WEAPON::ELECTRO_SHOT] = &Obj_Tank::ShootElectroShotCharged;
-	shot2_function[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ShootFlameThrower;
 
-	release_shot[(uint)WEAPON::FLAMETHROWER] = &Obj_Tank::ReleaseFlameThrower;
-	release_shot[(uint)WEAPON::BASIC] = &Obj_Tank::ReleaseBasicShot;
 
 	
 }
@@ -155,6 +160,21 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle = ObjectType::MAX;
 		weapon_info.shot1.recoil = 25;
 		break;
+	case WEAPON::LASER_SHOT:
+		weapon_info.type = WEAPON_TYPE::SUSTAINED;
+		weapon_info.quick_shot_time = 0.f;
+		weapon_info.shot1.bullet_damage = app->objectmanager->laser_info.damage_multiplier * pow(app->objectmanager->laser_info.damage_exponential_base, level - 1);;
+		weapon_info.shot1.explosion_damage = 0;
+		weapon_info.shot1.bullet_healing = 0;
+		weapon_info.shot1.bullet_life_ms = 2000;
+		weapon_info.shot1.bullet_speed = 25;
+		weapon_info.shot1.time_between_bullets = 250;
+		weapon_info.shot1.trauma = weapon_info.shot2.trauma = 0.f;
+		weapon_info.shot1.rumble_strength = weapon_info.shot2.rumble_strength = 0.2f;
+		weapon_info.shot1.rumble_duration = weapon_info.shot2.rumble_duration = 200;
+		weapon_info.shot1.smoke_particle = weapon_info.shot2.smoke_particle=  ObjectType::MAX;
+		weapon_info.shot1.recoil = 0;
+		break;
 	case WEAPON::FLAMETHROWER:
 		weapon_info.type = WEAPON_TYPE::SUSTAINED;
 		weapon_info.quick_shot_time = 500.f;
@@ -214,25 +234,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.recoil = 25;
 		weapon_info.shot2.recoil = 0;
 		break;
-	case WEAPON::LASER_SHOT:
-		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.shot1.bullet_damage = app->objectmanager->laser_info.damage_multiplier * pow(app->objectmanager->laser_info.damage_exponential_base, level - 1);;
-		weapon_info.shot1.explosion_damage = 0;
-		weapon_info.shot1.bullet_healing = 0;
-		weapon_info.shot1.bullet_life_ms = 2000;
-		weapon_info.shot1.bullet_speed = 25;
-		weapon_info.shot1.time_between_bullets = 500;
-		weapon_info.shot1.trauma = 0.f;
-		weapon_info.shot2.trauma = 0.f;
-		weapon_info.shot1.rumble_strength = 0.92f;
-		weapon_info.shot1.rumble_duration = 250;
-		weapon_info.shot2.rumble_strength = 1.0f;
-		weapon_info.shot2.rumble_duration = 400;
-		weapon_info.shot1.smoke_particle = ObjectType::MAX;
-		weapon_info.shot2.smoke_particle = ObjectType::MAX;
-		weapon_info.shot1.recoil = 0;
-		weapon_info.shot2.recoil = 0;
-		break;
+
 	case WEAPON::OIL:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
 		weapon_info.shot1.bullet_damage = 25 + level * 2;
@@ -416,35 +418,27 @@ void Obj_Tank::ShootHealingShotCharged()
 
 void Obj_Tank::ShootLaserShot()
 {
+	if (shot_timer_basic_bullet.ReadMs() >= weapon_info.shot1.time_between_bullets)
+	{
+		Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_LASER, turr_pos + shot_dir);
 
-	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_LASER, turr_pos + shot_dir);
+		laser_bullet->SetBulletProperties(
+			weapon_info.shot1.bullet_speed,
+			weapon_info.shot1.bullet_life_ms,
+			weapon_info.shot1.bullet_damage,
+			shot_dir,
+			atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
-	laser_bullet->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
-
-	laser_bullet->SetPlayer(this);
+		laser_bullet->SetPlayer(this);
+		shot_timer_basic_bullet.Start();
+		weapon_info.shot2.rumble_strength = weapon_info.shot1.rumble_strength = 0.5f;
+	}
+	else
+	{
+		weapon_info.shot2.rumble_strength  = weapon_info.shot1.rumble_strength = 0;
+	}
 }
 
-void Obj_Tank::ShootLaserShotCharged()
-{
-
-	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_LASER, turr_pos + shot_dir);
-
-	laser_bullet->SetBulletProperties(
-		weapon_info.shot1.bullet_speed,
-		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage * 2,
-		shot_dir,
-		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45,
-		true);
-
-	laser_bullet->SetPlayer(this);
-
-}
 
 void Obj_Tank::ShootFlameThrower()
 {

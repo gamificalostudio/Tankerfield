@@ -1330,11 +1330,11 @@ void Obj_Tank::ReviveTank(float dt)
 		}
 	}
 
-	if (can_revive /*&& tutorial_revive->GetState() != ELEMENT_STATE::VISIBLE*/)
+	if (can_revive)
 	{
 		tutorial_revive->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 	}
-	else /*if (&tutorial_revive->GetState() != ELEMENT_STATE::HIDDEN)*/ {
+	else {
 		tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	}
 }
