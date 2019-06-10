@@ -66,5 +66,20 @@ Pause menu workflow collaboration.
 
 Game installer.
 
-General bugfixes and changes, including:
+General bugfixes, including:
 
+Tutorial moving icon fix (it didn't disappear from the screen).
+
+The tank could pick up items when was dead.
+
+The healing shot caused a game crash.
+
+The Rocket Launcher enemy could attack players who were eliminated.
+
+The controllers submenu in the pause menu didn't work as expected, leaving a blank screen.
+
+General changes, including:
+
+Many tweaks on the enemies.
+
+Tank moves slower when charging a shot.
