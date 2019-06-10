@@ -65,14 +65,12 @@ void M_Debug::CreateLabel()
 	UI_LabelDef label_def("", app->font->rounds_font, {123,123,123,255});
 	debug_label = app->ui->CreateLabel({ screen.w * 0.5f ,  screen.h * 0.25f }, label_def);
 	debug_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	debug_label->SetMenuState(ELEMENT_STATE::HIDDEN);
-	app->scene->general_gui->MakeChildOfRoundElement(debug_label);
+	debug_label->SetState(ELEMENT_STATE::HIDDEN);
 
 	label_def.text = "GOD MODE";
 	god_mode_label = app->ui->CreateLabel({ screen.w * 0.5f, screen.h * 0.15f }, label_def);
 	god_mode_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
-	god_mode_label->SetMenuState(ELEMENT_STATE::HIDDEN);
-	app->scene->general_gui->MakeChildOfRoundElement(god_mode_label);
+	god_mode_label->SetState(ELEMENT_STATE::HIDDEN);
 }
 
 void M_Debug::ManageNumericDebug(fPoint mouse_pos)
@@ -215,11 +213,11 @@ bool M_Debug::PreUpdate()
 		god_mode = !god_mode;
 		if(god_mode)
 		{
-			god_mode_label->SetMenuState(ELEMENT_STATE::VISIBLE);
+			god_mode_label->SetState(ELEMENT_STATE::VISIBLE);
 		}
 		else
 		{
-			god_mode_label->SetMenuState(ELEMENT_STATE::HIDDEN);
+			god_mode_label->SetState(ELEMENT_STATE::HIDDEN);
 		}
 	}
 
@@ -284,7 +282,7 @@ void DebugNumeric::PressedKey()
 	{
 		app->debug->curr_debug_num = type;
 		app->debug->debug_label->SetText(label_message + std::to_string(num));
-		app->debug->debug_label->SetMenuState(ELEMENT_STATE::VISIBLE);
+		app->debug->debug_label->SetState(ELEMENT_STATE::VISIBLE);
 	}
 }
 
@@ -309,7 +307,7 @@ bool DebugNumeric::ReleasedKey()
 	if (app->input->GetKey(key) == KEY_UP)
 	{
 		pressed_numbers = false;
-		app->debug->debug_label->SetMenuState(ELEMENT_STATE::HIDDEN);
+		app->debug->debug_label->SetState(ELEMENT_STATE::HIDDEN);
 		ret = true;
 	}
 	return ret;

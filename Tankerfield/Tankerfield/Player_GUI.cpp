@@ -237,8 +237,45 @@ void Player_GUI::Fade_GUI(bool fade_on)
 	life_bar			->SetFX(type, 3.f);
 	weapon_lvl_label	->SetFX(type, 3.f);
 	weapon_lvl_image	->SetFX(type, 3.f);
-
 }
+
+void Player_GUI::ShowGUI()
+{
+	visible = true;
+	player_arrow		->SetState(ELEMENT_STATE::VISIBLE);
+	weapon_frame		->SetState(ELEMENT_STATE::VISIBLE);
+	weapon_helper		->SetState(ELEMENT_STATE::VISIBLE);
+	weapon_icon			->SetState(ELEMENT_STATE::VISIBLE);
+	item_frame			->SetState(ELEMENT_STATE::VISIBLE);
+	item_helper			->SetState(ELEMENT_STATE::VISIBLE);
+	item_icon			->SetState(ELEMENT_STATE::VISIBLE);
+	charged_shot_bar	->SetState(ELEMENT_STATE::VISIBLE);
+	life_bar			->SetState(ELEMENT_STATE::VISIBLE);
+	weapon_lvl_label	->SetState(ELEMENT_STATE::VISIBLE);
+	weapon_lvl_image	->SetState(ELEMENT_STATE::VISIBLE);
+}
+
+void Player_GUI::HideGUI()
+{
+	visible = false;
+	player_arrow		->SetState(ELEMENT_STATE::HIDDEN);
+	weapon_frame		->SetState(ELEMENT_STATE::HIDDEN);
+	weapon_helper		->SetState(ELEMENT_STATE::HIDDEN);
+	weapon_icon			->SetState(ELEMENT_STATE::HIDDEN);
+	item_frame			->SetState(ELEMENT_STATE::HIDDEN);
+	item_helper			->SetState(ELEMENT_STATE::HIDDEN);
+	item_icon			->SetState(ELEMENT_STATE::HIDDEN);
+	charged_shot_bar	->SetState(ELEMENT_STATE::HIDDEN);
+	life_bar			->SetState(ELEMENT_STATE::HIDDEN);
+	weapon_lvl_label	->SetState(ELEMENT_STATE::HIDDEN);
+	weapon_lvl_image	->SetState(ELEMENT_STATE::HIDDEN);
+}
+
+bool Player_GUI::GetIsVisible()
+{
+	return visible;
+}
+
 
 void Player_GUI::DamageFlash()
 {
@@ -355,7 +392,7 @@ void Player_GUI::SetWeapon(WEAPON weapon_type, int level)
 
 void Player_GUI::SetItem(ItemType type)
 {
-	item_icon->SetMenuState(ELEMENT_STATE::VISIBLE);
+	item_icon->SetState(ELEMENT_STATE::VISIBLE);
 
 	switch (type)
 	{
@@ -369,7 +406,7 @@ void Player_GUI::SetItem(ItemType type)
 		item_icon->sprite_rect = app->ui->icon_sprites[(int)ICON_SIZE::BIG][(int)ICON_TYPE::ITEM_INSTANT_HELP];
 		break;
 	case ItemType::NO_TYPE:
-		item_icon->SetMenuState(ELEMENT_STATE::HIDDEN);
+		item_icon->SetState(ELEMENT_STATE::HIDDEN);
 		break;
 	}
 
@@ -402,7 +439,7 @@ void Player_GUI::CreateParticleToWeaponFrame()
 	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
 	
 	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
-	particle_image->SetMenuState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	particle_image->alpha = 175.0f;
 	particle_image->timer.Start();
@@ -415,7 +452,7 @@ void Player_GUI::CreateParticleToItemFrame()
 	anim_image_def.sprite_section = { 1745, 0, 78, 89 };
 
 	UI_Image* particle_image = app->ui->CreateImage(app->map->MapToCamera(this->player->pos_map, this->player->camera_player), anim_image_def);
-	particle_image->SetMenuState(ELEMENT_STATE::VISIBLE);
+	particle_image->SetState(ELEMENT_STATE::VISIBLE);
 	particle_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	particle_image->alpha = 175.0f;
 	this->particles_item_frame_list.push_back(particle_image);
