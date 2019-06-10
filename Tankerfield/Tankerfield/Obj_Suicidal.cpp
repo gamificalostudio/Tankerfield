@@ -45,21 +45,10 @@ Obj_Suicidal::Obj_Suicidal(fPoint pos) : Obj_Enemy(pos)
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
 
-	state = ENEMY_STATE::SPAWN;
-
 	scale = 1.5f;
 	//INFO: Draw offset depends on the scale
 	draw_offset = normal_draw_offset = (iPoint)(fPoint(32.f, 36.f) * scale);
-
-	coll_w = 0.5f;
-	coll_h = 0.5f;
-
-	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
-	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
-
 	check_path_time = 2.0f;
-
-	curr_anim = &idle;
 }
 
 //Called after creating the enemy
@@ -80,9 +69,23 @@ Obj_Suicidal::~Obj_Suicidal()
 
 }
 
+
 void Obj_Suicidal::Spawn(const float& dt)
 {
-	state = ENEMY_STATE::GET_PATH;
+	if (coll == nullptr)
+	{
+		coll_w = 0.5f;
+		coll_h = 0.5f;
+
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
+		coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	}
+	else
+	{
+		coll->SetIsTrigger(true);
+	}
+
+	SetState(ENEMY_STATE::GET_PATH);
 }
 
 void Obj_Suicidal::Attack()

@@ -135,6 +135,8 @@
     <ClCompile Include="Bullet_RocketLauncher.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Controllers_Settings.cpp" />
+    <ClCompile Include="Obj_Emitter.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="LeaderBoard.cpp" />
     <ClCompile Include="M_Debug.cpp" />
     <ClCompile Include="NewRoundAnimation.cpp" />
@@ -146,7 +148,8 @@
     <ClCompile Include="HealingShot_Area.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
-    <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticlePool.cpp" />
     <ClCompile Include="Pause_Menu.cpp" />
     <ClCompile Include="Quadtree_Collision.cpp" />
     <ClCompile Include="UI_InputText.cpp" />
@@ -222,6 +225,8 @@
     <ClInclude Include="Bullet_RocketLauncher.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Controllers_Settings.h" />
+    <ClInclude Include="Obj_Emitter.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="LeaderBoard.h" />
     <ClInclude Include="M_Debug.h" />
     <ClInclude Include="NewRoundAnimation.h" />
@@ -233,7 +238,8 @@
     <ClInclude Include="HealingShot_Area.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
-    <ClInclude Include="Obj_FlamethrowerFlame.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticlePool.h" />
     <ClInclude Include="Pause_Menu.h" />
     <ClInclude Include="Quadtree_Collision.h" />
     <ClInclude Include="resource.h" />
@@ -321,6 +327,9 @@
     <Xml Include="..\Game\data\leader_board.xml">
       <SubType>Designer</SubType>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Game\psystem_config" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tankerfield.rc" />

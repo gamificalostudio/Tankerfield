@@ -46,10 +46,10 @@
 #include "Obj_Portal.h"
 #include "Obj_ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
-#include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
 #include "Oil_Splash.h"
 #include "Obj_Smoke.h"
+#include "Obj_Emitter.h"
 
 M_ObjManager::M_ObjManager()
 {
@@ -88,7 +88,9 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 	//Fill balance structs
 	LoadBalanceVariables(balance_xml_node);
 
-	//Close document
+	//TODO: Close document
+
+	particle_system.Awake();
 
 	return ret;
 }
@@ -96,10 +98,14 @@ bool M_ObjManager::Awake(pugi::xml_node& config)
 bool M_ObjManager::Start()
 {
 	bool ret = true;
+
 	//FillPool(ObjectType::TESLA_TROOPER, 100);
 	//FillPool(ObjectType::BRUTE, 2);
 	//FillPool(ObjectType::SUICIDAL, 2);
 	//FillPool(ObjectType::ROCKETLAUNCHER, 2);
+
+	particle_system.Start();
+
 	return ret;
 }
 
@@ -185,10 +191,6 @@ inline void M_ObjManager::RemoveObject(std::list<Object*>::iterator & iterator)
 		enemies.remove((*iterator));
 	}
 
-	if ((*iterator)->active == false)
-	{
-
-	}
 	if ((*iterator)->coll != nullptr)
 	{
 	
@@ -352,10 +354,6 @@ void M_ObjManager::FillPool(ObjectType type, uint number)
 			ret = DBG_NEW Eletro_Shot_Animation(pos);
 			ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
 			break;
-		case ObjectType::FLAMETHROWER_FLAME:
-			ret = DBG_NEW Obj_FlamethrowerFlame(pos);
-			ret->type = ObjectType::FLAMETHROWER_FLAME;
-			break;
 		case ObjectType::HEALING_AREA_SHOT:
 			ret = DBG_NEW HealingShot_Area(pos);
 			ret->type = ObjectType::HEALING_AREA_SHOT;
@@ -451,7 +449,7 @@ bool M_ObjManager::PostUpdate(float dt)
 		draw_objects.clear();
     }
 	SDL_RenderSetClipRect(app->render->renderer, nullptr);
-   
+
 	return true;
 }
 
@@ -471,6 +469,8 @@ bool M_ObjManager::CleanUp()
 	obj_tanks.clear();
 	enemies.clear();
 	pool_of_objects.clear();
+
+	particle_system.CleanUp();
 
 	return true;
 }
@@ -579,10 +579,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 		ret = DBG_NEW Eletro_Shot_Animation(pos);
 		ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
 		break;
-	case ObjectType::FLAMETHROWER_FLAME:
-		ret = DBG_NEW Obj_FlamethrowerFlame(pos);
-		ret->type = ObjectType::FLAMETHROWER_FLAME;
-		break;
 	case ObjectType::HEALING_AREA_SHOT:
 		ret = DBG_NEW HealingShot_Area(pos);
 		ret->type = ObjectType::HEALING_AREA_SHOT;
@@ -594,6 +590,10 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::DAMAGED_SMOKE:
 		ret = DBG_NEW Obj_Smoke(pos);
 		ret->type = ObjectType::DAMAGED_SMOKE;
+		break;
+	case ObjectType::EMITTER_FIRE:
+		ret = DBG_NEW Obj_Emitter(pos, particle_system.vecEmitterData[type]);
+		ret->type = ObjectType::EMITTER_FIRE;
 		break;
 	default:
 		LOG("Object could not be created. Type not detected correctly or hasn't a case.");

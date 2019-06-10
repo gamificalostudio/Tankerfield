@@ -21,8 +21,6 @@ public:
 	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
 
-	bool Start() override;
-
 	inline void TeleportOut(float & dt) override;
 
 	inline void TeleportIn(float & dt) override;
@@ -40,6 +38,7 @@ public:
 
 
 private:
+	
 
 	Animation spawn_anim;
 	

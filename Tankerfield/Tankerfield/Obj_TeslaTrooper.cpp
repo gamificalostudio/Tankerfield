@@ -65,12 +65,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 	
 	draw = false;
-	state = ENEMY_STATE::SPAWN; //enemy
-
-	coll_w = 0.5f;
-	coll_h = 0.5f;
-	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
-	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	
 
 	scale = 0.8f;
 	//INFO: Offset depends on the scale of the sprite.
@@ -101,11 +96,6 @@ Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
 }
 
-bool Obj_TeslaTrooper::Start()
-{
-	app->audio->PlayFx(sfx_spawn);
-	return true;
-}
 
 
 void Obj_TeslaTrooper::TeleportOut(float & dt)
@@ -145,7 +135,12 @@ void Obj_TeslaTrooper::TeleportIn(float & dt)
 }
 void Obj_TeslaTrooper::Spawn(const float & dt)
 {
-
+	if (spawn_first_enter)
+	{
+		app->audio->PlayFx(sfx_spawn);
+		spawn_first_enter = false;
+		
+	}
 	spawn_anim.NextFrame(dt);
 	if ((int)spawn_anim.current_frame >= 6)
 	{
@@ -153,8 +148,19 @@ void Obj_TeslaTrooper::Spawn(const float & dt)
 	}
 	if (spawn_anim.Finished())
 	{
+		if (coll == nullptr)
+		{
+			coll_w = 0.5f;
+			coll_h = 0.5f;
+			coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.0f, this);
+			coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+		}
+		else
+		{
+			coll->SetIsTrigger(true);
+		}
 		spawn_anim.Reset();
-		state = ENEMY_STATE::GET_PATH;
+		SetState(ENEMY_STATE::GET_PATH);
 	}
 }
 void Obj_TeslaTrooper::Idle()
