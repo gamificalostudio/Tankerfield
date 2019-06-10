@@ -35,6 +35,8 @@ public:
 
 	void HidePauseMenu();
 
+	void Delete();
+
 private:
 
 	UI_InteractiveGroup * pause_navigation = nullptr;

@@ -96,6 +96,15 @@ void Pause_Menu::HidePauseMenu()
 	pause_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 }
 
+void Pause_Menu::Delete()
+{
+	for (uint i = 0; i < 4; i++)
+	{
+		delete controllers_setting[i];
+		controllers_setting[i] = nullptr;
+	}
+}
+
 
 bool Pause_Menu::UI_Selected(UI_Element * element)
 {
