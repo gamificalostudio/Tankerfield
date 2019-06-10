@@ -81,11 +81,6 @@ void Pause_Menu::ShowPauseMenu()
 
 	pause_navigation->Active();
 
-	for (uint i = 0; i < 4; ++i)
-	{
-		controllers_setting[i]->ShowControllerSettings();
-	}
-
 	panel_panel->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 	pause_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
 }
@@ -93,11 +88,6 @@ void Pause_Menu::ShowPauseMenu()
 void Pause_Menu::HidePauseMenu()
 {
 	pause_navigation->Desactive();
-
-	for (uint i = 0; i < 4; ++i)
-	{
-		controllers_setting[i]->HideControllersSettings();
-	}
 
 	panel_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pause_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);

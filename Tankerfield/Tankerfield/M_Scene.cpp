@@ -35,6 +35,8 @@
 #include "PerfTimer.h"
 #include "Obj_Tank.h"
 
+#include "Controllers_Settings.h"
+
 #include "Options_Menu.h"
 #include "Pause_Menu.h"
 #include "General_HUD.h"
@@ -353,10 +355,10 @@ void M_Scene::SetMenuState(MENU_STATE new_state)
 		options_menu->HideOptionsMenu();
 		break;
 	case MENU_STATE::CONTROLLERS_SETTINGS:
-		//for (uint i = 0; i < 4; ++i)
-		//{
-		//	controllers_setting[i]->HideControllersSettings();
-		//}
+		for (uint i = 0; i < 4; ++i)
+		{
+			pause_menu->controllers_setting[i]->HideControllersSettings();
+		}
 		break;
 	}
 
@@ -379,10 +381,10 @@ void M_Scene::SetMenuState(MENU_STATE new_state)
 		break;
 	case MENU_STATE::CONTROLLERS_SETTINGS:
 
-		//for (uint i = 0; i < 4; ++i)
-		//{
-		//	controllers_setting[i]->ShowControllerSettings();
-		//}
+		for (uint i = 0; i < 4; ++i)
+		{
+			pause_menu->controllers_setting[i]->ShowControllerSettings();
+		}
 		break;
 	}
 }
