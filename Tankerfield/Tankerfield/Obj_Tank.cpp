@@ -1348,6 +1348,10 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::Die()
 {
+	if (flame_emitter->active)
+	{
+		flame_emitter->StopEmission();
+	}
 	app->audio->PlayFx(die_sfx);
 	Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 	dead_fire->tank = this;

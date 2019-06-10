@@ -128,6 +128,11 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 
 void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
+	if (weapon_info.weapon == WEAPON::FLAMETHROWER && flame_emitter->active)
+	{
+		flame_emitter->StopEmission();
+	}
+
 	weapon_info.level_weapon = level;
 	weapon_info.weapon = type;
 
