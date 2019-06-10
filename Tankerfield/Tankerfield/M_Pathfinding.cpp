@@ -212,6 +212,39 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	return list_to_fill.list.size();
 }
 
+PathNode PathNode::FindWalkableAdjacent() const
+{
+	iPoint cell;
+	bool directions_state[8] = { false, false, false, false, false, false, false, false };
+
+	// NORTH
+	cell.create(pos.x, pos.y + 1);
+	if (cell.y < app->map->data.rows)
+		if (directions_state[(int)DIRECTIONS::NORTH] = app->pathfinding->IsWalkable(cell))
+			return PathNode(-1, -1, cell, this);
+
+	// EAST
+	cell.create(pos.x + 1, pos.y);
+	if (cell.x < app->map->data.columns)
+		if (directions_state[(int)DIRECTIONS::EAST] = app->pathfinding->IsWalkable(cell))
+			return PathNode(-1, -1, cell, this);
+
+	// SOUTH
+	cell.create(pos.x, pos.y - 1);
+	if (cell.y >= 0)
+		if (directions_state[(int)DIRECTIONS::SOUTH] = app->pathfinding->IsWalkable(cell))
+			return PathNode(-1, -1, cell, this);
+
+	// WEST
+	cell.create(pos.x - 1, pos.y);
+	if (cell.x >= 0)
+		if (directions_state[(int)DIRECTIONS::WEST] = app->pathfinding->IsWalkable(cell))
+			return PathNode(-1, -1, cell, this);
+
+	cell = { -1,-1 };
+	return PathNode(-1, -1, cell, this);
+}
+
 // PathNode -------------------------------------------------------------------------
 // Calculates this tile score
 // ----------------------------------------------------------------------------------

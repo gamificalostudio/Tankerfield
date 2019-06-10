@@ -213,60 +213,20 @@ void Obj_Enemy::RecheadPoint()
 
 void Obj_Enemy::Dead()
 {
-	if (curr_anim != &death)
+	if (death.Finished())
 	{
-		// DROP A PICK UP ITEM 
+		return_to_pool = true;
 		app->pick_manager->PickUpFromEnemy(pos_map);
-		//curr_tex = tex;
-		curr_anim = &death;
-		app->audio->PlayFx(sfx_death);
-		if (coll != nullptr)
-		{
-			coll->Destroy();
-			coll = nullptr;
-		}
-		if (life_collider != nullptr)
-		{
-			life_collider->Destroy();
-			life_collider = nullptr;
-		}
-	}
-	else
-	{
-		if (death.Finished())
-		{
-			to_remove = true;
-
-		}
 	}
 }
 
 void Obj_Enemy::ElectroDead()
 {
-	if (curr_anim != &electro_dead)
+	if (electro_dead.Finished())
 	{
-		// DROP A PICK UP ITEM 
+		return_to_pool = true;
+		app->audio->PauseFx(channel_electrocuted);
 		app->pick_manager->PickUpFromEnemy(pos_map);
-
-		bool_electro_dead = true;
-		curr_tex = tex_electro_dead;
-		curr_anim = &electro_dead;
-		app->audio->PlayFx(sfx_death);
-		draw_offset = electrocuted_draw_offset;
-		if (coll != nullptr)
-		{
-			coll->Destroy();
-			coll = nullptr;
-		}
-	}
-	else
-	{
-		if (electro_dead.Finished())
-		{
-			to_remove = true;
-			app->audio->PauseFx(channel_electrocuted);
-
-		}
 	}
 }
 
@@ -275,27 +235,28 @@ void Obj_Enemy::Idle()
 	path.clear();
 	move_vect.SetToZero();
 	
-	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
-	if (target != nullptr)
+	if (change_to_teleport.ReadSec() > 2)
 	{
-		state = ENEMY_STATE::GET_PATH;
-	}
-	else
-	{
-		curr_anim = &idle;
+		SetState(ENEMY_STATE::GET_PATH);
+		change_to_teleport.Start();
 	}
 }
 
 void Obj_Enemy::Move(const float & dt)
 {
+	if (state == ENEMY_STATE::DEAD)
+	{
+		return;
+	}
+
 	if (IsOnGoal(next_pos))
 	{
 		if (path.size() > 0)
 			path.erase(path.begin());
 		else
-			state = ENEMY_STATE::GET_PATH;
-
-		state = ENEMY_STATE::RECHEAD_POINT;
+			SetState(ENEMY_STATE::GET_PATH);
+			
+		SetState(ENEMY_STATE::RECHEAD_POINT);
 	}
 
 	if (update_velocity_vec.ReadSec() > 1)
@@ -307,7 +268,7 @@ void Obj_Enemy::Move(const float & dt)
 		curr_anim = &walk;
 
 	if (path_timer.ReadSec() >= check_path_time)
-		state = ENEMY_STATE::GET_PATH;
+		SetState(ENEMY_STATE::GET_PATH);
 
 	UpdatePos(dt);
 
@@ -315,45 +276,55 @@ void Obj_Enemy::Move(const float & dt)
 
 void Obj_Enemy::GetPath()
 {
-	path.clear();
+	curr_anim = &idle;
 	move_vect.SetToZero();
-	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
+
+	if (target != nullptr || get_player.ReadSec() >= 3)
+	{
+		target = app->objectmanager->GetNearestTank(pos_map);
+		get_player.Start();
+	}
+
 	if (target != nullptr)
 	{
-		if (app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
+		if (pos_map.DistanceNoSqrt(target->pos_map) <= squared_detection_range
+			&& app->pathfinding->CreatePath((iPoint)pos_map, (iPoint)target->pos_map) != -1)
 		{
 			path.clear();
 			path = *app->pathfinding->GetLastPath();
 			if (path.size() > 0)
 				path.erase(path.begin());
-			next_pos = (fPoint)(*path.begin());
-			UpdateMoveVec();
 
-			state = ENEMY_STATE::MOVE;
+			next_pos = (fPoint)(*path.begin());
+			UpdateVelocity();
+
+			SetState(ENEMY_STATE::MOVE);
 		}
 		else
 		{
 			if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
 			{
-				state = ENEMY_STATE::GET_TELEPORT_POINT;
+				SetState(ENEMY_STATE::GET_TELEPORT_POINT);
 				curr_anim = &idle;
 			}
 			else if (path.size() > 0)
 			{
-				state = ENEMY_STATE::MOVE;
-				curr_anim = &walk;
+				SetState(ENEMY_STATE::MOVE);
 			}
 			else
 			{
-				state = ENEMY_STATE::IDLE;
-				curr_anim = &idle;
+				if (!app->pathfinding->IsWalkable(iPoint(pos_map.x, pos_map.y)) && GetOutOfUnwalkableTile())
+				{
+					SetState(ENEMY_STATE::MOVE);
+				}
+				else
+				{
+					SetState(ENEMY_STATE::IDLE);
+				}
+
 				path_timer.Start();
 			}
 		}
-	}
-	else
-	{
-		state = ENEMY_STATE::IDLE;
 	}
 }
 
@@ -413,7 +384,7 @@ inline void Obj_Enemy::GetTeleportPoint()
 
 		}
 		teleport_spawnpoint = nearest_spawners_points;
-		state = ENEMY_STATE::TELEPORT_IN;
+		SetState(ENEMY_STATE::TELEPORT_IN);
 		draw = false;
 		in_portal = &portal_animation;
 		angle = -90;
@@ -422,8 +393,7 @@ inline void Obj_Enemy::GetTeleportPoint()
 	}
 	else
 	{
-		state = ENEMY_STATE::GET_PATH;
-
+		SetState(ENEMY_STATE::GET_PATH);
 	}
 	teleport_timer.Start();
 }
@@ -442,7 +412,7 @@ inline void Obj_Enemy::TeleportIn(float & dt)
 		{
 			in_portal->Reset();
 			pos_map = teleport_spawnpoint->pos;
-			state = ENEMY_STATE::TELEPORT_OUT;
+			SetState(ENEMY_STATE::TELEPORT_OUT);
 			teleport_timer.Start();
 			angle = 90;
 		}
@@ -455,7 +425,7 @@ inline void Obj_Enemy::TeleportOut(float & dt)
 	{
 		in_portal->Reset();
 		in_portal = &portal_animation;
-		state = ENEMY_STATE::GET_PATH;
+		SetState(ENEMY_STATE::GET_PATH);
 		angle = -90;
 		draw = true;
 	}
@@ -497,7 +467,6 @@ bool Obj_Enemy::Draw(Camera * camera)
 bool Obj_Enemy::Start()
 {
 	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
-
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	ResetAllAnimations();
@@ -542,24 +511,6 @@ inline void Obj_Enemy::UpdatePos(const float& dt)
 
 inline void Obj_Enemy::Burn(const float & dt)
 {
-	if (burn_fist_enter)
-	{
-		curr_anim = &burn;
-		fire_damage = life / 3;
-		if (burn_texture != nullptr)
-			curr_tex = burn_texture;
-		oiled = false;
-		speed = original_speed;
-	/*	if (coll != nullptr)
-		{
-			coll->to_destroy = true;
-		}
-		if (life_collider != nullptr)
-		{
-			life_collider->to_destroy = true;
-		}*/
-	
-	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
 	{
 		if (life > 0)
@@ -598,13 +549,14 @@ inline void Obj_Enemy::Burn(const float & dt)
 		UpdatePos(dt);
 	else if (curr_anim == &dying_burn && curr_anim->Finished())
 	{
-		CleanUp();
+		return_to_pool = true;
 	}
 
 }
 
 inline void Obj_Enemy::Stunned()
 {
+	app->audio->PlayFx(sfx_spawn);
 	curr_tex = tex_electro_dead;
 	curr_anim = &electro_dead;
 	draw_offset = electrocuted_draw_offset;
@@ -631,6 +583,19 @@ inline void Obj_Enemy::Stunned()
 	}
 }
 
+bool Obj_Enemy::GetOutOfUnwalkableTile()
+{
+	PathNode node;
+	node.pos = iPoint(pos_map.x,pos_map.y);
+	PathNode neighbour = node.FindWalkableAdjacent();
+	if (neighbour.pos != iPoint(-1, -1))
+	{
+		next_pos = fPoint(neighbour.pos.x + 0.5f, neighbour.pos.y + 0.5f);
+		return true;
+	};
+	return false;
+};
+
 
 void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 {
@@ -650,8 +615,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 				if (life <= 0)
 				{
-
-					state = ENEMY_STATE::DEAD;
+					SetState(ENEMY_STATE::DEAD);
 				}
 				else
 				{
@@ -686,7 +650,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 			if (life <= 0)
 			{
-				state = ENEMY_STATE::DEAD;
+				SetState(ENEMY_STATE::DEAD);
 			}
 			else
 			{
@@ -703,7 +667,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 		{
 			if (oiled)
 			{
-				state = ENEMY_STATE::BURN;
+				SetState(ENEMY_STATE::BURN);
 			}
 			else
 			{
@@ -743,7 +707,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 				if (life <= 0)
 				{
 					channel_electrocuted = app->audio->PlayFx(electocuted);
-					state = ENEMY_STATE::DEAD;
+					SetState(ENEMY_STATE::DEAD);
 					is_electro_dead = true;
 
 				}
@@ -757,8 +721,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 					}
 
 					anim_saved = curr_anim;
-
-					state = ENEMY_STATE::STUNNED;
+					SetState(ENEMY_STATE::STUNNED);
 					if (player->GetIsElectroShotCharged())
 					{
 						stun_charged = true;
@@ -785,7 +748,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 		{
 			if (oiled)
 			{
-				state = ENEMY_STATE::BURN;
+				SetState(ENEMY_STATE::BURN);
 			}
 			else
 			{
@@ -837,6 +800,11 @@ void Obj_Enemy::Oiled()
 
 inline void Obj_Enemy::ReduceLife(int damage, float dt)
 {
+	if (state == ENEMY_STATE::DEAD)
+	{
+		return;
+	}
+
 	life -= damage;
 
 	damaged_sprite_timer.Start();
@@ -846,13 +814,79 @@ inline void Obj_Enemy::ReduceLife(int damage, float dt)
 
 	if (life <= 0)
 	{
-		app->pick_manager->PickUpFromEnemy(pos_map);
-		state = ENEMY_STATE::DEAD;
+		life = 0;
+		SetState(ENEMY_STATE::DEAD);
 	}
 	else
 	{
 		app->audio->PlayFx(sfx_hit);
 	}
+}
+
+void Obj_Enemy::SetState(ENEMY_STATE new_state)
+{
+	switch (new_state)
+	{
+	case ENEMY_STATE::SPAWN:
+		break;
+	case ENEMY_STATE::IDLE:
+		curr_anim = &idle;
+		change_to_teleport.Start();
+		break;
+	case ENEMY_STATE::GET_PATH:
+		break;
+	case ENEMY_STATE::MOVE:
+		curr_anim = &walk;
+		break;
+	case ENEMY_STATE::RECHEAD_POINT:
+		break;
+	case ENEMY_STATE::GET_TELEPORT_POINT:
+		break;
+	case ENEMY_STATE::TELEPORT_IN:
+		break;
+	case ENEMY_STATE::TELEPORT_OUT:
+		break;
+	case ENEMY_STATE::BURN:
+		curr_anim = &burn;
+		fire_damage = life / 3;
+		if (burn_texture != nullptr)
+			curr_tex = burn_texture;
+		oiled = false;
+		speed = original_speed;
+		break;
+	case ENEMY_STATE::DEAD:
+		if(is_electro_dead)
+		{
+			bool_electro_dead = true;
+			curr_tex = tex_electro_dead;
+			curr_anim = &electro_dead;
+			app->audio->PlayFx(sfx_death);
+			draw_offset = electrocuted_draw_offset;
+		}
+		else
+		{
+			curr_anim = &death;
+			curr_tex = tex;
+			app->audio->PlayFx(sfx_death);
+		}
+
+		if (coll != nullptr)
+		{
+			coll->SetIsTrigger(false);
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->SetIsTrigger(false);
+		}
+		break;
+	case ENEMY_STATE::STUNNED:
+		break;
+	case ENEMY_STATE::STUNNED_CHARGED:
+		break;
+	default:
+		break;
+	}
+	state = new_state;
 }
 
 void Obj_Enemy::ResetAllAnimations()
@@ -866,4 +900,14 @@ void Obj_Enemy::ResetAllAnimations()
 	electro_dead.Reset();
 	portal_animation.Reset();
 	portal_close_anim.Reset();
+}
+
+inline void Obj_Enemy::UpdateVelocity()
+{
+	fPoint new_move_vec = fPoint(next_pos-pos_map).Normalize();
+	if (new_move_vec != move_vect)
+	{
+		move_vect = new_move_vec;
+		angle = atan2(move_vect.y, -move_vect.x)  * RADTODEG - ISO_COMPENSATION;
+	}
 }

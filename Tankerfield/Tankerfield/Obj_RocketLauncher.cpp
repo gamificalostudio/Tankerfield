@@ -42,10 +42,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
-
-	curr_anim = &idle;
+	SetState(ENEMY_STATE::SPAWN);
 	
-	state = ENEMY_STATE::IDLE;
 
 	//spawn_draw_offset = { 49, 50 };
 	scale = 1.5f;
@@ -56,18 +54,16 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	check_path_time = 2.0f;
 	damaged_sprite_time = 75;
 
-	coll_w = 0.5f;
-	coll_h = 0.5f;
-	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
-	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+
 	can_attack = false;
-	distance_to_player = 5; //this is in tiles
+	distance_to_player = 10; //this is in tiles
 	deltatime_to_check_distance = 1;
 }
 
 void Obj_RocketLauncher::SetStats(int level)
 {
 	detection_range = app->objectmanager->rocket_launcher_info.detection_range;
+	squared_detection_range = detection_range * detection_range;
 	original_speed = speed = app->objectmanager->rocket_launcher_info.speed;
 	attack_damage = app->objectmanager->rocket_launcher_info.attack_damage;
 	attack_range = app->objectmanager->rocket_launcher_info.attack_range;
@@ -83,6 +79,17 @@ Obj_RocketLauncher::~Obj_RocketLauncher()
 
 void Obj_RocketLauncher::Spawn(const float& dt)
 {
+	if (coll==nullptr)
+	{
+		coll_w = 0.5f;
+		coll_h = 0.5f;
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	}
+	else
+	{
+		coll->SetIsTrigger(true);
+	}
 	state = ENEMY_STATE::GET_PATH;
 }
 
@@ -91,12 +98,9 @@ void Obj_RocketLauncher::Attack()
 	if (life > 0 && app->scene->game_state != GAME_STATE::NO_TYPE)
 	{
 		if (target != nullptr
-			/*&& target->coll->GetTag() == TAG::PLAYER*/
-			/*&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared*/
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
 			curr_anim = &attack;
-			//target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
 			ShootMissile();
@@ -115,7 +119,7 @@ void Obj_RocketLauncher::Move(const float & dt)
 {
 	if (timer_check_distance.ReadSec() >= deltatime_to_check_distance || fist_enter_to_move)
 	{
-		if (target->pos_map.DistanceNoSqrt(pos_map) <= 5 * 5)
+		if (target->pos_map.DistanceNoSqrt(pos_map) <= 10 * 10)
 		{
 			can_attack = true;
 			curr_anim = &idle;
@@ -159,23 +163,31 @@ void Obj_RocketLauncher::Move(const float & dt)
 
 void Obj_RocketLauncher::ShootMissile()
 {
+	fPoint offset_rocket{ 1.f,1.f };
 	fPoint p_dir(0.0f, 0.0f);
 	if (target != nullptr
-		&& target->coll->GetTag() == TAG::PLAYER
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared)
 	{
-		p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map;
-		p_dir.Normalize();
+		if (!target->Alive())
+		{
+			SetState(ENEMY_STATE::GET_PATH);
+		}
+		else
+		{
+			p_dir = app->map->ScreenToMapF(target->pos_screen.x, target->pos_screen.y) - this->pos_map + offset_rocket;
+			p_dir.Normalize();
 
-		Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map + p_dir);
-		bullet->SetBulletProperties(
-			9.0f,
-			2000.0f,
-			attack_damage,
-			p_dir,
-			atan2(-p_dir.y, p_dir.x) * RADTODEG - 45);
+			Bullet_RocketLauncher* bullet = (Bullet_RocketLauncher*)app->objectmanager->CreateObject(ObjectType::BULLET_ROCKETLAUNCHER, this->pos_map - offset_rocket /*+ p_dir*/);
+			bullet->SetBulletProperties(
+				9.0f,
+				2000.0f,
+				attack_damage,
+				p_dir,
+				atan2(-p_dir.y, p_dir.x) * RADTODEG - 45);
 
-		bullet->SetPlayer(target);
+			bullet->SetPlayer(target);
+		}
+		
 	}
 
 }

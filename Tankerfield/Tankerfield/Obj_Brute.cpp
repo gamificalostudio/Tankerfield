@@ -71,14 +71,15 @@ Obj_Brute::Obj_Brute(fPoint pos) : Obj_Enemy(pos)
   
 	damaged_sprite_time = 75;
 
-	app->audio->PlayFx(sfx_spawn);
+	
 }
 
 void Obj_Brute::SetStats(int level)
 {
 	detection_range = app->objectmanager->brute_info.detection_range;
+	squared_detection_range = detection_range * detection_range;
 	original_speed = speed = app->objectmanager->brute_info.speed;
-	range_pos.radius = 1.f;
+	range_pos.radius = 0.5f;
 	attack_damage = app->objectmanager->brute_info.attack_damage;
 	attack_range = app->objectmanager->brute_info.attack_range;
 	attack_range_squared = attack_range * attack_range;
@@ -116,14 +117,28 @@ void Obj_Brute::Spawn(const float& dt)
 	if (curr_anim->Finished())
 	{
 		curr_tex = tex;
-		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::NONE, BODY_TYPE::DYNAMIC, 0.f, this);
-		coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
-		life_collider = app->collision->AddCollider(pos_map, 2, 2, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
-		life_collider->is_sensor = true;
-		life_collider->SetObjOffset(fPoint(-1.f, -1.f));
+		if (coll == nullptr)
+		{
+			coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::NONE, BODY_TYPE::DYNAMIC, 0.f, this);
+			coll->SetObjOffset(fPoint(coll_w * 0.5f, coll_h * 0.5f));
+		}
+		else
+		{
+			coll->SetIsTrigger(true);
+		}
+		if (life_collider == nullptr)
+		{
+			life_collider = app->collision->AddCollider(pos_map, 2, 2, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+			life_collider->is_sensor = true;
+			life_collider->SetObjOffset(fPoint(-1.f, -1.f));
+		}
+		else
+		{
+			life_collider->SetIsTrigger(true);
+		}
 		draw_offset = normal_draw_offset;
 		curr_anim = &walk;
-		state = ENEMY_STATE::GET_PATH;
+		SetState(ENEMY_STATE::GET_PATH);
 	}
 }
 

@@ -19,7 +19,6 @@ enum class ObjectType
 	//OTHER
 	TANK,
 	STATIC,
-	REWARD_ZONE,
 	REWARD_BOX,
 	PICK_UP,
 	OIL_POOL,
@@ -142,8 +141,6 @@ public:
 	BruteInfo brute_info;
 	RocketLauncherInfo rocket_launcher_info;
 	SuicidalInfo suicidal_info;
-
-	RocketLauncherWeaponInfo rocketlauncher_weapon_info;
 
 	//WeaponInfo
 	BasicWeaponInfo basic_weapon_info;

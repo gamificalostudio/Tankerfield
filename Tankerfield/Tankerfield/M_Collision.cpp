@@ -38,6 +38,13 @@ void Collider::Destroy()
 	if (to_destroy == false)
 	{
 		to_destroy = true;
+
+		if (object != nullptr)
+		{
+			object->coll = nullptr;
+			object = nullptr;
+		}
+
 		app->collision->colliders_to_destroy.push_back(this);
 	}
 }
@@ -121,6 +128,8 @@ M_Collision::M_Collision()
 	physics_matrix[(int)TAG::ENEMY][(int)TAG::REWARD_BOX] = true;
 
 	physics_matrix[(int)TAG::PICK_UP][(int)TAG::PICK_UP] = true;
+	physics_matrix[(int)TAG::PICK_UP][(int)TAG::WALL] = true;
+	physics_matrix[(int)TAG::PICK_UP][(int)TAG::WATER] = true;
 
 }
 
@@ -164,20 +173,10 @@ bool M_Collision::Update(float dt)
 {
 	BROFILER_CATEGORY("M_CollisionUpdate", Profiler::Color::Orange);
 
-	if (app->map->MapIsLoaded() == false)
-	{
-		return true;
-	}
-
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
 	{
 		debug = !debug;
 	}
-
-	// Destroy Colliders =====================================================
-
-	DestroyColliders();
-
 	// Add colliders ========================================================
 
 	if (!colliders_to_add.empty())
@@ -189,6 +188,15 @@ bool M_Collision::Update(float dt)
 		}
 
 		colliders_to_add.clear();
+	}
+
+	// Destroy Colliders =====================================================
+
+	DestroyColliders();
+
+	if (app->map->MapIsLoaded() == false)
+	{
+		return true;
 	}
 
 	// Create Quadtree Collision =============================================

@@ -520,7 +520,7 @@ namespace pugi
 		// Parses buffer as an XML document fragment and appends all nodes as children of the current node.
 		// Copies/converts the buffer, so it may be deleted or changed after the function returns.
 		// Note: append_buffer allocates memory that has the lifetime of the owning document; removing the appended nodes does not immediately reclaim that memory.
-		xml_parse_result append_buffer(const void* contents, size_t size, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
+		xml_parse_result append_buffer(const void* contents, size_t size, unsigned int options_menu = parse_default, xml_encoding encoding = encoding_auto);
 
 		// Find attribute using predicate. Returns first attribute for which predicate returned true.
 		template <typename Predicate> xml_attribute find_attribute(Predicate pred) const
@@ -959,30 +959,30 @@ namespace pugi
 
 	#ifndef PUGIXML_NO_STL
 		// Load document from stream.
-		xml_parse_result load(std::basic_istream<char, std::char_traits<char> >& stream, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
-		xml_parse_result load(std::basic_istream<wchar_t, std::char_traits<wchar_t> >& stream, unsigned int options = parse_default);
+		xml_parse_result load(std::basic_istream<char, std::char_traits<char> >& stream, unsigned int options_menu = parse_default, xml_encoding encoding = encoding_auto);
+		xml_parse_result load(std::basic_istream<wchar_t, std::char_traits<wchar_t> >& stream, unsigned int options_menu = parse_default);
 	#endif
 
 		// (deprecated: use load_string instead) Load document from zero-terminated string. No encoding conversions are applied.
-		xml_parse_result load(const char_t* contents, unsigned int options = parse_default);
+		xml_parse_result load(const char_t* contents, unsigned int options_menu = parse_default);
 
 		// Load document from zero-terminated string. No encoding conversions are applied.
-		xml_parse_result load_string(const char_t* contents, unsigned int options = parse_default);
+		xml_parse_result load_string(const char_t* contents, unsigned int options_menu = parse_default);
 
 		// Load document from file
-		xml_parse_result load_file(const char* path, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
-		xml_parse_result load_file(const wchar_t* path, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
+		xml_parse_result load_file(const char* path, unsigned int options_menu = parse_default, xml_encoding encoding = encoding_auto);
+		xml_parse_result load_file(const wchar_t* path, unsigned int options_menu = parse_default, xml_encoding encoding = encoding_auto);
 
 		// Load document from buffer. Copies/converts the buffer, so it may be deleted or changed after the function returns.
-		xml_parse_result load_buffer(const void* contents, size_t size, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
+		xml_parse_result load_buffer(const void* contents, size_t size, unsigned int options_menu = parse_default, xml_encoding encoding = encoding_auto);
 
 		// Load document from buffer, using the buffer for in-place parsing (the buffer is modified and used for storage of document data).
 		// You should ensure that buffer data will persist throughout the document's lifetime, and free the buffer memory manually once document is destroyed.
-		xml_parse_result load_buffer_inplace(void* contents, size_t size, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
+		xml_parse_result load_buffer_inplace(void* contents, size_t size, unsigned int options_menu = parse_default, xml_encoding encoding = encoding_auto);
 
 		// Load document from buffer, using the buffer for in-place parsing (the buffer is modified and used for storage of document data).
 		// You should allocate the buffer with pugixml allocation function; document will free the buffer when it is no longer needed (you can't use it anymore).
-		xml_parse_result load_buffer_inplace_own(void* contents, size_t size, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
+		xml_parse_result load_buffer_inplace_own(void* contents, size_t size, unsigned int options_menu = parse_default, xml_encoding encoding = encoding_auto);
 
 		// Save XML document to writer (semantics is slightly different from xml_node::print, see documentation for details).
 		void save(xml_writer& writer, const char_t* indent = PUGIXML_TEXT("\t"), unsigned int flags = format_default, xml_encoding encoding = encoding_auto) const;

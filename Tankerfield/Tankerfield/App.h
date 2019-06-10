@@ -27,6 +27,8 @@ class M_PickManager;
 class M_AnimationBank;
 class M_RewardZoneManager;
 class M_MainMenu;
+class Options_Menu;
+class Pause_Menu;
 class M_Debug;
 class M_Options_Menu;
 class Video;
@@ -73,6 +75,12 @@ public:
 	void SaveGame(const char* file) const;
 
 	pugi::xml_node LoadEmitters(pugi::xml_document& psystem_file) const;
+	
+	bool IsPaused();
+
+	void PauseGame();
+
+	void ResumeGame();
 
 private:
 	// Load config file
@@ -121,7 +129,6 @@ public:
 	M_RewardZoneManager*    reward_zone_manager = nullptr;
 	M_MainMenu*             main_menu = nullptr;
 	M_Debug*				debug = nullptr;
-	M_Options_Menu*			options_menu = nullptr;
 	Video*					video = nullptr;
 
 	//XML document

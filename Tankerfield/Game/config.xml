@@ -5,7 +5,7 @@
     <title>Title</title>
     <organization>UPC</organization>
     <!-- 0.Release | 1.Debug(multiplayer) | 2.Debug(mainmenu) -->
-    <mode value ="1" />
+    <mode value ="0" />
 
 
   </app>
@@ -1721,4 +1721,34 @@
     </happy_hour>
   </items>
 
+  <input>
+    <controller>
+      <death_zone_porcenatage variable="0.20"/>
+      <vibration_percentage variable="1.0"/>
+      <attack_button variable="8"/>
+      <interaction_button variable="3"/>
+      <use_item_button variable="6"/>
+    </controller>
+    <controller>
+      <death_zone_porcenattage variable="0.20"/>
+      <vibration_percentage variable="1.0"/>
+      <attack_button variable="8"/>
+      <interaction_button variable="3"/>
+      <use_item_button variable="6"/>
+    </controller>
+    <controller>
+      <death_zone_porcenattage variable="0.20"/>
+      <vibration_percentage variable="1.0"/>
+      <attack_button variable="8"/>
+      <interaction_button variable="3"/>
+      <use_item_button variable="6"/>
+    </controller>
+    <controller>
+      <death_zone_porcenatage variable="0.20"/>
+      <vibration_percentage variable="1.0"/>
+      <attack_button variable="8"/>
+      <interaction_button variable="3"/>
+      <use_item_button variable="6"/>
+    </controller>
+  </input>
 </config>

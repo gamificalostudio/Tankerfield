@@ -81,6 +81,8 @@ public:
 	void ShotAutormaticallyDisactivate();
 	std::vector<Object*>* GetEnemiesHitted();
 	void CreatePortals();
+
+	void NewRound(int round);
 	
 	//- Pick ups
 	void SetPickUp(Obj_PickUp* pick_up);

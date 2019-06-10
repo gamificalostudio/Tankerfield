@@ -55,6 +55,25 @@ struct UI_InteractiveGroupDef;
 
 enum class INPUT_DIR;
 
+enum class MENU_TYPE
+{
+	MAIN_MENU,
+	PAUSE_MENU,
+	NO_TYPE
+};
+
+enum class MENU_STATE
+{
+	INIT_MENU,
+	OPTIONS,
+	CREDITS,
+	SELECTION,
+	LEADERBOARD,
+	CHANGE_SCENE,
+	CONTROLLERS_SETTINGS,
+	NO_TYPE
+};
+
 enum class FocusState
 {
 	ENTER,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3842">
+<map version="1.2" tiledversion="1.2.0" orientation="isometric" renderorder="left-up" width="200" height="250" tilewidth="60" tileheight="30" infinite="0" nextlayerid="10" nextobjectid="3842">
  <properties>
   <property name="offset_x" type="int" value="0"/>
   <property name="offset_y" type="int" value="0"/>
@@ -200173,7 +200173,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="5" name="Colliders">
+ <objectgroup id="5" name="Colliders" visible="0">
   <object id="55" type="WATER" x="4080" y="6420" width="390" height="30"/>
   <object id="328" type="WATER" x="3420" y="3870" width="330" height="1410"/>
   <object id="329" type="WATER" x="4260" y="3360" width="240" height="1650"/>
@@ -256186,7 +256186,7 @@
   <object id="3747" name="ENEMY" type="ENEMY" x="3870" y="5310" width="120" height="120"/>
   <object id="3750" name="ENEMY" type="ENEMY" x="4560" y="5070" width="120" height="120"/>
  </objectgroup>
- <objectgroup id="9" name="Players">
+ <objectgroup id="9" name="Players" visible="0">
   <object id="410" x="750" y="3780" width="30" height="30"/>
   <object id="411" x="750" y="3600" width="30" height="30"/>
   <object id="412" x="750" y="3660" width="30" height="30"/>

@@ -171,8 +171,8 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
-		weapon_info.shot1.bullet_damage = 0;
-		weapon_info.shot1.explosion_damage = app->objectmanager->double_missile_info.damage_multiplier * pow(app->objectmanager->double_missile_info.damage_exponential_base, level - 1);;
+		weapon_info.shot1.bullet_damage = app->objectmanager->double_missile_info.damage_multiplier * pow(app->objectmanager->double_missile_info.damage_exponential_base, level - 1);
+		weapon_info.shot1.explosion_damage = app->objectmanager->double_missile_info.explosion_damage_multiplier * pow(app->objectmanager->double_missile_info.damage_exponential_base, level - 1);
 		weapon_info.shot1.bullet_healing = 0;
 		weapon_info.shot1.bullet_life_ms = 2000;
 		weapon_info.shot1.bullet_speed = weapon_info.shot2.bullet_speed = app->objectmanager->double_missile_info.speed;
@@ -405,8 +405,7 @@ void Obj_Tank::ShootHealingShotCharged()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
-	heal_area->tank_parent = this;
-
+	heal_area->SetPlayer(this);
 }
 
 void Obj_Tank::ShootLaserShot()

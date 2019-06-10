@@ -54,6 +54,8 @@ bool M_Debug::Start()
 		INT_MAX,
 		"Selecting enemy level: ");
 
+
+
 	CreateLabel();
 
 	return true;
@@ -66,13 +68,11 @@ void M_Debug::CreateLabel()
 	debug_label = app->ui->CreateLabel({ screen.w * 0.5f ,  screen.h * 0.25f }, label_def);
 	debug_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	debug_label->SetState(ELEMENT_STATE::HIDDEN);
-	app->scene->general_gui->MakeChildOfRoundElement(debug_label);
 
 	label_def.text = "GOD MODE";
 	god_mode_label = app->ui->CreateLabel({ screen.w * 0.5f, screen.h * 0.15f }, label_def);
 	god_mode_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	god_mode_label->SetState(ELEMENT_STATE::HIDDEN);
-	app->scene->general_gui->MakeChildOfRoundElement(god_mode_label);
 }
 
 void M_Debug::ManageNumericDebug(fPoint mouse_pos)
@@ -127,13 +127,17 @@ void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 
 		case DebugNumericType::SELECT_OBJECT: {
 			ObjectType obj_type = (ObjectType)debug_numeric[(int)DebugNumericType::SELECT_OBJECT].num;
-			Object * obj = app->objectmanager->CreateObject(
-				obj_type,
-				mouse_pos);
-			if (app->objectmanager->IsEnemy(obj_type))
+			if (obj_type != ObjectType::TANK
+				|| obj_type != ObjectType::TANK_MAIN_MENU)
 			{
-				Obj_Enemy * enemy = (Obj_Enemy*)obj;
-				enemy->SetStats(debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].num);
+				Object * obj = app->objectmanager->CreateObject(
+					obj_type,
+					mouse_pos);
+				if (app->objectmanager->IsEnemy(obj_type))
+				{
+					Obj_Enemy * enemy = (Obj_Enemy*)obj;
+					enemy->SetStats(debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].num);
+				}
 			}
 		}	break;
 
@@ -218,7 +222,17 @@ bool M_Debug::PreUpdate()
 			god_mode_label->SetState(ELEMENT_STATE::HIDDEN);
 		}
 	}
-
+	if(app->input->GetKey(SDL_SCANCODE_RSHIFT)==KEY_DOWN)
+	{
+		if (SDL_ShowCursor(SDL_QUERY)== SDL_ENABLE)
+		{
+			SDL_ShowCursor(SDL_DISABLE);
+		}
+		else
+		{
+			SDL_ShowCursor(SDL_ENABLE);
+		}
+	}
 	//TODO: Debug Window with any variable you want to put in (you can add a parameter and it will be printed there with the string and the number you pass it)
 	//TODO: Attack with only one tank
 

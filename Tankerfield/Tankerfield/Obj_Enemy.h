@@ -27,6 +27,7 @@ enum class ENEMY_STATE
 class Obj_Enemy : public Object
 {
 public:
+
 	Obj_Enemy(fPoint pos);
 	~Obj_Enemy();
 
@@ -53,6 +54,9 @@ public:
 	void DrawAttackRange(Camera * camera);
 
 	inline void ReduceLife(int damage, float dt);
+
+	void SetState(ENEMY_STATE new_state);
+
 
 protected:
 	inline void UpdateMoveVec();
@@ -85,11 +89,16 @@ protected:
 
 	inline virtual void Stunned();
 
+	bool GetOutOfUnwalkableTile();
+
 	bool CleanUp() override;
 
 	void Oiled();
 
 	void ResetAllAnimations();
+
+	inline void UpdateVelocity();
+
 
 protected:
 
@@ -170,7 +179,7 @@ protected:
 	float check_path_time = 0.f;
 	fPoint next_pos = { 0.f, 0.f };
 	float detection_range = 0.0f;
-
+	float squared_detection_range = 0.f;
 
 	uint times_to_repeat_animation = 0u;
 	uint times_animation_repeated = 0u;
@@ -193,7 +202,8 @@ protected:
 	SpawnPoint* teleport_spawnpoint = nullptr;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
-
+	Timer	get_player;
+	Timer	change_to_teleport;
 	bool can_attack = true;
 
 

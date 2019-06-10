@@ -24,10 +24,10 @@
 #include "M_Collision.h"
 #include "M_PickManager.h"
 #include "M_AnimationBank.h"
-#include "M_RewardZoneManager.h"
 #include "M_MainMenu.h"
 #include "M_Debug.h"
 #include "Options_Menu.h"
+#include "Pause_Menu.h"
 #include "M_VideoPlayer.h"
 #include "ParticleSystem.h"
 
@@ -52,7 +52,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	scmanager = DBG_NEW M_SceneManager();
 	collision = DBG_NEW M_Collision();
 	anim_bank = DBG_NEW M_AnimationBank();
-	reward_zone_manager = DBG_NEW M_RewardZoneManager();
 	main_menu = DBG_NEW M_MainMenu();
 	debug = DBG_NEW M_Debug();
 	video = DBG_NEW Video();
@@ -71,7 +70,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(main_menu);
 	AddModule(objectmanager);
 	AddModule(pick_manager);
-	AddModule(reward_zone_manager);
 	AddModule(collision);
 	AddModule(ui);
 	AddModule(video);
@@ -199,6 +197,7 @@ bool App::Start()
 	
 	startup_time.Start();
 
+	
 	PERF_PEEK(ptimer);
 
 	return ret;
@@ -209,11 +208,7 @@ bool App::Update()
 {
 	bool ret = true;
 	PrepareUpdate();
-	if (input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
-	{
-		pause = !pause;
-		frame_time.Start();
-	}
+
 	if (input->GetWindowEvent(WE_QUIT) == true)
 		ret = false;
 
@@ -431,6 +426,22 @@ void App::SaveGame(const char* file) const
 
 	want_to_save = true;
 	save_game.assign(file);
+}
+
+bool App::IsPaused()
+{
+	return pause;
+}
+
+void App::PauseGame()
+{
+	pause = true;
+}
+
+void App::ResumeGame()
+{
+	pause = false;
+	frame_time.Start();
 }
 
 // ---------------------------------------

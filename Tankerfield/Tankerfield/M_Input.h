@@ -7,6 +7,9 @@
 #include "SDL\include\SDL_haptic.h"
 #include "SDL\include\SDL.h"
 
+#include "PugiXml/src/pugixml.hpp"
+#include "PugiXml/src/pugiconfig.hpp"
+
 #include "Module.h"
 #include "Point.h"
 
@@ -80,7 +83,7 @@ struct ControllersPlayerInfo
 	float death_zone_porcenatage = 0.20f;
 	float vibration_percentage = 1.00f;
 	CONTROLLER_BUTTON attack_button = CONTROLLER_BUTTON::RT;
-	CONTROLLER_BUTTON interacton_button = CONTROLLER_BUTTON::X;
+	CONTROLLER_BUTTON interaction_button = CONTROLLER_BUTTON::X;
 	CONTROLLER_BUTTON use_item_button = CONTROLLER_BUTTON::LB;
 
 };
@@ -100,8 +103,6 @@ private:
 
 public:
 	Controller();
-
-	
 
 private:
 	bool attached = false;
@@ -208,6 +209,8 @@ public:
 
 	bool IsConnectedController(int i);
 
+	bool GetControllerButtonDown(int controller, CONTROLLER_BUTTON& button);
+
 private:
 	iPoint GetMousePos_Tiles(const Camera* camera = nullptr);
 	void UpdateKeyboardState();
@@ -224,37 +227,13 @@ private:
 	int			mouse_y = NULL;
 	uint		num_controller_connected = 0;
 	Controller controllers[MAX_CONTROLLERS];
+	pugi::xml_node input_node;
 
 public:
 	std::string input_text;
 	int GetAbleController();
 	ControllersPlayerInfo controllerInfo[4];
-
-														
-	SDL_Rect buttons_image[(int)CONTROLLER_BUTTON::MAX] = 
-	//A
-	{{449,19,32,32},
-	//B
-	{399,69,32,32}, 
-	//Y
-	{449,69,32,32}, 
-	//X
-	{399,19,32,32},
-	//L
-	{500,15,42,42},
-	//LT
-	{287,15,36,39},
-	//LB
-	{284,73,41,23},
-	//R
-	{500,70,42,42},
-	//RT
-	{338,15,36,39},
-	//RB
-	{334,73,42,23},
-	};
-
-
+											
 };
 
 #endif // __j1INPUT_H__

@@ -66,15 +66,10 @@ public:
 	float speed = 0.f;
 };
 
-class RocketLauncherWeaponInfo : public WeaponXMLInfo
-{
-public:
-	
-};
-
 class DoubleMissileInfo : public WeaponXMLInfo
 {
 public:
+	float explosion_damage_multiplier = 0.f;
 	float speed = 0.f;
 };
 

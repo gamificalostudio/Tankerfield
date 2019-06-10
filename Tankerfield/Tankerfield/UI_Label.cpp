@@ -25,7 +25,7 @@ void UI_Label::Destroy()
 
 void UI_Label::SetText(String text)
 {
-	if (this->text == text)
+	if (this->text == text )
 	{
 		return;
 	}

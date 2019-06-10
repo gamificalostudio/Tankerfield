@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <math.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -23,10 +24,10 @@
 #include "M_Collision.h"
 #include "M_MainMenu.h"
 #include "M_PickManager.h"
-#include "M_RewardZoneManager.h"
 #include "LeaderBoard.h"
 
 #include "UI_Label.h"
+#include "UI_Image.h"
 
 #include "Point.h"
 #include "Rect.h"
@@ -34,6 +35,10 @@
 #include "PerfTimer.h"
 #include "Obj_Tank.h"
 
+#include "Controllers_Settings.h"
+
+#include "Options_Menu.h"
+#include "Pause_Menu.h"
 #include "General_HUD.h"
 #include "Player_GUI.h"
 
@@ -44,12 +49,6 @@
 
 #include "Object.h"
 #include "Obj_RewardBox.h"
-
-#include "UI_Image.h"
-
-#include "ParticleSystem.h"
-#include "Obj_Emitter.h"
-
 
 M_Scene::M_Scene() : Module()
 {
@@ -80,6 +79,12 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
+	SDL_ShowCursor(SDL_DISABLE);
+
+	tank_colors[0] = {255, 0, 0, 255};
+	tank_colors[1] = {248, 243, 43, 255};
+	tank_colors[2] = {0, 255, 0, 255};
+	tank_colors[3] = {0, 0, 255, 255};
 	//path_tex = app->tex->Load("maps/path.png");
 
 	// Load Fxs
@@ -147,6 +152,10 @@ bool M_Scene::Start()
 
 	general_gui = DBG_NEW General_GUI();
 	leaderboard = DBG_NEW LeaderBoard(screen_center,"data/leader_board.xml",false);
+	pause_menu = DBG_NEW Pause_Menu();
+	options_menu = DBG_NEW Options_Menu(MENU_TYPE::PAUSE_MENU);
+
+	SetMenuState( MENU_STATE::NO_TYPE);
 
 	new_round_animation.Start();
 
@@ -156,11 +165,46 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
-	//LOG("Enemy number %i", number_of_enemies);
-
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)//TODO: Go to pause screen
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KeyState::KEY_DOWN)
 	{
-		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
+		if (app->IsPaused() == true)
+		{
+			SetMenuState(MENU_STATE::NO_TYPE);
+		}
+		else
+		{
+			SetMenuState(MENU_STATE::INIT_MENU);
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_TAB) == KeyState::KEY_DOWN)
+	{
+		if (general_gui->GetIsVisible() == false)
+		{
+			general_gui->ShowGeneralGUI();
+		}
+		else
+		{
+			general_gui->HideGeneralGUI();
+		}
+
+		for (std::vector<Obj_Tank*>::iterator itr = app->objectmanager->obj_tanks.begin(); itr != app->objectmanager->obj_tanks.end(); ++itr)
+		{
+			if ((*itr)->gui == nullptr)
+			{
+				continue;
+			}
+
+			if ((*itr)->gui->GetIsVisible() == false)
+			{
+				(*itr)->gui->ShowGUI();
+			}
+			else
+			{
+				(*itr)->gui->HideGUI();
+			}
+		}
+
 	}
 
 	return true;
@@ -193,10 +237,14 @@ bool M_Scene::Update(float dt)
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
 		NewWave();
-		game_state = GAME_STATE::IN_WAVE;
+		for (int i = 0; i < 4; ++i)
+		{
+			app->objectmanager->obj_tanks[i]->NewRound(round);
+		}
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
+		game_state = GAME_STATE::IN_WAVE;
 		break;
 	}
 	case GAME_STATE::IN_WAVE:
@@ -332,7 +380,66 @@ bool M_Scene::CleanUp()
 	delete(leaderboard);
 	leaderboard = nullptr;
 
+	pause_menu->Delete();
+
 	return true;
+}
+
+void M_Scene::SetMenuState(MENU_STATE new_state)
+{
+	// If state is equal to current state ========================
+
+	if (new_state == menu_state)
+	{
+		return;
+	}
+
+	// Desactive current state ==================================
+
+	switch (menu_state)
+	{
+	case MENU_STATE::NO_TYPE:
+		SDL_ShowCursor(SDL_ENABLE);
+		break;
+	case MENU_STATE::INIT_MENU:
+		pause_menu->HidePauseMenu();
+		break;
+	case MENU_STATE::OPTIONS:
+		options_menu->HideOptionsMenu();
+		break;
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+		for (uint i = 0; i < 4; ++i)
+		{
+			pause_menu->controllers_setting[i]->HideControllersSettings();
+		}
+		break;
+	}
+
+	// Active new state ======================================
+
+	menu_state = new_state;
+
+	switch (menu_state)
+	{
+	case MENU_STATE::NO_TYPE:
+		SDL_ShowCursor(SDL_DISABLE);
+		app->ResumeGame();
+		break;
+	case MENU_STATE::INIT_MENU:
+		app->PauseGame();
+		pause_menu->ShowPauseMenu();
+		break;
+	case MENU_STATE::OPTIONS:
+		options_menu->ShowOptionsMenu();
+		break;
+	case MENU_STATE::CONTROLLERS_SETTINGS:
+
+		for (uint i = 0; i < 4; ++i)
+		{
+			pause_menu->controllers_setting[i]->ShowControllerSettings();
+		}
+		break;
+	}
 }
 
 void M_Scene::DebugPathfinding()
@@ -464,14 +571,32 @@ void M_Scene::CreateEnemyWave()
 void M_Scene::NewWave()
 {
 	Tesla_trooper_units = 30 + 40 * round;
+	Brute_units = 0u;
+	RocketLauncher_units = 0u;
+	Suicidal_units = 0u;
 
 	if (round >= 2)
 	{
-		Brute_units += round - 1;
-		RocketLauncher_units += round - 1;
-		Suicidal_units += round - 1;
-	}
+		uint number_of_special_enemies = 0.8f * round;
+		for (uint iter = 0; iter < number_of_special_enemies; ++iter)
+		{
+			uint r = rand() % 3 + 1;
+			if (r == 1)
+			{
+				Brute_units += 1;
+			}
 
+			else if (r == 2)
+			{
+				RocketLauncher_units += 1;
+			}
+
+			else
+			{
+				Suicidal_units += 1;
+			}
+		}
+	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
 }
