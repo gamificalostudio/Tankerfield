@@ -234,8 +234,7 @@ void Obj_Enemy::ElectroDead()
 
 void Obj_Enemy::Idle()
 {
-	path.clear();
-	move_vect.SetToZero();
+	
 	
 	if (change_to_teleport.ReadSec() > 2)
 	{
@@ -472,6 +471,8 @@ bool Obj_Enemy::Start()
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	ResetAllAnimations();
+	SetState(ENEMY_STATE::SPAWN);
+	spawn_first_enter = true;
 	return true;
 }
 
@@ -837,6 +838,8 @@ void Obj_Enemy::SetState(ENEMY_STATE new_state)
 	case ENEMY_STATE::SPAWN:
 		break;
 	case ENEMY_STATE::IDLE:
+		path.clear();
+		move_vect.SetToZero();
 		curr_anim = &idle;
 		change_to_teleport.Start();
 		break;
