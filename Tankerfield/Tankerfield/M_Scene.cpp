@@ -165,7 +165,8 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KeyState::KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KeyState::KEY_DOWN
+		|| app->input->GetControllerButtonState(0, SDL_GameControllerButton::SDL_CONTROLLER_BUTTON_START) == KEY_DOWN)
 	{
 		if (app->IsPaused() == true)
 		{

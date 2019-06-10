@@ -89,6 +89,11 @@ void Obj_Brute::SetStats(int level)
 
 Obj_Brute::~Obj_Brute()
 {
+	if (life_collider != nullptr)
+	{
+		life_collider->Destroy();
+		life_collider = nullptr;
+	}
 }
 
 
