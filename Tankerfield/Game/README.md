@@ -70,6 +70,7 @@ https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tan
 - V: Change enemy level
 - C: Select object
 https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Tankerfield/M_ObjManager.h#L15
+- Right Shift: Show/Hide cursor
 
 ## Keyboard controls:
 - Move mouse: Aim

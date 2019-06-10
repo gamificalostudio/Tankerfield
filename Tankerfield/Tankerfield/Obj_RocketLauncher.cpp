@@ -42,7 +42,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
-	SetState(ENEMY_STATE::IDLE);
+	SetState(ENEMY_STATE::SPAWN);
 	
 
 	//spawn_draw_offset = { 49, 50 };

@@ -54,6 +54,8 @@ bool M_Debug::Start()
 		INT_MAX,
 		"Selecting enemy level: ");
 
+
+
 	CreateLabel();
 
 	return true;
@@ -220,7 +222,17 @@ bool M_Debug::PreUpdate()
 			god_mode_label->SetState(ELEMENT_STATE::HIDDEN);
 		}
 	}
-
+	if(app->input->GetKey(SDL_SCANCODE_RSHIFT)==KEY_DOWN)
+	{
+		if (SDL_ShowCursor(SDL_QUERY)== SDL_ENABLE)
+		{
+			SDL_ShowCursor(SDL_DISABLE);
+		}
+		else
+		{
+			SDL_ShowCursor(SDL_ENABLE);
+		}
+	}
 	//TODO: Debug Window with any variable you want to put in (you can add a parameter and it will be printed there with the string and the number you pass it)
 	//TODO: Attack with only one tank
 
