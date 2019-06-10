@@ -37,9 +37,7 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.radius = 0.5f;
 
 	times_to_repeat_animation = 3u;
-
-	time_to_hit_sound_sec = 1u;
-	timer_to_hit_sound.Start();
+	
 
 	path_timer.Start();
 
@@ -55,6 +53,11 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 
 Obj_Enemy::~Obj_Enemy()
 {
+	if (life_collider != nullptr)
+	{
+		life_collider->Destroy();
+		life_collider = nullptr;
+	}
 }
 
 bool Obj_Enemy::Update(float dt)
@@ -229,7 +232,8 @@ void Obj_Enemy::ElectroDead()
 
 void Obj_Enemy::Idle()
 {
-	
+	path.clear();
+	move_vect.SetToZero();
 	
 	if (change_to_teleport.ReadSec() > 2)
 	{
@@ -466,8 +470,6 @@ bool Obj_Enemy::Start()
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	ResetAllAnimations();
-	SetState(ENEMY_STATE::SPAWN);
-	spawn_first_enter = true;
 	return true;
 }
 
@@ -636,11 +638,11 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 		{
-			ReduceLife(collider->damage);
+			ReduceLife(collider->damage, dt);
 		}
 		else if (collider->GetTag() == TAG::BULLET_OIL)
 		{
-			ReduceLife(life -= collider->damage);
+			ReduceLife(life -= collider->damage, dt);
 			oiled = true;
 			oiled_timer.Start();
 			damaged_sprite_timer.Start();
@@ -669,7 +671,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 			}
 			else
 			{
-				ReduceLife(collider->damage*dt);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
@@ -750,7 +752,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 			}
 			else
 			{
-				ReduceLife(collider->damage*dt);
+				ReduceLife(collider->damage, dt);
 			}
 		}
 	}
@@ -796,7 +798,7 @@ void Obj_Enemy::Oiled()
 		}
 }
 
-inline void Obj_Enemy::ReduceLife(float damage)
+inline void Obj_Enemy::ReduceLife(int damage, float dt)
 {
 	if (state == ENEMY_STATE::DEAD)
 	{
@@ -817,12 +819,7 @@ inline void Obj_Enemy::ReduceLife(float damage)
 	}
 	else
 	{
-		if (timer_to_hit_sound.ReadSec() >= time_to_hit_sound_sec || hit_first_time)
-		{
-			hit_first_time = false;
-			app->audio->PlayFx(sfx_hit);
-			timer_to_hit_sound.Start();
-		}
+		app->audio->PlayFx(sfx_hit);
 	}
 }
 
@@ -833,8 +830,6 @@ void Obj_Enemy::SetState(ENEMY_STATE new_state)
 	case ENEMY_STATE::SPAWN:
 		break;
 	case ENEMY_STATE::IDLE:
-		path.clear();
-		move_vect.SetToZero();
 		curr_anim = &idle;
 		change_to_teleport.Start();
 		break;
