@@ -244,22 +244,25 @@ bool M_UI::Update(float dt)
 		{
 			if ((*itr)->is_active == true)
 			{
-				(*itr)->MouseSelection();
-			}
-			if ((*itr)->is_active == true)
-			{
 				(*itr)->MouseNavigation();
 			}
+
+			if ((*itr)->is_active == true)
+			{
+				(*itr)->MouseSelection();
+			}
+
 		}
 		else if (input_type == UI_INPUT_TYPE::CONTROLLERS)
 		{
 			if ((*itr)->is_active == true)
 			{
-				(*itr)->ControllerSelection();
+				(*itr)->ControllersNavigation();
 			}
+
 			if ((*itr)->is_active == true)
 			{
-				(*itr)->ControllersNavigation();
+				(*itr)->ControllerSelection();
 			}
 		}
 	}

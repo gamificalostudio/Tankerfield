@@ -38,6 +38,13 @@ void Collider::Destroy()
 	if (to_destroy == false)
 	{
 		to_destroy = true;
+
+		if (object != nullptr)
+		{
+			object->coll = nullptr;
+			object = nullptr;
+		}
+
 		app->collision->colliders_to_destroy.push_back(this);
 	}
 }
@@ -145,6 +152,11 @@ bool M_Collision::CleanUp()
 	{
 		if (*item != nullptr)
 		{
+			if ((*item)->object != nullptr)
+			{
+				(*item)->object->coll = nullptr;
+			}
+
 			RELEASE(*item);
 		}
 	}

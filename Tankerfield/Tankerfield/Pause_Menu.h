@@ -41,11 +41,6 @@ private:
 
 	// Elements ================================================
 
-	// Control helpers --------------------------------------
-
-	UI_Image* control_helper_image = nullptr;
-	UI_Label* control_helper_label = nullptr;
-
 	// Main screen --------------------------------
 
 	UI_Label* pause_menu = nullptr;

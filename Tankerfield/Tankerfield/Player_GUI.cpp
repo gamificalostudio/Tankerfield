@@ -191,23 +191,23 @@ Player_GUI::Player_GUI(Obj_Tank * player_object) : player(player_object)
 
 	if (tank_num == 0 || tank_num == 1)
 	{
-		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, 55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::RT] }));
+		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, 55.f), UI_ImageDef({ app->ui->button_sprites[(int)app->input->controllerInfo[tank_num].attack_button] }));
 		item_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
-		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, -55.f), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::RT] }));
+		item_helper = app->ui->CreateImage(weapon_frame->position + fPoint(-65.f, -55.f), UI_ImageDef({ app->ui->button_sprites[(int)app->input->controllerInfo[tank_num].attack_button] }));
 		item_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 
 	if (tank_num == 0 || tank_num == 1)
 	{
-		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, 28.F), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::LB] }));
+		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, 28.F), UI_ImageDef({ app->ui->button_sprites[(int)app->input->controllerInfo[tank_num].use_item_button] }));
 		weapon_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 	else if (tank_num == 2 || tank_num == 3)
 	{
-		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, -28.F), UI_ImageDef({ app->ui->button_sprites[(int)CONTROLLER_BUTTON::LB] }));
+		weapon_helper = app->ui->CreateImage(item_frame->position + fPoint(28.F, -28.F), UI_ImageDef({ app->ui->button_sprites[(int)app->input->controllerInfo[tank_num].use_item_button] }));
 		weapon_helper->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	}
 

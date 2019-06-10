@@ -208,9 +208,9 @@ bool Obj_Tank::Start()
 
 	gamepad_move		= Joystick::LEFT;
 	gamepad_aim			= Joystick::RIGHT;
-	gamepad_shoot		= app->input->controllerInfo[number_of_tanks].attack_button;
-	gamepad_item		= app->input->controllerInfo[number_of_tanks].use_item_button;
-	gamepad_interact	= app->input->controllerInfo[number_of_tanks].interacton_button;
+	gamepad_shoot		= app->input->controllerInfo[tank_num].attack_button;
+	gamepad_item		= app->input->controllerInfo[tank_num].use_item_button;
+	gamepad_interact	= app->input->controllerInfo[tank_num].interaction_button;
 
 	draw_offset.x = 46;
 	draw_offset.y = 46;
@@ -240,14 +240,14 @@ bool Obj_Tank::Start()
 	////- Revive
 	tutorial_revive = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_revive->single_camera = camera_player;
-	tutorial_revive->AddButtonHelper(CONTROLLER_BUTTON::X, { 0.f, 100.f });
+	tutorial_revive->AddButtonHelper(app->input->controllerInfo[tank_num].interaction_button, { 0.f, 100.f });
 	tutorial_revive->AddTextHelper("REVIVE", { 0.f, 70.f });
 	tutorial_revive->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
 	////- PickUp
 	tutorial_pick_up = app->ui->CreateInGameHelper(pos_map, clue_def);
 	tutorial_pick_up->single_camera = camera_player;
-	tutorial_pick_up->AddButtonHelper(CONTROLLER_BUTTON::X, { 0.f, 100.f });
+	tutorial_pick_up->AddButtonHelper(app->input->controllerInfo[tank_num].interaction_button, { 0.f, 100.f });
 	tutorial_pick_up->AddTextHelper("TAKE", { 0.f, 70.f });
 	tutorial_pick_up->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 
@@ -286,15 +286,13 @@ bool Obj_Tank::Start()
 
 	show_crosshairs = true;
 
+	controller = tank_num;
+
 	return true;
 }
 
 bool Obj_Tank::PreUpdate()
 {
-	if (!app->input->IsConnectedController(controller))
-	{
-		controller = app->input->GetAbleController();
-	}
 	SelectInputMethod();
 
 	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
@@ -584,7 +582,7 @@ bool Obj_Tank::Draw(Camera * camera)
 
 		if (show_crosshairs
 			&& camera == camera_player
-			&& app->IsPaused())
+			&& !app->IsPaused())
 		{
 			DrawCrosshair(camera);
 		}
@@ -628,7 +626,7 @@ bool Obj_Tank::Draw(Camera * camera)
 
 		if (show_crosshairs
 			&& camera == camera_player
-			&& app->IsPaused())
+			&& !app->IsPaused())
 		{
 			DrawCrosshair(camera);
 		}
@@ -780,7 +778,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 	{
 	case TAG::FRIENDLY_BULLET: {
 		Healing_Bullet* bullet = (Healing_Bullet*)c1->GetObj();
-		if (bullet->player && Alive()) // he does not heal himself
+		if (bullet->player != this && Alive()) // he does not heal himself
 		{
 			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
 			new_particle->tank = this;
@@ -837,10 +835,10 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 	}break;
 
 	//This two cases without a break are intentional. DO NOT CHANGE THIS.
-	case TAG::WATER: //Fallthrough
-	case TAG::WALL:
-		SetSpeed(0.f);
-		break;
+	//case TAG::WATER: //Fallthrough
+	//case TAG::WALL:
+	//	SetSpeed(0.f);
+	//	break;
 
 	}
 }
@@ -871,10 +869,11 @@ void Obj_Tank::OnTrigger(Collider * c1, float dt)
 	}break;
 
 	//This two cases without a break are intentional. DO NOT CHANGE THIS.
-	case TAG::WATER: //Fallthrough
-		SetSpeed(speed_colliding_with_building);
-		SetSpeed(speed_colliding_with_building);
-		break;
+	//case TAG::WALL:
+	//case TAG::WATER: //Fallthrough
+	//	SetSpeed(speed_colliding_with_building);
+	//	SetSpeed(speed_colliding_with_building);
+	//	break;
 
 	}
 
@@ -1342,12 +1341,11 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::Die()
 {
-	//If life was over 0 die (otherwise no need to die again)
-		app->audio->PlayFx(die_sfx);
-		Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
-		dead_fire->tank = this;
-		SetWeapon(WEAPON::BASIC, 1);
-		SetItem(ItemType::NO_TYPE);
+	app->audio->PlayFx(die_sfx);
+	Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
+	dead_fire->tank = this;
+	SetWeapon(WEAPON::BASIC, app->scene->round);
+	SetItem(ItemType::NO_TYPE);
 }
 
 bool Obj_Tank::Alive() const
@@ -1424,4 +1422,12 @@ fPoint Obj_Tank::GetShotDir() const
 float Obj_Tank::GetTurrAngle() const
 {
 	return turr_angle;
+}
+
+void Obj_Tank::NewRound(int round)
+{
+	if (weapon_info.weapon == WEAPON::BASIC)
+	{
+		SetWeapon(WEAPON::BASIC, round);
+	}
 }

@@ -215,8 +215,6 @@ void Obj_Enemy::Dead()
 {
 	if (curr_anim != &death)
 	{
-		// DROP A PICK UP ITEM 
-		app->pick_manager->PickUpFromEnemy(pos_map);
 		//curr_tex = tex;
 		curr_anim = &death;
 		app->audio->PlayFx(sfx_death);
@@ -275,14 +273,10 @@ void Obj_Enemy::Idle()
 	path.clear();
 	move_vect.SetToZero();
 	
-	target = app->objectmanager->GetNearestTank(pos_map, detection_range);
-	if (target != nullptr)
+	if (change_to_teleport.ReadSec() > 2)
 	{
-		state = ENEMY_STATE::GET_PATH;
-	}
-	else
-	{
-		curr_anim = &idle;
+		SetState(ENEMY_STATE::GET_PATH);
+		change_to_teleport.Start();
 	}
 }
 
@@ -317,7 +311,12 @@ void Obj_Enemy::GetPath()
 {
 	curr_anim = &idle;
 	move_vect.SetToZero();
-	target = app->objectmanager->GetNearestTank(pos_map);
+
+	if (target != nullptr || get_player.ReadSec() >= 3)
+	{
+		target = app->objectmanager->GetNearestTank(pos_map);
+		get_player.Start();
+	}
 
 	if (target != nullptr)
 	{
@@ -332,31 +331,28 @@ void Obj_Enemy::GetPath()
 			next_pos = (fPoint)(*path.begin());
 			UpdateVelocity();
 
-			state = ENEMY_STATE::MOVE;
-			curr_anim = &walk;
+			SetState(ENEMY_STATE::MOVE);
 		}
 		else
 		{
 			if (teleport_timer.ReadSec() >= check_teleport_time && path.size() == 0)
 			{
-				state = ENEMY_STATE::GET_TELEPORT_POINT;
+				SetState(ENEMY_STATE::GET_TELEPORT_POINT);
 				curr_anim = &idle;
 			}
 			else if (path.size() > 0)
 			{
-				state = ENEMY_STATE::MOVE;
-				curr_anim = &walk;
+				SetState(ENEMY_STATE::MOVE);
 			}
 			else
 			{
 				if (!app->pathfinding->IsWalkable(iPoint(pos_map.x, pos_map.y)) && GetOutOfUnwalkableTile())
 				{
-					state = ENEMY_STATE::MOVE;
+					SetState(ENEMY_STATE::MOVE);
 				}
 				else
 				{
-					state = ENEMY_STATE::IDLE;
-					curr_anim = &idle;
+					SetState(ENEMY_STATE::IDLE);
 				}
 
 				path_timer.Start();
@@ -876,6 +872,7 @@ void Obj_Enemy::SetState(ENEMY_STATE new_state)
 		break;
 	case ENEMY_STATE::IDLE:
 		curr_anim = &idle;
+		change_to_teleport.Start();
 		break;
 	case ENEMY_STATE::GET_PATH:
 		break;

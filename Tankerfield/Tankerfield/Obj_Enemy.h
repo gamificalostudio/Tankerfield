@@ -202,7 +202,8 @@ protected:
 	SpawnPoint* teleport_spawnpoint = nullptr;
 	Timer	teleport_timer;
 	Timer	teleport_anim_duration;
-
+	Timer	get_player;
+	Timer	change_to_teleport;
 	bool can_attack = true;
 
 

@@ -127,13 +127,17 @@ void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 
 		case DebugNumericType::SELECT_OBJECT: {
 			ObjectType obj_type = (ObjectType)debug_numeric[(int)DebugNumericType::SELECT_OBJECT].num;
-			Object * obj = app->objectmanager->CreateObject(
-				obj_type,
-				mouse_pos);
-			if (app->objectmanager->IsEnemy(obj_type))
+			if (obj_type != ObjectType::TANK
+				|| obj_type != ObjectType::TANK_MAIN_MENU)
 			{
-				Obj_Enemy * enemy = (Obj_Enemy*)obj;
-				enemy->SetStats(debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].num);
+				Object * obj = app->objectmanager->CreateObject(
+					obj_type,
+					mouse_pos);
+				if (app->objectmanager->IsEnemy(obj_type))
+				{
+					Obj_Enemy * enemy = (Obj_Enemy*)obj;
+					enemy->SetStats(debug_numeric[(int)DebugNumericType::SELECT_ENEMY_LEVEL].num);
+				}
 			}
 		}	break;
 

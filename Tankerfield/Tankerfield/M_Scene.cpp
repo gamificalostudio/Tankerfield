@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <math.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -77,6 +78,8 @@ bool M_Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool M_Scene::Start()
 {
+	SDL_ShowCursor(SDL_DISABLE);
+
 	//path_tex = app->tex->Load("maps/path.png");
 
 	// Load Fxs
@@ -157,12 +160,7 @@ bool M_Scene::Start()
 // Called each loop iteration
 bool M_Scene::PreUpdate()
 {
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)//TODO: Go to pause screen
-	{
-		app->scmanager->FadeToBlack(this, app->main_menu, 1.f, 1.f );
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_P) == KeyState::KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KeyState::KEY_DOWN)
 	{
 		if (app->IsPaused() == true)
 		{
@@ -204,10 +202,14 @@ bool M_Scene::Update(float dt)
 	case GAME_STATE::ENTER_IN_WAVE:
 	{
 		NewWave();
-		game_state = GAME_STATE::IN_WAVE;
+		for (int i = 0; i < 4; ++i)
+		{
+			app->objectmanager->obj_tanks[i]->NewRound(round);
+		}
 		app->audio->PlayMusic(main_music, 2.0f);
 		app->audio->PauseFx(finish_wave_sound_channel, 2000);
 		app->audio->PauseFx(wind_sound_channel, 2000);
+		game_state = GAME_STATE::IN_WAVE;
 		break;
 	}
 	case GAME_STATE::IN_WAVE:
@@ -514,14 +516,32 @@ void M_Scene::CreateEnemyWave()
 void M_Scene::NewWave()
 {
 	Tesla_trooper_units = 30 + 40 * round;
+	Brute_units = 0u;
+	RocketLauncher_units = 0u;
+	Suicidal_units = 0u;
 
 	if (round >= 2)
 	{
-		Brute_units += round - 1;
-		RocketLauncher_units += round - 1;
-		Suicidal_units += round - 1;
-	}
+		uint number_of_special_enemies = 0.8f * round;
+		for (uint iter = 0; iter < number_of_special_enemies; ++iter)
+		{
+			uint r = rand() % 3 + 1;
+			if (r == 1)
+			{
+				Brute_units += 1;
+			}
 
+			else if (r == 2)
+			{
+				RocketLauncher_units += 1;
+			}
+
+			else
+			{
+				Suicidal_units += 1;
+			}
+		}
+	}
 	CreateEnemyWave();
 	app->pick_manager->CreateRewardBoxWave();
 }
