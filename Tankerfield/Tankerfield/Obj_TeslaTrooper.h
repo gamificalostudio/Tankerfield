@@ -21,6 +21,8 @@ public:
 	Obj_TeslaTrooper(fPoint pos);
 	~Obj_TeslaTrooper();
 
+	bool Start() override;
+
 	inline void TeleportOut(float & dt) override;
 
 	inline void TeleportIn(float & dt) override;
@@ -34,6 +36,8 @@ public:
 	bool Draw(Camera * camera) override;
 
 	void SetStats(int level) override;
+
+
 
 private:
 
