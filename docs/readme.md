@@ -76,9 +76,10 @@ For more information about the decisions we have taken, you can check our game d
 ## Gameplay
 
 ## Our social media
-* <img width="32" height="32" src="https://cdn.iconscout.com/icon/free/png-256/github-84-436555.png">[Github](https://github.com/gamificalostudio/Tankerfield)
-* <img width="32" height="32" src="https://cdn.icon-icons.com/icons2/122/PNG/128/twitter_socialnetwork_20007.png">[Twitter](https://twitter.com/gamificalo)
-* <img width="32" height="32" src="https://cdn.iconscout.com/icon/free/png-256/instagram-188-498425.png">[Instagram](https://www.instagram.com/gamificalo)
+
+* [<img width="32" height="32" src="https://cdn.iconscout.com/icon/free/png-256/github-84-436555.png">](https://github.com/gamificalostudio/Tankerfield)
+* [<img width="32" height="32" src="https://cdn.icon-icons.com/icons2/122/PNG/128/twitter_socialnetwork_20007.png">](https://twitter.com/gamificalo)
+* [<img width="32" height="32" src="https://cdn.iconscout.com/icon/free/png-256/instagram-188-498425.png">](https://www.instagram.com/gamificalo)
 
 ## Tools used
 * IDE: Microsoft Visual Studio 2017
