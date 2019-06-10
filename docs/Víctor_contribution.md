@@ -18,11 +18,6 @@ We had one or two point during the development where we had to redesign some imp
 ## Object Manager
 The first task I had in the game code was adding the Object Manager. I took the Entity Manager of my previous project [Alien Earth](https://github.com/VictorSegura99/Alien_Earth) and adapted it to work with STL containers.
 
-## Enemies
-
-### First Tesla Trooper Version
-### Brute
-
 ## Weapons
  
 ### Double Missile 
