@@ -128,7 +128,7 @@ void M_Debug::ManageNumericDebug(fPoint mouse_pos)
 		case DebugNumericType::SELECT_OBJECT: {
 			ObjectType obj_type = (ObjectType)debug_numeric[(int)DebugNumericType::SELECT_OBJECT].num;
 			if (obj_type != ObjectType::TANK
-				|| obj_type != ObjectType::TANK_MAIN_MENU)
+				&& obj_type != ObjectType::TANK_MAIN_MENU)
 			{
 				Object * obj = app->objectmanager->CreateObject(
 					obj_type,

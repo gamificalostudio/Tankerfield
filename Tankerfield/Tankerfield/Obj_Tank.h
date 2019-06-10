@@ -131,7 +131,6 @@ private:
 	void ShootHealingShot();
 	void ShootHealingShotCharged();
 	void ShootLaserShot();
-	void ShootLaserShotCharged();
 	void ShootOil();
 	void ShootOilCharged();
 	void ShootElectroShot();
@@ -139,7 +138,7 @@ private:
 
 	void ReleaseFlameThrower();
 	void ReleaseBasicShot() {};
-
+	void ReleaseLaserShot() {};
 	//- TankDeath
 	void ReviveTank(float dt);
 	void Die();

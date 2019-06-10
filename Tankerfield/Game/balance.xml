@@ -40,7 +40,7 @@
 
     <laser>
       <damage_multiplier num="60"/>
-      <damage_exponential_base num="1.5"/>
+      <damage_exponential_base num="1"/>
     </laser>
 
     <electro_shot>

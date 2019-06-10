@@ -313,6 +313,10 @@ KeyState M_Input::GetControllerTriggerState(int i , SDL_GameControllerAxis axis)
 
 void M_Input::ControllerPlayRumble(int i, float strengh, Uint32 length)
 {
+	if (strengh == 0)
+	{
+		return;
+	}
 	if (i >= 0 && i < MAX_CONTROLLERS && controllers[i].connected)
 	{
 		controllers[i].PlayRumble(strengh, length);
