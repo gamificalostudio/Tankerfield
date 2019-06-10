@@ -45,9 +45,7 @@ For more information about the decisions we have taken, you can check our game d
 
 ## Members:
 
-<p align="center">
-  <img width="600" height="600" src="https://github.com/gamificalostudio/Tankerfield/blob/master/docs/team_images/GroupPhoto.png">
-</p>
+![](https://github.com/gamificalostudio/Tankerfield/raw/master/docs/team_images/GroupPhoto.png)
 
 **Leader**: Jaume Montagut Guix 
 * [Github account](https://github.com/JaumeMontagut)
