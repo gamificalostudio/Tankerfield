@@ -46,6 +46,12 @@ public:
 
 	void Fade_GUI(bool fade_on);
 
+	void ShowGUI();
+
+	void HideGUI();
+
+	bool GetIsVisible();
+
 	/* UI Elements getters */
 
 	void CreateParticleToWeaponFrame();
@@ -72,6 +78,8 @@ public:
 	fPoint margin;
 
 private:
+
+	bool visible = true;
 
 	// Assets ===============================
 

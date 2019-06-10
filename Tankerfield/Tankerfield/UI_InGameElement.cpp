@@ -168,7 +168,7 @@ void UI_IG_Weapon::UpdateLevel()
 	Obj_PickUp* pick_up = (Obj_PickUp*) pointed_obj;
 	int diference = pick_up->level_of_weapon - app->ui->current_gui->player->GetWeaponInfo().level_weapon;
 
-	level_difference->SetMenuState(ELEMENT_STATE::VISIBLE);
+	level_difference->SetState(ELEMENT_STATE::VISIBLE);
 
 	if (diference > 4)
 	{
@@ -180,7 +180,7 @@ void UI_IG_Weapon::UpdateLevel()
 	}
 	else if (diference == 0)
 	{
-		level_difference->SetMenuState(ELEMENT_STATE::HIDDEN);
+		level_difference->SetState(ELEMENT_STATE::HIDDEN);
 	}
 
 	if (diference > 0)

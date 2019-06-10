@@ -86,7 +86,7 @@ void UI_Element::SetParent(UI_Element * new_parent)
 	element_parent->GetSons()->push_back(this);
 }
 
-void UI_Element::SetMenuState(ELEMENT_STATE new_state)
+void UI_Element::SetState(ELEMENT_STATE new_state)
 {
 	state = new_state;
 }

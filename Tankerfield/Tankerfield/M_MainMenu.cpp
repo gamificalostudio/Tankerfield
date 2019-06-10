@@ -665,8 +665,8 @@ void M_MainMenu::SetMenuState(MENU_STATE new_state)
 	case MENU_STATE::INIT_MENU:
 		current_player = 0;
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
-		logo_image->SetMenuState(ELEMENT_STATE::HIDDEN);
-		version_label->SetMenuState(ELEMENT_STATE::HIDDEN);
+		logo_image->SetState(ELEMENT_STATE::HIDDEN);
+		version_label->SetState(ELEMENT_STATE::HIDDEN);
 		break;
 
 	case MENU_STATE::SELECTION:
@@ -704,8 +704,8 @@ void M_MainMenu::SetMenuState(MENU_STATE new_state)
 		menu_navigation->Active();
 
 		menu_navigation->SetStateToBranch(ELEMENT_STATE::VISIBLE);
-		logo_image->SetMenuState(ELEMENT_STATE::VISIBLE);
-		version_label->SetMenuState(ELEMENT_STATE::VISIBLE);
+		logo_image->SetState(ELEMENT_STATE::VISIBLE);
+		version_label->SetState(ELEMENT_STATE::VISIBLE);
 
 		control_helper_label->SetPos(screen_center + fPoint(-330, 260));
 		control_helper_label->SetText("Accept");

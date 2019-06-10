@@ -282,6 +282,11 @@ void Obj_Enemy::Idle()
 
 void Obj_Enemy::Move(const float & dt)
 {
+	if (state == ENEMY_STATE::DEAD)
+	{
+		return;
+	}
+
 	if (IsOnGoal(next_pos))
 	{
 		if (path.size() > 0)
@@ -845,6 +850,11 @@ void Obj_Enemy::Oiled()
 
 inline void Obj_Enemy::ReduceLife(int damage, float dt)
 {
+	if (state == ENEMY_STATE::DEAD)
+	{
+		return;
+	}
+
 	life -= damage;
 
 	damaged_sprite_timer.Start();
@@ -854,6 +864,7 @@ inline void Obj_Enemy::ReduceLife(int damage, float dt)
 
 	if (life <= 0)
 	{
+		life = 0;
 		app->pick_manager->PickUpFromEnemy(pos_map);
 		SetState(ENEMY_STATE::DEAD);
 	}
