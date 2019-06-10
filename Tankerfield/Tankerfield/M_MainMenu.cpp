@@ -42,7 +42,7 @@ bool M_MainMenu::Start()
 
 	// Main menu ------------------------------
 
-	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, - 320.f), UI_ImageDef({10, 710, 915, 260}));
+	logo_image = app->ui->CreateImage(screen_center + fPoint( - 350.f, - 320.f), UI_ImageDef({10, 710, 932, 246}));
 	logo_image->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
 	play_button = app->ui->CreateButton(screen_center + fPoint(-350.f, -120.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
@@ -60,7 +60,7 @@ bool M_MainMenu::Start()
 	exit_button = app->ui->CreateButton(screen_center + fPoint(-350.f, 360.f), UI_ButtonDef({ 10,980,232,88 }, { 255, 980,232,88 }, { 495,970,280 ,136 }, { 785 ,970,280,136 }), this);
 	exit_button->SetLabel({ 0.f,2.f }, UI_LabelDef("Exit", app->font->button_font_22, { 50, 50, 50, 255 }));
 
-	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("v 1.0.0", app->font->label_font_38, {255,255,255,180}));
+	version_label = app->ui->CreateLabel({ screen.GetRight() - 40.f, screen.GetBottom() - 40.f }, UI_LabelDef("GOLD v1.0.0", app->font->label_font_38, {255,255,255,180}));
 	version_label->SetPivot(Pivot::X::RIGHT, Pivot::Y::BOTTOM);
 
 	UI_InteractiveGroupDef menu_panel_def( -1, nullptr);
@@ -138,7 +138,7 @@ bool M_MainMenu::Start()
 	panel_credits = app->ui->CreateImage({ screen.w * 0.5f,screen.h * 0.5f }, UI_ImageDef({ 10,1324,1650,880 }), this);
 	panel_credits->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 
-	credits_logo = app->ui->CreateImage({ screen.w * 0.5f+6,225 }, UI_ImageDef({ 10,2215,580,165 }), this);
+	credits_logo = app->ui->CreateImage({ screen.w * 0.5f,225 }, UI_ImageDef({ 10,2215,560,148 }), this);
 	credits_logo->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	credits_logo->SetParent(panel_credits);
 
