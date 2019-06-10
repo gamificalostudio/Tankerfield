@@ -185,7 +185,6 @@ bool Obj_Tank::Start()
 
 	acceleration_power = tank_stats_node.child("acceleration_power").attribute("value").as_float();
 	brake_power = tank_stats_node.child("brake_power").attribute("value").as_float();
-	recoil_speed = tank_stats_node.child("recoil_speed").attribute("value").as_float();
 
 	speed_colliding_with_building = 2.5f;
 
@@ -1079,7 +1078,7 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 				app->input->ControllerPlayRumble(controller,weapon_info.shot1.rumble_strength*vibration_percentage, weapon_info.shot1.rumble_duration);
 
 			app->objectmanager->CreateObject(weapon_info.shot1.smoke_particle, turr_pos + shot_dir * 1.2f);
-			velocity_map -= shot_dir * recoil_speed;
+			velocity_map -= shot_dir * weapon_info.shot1.recoil;
 		}
 		//- Charged shot
 		else
@@ -1089,8 +1088,8 @@ void Obj_Tank::ShootChargedWeapon(float dt)
 			camera_player->AddTrauma(weapon_info.shot2.trauma);
 			if (app->input->IsConnectedController(controller))
 				app->input->ControllerPlayRumble(controller, weapon_info.shot2.rumble_strength*vibration_percentage, weapon_info.shot2.rumble_duration);
-
 			app->objectmanager->CreateObject(weapon_info.shot2.smoke_particle, turr_pos + shot_dir * 1.2f);
+			velocity_map -= shot_dir * weapon_info.shot2.recoil;
 		}
 		shot_timer.Start();
 		gui->SetChargedShotBar(0.f);

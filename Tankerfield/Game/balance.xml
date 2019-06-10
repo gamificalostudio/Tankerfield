@@ -8,7 +8,6 @@
     <!--Movement-->
     <max_speed value ="6.5"/>
     <brake_power  value="27"/>
-    <recoil_speed value ="100"/>
     <!--Max speed bonuses-->
     <charged_shot_buff value="-3.25"/>
     <road_buff value ="1.75"/>
