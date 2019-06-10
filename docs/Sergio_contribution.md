@@ -1,4 +1,4 @@
-﻿# Sergio Gómez
+﻿# Sergio Gómez - Art & Audio
 ## Contribution
  
 ## Wiki contribution
