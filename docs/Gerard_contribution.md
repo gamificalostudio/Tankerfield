@@ -21,3 +21,16 @@ As a programmer, I had to design and write the Technical Design Document. This d
 **8.** External libraries
 
 **9.** Build delivery method
+
+Furthermore, I also took part in doing the Quality Assurance Plan Document, specifically:
+
+**·** QA Introduction
+
+**.** QA Bug properties
+
+**.** QA Process for QC
+
+## Game prototype
+
+I also took part in the development of our videogame prototype. We used the Unity Game Engine to create this our prototype. I chelped with the tank shooting mechanics and its particle.
+
