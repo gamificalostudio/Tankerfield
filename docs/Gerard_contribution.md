@@ -52,3 +52,19 @@ Tesla trooper (enemy) attack animation.
 
 Win condition.
 
+Tesla trooper (enemy) idle state.
+
+Brute (enemy) idle state.
+
+Suicidal enemy implementation.
+
+Rocket Launcher enemy implementation.
+
+Item / Weapon UI particle when using a pickup.
+
+Pause menu workflow collaboration.
+
+Game installer.
+
+General bugfixes and changes, including:
+
