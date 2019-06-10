@@ -465,8 +465,6 @@ void Obj_Tank::ShootFlameThrower()
 	coll_flame->SetPosToObj();
 
 	coll_flame->SetIsTrigger(true);
-
-	flame_emitter->StopEmission();
 }
 
 void Obj_Tank::ShootOil()
@@ -571,6 +569,7 @@ std::vector<Object*>* Obj_Tank::GetEnemiesHitted()
 
 void Obj_Tank::ReleaseFlameThrower()
 {
+	flame_emitter->StopEmission();
 	coll_flame->SetIsTrigger(false);
 }
 
