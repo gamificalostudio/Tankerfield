@@ -1,3 +1,4 @@
+#include <assert.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -694,25 +695,15 @@ bool M_Render::BlitParticle(SDL_Texture* texture, int x, int y, Camera * current
 	SDL_Rect rect_in_screen;
 	SDL_Rect spritesheet_rect{ 0,0,0,0 };
 
-	//Transform the rect in the word to the rect in screen =======================
-	rect_in_screen.x = -current_camera->rect.x + x * scale;
-	rect_in_screen.y = -current_camera->rect.y + y * scale;
+	//Transform the rect in the word to the rect in screen
+	rect_in_screen.x = x * scale - current_camera->rect.x + current_camera->screen_section.x;
+	rect_in_screen.y = y * scale - current_camera->rect.y + current_camera->screen_section.y;
 
-	if (section != NULL)
-	{
-		spritesheet_rect = *section;
-		rect_in_screen.w = section->w * scale;
-		rect_in_screen.h = section->h * scale;
-	}
-	else
-	{
-		SDL_QueryTexture(texture, NULL, NULL, &rect_in_screen.w, &rect_in_screen.h);
-		spritesheet_rect.w = rect_in_screen.w;
-		spritesheet_rect.h = rect_in_screen.h;
-	}
-	//Move the rect_in_screen to their correct screen =========================== 	
-	rect_in_screen.x += current_camera->screen_section.x;
-	rect_in_screen.y += current_camera->screen_section.y;
+	assert(section != NULL && rectSize != NULL);
+
+	spritesheet_rect = *section;
+	rect_in_screen.w = rectSize->w * scale;
+	rect_in_screen.h = rectSize->h * scale;
 
 	//Print the rect_in_screen ============================================
 	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, NULL, SDL_FLIP_NONE) != 0)
