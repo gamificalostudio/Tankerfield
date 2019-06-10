@@ -570,7 +570,7 @@ void M_Scene::CreateEnemyWave()
 
 void M_Scene::NewWave()
 {
-	Tesla_trooper_units = 30 + 40 * round;
+	Tesla_trooper_units = 10 + 40 * round;
 	Brute_units = 0u;
 	RocketLauncher_units = 0u;
 	Suicidal_units = 0u;
