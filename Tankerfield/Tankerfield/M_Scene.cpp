@@ -278,16 +278,16 @@ bool M_Scene::Update(float dt)
 	mouse_pos = app->map->ScreenToMapI(mouse_pos.x, mouse_pos.y);
 
 	//copied from particle system
-	if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		eFire = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, (fPoint)mouse_pos);
-	}
+	//if (app->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	//{
+	//	eFire = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, (fPoint)mouse_pos);
+	//}
 	//app->render->Blit(torchTex, pos.x - 43, pos.y - 270, &rect);
 
-	if (eFire != nullptr)
-	{
-		eFire->pos_map = (fPoint)mouse_pos;
-	}
+	//if (eFire != nullptr)
+	//{
+	//	eFire->pos_map = (fPoint)mouse_pos;
+	//}
 
 
 	return true;

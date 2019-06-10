@@ -10,6 +10,7 @@
 #include "M_Map.h"
 #include "M_Audio.h"
 #include "M_Input.h"
+#include "Obj_Emitter.h"
 
 //Bullets
 #include "Bullet_Missile.h"
@@ -112,6 +113,11 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 			electro_anim->draw_offset -= (iPoint)app->map->MapToScreenF(GetShotDir());
 			electro_anim->hit_no_enemie = true;
 		}
+	}
+	else if (weapon_info.weapon == WEAPON::FLAMETHROWER)
+	{
+		float turr_length_flamethrower = 1.f;
+		flame_emitter->pos_map = pos_map + shot_dir * turr_length_flamethrower;
 	}
 }
 
@@ -459,6 +465,8 @@ void Obj_Tank::ShootFlameThrower()
 	coll_flame->SetPosToObj();
 
 	coll_flame->SetIsTrigger(true);
+
+	flame_emitter->StopEmission();
 }
 
 void Obj_Tank::ShootOil()

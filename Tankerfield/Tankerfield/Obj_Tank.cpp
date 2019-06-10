@@ -284,7 +284,7 @@ bool Obj_Tank::Start()
 	show_crosshairs = true;
 
 	flame_emitter = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, pos_map);
-	flame_emitter->obj_to_follow = this;
+	flame_emitter->StopEmission();
 
 	return true;
 }
@@ -1097,6 +1097,14 @@ void Obj_Tank::ShootSustainedWeapon()
 	{
 		sustained_shot_timer.Start();
 		shot_timer_basic_bullet.Start();
+
+		//TODO: Make another function pointer for when a sustained button is first pressed, put that code in there
+		//TODO: Even better idea: make a class Weapon, which has as children WeaponCharged and WeaponSustained and so on
+		//Each one of those has a Shoot function which can be overriden as needed
+		if (weapon_info.weapon == WEAPON::FLAMETHROWER)
+		{
+			flame_emitter->StartEmission();
+		}
 	}
 
 	//- Sustained shot

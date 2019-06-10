@@ -114,11 +114,6 @@ bool Obj_Emitter::Update(float dt)
 		to_remove = true;
 	}
 
-	if (obj_to_follow != nullptr)
-	{
-		pos_map = obj_to_follow->pos_map;
-	}
-
 	return true;
 }
 
