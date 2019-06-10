@@ -74,6 +74,8 @@ public:
 	void LoadGame(const char* file);
 	void SaveGame(const char* file) const;
 
+	pugi::xml_node LoadEmitters(pugi::xml_document& psystem_file) const;
+	
 	bool IsPaused();
 
 	void PauseGame();

@@ -10,6 +10,7 @@
 #include "M_Map.h"
 #include "M_Audio.h"
 #include "M_Input.h"
+#include "Obj_Emitter.h"
 
 //Bullets
 #include "Bullet_Missile.h"
@@ -18,7 +19,6 @@
 #include "Bullet_Oil.h"
 #include "Obj_OilPool.h"
 #include "Obj_ElectroShotAnimation.h"
-#include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
 
 void Obj_Tank::InitWeapons()
@@ -114,10 +114,25 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 			electro_anim->hit_no_enemie = true;
 		}
 	}
+	else if (weapon_info.weapon == WEAPON::FLAMETHROWER)
+	{
+		float turr_length_flamethrower = 2.f;
+		flame_emitter->pos_map = turr_pos + shot_dir * turr_length_flamethrower;
+		float shot_dir_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG;
+		float angle_variation = 20;
+		flame_emitter->angleRange = {
+			shot_dir_angle - angle_variation * 0.5f,
+			shot_dir_angle + angle_variation * 0.5f};
+	}
 }
 
 void Obj_Tank::SetWeapon(WEAPON type, uint level)
 {
+	if (weapon_info.weapon == WEAPON::FLAMETHROWER && flame_emitter->active)
+	{
+		flame_emitter->StopEmission();
+	}
+
 	weapon_info.level_weapon = level;
 	weapon_info.weapon = type;
 
@@ -158,6 +173,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot1.recoil = 0;
+		coll_flame->damage = weapon_info.shot1.bullet_damage;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
@@ -421,7 +437,7 @@ void Obj_Tank::ShootLaserShotCharged()
 	laser_bullet->SetBulletProperties(
 		weapon_info.shot1.bullet_speed,
 		weapon_info.shot1.bullet_life_ms,
-		weapon_info.shot1.bullet_damage,
+		weapon_info.shot1.bullet_damage * 2,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45,
 		true);
@@ -432,7 +448,6 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
-	flame->is_holding = true;
 	flame_release_time.Start();
 
 	if(coll_flame->GetIsTrigger() == false)
@@ -564,7 +579,7 @@ std::vector<Object*>* Obj_Tank::GetEnemiesHitted()
 
 void Obj_Tank::ReleaseFlameThrower()
 {
-	flame->is_holding = false;
+	flame_emitter->StopEmission();
 	coll_flame->SetIsTrigger(false);
 }
 

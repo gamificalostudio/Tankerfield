@@ -175,9 +175,6 @@
     <ClCompile Include="Obj_Enemy.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_FlamethrowerFlame.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_HealingAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -250,6 +247,10 @@
     <ClCompile Include="Obj_Smoke.cpp">
       <Filter>Objects\Particles</Filter>
     </ClCompile>
+    <ClCompile Include="ParticlePool.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="Obj_Emitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -453,9 +454,6 @@
     <ClInclude Include="Obj_Enemy.h">
       <Filter>Objects\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Obj_FlamethrowerFlame.h">
-      <Filter>Objects\Bullets</Filter>
-    </ClInclude>
     <ClInclude Include="Obj_HealingAnimation.h">
       <Filter>Objects\Bullets</Filter>
     </ClInclude>
@@ -525,6 +523,10 @@
     <ClInclude Include="Obj_Smoke.h">
       <Filter>Objects\Particles</Filter>
     </ClInclude>
+    <ClInclude Include="ParticlePool.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="Obj_Emitter.h" />
     <ClInclude Include="resource.h">
       <Filter>Data\Icon</Filter>
     </ClInclude>
@@ -608,5 +610,10 @@
     <Image Include="..\Game\textures\ui\icon.ico">
       <Filter>Data\Icon</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Game\psystem_config">
+      <Filter>Data</Filter>
+    </None>
   </ItemGroup>
 </Project>

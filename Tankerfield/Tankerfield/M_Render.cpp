@@ -1,3 +1,4 @@
+#include <assert.h>
 
 #include "Brofiler/Brofiler.h"
 
@@ -663,7 +664,6 @@ bool M_Render::DrawIsoCircle(int x, int y, int radius, Camera* camera, Uint8 r, 
 
 }
 
-
 bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int & h, Camera* camera) const
 {
 	int scale = app->win->GetScale();
@@ -671,4 +671,46 @@ bool M_Render::IsOnCamera(const int & x, const int & y, const int & w, const int
 	SDL_Rect r = { x*scale,y*scale,w*scale,h*scale };
 
 	return SDL_HasIntersection(&r, &camera->rect);
+}
+
+// Blit particle to screen
+bool M_Render::BlitParticle(SDL_Texture* texture, int x, int y, Camera * current_camera, const SDL_Rect* section, const SDL_Rect* rectSize, const SDL_Color & color, const SDL_BlendMode & blend_mode, float speed, double angle) const
+{
+	if (SDL_SetTextureColorMod(texture, color.r, color.g, color.b) != 0)
+	{
+		LOG("Cannot set texture color mode. SDL_SetTextureColorMod error: %s", SDL_GetError());
+	}
+	if (SDL_SetTextureAlphaMod(texture, color.a) != 0)
+	{
+		LOG("Cannot set texture alpha mode. SDL_SetTextureAlphaMod error: %s", SDL_GetError());
+	}
+	if (SDL_SetTextureBlendMode(texture, blend_mode) != 0)
+	{
+		LOG("Cannot set texture blend mode. SDL_SetTextureBlendMode error: %s", SDL_GetError());
+	}
+
+	bool ret = true;
+	uint scale = app->win->GetScale();
+
+	SDL_Rect rect_in_screen;
+	SDL_Rect spritesheet_rect{ 0,0,0,0 };
+
+	//Transform the rect in the word to the rect in screen
+	rect_in_screen.x = x * scale - current_camera->rect.x + current_camera->screen_section.x;
+	rect_in_screen.y = y * scale - current_camera->rect.y + current_camera->screen_section.y;
+
+	assert(section != NULL && rectSize != NULL);//Partcles can't take the whole particle atlas or not have a rect
+
+	spritesheet_rect = *section;
+	rect_in_screen.w = rectSize->w * scale;
+	rect_in_screen.h = rectSize->h * scale;
+
+	//Print the rect_in_screen ============================================
+	if (SDL_RenderCopyEx(renderer, texture, &spritesheet_rect, &rect_in_screen, angle, NULL, SDL_FLIP_NONE) != 0)
+	{
+		LOG("Cannot blit to main_object. SDL_RenderCopy error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
 }

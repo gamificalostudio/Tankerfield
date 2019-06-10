@@ -34,12 +34,12 @@
 #include "Item_InstantHelp.h"
 #include "Obj_Portal.h"
 #include "HealingShot_Area.h"
-#include "Obj_FlamethrowerFlame.h"
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
 #include "M_PickManager.h"
 #include "Obj_Enemy.h"
 #include "Obj_Smoke.h"
+#include "Obj_Emitter.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -267,9 +267,6 @@ bool Obj_Tank::Start()
 	coll_flame->is_sensor = true;
 	coll_flame->SetIsTrigger(false);
 
-	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
-	flame->tank = this;
-
 	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("charging").child("animation");
 
 	text_charging = app->tex->Load("textures/Objects/tank/texture_charging.png");
@@ -286,6 +283,9 @@ bool Obj_Tank::Start()
 
 	show_crosshairs = true;
 
+	flame_emitter = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, pos_map);
+	flame_emitter->StopEmission();
+	
 	controller = tank_num;
 
 	return true;
@@ -421,7 +421,6 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
-
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
@@ -809,9 +808,12 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 		HealingShot_Area* area = (HealingShot_Area*)c1->GetObj();
 		if (this->GetLife() < GetMaxLife())
 		{
-			Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
-			new_particle->tank = this;
-			IncreaseLife(area->player->weapon_info.shot2.bullet_healing);
+			if (this->GetLife() > 0 && area->player != nullptr)
+			{
+				Obj_Healing_Animation* new_particle = (Obj_Healing_Animation*)app->objectmanager->CreateObject(ObjectType::HEALING_ANIMATION, pos_map);
+				new_particle->tank = this;
+				IncreaseLife(area->player->weapon_info.shot2.bullet_healing);
+			}
 		}
 	}break;
 
@@ -829,7 +831,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 		if (curr_speed > 0.f)
 		{
 			Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
-			enemy->ReduceLife(curr_speed * run_over_damage_multiplier, dt);
+			enemy->ReduceLife(curr_speed * run_over_damage_multiplier);
 			ReduceSpeed(run_over_speed_reduction);
 		}
 	}break;
@@ -1101,6 +1103,14 @@ void Obj_Tank::ShootSustainedWeapon()
 	{
 		sustained_shot_timer.Start();
 		shot_timer_basic_bullet.Start();
+
+		//TODO: Make another function pointer for when a sustained button is first pressed, put that code in there
+		//TODO: Even better idea: make a class Weapon, which has as children WeaponCharged and WeaponSustained and so on
+		//Each one of those has a Shoot function which can be overriden as needed
+		if (weapon_info.weapon == WEAPON::FLAMETHROWER)
+		{
+			flame_emitter->StartEmission();
+		}
 	}
 
 	//- Sustained shot
@@ -1341,11 +1351,16 @@ bool Obj_Tank::ReleaseInteract()
 
 void Obj_Tank::Die()
 {
+	if (flame_emitter->active)
+	{
+		flame_emitter->StopEmission();
+	}
 	app->audio->PlayFx(die_sfx);
 	Obj_Fire* dead_fire = (Obj_Fire*)app->objectmanager->CreateObject(ObjectType::FIRE_DEAD, pos_map);
 	dead_fire->tank = this;
 	SetWeapon(WEAPON::BASIC, app->scene->round);
 	SetItem(ItemType::NO_TYPE);
+	coll_flame->SetIsTrigger(false);
 }
 
 bool Obj_Tank::Alive() const
