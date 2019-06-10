@@ -2,10 +2,6 @@
 Tankerfield is a cooperative survival tank game made by 8 students in UPC.
 Each one of you will control a tank and defend against enldess rounds of invaders to try to survive as much as you can.
 
-# Trailer
-
-<iframe width="1024" height="576"src="https://www.youtube.com/embed/QC2n7g_kISs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 # Members:
 
 * **Leader:** Jaume Montagut Guix
