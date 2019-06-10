@@ -42,3 +42,13 @@ More of my individual contributions to the project are explained below:
 
 The initial pathfinding and walkability of the enemies and how they relate to the scene/map itself.
 
+Basic enemies attack method or template.
+
+A wave system which spawns the enemies over time. It was removed from the project, as we decided to implement enemy spawners and it was a lot more different that was my wave system.
+
+The reward zones. It consists on a defined group of enemies that are positioned on a strategic place in the map and the player needs to kill them in order to get a prize. They could be loaded from Tiled, so it could be more comfortable and effective to create them. Again, it was eliminated from the project, because our game had to be a lot more dynamic.
+
+Tesla trooper (enemy) attack animation.
+
+Win condition.
+
