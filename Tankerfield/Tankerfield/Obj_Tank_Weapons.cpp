@@ -395,8 +395,7 @@ void Obj_Tank::ShootHealingShotCharged()
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45);
 
-	heal_area->tank_parent = this;
-
+	heal_area->SetPlayer(this);
 }
 
 void Obj_Tank::ShootLaserShot()
