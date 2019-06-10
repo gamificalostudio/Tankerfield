@@ -83,3 +83,11 @@ General changes, including:
 Many tweaks on the enemies.
 
 Tank moves slower when charging a shot.
+
+## Extra
+
+During the development of this project, I did a research of an Input Combos implementation in videogames. It can be checked out on the link below:
+
+https://vsrushy.github.io/Research-Input_Combos/
+
+Although we didn't use it in our project, it could be useful for the future. It is important to mention that a combos system is a lot more meaningful and useful in other types of games.
