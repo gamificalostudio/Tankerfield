@@ -14,11 +14,6 @@ public:
 
 	Laser_Bullet(fPoint pos);
 	~Laser_Bullet();
-
-public:
-
-
-public:
 	bool Start();
 
 public:
@@ -26,7 +21,7 @@ public:
 	uint kill_counter_max = 0u;
 
 private:
-
+	int sound;
 };
 
 #endif
