@@ -4,7 +4,7 @@
     <particleAtlas name="textures/particles.png">
       
       <emitter type ="fire">
-        <angleRange min ="80" max ="110"/>
+        <angleRange min ="270" max ="290"/>
         <rotSpeed value ="0" randMin = "-1" randMax ="1"/>
         <startSpeed value ="25" randMin = "0" randMax ="1"/>
         <endSpeed value ="25" randMin = "0" randMax ="1"/>

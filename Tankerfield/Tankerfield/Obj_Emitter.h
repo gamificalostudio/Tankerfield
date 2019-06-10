@@ -80,6 +80,8 @@ public:
 	void StopEmission(double timer = 0.0f);
 
 	void CalculateDrawVariables() override;
+
+	friend class Obj_Tank;
 };
 
 #endif
