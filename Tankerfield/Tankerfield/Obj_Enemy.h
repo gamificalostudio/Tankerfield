@@ -52,7 +52,7 @@ public:
 
 	void DrawAttackRange(Camera * camera);
 
-	inline void ReduceLife(int damage, float dt);
+	inline void ReduceLife(float damage);
 
 	void SetState(ENEMY_STATE new_state);
 
@@ -102,7 +102,7 @@ protected:
 protected:
 
 	//VARIABLES ================================
-	int life = 0;
+	float life = 0.f;
 	float speed = 0.f;
 	float original_speed = 0.f;
 

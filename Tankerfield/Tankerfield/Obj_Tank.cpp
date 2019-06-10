@@ -829,7 +829,7 @@ void Obj_Tank::OnTriggerEnter(Collider * c1, float dt)
 		if (curr_speed > 0.f)
 		{
 			Obj_Enemy * enemy = (Obj_Enemy*)c1->GetObj();
-			enemy->ReduceLife(curr_speed * run_over_damage_multiplier, dt);
+			enemy->ReduceLife(curr_speed * run_over_damage_multiplier);
 			ReduceSpeed(run_over_speed_reduction);
 		}
 	}break;
@@ -1346,6 +1346,7 @@ void Obj_Tank::Die()
 	dead_fire->tank = this;
 	SetWeapon(WEAPON::BASIC, app->scene->round);
 	SetItem(ItemType::NO_TYPE);
+	coll_flame->SetIsTrigger(false);
 }
 
 bool Obj_Tank::Alive() const

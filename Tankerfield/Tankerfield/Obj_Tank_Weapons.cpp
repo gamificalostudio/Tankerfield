@@ -158,6 +158,7 @@ void Obj_Tank::SetWeapon(WEAPON type, uint level)
 		weapon_info.shot1.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot2.smoke_particle = ObjectType::CANNON_FIRE;
 		weapon_info.shot1.recoil = 0;
+		coll_flame->damage = weapon_info.shot1.bullet_damage;
 		break;
 	case WEAPON::DOUBLE_MISSILE:
 		weapon_info.type = WEAPON_TYPE::CHARGED;
