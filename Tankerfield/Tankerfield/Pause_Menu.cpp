@@ -18,6 +18,8 @@
 #include "UI_Label.h"
 #include "UI_InteractiveGroup.h"
 
+#include "Controllers_Settings.h"
+
 Pause_Menu::Pause_Menu()
 {
 	button_enter_sfx = app->audio->LoadFx("audio/Fx/main_menu/button_enter.wav", 20);
@@ -58,8 +60,15 @@ Pause_Menu::Pause_Menu()
 	pause_navigation->AddElement(options_menu);
 	pause_navigation->AddElement(main_menu);
 
-	HidePauseMenu();
+	controllers_setting[0] = DBG_NEW Controllers_Settings(fPoint(0, 0), 0, MENU_TYPE::PAUSE_MENU);
+	controllers_setting[1] = DBG_NEW Controllers_Settings(fPoint(screen.w*0.5f, 0), 1, MENU_TYPE::PAUSE_MENU);
+	controllers_setting[2] = DBG_NEW Controllers_Settings(fPoint(0, screen.h*0.5f), 2, MENU_TYPE::PAUSE_MENU);
+	controllers_setting[3] = DBG_NEW Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f), 3, MENU_TYPE::PAUSE_MENU);
 
+	for(uint i = 0; i < 4; i++)
+		controllers_setting[i]->HideControllersSettings();
+
+	HidePauseMenu();
 }
 
 bool Pause_Menu::UI_OnHoverEnter(UI_Element * element)
@@ -85,6 +94,15 @@ void Pause_Menu::HidePauseMenu()
 
 	panel_panel->SetStateToBranch(ELEMENT_STATE::HIDDEN);
 	pause_navigation->SetStateToBranch(ELEMENT_STATE::HIDDEN);
+}
+
+void Pause_Menu::Delete()
+{
+	for (uint i = 0; i < 4; i++)
+	{
+		delete controllers_setting[i];
+		controllers_setting[i] = nullptr;
+	}
 }
 
 
