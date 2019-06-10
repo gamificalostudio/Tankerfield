@@ -65,6 +65,9 @@ Pause_Menu::Pause_Menu()
 	controllers_setting[2] = DBG_NEW Controllers_Settings(fPoint(0, screen.h*0.5f), 2, MENU_TYPE::PAUSE_MENU);
 	controllers_setting[3] = DBG_NEW Controllers_Settings(fPoint(screen.w*0.5f, screen.h*0.5f), 3, MENU_TYPE::PAUSE_MENU);
 
+	for(uint i = 0; i < 4; i++)
+		controllers_setting[i]->HideControllersSettings();
+
 	HidePauseMenu();
 }
 

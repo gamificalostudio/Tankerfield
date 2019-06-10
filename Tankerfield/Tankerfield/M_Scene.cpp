@@ -329,6 +329,8 @@ bool M_Scene::CleanUp()
 	delete(leaderboard);
 	leaderboard = nullptr;
 
+	//pause_menu->Delete();
+
 	return true;
 }
 
