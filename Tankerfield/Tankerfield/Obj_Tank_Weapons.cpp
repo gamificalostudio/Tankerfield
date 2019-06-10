@@ -24,7 +24,7 @@
 void Obj_Tank::InitWeapons()
 {
 	//Basic weapon starting properties
-	SetWeapon(WEAPON::LASER_SHOT, 1u);
+	SetWeapon(WEAPON::BASIC, 1u);
 
 	//BASIC SHOOT
 	shot1_function[(uint)WEAPON::BASIC] = &Obj_Tank::ShootBasic;

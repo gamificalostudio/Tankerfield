@@ -7,16 +7,9 @@
 #include "Obj_Tank.h"
 #include "M_Textures.h"
 #include "M_AnimationBank.h"
+#include "M_Audio.h"
 
 Laser_Bullet::Laser_Bullet(fPoint pos) : Obj_Bullet(pos)
-{
-}
-
-Laser_Bullet::~Laser_Bullet()
-{
-}
-
-bool Laser_Bullet::Start()
 {
 	pugi::xml_node bullet_node = app->config.child("object").child("laser_bullet");
 
@@ -25,9 +18,20 @@ bool Laser_Bullet::Start()
 
 	tex = app->tex->Load(bullet_node.child("tex").attribute("path").as_string());
 	curr_tex = tex;
-
 	draw_offset = { 35, 14 };
 
+	kill_counter_max = bullet_node.child("kill_counter_max").attribute("value").as_int();
+
+	sound = app->audio->LoadFx("audio/Fx/tank/weapons/tank_laser_shot.wav", 10);
+}
+
+Laser_Bullet::~Laser_Bullet()
+{
+}
+
+bool Laser_Bullet::Start()
+{
+	
 	if (coll)
 	{
 		coll->SetIsTrigger(true);
@@ -39,11 +43,11 @@ bool Laser_Bullet::Start()
 
 		coll->SetObjOffset({ -0.25f, -0.25f });
 	}
-	if (!charged)
-	{
-		kill_counter_max = bullet_node.child("kill_counter_max").attribute("value").as_int();
-	}
+
 	bullet_life_ms_timer.Start();
+
+	app->audio->PlayFx(sound);
+	
 	return true;
 }
 
