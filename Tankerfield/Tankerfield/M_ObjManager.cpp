@@ -354,10 +354,6 @@ void M_ObjManager::FillPool(ObjectType type, uint number)
 			ret = DBG_NEW Eletro_Shot_Animation(pos);
 			ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
 			break;
-		case ObjectType::FLAMETHROWER_FLAME:
-			ret = DBG_NEW Obj_FlamethrowerFlame(pos);
-			ret->type = ObjectType::FLAMETHROWER_FLAME;
-			break;
 		case ObjectType::HEALING_AREA_SHOT:
 			ret = DBG_NEW HealingShot_Area(pos);
 			ret->type = ObjectType::HEALING_AREA_SHOT;

@@ -116,7 +116,7 @@ void Obj_Tank::UpdateWeaponsWithoutBullets(float dt)
 	}
 	else if (weapon_info.weapon == WEAPON::FLAMETHROWER)
 	{
-		float turr_length_flamethrower = 1.5f;
+		float turr_length_flamethrower = 2.f;
 		flame_emitter->pos_map = turr_pos + shot_dir * turr_length_flamethrower;
 		float shot_dir_angle = atan2(-shot_dir.y, shot_dir.x) * RADTODEG;
 		float angle_variation = 20;
