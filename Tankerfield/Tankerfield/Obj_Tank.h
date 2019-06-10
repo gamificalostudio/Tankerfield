@@ -17,7 +17,6 @@ class Camera;
 class Obj_PickUp;
 class Player_GUI;
 class UI_IG_Helper;
-class Obj_FlamethrowerFlame;
 
 enum class INPUT_METHOD {
 	KEYBOARD_MOUSE,
@@ -240,8 +239,8 @@ private:
 
 	std::vector<Object*> enemies_hitted;
 
-	//Flamethrower shot
-	Obj_FlamethrowerFlame * flame = nullptr;
+	//Flamethrower
+	Obj_Emitter * flame_emitter = nullptr;
 
 public:
 

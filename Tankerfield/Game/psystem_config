@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<emitters>
+    <particleAtlas name="textures/particles.png">
+      
+      <emitter type ="fire">
+        <angleRange min ="0" max ="360"/>
+        <rotSpeed value ="0" randMin = "-1" randMax ="1"/>
+        <startSpeed value ="20" randMin = "0" randMax ="1"/>
+        <endSpeed value ="0" randMin = "0" randMax ="1"/>
+        <startSize value ="180" randMin ="0" randMax ="1"/>
+        <endSize value =" 40" randMin ="1" randMax ="1"/>
+        <emitNumber value ="1"/>
+        <emitVariance value ="0" randMin = "0" randMax ="1"/>
+        <maxParticleLife value ="100" randMin = "0" randMax ="1"/>
+        <textureRect x="128" y="256" w="256" h="256"/>
+        <startColor r ="255" g="123" b="0" a="92"/>
+        <endColor r ="123" g="62" b="0" a ="0"/>
+        <blendMode mode ="blend"/>
+        <lifetime value ="-1"/>
+      </emitter>
+      
+    </particleAtlas>
+</emitters>

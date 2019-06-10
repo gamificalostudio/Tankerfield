@@ -149,6 +149,7 @@ private:
 	RewardZone* reward_zone_02 = nullptr;
 
 	NewRoundAnimation new_round_animation;
+	Obj_Emitter* eFire = nullptr;
 };
 
 #endif // __j1SCENE_H__

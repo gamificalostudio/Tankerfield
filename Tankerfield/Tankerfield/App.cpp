@@ -29,6 +29,7 @@
 #include "Options_Menu.h"
 #include "Pause_Menu.h"
 #include "M_VideoPlayer.h"
+#include "ParticleSystem.h"
 
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
@@ -54,6 +55,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	main_menu = DBG_NEW M_MainMenu();
 	debug = DBG_NEW M_Debug();
 	video = DBG_NEW Video();
+
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
 
@@ -515,5 +517,18 @@ bool App::SavegameNow() const
 
 	data.reset();
 	want_to_save = false;
+	return ret;
+}
+
+pugi::xml_node App::LoadEmitters(pugi::xml_document& psystem_file) const
+{
+	pugi::xml_node ret;
+
+	pugi::xml_parse_result result = psystem_file.load_file("psystem_config");
+
+	if (result == NULL)
+		LOG("Could not load xml file config.xml. pugi error: %s", result.description());
+	else
+		ret = psystem_file.child("emitters");
 	return ret;
 }

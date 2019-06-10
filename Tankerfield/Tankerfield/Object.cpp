@@ -83,7 +83,7 @@ void Object::SetDamage(float damage)
 
 void Object::CalculateDrawVariables()
 {
-	if (is_isometric == true)
+	if (is_isometric)
 	{
 		pos_screen = app->map->MapToScreenF(pos_map);
 	}
