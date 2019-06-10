@@ -14,6 +14,9 @@ struct EmitterData;
 
 class Obj_Emitter : public Object
 {
+public:
+	Object * obj_to_follow = nullptr;
+
 private:
 	fPoint angleRange = { 0.0f, 360.0f };
 	float startSpeed = 0.0f;

@@ -284,6 +284,7 @@ bool Obj_Tank::Start()
 	show_crosshairs = true;
 
 	flame_emitter = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, pos_map);
+	flame_emitter->obj_to_follow = this;
 
 	return true;
 }
@@ -422,7 +423,6 @@ void Obj_Tank::Movement(float dt)
 		tutorial_move->Destroy();
 		tutorial_move = nullptr;
 	}
-
 }
 
 void Obj_Tank::InputMovementKeyboard(fPoint & input)
