@@ -71,6 +71,19 @@
           <frame name="sprite15" x="88" y="176" w="44" h="44"></frame>
         </dir>
       </spawn>
+      <idle speed="10" rotation="counter-clockwise" first_dir_angle ="0">
+        <dir>
+          <frame name="sprite1"  x="0"  y="0"   w="44" h="44"></frame>
+          <frame name="sprite2"  x="44" y="0"   w="44" h="44"></frame>
+          <frame name="sprite3"  x="88" y="0"   w="44" h="44"></frame>
+          <frame name="sprite4"  x="0"  y="44"  w="44" h="44"></frame>
+          <frame name="sprite5"  x="44" y="44"  w="44" h="44"></frame>
+          <frame name="sprite6"  x="88" y="44"  w="44" h="44"></frame>
+          <frame name="sprite7"  x="0"  y="88"  w="44" h="44"></frame>
+          <frame name="sprite8"  x="44" y="88"  w="44" h="44"></frame>
+          <frame name="sprite9"  x="88" y="88"  w="44" h="44"></frame>
+        </dir>
+      </idle>
     </animations>
   </portal>
   <cycle-progress-bar speed="60" rotation="counter-clockwise" first_dir_angle ="0">

@@ -53,6 +53,8 @@ enum class ObjectType
 	//EMITTERS
 	EMITTER_FIRE,
 
+	SPAWNPOINT,
+
 	MAX
 };
 

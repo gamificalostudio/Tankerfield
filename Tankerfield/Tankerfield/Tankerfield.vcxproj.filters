@@ -251,6 +251,9 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Obj_Emitter.cpp" />
+    <ClCompile Include="Obj_SpawnPoint.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="M_AnimationBank.h">
@@ -529,6 +532,9 @@
     <ClInclude Include="Obj_Emitter.h" />
     <ClInclude Include="resource.h">
       <Filter>Data\Icon</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj_SpawnPoint.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
