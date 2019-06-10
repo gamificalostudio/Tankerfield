@@ -53,6 +53,11 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 
 Obj_Enemy::~Obj_Enemy()
 {
+	if (life_collider != nullptr)
+	{
+		life_collider->Destroy();
+		life_collider = nullptr;
+	}
 }
 
 bool Obj_Enemy::Update(float dt)
