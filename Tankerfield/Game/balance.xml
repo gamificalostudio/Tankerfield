@@ -49,7 +49,7 @@
     </electro_shot>
 
     <flamethrower>
-      <damage_multiplier num="5"/>
+      <damage_multiplier num="100"/>
       <damage_exponential_base num="1.5"/>
     </flamethrower>
 

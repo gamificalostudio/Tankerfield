@@ -53,7 +53,7 @@ public:
 
 	void DrawAttackRange(Camera * camera);
 
-	inline void ReduceLife(int damage, float dt);
+	inline void ReduceLife(float damage);
 
 	void SetState(ENEMY_STATE new_state);
 
@@ -103,7 +103,7 @@ protected:
 protected:
 
 	//VARIABLES ================================
-	int life = 0;
+	float life = 0.f;
 	float speed = 0.f;
 	float original_speed = 0.f;
 
@@ -187,6 +187,10 @@ protected:
 
 	uint electocuted;
 	uint channel_electrocuted;
+
+	Timer timer_to_hit_sound;
+	uint time_to_hit_sound_sec = 0u;
+	bool hit_first_time = true;
 
 	// BURN VARIABLES =======================
 	bool burn_fist_enter = true;

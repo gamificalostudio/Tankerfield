@@ -37,7 +37,9 @@ Obj_Enemy::Obj_Enemy(fPoint pos) : Object(pos)
 	range_pos.radius = 0.5f;
 
 	times_to_repeat_animation = 3u;
-	
+
+	time_to_hit_sound_sec = 1u;
+	timer_to_hit_sound.Start();
 
 	path_timer.Start();
 
@@ -638,11 +640,11 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 		if ((collider->GetTag() == TAG::BULLET) || (collider->GetTag() == TAG::FRIENDLY_BULLET))
 		{
-			ReduceLife(collider->damage, dt);
+			ReduceLife(collider->damage);
 		}
 		else if (collider->GetTag() == TAG::BULLET_OIL)
 		{
-			ReduceLife(life -= collider->damage, dt);
+			ReduceLife(life -= collider->damage);
 			oiled = true;
 			oiled_timer.Start();
 			damaged_sprite_timer.Start();
@@ -671,7 +673,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 			}
 			else
 			{
-				ReduceLife(collider->damage, dt);
+				ReduceLife(collider->damage*dt);
 			}
 		}
 	}
@@ -752,7 +754,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 			}
 			else
 			{
-				ReduceLife(collider->damage, dt);
+				ReduceLife(collider->damage*dt);
 			}
 		}
 	}
@@ -798,7 +800,7 @@ void Obj_Enemy::Oiled()
 		}
 }
 
-inline void Obj_Enemy::ReduceLife(int damage, float dt)
+inline void Obj_Enemy::ReduceLife(float damage)
 {
 	if (state == ENEMY_STATE::DEAD)
 	{
@@ -819,7 +821,12 @@ inline void Obj_Enemy::ReduceLife(int damage, float dt)
 	}
 	else
 	{
-		app->audio->PlayFx(sfx_hit);
+		if (timer_to_hit_sound.ReadSec() >= time_to_hit_sound_sec || hit_first_time)
+		{
+			hit_first_time = false;
+			app->audio->PlayFx(sfx_hit);
+			timer_to_hit_sound.Start();
+		}
 	}
 }
 
