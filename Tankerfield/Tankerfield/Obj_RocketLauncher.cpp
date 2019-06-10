@@ -42,10 +42,8 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	walk.frames = app->anim_bank->LoadFrames(anim_node.child("walk"));
 	attack.frames = app->anim_bank->LoadFrames(anim_node.child("attack"));
 	death.frames = app->anim_bank->LoadFrames(anim_node.child("death"));
-
-	curr_anim = &idle;
+	SetState(ENEMY_STATE::IDLE);
 	
-	state = ENEMY_STATE::IDLE;
 
 	//spawn_draw_offset = { 49, 50 };
 	scale = 1.5f;
@@ -56,10 +54,7 @@ Obj_RocketLauncher::Obj_RocketLauncher(fPoint pos) : Obj_Enemy(pos)
 	check_path_time = 2.0f;
 	damaged_sprite_time = 75;
 
-	coll_w = 0.5f;
-	coll_h = 0.5f;
-	coll = app->collision->AddCollider(pos, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
-	coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+
 	can_attack = false;
 	distance_to_player = 10; //this is in tiles
 	deltatime_to_check_distance = 1;
@@ -84,6 +79,17 @@ Obj_RocketLauncher::~Obj_RocketLauncher()
 
 void Obj_RocketLauncher::Spawn(const float& dt)
 {
+	if (coll==nullptr)
+	{
+		coll_w = 0.5f;
+		coll_h = 0.5f;
+		coll = app->collision->AddCollider(pos_map, coll_w, coll_h, TAG::ENEMY, BODY_TYPE::DYNAMIC, 0.f, this);
+		coll->SetObjOffset({ -coll_w * 0.5f, -coll_h * 0.5f });
+	}
+	else
+	{
+		coll->SetIsTrigger(true);
+	}
 	state = ENEMY_STATE::GET_PATH;
 }
 
@@ -92,12 +98,9 @@ void Obj_RocketLauncher::Attack()
 	if (life > 0 && app->scene->game_state != GAME_STATE::NO_TYPE)
 	{
 		if (target != nullptr
-			/*&& target->coll->GetTag() == TAG::PLAYER*/
-			/*&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared*/
 			&& perf_timer.ReadMs() > (double)attack_frequency)
 		{
 			curr_anim = &attack;
-			//target->ReduceLife(attack_damage);
 			perf_timer.Start();
 			app->audio->PlayFx(sfx_attack);
 			ShootMissile();
@@ -165,7 +168,7 @@ void Obj_RocketLauncher::ShootMissile()
 	if (target != nullptr
 		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared)
 	{
-		if (target->Alive())
+		if (!target->Alive())
 		{
 			SetState(ENEMY_STATE::GET_PATH);
 		}

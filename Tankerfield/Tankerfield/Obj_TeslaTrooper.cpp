@@ -63,7 +63,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 	sfx_hit = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/hit.wav", 25);
 	sfx_death = app->audio->LoadFx("audio/Fx/entities/enemies/tesla-trooper/death.wav", 25);
 
-	app->audio->PlayFx(sfx_spawn);
+	
 	draw = false;
 	state = ENEMY_STATE::SPAWN; //enemy
 
@@ -82,7 +82,7 @@ Obj_TeslaTrooper::Obj_TeslaTrooper(fPoint pos) : Obj_Enemy(pos)
 
 	damaged_sprite_time = 75;
 
-	app->audio->PlayFx(sfx_spawn);
+	
 }
 
 void Obj_TeslaTrooper::SetStats(int level)
@@ -99,6 +99,12 @@ void Obj_TeslaTrooper::SetStats(int level)
 
 Obj_TeslaTrooper::~Obj_TeslaTrooper()
 {
+}
+
+bool Obj_TeslaTrooper::Start()
+{
+	app->audio->PlayFx(sfx_spawn);
+	return true;
 }
 
 

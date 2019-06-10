@@ -24,10 +24,6 @@ public:
 
 public:
 	int healing = 15;
-
-public:
-	Obj_Tank* tank_parent = nullptr;
-
 };
 
 #endif // !__HEALING_AREA_SHOT__

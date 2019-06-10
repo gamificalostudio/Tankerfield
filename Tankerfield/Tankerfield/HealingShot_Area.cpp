@@ -40,7 +40,7 @@ bool HealingShot_Area::Start()
 
 bool HealingShot_Area::Update(float dt)
 {
-	pos_map = tank_parent->pos_map;
+	pos_map = player->pos_map;
 
 	if (anim.Finished())
 	{

@@ -213,58 +213,20 @@ void Obj_Enemy::RecheadPoint()
 
 void Obj_Enemy::Dead()
 {
-	if (curr_anim != &death)
+	if (death.Finished())
 	{
-		//curr_tex = tex;
-		curr_anim = &death;
-		app->audio->PlayFx(sfx_death);
-		if (coll != nullptr)
-		{
-			coll->Destroy();
-			coll = nullptr;
-		}
-		if (life_collider != nullptr)
-		{
-			life_collider->Destroy();
-			life_collider = nullptr;
-		}
-	}
-	else
-	{
-		if (death.Finished())
-		{
-			to_remove = true;
-
-		}
+		return_to_pool = true;
+		app->pick_manager->PickUpFromEnemy(pos_map);
 	}
 }
 
 void Obj_Enemy::ElectroDead()
 {
-	if (curr_anim != &electro_dead)
+	if (electro_dead.Finished())
 	{
-		// DROP A PICK UP ITEM 
+		return_to_pool = true;
+		app->audio->PauseFx(channel_electrocuted);
 		app->pick_manager->PickUpFromEnemy(pos_map);
-
-		bool_electro_dead = true;
-		curr_tex = tex_electro_dead;
-		curr_anim = &electro_dead;
-		app->audio->PlayFx(sfx_death);
-		draw_offset = electrocuted_draw_offset;
-		if (coll != nullptr)
-		{
-			coll->Destroy();
-			coll = nullptr;
-		}
-	}
-	else
-	{
-		if (electro_dead.Finished())
-		{
-			to_remove = true;
-			app->audio->PauseFx(channel_electrocuted);
-
-		}
 	}
 }
 
@@ -292,9 +254,9 @@ void Obj_Enemy::Move(const float & dt)
 		if (path.size() > 0)
 			path.erase(path.begin());
 		else
-			state = ENEMY_STATE::GET_PATH;
-
-		state = ENEMY_STATE::RECHEAD_POINT;
+			SetState(ENEMY_STATE::GET_PATH);
+			
+		SetState(ENEMY_STATE::RECHEAD_POINT);
 	}
 
 	if (update_velocity_vec.ReadSec() > 1)
@@ -306,7 +268,7 @@ void Obj_Enemy::Move(const float & dt)
 		curr_anim = &walk;
 
 	if (path_timer.ReadSec() >= check_path_time)
-		state = ENEMY_STATE::GET_PATH;
+		SetState(ENEMY_STATE::GET_PATH);
 
 	UpdatePos(dt);
 
@@ -422,7 +384,7 @@ inline void Obj_Enemy::GetTeleportPoint()
 
 		}
 		teleport_spawnpoint = nearest_spawners_points;
-		state = ENEMY_STATE::TELEPORT_IN;
+		SetState(ENEMY_STATE::TELEPORT_IN);
 		draw = false;
 		in_portal = &portal_animation;
 		angle = -90;
@@ -431,8 +393,7 @@ inline void Obj_Enemy::GetTeleportPoint()
 	}
 	else
 	{
-		state = ENEMY_STATE::GET_PATH;
-
+		SetState(ENEMY_STATE::GET_PATH);
 	}
 	teleport_timer.Start();
 }
@@ -451,7 +412,7 @@ inline void Obj_Enemy::TeleportIn(float & dt)
 		{
 			in_portal->Reset();
 			pos_map = teleport_spawnpoint->pos;
-			state = ENEMY_STATE::TELEPORT_OUT;
+			SetState(ENEMY_STATE::TELEPORT_OUT);
 			teleport_timer.Start();
 			angle = 90;
 		}
@@ -464,7 +425,7 @@ inline void Obj_Enemy::TeleportOut(float & dt)
 	{
 		in_portal->Reset();
 		in_portal = &portal_animation;
-		state = ENEMY_STATE::GET_PATH;
+		SetState(ENEMY_STATE::GET_PATH);
 		angle = -90;
 		draw = true;
 	}
@@ -506,7 +467,6 @@ bool Obj_Enemy::Draw(Camera * camera)
 bool Obj_Enemy::Start()
 {
 	burn_texture = app->tex->Load(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn").attribute("texture").as_string());
-
 	burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("burn"));
 	dying_burn.frames = app->anim_bank->LoadFrames(app->anim_bank->animations_xml_node.child("burn").child("animations").child("dying_burn"));
 	ResetAllAnimations();
@@ -551,16 +511,6 @@ inline void Obj_Enemy::UpdatePos(const float& dt)
 
 inline void Obj_Enemy::Burn(const float & dt)
 {
-	if (burn_fist_enter)
-	{
-		curr_anim = &burn;
-		fire_damage = life / 3;
-		if (burn_texture != nullptr)
-			curr_tex = burn_texture;
-		oiled = false;
-		speed = original_speed;
-	
-	}
 	if (burn_fist_enter || timer_change_direction.ReadSec() >= max_time_change_direction)
 	{
 		if (life > 0)
@@ -599,13 +549,14 @@ inline void Obj_Enemy::Burn(const float & dt)
 		UpdatePos(dt);
 	else if (curr_anim == &dying_burn && curr_anim->Finished())
 	{
-		CleanUp();
+		return_to_pool = true;
 	}
 
 }
 
 inline void Obj_Enemy::Stunned()
 {
+	app->audio->PlayFx(sfx_spawn);
 	curr_tex = tex_electro_dead;
 	curr_anim = &electro_dead;
 	draw_offset = electrocuted_draw_offset;
@@ -699,7 +650,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 
 			if (life <= 0)
 			{
-				state = ENEMY_STATE::DEAD;
+				SetState(ENEMY_STATE::DEAD);
 			}
 			else
 			{
@@ -716,7 +667,7 @@ void Obj_Enemy::OnTriggerEnter(Collider * collider, float dt)
 		{
 			if (oiled)
 			{
-				state = ENEMY_STATE::BURN;
+				SetState(ENEMY_STATE::BURN);
 			}
 			else
 			{
@@ -756,7 +707,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 				if (life <= 0)
 				{
 					channel_electrocuted = app->audio->PlayFx(electocuted);
-					state = ENEMY_STATE::DEAD;
+					SetState(ENEMY_STATE::DEAD);
 					is_electro_dead = true;
 
 				}
@@ -770,8 +721,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 					}
 
 					anim_saved = curr_anim;
-
-					state = ENEMY_STATE::STUNNED;
+					SetState(ENEMY_STATE::STUNNED);
 					if (player->GetIsElectroShotCharged())
 					{
 						stun_charged = true;
@@ -798,7 +748,7 @@ void Obj_Enemy::OnTrigger(Collider * collider, float dt)
 		{
 			if (oiled)
 			{
-				state = ENEMY_STATE::BURN;
+				SetState(ENEMY_STATE::BURN);
 			}
 			else
 			{
@@ -865,7 +815,6 @@ inline void Obj_Enemy::ReduceLife(float damage)
 	if (life <= 0)
 	{
 		life = 0;
-		app->pick_manager->PickUpFromEnemy(pos_map);
 		SetState(ENEMY_STATE::DEAD);
 	}
 	else
@@ -899,9 +848,36 @@ void Obj_Enemy::SetState(ENEMY_STATE new_state)
 		break;
 	case ENEMY_STATE::BURN:
 		curr_anim = &burn;
+		fire_damage = life / 3;
+		if (burn_texture != nullptr)
+			curr_tex = burn_texture;
+		oiled = false;
+		speed = original_speed;
 		break;
 	case ENEMY_STATE::DEAD:
-		curr_anim = &death;
+		if(is_electro_dead)
+		{
+			bool_electro_dead = true;
+			curr_tex = tex_electro_dead;
+			curr_anim = &electro_dead;
+			app->audio->PlayFx(sfx_death);
+			draw_offset = electrocuted_draw_offset;
+		}
+		else
+		{
+			curr_anim = &death;
+			curr_tex = tex;
+			app->audio->PlayFx(sfx_death);
+		}
+
+		if (coll != nullptr)
+		{
+			coll->SetIsTrigger(false);
+		}
+		if (life_collider != nullptr)
+		{
+			life_collider->SetIsTrigger(false);
+		}
 		break;
 	case ENEMY_STATE::STUNNED:
 		break;
