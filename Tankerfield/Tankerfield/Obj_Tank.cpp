@@ -34,12 +34,12 @@
 #include "Item_InstantHelp.h"
 #include "Obj_Portal.h"
 #include "HealingShot_Area.h"
-#include "Obj_FlamethrowerFlame.h"
 #include "M_Debug.h"
 #include "Item_InstantHelp.h"
 #include "M_PickManager.h"
 #include "Obj_Enemy.h"
 #include "Obj_Smoke.h"
+#include "Obj_Emitter.h"
 
 int Obj_Tank::number_of_tanks = 0;
 
@@ -267,9 +267,6 @@ bool Obj_Tank::Start()
 	coll_flame->is_sensor = true;
 	coll_flame->SetIsTrigger(false);
 
-	flame = (Obj_FlamethrowerFlame*)app->objectmanager->CreateObject(ObjectType::FLAMETHROWER_FLAME, pos_map);
-	flame->tank = this;
-
 	pugi::xml_node anim_node = app->anim_bank->animations_xml_node.child("charging").child("animation");
 
 	text_charging = app->tex->Load("textures/Objects/tank/texture_charging.png");
@@ -285,6 +282,8 @@ bool Obj_Tank::Start()
 	this->time_between_portal_tp.Start();
 
 	show_crosshairs = true;
+
+	flame_emitter = (Obj_Emitter*)app->objectmanager->CreateObject(ObjectType::EMITTER_FIRE, pos_map);
 
 	return true;
 }

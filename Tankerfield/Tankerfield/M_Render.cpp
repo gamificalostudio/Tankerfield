@@ -699,7 +699,7 @@ bool M_Render::BlitParticle(SDL_Texture* texture, int x, int y, Camera * current
 	rect_in_screen.x = x * scale - current_camera->rect.x + current_camera->screen_section.x;
 	rect_in_screen.y = y * scale - current_camera->rect.y + current_camera->screen_section.y;
 
-	assert(section != NULL && rectSize != NULL);
+	assert(section != NULL && rectSize != NULL);//Partcles can't take the whole particle atlas or not have a rect
 
 	spritesheet_rect = *section;
 	rect_in_screen.w = rectSize->w * scale;

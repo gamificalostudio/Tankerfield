@@ -45,7 +45,6 @@
 #include "Obj_Portal.h"
 #include "Obj_ElectroShotAnimation.h"
 #include "Obj_Tank_MainMenu.h"
-#include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
 #include "Oil_Splash.h"
 #include "Obj_Smoke.h"
@@ -458,10 +457,6 @@ Object* M_ObjManager::CreateObject(ObjectType type, fPoint pos)
 	case ObjectType::ELECTRO_SHOT_ANIMATION:
 		ret = DBG_NEW Eletro_Shot_Animation(pos);
 		ret->type = ObjectType::ELECTRO_SHOT_ANIMATION;
-		break;
-	case ObjectType::FLAMETHROWER_FLAME:
-		ret = DBG_NEW Obj_FlamethrowerFlame(pos);
-		ret->type = ObjectType::FLAMETHROWER_FLAME;
 		break;
 	case ObjectType::HEALING_AREA_SHOT:
 		ret = DBG_NEW HealingShot_Area(pos);

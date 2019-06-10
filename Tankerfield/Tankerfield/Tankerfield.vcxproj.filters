@@ -178,9 +178,6 @@
     <ClCompile Include="Obj_Enemy.cpp">
       <Filter>Objects\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Obj_FlamethrowerFlame.cpp">
-      <Filter>Objects\Bullets</Filter>
-    </ClCompile>
     <ClCompile Include="Obj_HealingAnimation.cpp">
       <Filter>Objects\Bullets</Filter>
     </ClCompile>
@@ -457,9 +454,6 @@
     </ClInclude>
     <ClInclude Include="Obj_Enemy.h">
       <Filter>Objects\Enemies</Filter>
-    </ClInclude>
-    <ClInclude Include="Obj_FlamethrowerFlame.h">
-      <Filter>Objects\Bullets</Filter>
     </ClInclude>
     <ClInclude Include="Obj_HealingAnimation.h">
       <Filter>Objects\Bullets</Filter>

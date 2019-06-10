@@ -146,7 +146,6 @@
     <ClCompile Include="HealingShot_Area.cpp" />
     <ClCompile Include="Item_HappyHour.cpp" />
     <ClCompile Include="Item_InstantHelp.cpp" />
-    <ClCompile Include="Obj_FlamethrowerFlame.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticlePool.cpp" />
     <ClCompile Include="Quadtree_Collision.cpp" />
@@ -237,7 +236,6 @@
     <ClInclude Include="HealingShot_Area.h" />
     <ClInclude Include="Item_HappyHour.h" />
     <ClInclude Include="Item_InstantHelp.h" />
-    <ClInclude Include="Obj_FlamethrowerFlame.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticlePool.h" />
     <ClInclude Include="Quadtree_Collision.h" />

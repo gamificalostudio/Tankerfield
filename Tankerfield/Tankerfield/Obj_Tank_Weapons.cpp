@@ -18,7 +18,6 @@
 #include "Bullet_Oil.h"
 #include "Obj_OilPool.h"
 #include "Obj_ElectroShotAnimation.h"
-#include "Obj_FlamethrowerFlame.h"
 #include "HealingShot_Area.h"
 
 void Obj_Tank::InitWeapons()
@@ -433,7 +432,6 @@ void Obj_Tank::ShootLaserShotCharged()
 
 void Obj_Tank::ShootFlameThrower()
 {
-	flame->is_holding = true;
 	flame_release_time.Start();
 
 	if(coll_flame->GetIsTrigger() == false)
@@ -565,7 +563,6 @@ std::vector<Object*>* Obj_Tank::GetEnemiesHitted()
 
 void Obj_Tank::ReleaseFlameThrower()
 {
-	flame->is_holding = false;
 	coll_flame->SetIsTrigger(false);
 }
 
