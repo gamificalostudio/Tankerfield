@@ -19,6 +19,8 @@ class UI_Label;
 class UI_InteractiveGroup;
 class Options_Menu;
 
+class Controllers_Settings;
+
 class Pause_Menu :public UI_Listener
 {
 public:
@@ -32,6 +34,8 @@ public:
 	void ShowPauseMenu();
 
 	void HidePauseMenu();
+
+	void Delete();
 
 private:
 
@@ -54,6 +58,9 @@ private:
 	uint button_select_sfx = 0u;
 	uint button_error_sfx = 0u;
 	uint selection_finished_sfx = 0u;
+
+public:
+	Controllers_Settings* controllers_setting[4] = { nullptr, nullptr, nullptr, nullptr };
 };
 
 #endif 

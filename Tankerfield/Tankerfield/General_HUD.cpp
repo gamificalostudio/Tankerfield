@@ -136,6 +136,11 @@ void General_GUI::RoundFX()
 	round_fx->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.8F, 4.F);
 }
 
+bool General_GUI::GetIsVisible()
+{
+	return visible;
+}
+
 
 void General_GUI::FadeGameOverScreen(bool fade_on, int rounds_survived)
 {
@@ -174,11 +179,26 @@ void General_GUI::FadeGameOverScreen(bool fade_on, int rounds_survived)
 	over_word->SetFX(type, 2.F); 
 }
 
-
-void General_GUI::MakeChildOfRoundElement(UI_Element * elem)
+void General_GUI::ShowGeneralGUI()
 {
-	//if (round_element != nullptr)
-	//{
-	//	elem->SetParent(round_element);
-	//}
+	visible = true;
+	vertical_split_rect		->SetState(ELEMENT_STATE::VISIBLE);
+	horizontal_split_rect	->SetState(ELEMENT_STATE::VISIBLE);
+	round_fx				->SetState(ELEMENT_STATE::VISIBLE);
+	round_number_label		->SetState(ELEMENT_STATE::VISIBLE);
+	round_element			->SetState(ELEMENT_STATE::VISIBLE);
+	left_tank_life			->SetState(ELEMENT_STATE::VISIBLE);
+	right_tank_life			->SetState(ELEMENT_STATE::VISIBLE);
+}
+
+void General_GUI::HideGeneralGUI()
+{
+	visible = false;
+	vertical_split_rect		->SetState(ELEMENT_STATE::HIDDEN);
+	horizontal_split_rect	->SetState(ELEMENT_STATE::HIDDEN);
+	round_fx				->SetState(ELEMENT_STATE::HIDDEN);
+	round_number_label		->SetState(ELEMENT_STATE::HIDDEN);
+	round_element			->SetState(ELEMENT_STATE::HIDDEN);
+	left_tank_life			->SetState(ELEMENT_STATE::HIDDEN);
+	right_tank_life			->SetState(ELEMENT_STATE::HIDDEN);
 }

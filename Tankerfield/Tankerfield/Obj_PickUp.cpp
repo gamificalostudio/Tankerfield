@@ -17,13 +17,13 @@
 
 Obj_PickUp::Obj_PickUp(fPoint pos) : Object(pos)
 {
-	coll = app->collision->AddCollider(pos, 1.6F, 1.6F, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll = app->collision->AddCollider(pos, 1.2F, 1.2F, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll->is_sensor = true;
-	coll->SetObjOffset(fPoint( -0.8F, -0.8F));
+	coll->SetObjOffset(fPoint( -0.6F, -0.6F));
 
-	coll_corrector = app->collision->AddCollider(pos, 2.6F, 2.6F, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
+	coll_corrector = app->collision->AddCollider(pos, 2.F, 2.F, TAG::PICK_UP, BODY_TYPE::DYNAMIC, 0.f, this);
 	coll_corrector->SetIsTrigger(false);
-	coll_corrector->SetObjOffset(fPoint(-1.3F, -1.3F));
+	coll_corrector->SetObjOffset(fPoint(-1.F, -1.F));
 
 	frame.w = 1;
 	frame.h = 1;

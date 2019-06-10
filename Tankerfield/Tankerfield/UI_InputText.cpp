@@ -10,19 +10,19 @@ max_characters(definition.max_characters), font(definition.font)
 	editable_label = app->ui->CreateLabel(fPoint(position), UI_LabelDef("", font, definition.editable_text_color));
 	editable_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	editable_label->SetParent(this);
-	editable_label->SetMenuState(ELEMENT_STATE::HIDDEN);
+	editable_label->SetState(ELEMENT_STATE::HIDDEN);
 
 	default_label = app->ui->CreateLabel(fPoint(position), UI_LabelDef(definition.default_text, font, definition.default_text_color));
 	default_label->SetPivot(Pivot::X::CENTER, Pivot::Y::CENTER);
 	default_label->SetParent(this);
-	default_label->SetMenuState(ELEMENT_STATE::HIDDEN);
+	default_label->SetState(ELEMENT_STATE::HIDDEN);
 
 	SDL_Rect rect = editable_label->GetDrawRect();
 	fPoint point(rect.x + rect.w, rect.y + rect.h* 0.5f);
 	cursor = app->ui->CreateQuad(point, UI_QuadDef({ 0,0,3,25 }, {255,255,255,255}));
 	cursor->SetPivot(Pivot::X::LEFT, Pivot::Y::CENTER);
 	cursor->SetParent(editable_label);
-	cursor->SetMenuState(ELEMENT_STATE::HIDDEN);
+	cursor->SetState(ELEMENT_STATE::HIDDEN);
 
 }
 
@@ -116,21 +116,21 @@ void UI_InputText::SetInputState(INPUT_STATE state)
 	{
 	case INPUT_STATE::DEFAULT_TEXT:
 
-		cursor->SetMenuState(ELEMENT_STATE::HIDDEN);
+		cursor->SetState(ELEMENT_STATE::HIDDEN);
 		cursor->FinishFX();
 		cursor->alpha = 0;
-		editable_label->SetMenuState(ELEMENT_STATE::HIDDEN);
-		default_label->SetMenuState(ELEMENT_STATE::VISIBLE);
+		editable_label->SetState(ELEMENT_STATE::HIDDEN);
+		default_label->SetState(ELEMENT_STATE::VISIBLE);
 		default_label->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 1.f, -1.f, 0.f, 255.f);
 
 		break;
 	case INPUT_STATE::EDITABLE_TEXT:
 
-		cursor->SetMenuState(ELEMENT_STATE::VISIBLE);
+		cursor->SetState(ELEMENT_STATE::VISIBLE);
 		cursor->SetFX(UI_Fade_FX::FX_TYPE::INTERMITTENT, 0.5f, -1.f, 0.f, 255.f);
 
-		editable_label->SetMenuState(ELEMENT_STATE::VISIBLE);
-		default_label->SetMenuState(ELEMENT_STATE::HIDDEN);
+		editable_label->SetState(ELEMENT_STATE::VISIBLE);
+		default_label->SetState(ELEMENT_STATE::HIDDEN);
 		default_label->FinishFX();
 		default_label->alpha = 0;
 

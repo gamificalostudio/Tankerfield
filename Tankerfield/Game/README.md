@@ -47,6 +47,7 @@ https://github.com/AitorVelez
 - X button : Interact
 
 # Debug functionality:
+- TAB: Show / hide HUD/GUI
 - F1: Show / hide grid
 - F2: Change tank weapon
 - F3: Show / hide sprite sorting rects and pivots
