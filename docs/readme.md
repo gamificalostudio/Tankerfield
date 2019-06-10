@@ -4,6 +4,8 @@ Each one of you will control a tank and defend against enldess rounds of invader
 
 You can play with your friends downloading the latest release [here]().
 
+[Download the Game!](https://github.com/gamificalostudio/Tankerfield/releases/download/1.3.2/Tankerfield.1.3.2.zip)
+
 ## Trailer
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/QC2n7g_kISs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
