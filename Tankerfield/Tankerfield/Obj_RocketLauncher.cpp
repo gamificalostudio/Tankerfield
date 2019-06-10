@@ -99,7 +99,8 @@ void Obj_RocketLauncher::Attack()
 	if (life > 0 && app->scene->game_state != GAME_STATE::NO_TYPE)
 	{
 		if (target != nullptr
-			&& perf_timer.ReadMs() > (double)attack_frequency)
+			&& perf_timer.ReadMs() > (double)attack_frequency
+			&& target->GetLife() > 0)
 		{
 			curr_anim = &attack;
 			perf_timer.Start();
@@ -167,7 +168,8 @@ void Obj_RocketLauncher::ShootMissile()
 	fPoint offset_rocket{ 1.f,1.f };
 	fPoint p_dir(0.0f, 0.0f);
 	if (target != nullptr
-		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared)
+		&& pos_map.DistanceNoSqrt(target->pos_map) < attack_range_squared
+		&& target->GetLife() > 0)
 	{
 		if (!target->Alive())
 		{
