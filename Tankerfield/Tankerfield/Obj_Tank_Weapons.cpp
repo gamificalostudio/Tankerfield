@@ -420,9 +420,9 @@ void Obj_Tank::ShootLaserShotCharged()
 	Laser_Bullet *	 laser_bullet = (Laser_Bullet*)app->objectmanager->GetObjectFromPool(ObjectType::BULLET_LASER, turr_pos + shot_dir);
 
 	laser_bullet->SetBulletProperties(
-		weapon_info.shot2.bullet_speed,
-		weapon_info.shot2.bullet_life_ms,
-		weapon_info.shot2.bullet_damage,
+		weapon_info.shot1.bullet_speed,
+		weapon_info.shot1.bullet_life_ms,
+		weapon_info.shot1.bullet_damage * 2,
 		shot_dir,
 		atan2(-shot_dir.y, shot_dir.x) * RADTODEG - 45,
 		true);
