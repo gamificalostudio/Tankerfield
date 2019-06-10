@@ -36,3 +36,4 @@ I also took part in the development of our videogame prototype. We used the Unit
 
 ## Game implementation
 
+In the first place, our project needed a base code structure to start developing our video game. We used my code, which had the basic functionalities of the engine, the modules (e.g. render module, window module, pathfinding module, scene module, and so on). From there, we have been implementing all the game features. Obviously, all the code that has been written followed the rules of the TDD.
