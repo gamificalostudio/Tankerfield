@@ -6,7 +6,16 @@ Inside the group, I have taken the role as managment. As responsible for this ro
 
 You can access the Excel used during the process by clicking [here](https://docs.google.com/spreadsheets/d/113tm7NAg_KK83d1rDMhxiy8_wCKlocxPwiix-iR6Y-M/edit?usp=sharing)
 
+<p align="center">
+  <img src="https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Excel_image.png">
+</p>
+
 In addition, I was also in charge of the internal organization of the group thanks to the [ClickUp](https://clickup.com/) tool, where I distributed to each member what tasks they had to perform and agreed on when they would be finished.
+
+
+<p align="center">
+  <img src="https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/ClickUp_image.png">
+</p>
 
 Another aspect of which I have done as managment, is the planning and development of the internal and constant meetings of the group, with the help of the leader, [Jaume Montagut](https://github.com/JaumeMontagut) who has helped me in the different fields mentioned above.
 
