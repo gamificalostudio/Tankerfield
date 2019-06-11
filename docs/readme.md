@@ -9,6 +9,8 @@ Or you can check the releases [here](https://github.com/gamificalostudio/Tankerf
 ## Trailer
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/QC2n7g_kISs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+## Gameplay
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=TFSujlLxkXw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Index
 * [About our game](https://gamificalostudio.github.io/Tankerfield/#about-our-game)
@@ -74,10 +76,6 @@ For more information about the decisions we have taken, you can check our game d
 **QA**: Aitor Vélez Tolosa 
 * [Github account](https://github.com/AitorVelez)
 * [Contribution in the game](https://gamificalostudio.github.io/Tankerfield/Aitor_contribution)
-
-## Trailer of the game
-
-## Gameplay
 
 ## Our social media
 
