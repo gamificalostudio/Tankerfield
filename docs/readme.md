@@ -10,7 +10,7 @@ Or you can check the releases [here](https://github.com/gamificalostudio/Tankerf
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/QC2n7g_kISs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 ## Gameplay
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=TFSujlLxkXw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://youtu.be/TFSujlLxkXw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Index
 * [About our game](https://gamificalostudio.github.io/Tankerfield/#about-our-game)
