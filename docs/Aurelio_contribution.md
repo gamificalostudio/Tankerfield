@@ -4,7 +4,9 @@ Como encargado de la UI, mi trabajo ha sido diseñar el funcionamiento y el arte
 
 Durante el desarrollo del juego el UI ha ido evolucionando iteración trás iteración siempre buscando ser lo más intuitiva y simple posible para poder adaptarse a los pilares de nuestro juego.
 
-## 
+## Game Implementations
+
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA3NDkyNDM0NCwxNTI2MDcwNDQxXX0=
+eyJoaXN0b3J5IjpbLTE2MzE3NzkzMywyMDc0OTI0MzQ0LDE1Mj
+YwNzA0NDFdfQ==
 -->
