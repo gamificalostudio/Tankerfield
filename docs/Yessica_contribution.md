@@ -2,6 +2,7 @@
 ## Individual Contribution
 
  - **Sprite extraction(Original sprites and Extraction of sprite from 3D models)**
+ 
 I searched for how extract sprites from the files of the original game and searched and extracted from 3d models of the original game.
  
  ![enter image description here](https://user-images.githubusercontent.com/25900809/54059038-fd112e80-41f7-11e9-85d6-322caaa5f016.gif)
