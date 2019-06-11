@@ -39,8 +39,13 @@ Other functions of the UI manager:
 ![enter image description here](https://raw.githubusercontent.com/gamificalostudio/Tankerfield/master/docs/Aurelio_Contributions_docs/UI_FLOW.jpg)
 
 ## Module Collision / Collision Manager
+Another of the main contributions I have made to the project has been the implementation of the collision module. This module is intended to be similar to the operation of colliders and  [Unity 2D physics](https://unity3d.com/es/learn/tutorials/s/physics). The main features of this module are:
 
+* Colliders Update & Destroy
+* OnTriggerEnter, OnTrigger & OnTriggerExit functions
+* 2D Physics with Dynamic & Static Rigid Bodies
+* Collisions QuadTree : Added after Vertical, this improve our debug mode ms
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE0ODY3NjQyNDgsNTc1Mzc3NzgzLC0xNj
+eyJoaXN0b3J5IjpbLTE1NTMxODA4NjksNTc1Mzc3NzgzLC0xNj
 MxNzc5MzMsMjA3NDkyNDM0NCwxNTI2MDcwNDQxXX0=
 -->
