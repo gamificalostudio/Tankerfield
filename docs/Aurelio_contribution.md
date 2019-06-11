@@ -1,21 +1,21 @@
 # UI - Alejandro Gamarra Niño
+![enter image description here](https://raw.githubusercontent.com/gamificalostudio/Tankerfield/master/docs/Aurelio_Contributions_docs/aurelio_photo.jpg)
 ## Role
-Buenas, me presento, mi nombre es Alejandro Aurelio Gamarra Niño y soy el encargado de la UI de nuestro juego Tankerfield y junto a mis compañeros hemos hecho posible el desarrollo de este proyecto. Como encargado del apartado del User Interface mis principales tareas han sido :
+I present myself, my name is Aurelio Gamarra Alejandro Niño and I am responsible for the UI of our game Tankerfield and with my colleagues have made the development of this project possible. As the person in charge of the User Interface section, my main tasks have been:
 
-* La supervisión del diseño de la UI.
-* Diseño del flow de menus, HUD y los distintos elementos a nivel individual.
-* Organizar y tener control sobre los documentos relacionados con la UI.
-* Intregración de la UI en el código del juego.
-* Generar el arte 
+* The supervision of the design of the UI.
+* Design of the flow of menus, HUD and the different elements at the individual level.
+* Organize and have control over the documents related to the UI.
+* Intregration of the UI in the game code.
+* Generate art
 
-
-Durante el desarrollo del juego el UI ha ido evolucionando iteración trás iteración siempre buscando ser lo más intuitiva y simple posible para poder adaptarse a los pilares de nuestro juego.
+During the development of the game the UI has been evolving iteration after iteration always looking to be as intuitive and simple as possible to be able to adapt to the pillars of our game.
 
 # Game Implementations
 ## User Interface
 ### Atlas Creation & Modification 
 ![enter image description here](https://github.com/gamificalostudio/Tankerfield/blob/development/Tankerfield/Game/textures/ui/atlas.png?raw=true)
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwOTM4NTU2NjQsNTc1Mzc3NzgzLC0xNj
-MxNzc5MzMsMjA3NDkyNDM0NCwxNTI2MDcwNDQxXX0=
+eyJoaXN0b3J5IjpbMTQ5ODE5MTU2MSw1NzUzNzc3ODMsLTE2Mz
+E3NzkzMywyMDc0OTI0MzQ0LDE1MjYwNzA0NDFdfQ==
 -->
