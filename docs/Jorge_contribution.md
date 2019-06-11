@@ -39,7 +39,7 @@ All the creation and management of pick ups, therefore, the items and weapons th
 
 All this includes the interaction of the player and the pick ups and reward boxes.
 
-![]()
+![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Reward_bobex_and_pick_ups.gif)
 
 The particle after take the weapon was did by [Gerard Marcos](https://github.com/vsRushy).
 
@@ -75,5 +75,9 @@ The weapon consists of a shot in a cone-shaped area that fires rays at enemies w
 To simulate the cone reach, the use of several square colliders placed in a straight line towards the direction in which the player points is implemented, the collider being bigger depending on if it is further away from the player to simulate the reach of a cone.
 
 The weapon, like all "charged" weapons, has two types of shot: basic and charged. The basic continues as explained above, and the charged differs in a greater range and in a greater damage plus an amplified time of stun to the enemies.
+
+![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_basic.gif)
+
+![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_charged.gif)
 
 For the visual part of the weapon, it is based on a single animation of a vertical beam of a few frames. The weapon is responsible for creating a lightning animation for each enemy hit, and the animation is rotated in the direction of the target enemy and is continuously scaled according to the position of the enemy, even if it moves to convey the feeling that the enemy tank is firing the lightning at each enemy.
