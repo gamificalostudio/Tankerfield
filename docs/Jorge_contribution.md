@@ -6,6 +6,8 @@ Inside the group, I have taken the role as managment. As responsible for this ro
 
 You can access the Excel used during the process by clicking [here](https://docs.google.com/spreadsheets/d/113tm7NAg_KK83d1rDMhxiy8_wCKlocxPwiix-iR6Y-M/edit?usp=sharing)
 
+![Credits Menu](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Excel_image.png?raw=true)
+
 <p align="center">
   <img src="https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Excel_image.png">
 </p>
