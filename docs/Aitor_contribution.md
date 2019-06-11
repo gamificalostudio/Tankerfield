@@ -33,27 +33,28 @@ I was also responsible of reviewing the tasks that other teammates did, and I wa
 
 # Game implementations
 
-The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
+
 
 ### First Camera Version
 
-All your files are listed in the file explorer. You can switch from one to another by clicking a file in the list.
+There was one first camera version, created using the lerp factor, in order to make navigation smoother.
 
 ### Map Creation
 
-You can rename the current file by clicking the file name in the navigation bar or by clicking the **Rename** button in the file explorer.
+I' ve been collaborating with the Art responsible, creating the map and helping the art responsible with any task he had. 
 
 ### Tank revival 
 
-You can delete the current file by clicking the **Remove** button in the file explorer. The file will be moved into the **Trash** folder and automatically deleted after 7 days of inactivity.
+The system that let other player revive each other when they are dead.
 
-### Weapon Laser
+## Weapons
 
-You can export the current file by clicking **Export to disk** in the menu. You can choose to export the file as plain Markdown, as HTML using a Handlebars template or as a PDF.
-
-### Weapon Flamethrower
+- Weapon Flamethrower
+- Weapon Laser
 
 ### Cinematic of the team Logo
+
+I create the video intro of the studio using adobe affter effects.
 
 ### Brofiler
 
