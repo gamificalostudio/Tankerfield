@@ -36,14 +36,14 @@ One of the longest and most difficult tasks implemented by me. Because the game 
 
 To know more information about how to implement a splitscreen system like Tankerfield, I have done a research on splitscreen that you can visit in the following repository: [Split-screen](https://github.com/jorgegh2/Split-screen).
 
-![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Split_screen.jpg)
+![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Split_screen.jpg?raw=true)
 
 ### Creation and managment of pick ups and reward boxes
 All the creation and management of pick ups, therefore, the items and weapons that appear in the game and the reward boxes, responsible for spawning pick ups in a certain way.
 
 All this includes the interaction of the player and the pick ups and reward boxes.
 
-![enter image description here](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Reward_bobex_and_pick_ups.gif)
+![enter image description here](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Reward_bobex_and_pick_ups.gif?raw=true)
 
 The particle after take the weapon was did by [Gerard Marcos](https://github.com/vsRushy).
 
@@ -66,7 +66,7 @@ Due to the observation that the players during the playtestings were not aware t
 
 This includes particles, sounds, screen shaking and command shake...
 
-![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Feedback_charged_shot.gif)
+![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Feedback_charged_shot.gif?raw=true)
 
 ### Item “Healt área”
 In the project, except for the help in the other items, I took care of one in particular from start to the end called "Health area". But because the lack of time and the little impact of the item due to other items such as the "health bag" and weapons that fulfill the main function of the item, which is to cure, was discarded to focus efforts on other tasks relevant to the project.
@@ -80,7 +80,7 @@ To simulate the cone reach, the use of several square colliders placed in a stra
 
 The weapon, like all "charged" weapons, has two types of shot: basic and charged. The basic continues as explained above, and the charged differs in a greater range and in a greater damage plus an amplified time of stun to the enemies.
 
-![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_basic.gif)
+![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_basic.gif?raw=true)
 
 ![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_charged.gif?raw=true)
 
