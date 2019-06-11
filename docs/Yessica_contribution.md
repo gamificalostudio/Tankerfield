@@ -25,6 +25,17 @@ Some times enemeis enter in a unwalkable tile so I made them to move out if this
 - **Reconfigurable keys** In the controllers option you can change de button you use in game, like the shoot button, and the helpers in game change. This information is saved when you close the game so it's ready to play again. 
 
  ![enter image description here](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/YessicaSD_Contributions_docs/controller_settings.png?raw=true)
+ 
+ 
+ ##Wiki Tasks
+ - **Technical design document**
+	 - UML
+	 - Target hardware
+	 - External libraries
+	 - Market position
+	 - Technical profile
+
+- Genre
 ### Other tasks
 - Make that the rocketlauncher shoot in a sertence distance.
 - Problem solving
