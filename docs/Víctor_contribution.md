@@ -22,7 +22,7 @@ The first task I had in the game code was adding the Object Manager. I took the 
  
 ### Double Missile 
 
-This shot creates a bullet that when it collides, it creates an Object Explosiod the bullet removes itself. This Object Explosion creates a collider during one frame and then deleted, and when the animation ends, the object removes itself.
+This shot creates a bullet that when it collides, it creates an Object Explosion and the bullet removes itself. This Object Explosion creates a collider during one frame and then deleted, and when the animation ends, the object removes itself.
 
 The Normal Shot creates 2 bullets and the charged Shot creates 4.
 
@@ -79,4 +79,8 @@ The Music Volume and SFX volume are ints that modify the volume, after multiplyi
 I added a VideoPlayer to display the Logo Intro at the beginning of the game. I used the [Personal Research](https://github.com/AxelAlavedra/Video-Player-Research) of my classmate [Axel Alavedra](https://github.com/AxelAlavedra), which was a great help and worked great.
 
 I made a little modification because there was a bug that printed a frame green just before reproducing the video.
+
+## Other 
+
+I was in charge, with the leader [Jaume Montagut](https://github.com/JaumeMontagut), of all the presentations of the game.
 ﻿
