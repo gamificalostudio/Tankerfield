@@ -6,18 +6,11 @@ Inside the group, I have taken the role as managment. As responsible for this ro
 
 You can access the Excel used during the process by clicking [here](https://docs.google.com/spreadsheets/d/113tm7NAg_KK83d1rDMhxiy8_wCKlocxPwiix-iR6Y-M/edit?usp=sharing)
 
-![Credits Menu](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Excel_image.png?raw=true)
-
-<p align="center">
-  <img src="https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Excel_image.png">
-</p>
+![Excel](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Excel_image.png?raw=true)
 
 In addition, I was also in charge of the internal organization of the group thanks to the [ClickUp](https://clickup.com/) tool, where I distributed to each member what tasks they had to perform and agreed on when they would be finished.
 
-
-<p align="center">
-  <img src="https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/ClickUp_image.png">
-</p>
+![ClickUp](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/ClickUp_image.png?raw=true)
 
 Another aspect of which I have done as managment, is the planning and development of the internal and constant meetings of the group, with the help of the leader, [Jaume Montagut](https://github.com/JaumeMontagut) who has helped me in the different fields mentioned above.
 
@@ -50,7 +43,7 @@ All the creation and management of pick ups, therefore, the items and weapons th
 
 All this includes the interaction of the player and the pick ups and reward boxes.
 
-![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Reward_bobex_and_pick_ups.gif)
+![enter image description here](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Reward_bobex_and_pick_ups.gif)
 
 The particle after take the weapon was did by [Gerard Marcos](https://github.com/vsRushy).
 
@@ -89,6 +82,6 @@ The weapon, like all "charged" weapons, has two types of shot: basic and charged
 
 ![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_basic.gif)
 
-![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_charged.gif)
+![](https://github.com/gamificalostudio/Tankerfield/blob/master/docs/Jorge_Contributions_doc/Electro_shot_charged.gif?raw=true)
 
 For the visual part of the weapon, it is based on a single animation of a vertical beam of a few frames. The weapon is responsible for creating a lightning animation for each enemy hit, and the animation is rotated in the direction of the target enemy and is continuously scaled according to the position of the enemy, even if it moves to convey the feeling that the enemy tank is firing the lightning at each enemy.
