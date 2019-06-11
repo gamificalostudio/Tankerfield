@@ -6,9 +6,9 @@ Durante el desarrollo del juego el UI ha ido evolucionando iteración trás iter
 
 # Game Implementations
 ## User Interface
-* **Atlas :** 
-
+### Atlas Creation & Modification 
+Esto incluye iconos, botones, palabras, HUD, etc
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA2NjQ2NjcyMSwtMTYzMTc3OTMzLDIwNz
-Q5MjQzNDQsMTUyNjA3MDQ0MV19
+eyJoaXN0b3J5IjpbNzg0MTYzNTUxLC0xNjMxNzc5MzMsMjA3ND
+kyNDM0NCwxNTI2MDcwNDQxXX0=
 -->
