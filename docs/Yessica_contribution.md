@@ -25,3 +25,4 @@ Some times enemeis enter in a unwalkable tile so I made them to move out if this
 
 ### Other tasks
 - Make that the rocketlauncher shoot in a sertence distance.
+- Problem solving
