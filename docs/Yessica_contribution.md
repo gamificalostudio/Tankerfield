@@ -16,6 +16,7 @@ Some states are:
 - GET_PATH: In this state entities do the pathfinding to the nearest player.
 - MOVE: In this state enemies follow the path created.
 - BURN: When oil and fire weapons are combined, enemies enter in this state and start to run on fire.
+- TELEPORT: When enemies are for away of player they teleport near the players.
 
 Some times enemeis enter in a unwalkable tile so I made them to move out if this happends. 
 
