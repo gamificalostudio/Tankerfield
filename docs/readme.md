@@ -14,8 +14,6 @@ Or you can check the releases [here](https://github.com/gamificalostudio/Tankerf
 * [About our game](https://gamificalostudio.github.io/Tankerfield/#about-our-game)
 * [Controls](https://gamificalostudio.github.io/Tankerfield/#controls)
 * [Members](https://gamificalostudio.github.io/Tankerfield/#members)
-* [Trailer of the game](https://gamificalostudio.github.io/Tankerfield/#trailer-of-the-game)
-* [Gameplay](https://gamificalostudio.github.io/Tankerfield/#gameplay)
 * [Our social media](https://gamificalostudio.github.io/Tankerfield/#our-social-media)
 * [Tools used](https://gamificalostudio.github.io/Tankerfield/#tools-used)
 
