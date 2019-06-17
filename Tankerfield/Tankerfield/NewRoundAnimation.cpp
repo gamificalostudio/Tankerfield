@@ -10,6 +10,8 @@
 #include "General_HUD.h"
 #include "UI_Label.h"
 #include "M_Audio.h"
+#include "M_Map.h"
+#include "Obj_SpawnPoint.h"
 
 void NewRoundAnimation::Start()
 {
@@ -118,6 +120,8 @@ void NewRoundAnimation::PrepareNewRoundUIParticles()
 	particles_reached_trg = 0;
 	particles_timer.Start();
 	center_energy->SetState(ELEMENT_STATE::VISIBLE);
+
+
 }
 
 bool NewRoundAnimation::Update(float dt)
@@ -136,6 +140,7 @@ bool NewRoundAnimation::Update(float dt)
 			++app->scene->round;
 			app->scene->general_gui->SetRoundNumber(app->scene->round);
 			phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
+		
 		}
 		//If for any reasons all particles don't reach the center
 		else if (particles_timer.Read() > max_particle_time)
@@ -150,7 +155,11 @@ bool NewRoundAnimation::Update(float dt)
 			++app->scene->round;
 			app->scene->general_gui->SetRoundNumber(app->scene->round);
 			phase = NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION;
+
+			
+			
 		}
+	
 	}break;
 
 	case NEW_ROUND_ANIMATION_PHASE::COLOR_TRANSITION:
@@ -172,6 +181,12 @@ bool NewRoundAnimation::Update(float dt)
 				heal_particle[i]->SetState(ELEMENT_STATE::VISIBLE);
 			}
 			phase = NEW_ROUND_ANIMATION_PHASE::REDUCE_ALPHA;
+
+			for (std::vector<Obj_SpawnPoint*>::iterator spawnPoint = app->map->data.spawners_position_enemy.begin(); spawnPoint != app->map->data.spawners_position_enemy.end(); ++spawnPoint)
+			{
+				(*spawnPoint)->Start();
+				(*spawnPoint)->active = true;
+			}
 		}
 	}break;
 
@@ -205,6 +220,8 @@ bool NewRoundAnimation::Update(float dt)
 			HealPlayers();
 			app->scene->game_state = GAME_STATE::ENTER_IN_WAVE;
 			phase = NEW_ROUND_ANIMATION_PHASE::WAITING;
+
+		
 		}
 	}break;
 

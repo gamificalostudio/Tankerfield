@@ -6,7 +6,7 @@
 #include "Obj_PickUp.h"
 
 class SDL_Texture;
-class SpawnPoint;
+class Obj_SpawnPoint;
 
 class Obj_RewardBox : public Object
 {
@@ -36,7 +36,7 @@ private:
 	float max_time_in_white = 0.2;
 
 public:
-	SpawnPoint* my_spawn_point			= nullptr;
+	Obj_SpawnPoint* my_spawn_point			= nullptr;
 
 public:
 
