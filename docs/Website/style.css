@@ -1,194 +1,169 @@
-html{
-    height: 100%;
-    overflow: hidden;
+html {
+  height: 100%;
+  overflow: hidden;
 }
-body
-{
-    margin: 0;
-    padding: 0;
-    perspective: 1px;
-    transform-style: preserve-3d;
-    height: 100%;
-    overflow-y: scroll;
+body {
+  margin: 0;
+  padding: 0;
+  perspective: 1px;
+  transform-style: preserve-3d;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: scroll;
+  color: rgb(255, 255, 255);
+  font-family: "Roboto", sans-serif;
+}
+header {
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 30vw 0 5vw;
+  position: relative;
+}
+header h1 {
+  margin-top: 0px;
+  position: relative;
+
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+header::before {
+  background: 50% 50% / cover;
+}
+header::before {
+  bottom: 0;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: block;
+  background-image: url(world_of_tanks_4k.jpg);
+  background-size: cover;
+
+  transform-origin: center center 0;
+  transform: translateZ(-1px) scale(2);
+  z-index: -1;
+  min-height: 100vh;
+}
+
+header * {
+  font-weight: normal;
+  letter-spacing: 0.2em;
+  text-align: center;
+  margin: 0;
+  padding: 1em 0;
+}
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+nav {
+  width: 100%;
+  height: 50px;
+  background-color: dimgrey;
+  display: flex;
+
+  justify-content: space-around;
+  align-items: center;
+  min-height: 8vh;
+
+  font-family: "Roboto", sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.logo {
+  color: rgb(31, 31, 46);
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  font-size: 22px;
+}
+.nav-links {
+  display: flex;
+  justify-content: space-around;
+  width: 40%;
+}
+.nav-links li {
+  list-style: none;
+}
+.nav-links a {
+  color: rgb(238, 238, 238);
+  text-decoration: none;
+  letter-spacing: 3px;
+  font-size: 15px;
+}
+
+.burger {
+  display: none;
+
+  cursor: pointer;
+}
+.burger div {
+  width: 25px;
+  height: 2px;
+  background-color: rgb(238, 238, 238);
+  margin: 5px;
+  transition: all 0.4s ease;
+}
+
+@media screen and (max-width: 1024px) {
+  .nav-links {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  body {
     overflow-x: scroll;
-    color: rgb(255, 255, 255);
-    font-family: 'Roboto', sans-serif;
-}
-header 
-{
-    
-    box-sizing: border-box;
-    min-height: 100vh;
-    padding: 30vw 0 5vw;
-    position: relative;
-}
-header h1
-{
-    margin-top: -100px;
-}
-header, header::before
-{
-    background: 50% 50%/cover;
-}
-header::before
-{
-    bottom: 0;
-    content: "";
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
+  }
+  .burger {
     display: block;
-    background-image: url(world_of_tanks_4k.jpg);
-    background-size: cover;
-  
-    transform-origin: center center 0;
-    transform: translateZ(-1px) scale(2);
-    z-index: -1;
-    min-height: 100vh;
-}
-
-header *
-{
-    font-weight: normal;
-    letter-spacing: 0.2em;
-    text-align: center;
-    margin: 0;
-    padding: 1em 0;
-}
-*{
-    margin: 0px;
-    padding: 0px;
-    box-sizing: border-box;
-}
-
-nav
-{
-    width: 100%;
-    height: 50px;
+    cursor: pointer;
+  }
+  .nav-links {
+    position: absolute;
+    right: 0px;
+    height: 94vh;
+    top: 8vh;
     background-color: dimgrey;
     display: flex;
-  
-   justify-content: space-around;
+    flex-direction: column;
     align-items: center;
-    min-height: 8vh;
-  
-    font-family: 'Roboto', sans-serif;
-   position: sticky;
-   top: 0;
-   z-index: 2;
+    width: 37%;
+    transform: translateX(100%);
+    transition: transform 0.5s ease-in;
+  }
+  .nav-links li {
+    opacity: 0;
+  }
 }
 
-.logo{
- color: rgb(31, 31, 46);
- text-transform: uppercase;
- letter-spacing: 5px;
- font-size: 22px;
-}
-.nav-links
-{
-    display: flex;
-    justify-content: space-around;
-    width: 40%;
-}
-.nav-links li{
-    list-style: none; 
-}
-.nav-links a
-{
-    color: rgb(238, 238, 238);
-    text-decoration: none;
-    letter-spacing: 3px;
-    font-size: 15px;
+.nav-active {
+  transform: translateX(0%);
 }
 
-.burger
-{
-    display: none;
-
-    cursor: pointer;
-}
-.burger div{
-    width: 25px;
-    height: 2px;
-    background-color: rgb(238, 238, 238);
-    margin:     5px;
-    transition: all 0.4s ease;
+@keyframes navLinkFade {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 }
 
-
-@media screen and (max-width: 1024px)
-{
-    .nav-links
-    {
-        width: 60%;
-    }
+.toggle .line1 {
+  transform: rotate(-45deg) translate(-5px, 5px);
 }
-
-@media screen and (max-width: 1920px)
-{
-    body {
-        overflow-x: scroll;
-    }
-    .burger
-    {
-        display: block;
-        cursor: pointer;
-    }
-    .nav-links
-    {
-        position: absolute;
-        right: 0px;
-        height: 94vh;
-        top: 8vh;
-        background-color: dimgrey;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 37%;
-        transform: translateX(100%);
-        transition: transform 0.5s ease-in;
-       
-    }
-    .nav-links li {
-        opacity: 0;
-      
-    };
-
-   
-
-}
-
-
-.nav-active
-{
-    transform: translateX(0%);
-}
-
-
-@keyframes navLinkFade
-{
-    from
-    {
-        opacity: 0;
-        transform: translateX(50px);
-        
-    }
-    to{
-        opacity: 1;
-        transform: translateX(0px);
-    }
-}
-
-.toggle .line1
-{
-    transform: rotate(-45deg) translate(-5px, 5px);
-}
-.toggle .line2
-{
+.toggle .line2 {
   opacity: 0;
 }
-.toggle .line3
-{
-    transform: rotate(45deg) translate(-5px, -5px);
+.toggle .line3 {
+  transform: rotate(45deg) translate(-5px, -5px);
 }
