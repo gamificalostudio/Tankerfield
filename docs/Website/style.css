@@ -33,7 +33,6 @@ html {
   background-image: url("img/world_of_tanks_4k.jpg");
   min-height: 100%;
   box-shadow: 0px 0px 49px 0px rgba(0, 0, 0, 0.75);
-
 }
 
 .pimg2 {
@@ -62,7 +61,6 @@ html {
 .frame {
   height: 400px;
   width: 400px;
-
 }
 
 .logo_img {
@@ -105,7 +103,6 @@ nav {
   z-index: 2;
 
   box-shadow: 0px 5px 10px rgba(36, 36, 36, 0.561);
-
 }
 
 .logo {
@@ -209,6 +206,15 @@ nav {
   transform: rotate(45deg) translate(-5px, -5px);
 }
 
+.PlayNowButton {
+  background-image: linear-gradient(rgb(172, 248, 128), rgb(31, 155, 31));
+  display: inline-block;
+  width: 200px;
+  text-decoration: none;
+  border-radius: 42px 42px 42px 42px;
+  color: black;
+  box-shadow: 0px 5px 20px -7px rgba(0, 0, 0, 0.75);
+}
 /*Social Media links*/
 
 .SocialMedia {
