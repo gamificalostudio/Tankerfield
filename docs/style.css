@@ -205,6 +205,89 @@ nav {
 .toggle .line3 {
   transform: rotate(45deg) translate(-5px, -5px);
 }
+/* *end of Nav =============================================== */
+
+button {
+  transform: translate(0%, -50%);
+  background: linear-gradient(
+    to bottom,
+    rgba(87, 214, 114, 1) 0%,
+    rgba(59, 206, 98, 1) 50%,
+    rgba(0, 168, 50, 1) 51%,
+    rgba(39, 236, 105, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#57d672', endColorstr='#27ec69', GradientType=0 );
+  box-shadow: 0px 28px 27px -27px rgba(0, 0, 0, 0.52);
+
+  color: rgb(255, 255, 255);
+
+  width: 240px;
+  height: 80px;
+  border: none;
+  /* border: 1px solid #62e262;*/
+  font-size: 18px;
+  border-radius: 4px;
+  transition: 0.6s;
+  overflow: hidden;
+}
+button:focus {
+  outline: none;
+}
+button:before {
+  content: "";
+  display: block;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  width: 60px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  opacity: 0.5s;
+  filter: blur(30px);
+  transform: translateX(-130px) skewX(-15deg);
+}
+button:after {
+  content: "";
+  display: block;
+  position: absolute;
+  background: linear-gradient(
+    to bottom,
+    rgba(143, 255, 167, 1) 0%,
+    rgba(97, 255, 139, 1) 50%,
+    rgba(0, 224, 67, 1) 51%,
+    rgba(112, 255, 160, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8fffa7', endColorstr='#70ffa0', GradientType=0 );
+  width: 30px;
+  height: 100%;
+  left: 30px;
+  top: 0;
+  opacity: 0;
+  filter: blur(30px);
+  transform: translate(-100px) skewX(-15deg);
+}
+button:hover {
+  background: linear-gradient(
+    to bottom,
+    rgba(143, 255, 167, 1) 0%,
+    rgba(97, 255, 139, 1) 50%,
+    rgba(0, 224, 67, 1) 51%,
+    rgba(112, 255, 160, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8fffa7', endColorstr='#70ffa0', GradientType=0 );
+  box-shadow: 3px 2px 53px 0px rgba(199, 252, 202, 1);
+  cursor: pointer;
+}
+button:hover:before {
+  transform: translateX(300px) skewX(-15deg);
+  opacity: 0.6s;
+  transition: 0.7s;
+}
+button:hover:before {
+  transform: translateX(300px) skewX(-15deg);
+  opacity: 1;
+  transition: 0.7s;
+}
 
 .PlayNowButton {
   background-image: linear-gradient(rgb(172, 248, 128), rgb(31, 155, 31));
